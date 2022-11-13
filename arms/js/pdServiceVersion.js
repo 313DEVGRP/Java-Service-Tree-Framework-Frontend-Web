@@ -19,33 +19,48 @@ $(function () {
 	$(".date-picker").datepicker({
 		autoclose: true,
 	});
-	//datepicker 만들기
-	const makeDatePicker = (calender) => {
-		calender
-			.datepicker({
-				autoclose: true,
-			})
-			.on("changeDate", function (ev) {
-				const Input = $(this).parent().prev();
-				Input.val(calender.data("date"));
-				if (Input.attr("id") === "input_pdservice_start_date") {
-					$("#versionStartDate").text(calender.data("date"));
-				} else if (Input.attr("id") === "input_pdservice_end_date") {
-					$("#versionEndDate").text(calender.data("date"));
-				}
-				calender.datepicker("hide");
-			});
-	};
 
-	const $btnCalendar = $("#btn-select-calendar");
-	const $btnEndCalendar = $("#btn-end-calendar");
-	const $btnCalendarPopup = $("#btn-select-calendar-popup");
-	const $btnEndCalendarPopup = $("#btn-end-calendar-popup");
 
-	makeDatePicker($btnCalendar);
-	makeDatePicker($btnEndCalendar);
-	makeDatePicker($btnCalendarPopup);
-	makeDatePicker($btnEndCalendarPopup);
+
+
+	// const makeDatePicker = (calender) => {
+
+	// 	const Inputs = $(calender).parent().prev();
+	// 	console.log('ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ호출', Inputs.val())
+
+
+	// 	calender
+	// 		.datepicker({
+	// 			autoclose: true,
+	// 		})
+	// 		.on("changeDate", function (ev) {
+	// 			const Input = $(this).parent().prev();
+	// 			Input.val(calender.data("date"));
+	// 			if (Input.attr("id") === "input_pdservice_start_date") {
+	// 				$("#versionStartDate").text(calender.data("date"));
+	// 			} else if (Input.attr("id") === "input_pdservice_end_date") {
+	// 				$("#versionEndDate").text(calender.data("date"));
+	// 			}
+	// 			calender.datepicker("hide");
+	// 		});
+	// };
+
+	// const $btnCalendar = $("#btn-select-calendar");
+	// const $btnEndCalendar = $("#btn-end-calendar");
+	// const $btnCalendarPopup = $("#btn-select-calendar-popup");
+	// const $btnEndCalendarPopup = $("#btn-end-calendar-popup");
+
+	// makeDatePicker($btnCalendar);
+	// makeDatePicker($btnEndCalendar);
+	// makeDatePicker($btnCalendarPopup);
+	// makeDatePicker($btnEndCalendarPopup);
+
+	makeDatePicker($("#btn-select-calendar"));
+	makeDatePicker($("#btn-end-calendar"));
+	makeDatePicker($("#btn-select-calendar-popup"));
+	makeDatePicker($("#btn-end-calendar-popup"));
+
+
 
 });
 
@@ -65,6 +80,29 @@ $(function () {
 	$("body").find("[aria-controls='pdserviceTable']").css("width", "100px");
 	$("select[name=pdserviceTable_length]").css("width", "50px");
 });
+
+//datepicker 만들기
+function makeDatePicker (calender) {
+
+	const Inputs = $(calender).parent().prev().val();
+	$(calender).attr('data-date', Inputs)
+
+	calender
+		.datepicker({
+			autoclose: true,
+		})
+		.datepicker("update", Inputs)
+		.on("changeDate", function (ev) {
+			const Input = $(this).parent().prev();
+			Input.val(calender.data("date"));
+			if (Input.attr("id") === "input_pdservice_start_date") {
+				$("#versionStartDate").text(calender.data("date"));
+			} else if (Input.attr("id") === "input_pdservice_end_date") {
+				$("#versionEndDate").text(calender.data("date"));
+			}
+			calender.datepicker("hide");
+		});
+};
 
 
 // --- 팝업 띄울때 사이즈 조정 -- //
@@ -284,6 +322,9 @@ function dataLoad(getSelectedText, selectedText) {
 
 
 
+
+
+
 			//데이터 로드를 사용자에게 알리기
 			Messenger().post({
 				message: 'Version Data 조회를 완료하였습니다.',
@@ -365,6 +406,11 @@ function versionClick(c_id) {
 			$("#input_pdservice_start_date").val(json.c_start_date);
 			$("#input_pdservice_end_date").val(json.c_end_date);
 			CKEDITOR.instances.input_pdservice_editor.setData(json.c_contents);
+
+			makeDatePicker($("#btn-select-calendar"));
+			makeDatePicker($("#btn-end-calendar"));
+			makeDatePicker($("#btn-select-calendar-popup"));
+			makeDatePicker($("#btn-end-calendar-popup"));
 
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
