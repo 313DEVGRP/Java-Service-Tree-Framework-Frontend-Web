@@ -228,7 +228,7 @@ $(function () {
 
 	// 탭 클릭 이벤트
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-		var target = $(e.target).attr("href") // activated tab
+		var target = $(e.target).attr("href"); // activated tab
 
 		if (target == "#dropdown1") {
 			$('.body-middle').hide();

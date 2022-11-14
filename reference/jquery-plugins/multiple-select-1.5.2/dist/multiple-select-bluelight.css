@@ -16,13 +16,14 @@
     top: auto !important; }
 
 .ms-parent {
+    border-radius: 4px;
     display: inline-block;
     position: relative;
     vertical-align: middle; }
 
 .ms-choice {
-    background: rgba(51, 51, 51, 0.4) !important;
-    border: 1px solid rgba(51, 51, 51, 0.425) !important;
+    background: rgba(51, 51, 51, 0.01) !important;
+    border: 1px solid rgba(51, 51, 51, 0.03) !important;
     display: block;
     width: 100%;
     height: 26px;
@@ -131,6 +132,7 @@
     margin: 0;
     padding: 0; }
 .ms-drop ul > li {
+    color: #f8f8f8;
     list-style: none;
     display: list-item;
     background-image: none;
@@ -184,4 +186,5 @@
     margin-left: -1.25rem; }
 
 .ms-drop .ms-no-results {
-    display: none; }
+    display: none;
+    color: #f8f8f8;}
