@@ -201,13 +201,13 @@ function formatUserSelection(jsonData) {
 }
 
 // --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
-$('#popup-editView-pdService-reviewer').on('select2:selecting', function (e) {
+$('#popup-editView-pdService-reviewer').on('select2:select', function (e) {
 	var heightValue = $('#popup-editView-pdService-reviewer').height();
 	var resultValue = heightValue + 20;
 	$('#popup-editView-pdService-reviewer').css('height', resultValue + 'px');
 });
 
-$('#editView-pdService-reviewers').on('select2:selecting', function (e) {
+$('#editView-pdService-reviewers').on('select2:select', function (e) {
 	var heightValue = $('#editView-pdService-reviewer').height();
 	var resultValue = heightValue + 20;
 	$('#editView-pdService-reviewer').css('height', resultValue + 'px');
