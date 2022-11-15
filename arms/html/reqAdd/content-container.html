@@ -79,7 +79,7 @@
                         <header>
                             <ul class="nav nav-tabs">
                                 <li class="active">
-                                    <a href="#stats" data-toggle="tab"><strong>Overview</strong></a>
+                                    <a href="#stats" data-toggle="tab"><strong>상세 보기</strong></a>
                                 </li>
                                 <li>
                                     <a href="#report" data-toggle="tab"><strong>Linked JIRA ISSUE</strong></a>
@@ -94,7 +94,33 @@
                                 <form class="form-horizontal" method="post">
                                     <fieldset>
                                         <div class="control-group">
-                                            <label class="control-label" for="prepended-input">
+                                            <label class="control-label" for="detailView-req-pdService-name">
+                                                요구사항 연관 제품(서비스)&nbsp;
+                                            </label>
+                                            <div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>&nbsp;
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+                                                    <a href="#" id="detailView-req-pdService-name"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="detailView-req-pdService-version">
+                                                요구사항 연관 버전 &nbsp;
+                                            </label>
+                                            <div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>&nbsp;
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+                                                    <a href="#" id="detailView-req-pdService-version"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="detailView-req-id">
                                                 요구사항 아이디 &nbsp;
                                             </label>
                                             <div class="input-wrap col-sm-8">
@@ -102,12 +128,12 @@
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>&nbsp;
                                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
-                                                    <a href="#" id="detailView-pdService-name"></a>
+                                                    <a href="#" id="detailView-req-id"></a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label" for="prepended-input">
+                                            <label class="control-label" for="detailView-req-name">
                                                 요구사항 제목 &nbsp;
                                             </label>
                                             <div class="input-wrap col-sm-8">
@@ -115,20 +141,46 @@
 													<i class="fa fa-user"></i>
 												</span>&nbsp;
                                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
-                                                    <a href="#" id="detailView-pdService-owner"></a>
+                                                    <a href="#" id="detailView-req-name"></a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label" for="prepended-input">
-                                                요구사항 편집자 &nbsp;
+                                            <label class="control-label" for="detailView-req-status">
+                                                요구사항 상태 &nbsp;
                                             </label>
                                             <div class="input-wrap col-sm-8">
 												<span class="input-group-addon">
 													<i class="fa fa-user"></i>
 												</span>&nbsp;
                                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
-                                                    <a href="#" id="detailView-pdService-owner"></a>
+                                                    <a href="#" id="detailView-req-status"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="detailView-req-writer">
+                                                요구사항 작성자 &nbsp;
+                                            </label>
+                                            <div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+                                                    <a href="#" id="detailView-req-writer"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="detailView-req-write-date">
+                                                요구사항 최근 작성일 &nbsp;
+                                            </label>
+                                            <div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+                                                    <a href="#" id="detailView-req-write-date"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -141,11 +193,11 @@
 													<i class="fa fa-users"></i>
 												</span>&nbsp;
                                                 <div>
-                                                    <a href="#" id="detailView-pdService-reviewer01"></a>
-                                                    <a href="#" id="detailView-pdService-reviewer02"></a>
-                                                    <a href="#" id="detailView-pdService-reviewer03"></a>
-                                                    <a href="#" id="detailView-pdService-reviewer04"></a>
-                                                    <a href="#" id="detailView-pdService-reviewer05"></a>
+                                                    <a href="#" id="detailView-req-reviewer01"></a>
+                                                    <a href="#" id="detailView-req-reviewer02"></a>
+                                                    <a href="#" id="detailView-req-reviewer03"></a>
+                                                    <a href="#" id="detailView-req-reviewer04"></a>
+                                                    <a href="#" id="detailView-req-reviewer05"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -153,11 +205,11 @@
                                             <label class="control-label" style="margin-top: 10px">
                                                 요구사항 내용 &nbsp;
                                             </label>
-                                            <div class="col-sm-8" style="margin-top: 10px">
+                                            <div class="col-sm-8" style="margin-top: 10px;margin-bottom: 10px">
                                                 문서로 보기 : <button type="button" class="btn btn-warning">새 창으로 제품(서비스) 내용 보기</button>
                                             </div>
                                             <br><br><br>
-                                            <div class="col-sm-12" id="detailView-pdService-contents">
+                                            <div class="col-sm-12" id="detailView-req-contents">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -397,6 +449,78 @@
     .modalDarkBack{
         background: rgb(51 51 51 / 94%) !important;
         border: 1px solid rgb(51 51 51) !important;
+    }
+
+    .new-tab-open .product-handler,
+    .new-tab-open .pull-right {
+        display: none;
+    }
+
+    .product-handler {
+        display: flex;
+        justify-content: space-between;
+    }
+    .product-handler__group {
+        display: flex;
+        gap: 7px;
+    }
+    .product-handler .btn-block {
+        margin: 0;
+        max-width: 160px;
+    }
+    .btn:focus,
+    .btn:active:focus {
+        outline: 0px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
+    }
+    .input-wrap {
+        display: flex;
+        height: 30px;
+        margin-bottom: 7px;
+    }
+    .input-wrap .input-group-addon {
+        width: 40px;
+        height: 30px;
+    }
+    .input-wrap .select2-selection--single,
+    .input-wrap .select2-selection--multiple {
+        height: 30px !important;
+        min-height: 30px !important;
+    }
+    .input-wrap .select2-selection__placeholder {
+        padding-left: 2px !important;
+    }
+    .input-wrap .select2-selection--multiple ul {
+        padding-left: 10px !important;
+    }
+    .input-wrap .select2-search--inline,
+    .input-wrap .select2-search--inline input {
+        width: 100% !important;
+    }
+    .form-control:focus {
+        box-shadow: none;
+    }
+
+    #service-reviewers,
+    #service-reviewers a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0;
+    }
+
+    #service-reviewers a {
+        gap: 5px;
+    }
+
+    .profile-image {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    .profile-image img {
+        width: 100%;
     }
 
 .btn-transparent.active {

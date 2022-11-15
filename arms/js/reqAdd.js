@@ -44,7 +44,58 @@ CKEDITOR.replace("modalEditor");
 
 // --- jstree ( 요구사항 ) 선택 이벤트 --- //
 function jsTreeClick(selectedNodeID) {
-	console.log(selectedNodeID);
+	var selectId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
+	console.log("selectedNodeID===" + selectId);
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true
+	}).done(function(data) {
+
+		console.log(data);
+		$('#detailView-req-pdService-name').text(data.c_pdService_Link);
+		$('#detailView-req-pdService-version').text(data.c_version_Link);
+		$('#detailView-req-id').text(data.c_id);
+		$('#detailView-req-name').text(data.c_title);
+		$('#detailView-req-status').text(data.c_req_status);
+		$('#detailView-req-writer').text(data.c_writer_cn);
+		$('#detailView-req-write-date').text(data.c_writer_date);
+		if (data.c_reviewer01 == null || data.c_reviewer01 == "none") {
+			$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+		} else {
+			$("#detailView-req-reviewer01").text(data.c_reviewer01);
+		}
+		if (data.c_reviewer02 == null || data.c_reviewer02 == "none") {
+		} else {
+			$("#detailView-req-reviewer02").text(data.c_reviewer02);
+		}
+
+		if (data.c_reviewer03 == null || data.c_reviewer03 == "none") {
+		} else {
+			$("#detailView-req-reviewer03").text(data.c_reviewer03);
+		}
+
+		if (data.c_reviewer04 == null || data.c_reviewer04 == "none") {
+		} else {
+			$("#detailView-req-reviewer04").text(data.c_reviewer04);
+		}
+
+		if (data.c_reviewer05 == null || data.c_reviewer05 == "none") {
+		} else {
+			$("#detailView-req-reviewer05").text(data.c_reviewer05);
+		}
+		$("#detailView-req-contents").html(data.c_contents);
+
+
+	}).fail(function(e) {
+		console.log("fail call");
+	}).always(function() {
+		console.log("always call");
+	});
+
 }
 
 // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
