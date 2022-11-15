@@ -327,7 +327,7 @@ function dataTableClick(selectedData) {
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
 		url: '/auth-user/api/arms/fileRepository/getFilesByNode.do',
-		data: { fileIdLink: selectId },
+		data: { fileIdLink: selectId, c_title: "pdService" },
 		dataType: 'json',
 		context: $fileupload[0]
 	}).done(function (result) {

@@ -38,6 +38,59 @@ $(function () {
 
 });
 
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** file upload **/
+$(function () {
+	'use strict';
+
+	// Initialize the jQuery File Upload widget:
+	var $fileupload = $('#fileupload');
+	$fileupload.fileupload({
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},
+		autoUpload: true,
+		url: '/auth-user/api/arms/reqAdd/uploadFileToNode.do',
+		dropZone: $('#dropzone')
+	});
+
+	// Enable iframe cross-domain access via redirect option:
+	$fileupload.fileupload(
+		'option',
+		'redirect',
+		window.location.href.replace(
+			/\/[^\/]*$/,
+			'/cors/result.html?%s'
+		)
+	);
+
+	// Load existing files:
+	$.ajax({
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},
+		url: $fileupload.fileupload('option', 'url'),
+		dataType: 'json',
+		context: $fileupload[0]
+	}).done(function (result) {
+		$(this).fileupload('option', 'done').call(this, null, { result: result });
+	});
+
+});
+
+$('#fileupload').bind('fileuploadsubmit', function (e, data) {
+	// The example input, doesn't have to be part of the upload form:
+	var input = $('#fileIdLink');
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
+	data.formData = { fileIdLink: input.val(), c_title: tableName };
+	if (!data.formData.fileIdLink) {
+		data.context.find('button').prop('disabled', false);
+		input.focus();
+		return false;
+	}
+});
+///////////////////////////////////////////////////////////////////////////////
+
 // --- 에디터 설정 --- //
 //CKEDITOR.replace("editor");
 CKEDITOR.replace("modalEditor");
@@ -46,6 +99,19 @@ CKEDITOR.replace("modalEditor");
 function jsTreeClick(selectedNodeID) {
 	var selectId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
 	console.log("selectedNodeID===" + selectId);
+
+	var selectRel = selectedNodeID.attr("rel");
+	console.log("selectRel -===> " + selectRel);
+	if(selectRel == "default"){
+		$('#defaultTab').get(0).click();
+		$('.widget-tabs ul li:nth-child(2)').hide();
+		$('.widget-tabs ul li:nth-child(3)').hide();
+	}else{
+		$('.widget-tabs ul li:nth-child(2)').show();
+		$('.widget-tabs ul li:nth-child(3)').show();
+	}
+
+
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
@@ -96,6 +162,23 @@ function jsTreeClick(selectedNodeID) {
 		console.log("always call");
 	});
 
+	$('#fileIdLink').val(selectId);
+	//jstree click 시 file 컨트롤
+	//파일 리스트 초기화
+	$("table tbody.files").empty();
+	// Load existing files:
+	var $fileupload = $('#fileupload');
+	// Load existing files:
+	$.ajax({
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},
+		url: '/auth-user/api/arms/fileRepository/getFilesByNode.do',
+		data: { fileIdLink: selectId, c_title: tableName },
+		dataType: 'json',
+		context: $fileupload[0]
+	}).done(function (result) {
+		$(this).fileupload('option', 'done').call(this, null, { result: result });
+	});
 }
 
 // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
