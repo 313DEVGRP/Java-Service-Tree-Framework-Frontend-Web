@@ -309,6 +309,7 @@ $("#save-req").click(function () {
 			c_reviewer03: reviewers03,
 			c_reviewer04: reviewers04,
 			c_reviewer05: reviewers05,
+			c_req_status: "Draft",
 			c_contents: CKEDITOR.instances["modalEditor"].getData(),
 		},
 		statusCode: {
