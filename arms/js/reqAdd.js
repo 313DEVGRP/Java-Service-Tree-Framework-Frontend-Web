@@ -1,9 +1,13 @@
+let selectedJsTreeId; // 요구사항 아이디
+
 $(function () {
 	setSideMenu(
 		"sidebar_menu_requirement",
 		"sidebar_menu_requirement_regist",
 		"requirement-elements-collapse"
 	);
+
+	$('#newReqDiv').hide();
 
 	//제품 서비스 셀렉트 박스 이니시에이터
 	$(".chzn-select").each(function(){
@@ -38,7 +42,32 @@ $(function () {
 
 });
 
+// --- 데이터 테이블 설정 --- //
+function dataTableLoad(selectId) {
+	// 데이터 테이블 컬럼 및 열그룹 구성
+	var columnList = [
+		{ data: "c_id" },
+		{ data: "c_left" },
+		{ data: "c_title" },
+	];
+	var rowsGroupList = [];
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
 
+	if(selectId == 2){
+		dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getMonitor.do", columnList, rowsGroupList);
+	}else{
+		dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNode.do?c_id="+selectId, columnList, rowsGroupList);
+	}
+
+	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$("body").find("[aria-controls='pdserviceTable']").css("width", "100px");
+	$("select[name=pdserviceTable_length]").css("width", "50px");
+}
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(selectedData) {
+	console.log(selectedData);
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 /** file upload **/
@@ -97,8 +126,7 @@ CKEDITOR.replace("modalEditor");
 
 // --- jstree ( 요구사항 ) 선택 이벤트 --- //
 function jsTreeClick(selectedNodeID) {
-	var selectId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
-	console.log("selectedNodeID===" + selectId);
+	selectedJsTreeId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
 
 	var selectRel = selectedNodeID.attr("rel");
 	console.log("selectRel -===> " + selectRel);
@@ -106,15 +134,21 @@ function jsTreeClick(selectedNodeID) {
 		$('#defaultTab').get(0).click();
 		$('.widget-tabs ul li:nth-child(2)').hide();
 		$('.widget-tabs ul li:nth-child(3)').hide();
+		$('#newReqDiv').hide();
 	}else{
+		$('#folderTab').get(0).click();
 		$('.widget-tabs ul li:nth-child(2)').show();
 		$('.widget-tabs ul li:nth-child(3)').show();
+		$('#newReqDiv').show();
+		/////////////////////////////////////////   데이터 테이블 설정
+		dataTableLoad(selectedJsTreeId);
+
 	}
 
 
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
 	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",
@@ -162,7 +196,7 @@ function jsTreeClick(selectedNodeID) {
 		console.log("always call");
 	});
 
-	$('#fileIdLink').val(selectId);
+	$('#fileIdLink').val(selectedJsTreeId);
 	//jstree click 시 file 컨트롤
 	//파일 리스트 초기화
 	$("table tbody.files").empty();
@@ -173,7 +207,7 @@ function jsTreeClick(selectedNodeID) {
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
 		url: '/auth-user/api/arms/fileRepository/getFilesByNode.do',
-		data: { fileIdLink: selectId, c_title: tableName },
+		data: { fileIdLink: selectedJsTreeId, c_title: tableName },
 		dataType: 'json',
 		context: $fileupload[0]
 	}).done(function (result) {
@@ -229,9 +263,19 @@ $('#country').on('select2:select', function (e) {
 
 // 신규 제품(서비스) 등록 버튼
 // --- 팝업 띄울때 사이즈 조정 -- //
-$("#newReqRegist").click(function () {
+$("#newReqRegist01").click(function () {
+	registNewPopup();
+});
+$("#newReqRegist02").click(function () {
+	registNewPopup();
+});
+$("#newReqRegist03").click(function () {
+	registNewPopup();
+});
 
-	var height = $(document).height() - 600;
+function registNewPopup(){
+
+	var height = $(document).height() - 700;
 	$(".modal-body")
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
@@ -253,14 +297,14 @@ $("#newReqRegist").click(function () {
 		progress: true
 	}).done(function(data) {
 
-		 ////////////////////////////////////////////////////////////
-			//var jira_name = obj.c_title;
-			//selectConnectID = obj.c_id;
-			console.log("c_reviewer01==" + data.c_reviewer01);
-			console.log("c_reviewer02==" + data.c_reviewer02);
-			console.log("c_reviewer03==" + data.c_reviewer03);
-			console.log("c_reviewer04==" + data.c_reviewer04);
-			console.log("c_reviewer05==" + data.c_reviewer05);
+		////////////////////////////////////////////////////////////
+		//var jira_name = obj.c_title;
+		//selectConnectID = obj.c_id;
+		console.log("c_reviewer01==" + data.c_reviewer01);
+		console.log("c_reviewer02==" + data.c_reviewer02);
+		console.log("c_reviewer03==" + data.c_reviewer03);
+		console.log("c_reviewer04==" + data.c_reviewer04);
+		console.log("c_reviewer05==" + data.c_reviewer05);
 
 		//clear
 		$('#popup-pdService-reviewers').val(null).trigger('change');
@@ -312,10 +356,10 @@ $("#newReqRegist").click(function () {
 			$('#popup-pdService-reviewer').css('height', resultValue + 'px');
 		}, 250);
 
-			////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////
 	});
 
-});
+}
 
 // --- select2 (사용자 자동완성 검색 ) 설정 --- //
 $(".js-data-example-ajax").select2({
@@ -429,7 +473,7 @@ $("#save-req").click(function () {
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 		type: "POST",
 		data: {
-			ref: 2,
+			ref: selectedJsTreeId,
 			c_title: $("#req-title").val(),
 			c_type: "default",
 			c_pdService_Link: $('#country').val(),
