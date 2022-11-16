@@ -207,6 +207,9 @@ function dataTableBuild(jQueryElementID, serviceNameForURL, endPointUrl="/getMon
 				className: "dt-body-left",
 			},
 		],
+		drawCallback: function() {
+			dataTableCallBack();
+		}
 	});
 
 	$(jQueryElementID + " tbody").on("click", "tr", function () {

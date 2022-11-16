@@ -53,10 +53,11 @@ function dataTableLoad(selectId) {
 	var rowsGroupList = [];
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
 
+	var dataTableRef;
 	if(selectId == 2){
-		dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getMonitor.do", columnList, rowsGroupList);
+		dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getMonitor.do", columnList, rowsGroupList);
 	}else{
-		dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNode.do?c_id="+selectId, columnList, rowsGroupList);
+		dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNode.do?c_id="+selectId, columnList, rowsGroupList);
 	}
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
@@ -67,6 +68,29 @@ function dataTableLoad(selectId) {
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(selectedData) {
 	console.log(selectedData);
+}
+
+function dataTableCallBack(){
+
+	var data = $('#reqTable').DataTable().rows().data().toArray();
+	$.each( data, function( key, value ) {
+
+		$('.dd-list').append("<li class='dd-item' data-id='" + value.c_id + "'>" +
+																								"<div class='dd-handle'>" +
+																									"<i class='fa fa-sort'></i>" +
+																											value.c_id + " " + value.c_title +
+																											"<p>" + value.c_contents + "</p>" +
+																								"</div>" +
+																							"</li>");
+		console.log( key + ": " + value.c_id);
+		console.log( key + ": " + value.c_parentid);
+		console.log( key + ": " + value.c_position);
+		console.log( key + ": " + value.c_left);
+		console.log( key + ": " + value.c_title);
+		console.log( key + ": " + value.c_contents);
+
+	});
+	//console.log(data);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -223,11 +247,6 @@ $('#country').on('select2:select', function (e) {
 	console.log("check -> " + $('#country').val());
 	jsTreeBuild("#productTree", "reqAdd/T_ARMS_REQADD_" + $('#country').val());
 
-	//jstree 전부 펼치기
-	setTimeout(function () {
-		$('#productTree').jstree('open_all');
-	}, 777);
-
 	$(".multiple-select option").remove();
 	$.ajax({
 		url: "/auth-user/api/arms/pdversion/getVersion.do?c_id=" + $('#country').val(),
@@ -258,6 +277,10 @@ $('#country').on('select2:select', function (e) {
 		console.log("fail call");
 	}).always(function() {
 		console.log("always call");
+		//jstree 전부 펼치기
+		setTimeout(function () {
+			$('#productTree').jstree('open_all');
+		}, 777);
 	});
 });
 
