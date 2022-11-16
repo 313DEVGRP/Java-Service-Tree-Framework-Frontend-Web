@@ -72,16 +72,44 @@ function dataTableClick(selectedData) {
 
 function dataTableCallBack(){
 
+	$('.dd-list').empty();
 	var data = $('#reqTable').DataTable().rows().data().toArray();
 	$.each( data, function( key, value ) {
 
-		$('.dd-list').append("<li class='dd-item' data-id='" + value.c_id + "'>" +
-																								"<div class='dd-handle'>" +
-																									"<i class='fa fa-sort'></i>" +
-																											value.c_id + " " + value.c_title +
+		if(value.c_contents == null || value.c_contents == "null"){
+			value.c_contents = "";
+		}
+
+		var iconHtml;
+		if(value.c_type == "root" || value.c_id == 2){
+			iconHtml = "<i class='fa fa-clipboard'></i>";
+		}else if(value.c_type == "folder"){
+			iconHtml = "<i class='fa fa-files-o'></i>";
+		}else {
+			iconHtml = "<i class='fa fa-file-text-o'></i>";
+		}
+
+		if(value.c_id == 1){
+			console.log("ROOT 노드는 처리하지 않습니다.");
+		}else if(value.c_id == 2){
+			$('.dd-list').append("<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id + "' data-id='" + value.c_id + "'>" +
+																									"<div class='dd-handle'>" +
+																												iconHtml +
+																												" " + value.c_title +
 																											"<p>" + value.c_contents + "</p>" +
-																								"</div>" +
-																							"</li>");
+																									"</div>" +
+																								"</li>");
+		}else {
+			$('#T_ARMS_REQ_'+value.c_parentid).append("<ol class='dd-list'>" +
+				"<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id +"' data-id='" + value.c_id + "'>" +
+				"<div class='dd-handle'>" +
+				iconHtml +
+				" " + value.c_title +
+				"<p>" + value.c_contents + "</p>" +
+				"</div>" +
+				"</li>" +
+				"</ol>");
+		}
 		console.log( key + ": " + value.c_id);
 		console.log( key + ": " + value.c_parentid);
 		console.log( key + ": " + value.c_position);
