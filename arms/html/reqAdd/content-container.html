@@ -80,10 +80,16 @@
                                     <a href="#stats" data-toggle="tab" id="defaultTab"><strong>상세 보기</strong></a>
                                 </li>
                                 <li>
+                                    <a href="#edit" data-toggle="tab" id="editTab"><strong>편집 하기</strong></a>
+                                </li>
+                                <li>
                                     <a href="#report" data-toggle="tab" id="folderTab"><strong>리스트로 보기</strong></a>
                                 </li>
                                 <li>
-                                    <a href="#history" data-toggle="tab"><strong>문서로 보기</strong></a>
+                                    <a href="#history" data-toggle="tab" id="docuTab"><strong>문서로 보기</strong></a>
+                                </li>
+                                <li>
+                                    <a href="#jira" data-toggle="tab" id="jiraTab"><strong>JIRA 연결 설정</strong></a>
                                 </li>
                             </ul>
                         </header>
@@ -218,6 +224,50 @@
                                     </fieldset>
                                 </form>
                             </div>
+                            <div id="edit" class="tab-pane" style="padding-top: 10px !important">
+                                <div class="form-group" style="padding-top: 10px;">
+                                    <div class="control-group">
+                                        <label class="control-label" for="prepended-input" style="vertical-align: center">요구사항 등록 모드 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group" style="text-align: left;">
+                                                <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
+                                                <div class="btn-group" data-toggle="buttons">
+                                                    <label class="btn btn-transparent btn-sm active">
+                                                        <input type="radio"> 요구사항 변경 모드
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="prepended-input">제품(서비스) &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="prepended-input">버전 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="prepended-input">요구사항 제목 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div id="report" class="tab-pane" style="padding-top: 10px !important">
                                 <div id="newReqDiv" style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="darkBack">
                                     <label id="newReqRegist02" class="btn btn-primary btn-transparent btn-sm active" data-target="#myModal1" data-toggle="modal" style="width: 100%; background-color: #2477FF !important;">
@@ -247,6 +297,9 @@
                                         </ol>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="jira" class="tab-pane" style="padding-top: 10px !important">
+                                JIRA
                             </div>
                             <div class="body-middle">
                                 <form
