@@ -543,6 +543,8 @@ $("#save-req").click(function () {
 		},
 		statusCode: {
 			200: function () {
+				$('#productTree').jstree('refresh');
+				$('#close-req').trigger('click');
 				jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
 			},
 		},

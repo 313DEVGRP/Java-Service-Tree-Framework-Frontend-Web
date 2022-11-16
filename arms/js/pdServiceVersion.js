@@ -423,3 +423,8 @@ function versionClick(c_id) {
 			console.log(xhr + status);
 		});
 }
+
+//데이터 테이블 ajax load 이후 콜백.
+function dataTableCallBack(){
+
+}

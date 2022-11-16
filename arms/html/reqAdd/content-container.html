@@ -15,7 +15,7 @@
         <div class="body">
             <blockquote class="font13">1. 제품(서비스) : 버전 : 요구사항 선택</blockquote>
             <div class="wrapper">
-                <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0; border-bottom: 1px dashed #e5e5e5;">
+                <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
                     <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
                         <select id="country" required="required"
                                 data-placeholder="Select Product(Service)" class="select-block-level chzn-select"
@@ -29,7 +29,10 @@
                         </select>
                     </div>
                 </div>
-                <div id="mmenu" style="padding-bottom: 5px;">
+                <div class="progress progress-xs mt-xs mb-0">
+                    <div class="progress-bar progress-bar-striped" style="width: 100%"></div>
+                </div>
+                <div id="mmenu" style="padding-bottom: 5px; padding-top: 15px;">
                     <form class="form-search no-margin" role="form">
                         <div class="input-group">
                             <input type="search" id="text" class="form-control searchDarkBack" style="color: #f8f8f8;" placeholder="찾을 노드 이름 입력" data-tooltip="Press Enter To Node To Search">
@@ -240,32 +243,7 @@
                                 <div class="col-md-12">
                                     <div class="dd" id="nestable1">
                                         <ol class="dd-list">
-                                            <li class="dd-item" data-id="1">
-                                                <div class="dd-handle">
-                                                    <i class="fa fa-sort"></i>
-                                                    &nbsp;&nbsp;&nbsp; 03 &nbsp;&nbsp;&nbsp;
-                                                    Barnard's Star
-                                                    <p>contents</p>
-                                                </div>
-                                            </li>
-                                            <li class="dd-item" data-id="2">
-                                                <div class="dd-handle">Item 2</div>
-                                                <ol class="dd-list">
-                                                    <li class="dd-item" data-id="3">
-                                                        <div class="dd-handle">Item 3</div>
-                                                    </li>
-                                                    <li class="dd-item" data-id="4"><div class="dd-handle">Item 4</div></li>
-                                                    <li class="dd-item" data-id="5">
-                                                        <div class="dd-handle">Item 5</div>
-                                                        <ol class="dd-list">
-                                                            <li class="dd-item" data-id="6"><div class="dd-handle">Item 6</div></li>
-                                                            <li class="dd-item" data-id="7"><div class="dd-handle">Item 7</div></li>
-                                                            <li class="dd-item" data-id="8"><div class="dd-handle">Item 8</div></li>
-                                                        </ol>
-                                                    </li>
-                                                    <li class="dd-item" data-id="9"><div class="dd-handle">Item 9</div></li>
-                                                </ol>
-                                            </li>
+
                                         </ol>
                                     </div>
                                 </div>
@@ -479,7 +457,7 @@
                  padding: 5px;
                  text-align: right;
                  border-top: 0px;">
-                <button type="button" id="extendClose-pdService" class="btn btn-default" data-dismiss="modal">
+                <button type="button" id="close-req" class="btn btn-default" data-dismiss="modal">
                     Close
                 </button>
                 <button type="button" id="save-req" class="btn btn-success">

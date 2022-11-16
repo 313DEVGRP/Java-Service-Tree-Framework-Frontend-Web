@@ -981,3 +981,9 @@ function d3Update() {
 	});
 	update(root);
 }
+
+
+//데이터 테이블 ajax load 이후 콜백.
+function dataTableCallBack(){
+
+}

@@ -208,7 +208,10 @@ function dataTableBuild(jQueryElementID, serviceNameForURL, endPointUrl="/getMon
 			},
 		],
 		drawCallback: function() {
-			dataTableCallBack();
+			console.log("dataTableBuild :: drawCallback");
+			if ($.isFunction(dataTableCallBack )) {
+				dataTableCallBack();
+			}
 		}
 	});
 
@@ -629,6 +632,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				console.log(data.rslt.obj);
 				jsTreeClick(data.rslt.obj);
 			}
+		})
+		.bind("select_node.jstree", function (event, data) {
+			$(jQueryElementID).jstree('open_all');
 		});
 
 	$("#mmenu input, #mmenu button").click(function () {
