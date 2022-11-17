@@ -452,6 +452,8 @@ function setDocViewTab(){
 			value.c_contents = "";
 		}
 
+		console.log(value.c_id + "=" + value.c_type + "=" + value.c_title + "//" + value.c_parentid);
+
 		var iconHtml;
 		if(value.c_type == "root" || value.c_type == "drive"){
 			iconHtml = "<i class='fa fa-clipboard'></i>";
@@ -463,7 +465,7 @@ function setDocViewTab(){
 
 		if(value.c_type == "root"){
 			console.log("ROOT 노드는 처리하지 않습니다.");
-		}else if(value.c_type == "folder" || value.c_type == "drive"){
+		}else if(value.c_type == "drive"){
 			$('.dd-list').append("<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id + "' data-id='" + value.c_id + "'>" +
 				"<div class='dd-handle'>" +
 				iconHtml +
@@ -482,12 +484,6 @@ function setDocViewTab(){
 				"</li>" +
 				"</ol>");
 		}
-		console.log( key + ": " + value.c_id);
-		console.log( key + ": " + value.c_parentid);
-		console.log( key + ": " + value.c_position);
-		console.log( key + ": " + value.c_left);
-		console.log( key + ": " + value.c_title);
-		console.log( key + ": " + value.c_contents);
 
 	});
 	//console.log(data);
