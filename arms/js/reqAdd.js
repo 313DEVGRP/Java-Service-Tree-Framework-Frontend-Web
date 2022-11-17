@@ -323,17 +323,22 @@ function bindDataEditlTab(ajaxData){
 	}).always(function() {
 	});
 
-	console.log("ajaxData.c_version_Link = " + ajaxData.c_version_Link);
-	$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_Link.split(","));
+	if(!isEmpty(ajaxData.c_version_Link)) {
+		$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_Link.split(","));
+	}
 
 	$('#editView-req-id').val(ajaxData.c_id);
 	$('#editView-req-name').val(ajaxData.c_title);
-	$('#editView-req-priority').val(ajaxData.c_priority);
+
+	$('#editView-req-priority').children('.btn.active').removeClass("active");
+	var slectReqPriorityID = "editView-req-priority-option" + ajaxData.c_priority;
+	$('#'+slectReqPriorityID).parent().addClass("active");
+
 	$('#editView-req-status').val(ajaxData.c_req_status);
 	$('#editView-req-writer').val(ajaxData.c_writer_cn);
 	$('#editView-req-write-date').val(ajaxData.c_writer_date);
 	$("#editView-req-reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
-	$("#editView-req-contents").html(ajaxData.c_contents);
+	CKEDITOR.instances.editTabModalEditor.setData(ajaxData.c_contents);
 }
 
 // ------------------ 상세보기 ------------------ //
@@ -358,7 +363,12 @@ function bindDataDetailTab(ajaxData){
 	$('#detailView-req-pdService-version').text(ajaxData.c_version_Link);
 	$('#detailView-req-id').text(ajaxData.c_id);
 	$('#detailView-req-name').text(ajaxData.c_title);
-	$('#detailView-req-priority').text(ajaxData.c_priority);
+
+	//우선순위 셋팅
+	$('#detailView-req-priority').children('.btn.active').removeClass("active");
+	var slectReqPriorityID = "detailView-req-priority-option" + ajaxData.c_priority;
+	$('#'+slectReqPriorityID).parent().addClass("active");
+
 	$('#detailView-req-status').text(ajaxData.c_req_status);
 	$('#detailView-req-writer').text(ajaxData.c_writer_cn);
 	$('#detailView-req-write-date').text(ajaxData.c_writer_date);
@@ -704,6 +714,9 @@ $("#editTab_Req_Update").click(function () {
 		reviewers05 = $('#popup-pdService-reviewers').select2('data')[4].text;
 	}
 
+	//우선 순위 값 셋팅
+	var priorityValue = $('#editView-req-priority').children('.btn.active').children('input').attr('id');
+	priorityValue = priorityValue.replace("editView-req-priority-option","");
 
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
@@ -713,12 +726,13 @@ $("#editTab_Req_Update").click(function () {
 			c_title: $('#editView-req-name').val(),
 			c_version_Link: JSON.stringify($('#editMultiVersion').val()),
 			c_writer_date: new Date(),
-			c_priority: 1,
+			c_priority: priorityValue,
 			c_reviewer01: reviewers01,
 			c_reviewer02: reviewers02,
 			c_reviewer03: reviewers03,
 			c_reviewer04: reviewers04,
 			c_reviewer05: reviewers05,
+			c_req_status: "ChangeReq",
 			c_contents: CKEDITOR.instances["editTabModalEditor"].getData(),
 		},
 		statusCode: {
