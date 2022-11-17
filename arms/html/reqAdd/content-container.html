@@ -98,7 +98,7 @@
                         </header>
                         <div class="body tab-content">
                             <div id="stats" class="tab-pane active clearfix" style="padding-top: 10px !important">
-                                <div id="newReqDiv" style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="darkBack">
+                                <div style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="newReqDiv darkBack">
                                     <label id="newReqRegist01" class="btn btn-primary btn-transparent btn-sm active" data-target="#myModal1" data-toggle="modal" style="width: 100%; background-color: #2477FF !important;">
                                         a-RMS의 신규 요구사항 등록하기
                                     </label>
@@ -390,7 +390,7 @@
                                 </div>
                             </div>
                             <div id="report" class="tab-pane" style="padding-top: 10px !important">
-                                <div id="newReqDiv" style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="darkBack">
+                                <div style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="newReqDiv darkBack">
                                     <label id="newReqRegist02" class="btn btn-primary btn-transparent btn-sm active" data-target="#myModal1" data-toggle="modal" style="width: 100%; background-color: #2477FF !important;">
                                         a-RMS의 신규 요구사항 등록하기
                                     </label>
@@ -406,7 +406,7 @@
                                 </table>
                             </div>
                             <div id="doc" class="tab-pane" style="padding-top: 10px !important">
-                                <div id="newReqDiv" style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="darkBack">
+                                <div style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="newReqDiv darkBack">
                                     <label id="newReqRegist03" class="btn btn-primary btn-transparent btn-sm active" data-target="#myModal1" data-toggle="modal" style="width: 100%; background-color: #2477FF !important;">
                                         a-RMS의 신규 요구사항 등록하기
                                     </label>
@@ -424,7 +424,163 @@
                             </div>
 
                             <div id="history" class="tab-pane" style="padding-top: 10px !important">
-                                HISTORY
+                                <!-- The timeline -->
+                                <ul class="timeline timeline-inverse">
+                                    <!-- timeline time label -->
+                                    <li class="time-label">
+                        <span class="bg-red font13">
+                          Requirements
+                        </span>
+                                    </li>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-balance-scale bg-maroon"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> 09:00 (MON)</span>
+
+                                            <h3 class="timeline-header"><a href="http://www.313.co.kr/confluence" target="_blank">착수</a> <small>Customers & Sales</small></h3>
+
+                                            <div class="timeline-body col-md-4 font11">
+                                                <a href="http://www.313.co.kr/confluence" target="_blank" class="btn bg-maroon btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Confluence by 313 DEV GRP</a>
+                                            </div>
+                                            <div class="timeline-footer col-md-8 font12 fontw600">
+                                                Input : Plan & Opinion & Idea<br>
+                                                Skill : Negotiation<br>
+                                                Output : Requirements<br>
+                                                System : Atlassian Confluence ( Online Document System )
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-check-square-o bg-yellow"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> 10:00 (TUE)</span>
+
+                                            <h3 class="timeline-header"><a href="http://www.313.co.kr/confluence" target="_blank">기획</a> <small>Project Manager</small></h3>
+
+                                            <div class="timeline-body col-md-4 font11">
+                                                <a href="http://www.313.co.kr/confluence" target="_blank" class="btn bg-yellow btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Confluence by 313 DEV GRP</a>
+                                            </div>
+                                            <div class="timeline-footer col-md-8 font12 fontw600">
+                                                Input : Requirements<br>
+                                                Skill : Requirements engineering<br>
+                                                Output : SRS ( Software Requirements Specification )<br>
+                                                System : Atlassian Confluence ( Online Document System )
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-cubes bg-teal"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> 12:00 (WED)</span>
+
+                                            <h3 class="timeline-header"><a href="http://www.313.co.kr/jira" target="_blank">실행 및 이행</a> <small>Developers</small></h3>
+
+                                            <div class="timeline-body col-md-4 font11">
+                                                <a href="http://www.313.co.kr/jira" target="_blank" class="btn bg-teal btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Jira by 313 DEV GRP</a>
+                                            </div>
+                                            <div class="timeline-footer col-md-8 font12 fontw600">
+                                                Input : SRS ( Software Requirements Specification )<br>
+                                                Skill : Architecture design<br>
+                                                Output : SDS ( Software Design Specification )<br>
+                                                System : Atlassian Jira ( Issue Management System )
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <!-- timeline time label -->
+                                    <li class="time-label">
+                        <span class="bg-aqua font13">
+                          Development
+                        </span>
+                                    </li>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-sitemap bg-light-blue"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> 15:00 (THU)</span>
+
+                                            <h3 class="timeline-header"><a href="https://github.com/jstree" target="_blank">실행 및 이행</a> <small>Developers</small></h3>
+
+                                            <div class="timeline-body col-md-4 font11">
+                                                <a href="https://github.com/jstree" target="_blank" class="btn bg-light-blue btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> GitHub by 313 DEV GRP</a>
+                                                <a href="http://www.313.co.kr/fecru" target="_blank" class="btn bg-light-blue btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Fecru by 313 DEV GRP</a>
+                                                <a href="http://www.313.co.kr/bamboo" target="_blank" class="btn bg-light-blue btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Bamboo by 313 DEV GRP</a>
+                                            </div>
+                                            <div class="timeline-footer col-md-8 font12 fontw600">
+                                                Input : SDS ( Software Design Specification )<br>
+                                                Skill : Coding<br>
+                                                Output : Source Code & Artifacts<br>
+                                                System : GitHub ( Software Version Management )
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-bug bg-purple"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> 17:00 (FRI)</span>
+
+                                            <h3 class="timeline-header"><a href="https://github.com/jstree" target="_blank">감시 및 통제</a> <small>Quality Assurance</small></h3>
+
+                                            <div class="timeline-body col-md-4 font11">
+                                                <a href="http://www.313.co.kr/analysis" target="_blank" class="btn bg-purple btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Project Analysis by 313 DEV GRP</a>
+                                                <a href="http://www.313.co.kr/nexus" target="_blank" class="btn bg-purple btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Nexus by 313 DEV GRP</a>
+                                                <a href="http://www.313.co.kr/sonar" target="_blank" class="btn bg-purple btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> Sonar by 313 DEV GRP</a>
+                                            </div>
+                                            <div class="timeline-footer col-md-8 font12 fontw600">
+                                                Input : Source Code & Artifacts<br>
+                                                Skill : Quality Assurance<br>
+                                                Output : TCR ( Test Case Result )<br>
+                                                System : SonarQube
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <!-- timeline time label -->
+                                    <li class="time-label">
+                        <span class="bg-navy font13">
+                          Operation
+                        </span>
+                                    </li>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-train bg-black"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> 18:00 (SAT)</span>
+
+                                            <h3 class="timeline-header"><a href="https://github.com/jstree" target="_blank">종료</a> <small>Project Member</small></h3>
+
+                                            <div class="timeline-body col-md-4 font11">
+                                                <a href="https://hub.docker.com/u/313devgrp/" target="_blank" class="btn bg-black btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> DockerHub by 313 DEV GRP</a>
+                                            </div>
+                                            <div class="timeline-footer col-md-8 font12 fontw600">
+                                                Input : TCR ( Test Case Result )<br>
+                                                Skill : Lessons learned and retrospective<br>
+                                                Output : Container<br>
+                                                System : Docker ( Cloud Operating system )
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <li>
+                                        <i class="fa fa-clock-o bg-gray"></i>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="body-middle">
                                 <form

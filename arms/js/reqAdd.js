@@ -13,7 +13,7 @@ $(function () {
 	);
 
 	//신규 요구사항 등록 버튼 숨김
-	$('#newReqDiv').hide();
+	$('.newReqDiv').hide();
 
 	//제품(서비스) 셀렉트 박스 이니시에이터
 	makePdServiceSelectBox();
@@ -123,7 +123,7 @@ function jsTreeClick(selectedNodeID) {
 	//요구사항 타입에 따라서 탭의 설정을 변경
 	if(selectRel == "default"){
 		$('#defaultTab').get(0).click();
-		$('#newReqDiv').hide();
+		$('.newReqDiv').hide();
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(1)').show(); //상세보기
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(2)').show(); //편집하기
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(3)').hide(); //리스트보기
@@ -135,7 +135,7 @@ function jsTreeClick(selectedNodeID) {
 
 	}else{
 		$('#folderTab').get(0).click();
-		$('#newReqDiv').show();
+		$('.newReqDiv').show();
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(1)').show(); //상세보기
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(2)').show(); //편집하기
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(3)').show(); //리스트보기
