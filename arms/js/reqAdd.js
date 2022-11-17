@@ -49,9 +49,7 @@ function makePdServiceSelectBox(){
 			$('#country').append(newOption).trigger('change');
 		}
 	}).fail(function(e) {
-		console.log("fail call");
 	}).always(function() {
-		console.log("always call");
 	});
 } // end makePdServiceSelectBox()
 
@@ -92,15 +90,20 @@ function bind_VersionData_By_PdService(){
 				text: obj.c_title,
 			})
 
+			//$('#multiVersion').append($opt);
+			//$('#editMultiVersion').append($opt);
 			$('.multiple-select').append($opt);
 		}
 
+		if(data.length > 0){
+			console.log("display 재설정.");
+		}
+		//$('#multiVersion').multipleSelect('refresh');
+		//$('#editMultiVersion').multipleSelect('refresh');
 		$('.multiple-select').multipleSelect('refresh');
 
 	}).fail(function(e) {
-		console.log("fail call");
 	}).always(function() {
-		console.log("always call");
 	});
 }
 
@@ -113,7 +116,6 @@ function build_ReqData_By_PdService(){
 
 // --- 요구사항 (jstree) 선택 이벤트 --- //
 function jsTreeClick(selectedNodeID) {
-	
 	selectedJsTreeId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
 	var selectRel = selectedNodeID.attr("rel");
 	
@@ -121,109 +123,37 @@ function jsTreeClick(selectedNodeID) {
 	if(selectRel == "default"){
 		$('#defaultTab').get(0).click();
 		$('#newReqDiv').hide();
-		$('.widget-tabs ul li:nth-child(1)').show(); //상세보기
-		$('.widget-tabs ul li:nth-child(2)').show(); //편집하기
-		$('.widget-tabs ul li:nth-child(3)').hide(); //리스트보기
-		$('.widget-tabs ul li:nth-child(4)').hide(); //문서로보기
-		$('.widget-tabs ul li:nth-child(5)').show(); //JIRA연결설정
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(1)').show(); //상세보기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(2)').show(); //편집하기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(3)').hide(); //리스트보기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(4)').hide(); //문서로보기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(5)').show(); //JIRA연결설정
+
+		//상세보기 탭 셋팅
+		setDetailViewTab();
+
 	}else{
 		$('#folderTab').get(0).click();
 		$('#newReqDiv').show();
-		$('.widget-tabs ul li:nth-child(1)').show(); //상세보기
-		$('.widget-tabs ul li:nth-child(2)').show(); //편집하기
-		$('.widget-tabs ul li:nth-child(3)').show(); //리스트보기
-		$('.widget-tabs ul li:nth-child(4)').show(); //문서로보기
-		$('.widget-tabs ul li:nth-child(5)').hide(); //JIRA연결설정
-		/////////////////////////////////////////   데이터 테이블 설정
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(1)').show(); //상세보기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(2)').show(); //편집하기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(3)').show(); //리스트보기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(4)').show(); //문서로보기
+		$('.widget-tabs').children('header').children('ul').children('li:nth-child(5)').hide(); //JIRA연결설정
+
+		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
+		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
 		dataTableLoad(selectedJsTreeId);
 
 	}
-	//상세보기 탭 셋팅
-	setDetailViewTab();
 
-	//요구사항
+	//파일 데이터셋팅
 	get_FileList_By_Req();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//파일 관리 : fileupload
+//리스트 :: DataTable
 ////////////////////////////////////////////////////////////////////////////////////////
-function get_FileList_By_Req() {
-	$('#fileIdLink').val(selectedJsTreeId);
-	//jstree click 시 file 컨트롤
-	//파일 리스트 초기화
-	$("table tbody.files").empty();
-	// Load existing files:
-	var $fileupload = $('#fileupload');
-	// Load existing files:
-	$.ajax({
-		// Uncomment the following to send cross-domain cookies:
-		//xhrFields: {withCredentials: true},
-		url: '/auth-user/api/arms/fileRepository/getFilesByNode.do',
-		data: { fileIdLink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $('#country').val() },
-		dataType: 'json',
-		context: $fileupload[0]
-	}).done(function (result) {
-		$(this).fileupload('option', 'done').call(this, null, { result: result });
-	});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-//상세 보기 탭
-////////////////////////////////////////////////////////////////////////////////////////
-function setDetailViewTab(){
-	var tableName = "T_ARMS_REQADD_" + $('#country').val();
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType : "json",
-		progress: true
-	}).done(function(data) {
-
-		console.log(data);
-		$('#detailView-req-pdService-name').text(data.c_pdService_Link);
-		$('#detailView-req-pdService-version').text(data.c_version_Link);
-		$('#detailView-req-id').text(data.c_id);
-		$('#detailView-req-name').text(data.c_title);
-		$('#detailView-req-status').text(data.c_req_status);
-		$('#detailView-req-writer').text(data.c_writer_cn);
-		$('#detailView-req-write-date').text(data.c_writer_date);
-		if (data.c_reviewer01 == null || data.c_reviewer01 == "none") {
-			$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
-		} else {
-			$("#detailView-req-reviewer01").text(data.c_reviewer01);
-		}
-		if (data.c_reviewer02 == null || data.c_reviewer02 == "none") {
-		} else {
-			$("#detailView-req-reviewer02").text(data.c_reviewer02);
-		}
-
-		if (data.c_reviewer03 == null || data.c_reviewer03 == "none") {
-		} else {
-			$("#detailView-req-reviewer03").text(data.c_reviewer03);
-		}
-
-		if (data.c_reviewer04 == null || data.c_reviewer04 == "none") {
-		} else {
-			$("#detailView-req-reviewer04").text(data.c_reviewer04);
-		}
-
-		if (data.c_reviewer05 == null || data.c_reviewer05 == "none") {
-		} else {
-			$("#detailView-req-reviewer05").text(data.c_reviewer05);
-		}
-		$("#detailView-req-contents").html(data.c_contents);
-
-
-	}).fail(function(e) {
-		console.log("fail call");
-	}).always(function() {
-		console.log("always call");
-	});
-}
-
-
 // --- 데이터 테이블 설정 --- //
 function dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
@@ -239,7 +169,28 @@ function dataTableLoad(selectId) {
 	if(selectId == 2){
 		dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getMonitor.do", columnList, rowsGroupList);
 	}else{
-		dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNode.do?c_id="+selectId, columnList, rowsGroupList);
+
+		//select node 정보를 가져온다.
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
+			type: "GET",
+			contentType: "application/json;charset=UTF-8",
+			dataType : "json",
+			progress: true,
+			success: function(data) {
+				var paramUrl = "c_id=313&c_left=" + data.c_left + "&c_right=" + data.c_right;
+				dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNodeWithParent.do?"+paramUrl, columnList, rowsGroupList);
+
+			}
+		}).done(function(data) {
+
+
+		}).fail(function(e) {
+
+		}).always(function() {
+
+		});
+
 	}
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
@@ -252,59 +203,16 @@ function dataTableClick(selectedData) {
 	console.log(selectedData);
 }
 
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(){
-
-	$('.dd-list').empty();
-	var data = $('#reqTable').DataTable().rows().data().toArray();
-	$.each( data, function( key, value ) {
-
-		if(value.c_contents == null || value.c_contents == "null"){
-			value.c_contents = "";
-		}
-
-		var iconHtml;
-		if(value.c_type == "root" || value.c_id == 2){
-			iconHtml = "<i class='fa fa-clipboard'></i>";
-		}else if(value.c_type == "folder"){
-			iconHtml = "<i class='fa fa-files-o'></i>";
-		}else {
-			iconHtml = "<i class='fa fa-file-text-o'></i>";
-		}
-
-		if(value.c_id == 1){
-			console.log("ROOT 노드는 처리하지 않습니다.");
-		}else if(value.c_id == 2){
-			$('.dd-list').append("<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id + "' data-id='" + value.c_id + "'>" +
-																									"<div class='dd-handle'>" +
-																												iconHtml +
-																												" " + value.c_title +
-																											"<p>" + value.c_contents + "</p>" +
-																									"</div>" +
-																								"</li>");
-		}else {
-			$('#T_ARMS_REQ_'+value.c_parentid).append("<ol class='dd-list'>" +
-				"<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id +"' data-id='" + value.c_id + "'>" +
-				"<div class='dd-handle'>" +
-				iconHtml +
-				" " + value.c_title +
-				"<p>" + value.c_contents + "</p>" +
-				"</div>" +
-				"</li>" +
-				"</ol>");
-		}
-		console.log( key + ": " + value.c_id);
-		console.log( key + ": " + value.c_parentid);
-		console.log( key + ": " + value.c_position);
-		console.log( key + ": " + value.c_left);
-		console.log( key + ": " + value.c_title);
-		console.log( key + ": " + value.c_contents);
-
-	});
-	//console.log(data);
+	setDocViewTab();
+	//상세보기 탭 셋팅
+	setDetailViewTab();
 }
-///////////////////////////////////////////////////////////////////////////////
-
-/** file upload **/
+////////////////////////////////////////////////////////////////////////////////////////
+//파일 관리 : fileupload
+////////////////////////////////////////////////////////////////////////////////////////
+/** file upload 이니시에이터 **/
 $(function () {
 	'use strict';
 
@@ -352,12 +260,199 @@ $('#fileupload').bind('fileuploadsubmit', function (e, data) {
 		return false;
 	}
 });
+
+function get_FileList_By_Req() {
+	$('#fileIdLink').val(selectedJsTreeId);
+	//jstree click 시 file 컨트롤
+	//파일 리스트 초기화
+	$("table tbody.files").empty();
+	// Load existing files:
+	var $fileupload = $('#fileupload');
+	// Load existing files:
+	$.ajax({
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},
+		url: '/auth-user/api/arms/fileRepository/getFilesByNode.do',
+		data: { fileIdLink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $('#country').val() },
+		dataType: 'json',
+		context: $fileupload[0]
+	}).done(function (result) {
+		$(this).fileupload('option', 'done').call(this, null, { result: result });
+	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//상세 보기 탭 & 편집 탭
+////////////////////////////////////////////////////////////////////////////////////////
+function setDetailViewTab(){
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true
+	}).done(function(data) {
+
+		// ------------------ 상세보기 ------------------ //
+		bindDataDetailTab(data);
+		// ------------------ 편집하기 ------------------ //
+		bindDataEditlTab(data);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+}
+
+function bindDataEditlTab(ajaxData){
+
+	//제품(서비스) 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/pdservice/getNode.do?c_id=" + ajaxData.c_pdService_Link,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true
+	}).done(function(data) {
+
+		$('#editView-req-pdService-name').val(data.c_title);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+	//제품(서비스) 데이터 바인딩
+	$.ajax({
+		//이부분이 좀 이상할 것인데. c_id 가 백엔드에서 c_version_Link 로 대치되어 조회함.
+		url: "/auth-user/api/arms/pdversion/getNode.do?c_id=" + ajaxData.c_version_Link,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true
+	}).done(function(data) {
+
+		$('#editView-req-pdService-version').val(data.c_title);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+	$('#editView-req-pdService-version').val(ajaxData.c_version_Link);
+	$('#editView-req-id').val(ajaxData.c_id);
+	$('#editView-req-name').val(ajaxData.c_title);
+	$('#editView-req-priority').val(ajaxData.c_priority);
+	$('#editView-req-status').val(ajaxData.c_req_status);
+	$('#editView-req-writer').val(ajaxData.c_writer_cn);
+	$('#editView-req-write-date').val(ajaxData.c_writer_date);
+	$("#editView-req-reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
+	$("#editView-req-contents").html(ajaxData.c_contents);
+}
+
+function bindDataDetailTab(ajaxData){
+
+	//제품(서비스) 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/pdservice/getNode.do?c_id=" + ajaxData.c_pdService_Link,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true
+	}).done(function(data) {
+
+		$('#detailView-req-pdService-name').text(data.c_title);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+	$('#detailView-req-pdService-version').text(ajaxData.c_version_Link);
+	$('#detailView-req-id').text(ajaxData.c_id);
+	$('#detailView-req-name').text(ajaxData.c_title);
+	$('#detailView-req-priority').text(ajaxData.c_priority);
+	$('#detailView-req-status').text(ajaxData.c_req_status);
+	$('#detailView-req-writer').text(ajaxData.c_writer_cn);
+	$('#detailView-req-write-date').text(ajaxData.c_writer_date);
+	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
+		$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+	} else {
+		$("#detailView-req-reviewer01").text(ajaxData.c_reviewer01);
+	}
+	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
+	} else {
+		$("#detailView-req-reviewer02").text(ajaxData.c_reviewer02);
+	}
+	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
+	} else {
+		$("#detailView-req-reviewer03").text(ajaxData.c_reviewer03);
+	}
+	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
+	} else {
+		$("#detailView-req-reviewer04").text(ajaxData.c_reviewer04);
+	}
+	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
+	} else {
+		$("#detailView-req-reviewer05").text(ajaxData.c_reviewer05);
+	}
+	$("#detailView-req-contents").html(ajaxData.c_contents);
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
+//문서로 보기 탭
+///////////////////////////////////////////////////////////////////////////////
+function setDocViewTab(){
+	$('.dd-list').empty();
+	var data = $('#reqTable').DataTable().rows().data().toArray();
+	$.each( data, function( key, value ) {
 
+		if(value.c_contents == null || value.c_contents == "null"){
+			value.c_contents = "";
+		}
 
+		var iconHtml;
+		if(value.c_type == "root" || value.c_type == "drive"){
+			iconHtml = "<i class='fa fa-clipboard'></i>";
+		}else if(value.c_type == "folder"){
+			iconHtml = "<i class='fa fa-files-o'></i>";
+		}else {
+			iconHtml = "<i class='fa fa-file-text-o'></i>";
+		}
 
-// 신규 제품(서비스) 등록 버튼
-// --- 팝업 띄울때 사이즈 조정 -- //
+		if(value.c_type == "root"){
+			console.log("ROOT 노드는 처리하지 않습니다.");
+		}else if(value.c_type == "folder" || value.c_type == "drive"){
+			$('.dd-list').append("<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id + "' data-id='" + value.c_id + "'>" +
+				"<div class='dd-handle'>" +
+				iconHtml +
+				" " + value.c_title +
+				"<p>" + value.c_contents + "</p>" +
+				"</div>" +
+				"</li>");
+		}else {
+			$('#T_ARMS_REQ_'+value.c_parentid).append("<ol class='dd-list'>" +
+				"<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id +"' data-id='" + value.c_id + "'>" +
+				"<div class='dd-handle'>" +
+				iconHtml +
+				" " + value.c_title +
+				"<p>" + value.c_contents + "</p>" +
+				"</div>" +
+				"</li>" +
+				"</ol>");
+		}
+		console.log( key + ": " + value.c_id);
+		console.log( key + ": " + value.c_parentid);
+		console.log( key + ": " + value.c_position);
+		console.log( key + ": " + value.c_left);
+		console.log( key + ": " + value.c_title);
+		console.log( key + ": " + value.c_contents);
+
+	});
+	//console.log(data);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// 신규 요구사항 등록 버튼
+///////////////////////////////////////////////////////////////////////////////
 $("#newReqRegist01").click(function () {
 	registNewPopup();
 });
@@ -391,15 +486,6 @@ function registNewPopup(){
 		dataType : "json",
 		progress: true
 	}).done(function(data) {
-
-		////////////////////////////////////////////////////////////
-		//var jira_name = obj.c_title;
-		//selectConnectID = obj.c_id;
-		console.log("c_reviewer01==" + data.c_reviewer01);
-		console.log("c_reviewer02==" + data.c_reviewer02);
-		console.log("c_reviewer03==" + data.c_reviewer03);
-		console.log("c_reviewer04==" + data.c_reviewer04);
-		console.log("c_reviewer05==" + data.c_reviewer05);
 
 		//clear
 		$('#popup-pdService-reviewers').val(null).trigger('change');
@@ -451,12 +537,13 @@ function registNewPopup(){
 			$('#popup-pdService-reviewer').css('height', resultValue + 'px');
 		}, 250);
 
-		////////////////////////////////////////////////////////////////
 	});
 
 }
 
+///////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 설정 --- //
+///////////////////////////////////////////////////////////////////////////////
 $(".js-data-example-ajax").select2({
 	maximumSelectionLength: 5,
 	width: 'resolve',
@@ -537,9 +624,9 @@ $('#popup-pdService-reviewer').on('select2:select', function (e) {
 	$('#popup-pdService-reviewer').css('height', resultValue + 'px');
 });
 
-
-
-// 팝업에서 제품(서비스) 변경 저장 버튼
+///////////////////////////////////////////////////////////////////////////////
+// 팝업에서 신규 요구사항 저장 버튼
+///////////////////////////////////////////////////////////////////////////////
 $("#save-req").click(function () {
 	var reviewers01 = "none";
 	var reviewers02 = "none";

@@ -395,7 +395,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					// (may be -1, 0, or undefined when loading the root nodes)
 					data: function (n) {
 						// the result is fed to the AJAX request `data` option
-						console.log(n);
+						console.log("jsTreeBuild :: json data load :: data = " + JSON.stringify(n));
 						return {
 							c_id: n.attr
 								? n.attr("id").replace("node_", "").replace("copy_", "")
@@ -506,7 +506,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						Chat.sendMessage(
 							"노드를 추가했습니다. 추가된 노드의 아이디는 " + r.id,
 							function (data) {
-								console.log(data);
+								console.log("jsTreeBuild :: create :: data = " + data);
 							}
 						);
 					}
@@ -530,7 +530,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 							Chat.sendMessage(
 								"노드를 삭제했습니다. 삭제된 노드의 아이디는 " + r.c_id,
 								function (data) {
-									console.log(data);
+									console.log("jsTreeBuild :: remove :: data = " + data);
 								}
 							);
 						}
@@ -554,9 +554,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					jSuccess("Rename Node Complete");
 					if (typeof Chat != "undefined") {
 						Chat.sendMessage(
-							"노드를 변경했습니다. 변경된 노드의 아이디는 " + r.c_id,
+							"노드의 이름을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id,
 							function (data) {
-								console.log(data);
+								console.log("jsTreeBuild :: rename :: data = " + data);
 							}
 						);
 					}
@@ -576,9 +576,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					jSuccess("Node Type Change");
 					if (typeof Chat != "undefined") {
 						Chat.sendMessage(
-							"노드를 변경했습니다. 변경된 노드의 아이디는 " + r.c_id,
+							"노드의 타입을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id,
 							function (data) {
-								console.log(data);
+								console.log("jsTreeBuild :: set_type :: data = " + data);
 							}
 						);
 					}
@@ -617,7 +617,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 							Chat.sendMessage(
 								"노드가 이동되었습니다. 이동된 노드의 아이디는 " + r.c_id,
 								function (data) {
-									console.log(data);
+									console.log("jsTreeBuild :: move_node :: data = " + data);
 								}
 							);
 						}
@@ -629,11 +629,15 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 		.bind("select_node.jstree", function (event, data) {
 			// `data.rslt.obj` is the jquery extended node that was clicked
 			if ($.isFunction(jsTreeClick)) {
-				console.log(data.rslt.obj);
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj.data('id')" + data.rslt.obj.attr("id"));
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj.data('rel')" + data.rslt.obj.attr("rel"));
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj.data('class')" + data.rslt.obj.attr("class"));
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj..children('a')" + data.rslt.obj.children("a"));
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj..children('ul')" + data.rslt.obj.children("ul"));
 				jsTreeClick(data.rslt.obj);
 			}
 		})
-		.bind("select_node.jstree", function (event, data) {
+		.bind("loaded.jstree", function (event, data) {
 			$(jQueryElementID).jstree('open_all');
 		});
 

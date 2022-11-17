@@ -86,10 +86,13 @@
                                     <a href="#report" data-toggle="tab" id="folderTab"><strong>리스트로 보기</strong></a>
                                 </li>
                                 <li>
-                                    <a href="#history" data-toggle="tab" id="docuTab"><strong>문서로 보기</strong></a>
+                                    <a href="#doc" data-toggle="tab" id="docuTab"><strong>문서로 보기</strong></a>
                                 </li>
                                 <li>
                                     <a href="#jira" data-toggle="tab" id="jiraTab"><strong>JIRA 연결 설정</strong></a>
+                                </li>
+                                <li>
+                                    <a href="#history" data-toggle="tab" id="historyTab"><strong>History(이력)</strong></a>
                                 </li>
                             </ul>
                         </header>
@@ -151,6 +154,19 @@
 												</span>&nbsp;
                                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
                                                     <a href="#" id="detailView-req-name"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="detailView-req-priority">
+                                                요구사항 우선순위 &nbsp;
+                                            </label>
+                                            <div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+                                                    <a href="#" id="detailView-req-priority"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,7 +243,7 @@
                             <div id="edit" class="tab-pane" style="padding-top: 10px !important">
                                 <div class="form-group" style="padding-top: 10px;">
                                     <div class="control-group">
-                                        <label class="control-label" for="prepended-input" style="vertical-align: center">요구사항 등록 모드 &nbsp;</label>
+                                        <label class="control-label" style="vertical-align: center">요구사항 등록 모드 &nbsp;</label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group" style="text-align: left;">
                                                 <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
@@ -240,29 +256,93 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="prepended-input">제품(서비스) &nbsp;</label>
+                                        <label class="control-label" for="editView-req-pdService-name">요구사항 연관 제품(서비스) &nbsp;</label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <input id="editView-req-pdService-name" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="prepended-input">버전 &nbsp;</label>
+                                        <label class="control-label" for="editMultiVersion">요구사항 연관 버전 &nbsp;</label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <select multiple="multiple" id="editMultiVersion" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="prepended-input">요구사항 제목 &nbsp;</label>
+                                        <label class="control-label" for="editView-req-id">요구사항 아이디 &nbsp;</label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <input id="editView-req-id" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-name">요구사항 제목 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-name" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-priority">요구사항 우선순위 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-priority" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-status">요구사항 상태 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-status" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-writer">요구사항 작성자 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-writer" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-write-date">요구사항 최근 작성일 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-write-date" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-reviewers">요구사항 리뷰어 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-reviewers" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="editView-req-contents">요구사항 내용 &nbsp;</label>
+                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+                                                <input id="editView-req-contents" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
@@ -284,7 +364,7 @@
                                     </thead>
                                 </table>
                             </div>
-                            <div id="history" class="tab-pane" style="padding-top: 10px !important">
+                            <div id="doc" class="tab-pane" style="padding-top: 10px !important">
                                 <div id="newReqDiv" style="margin-top: 10px;margin-bottom: 10px; border: 1px solid #0b67ff !important;" class="darkBack">
                                     <label id="newReqRegist03" class="btn btn-primary btn-transparent btn-sm active" data-target="#myModal1" data-toggle="modal" style="width: 100%; background-color: #2477FF !important;">
                                         a-RMS의 신규 요구사항 등록하기
@@ -300,6 +380,10 @@
                             </div>
                             <div id="jira" class="tab-pane" style="padding-top: 10px !important">
                                 JIRA
+                            </div>
+
+                            <div id="history" class="tab-pane" style="padding-top: 10px !important">
+                                HISTORY
                             </div>
                             <div class="body-middle">
                                 <form
