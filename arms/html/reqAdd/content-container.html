@@ -279,7 +279,7 @@
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-id" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <input id="editView-req-id" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
@@ -306,7 +306,7 @@
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-status" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <input id="editView-req-status" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
@@ -315,7 +315,7 @@
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-writer" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <input id="editView-req-writer" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
@@ -324,7 +324,7 @@
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-write-date" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <input id="editView-req-write-date" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
@@ -338,12 +338,32 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-contents">요구사항 내용 &nbsp;</label>
+                                        <label class="control-label" for="editTabmodalEditor">요구사항 내용 &nbsp;</label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-contents" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                            <div class="input-group" style="padding-top: 5px;">
+                                                <code>
+                                                    <i class="fa fa-long-arrow-right"></i>
+                                                    입력창이 좁다면 하단의 팝업으로 편집하기를 활용하세요
+                                                    <i class="fa fa-long-arrow-left"></i>
+                                                </code>
                                             </div>
+                                        </div>
+                                        <div class="controls form-group">
+                                            <div class="col-sm-12">
+                                                <div id="editTabModalEditor" class="darkBack">
+                                                    <p>요구사항 내용을 기록합니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions" style="float: right; margin-top: 0px !important;">
+                                        <div>
+                                            <button class="btn btn-warning" data-target="#editModal" data-toggle="modal" id="editModalBtn" type="button">
+                                                팝업 창으로 편집 하기
+                                            </button>
+                                            <button type="button" id="editTab_Req_Update" class="btn btn-success">
+                                                제품(서비스) 변경 사항 저장
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -581,7 +601,7 @@
                                 </span></label>
                             <div class="controls form-group  col-sm-12">
                                 <div id="modalEditor" class="darkBack">
-                                    <p>버전에 포함될 기능을 요약합니다.</p>
+                                    <p>요구사항 내용을 기록합니다.</p>
                                 </div>
                             </div>
 

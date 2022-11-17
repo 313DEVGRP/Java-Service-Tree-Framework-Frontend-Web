@@ -22,6 +22,7 @@ $(function () {
 
 	// --- 에디터 설정 --- //
 	CKEDITOR.replace("modalEditor");
+	CKEDITOR.replace("editTabModalEditor");
 
 });
 
@@ -304,6 +305,7 @@ function setDetailViewTab(){
 	});
 }
 
+// ------------------ 편집하기 ------------------ //
 function bindDataEditlTab(ajaxData){
 
 	//제품(서비스) 데이터 바인딩
@@ -321,23 +323,9 @@ function bindDataEditlTab(ajaxData){
 	}).always(function() {
 	});
 
-	//제품(서비스) 데이터 바인딩
-	$.ajax({
-		//이부분이 좀 이상할 것인데. c_id 가 백엔드에서 c_version_Link 로 대치되어 조회함.
-		url: "/auth-user/api/arms/pdversion/getNode.do?c_id=" + ajaxData.c_version_Link,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType : "json",
-		progress: true
-	}).done(function(data) {
+	console.log("ajaxData.c_version_Link = " + ajaxData.c_version_Link);
+	$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_Link.split(","));
 
-		$('#editView-req-pdService-version').val(data.c_title);
-
-	}).fail(function(e) {
-	}).always(function() {
-	});
-
-	$('#editView-req-pdService-version').val(ajaxData.c_version_Link);
 	$('#editView-req-id').val(ajaxData.c_id);
 	$('#editView-req-name').val(ajaxData.c_title);
 	$('#editView-req-priority').val(ajaxData.c_priority);
@@ -348,8 +336,10 @@ function bindDataEditlTab(ajaxData){
 	$("#editView-req-contents").html(ajaxData.c_contents);
 }
 
+// ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData){
 
+	$('#detailView-req-pdService-name').text("");
 	//제품(서비스) 데이터 바인딩
 	$.ajax({
 		url: "/auth-user/api/arms/pdservice/getNode.do?c_id=" + ajaxData.c_pdService_Link,
@@ -451,7 +441,91 @@ function setDocViewTab(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// 신규 요구사항 등록 버튼
+// --- select2 (사용자 자동완성 검색 ) 설정 --- //
+///////////////////////////////////////////////////////////////////////////////
+$(".js-data-example-ajax").select2({
+	maximumSelectionLength: 5,
+	width: 'resolve',
+	ajax: {
+		url: function (params) {
+			return '/auth-check/getUsers/' + params.term;
+		},
+		dataType: "json",
+		delay: 250,
+		//data: function (params) {
+		//    return {
+		//        q: params.term, // search term
+		//        page: params.page,
+		//    };
+		//},
+		processResults: function (data, params) {
+			// parse the results into the format expected by Select2
+			// since we are using custom formatting functions we do not need to
+			// alter the remote JSON data, except to indicate that infinite
+			// scrolling can be used
+			params.page = params.page || 1;
+
+			return {
+				results: data,
+				pagination: {
+					more: params.page * 30 < data.total_count,
+				},
+			};
+		},
+		cache: true,
+	},
+	placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
+	minimumInputLength: 1,
+	templateResult: formatUser,
+	templateSelection: formatUserSelection,
+});
+
+// --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
+function formatUser(jsonData) {
+	var $container = $(
+		"<div class='select2-result-jsonData clearfix'>" +
+		"<div class='select2-result-jsonData__meta'>" +
+		"<div class='select2-result-jsonData__username'><i class='fa fa-flash'></i></div>" +
+		"<div class='select2-result-jsonData__id'><i class='fa fa-star'></i></div>" +
+		"</div>" +
+		"</div>"
+	);
+
+	$container.find(".select2-result-jsonData__username").text(jsonData.username);
+	$container
+		.find(".select2-result-jsonData__id")
+		.text(jsonData.id);
+
+	return $container;
+}
+
+// --- select2 (사용자 자동완성 검색 ) templateSelection 설정 --- //
+function formatUserSelection(jsonData) {
+
+	if (jsonData.id == '') {
+		jsonData.text = "placeholder";
+	} else {
+
+		if (jsonData.username == undefined) {
+			jsonData.text = jsonData.id;
+		} else {
+			jsonData.text = "[" + jsonData.username + "] - " + jsonData.id;
+		}
+
+	}
+	return jsonData.text;
+}
+
+// --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
+$('#popup-pdService-reviewer').on('select2:select', function (e) {
+	var heightValue = $('#popupw-pdService-reviewer').height();
+	var resultValue = heightValue + 20;
+	$('#popup-pdService-reviewer').css('height', resultValue + 'px');
+});
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 신규 요구사항 팝업 데이터 셋팅
 ///////////////////////////////////////////////////////////////////////////////
 $("#newReqRegist01").click(function () {
 	registNewPopup();
@@ -542,89 +616,6 @@ function registNewPopup(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// --- select2 (사용자 자동완성 검색 ) 설정 --- //
-///////////////////////////////////////////////////////////////////////////////
-$(".js-data-example-ajax").select2({
-	maximumSelectionLength: 5,
-	width: 'resolve',
-	ajax: {
-		url: function (params) {
-			return '/auth-check/getUsers/' + params.term;
-		},
-		dataType: "json",
-		delay: 250,
-		//data: function (params) {
-		//    return {
-		//        q: params.term, // search term
-		//        page: params.page,
-		//    };
-		//},
-		processResults: function (data, params) {
-			// parse the results into the format expected by Select2
-			// since we are using custom formatting functions we do not need to
-			// alter the remote JSON data, except to indicate that infinite
-			// scrolling can be used
-			params.page = params.page || 1;
-
-			return {
-				results: data,
-				pagination: {
-					more: params.page * 30 < data.total_count,
-				},
-			};
-		},
-		cache: true,
-	},
-	placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
-	minimumInputLength: 1,
-	templateResult: formatUser,
-	templateSelection: formatUserSelection,
-});
-
-// --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
-function formatUser(jsonData) {
-	var $container = $(
-		"<div class='select2-result-jsonData clearfix'>" +
-		"<div class='select2-result-jsonData__meta'>" +
-		"<div class='select2-result-jsonData__username'><i class='fa fa-flash'></i></div>" +
-		"<div class='select2-result-jsonData__id'><i class='fa fa-star'></i></div>" +
-		"</div>" +
-		"</div>"
-	);
-
-	$container.find(".select2-result-jsonData__username").text(jsonData.username);
-	$container
-		.find(".select2-result-jsonData__id")
-		.text(jsonData.id);
-
-	return $container;
-}
-
-// --- select2 (사용자 자동완성 검색 ) templateSelection 설정 --- //
-function formatUserSelection(jsonData) {
-
-	if (jsonData.id == '') {
-		jsonData.text = "placeholder";
-	} else {
-
-		if (jsonData.username == undefined) {
-			jsonData.text = jsonData.id;
-		} else {
-			jsonData.text = "[" + jsonData.username + "] - " + jsonData.id;
-		}
-
-	}
-	return jsonData.text;
-}
-
-// --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
-$('#popup-pdService-reviewer').on('select2:select', function (e) {
-	var heightValue = $('#popupw-pdService-reviewer').height();
-	var resultValue = heightValue + 20;
-	$('#popup-pdService-reviewer').css('height', resultValue + 'px');
-});
-
-///////////////////////////////////////////////////////////////////////////////
 // 팝업에서 신규 요구사항 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
 $("#save-req").click(function () {
@@ -677,6 +668,63 @@ $("#save-req").click(function () {
 				$('#productTree').jstree('refresh');
 				$('#close-req').trigger('click');
 				jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
+			},
+		},
+	});
+});
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 요구사항 편집 탭 저장 버튼
+///////////////////////////////////////////////////////////////////////////////
+$("#editTab_Req_Update").click(function () {
+
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
+	var reqName = $('#editView-req-name').val();
+
+	var reviewers01 = "none";
+	var reviewers02 = "none";
+	var reviewers03 = "none";
+	var reviewers04 = "none";
+	var reviewers05 = "none";
+	if ($('#popup-pdService-reviewers').select2('data')[0] != undefined) {
+		reviewers01 = $('#popup-pdService-reviewers').select2('data')[0].text;
+	}
+	if ($('#popup-pdService-reviewers').select2('data')[1] != undefined) {
+		reviewers02 = $('#popup-pdService-reviewers').select2('data')[1].text;
+	}
+	if ($('#popup-pdService-reviewers').select2('data')[2] != undefined) {
+		reviewers03 = $('#popup-pdService-reviewers').select2('data')[2].text;
+	}
+	if ($('#popup-pdService-reviewers').select2('data')[3] != undefined) {
+		reviewers04 = $('#popup-pdService-reviewers').select2('data')[3].text;
+	}
+	if ($('#popup-pdService-reviewers').select2('data')[4] != undefined) {
+		reviewers05 = $('#popup-pdService-reviewers').select2('data')[4].text;
+	}
+
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
+		type: "POST",
+		data: {
+			c_id: $('#editView-req-id').val(),
+			c_title: $('#editView-req-name').val(),
+			c_version_Link: JSON.stringify($('#editMultiVersion').val()),
+			c_writer_date: new Date(),
+			c_priority: 1,
+			c_reviewer01: reviewers01,
+			c_reviewer02: reviewers02,
+			c_reviewer03: reviewers03,
+			c_reviewer04: reviewers04,
+			c_reviewer05: reviewers05,
+			c_contents: CKEDITOR.instances["editTabModalEditor"].getData(),
+		},
+		statusCode: {
+			200: function () {
+				$('#productTree').jstree('refresh');
+				jSuccess(reqName + "의 데이터가 변경되었습니다.");
 			},
 		},
 	});
