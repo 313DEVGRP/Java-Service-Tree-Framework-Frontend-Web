@@ -295,10 +295,10 @@ function setDetailViewTab(){
 		progress: true
 	}).done(function(data) {
 
-		// ------------------ 상세보기 ------------------ //
-		bindDataDetailTab(data);
 		// ------------------ 편집하기 ------------------ //
 		bindDataEditlTab(data);
+		// ------------------ 상세보기 ------------------ //
+		bindDataDetailTab(data);
 
 	}).fail(function(e) {
 	}).always(function() {
@@ -309,22 +309,18 @@ function setDetailViewTab(){
 function bindDataEditlTab(ajaxData){
 
 	//제품(서비스) 데이터 바인딩
-	$.ajax({
-		url: "/auth-user/api/arms/pdservice/getNode.do?c_id=" + ajaxData.c_pdService_Link,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType : "json",
-		progress: true
-	}).done(function(data) {
+	var selectedPdServiceText = $('#country').select2('data')[0].text;
+	if(isEmpty(selectedPdServiceText)){
+		$('#editView-req-pdService-name').val("");
+	}else{
+		$('#editView-req-pdService-name').val(selectedPdServiceText);
+	}
 
-		$('#editView-req-pdService-name').val(data.c_title);
-
-	}).fail(function(e) {
-	}).always(function() {
-	});
-
+	// 버전 데이터 바인딩
 	if(!isEmpty(ajaxData.c_version_Link)) {
 		$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_Link.split(","));
+	}else{
+		$('#editMultiVersion').multipleSelect('uncheckAll')
 	}
 
 	$('#editView-req-id').val(ajaxData.c_id);
@@ -334,33 +330,75 @@ function bindDataEditlTab(ajaxData){
 	var slectReqPriorityID = "editView-req-priority-option" + ajaxData.c_priority;
 	$('#'+slectReqPriorityID).parent().addClass("active");
 
+	// ------------------------- reviewer --------------------------------//
+	//clear
+	$('#editView-req-reviewers').val(null).trigger('change');
+
+	var reviewer01Option = new Option(ajaxData.c_reviewer01, ajaxData.c_reviewer01, true, true);
+	var reviewer02Option = new Option(ajaxData.c_reviewer02, ajaxData.c_reviewer02, true, true);
+	var reviewer03Option = new Option(ajaxData.c_reviewer03, ajaxData.c_reviewer03, true, true);
+	var reviewer04Option = new Option(ajaxData.c_reviewer04, ajaxData.c_reviewer04, true, true);
+	var reviewer05Option = new Option(ajaxData.c_reviewer05, ajaxData.c_reviewer05, true, true);
+
+	var multifyValue = 1;
+	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_reviewer01 empty");
+	} else {
+		multifyValue = multifyValue + 1;
+		$('#editView-req-reviewers').append(reviewer01Option);
+	}
+	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_reviewer02 empty");
+	} else {
+		multifyValue = multifyValue + 1;
+		$('#editView-req-reviewers').append(reviewer02Option);
+	}
+	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_reviewer03 empty");
+	} else {
+		multifyValue = multifyValue + 1;
+		$('#editView-req-reviewers').append(reviewer03Option);
+	}
+	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_reviewer04 empty");
+	} else {
+		multifyValue = multifyValue + 1;
+		$('#editView-req-reviewers').append(reviewer04Option);
+	}
+	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
+		console.log("bindDataEditlTab :: json.c_reviewer05 empty");
+	} else {
+		multifyValue = multifyValue + 1;
+		$('#editView-req-reviewers').append(reviewer05Option);
+	}
+
+	$('#editView-req-reviewers').trigger('change');
+
+	// ------------------------- reviewer --------------------------------//
 	$('#editView-req-status').val(ajaxData.c_req_status);
 	$('#editView-req-writer').val(ajaxData.c_writer_cn);
 	$('#editView-req-write-date').val(ajaxData.c_writer_date);
-	$("#editView-req-reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
 	CKEDITOR.instances.editTabModalEditor.setData(ajaxData.c_contents);
 }
 
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData){
 
-	$('#detailView-req-pdService-name').text("");
 	//제품(서비스) 데이터 바인딩
-	$.ajax({
-		url: "/auth-user/api/arms/pdservice/getNode.do?c_id=" + ajaxData.c_pdService_Link,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType : "json",
-		progress: true
-	}).done(function(data) {
+	var selectedPdServiceText = $('#country').select2('data')[0].text;
+	if(isEmpty(selectedPdServiceText)){
+		$('#detailView-req-pdService-name').text("");
+	}else{
+		$('#detailView-req-pdService-name').text(selectedPdServiceText);
+	}
 
-		$('#detailView-req-pdService-name').text(data.c_title);
-
-	}).fail(function(e) {
-	}).always(function() {
-	});
-
-	$('#detailView-req-pdService-version').text(ajaxData.c_version_Link);
+	//Version 데이터 바인딩
+	var selectedVersionText = $('#editMultiVersion').multipleSelect('getSelects', 'text');
+	if ( isEmpty(selectedVersionText)){
+		$('#detailView-req-pdService-version').text("요구사항에 등록된 버전이 없습니다.");
+	}else {
+		$('#detailView-req-pdService-version').text(selectedVersionText);
+	}
 	$('#detailView-req-id').text(ajaxData.c_id);
 	$('#detailView-req-name').text(ajaxData.c_title);
 
@@ -372,24 +410,29 @@ function bindDataDetailTab(ajaxData){
 	$('#detailView-req-status').text(ajaxData.c_req_status);
 	$('#detailView-req-writer').text(ajaxData.c_writer_cn);
 	$('#detailView-req-write-date').text(ajaxData.c_writer_date);
+
 	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
 		$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
 	} else {
 		$("#detailView-req-reviewer01").text(ajaxData.c_reviewer01);
 	}
 	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
+		$("#detailView-req-reviewer02").text("");
 	} else {
 		$("#detailView-req-reviewer02").text(ajaxData.c_reviewer02);
 	}
 	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
+		$("#detailView-req-reviewer03").text("");
 	} else {
 		$("#detailView-req-reviewer03").text(ajaxData.c_reviewer03);
 	}
 	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
+		$("#detailView-req-reviewer04").text("");
 	} else {
 		$("#detailView-req-reviewer04").text(ajaxData.c_reviewer04);
 	}
 	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
+		$("#detailView-req-reviewer05").text("");
 	} else {
 		$("#detailView-req-reviewer05").text(ajaxData.c_reviewer05);
 	}
@@ -527,10 +570,8 @@ function formatUserSelection(jsonData) {
 }
 
 // --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
-$('#popup-pdService-reviewer').on('select2:select', function (e) {
-	var heightValue = $('#popupw-pdService-reviewer').height();
-	var resultValue = heightValue + 20;
-	$('#popup-pdService-reviewer').css('height', resultValue + 'px');
+$('#editView-req-reviewers').on('select2:select', function (e) {
+	console.log("select2:select");
 });
 
 
@@ -698,20 +739,20 @@ $("#editTab_Req_Update").click(function () {
 	var reviewers03 = "none";
 	var reviewers04 = "none";
 	var reviewers05 = "none";
-	if ($('#popup-pdService-reviewers').select2('data')[0] != undefined) {
-		reviewers01 = $('#popup-pdService-reviewers').select2('data')[0].text;
+	if ($('#editView-req-reviewers').select2('data')[0] != undefined) {
+		reviewers01 = $('#editView-req-reviewers').select2('data')[0].text;
 	}
-	if ($('#popup-pdService-reviewers').select2('data')[1] != undefined) {
-		reviewers02 = $('#popup-pdService-reviewers').select2('data')[1].text;
+	if ($('#editView-req-reviewers').select2('data')[1] != undefined) {
+		reviewers02 = $('#editView-req-reviewers').select2('data')[1].text;
 	}
-	if ($('#popup-pdService-reviewers').select2('data')[2] != undefined) {
-		reviewers03 = $('#popup-pdService-reviewers').select2('data')[2].text;
+	if ($('#editView-req-reviewers').select2('data')[2] != undefined) {
+		reviewers03 = $('#editView-req-reviewers').select2('data')[2].text;
 	}
-	if ($('#popup-pdService-reviewers').select2('data')[3] != undefined) {
-		reviewers04 = $('#popup-pdService-reviewers').select2('data')[3].text;
+	if ($('#editView-req-reviewers').select2('data')[3] != undefined) {
+		reviewers04 = $('#editView-req-reviewers').select2('data')[3].text;
 	}
-	if ($('#popup-pdService-reviewers').select2('data')[4] != undefined) {
-		reviewers05 = $('#popup-pdService-reviewers').select2('data')[4].text;
+	if ($('#editView-req-reviewers').select2('data')[4] != undefined) {
+		reviewers05 = $('#editView-req-reviewers').select2('data')[4].text;
 	}
 
 	//우선 순위 값 셋팅
