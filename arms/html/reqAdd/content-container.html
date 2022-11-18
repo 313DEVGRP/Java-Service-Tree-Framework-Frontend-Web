@@ -420,7 +420,20 @@
                                 </div>
                             </div>
                             <div id="jira" class="tab-pane" style="padding-top: 10px !important">
-                                JIRA
+                                요구사항 별로 JIRA 연결을 재설정 할 수 있다.<br>
+                                1. 요구사항은 무조건 한개 이상의 버전을 적용받는다.<br>
+                                2. 요구사항이 예를 들어 2개 이상일 때. ( A버전, B버전 ~ )<br>
+                                2-1 . A버전의 요구사항과 연결되는 JIRA 설정은 따로이고<br>
+                                2-2 . B버전의 요구사항과 연결되는 JIRA 설정도 따로이다.<br>
+                                2-3 . 단 별도의 JIRA 설정이 없다면 BaseVersion 설정을 유지한다.<br>
+                                <br>
+                                3. 따라서, 제품(서비스) - 버전 - 요구사항 - JIRA 연결 Mapper 테이블은 아래와 같다.<br>
+                                ex) a-RMS - BaseVersion - 요구사항A - JIRA Project Z - 요구사항 타입의 이슈 아이디 ( 연결 포인트 )<br>
+                                ex) a-RMS - 1.1.2 - 요구사항A - JIRA Project Z - 요구사항 타입의 이슈 아이디 ( 연결 포인트 )<br>
+                                ex) a-RMS - 1.1.2 - 요구사항A - JIRA Project X - 요구사항 타입의 이슈 아이디 ( 연결 포인트 )<br>
+                                <br>
+                                4. JIRA 프로젝트 테이블은 이미 있다 - 버전이랑 연결해야 하기 때문에 사용되었다. JIRA API 참조
+                                5.
                             </div>
 
                             <div id="history" class="tab-pane" style="padding-top: 10px !important">

@@ -484,6 +484,8 @@ function bindDataDetailTab(ajaxData){
 function setDocViewTab(){
 	$('.dd-list').empty();
 	var data = $('#reqTable').DataTable().rows().data().toArray();
+
+	var firstBranchChecker = true;
 	$.each( data, function( key, value ) {
 
 		if(value.c_contents == null || value.c_contents == "null"){
@@ -503,14 +505,27 @@ function setDocViewTab(){
 
 		if(value.c_type == "root"){
 			console.log("ROOT 노드는 처리하지 않습니다.");
-		}else if(value.c_type == "drive"){
-			$('.dd-list').append("<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id + "' data-id='" + value.c_id + "'>" +
-				"<div class='dd-handle'>" +
-				iconHtml +
-				" " + value.c_title +
-				"<p>" + value.c_contents + "</p>" +
-				"</div>" +
-				"</li>");
+		}else if(value.c_type == "drive" || value.c_type == "folder"){
+			if(firstBranchChecker){
+				$('.dd-list').append("<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id + "' data-id='" + value.c_id + "'>" +
+					"<div class='dd-handle'>" +
+					iconHtml +
+					" " + value.c_title +
+					"<p>" + value.c_contents + "</p>" +
+					"</div>" +
+					"</li>");
+				firstBranchChecker = false;
+			}else{
+				$('#T_ARMS_REQ_'+value.c_parentid).append("<ol class='dd-list'>" +
+					"<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id +"' data-id='" + value.c_id + "'>" +
+					"<div class='dd-handle'>" +
+					iconHtml +
+					" " + value.c_title +
+					"<p>" + value.c_contents + "</p>" +
+					"</div>" +
+					"</li>" +
+					"</ol>");
+			}
 		}else {
 			$('#T_ARMS_REQ_'+value.c_parentid).append("<ol class='dd-list'>" +
 				"<li class='dd-item' id='" + "T_ARMS_REQ_" + value.c_id +"' data-id='" + value.c_id + "'>" +
