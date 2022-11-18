@@ -131,7 +131,7 @@ function jsTreeClick(selectedNodeID) {
 		$('.widget-tabs').children('header').children('ul').children('li:nth-child(5)').show(); //JIRA연결설정
 
 		//상세보기 탭 셋팅
-		setDetailViewTab();
+		setDetailAndEditViewTab();
 
 	}else{
 		$('#folderTab').get(0).click();
@@ -181,15 +181,10 @@ function dataTableLoad(selectId) {
 			success: function(data) {
 				var paramUrl = "c_id=313&c_left=" + data.c_left + "&c_right=" + data.c_right;
 				dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNodeWithParent.do?"+paramUrl, columnList, rowsGroupList);
-
 			}
 		}).done(function(data) {
-
-
 		}).fail(function(e) {
-
 		}).always(function() {
-
 		});
 
 	}
@@ -208,7 +203,7 @@ function dataTableClick(selectedData) {
 function dataTableCallBack(){
 	setDocViewTab();
 	//상세보기 탭 셋팅
-	setDetailViewTab();
+	setDetailAndEditViewTab();
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //파일 관리 : fileupload
@@ -285,7 +280,7 @@ function get_FileList_By_Req() {
 ////////////////////////////////////////////////////////////////////////////////////////
 //상세 보기 탭 & 편집 탭
 ////////////////////////////////////////////////////////////////////////////////////////
-function setDetailViewTab(){
+function setDetailAndEditViewTab(){
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
@@ -320,7 +315,7 @@ function bindDataEditlTab(ajaxData){
 	if(!isEmpty(ajaxData.c_version_Link)) {
 		$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_Link.split(","));
 	}else{
-		$('#editMultiVersion').multipleSelect('uncheckAll')
+		$('#editMultiVersion').multipleSelect('uncheckAll');
 	}
 
 	$('#editView-req-id').val(ajaxData.c_id);
@@ -330,51 +325,94 @@ function bindDataEditlTab(ajaxData){
 	var slectReqPriorityID = "editView-req-priority-option" + ajaxData.c_priority;
 	$('#'+slectReqPriorityID).parent().addClass("active");
 
-	// ------------------------- reviewer --------------------------------//
-	//clear
+	// -------------------- reviewer setting -------------------- //
+	//reviewer clear
 	$('#editView-req-reviewers').val(null).trigger('change');
 
-	var reviewer01Option = new Option(ajaxData.c_reviewer01, ajaxData.c_reviewer01, true, true);
-	var reviewer02Option = new Option(ajaxData.c_reviewer02, ajaxData.c_reviewer02, true, true);
-	var reviewer03Option = new Option(ajaxData.c_reviewer03, ajaxData.c_reviewer03, true, true);
-	var reviewer04Option = new Option(ajaxData.c_reviewer04, ajaxData.c_reviewer04, true, true);
-	var reviewer05Option = new Option(ajaxData.c_reviewer05, ajaxData.c_reviewer05, true, true);
-
-	var multifyValue = 1;
+	var selectedReviewerArr = [];
 	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
 		console.log("bindDataEditlTab :: ajaxData.c_reviewer01 empty");
 	} else {
-		multifyValue = multifyValue + 1;
-		$('#editView-req-reviewers').append(reviewer01Option);
+
+		selectedReviewerArr.push(ajaxData.c_reviewer01);
+		// Set the value, creating a new option if necessary
+		if ($('#editView-req-reviewers').find("option[value='" + ajaxData.c_reviewer01 + "']").length) {
+			console.log("option[value='\" + ajaxData.c_reviewer01 + \"']\"" + "already exist");
+		} else {
+			// Create a DOM Option and pre-select by default
+			var newOption01 = new Option(ajaxData.c_reviewer01, ajaxData.c_reviewer01, true, true);
+			// Append it to the select
+			$('#editView-req-reviewers').append(newOption01).trigger('change');
+		}
+
 	}
 	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
 		console.log("bindDataEditlTab :: ajaxData.c_reviewer02 empty");
 	} else {
-		multifyValue = multifyValue + 1;
-		$('#editView-req-reviewers').append(reviewer02Option);
+
+		selectedReviewerArr.push(ajaxData.c_reviewer02);
+		// Set the value, creating a new option if necessary
+		if ($('#editView-req-reviewers').find("option[value='" + ajaxData.c_reviewer02 + "']").length) {
+			console.log("option[value='\" + ajaxData.c_reviewer02 + \"']\"" + "already exist");
+		} else {
+			// Create a DOM Option and pre-select by default
+			var newOption02 = new Option(ajaxData.c_reviewer02, ajaxData.c_reviewer02, true, true);
+			// Append it to the select
+			$('#editView-req-reviewers').append(newOption02).trigger('change');
+		}
+
 	}
 	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
 		console.log("bindDataEditlTab :: ajaxData.c_reviewer03 empty");
 	} else {
-		multifyValue = multifyValue + 1;
-		$('#editView-req-reviewers').append(reviewer03Option);
+
+		selectedReviewerArr.push(ajaxData.c_reviewer03);
+		// Set the value, creating a new option if necessary
+		if ($('#editView-req-reviewers').find("option[value='" + ajaxData.c_reviewer03 + "']").length) {
+			console.log("option[value='\" + ajaxData.c_reviewer03 + \"']\"" + "already exist");
+		} else {
+			// Create a DOM Option and pre-select by default
+			var newOption03 = new Option(ajaxData.c_reviewer03, ajaxData.c_reviewer03, true, true);
+			// Append it to the select
+			$('#editView-req-reviewers').append(newOption03).trigger('change');
+		}
+
 	}
 	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
 		console.log("bindDataEditlTab :: ajaxData.c_reviewer04 empty");
 	} else {
-		multifyValue = multifyValue + 1;
-		$('#editView-req-reviewers').append(reviewer04Option);
+
+		selectedReviewerArr.push(ajaxData.c_reviewer04);
+		// Set the value, creating a new option if necessary
+		if ($('#editView-req-reviewers').find("option[value='" + ajaxData.c_reviewer04 + "']").length) {
+			console.log("option[value='\" + ajaxData.c_reviewer04 + \"']\"" + "already exist");
+		} else {
+			// Create a DOM Option and pre-select by default
+			var newOption04 = new Option(ajaxData.c_reviewer04, ajaxData.c_reviewer04, true, true);
+			// Append it to the select
+			$('#editView-req-reviewers').append(newOption04).trigger('change');
+		}
+
 	}
 	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
-		console.log("bindDataEditlTab :: json.c_reviewer05 empty");
+		console.log("bindDataEditlTab :: ajaxData.c_reviewer05 empty");
 	} else {
-		multifyValue = multifyValue + 1;
-		$('#editView-req-reviewers').append(reviewer05Option);
+
+		selectedReviewerArr.push(ajaxData.c_reviewer05);
+		// Set the value, creating a new option if necessary
+		if ($('#editView-req-reviewers').find("option[value='" + ajaxData.c_reviewer05 + "']").length) {
+			console.log("option[value='\" + ajaxData.c_reviewer05 + \"']\"" + "already exist");
+		} else {
+			// Create a DOM Option and pre-select by default
+			var newOption05 = new Option(ajaxData.c_reviewer05, ajaxData.c_reviewer05, true, true);
+			// Append it to the select
+			$('#editView-req-reviewers').append(newOption05).trigger('change');
+		}
+
 	}
+	$('#editView-req-reviewers').val(selectedReviewerArr).trigger('change');
 
-	$('#editView-req-reviewers').trigger('change');
-
-	// ------------------------- reviewer --------------------------------//
+	// ------------------------- reviewer end --------------------------------//
 	$('#editView-req-status').val(ajaxData.c_req_status);
 	$('#editView-req-writer').val(ajaxData.c_writer_cn);
 	$('#editView-req-write-date').val(ajaxData.c_writer_date);

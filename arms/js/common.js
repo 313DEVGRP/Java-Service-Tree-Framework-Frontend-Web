@@ -632,8 +632,8 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				console.log("jsTreeBuild :: select_node :: data.rslt.obj.data('id')" + data.rslt.obj.attr("id"));
 				console.log("jsTreeBuild :: select_node :: data.rslt.obj.data('rel')" + data.rslt.obj.attr("rel"));
 				console.log("jsTreeBuild :: select_node :: data.rslt.obj.data('class')" + data.rslt.obj.attr("class"));
-				console.log("jsTreeBuild :: select_node :: data.rslt.obj..children('a')" + data.rslt.obj.children("a"));
-				console.log("jsTreeBuild :: select_node :: data.rslt.obj..children('ul')" + data.rslt.obj.children("ul"));
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj.children('a')" + data.rslt.obj.children("a"));
+				console.log("jsTreeBuild :: select_node :: data.rslt.obj.children('ul')" + data.rslt.obj.children("ul"));
 				jsTreeClick(data.rslt.obj);
 			}
 		})
