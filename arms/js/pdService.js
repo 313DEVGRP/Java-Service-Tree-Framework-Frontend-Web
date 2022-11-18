@@ -397,57 +397,97 @@ function pdServiceDataTableClick(c_id) {
 				var newOption = new Option(json.c_owner, json.c_owner, true, true);
 				$('#editView-pdService-owner').append(newOption).trigger('change');
 			}
-			//clear
+			// -------------------- reviewer setting -------------------- //
+			//reviewer clear
 			$('#editView-pdService-reviewers').val(null).trigger('change');
 
-			var reviewer01Option = new Option(json.c_reviewer01, json.c_reviewer01, true, true);
-			var reviewer02Option = new Option(json.c_reviewer02, json.c_reviewer02, true, true);
-			var reviewer03Option = new Option(json.c_reviewer03, json.c_reviewer03, true, true);
-			var reviewer04Option = new Option(json.c_reviewer04, json.c_reviewer04, true, true);
-			var reviewer05Option = new Option(json.c_reviewer05, json.c_reviewer05, true, true);
-
-			var multifyValue = 1;
+			var selectedReviewerArr = [];
 			if (json.c_reviewer01 == null || json.c_reviewer01 == "none") {
 				console.log("pdServiceDataTableClick :: json.c_reviewer01 empty");
 			} else {
-				multifyValue = multifyValue + 1;
-				$('#editView-pdService-reviewers').append(reviewer01Option);
+
+				selectedReviewerArr.push(json.c_reviewer01);
+				// Set the value, creating a new option if necessary
+				if ($('#editView-pdService-reviewers').find("option[value='" + json.c_reviewer01 + "']").length) {
+					console.log("option[value='\" + json.c_reviewer01 + \"']\"" + "already exist");
+				} else {
+					// Create a DOM Option and pre-select by default
+					var newOption01 = new Option(json.c_reviewer01, json.c_reviewer01, true, true);
+					// Append it to the select
+					$('#editView-pdService-reviewers').append(newOption01).trigger('change');
+				}
+
 			}
 			if (json.c_reviewer02 == null || json.c_reviewer02 == "none") {
 				console.log("pdServiceDataTableClick :: json.c_reviewer02 empty");
 			} else {
-				multifyValue = multifyValue + 1;
-				$('#editView-pdService-reviewers').append(reviewer02Option);
+
+				selectedReviewerArr.push(json.c_reviewer02);
+				// Set the value, creating a new option if necessary
+				if ($('#editView-pdService-reviewers').find("option[value='" + json.c_reviewer02 + "']").length) {
+					console.log("option[value='\" + json.c_reviewer02 + \"']\"" + "already exist");
+				} else {
+					// Create a DOM Option and pre-select by default
+					var newOption02 = new Option(json.c_reviewer02, json.c_reviewer02, true, true);
+					// Append it to the select
+					$('#editView-pdService-reviewers').append(newOption02).trigger('change');
+				}
+
 			}
 			if (json.c_reviewer03 == null || json.c_reviewer03 == "none") {
 				console.log("pdServiceDataTableClick :: json.c_reviewer03 empty");
 			} else {
-				multifyValue = multifyValue + 1;
-				$('#editView-pdService-reviewers').append(reviewer03Option);
+
+				selectedReviewerArr.push(json.c_reviewer03);
+				// Set the value, creating a new option if necessary
+				if ($('#editView-pdService-reviewers').find("option[value='" + json.c_reviewer03 + "']").length) {
+					console.log("option[value='\" + json.c_reviewer03 + \"']\"" + "already exist");
+				} else {
+					// Create a DOM Option and pre-select by default
+					var newOption03 = new Option(json.c_reviewer03, json.c_reviewer03, true, true);
+					// Append it to the select
+					$('#editView-pdService-reviewers').append(newOption03).trigger('change');
+				}
+
 			}
 			if (json.c_reviewer04 == null || json.c_reviewer04 == "none") {
 				console.log("pdServiceDataTableClick :: json.c_reviewer04 empty");
 			} else {
-				multifyValue = multifyValue + 1;
-				$('#editView-pdService-reviewers').append(reviewer04Option);
+
+				selectedReviewerArr.push(json.c_reviewer04);
+				// Set the value, creating a new option if necessary
+				if ($('#editView-pdService-reviewers').find("option[value='" + json.c_reviewer04 + "']").length) {
+					console.log("option[value='\" + json.c_reviewer04 + \"']\"" + "already exist");
+				} else {
+					// Create a DOM Option and pre-select by default
+					var newOption04 = new Option(json.c_reviewer04, json.c_reviewer04, true, true);
+					// Append it to the select
+					$('#editView-pdService-reviewers').append(newOption04).trigger('change');
+				}
+
 			}
 			if (json.c_reviewer05 == null || json.c_reviewer05 == "none") {
 				console.log("pdServiceDataTableClick :: json.c_reviewer05 empty");
 			} else {
-				multifyValue = multifyValue + 1;
-				$('#editView-pdService-reviewers').append(reviewer05Option);
-			}
 
-			$('#editView-pdService-reviewers').trigger('change');
+				selectedReviewerArr.push(json.c_reviewer05);
+				// Set the value, creating a new option if necessary
+				if ($('#editView-pdService-reviewers').find("option[value='" + json.c_reviewer05 + "']").length) {
+					console.log("option[value='\" + json.c_reviewer05 + \"']\"" + "already exist");
+				} else {
+					// Create a DOM Option and pre-select by default
+					var newOption05 = new Option(json.c_reviewer05, json.c_reviewer05, true, true);
+					// Append it to the select
+					$('#editView-pdService-reviewers').append(newOption05).trigger('change');
+				}
+
+			}
+			$('#editView-pdService-reviewers').val(selectedReviewerArr).trigger('change');
+
+			// ------------------------- reviewer end --------------------------------//
 
 			CKEDITOR.instances.input_pdservice_editor.setData(json.c_contents);
 
-			$('#editView-pdService-reviewer').css('height', '20px');
-			setTimeout(function () {
-				var heightValue = $('#editView-pdService-reviewer').height();
-				var resultValue = heightValue + (20 * multifyValue);
-				$('#editView-pdService-reviewer').css('height', resultValue + 'px');
-			}, 250);
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
 		.fail(function (xhr, status, errorThrown) {
@@ -455,7 +495,6 @@ function pdServiceDataTableClick(c_id) {
 		})
 		//
 		.always(function (xhr, status) {
-			$("#text").html("요청이 완료되었습니다!");
 			console.log(xhr + status);
 		});
 }
