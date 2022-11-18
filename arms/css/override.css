@@ -161,6 +161,10 @@ body {
   border: 1px solid rgba(51, 51, 51, 0.425) !important;
 }
 
+.nav-tabs > li.active > a {
+  color: #a4c6ff !important;
+}
+
 /*****************/
 /** jNotify CSS **/
 /*****************/
@@ -373,14 +377,13 @@ body {
   clear: both;
 }
 .timeline > li > .timeline-item {
+  background: rgba(51, 51, 51, 0.3);
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   border-radius: 3px;
   margin-top: 0;
-  background: #fff;
-  color: #444;
+  color: #f8f8f8;
   margin-left: 60px;
-  margin-right: 15px;
   padding: 0;
   position: relative;
 }
@@ -393,9 +396,8 @@ body {
 .timeline > li > .timeline-item > .timeline-header {
   margin: 0;
   color: #555;
-  border-bottom: 1px solid #f4f4f4;
   padding: 10px;
-  font-size: 16px;
+  font-size: 13px;
   line-height: 1.1;
 }
 .timeline > li > .timeline-item > .timeline-header > a {
@@ -413,7 +415,7 @@ body {
   font-size: 15px;
   line-height: 30px;
   position: absolute;
-  color: #666;
+  color: #000;
   background: #d2d6de;
   border-radius: 50%;
   text-align: center;
@@ -428,11 +430,23 @@ body {
   border-radius: 4px;
 }
 .timeline-inverse > li > .timeline-item {
-  background: #f0f0f0;
-  border: 1px solid #ddd;
+  background: rgba(51, 51, 51, 0.3);
+  border-left: 2px solid rgba(26, 26, 26, 0.425);
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 .timeline-inverse > li > .timeline-item > .timeline-header {
   border-bottom-color: #ddd;
+}
+
+.timeline-inverse .arrow {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: -7px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid rgba(26, 26, 26, 0.425);
 }
