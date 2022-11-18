@@ -638,7 +638,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			}
 		})
 		.bind("loaded.jstree", function (event, data) {
-			$(jQueryElementID).jstree('open_all');
+			setTimeout(function(){
+				$(jQueryElementID).jstree('open_all');
+			},1500);
 		});
 
 	$("#mmenu input, #mmenu button").click(function () {
