@@ -646,55 +646,94 @@ function registNewPopup(){
 		progress: true
 	}).done(function(data) {
 
-		//clear
+		// -------------------- reviewer setting -------------------- //
+		//reviewer clear
 		$('#popup-pdService-reviewers').val(null).trigger('change');
 
-		var reviewer01Option = new Option(data.c_reviewer01, data.c_reviewer01, true, true);
-		var reviewer02Option = new Option(data.c_reviewer02, data.c_reviewer02, true, true);
-		var reviewer03Option = new Option(data.c_reviewer03, data.c_reviewer03, true, true);
-		var reviewer04Option = new Option(data.c_reviewer04, data.c_reviewer04, true, true);
-		var reviewer05Option = new Option(data.c_reviewer05, data.c_reviewer05, true, true);
-
-		var multifyValue = 1;
+		var selectedReviewerArr = [];
 		if (data.c_reviewer01 == null || data.c_reviewer01 == "none") {
-			console.log("pdServiceDataTableClick :: json.c_reviewer01 empty");
+			console.log("registNewPopup :: data.c_reviewer01 empty");
 		} else {
-			multifyValue = multifyValue + 1;
-			$('#popup-pdService-reviewers').append(reviewer01Option);
+
+			selectedReviewerArr.push(data.c_reviewer01);
+			// Set the value, creating a new option if necessary
+			if ($('#popup-pdService-reviewers').find("option[value='" + data.c_reviewer01 + "']").length) {
+				console.log("option[value='\" + data.c_reviewer01 + \"']\"" + "already exist");
+			} else {
+				// Create a DOM Option and pre-select by default
+				var newOption01 = new Option(data.c_reviewer01, data.c_reviewer01, true, true);
+				// Append it to the select
+				$('#popup-pdService-reviewers').append(newOption01).trigger('change');
+			}
+
 		}
 		if (data.c_reviewer02 == null || data.c_reviewer02 == "none") {
-			console.log("pdServiceDataTableClick :: json.c_reviewer02 empty");
+			console.log("registNewPopup :: data.c_reviewer02 empty");
 		} else {
-			multifyValue = multifyValue + 1;
-			$('#popup-pdService-reviewers').append(reviewer02Option);
+
+			selectedReviewerArr.push(data.c_reviewer02);
+			// Set the value, creating a new option if necessary
+			if ($('#popup-pdService-reviewers').find("option[value='" + data.c_reviewer02 + "']").length) {
+				console.log("option[value='\" + data.c_reviewer02 + \"']\"" + "already exist");
+			} else {
+				// Create a DOM Option and pre-select by default
+				var newOption02 = new Option(data.c_reviewer02, data.c_reviewer02, true, true);
+				// Append it to the select
+				$('#popup-pdService-reviewers').append(newOption02).trigger('change');
+			}
+
 		}
 		if (data.c_reviewer03 == null || data.c_reviewer03 == "none") {
-			console.log("pdServiceDataTableClick :: json.c_reviewer03 empty");
+			console.log("registNewPopup :: data.c_reviewer03 empty");
 		} else {
-			multifyValue = multifyValue + 1;
-			$('#popup-pdService-reviewers').append(reviewer03Option);
+
+			selectedReviewerArr.push(data.c_reviewer03);
+			// Set the value, creating a new option if necessary
+			if ($('#popup-pdService-reviewers').find("option[value='" + data.c_reviewer03 + "']").length) {
+				console.log("option[value='\" + data.c_reviewer03 + \"']\"" + "already exist");
+			} else {
+				// Create a DOM Option and pre-select by default
+				var newOption03 = new Option(data.c_reviewer03, data.c_reviewer03, true, true);
+				// Append it to the select
+				$('#popup-pdService-reviewers').append(newOption03).trigger('change');
+			}
+
 		}
 		if (data.c_reviewer04 == null || data.c_reviewer04 == "none") {
-			console.log("pdServiceDataTableClick :: json.c_reviewer04 empty");
+			console.log("registNewPopup :: data.c_reviewer04 empty");
 		} else {
-			multifyValue = multifyValue + 1;
-			$('#popup-pdService-reviewers').append(reviewer04Option);
+
+			selectedReviewerArr.push(data.c_reviewer04);
+			// Set the value, creating a new option if necessary
+			if ($('#popup-pdService-reviewers').find("option[value='" + data.c_reviewer04 + "']").length) {
+				console.log("option[value='\" + data.c_reviewer04 + \"']\"" + "already exist");
+			} else {
+				// Create a DOM Option and pre-select by default
+				var newOption04 = new Option(data.c_reviewer04, data.c_reviewer04, true, true);
+				// Append it to the select
+				$('#popup-pdService-reviewers').append(newOption04).trigger('change');
+			}
+
 		}
 		if (data.c_reviewer05 == null || data.c_reviewer05 == "none") {
-			console.log("pdServiceDataTableClick :: json.c_reviewer05 empty");
+			console.log("registNewPopup :: data.c_reviewer05 empty");
 		} else {
-			multifyValue = multifyValue + 1;
-			$('#popup-pdService-reviewers').append(reviewer05Option);
+
+			selectedReviewerArr.push(data.c_reviewer05);
+			// Set the value, creating a new option if necessary
+			if ($('#popup-pdService-reviewers').find("option[value='" + data.c_reviewer05 + "']").length) {
+				console.log("option[value='\" + data.c_reviewer05 + \"']\"" + "already exist");
+			} else {
+				// Create a DOM Option and pre-select by default
+				var newOption05 = new Option(data.c_reviewer05, data.c_reviewer05, true, true);
+				// Append it to the select
+				$('#popup-pdService-reviewers').append(newOption05).trigger('change');
+			}
+
 		}
+		$('#popup-pdService-reviewers').val(selectedReviewerArr).trigger('change');
 
-		$('#popup-pdService-reviewers').trigger('change');
-
-		$('#popup-pdService-reviewer').css('height', '20px');
-		setTimeout(function () {
-			var heightValue = $('#popup-pdService-reviewer').height();
-			var resultValue = heightValue + (20 * multifyValue);
-			$('#popup-pdService-reviewer').css('height', resultValue + 'px');
-		}, 250);
+		// ------------------------- reviewer end --------------------------------//
 
 	});
 
