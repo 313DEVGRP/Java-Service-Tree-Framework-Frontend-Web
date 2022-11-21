@@ -37,7 +37,7 @@ function makePdServiceSelectBox(){
 
 	//제품 서비스 셀렉트 박스 데이터 바인딩
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/getPdServiceMonitor.do",
+		url: "/auth-user/api/arms/pdService/getPdServiceMonitor.do",
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",
@@ -77,7 +77,7 @@ function makeVersionMultiSelectBox(){
 function bind_VersionData_By_PdService(){
 	$(".multiple-select option").remove();
 	$.ajax({
-		url: "/auth-user/api/arms/pdversion/getVersion.do?c_id=" + $('#country').val(),
+		url: "/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + $('#country').val(),
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",
@@ -654,7 +654,7 @@ function registNewPopup(){
 
 	//리뷰어 셋팅
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/getNode.do?c_id=" + $('#country').val(),
+		url: "/auth-user/api/arms/pdService/getNode.do?c_id=" + $('#country').val(),
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",

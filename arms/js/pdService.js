@@ -252,7 +252,7 @@ $(function () {
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
 		autoUpload: true,
-		url: '/auth-user/api/arms/pdservice/uploadFileToNode.do',
+		url: '/auth-user/api/arms/pdService/uploadFileToNode.do',
 		dropZone: $('#dropzone')
 	});
 
@@ -298,7 +298,7 @@ function dataTableLoad() {
 		{ data: "c_title" },
 	];
 	var rowsGroupList = [];
-	dataTableRef = dataTableBuild("#pdserviceTable", "pdservice", "/getPdServiceMonitor.do", columnList, rowsGroupList);
+	dataTableRef = dataTableBuild("#pdserviceTable", "pdService", "/getPdServiceMonitor.do", columnList, rowsGroupList);
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
@@ -344,7 +344,7 @@ function pdServiceDataTableClick(c_id) {
 	selectVersion = c_id;
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		url: "/auth-user/api/arms/pdService/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
 		method: "GET", // HTTP 요청 메소드(GET, POST 등)
 		dataType: "json", // 서버에서 보내줄 데이터의 타입
@@ -523,7 +523,7 @@ $("#regist-pdService").click(function () {
 	}
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/addPdServiceNode.do",
+		url: "/auth-user/api/arms/pdService/addPdServiceNode.do",
 		type: "POST",
 		data: {
 			ref: 2,
@@ -551,7 +551,7 @@ $("#regist-pdService").click(function () {
 // 신규 제품(서비스) 삭제 버튼
 $("#delete-pdService").click(function () {
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/removeNode.do",
+		url: "/auth-user/api/arms/pdService/removeNode.do",
 		type: "POST",
 		data: {
 			c_id: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
@@ -598,7 +598,7 @@ $("#pdServiceUpdate").click(function () {
 	}
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/updatePdServiceNode.do",
+		url: "/auth-user/api/arms/pdService/updatePdServiceNode.do",
 		type: "POST",
 		data: {
 			c_id: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
@@ -650,7 +650,7 @@ $("#extendUpdate-pdService").click(function () {
 	}
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdservice/updatePdServiceNode.do",
+		url: "/auth-user/api/arms/pdService/updatePdServiceNode.do",
 		type: "POST",
 		data: {
 			c_id: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,

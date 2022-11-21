@@ -24,7 +24,7 @@ function dataTableLoad() {
 		{ data: "c_title" },
 	];
 	var rowsGroupList = [];
-	dataTableRef = dataTableBuild("#pdserviceTable","pdservice", "/getPdServiceMonitor.do",columnList, rowsGroupList);
+	dataTableRef = dataTableBuild("#pdserviceTable","pdService", "/getPdServiceMonitor.do",columnList, rowsGroupList);
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
@@ -52,7 +52,7 @@ function dataLoad(getSelectedText, selectedText) {
 
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID -> " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdversion/getVersion.do?c_id=" + getSelectedText)
+	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText)
 		.done(function (json) {
 			console.log("dataLoad :: success -> ", json);
 			versionList = json;

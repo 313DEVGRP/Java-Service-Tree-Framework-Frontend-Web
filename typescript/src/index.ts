@@ -1,17 +1,8 @@
 import {testMakePerson} from "./utils/makePerson";
-import IPerson from "./person/IPerson";
-import Person, { makePerson } from "./person/Person";
-
-import * as R from 'ramda';
 import CarImpl from "./standard/CarImpl";
 import CarExtImpl from "./standard/CarExtImpl";
 import ObjExtCarImpl from "./standard/ObjExtCarImpl";
 import Car from "./standard/Car";
-
-//인터페이스로 객체 Person 을 만들어서 loop 돌리는 예제
-let persons: IPerson[] = R.range(0, 5)
-    .map((n: number) => new Person("이동민", 99));
-console.log(persons);
 
 testMakePerson();
 

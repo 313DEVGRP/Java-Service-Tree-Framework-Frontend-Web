@@ -390,6 +390,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					// the URL to fetch the data
 					url:
 						authCheckURL + "/api/arms/" + serviceNameForURL + "/getChildNode.do",
+					cache : false,
 					// the `data` function is executed in the instance's scope
 					// the parameter is the node being loaded
 					// (may be -1, 0, or undefined when loading the root nodes)

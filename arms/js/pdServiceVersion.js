@@ -73,7 +73,7 @@ $(function () {
 		{ data: "c_title" },
 	];
 	var rowsGroupList = [];
-	dataTableBuild("#pdserviceTable", "pdservice", "/getMonitor.do", columnList, rowsGroupList);
+	dataTableBuild("#pdserviceTable", "pdService", "/getMonitor.do", columnList, rowsGroupList);
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
@@ -184,7 +184,7 @@ function dataTableClick(selectedData) {
 $("#delVersion").click(function () {
 	console.log("delete btn");
 	$.ajax({
-		url: "/auth-user/api/arms/pdversion/removeNode.do",
+		url: "/auth-user/api/arms/pdServiceVersion/removeNode.do",
 		type: "POST",
 		data: {
 			c_id: selectVersion
@@ -205,7 +205,7 @@ $("#delVersion").click(function () {
 $("#versionUpdate").click(function () {
 	console.log("update btn");
 	$.ajax({
-		url: "/auth-user/api/arms/pdversion/updateVersionNode.do",
+		url: "/auth-user/api/arms/pdServiceVersion/updateVersionNode.do",
 		type: "POST",
 		data: {
 			c_id: selectVersion,
@@ -231,7 +231,7 @@ $("#versionUpdate").click(function () {
 function modalPopupNewUpdate() {
 	console.log("save btn");
 	$.ajax({
-		url: "/auth-user/api/arms/pdversion/addNode.do",
+		url: "/auth-user/api/arms/pdServiceVersion/addNode.do",
 		type: "POST",
 		data: {
 			ref: 2,
@@ -261,7 +261,7 @@ function modalPopupNewUpdate() {
 function modalPopupUpdate() {
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdversion/updateVersionNode.do",
+		url: "/auth-user/api/arms/pdServiceVersion/updateVersionNode.do",
 		type: "POST",
 		data: {
 			c_id: selectVersion,
@@ -290,7 +290,7 @@ function dataLoad(getSelectedText, selectedText) {
 
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID -> " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdversion/getVersion.do?c_id=" + getSelectedText)
+	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText)
 		.done(function (json) {
 			console.log("dataLoad :: success -> ", json);
 			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
@@ -387,7 +387,7 @@ function draw(main, menu) {
 function versionClick(c_id) {
 	selectVersion = c_id;
 	$.ajax({
-		url: "/auth-user/api/arms/pdversion/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		url: "/auth-user/api/arms/pdServiceVersion/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
 		method: "GET", // HTTP 요청 메소드(GET, POST 등)
 		dataType: "json", // 서버에서 보내줄 데이터의 타입
