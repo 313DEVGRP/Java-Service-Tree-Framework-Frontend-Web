@@ -93,7 +93,7 @@ function makeDatePicker (calender) {
 		})
 		.datepicker("update", Inputs)
 		.on("changeDate", function (ev) {
-			const Input = $(this).parent().prev();
+			const Input = $(this).parent().next();
 			Input.val(calender.data("date"));
 			if (Input.attr("id") === "input_pdservice_start_date") {
 				$("#versionStartDate").text(calender.data("date"));

@@ -448,7 +448,49 @@
                                     </li>
                                     <!-- /.timeline-label -->
                                     <!-- timeline item -->
-                                    <li>
+                                    <li class="timeline-item-head">
+                                        <i class="fa fa-search bg-maroon"></i>
+                                        <div class="timeline-item" style="line-height: 2.0 !important;">
+                                            <span class="arrow"></span>
+                                            <div class="col-sm-5" style="padding-top: 12px;">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <a href="#" id="btn-start-calendar-popup"
+                                                           class="btn btn-warning" data-date-format="yyyy/mm/dd"
+                                                           data-date="2022/11/11">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </a>
+                                                    </span>
+                                                    <input id="input_req_start_date" class="form-control"
+                                                           type="text" name="btn-enabled-date" value="검색 시작 날짜"
+                                                           pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5" style="padding-top: 12px;">
+                                                <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <a href="#" id="btn-end-calendar-popup"
+                                                               class="btn btn-warning" data-date-format="yyyy/mm/dd"
+                                                               data-date="2022/11/11">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </a>
+                                                        </span>
+                                                    <input id="input_req_end_date" class="form-control"
+                                                           type="text" name="btn-enabled-date" value="검색 종료 날짜"
+                                                           pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2" style="padding-top: 12px;">
+                                                <button type="button" class="btn btn-warning" id="logSearch">Search</button>
+                                            </div>
+                                            <h3 class="timeline-header" style="padding: 0px !important; font-size: 11px;">
+                                                &nbsp;
+                                            </h3>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                    <!-- timeline item -->
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-balance-scale bg-maroon"></i>
                                         <div class="timeline-item">
                                             <span class="arrow"></span>
@@ -469,7 +511,7 @@
                                     </li>
                                     <!-- END timeline item -->
                                     <!-- timeline item -->
-                                    <li>
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-check-square-o bg-yellow"></i>
 
                                         <div class="timeline-item">
@@ -490,7 +532,7 @@
                                     </li>
                                     <!-- END timeline item -->
                                     <!-- timeline item -->
-                                    <li>
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-cubes bg-teal"></i>
 
                                         <div class="timeline-item">
@@ -513,7 +555,7 @@
                                     <!-- timeline time label -->
                                     <!-- /.timeline-label -->
                                     <!-- timeline item -->
-                                    <li>
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-sitemap bg-light-blue"></i>
 
                                         <div class="timeline-item">
@@ -536,7 +578,7 @@
                                     </li>
                                     <!-- END timeline item -->
                                     <!-- timeline item -->
-                                    <li>
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-bug bg-purple"></i>
 
                                         <div class="timeline-item">
@@ -561,7 +603,7 @@
                                     <!-- timeline time label -->
                                     <!-- /.timeline-label -->
                                     <!-- timeline item -->
-                                    <li>
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-train bg-black"></i>
 
                                         <div class="timeline-item">
@@ -581,7 +623,7 @@
                                         </div>
                                     </li>
                                     <!-- END timeline item -->
-                                    <li>
+                                    <li class="timeline-item-body">
                                         <i class="fa fa-clock-o bg-gray"></i>
                                     </li>
                                 </ul>
@@ -1121,6 +1163,139 @@
 
     .dd3-handle:hover {
         background: #ddd;
+    }
+
+    /*!
+ * Datepicker for Bootstrap
+ *
+ * Copyright 2012 Stefan Petre
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ */
+    .datepicker {
+        top: 0;
+        left: 0;
+        padding: 4px;
+        margin-top: 1px;
+        color: #555555;
+        -webkit-border-radius: 1px;
+        -moz-border-radius: 1px;
+        -ms-border-radius: 1px;
+        -o-border-radius: 1px;
+        border-radius: 1px;
+        /*.dow {
+            border-top: 1px solid #ddd !important;
+        }*/
+    }
+
+    .datepicker:before {
+        content: "";
+        display: inline-block;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #ccc;
+        border-bottom-color: rgba(0, 0, 0, 0.2);
+        position: absolute;
+        top: -7px;
+        left: 6px;
+    }
+
+    .datepicker:after {
+        content: "";
+        display: inline-block;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid white;
+        position: absolute;
+        top: -6px;
+        left: 7px;
+    }
+
+    .datepicker>div {
+        display: none;
+    }
+
+    .datepicker table {
+        width: 100%;
+        margin: 0;
+    }
+
+    .datepicker td,
+    .datepicker th {
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        -webkit-border-radius: 1px;
+        -moz-border-radius: 1px;
+        -ms-border-radius: 1px;
+        -o-border-radius: 1px;
+        border-radius: 1px;
+    }
+
+    .datepicker td.day:hover {
+        background: #f8f8f8;
+        cursor: pointer;
+    }
+
+    .datepicker td.day.disabled {
+        color: #f8f8f8;
+    }
+
+    .datepicker td.old,
+    .datepicker td.new {
+        color: white;
+    }
+
+    .datepicker td.active,
+    .datepicker td.active:hover {
+        background: #618fb0;
+        color: #fff;
+    }
+
+    .datepicker td span {
+        display: block;
+        width: 47px;
+        height: 54px;
+        line-height: 54px;
+        float: left;
+        margin: 2px;
+        cursor: pointer;
+        -webkit-border-radius: 1px;
+        -moz-border-radius: 1px;
+        -ms-border-radius: 1px;
+        -o-border-radius: 1px;
+        border-radius: 1px;
+    }
+
+    .datepicker td span:hover {
+        background: #eeeeee;
+    }
+
+    .datepicker td span.active {
+        background: #618fb0;
+        color: #fff;
+    }
+
+    .datepicker td span.old {
+        color: #999999;
+    }
+
+    .datepicker th.switch {
+        width: 145px;
+    }
+
+    .datepicker th.next,
+    .datepicker th.prev {
+        font-size: 19.5px;
+    }
+
+    .datepicker thead tr:first-child th {
+        cursor: pointer;
+    }
+
+    .datepicker thead tr:first-child th:hover {
+        background: #eeeeee;
     }
 </style>
 <script type="text/javascript" charset="utf-8">

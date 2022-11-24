@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
-let selectedJsTreeId; // 요구사항 아이디
+var selectedJsTreeId; // 요구사항 아이디
 
 $(function () {
 
@@ -23,6 +23,9 @@ $(function () {
 	// --- 에디터 설정 --- //
 	CKEDITOR.replace("modalEditor");
 	CKEDITOR.replace("editTabModalEditor");
+
+	makeDatePicker($("#btn-start-calendar-popup"));
+	makeDatePicker($("#btn-end-calendar-popup"));
 
 });
 
@@ -872,3 +875,167 @@ $("#editTab_Req_Update").click(function () {
 		},
 	});
 });
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 달력
+///////////////////////////////////////////////////////////////////////////////
+function makeDatePicker (calender) {
+	var Inputs = $(calender).parent().prev().val();
+	$(calender).attr('data-date', Inputs)
+
+	calender
+		.datepicker({
+			autoclose: true,
+		})
+		.datepicker("update", Inputs)
+		.on("changeDate", function (ev) {
+
+			var Input = $(this).parent().next();
+			Input.val(calender.data("date"));
+			calender.datepicker("hide");
+		});
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// History TAB 검색 버튼
+///////////////////////////////////////////////////////////////////////////////
+$("#logSearch").click(function () {
+
+	$('.timeline-item-body').remove();
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getHistory.do",
+		type: "GET",
+		data: {
+			startDate: $("#input_req_start_date").val(),
+			endDate: $("#input_req_end_date").val()
+		},
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true,
+		statusCode: {
+			200: function () {
+				console.log("성공!");
+				jSuccess("데이터 조회가 완료되었습니다.");
+			},
+		},
+	}).done(function(data) {
+
+		for(var k in data){
+			var obj = data[k];
+
+			console.log("jsonIndex[" + k +"]=" + "obj.c_file_id_link => " + obj.c_file_id_link); //t_arms_filerepository
+			console.log("jsonIndex[" + k +"]=" + "obj.c_pdservice_jira_ids => " + obj.c_pdservice_jira_ids); //t_arms_pdserviceconnect
+			console.log("jsonIndex[" + k +"]=" + "obj.c_jira_con_passmode => " + obj.c_jira_con_passmode); //t_arms_pdservicjira
+			console.log("jsonIndex[" + k +"]=" + "obj.c_pdservice_link => " + obj.c_pdservice_link); //t_arms_pdservicversion
+			console.log("jsonIndex[" + k +"]=" + "obj.c_fileid_link => " + obj.c_fileid_link); //t_arms_pdservice
+			console.log("jsonIndex[" + k +"]=" + "obj.c_req_status => " + obj.c_req_status); //t_arms_reqadd
+
+			if(!isEmpty(obj.c_file_id_link) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+				//t_arms_filerepository
+				if(obj.c_title=="pdService"){
+					var addHtmlStr = "<li class=\"timeline-item-body\">\n" +
+						"                                        <i class=\"fa fa-balance-scale bg-maroon\"></i>\n" +
+						"                                        <div class=\"timeline-item\">\n" +
+						"                                            <span class=\"arrow\"></span>\n" +
+						"                                            <span class=\"time\"><i class=\"fa fa-clock-o\"></i> 09:00 (MON)</span>\n" +
+						"\n" +
+						"                                            <h3 class=\"timeline-header\"><a href=\"http://www.313.co.kr/confluence\" target=\"_blank\">착수</a> <small class=\"font11\">제품(서비스) 등록, 버전 등록</small></h3>\n" +
+						"\n" +
+						"                                            <div class=\"timeline-body col-md-4 font11\">\n" +
+						"                                                <a href=\"http://www.313.co.kr/confluence\" target=\"_blank\" class=\"btn bg-maroon btn-xs\" style=\"font-size: 11px;\"><i class=\"fa fa-share\"></i> Confluence by 313 DEV GRP</a>\n" +
+						"                                            </div>\n" +
+						"                                            <div class=\"timeline-footer col-md-8 font12 fontw600\">\n" +
+						"                                                FileName : " + obj.c_file_name + "<br>\n" +
+						"                                                Skill : Negotiation<br>\n" +
+						"                                                Output : Requirements<br>\n" +
+						"                                                System : Atlassian Confluence ( Online Document System )\n" +
+						"                                            </div>\n" +
+						"                                        </div>\n" +
+						"                                    </li>";
+					$('.timeline.timeline-inverse').append(addHtmlStr);
+				}else{
+
+				}
+
+			}else if(isEmpty(obj.c_file_id_link) && !isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+				//t_arms_pdserviceconnect
+
+			}else if(isEmpty(obj.c_file_id_link) && isEmpty(obj.c_pdservice_jira_ids) && !isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+				//t_arms_pdservicjira
+
+			}else if(isEmpty(obj.c_file_id_link) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && !isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+				//t_arms_pdservicversion
+				var timestampStr = new Date(obj.c_date);
+				var dateTimeStr = timestampStr.getFullYear()+"/"+(timestampStr.getMonth()+1)+"/"+timestampStr.getDate()+
+					" "+timestampStr.getHours()+":"+timestampStr.getMinutes();
+
+					var add_t_arms_pdservicversion =
+						"<li class=\"timeline-item-body\">\n" +
+						"	<i class=\"fa fa-balance-scale bg-maroon\"></i>\n" +
+						"	<div class=\"timeline-item\">\n" +
+						"		<span class=\"arrow\"></span>\n" +
+						"		<span class=\"time\"><i class=\"fa fa-clock-o\"></i> 09:00 (MON)</span>\n" +
+						"		<h3 class=\"timeline-header\"><a href=\"#\">착수</a> <small class=\"font11\">제품(서비스) 등록, 버전 등록</small></h3>\n" +
+						"		<div class=\"timeline-body col-md-4 font11\">\n" +
+						"			<a href=\"#\" target=\"_blank\" class=\"btn bg-maroon btn-xs\" style=\"font-size: 11px;\"><i class=\"fa fa-share\"></i> 로그 자세히 보기</a>\n" +
+						"		</div>\n" +
+						" <div class=\"timeline-footer col-md-8 font12 fontw600\">\n" +
+						"  저장된 액션 : " + obj.c_state + "<br>\n" +
+						"  저장된 버전 명 : " + obj.c_title + "<br>\n" +
+						"  저장된 제품(서비스) 아이디 : " + obj.c_pdservice_link + "<br>\n" +
+						"  저장된 시간 : " + dateTimeStr + "<br>\n" +
+						"  </div>\n" +
+						" </div>\n" +
+						"</li>";
+					$('.timeline.timeline-inverse').append(add_t_arms_pdservicversion);
+
+			}else if(isEmpty(obj.c_file_id_link) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && !isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+				//t_arms_pdservice
+
+			}else if(isEmpty(obj.c_file_id_link) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && !isEmpty(obj.c_req_status)){
+				//t_arms_reqadd
+
+			}else{
+				console.log("정의되지 않은 타입의 객체 데이터 확인 :: " + obj);
+			}
+
+		}//for end
+
+		var endPointHtmlStr = "<!-- END timeline item -->\n" +
+			"                                    <li class=\"timeline-item-body\">\n" +
+			"                                        <i class=\"fa fa-clock-o bg-gray\"></i>\n" +
+			"                                    </li>";
+		$('.timeline.timeline-inverse').append(endPointHtmlStr);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// 전체 AJAX 통신에 대한 이벤트 콜백 처리.
+///////////////////////////////////////////////////////////////////////////////
+$(document)
+	.ajaxStart(function(){
+		jNotify('<span class="spinner"><i class="fa fa-spinner fa-spin"></i> 서버와 통신 중 입니다.</span>');
+	})
+	.ajaxStop(function(){
+		console.log("ajaxStop");
+	})
+	.ajaxComplete(function(){
+		console.log("ajaxComplete");
+	})
+	.ajaxSuccess(function(){
+		console.log("ajaxComplete");
+	})
+	.ajaxError(function(){
+		console.log("ajaxComplete");
+	})
+	.ajaxSend(function(){
+		console.log("ajaxComplete");
+	});
