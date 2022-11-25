@@ -977,9 +977,8 @@ $("#logSearch").click(function () {
 						" <div class=\"timeline-footer col-md-8 font12 fontw600\">\n" +
 						"  저장된 액션 : " + obj.c_state + "<br>\n" +
 						"  저장된 액션 : " + obj.c_method + "<br>\n" +
-						"  저장된 요구사항 이름 : " + obj.c_title + "<br>\n" +
-						"  저장된 제품(서비스) 아이디 : " + obj.c_pdservice_link + "<br>\n" +
-						"  저장된 요구사항 상태 : " + obj.c_req_status + "<br>\n" +
+						"  저장된 파일 이름 : " + obj.fileName + "<br>\n" +
+						"  저장된 파일 타입 : " + obj.contentType + "\n" +
 						"  </div>\n" +
 						" </div>\n" +
 						"</li>";
@@ -1019,7 +1018,7 @@ $("#logSearch").click(function () {
 					"  저장된 액션 : " + obj.c_method + "<br>\n" +
 					"  저장된 요구사항 이름 : " + obj.c_title + "<br>\n" +
 					"  저장된 제품(서비스) 아이디 : " + obj.c_pdservice_link + "<br>\n" +
-					"  저장된 요구사항 상태 : " + obj.c_req_status + "<br>\n" +
+					"  저장된 요구사항 상태 : " + obj.c_req_status + "\n" +
 					"  </div>\n" +
 					" </div>\n" +
 					"</li>";
