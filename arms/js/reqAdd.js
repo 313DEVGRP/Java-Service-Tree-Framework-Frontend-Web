@@ -439,7 +439,7 @@ function bindDataEditlTab(ajaxData){
 
 	// ------------------------- reviewer end --------------------------------//
 	$('#editView-req-status').val(ajaxData.c_req_status);
-	$('#editView-req-writer').val(ajaxData.c_writer_cn);
+	$('#editView-req-writer').val(ajaxData.c_writer);
 	$('#editView-req-write-date').val(ajaxData.c_writer_date);
 	CKEDITOR.instances.editTabModalEditor.setData(ajaxData.c_contents);
 }
@@ -471,7 +471,7 @@ function bindDataDetailTab(ajaxData){
 	$('#'+slectReqPriorityID).parent().addClass("active");
 
 	$('#detailView-req-status').text(ajaxData.c_req_status);
-	$('#detailView-req-writer').text(ajaxData.c_writer_cn);
+	$('#detailView-req-writer').text(ajaxData.c_writer);
 	$('#detailView-req-write-date').text(ajaxData.c_writer_date);
 
 	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
@@ -813,10 +813,10 @@ $("#save-req").click(function () {
 			ref: selectedJsTreeId,
 			c_title: $("#req-title").val(),
 			c_type: "default",
-			c_pdService_Link: $('#country').val(),
+			c_pdservice_link: $('#country').val(),
 			c_version_Link: JSON.stringify($('#popup-version').val()),
-			c_writer_name: "ldm",
-			c_writer_cn: "spear79",
+			c_jira_link: "inherit",
+			c_writer: "admin",
 			c_writer_date: new Date(),
 			c_priority: 2,
 			c_reviewer01: reviewers01,
@@ -879,6 +879,7 @@ $("#editTab_Req_Update").click(function () {
 			c_id: $('#editView-req-id').val(),
 			c_title: $('#editView-req-name').val(),
 			c_version_Link: JSON.stringify($('#editMultiVersion').val()),
+			c_writer: "admin",
 			c_writer_date: new Date(),
 			c_priority: priorityValue,
 			c_reviewer01: reviewers01,
@@ -951,11 +952,11 @@ $("#logSearch").click(function () {
 			console.log("jsonIndex[" + k +"]=" + "obj.fileIdLink => " + obj.fileIdLink); //t_arms_filerepository
 			console.log("jsonIndex[" + k +"]=" + "obj.c_pdservice_jira_ids => " + obj.c_pdservice_jira_ids); //t_arms_pdserviceconnect
 			console.log("jsonIndex[" + k +"]=" + "obj.c_jira_con_passmode => " + obj.c_jira_con_passmode); //t_arms_pdservicjira
-			console.log("jsonIndex[" + k +"]=" + "obj.c_pdservice_link => " + obj.c_pdservice_link); //t_arms_pdservicversion
+			console.log("jsonIndex[" + k +"]=" + "obj.c_end_date => " + obj.c_end_date); //t_arms_pdservicversion
 			console.log("jsonIndex[" + k +"]=" + "obj.c_fileid_link => " + obj.c_fileid_link); //t_arms_pdservice
 			console.log("jsonIndex[" + k +"]=" + "obj.c_req_status => " + obj.c_req_status); //t_arms_reqadd
 
-			if(!isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			if(!isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_filerepository
 				if(obj.c_title=="pdService"){
 
@@ -985,19 +986,19 @@ $("#logSearch").click(function () {
 					$('.timeline.timeline-inverse').append(add_t_arms_filerepository);
 				}
 
-			}else if(isEmpty(obj.fileIdLink) && !isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdLink) && !isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdserviceconnect
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && !isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && !isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdservicjira
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && !isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && !isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdservicversion
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && !isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && !isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdservice
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_pdservice_link) && isEmpty(obj.c_fileid_link) && !isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && !isEmpty(obj.c_req_status)){
 				//t_arms_reqadd
 				var timestamp_t_arms_reqadd = new Date(obj.c_date);
 				var datetime_t_arms_reqadd = timestamp_t_arms_reqadd.getFullYear()+"/"+(timestamp_t_arms_reqadd.getMonth()+1)+"/"+timestamp_t_arms_reqadd.getDate()+
