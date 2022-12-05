@@ -337,8 +337,8 @@ function bindDataEditlTab(ajaxData){
 	}
 
 	// 버전 데이터 바인딩
-	if(!isEmpty(ajaxData.c_version_Link)) {
-		$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_Link.split(","));
+	if(!isEmpty(ajaxData.c_version_link)) {
+		$('#editMultiVersion').multipleSelect('setSelects', ajaxData.c_version_link.split(","));
 	}else{
 		$('#editMultiVersion').multipleSelect('uncheckAll');
 	}
@@ -814,7 +814,7 @@ $("#save-req").click(function () {
 			c_title: $("#req-title").val(),
 			c_type: "default",
 			c_pdservice_link: $('#country').val(),
-			c_version_Link: JSON.stringify($('#popup-version').val()),
+			c_version_link: JSON.stringify($('#popup-version').val()),
 			c_jira_link: "inherit",
 			c_writer: "admin",
 			c_writer_date: new Date(),
@@ -878,7 +878,7 @@ $("#editTab_Req_Update").click(function () {
 		data: {
 			c_id: $('#editView-req-id').val(),
 			c_title: $('#editView-req-name').val(),
-			c_version_Link: JSON.stringify($('#editMultiVersion').val()),
+			c_version_link: JSON.stringify($('#editMultiVersion').val()),
 			c_writer: "admin",
 			c_writer_date: new Date(),
 			c_priority: priorityValue,
