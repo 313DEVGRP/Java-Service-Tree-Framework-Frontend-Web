@@ -121,6 +121,12 @@ function setSideMenu( categoryName, listName, collapse = "product-elements-colla
 	}, 1000);
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// buildDataTables
+///////////////////////////////////////////////////////////////////////////////
+
+
 // --- 데이터 테이블 설정 ( 곧 삭제 대상 ) --- //
 function setTable(tableDataUrl, dataList, options = null, selectedView = null) {
 	jstreeDataTableReload(tableDataUrl, dataList, options, selectedView);

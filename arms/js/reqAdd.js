@@ -2,6 +2,7 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedJsTreeId; // 요구사항 아이디
+var defaultTypeDataTable;
 
 $(function () {
 
@@ -158,6 +159,8 @@ function jsTreeClick(selectedNodeID) {
 		//상세보기 탭 셋팅
 		setDetailAndEditViewTab();
 
+		defaultTypeDataTable = defaultType_dataTableLoad(selectedJsTreeId);
+
 	}else{
 		$('#folderTab').get(0).click();
 		$('.newReqDiv').show();
@@ -180,7 +183,7 @@ function jsTreeClick(selectedNodeID) {
 ////////////////////////////////////////////////////////////////////////////////////////
 //리스트 :: DataTable
 ////////////////////////////////////////////////////////////////////////////////////////
-// --- 데이터 테이블 설정 --- //
+// --- Root, Drive, Folder 데이터 테이블 설정 --- //
 function dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
@@ -219,6 +222,116 @@ function dataTableLoad(selectId) {
 	$("body").find("[aria-controls='pdserviceTable']").css("width", "100px");
 	$("select[name=pdserviceTable_length]").css("width", "50px");
 }
+
+// --- default 데이터 테이블 설정 --- //
+// -------------------- checkbox 가 들어가야 하는 데이터테이블 이므로 row code를 사용함 ------------------ //
+// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
+function defaultType_dataTableLoad(selectId) {
+
+	var jQueryElementID = "#jiraVerTable";
+	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+	var jQueryElementStr = jQueryElementID.replace(reg,'');
+	console.log("jQueryElementStr ======== " + jQueryElementStr );
+	var serviceNameForURL = "pdServiceJiraVer";
+	var endPointUrl = "/getMonitor_Without_Root.do";
+	// 데이터 테이블 컬럼 및 열그룹 구성
+	var columnList = [
+		{
+			data:   "c_id",
+			render: function ( data, type, row ) {
+				if ( type === 'display' ) {
+					return '<input type="checkbox" class="editor-active" name="jiraVerList" value="' + data + '">';
+				}
+				return data;
+			},
+			className: "dt-body-center"
+		},
+		{ data: "c_pdservice_name" },
+		{ data: "c_pdservice_version_name" },
+		{ data: "c_pdservice_jira_name"}
+	];
+	var rowsGroupList = [];
+	var columnDefList = [
+		{
+			orderable: false,
+			className: 'select-checkbox',
+			targets: 0
+		}
+	];
+	var selectList = {
+		style:    'os',
+		selector: 'td:first-child'
+	};
+	var orderList = [[ 1, 'asc' ]];
+	console.log("defaultType_dataTableLoad selectId -> " + selectId);
+	console.log("dataTableBuild :: jQueryElementID -> " + jQueryElementID + ", serviceNameForURL -> " + serviceNameForURL);
+	console.log("dataTableBuild :: columnList -> " + columnList + ", rowsGroupList -> " + rowsGroupList);
+
+	console.log("dataTableBuild :: href: " + $(location).attr("href"));
+	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
+	console.log("dataTableBuild :: host: " + $(location).attr("host"));
+	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
+	console.log("dataTableBuild :: search: " + $(location).attr("search"));
+	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
+	console.log("dataTableBuild :: port: " + $(location).attr("port"));
+
+	var authCheckURL = "/auth-user";
+
+	var tempDataTable = $(jQueryElementID).DataTable({
+		ajax: {
+			url: authCheckURL + "/api/arms/" + serviceNameForURL + endPointUrl,
+			dataSrc: ''
+		},
+		destroy: true,
+		processing: true,
+		responsive: true,
+		columns: columnList,
+		rowsGroup: rowsGroupList,
+		columnDefs: columnDefList,
+		select: selectList,
+		order: orderList,
+		drawCallback: function() {
+			console.log("dataTableBuild :: drawCallback");
+			if ($.isFunction(dataTableCallBack )) {
+				dataTableCallBack();
+			}
+		}
+	});
+
+	$(jQueryElementID + " tbody").on("click", "tr", function () {
+
+		if ($(this).hasClass("selected")) {
+			$(this).removeClass("selected");
+		} else {
+			tempDataTable.$("tr.selected").removeClass("selected");
+			$(this).addClass("selected");
+		}
+
+		var selectedData = tempDataTable.row(this).data();
+		selectedData.selectedIndex = $(this).closest('tr').index();
+
+		var info = tempDataTable.page.info();
+		console.log( 'Showing page: '+info.page+' of '+info.pages );
+		selectedData.selectedPage = info.page;
+
+		dataTableClick(selectedData);
+	});
+
+	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
+	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
+	//min-height: 30px;
+
+	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$("body").find("[aria-controls='" + jQueryElementStr + "']").css("width", "100px");
+	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
+
+	return tempDataTable;
+}
+// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
+
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(selectedData) {
 	console.log(selectedData);
@@ -1066,3 +1179,106 @@ $(document)
 	.ajaxSend(function(){
 		console.log("ajaxComplete");
 	});
+
+///////////////////////////////////////////////////////////////////////////////
+// 탭 클릭 이벤트
+///////////////////////////////////////////////////////////////////////////////
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	var target = $(e.target).attr("href"); // activated tab
+
+	if (target == "#jira") {
+		console.log("jira tab click event");
+		//1-1. 제품(서비스) 아이디를 기준으로, -- $('#country').val()
+		//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
+		//2. 요구사항 테이블 ( REQADD ) 을 검색하여
+		//3. JIRA_VER 정보에 체크해 주기.
+		//제품 서비스 셀렉트 박스 데이터 바인딩
+		//요구사항 클릭하면 자세히보기 탭으로 가니까 이 로직은 유효하다.
+		var tableName = "T_ARMS_REQADD_" + $('#country').val();
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do",
+			data: {
+				c_id: selectedJsTreeId
+			},
+			type: "GET",
+			contentType: "application/json;charset=UTF-8",
+			dataType : "json",
+			progress: true
+		}).done(function(data) {
+
+			console.log(data.c_jira_ver_link);
+
+			for(var key in data){
+				var value = data[key];
+				//console.log(key + "=" + value);
+			}
+
+			if(isEmpty(data.c_jira_ver_link)){
+				console.log("jiraVerArr is empty");
+			}else{
+				var jiraVerArrStr = data.c_jira_ver_link;
+				//특수 문자 중에 콤마는 빼고 지움
+				var reg = /[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+				jiraVerArrStr = jiraVerArrStr.replace(reg,'');
+				var jiraVerArr = jiraVerArrStr.split(',');
+
+				var loopCount = jiraVerArr.length;
+
+				for (var i = 0; i< loopCount ; i++) {
+					console.log( "loop check i = " + i );
+					console.log( "loop check value = " + jiraVerArr[i] );
+					$("input:checkbox[value='" + jiraVerArr[i] +"']").prop("checked", true);
+				}
+			}
+
+		}).fail(function(e) {
+		}).always(function() {
+		});
+
+	}
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// 요구사항 - 지라 연결 변경 버튼 클릭 이벤트
+///////////////////////////////////////////////////////////////////////////////
+$("#req_JiraVer_Connect_Change").click(function () {
+
+	console.log("req_JiraVer_Connect_Change");
+
+	//JiraVersion 정보 셋팅
+	var chk_Val = [];
+	$("input:checkbox[name=jiraVerList]:checked").each(function(i,iVal) {
+		chk_Val.push(iVal.value);
+	});
+	console.log(JSON.stringify(chk_Val));
+
+	//반영할 테이블 네임 값 셋팅
+	var tableName = "T_ARMS_REQADD_" + $('#country').val();
+	
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
+		data: {
+			c_id: selectedJsTreeId,
+			c_version_link: "[]",
+			c_jira_link: "independent",
+			c_jira_ver_link: JSON.stringify(chk_Val)
+		},
+		type: "POST",
+		progress: true
+	}).done(function(data) {
+
+		for(var key in data){
+			var value = data[key];
+			console.log(key + "=" + value);
+		}
+
+		var loopCount = 3;
+		for (var i = 0; i < loopCount ; i++) {
+			console.log( "loop check i = " + i );
+		}
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+});
