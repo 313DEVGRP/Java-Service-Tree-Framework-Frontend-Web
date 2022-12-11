@@ -1,54 +1,4 @@
-<div class="col-lg-4">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-sort-amount-asc"></i> 제품(서비스) 조회
-                </span>
-            </h4>
-            <div class="actions">
-                <button class="btn btn-transparent btn-xs" onclick="$('#demo').jstree('open_all');">Show All
-                    <i class="fa fa-arrow-down"></i>
-                </button>
-            </div>
-        </header>
-        <div class="body">
-            <div class="wrapper">
-                <div id="mmenu" style="padding-bottom: 5px;">
-                    <form class="form-search no-margin" role="form">
-                        <div class="input-group">
-                            <input type="search" id="text" class="form-control searchDarkBack" style="color: #f8f8f8;" placeholder="찾을 노드 이름 입력" data-tooltip="Press Enter To Node To Search">
-                            <span class="input-group-btn">
-                                <button type="button" id="search" title="Search" class="btn btn-default btn-sm">
-                                    Search
-                                </button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-                <div id="pdServiceTree" style="padding-top: 5px;" class="darkBack"></div>
-                <div style="margin-top: 10px;" class="darkBack">
-                    설명
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="widget">
-        <header>
-            <h5>
-                <i class="fa fa-check-square-o"></i>
-                제품(서비스) Version 조회
-            </h5>
-        </header>
-        <div class="body">
-            <div class="panel-group" id="versionAccordion">
-            </div>
-        </div>
-    </section>
-</div>
-
-
-<div class="col-lg-8">
+<div class="col-lg-12">
     <section class="widget">
         <header>
             <h4>
@@ -68,9 +18,28 @@
             <blockquote class="font13">
                 상세 보기는 리스트 클릭
             </blockquote>
+            <div class="wrapper">
+                <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
+                    <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
+                        <select id="country" required="required"
+                                data-placeholder="Select Product(Service)" class="select-block-level chzn-select"
+                                tabindex="-1"
+                                name="country"  class="darkBack">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
+                        <select multiple="multiple" id="multiVersion" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
+                        </select>
+                    </div>
+                </div>
+                <div class="progress progress-xs mt-xs mb-0 active">
+                    <div class="progress-bar progress-bar-striped" style="width: 100%"></div>
+                </div>
+            </div>
             <div class="box box-primary" style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important;">
                 <div class="box-body">
-                    <table id="jstreeTable" class="display responsive no-wrap" cellspacing="0">
+                    <table id="reqStatusTable" class="display responsive no-wrap" cellspacing="0">
                     </table>
                 </div>
             </div>
@@ -100,69 +69,7 @@
     //<![CDATA[
 
     // 초기 개발 및 확인 용도
-    (function( $ ){
-
-                    let menu;
-
-                    function draw(main){
-
-                        main.html("");
-
-                        let data = `
-                                        <li class='list-group-item json-menu-header'>
-                                            product name
-                                        </li>
-                                    `;
-
-                        for(let i = 0; i < menu.length; i++){
-
-                            data += `
-                                        <div class="panel">
-                                            <div class="panel-heading">
-                                                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#jsonItem${i}">
-                                                    ${menu[i].c_title}
-                                                </a>
-                                            </div>
-                                            <div id="jsonItem${i}" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    ${menu[i].c_type}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
-
-                        }
-
-                        main.html(data);
-
-                    }
-
-                    $.fn.jsonMenu = function(action, items, options){
-                        $(this).addClass("json-menu")
-                        if(action == "add"){
-                            menu.body.push(items);
-                            draw($(this));
-                        } else if(action == "set"){
-                            menu = items;
-                            draw($(this));
-                        }
-                        return this;
-                    }
-                 })( jQuery );
-
     $(function () {
-
-        $.ajax( "/auth-user/api/arms/pdversion/getChildNode.do?c_id=1")
-        .done(function(json) {
-            console.log(json);
-            $("#versionAccordion").jsonMenu("set", json,{speed:5000});
-        })
-        .fail(function(jqXHR) {
-            console.log( "error" );
-        })
-        .always(function(jqXHR) {
-            console.log( "finished" );
-        });
 
 
     });
