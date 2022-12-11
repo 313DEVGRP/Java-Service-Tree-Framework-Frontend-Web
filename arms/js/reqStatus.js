@@ -165,9 +165,19 @@ function common_dataTableLoad(selectId) {
 			data: "c_jira_project_link",
 			visible: false
 		},
-		{ name: "c_jira_project_name",
+		{
+			name: "c_jira_project_name",
 			title: "JIRA Project",
-			data: "c_jira_project_name",
+			data:   "c_jira_project_name",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					var link = 'http://www.313.co.kr/jira/browse/';
+					return '<a href="' + link + row.c_jira_project_key + '" target="_blank">' + data + '</a>';
+				}
+
+				return data;
+			},
+			className: "dt-body-center",
 			visible: true
 		},
 
@@ -193,9 +203,19 @@ function common_dataTableLoad(selectId) {
 			visible: true
 		},
 
-		{ name: "c_jira_req_issue_key",
+		{
+			name: "c_jira_req_issue_key",
 			title: "JIRA 이슈",
-			data: "c_jira_req_issue_key",
+			data:   "c_jira_req_issue_key",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					var link = 'http://www.313.co.kr/jira/browse/';
+					return '<a href="' + link + row.c_jira_req_issue_key + '" target="_blank">' + data + '</a>';
+				}
+
+				return data;
+			},
+			className: "dt-body-center",
 			visible: true
 		},
 		{ name: "c_jira_req_issue_id",
@@ -211,21 +231,25 @@ function common_dataTableLoad(selectId) {
 			render: function ( data, type, row ) {
 				if ( isEmpty(data) || data == "[]" ) {
 					return 'no data';
+				}else{
+					//data-target="#myModal1" data-toggle="modal"
+					return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#myModal1" data-toggle="modal">SubTask</label>';
 				}
-				return "Data Check";
 			},
 			className: "dt-body-center",
 			visible: true
 		},
 		{
 			name: "c_jira_req_linkingissue",
-			title: "LinkTask",
+			title: "SubTask",
 			data:   "c_jira_req_linkingissue",
 			render: function ( data, type, row ) {
 				if ( isEmpty(data) || data == "[]" ) {
 					return 'no data';
+				}else{
+					//data-target="#myModal1" data-toggle="modal"
+					return '<label id="newReqRegist01" class="btn btn-primary btn-sm" data-target="#myModal1" data-toggle="modal">LinkIssue</label>';
 				}
-				return "Data Check";
 			},
 			className: "dt-body-center",
 			visible: true
