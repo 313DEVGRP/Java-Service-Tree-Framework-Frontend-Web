@@ -19,7 +19,10 @@
                 상세 보기는 리스트 클릭
             </blockquote>
             <div class="row">
-                <div class="col-md-6 well">
+                <div class="col-md-4 well">
+                    <legend>
+                        Search
+                    </legend>
                     <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
                         <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
                             <select id="country" required="required"
@@ -29,18 +32,30 @@
                                 <option value=""></option>
                             </select>
                         </div>
+                    </div>
+                    <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
                         <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
                             <select multiple="multiple" id="multiVersion" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 well">
+                <div class="col-md-4 well">
+                    <legend>
+                        Filter
+                    </legend>
                     <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
                         <div class="checkbox">
                             <input id="checkbox1" type="checkbox" data-check-all="">
                             <label for="checkbox1">disable 된 요구사항 필터</label>
                         </div>
+                    </div>
+                </div>
+                <div class="col-md-4 well">
+                    <legend>
+                        Export
+                    </legend>
+                    <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
                         <div id="filterTopCriteria">
                             <button id="copychecker" type="button" class="btn btn-danger" data-placement="top" data-original-title=".btn .btn-danger">
                                 copy
@@ -69,9 +84,6 @@
                     <table id="reqStatusTable" class="display responsive no-wrap" cellspacing="0">
                     </table>
                 </div>
-            </div>
-            <div class="modal-footer" style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px;">
-                <button id="selectView" type="button" class="btn btn-primary">Select View</button>
             </div>
         </div>
     </section>
@@ -238,6 +250,51 @@
     .modalDarkBack{
         background: rgb(51 51 51 / 94%) !important;
         border: 1px solid rgb(51 51 51) !important;
+    }
+
+    .well {
+        min-height: 20px;
+        padding: 19px;
+        height: 160px !important;
+        margin-bottom: 20px;
+        background-color: rgba(51, 51, 51, 0.3);
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+    }
+
+    .btn {
+        display: inline-block;
+        margin-bottom: 4px !important;
+        font-weight: 300;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 5px 12px;
+        font-size: 13px;
+        line-height: 1.428571429;
+        border-radius: 3px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 18px;
+        font-size: 14px !important;
+        line-height: inherit;
+        color: #ffffff;
+        border: 0;
+        border-bottom: 1px dashed #e5e5e5 !important;
     }
 
     .btn-transparent.active {

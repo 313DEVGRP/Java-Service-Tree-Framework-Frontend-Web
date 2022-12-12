@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
-var selectedJsTreeId; // 요구사항 아이디
+var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 
 $(function () {
@@ -61,7 +61,15 @@ $('#country').on('select2:select', function (e) {
 //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 	bind_VersionData_By_PdService();
 
-	common_dataTableLoad($('#country').val());
+	var checked = $('#checkbox1').is(':checked');
+	var endPointUrl = "";
+
+	if(checked){
+		endPointUrl = "/T_ARMS_REQSTATUS_" + $('#country').val() + "/getStatusMonitor.do?disable=true";
+	}else{
+		endPointUrl = "/T_ARMS_REQSTATUS_" + $('#country').val() + "/getStatusMonitor.do?disable=false";
+	}
+	common_dataTableLoad($('#country').val(), endPointUrl);
 
 });
 
@@ -72,7 +80,30 @@ $('#country').on('select2:select', function (e) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function makeVersionMultiSelectBox(){
 	//버전 선택 셀렉트 박스 이니시에이터
-	$('.multiple-select').multipleSelect();
+	$('.multiple-select').multipleSelect({
+		filter: true,
+		onClose: function () {
+			console.log('onOpen event fire!\n');
+
+			var checked = $('#checkbox1').is(':checked');
+			var endPointUrl = "";
+			var versionTag = $('.multiple-select').val();
+
+
+			if(checked){
+
+				endPointUrl = "/T_ARMS_REQSTATUS_" + $('#country').val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
+				common_dataTableLoad($('#country').val(), endPointUrl);
+
+			}else{
+
+				endPointUrl = "/T_ARMS_REQSTATUS_" + $('#country').val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
+				common_dataTableLoad($('#country').val(), endPointUrl);
+
+			}
+
+		}
+	});
 }
 
 function bind_VersionData_By_PdService(){
@@ -92,16 +123,12 @@ function bind_VersionData_By_PdService(){
 				text: obj.c_title,
 			})
 
-			//$('#multiVersion').append($opt);
-			//$('#editMultiVersion').append($opt);
 			$('.multiple-select').append($opt);
 		}
 
 		if(data.length > 0){
 			console.log("display 재설정.");
 		}
-		//$('#multiVersion').multipleSelect('refresh');
-		//$('#editMultiVersion').multipleSelect('refresh');
 		$('.multiple-select').multipleSelect('refresh');
 
 	}).fail(function(e) {
@@ -128,14 +155,13 @@ function  makeSlimScroll(targetElement) {
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function common_dataTableLoad(selectId) {
+function common_dataTableLoad(selectId, endPointUrl) {
 
 	var jQueryElementID = "#reqStatusTable";
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg,'');
 	console.log("jQueryElementStr ======== " + jQueryElementStr );
 	var serviceNameForURL = "reqStatus";
-	var endPointUrl = "/T_ARMS_REQSTATUS_" + selectId + "/getStatusMonitor.do";
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
 		{ name: "c_pdservice_link",
@@ -348,6 +374,27 @@ function dataTableClick(selectedData) {
 function dataTableCallBack(){
 
 }
+
+$('#checkbox1').click(function(){
+
+	var checked = $('#checkbox1').is(':checked');
+	var endPointUrl = "";
+	var versionTag = $('.multiple-select').val();
+
+
+	if(checked){
+
+		endPointUrl = "/T_ARMS_REQSTATUS_" + $('#country').val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
+		common_dataTableLoad($('#country').val(), endPointUrl);
+
+	}else{
+
+		endPointUrl = "/T_ARMS_REQSTATUS_" + $('#country').val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
+		common_dataTableLoad($('#country').val(), endPointUrl);
+
+	}
+});
+
 
 $("#copychecker").on("click", function() {
 	reqStatusDataTable.button( '.buttons-copy' ).trigger();
