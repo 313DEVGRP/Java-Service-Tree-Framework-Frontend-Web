@@ -292,6 +292,9 @@ function common_dataTableLoad(selectId) {
 		columnDefs: columnDefList,
 		select: selectList,
 		order: orderList,
+		buttons: [
+			'copy', 'csv', 'excel', 'pdf', 'print'
+		],
 		drawCallback: function() {
 			console.log("dataTableBuild :: drawCallback");
 			if ($.isFunction(dataTableCallBack )) {
@@ -345,3 +348,19 @@ function dataTableClick(selectedData) {
 function dataTableCallBack(){
 
 }
+
+$("#copychecker").on("click", function() {
+	reqStatusDataTable.button( '.buttons-copy' ).trigger();
+});
+$("#printchecker").on("click", function() {
+	reqStatusDataTable.button( '.buttons-print' ).trigger();
+});
+$("#csvchecker").on("click", function() {
+	reqStatusDataTable.button( '.buttons-csv' ).trigger();
+});
+$("#excelchecker").on("click", function() {
+	reqStatusDataTable.button( '.buttons-excel' ).trigger();
+});
+$("#pdfchecker").on("click", function() {
+	reqStatusDataTable.button( '.buttons-pdf' ).trigger();
+});
