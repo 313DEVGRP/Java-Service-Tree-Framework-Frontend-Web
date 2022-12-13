@@ -1,7 +1,7 @@
 // make review classify menu
-const makeClassifyMenus = function (data) {
-	const reviewClassify = document.getElementById("review-classify");
-	let menus = "";
+var makeClassifyMenus = function (data) {
+	var reviewClassify = document.getElementById("review-classify");
+	var menus = "";
 	data.forEach(
 		(item) =>
 			(menus += `
@@ -14,17 +14,20 @@ const makeClassifyMenus = function (data) {
 };
 
 // make review list
-const makeReviewList = function (data) {
-	const reviewList = document.getElementById("review-list");
-	let list = "";
+var makeReviewList = function (data) {
+	var reviewList = document.getElementById("review-list");
+	var list = "";
 	data.forEach(
 		(item) =>
 			(list += `
-		<tr data-id="${item.id}">
+		<tr data-id="${item.c_id}">
 		<td class="tiny-column"><i class="fa fa-star"></i></td>
-		<td class="name">${item.register}</td>
-		<td>${item.requirements}</td>
-		<td class="date">${dateFormat(item.timestamp)}</td>
+		<td class="name">${item.c_review_pdservice_name}</td>
+		<td class="name">${item.c_review_sender}</td>
+		<td class="name">${item.c_review_responder}</td>
+		<td>${item.c_review_req_name}</td>
+		<td class="date">${item.c_review_result_state}</td>
+		<td class="date">${dateFormat(item.c_review_creat_date)}</td>
 		</tr>
 	`)
 	);
@@ -41,19 +44,19 @@ $(function () {
 	);
 
 	getJsonForPrototype("./js/reviewClassify.json", makeClassifyMenus);
-	getJsonForPrototype("./js/reviewList.json", makeReviewList);
+	getJsonForPrototype("/auth-user/api/arms/reqReview/getMonitor_Without_Root.do?searchReviewer=admin", makeReviewList);
 });
 
 // reviwe click
 $("#review-list").click(function (ev) {
-	const row = ev.target.parentNode.dataset;
+	var row = ev.target.parentNode.dataset;
 	location.href = `reqReviewDetail.html?id=${row.id}`;
 });
 
 // side menu click
 $("#review-classify").click(async function (ev) {
-	const li = ev.target.parentNode;
-	for (const item of ev.currentTarget.children) {
+	var li = ev.target.parentNode;
+	for (var item of ev.currentTarget.children) {
 		item.classList.remove("active");
 	}
 
@@ -63,8 +66,8 @@ $("#review-classify").click(async function (ev) {
 	// getJsonForPrototype("./js/reviewList.json", makeReviewList);
 
 	// 분류 예제 코드
-	const data = await ajaxGet("./js/reviewList.json");
-	const order = Number(li.dataset.order);
+	var data = await ajaxGet("./js/reviewList.json");
+	var order = Number(li.dataset.order);
 	makeReviewList(
 		order ? data.filter((item) => item.order === Number(li.dataset.order)) : data
 	);
