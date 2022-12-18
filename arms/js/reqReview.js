@@ -41,10 +41,15 @@ $(function () {
 			visible: true
 		},
 
-		{ name: "c_review_req_name",
-			title: "리뷰 제목",
-			data: "c_review_req_name",
+		{ name: "c_review_req_link",
+			title: "요구사항 아이디",
+			data: "c_review_req_link",
 			visible: false
+		},
+		{ name: "c_review_req_name",
+			title: "요구사항",
+			data: "c_review_req_name",
+			visible: true
 		},
 		{ name: "c_review_result_state",
 			title: "리뷰 상태",
@@ -56,17 +61,6 @@ $(function () {
 			data: "c_review_creat_date",
 			visible: true
 		},
-
-		{ name: "c_req_link",
-			title: "요구사항 아이디",
-			data: "c_req_link",
-			visible: false
-		},
-		{ name: "c_req_name",
-			title: "요구사항",
-			data: "c_req_name",
-			visible: true
-		}
 
 	];
 	var rowsGroupList = [];
@@ -121,6 +115,7 @@ function common_dataTableLoad(externalData ,jquerySelectorID, ajaxUrl, columnLis
 			url: ajaxUrl,
 			dataSrc: 'result'
 		},
+		serverSide: true,
 		destroy: true,
 		processing: true,
 		responsive: false,
@@ -130,11 +125,21 @@ function common_dataTableLoad(externalData ,jquerySelectorID, ajaxUrl, columnLis
 		select: selectList,
 		order: orderList,
 		buttons: buttonList,
+		language: {
+			processing: '<img src="./img/earth.gif" height="90px" width="90px"> '
+		},
 		drawCallback: function() {
 			console.log("dataTableBuild :: drawCallback");
 			if ($.isFunction(dataTableCallBack )) {
 				dataTableCallBack();
 			}
+		},
+		fnInitComplete: function(oSettings, json) {
+					if(json.message == undefined){
+						console.log("정상");
+					}else{
+						console.log("비정상");
+					}
 		}
 	});
 
@@ -167,9 +172,16 @@ function common_dataTableLoad(externalData ,jquerySelectorID, ajaxUrl, columnLis
 	//datatable 좌상단 datarow combobox style
 	$("body").find("[aria-controls='" + jQueryElementStr + "']").css("width", "100px");
 	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
+	$("select[name=" + jQueryElementStr + "_length] option").css("background", "red");
 
 	return tempDataTable;
 }
+
+$.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) {
+	console.log(message);
+	jError("Notification : <strong>Ajax Error</strong>, Complete !");
+};
+
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
