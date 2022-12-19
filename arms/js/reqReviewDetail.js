@@ -1,3 +1,20 @@
+////////////////////////////////////////////////////////////////////////////////////////
+//Document Ready ( execArmsDocReady )
+////////////////////////////////////////////////////////////////////////////////////////
+// --- 사이드 메뉴 -- //
+function execArmsDocReady() {
+	setSideMenu(
+		"sidebar_menu_requirement",
+		"sidebar_menu_requirement_review",
+		"requirement-elements-collapse"
+	);
+
+	getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
+
+	includeDiff();
+};
+
+
 const makeHistory = function (data) {
 	const historys = document.querySelector(".review-history");
 
@@ -122,16 +139,3 @@ index 0000001..0ddf2ba
 	diff2htmlUi.highlightCode();
 	diff2htmlUi.fileListToggle(false);
 };
-
-// --- 사이드 메뉴 -- //
-$(function () {
-	setSideMenu(
-		"sidebar_menu_requirement",
-		"sidebar_menu_requirement_review",
-		"requirement-elements-collapse"
-	);
-
-	getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
-
-	includeDiff();
-});

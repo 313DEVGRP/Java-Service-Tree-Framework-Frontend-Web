@@ -1,10 +1,39 @@
+////////////////////////////////////////////////////////////////////////////////////////
+//Document Ready
+////////////////////////////////////////////////////////////////////////////////////////
+
+$(function () {
+
 // Page load & 상단 페이지 로드 프로그래스바
-topbarConfig();
-topbar.show();
-setTimeout(function () {
-	$(".container").fadeIn("slow");
-	topbar.hide();
-}, 2000);
+	topbarConfig();
+	topbar.show();
+	setTimeout(function () {
+		$(".container").fadeIn("slow");
+		topbar.hide();
+	}, 2000);
+
+	/* 로그인 인증 여부 체크 함수 */
+	authUserCheck();
+
+	/* include 레이아웃 html 파일을 로드하는 함수 */
+	includeLayout();
+
+	/* 맨위로 아이콘 */
+	rightBottomTopForwardIcon();
+
+});
+
+////////////////////////////////////////////////////////////////////////////////////////
+//Common Variable
+////////////////////////////////////////////////////////////////////////////////////////
+var userName;
+var userApplicationRoles;
+var userAttributes;
+var userEnabled;
+var userGroups;
+var userID;
+var userRealmRoles;
+var permissions;
 
 // 상단 페이지 로드 프로그래스바 설정
 function topbarConfig() {
@@ -24,19 +53,6 @@ function topbarConfig() {
 }
 
 
-// jQuery Document ready
-$(function () {
-
-	/* 로그인 인증 여부 체크 함수 */
-	authUserCheck();
-
-	/* include 레이아웃 html 파일을 로드하는 함수 */
-	includeLayout();
-
-	/* 맨위로 아이콘 */
-	rightBottomTopForwardIcon();
-
-});
 
 // 맨위로 아이콘
 function rightBottomTopForwardIcon(){
@@ -54,13 +70,74 @@ function authUserCheck() {
 		timeout: 7313,
 		global: false,
 		statusCode: {
-			200: function (n) {
-				console.log("authUserCheck :: " + n);
+			200: function (json) {
+				console.log("authUserCheck :: userName = " + json.name);
+				console.log("authUserCheck :: permissions = " + json.permissions);
+				userName = json.name;
+				permissions = json.permissions;
+
+				getUserInfo();
 			},
 			401: function (n) {
 				location.href = "/sso/login";
 			},
 		},
+	});
+}
+
+function getUserInfo() {
+	$.ajax({
+		url: "/auth-check/getUsers/"+userName,
+		data: {
+			sendData: ""
+		},
+		type: "GET",
+		progress: true,
+		statusCode: {
+			200: function (json) {
+				console.log("authUserCheck length = :: " + json.length);
+				if( json.length > 1 ){
+					jError("중복된 사용자가 있습니다.");
+				}else if( json.length == 0 ){
+					jError("사용자 정보가 조회되지 않습니다.");
+				}else {
+					userApplicationRoles = json[0].applicationRoles;
+					userAttributes = json[0].attributes;
+					userEnabled = json[0].enabled;
+					userGroups = json[0].groups;
+					userID = json[0].id;
+					userRealmRoles = json[0].realmRoles;
+					console.log("authUserCheck :: userApplicationRoles = " + userApplicationRoles);
+					console.log("authUserCheck :: userAttributes = " + userAttributes);
+					console.log("authUserCheck :: userEnabled = " + userEnabled);
+					console.log("authUserCheck :: userGroups = " + userGroups);
+					console.log("authUserCheck :: userID = " + userID);
+					console.log("authUserCheck :: userRealmRoles = " + userRealmRoles);
+
+					if ($.isFunction(execArmsDocReady)) {
+						execArmsDocReady();
+					}
+
+				}
+			},
+			401: function (n) {
+				location.href = "/sso/login";
+			},
+		},
+	}).done(function(data) {
+
+		// for(var key in data){
+		// 	var value = data[key];
+		// 	console.log(key + "=" + value);
+		// }
+		//
+		// var loopCount = 3;
+		// for (var i = 0; i < loopCount ; i++) {
+		// 	console.log( "loop check i = " + i );
+		// }
+
+	}).fail(function(e) {
+	}).always(function() {
 	});
 }
 
