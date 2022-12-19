@@ -165,7 +165,7 @@ const getJsonForPrototype = function (url, bindTemplate) {
 
 const dateFormat = (time = 0) => {
 	let date = time ? new Date(time).toISOString() : new Date().toISOString();
-	return date.split("T")[0];
+	return date;
 };
 
 const ajaxGet = (url) =>

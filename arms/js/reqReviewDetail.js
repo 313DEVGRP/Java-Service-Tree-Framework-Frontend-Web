@@ -9,17 +9,200 @@ function execArmsDocReady() {
 		"requirement-elements-collapse"
 	);
 
-	getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
+	//getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
 
 	includeDiff();
+
+	getPdService();
+
+	//getVersion();
+
+
+	getReqReviewHistory();
+
+	getReqAdd();
+
+	getReqAddLog();
+
 };
 
+function getPdService() {
+
+	var searchParams = new URLSearchParams(location.search);
+	console.log(searchParams.get('c_id'));
+
+	$.ajax({
+		url: "/auth-user/api/arms/pdService/getNode.do",
+		data: {
+			c_id: searchParams.get('c_review_pdservice_link')
+		},
+		type: "GET",
+		progress: true,
+		statusCode: {
+			200: function (json) {
+				console.log(json);
+			},
+			401: function (n) {
+				location.href = "/sso/login";
+			},
+		},
+	}).done(function(data) {
+
+		for(var key in data){
+			var value = data[key];
+			console.log(key + "=" + value);
+		}
+
+		var loopCount = 3;
+		for (var i = 0; i < loopCount ; i++) {
+			console.log( "loop check i = " + i );
+		}
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+}
+
+function getReqAddLog() {
+
+	var searchParams = new URLSearchParams(location.search);
+	console.log(searchParams.get('c_id'));
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqAddLog/T_ARMS_REQADD_" + searchParams.get('c_review_pdservice_link') + "/getHistory.do",
+		data: {
+			c_id: searchParams.get('c_review_req_link')
+		},
+		type: "GET",
+		progress: true,
+		statusCode: {
+			200: function (json) {
+				console.log(json);
+			},
+			401: function (n) {
+				location.href = "/sso/login";
+			},
+		},
+	}).done(function(data) {
+
+		for(var key in data){
+			var value = data[key];
+			console.log(key + "=" + value);
+		}
+
+		var loopCount = 3;
+		for (var i = 0; i < loopCount ; i++) {
+			console.log( "loop check i = " + i );
+		}
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+}
+
+function getReqAdd() {
+
+	var searchParams = new URLSearchParams(location.search);
+	console.log(searchParams.get('c_id'));
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + searchParams.get('c_review_pdservice_link') + "/getNode.do",
+		data: {
+			c_id: searchParams.get('c_review_req_link')
+		},
+		type: "GET",
+		progress: true,
+		statusCode: {
+			200: function (json) {
+				console.log(json);
+			},
+			401: function (n) {
+				location.href = "/sso/login";
+			},
+		},
+	}).done(function(data) {
+
+		for(var key in data){
+			var value = data[key];
+			console.log(key + "=" + value);
+		}
+
+		var loopCount = 3;
+		for (var i = 0; i < loopCount ; i++) {
+			console.log( "loop check i = " + i );
+		}
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+}
+
+function getReqReviewHistory() {
+
+	var searchParams = new URLSearchParams(location.search);
+	console.log(searchParams.get('c_id'));
+
+	getJsonForPrototype("/auth-user/api/arms/reqReviewLog/getHistory.do?reqID=" + searchParams.get('c_id'), buildHistory);
+
+	// $.ajax({
+	// 	url: "/auth-user/api/arms/reqReviewLog/getHistory.do",
+	// 	data: {
+	// 		reqID: searchParams.get('c_id')
+	// 	},
+	// 	type: "GET",
+	// 	progress: true,
+	// 	statusCode: {
+	// 		200: function (json) {
+	// 			console.log(json);
+	// 		},
+	// 		401: function (n) {
+	// 			location.href = "/sso/login";
+	// 		},
+	// 	},
+	// }).done(function(data) {
+	//
+	// 	for(var key in data){
+	// 		var value = data[key];
+	// 		console.log(key + "=" + value);
+	// 	}
+	//
+	// 	var loopCount = 3;
+	// 	for (var i = 0; i < loopCount ; i++) {
+	// 		console.log( "loop check i = " + i );
+	// 	}
+	//
+	// }).fail(function(e) {
+	// }).always(function() {
+	// });
+}
+
+const buildHistory = function (data) {
+	const historys = document.querySelector(".review-history");
+
+	let lists = "";
+	data.forEach((item, index) => {
+		lists += `
+			<li class="timeline-item" data-value="${item.c_id}">
+				<span class="timeline-icon label label-${historyLabel(item.c_method)}">
+					${item.c_method}
+				</span>
+				<h5 class="fw-bold">${item.c_state}</h5>
+				<time class="text-muted">${dateFormat(item.c_date)}</time>
+				<div class="text-muted timeline-item-summary">
+					ID:[${item.c_review_req_link}]-${item.c_review_req_name}
+				</div>
+			</li>
+		`;
+	});
+
+	historys.innerHTML = `<ul class="timeline-with-icons">${lists}</ul>`;
+};
 
 const makeHistory = function (data) {
 	const historys = document.querySelector(".review-history");
 
 	let lists = "";
-	data.history.forEach((item, index) => {
+	data.forEach((item, index) => {
 		lists += `
 			<li class="timeline-item" data-value="${item.value}">
 				<span class="timeline-icon label label-${historyLabel(item.status)}">
@@ -27,8 +210,8 @@ const makeHistory = function (data) {
 				</span>
 				<h5 class="fw-bold">${item.title}</h5>
 				<time class="text-muted">${dateFormat(item.upd_dt)}</time>
-				<div class="text-muted timeline-item--summary">
-					${historySummary(item.summary)}
+				<div class="text-muted timeline-item-summary">
+					${item.summary}
 				</div>
 			</li>
 		`;
