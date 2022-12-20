@@ -17,6 +17,37 @@ function execArmsDocReady() {
 
 	getReqAdd();
 
+	getReqComment();
+
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 커멘트 조회
+///////////////////////////////////////////////////////////////////////////////
+function getReqComment() {
+	//정보 셋팅
+	var searchParams = new URLSearchParams(location.search);
+	var c_id = searchParams.get('c_id');
+	var c_review_pdservice_link = searchParams.get('c_review_pdservice_link');
+	var c_review_req_link = searchParams.get('c_review_req_link');
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqComment/getComment.do",
+		data: {
+			c_id: c_id,
+			c_review_pdservice_link: c_review_pdservice_link,
+			c_review_req_link: c_review_req_link,
+		},
+		type: "GET",
+		progress: true
+	}).done(function(data) {
+		console.log(data);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
 };
 
 function getReqAdd() {
@@ -383,3 +414,40 @@ function set_Review_Result(reviewResult){
 	});
 
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// 요구사항 - 커멘트 등록
+///////////////////////////////////////////////////////////////////////////////
+$("#new-message-btn").click(function () {
+	//정보 셋팅
+	var searchParams = new URLSearchParams(location.search);
+	var c_id = searchParams.get('c_id');
+	var c_review_pdservice_link = searchParams.get('c_review_pdservice_link');
+	var c_review_req_link = searchParams.get('c_review_req_link');
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqReview/setComment.do",
+		data: {
+			c_id: c_id,
+			c_review_pdservice_link: c_review_pdservice_link,
+			c_review_req_link: c_review_req_link,
+			reviewer: "["+userName+"]" + " - " + userID,
+			comment: $('#new-message').val()
+		},
+		type: "POST",
+		progress: true
+	}).done(function(data) {
+
+		jSuccess("커멘트가 입력되었습니다.");
+
+		includeDiff();
+
+		getReqReviewHistory();
+
+		getReqAdd();
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+});

@@ -170,7 +170,7 @@
 									<button
 										type="button"
 										id="new-message-btn"
-										class="btn btn-transparent btn-block"
+										class="btn-block btn btn-transparent btn-sm active"
 									>
 										Send
 									</button>
@@ -187,6 +187,15 @@
 
 <!-- page specific application css/js -->
 <style type="text/css">
+
+    .btn-transparent.active {
+        color: white;
+        background: rgba(51, 51, 51, 0.55);
+        color: #ffffff;
+        background-color: #e5603b;
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+
 	.timeline-with-icons {
 		padding-left: 3rem;
 		border-left: 1px solid hsl(0, 0%, 90%);
