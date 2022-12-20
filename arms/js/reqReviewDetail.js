@@ -38,6 +38,8 @@ function getReqAdd() {
 				//////////////////////////////////////////////////////////////////////////
 				var history = document.querySelector(".pdServiceInfo");
 
+				history.innerHTML = '';
+
 				let lists = "";
 					lists += `
 							<h4 class="details-title">Review Information</h4>
@@ -117,6 +119,8 @@ function getReqStatus(c_issue_link) {
 				//////////////////////////////////////////////////////////////////////////////////
 				var history = document.querySelector(".Review-Detail-Div");
 
+				history.innerHTML = '';
+
 				let lists = "<h4 class='details-title'>Review - Jira Issue</h4>";
 				json.forEach((item, index) => {
 					lists += `
@@ -173,6 +177,8 @@ function getReqReviewHistory() {
 var buildHistory = function (data) {
 	var history = document.querySelector(".review-history");
 
+	history.innerHTML = '';
+
 	let lists = "";
 	data.forEach((item, index) => {
 		lists += `
@@ -181,7 +187,7 @@ var buildHistory = function (data) {
 					${item.c_method}
 				</span>
 				<h5 class="fw-bold">${item.c_state}</h5>
-				<time class="text-muted">${item.c_review_creat_date}</time>
+				<time class="text-muted">${dateFormat(item.c_date)}</time>
 				<div class="text-muted timeline-item-summary">
 				 <strong style="color: #a4c6ff">STATE:</strong> ${item.c_review_result_state}<br>
 					<strong style="color: #a4c6ff">ID:</strong> [${item.c_review_req_link}]-${item.c_review_req_name}<br>
@@ -326,3 +332,54 @@ index 0000001..0ddf2ba
 	diff2htmlUi.highlightCode();
 	diff2htmlUi.fileListToggle(false);
 };
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 요구사항 - 승인 클릭
+///////////////////////////////////////////////////////////////////////////////
+$("#show-info-accept").click(function () {
+	set_Review_Result("Accept");
+});
+
+$("#show-info-reject").click(function () {
+	set_Review_Result("Reject");
+});
+
+$("#show-info-delay").click(function () {
+	set_Review_Result("Delay");
+});
+
+function set_Review_Result(reviewResult){
+	//정보 셋팅
+	var searchParams = new URLSearchParams(location.search);
+	var c_id = searchParams.get('c_id');
+	var c_review_pdservice_link = searchParams.get('c_review_pdservice_link');
+	var c_review_req_link = searchParams.get('c_review_req_link');
+
+	//반영할 테이블 네임 값 셋팅
+	var tableName = "T_ARMS_REQADD_" + c_review_pdservice_link;
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/withReqReview/updateNode.do",
+		data: {
+			c_id: c_id,
+			c_review_pdservice_link: c_review_pdservice_link,
+			c_review_req_link: c_review_req_link,
+			c_review_result_state: reviewResult
+		},
+		type: "POST",
+		progress: true
+	}).done(function(data) {
+
+		includeDiff();
+
+		getReqReviewHistory();
+
+		getReqAdd();
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+}
