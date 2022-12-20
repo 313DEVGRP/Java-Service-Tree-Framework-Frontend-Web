@@ -13,92 +13,11 @@ function execArmsDocReady() {
 
 	includeDiff();
 
-	getPdService();
-
-	//getVersion();
-
-
 	getReqReviewHistory();
 
 	getReqAdd();
 
-	getReqAddLog();
-
 };
-
-function getPdService() {
-
-	var searchParams = new URLSearchParams(location.search);
-	console.log(searchParams.get('c_id'));
-
-	$.ajax({
-		url: "/auth-user/api/arms/pdService/getNode.do",
-		data: {
-			c_id: searchParams.get('c_review_pdservice_link')
-		},
-		type: "GET",
-		progress: true,
-		statusCode: {
-			200: function (json) {
-				console.log(json);
-			},
-			401: function (n) {
-				location.href = "/sso/login";
-			},
-		},
-	}).done(function(data) {
-
-		for(var key in data){
-			var value = data[key];
-			console.log(key + "=" + value);
-		}
-
-		var loopCount = 3;
-		for (var i = 0; i < loopCount ; i++) {
-			console.log( "loop check i = " + i );
-		}
-
-	}).fail(function(e) {
-	}).always(function() {
-	});
-}
-
-function getReqAddLog() {
-
-	var searchParams = new URLSearchParams(location.search);
-	console.log(searchParams.get('c_id'));
-
-	$.ajax({
-		url: "/auth-user/api/arms/reqAddLog/T_ARMS_REQADD_" + searchParams.get('c_review_pdservice_link') + "/getHistory.do",
-		data: {
-			c_id: searchParams.get('c_review_req_link')
-		},
-		type: "GET",
-		progress: true,
-		statusCode: {
-			200: function (json) {
-				console.log(json);
-			},
-			401: function (n) {
-				location.href = "/sso/login";
-			},
-		},
-	}).done(function(data) {
-
-		for(var key in data){
-			var value = data[key];
-			console.log(key + "=" + value);
-		}
-
-		var loopCount = 3;
-		for (var i = 0; i < loopCount ; i++) {
-			console.log( "loop check i = " + i );
-		}
-
-	}).fail(function(e) {
-	}).always(function() {
-	});
-}
 
 function getReqAdd() {
 
@@ -114,7 +33,107 @@ function getReqAdd() {
 		progress: true,
 		statusCode: {
 			200: function (json) {
+				getReqStatus(json.c_issue_link);
+
+				//////////////////////////////////////////////////////////////////////////
+				var history = document.querySelector(".pdServiceInfo");
+
+				let lists = "";
+					lists += `
+							<h4 class="details-title">Review Information</h4>
+							<address>
+									<strong style="color: #a4c6ff">요구사항 명</strong> : ${json.c_title}<br />
+									<strong style="color: #a4c6ff">요구사항 상태</strong> : ${json.c_req_status}<br />
+							</address>
+							<li class="history-profile">
+								<span class="history-profile--name"><i class="fa fa-sliders"></i> 리뷰어의 리뷰상황</span>
+							</li>
+							<li class="history-profile">
+								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--name">${getStrLimit(json.c_reviewer01,30)}</span>
+								${historyReviewerStatus(json.c_reviewer01_status)}
+							</li>
+							<li class="history-profile">
+								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--name">${getStrLimit(json.c_reviewer02,30)}</span>
+								${historyReviewerStatus(json.c_reviewer02_status)}
+							</li>
+							<li class="history-profile">
+								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--name">${getStrLimit(json.c_reviewer03,30)}</span>
+								${historyReviewerStatus(json.c_reviewer03_status)}
+							</li>
+							<li class="history-profile">
+								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--name">${getStrLimit(json.c_reviewer04,30)}</span>
+								${historyReviewerStatus(json.c_reviewer04_status)}
+							</li>
+							<li class="history-profile">
+								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--name">${getStrLimit(json.c_reviewer05,30)}</span>
+								${historyReviewerStatus(json.c_reviewer05_status)}
+							</li>
+		`;
+
+				history.innerHTML = `${lists}`;
+				//////////////////////////////////////////////////////////////////////////
+
+			},
+			401: function (n) {
+				location.href = "/sso/login";
+			},
+		},
+	}).done(function(data) {
+
+		for(var key in data){
+			var value = data[key];
+			console.log(key + "=" + value);
+		}
+
+		var loopCount = 3;
+		for (var i = 0; i < loopCount ; i++) {
+			console.log( "loop check i = " + i );
+		}
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+}
+
+function getReqStatus(c_issue_link) {
+
+	var searchParams = new URLSearchParams(location.search);
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + searchParams.get('c_review_pdservice_link') + "/getStatusChildNode.do",
+		data: {
+			c_ids: c_issue_link
+		},
+		type: "GET",
+		progress: true,
+		statusCode: {
+			200: function (json) {
 				console.log(json);
+				//////////////////////////////////////////////////////////////////////////////////
+				var history = document.querySelector(".Review-Detail-Div");
+
+				let lists = "<h4 class='details-title'>Review - Jira Issue</h4>";
+				json.forEach((item, index) => {
+					lists += `
+							<div class="darkBack font12">
+								<span title="Work c_pdservice_name" style="color: #a4c6ff">제품(서비스)</span>: ${getStrLimit(item.c_pdservice_name,20)}<br />
+								<span title="Work c_pdservice_name" style="color: #a4c6ff">버전</span>: ${getStrLimit(item.c_version_name,20)}<br />
+								<span title="Work c_pdservice_name" style="color: #a4c6ff">지라 프로젝트</span>: ${getStrLimit(item.c_jira_project_name,20)}<br />
+								<span title="Work c_pdservice_name" style="color: #a4c6ff">지라 버전</span>: ${getStrLimit(item.c_jira_version_name,20)}<br />
+								<span title="Work c_pdservice_name" style="color: #a4c6ff">지라 이슈</span>: ${getStrLimit(item.c_jira_req_issue_key,20)}<br />
+							</div>
+							<br>
+		`;
+				});
+
+				history.innerHTML = `${lists}`;
+				//////////////////////////////////////////////////////////////////////////////////
+
 			},
 			401: function (n) {
 				location.href = "/sso/login";
@@ -149,40 +168,10 @@ function getReqReviewHistory() {
 
 	getJsonForPrototype("/auth-user/api/arms/reqReviewLog/getHistory.do" + param, buildHistory);
 
-	// $.ajax({
-	// 	url: "/auth-user/api/arms/reqReviewLog/getHistory.do",
-	// 	data: {
-	// 		reqID: searchParams.get('c_id')
-	// 	},
-	// 	type: "GET",
-	// 	progress: true,
-	// 	statusCode: {
-	// 		200: function (json) {
-	// 			console.log(json);
-	// 		},
-	// 		401: function (n) {
-	// 			location.href = "/sso/login";
-	// 		},
-	// 	},
-	// }).done(function(data) {
-	//
-	// 	for(var key in data){
-	// 		var value = data[key];
-	// 		console.log(key + "=" + value);
-	// 	}
-	//
-	// 	var loopCount = 3;
-	// 	for (var i = 0; i < loopCount ; i++) {
-	// 		console.log( "loop check i = " + i );
-	// 	}
-	//
-	// }).fail(function(e) {
-	// }).always(function() {
-	// });
 }
 
-const buildHistory = function (data) {
-	const historys = document.querySelector(".review-history");
+var buildHistory = function (data) {
+	var history = document.querySelector(".review-history");
 
 	let lists = "";
 	data.forEach((item, index) => {
@@ -196,21 +185,21 @@ const buildHistory = function (data) {
 				<div class="text-muted timeline-item-summary">
 				 <strong style="color: #a4c6ff">STATE:</strong> ${item.c_review_result_state}<br>
 					<strong style="color: #a4c6ff">ID:</strong> [${item.c_review_req_link}]-${item.c_review_req_name}<br>
-					<strong style="color: #a4c6ff">IN:</strong> ${item.c_review_responder}<br>
-					<strong style="color: #a4c6ff">OUT:</strong> ${item.c_review_sender}
+					<strong style="color: #a4c6ff">RES:</strong> ${getStrLimit(item.c_review_responder,15)} - (${historyReviewerStatus(item.c_review_result_state)})<br>
+					<strong style="color: #a4c6ff">REQ:</strong> ${getStrLimit(item.c_review_sender,15)}
 				</div>
 			</li>
 		`;
 	});
 
-	historys.innerHTML = `<ul class="timeline-with-icons">${lists}</ul>`;
+	history.innerHTML = `<ul class="timeline-with-icons">${lists}</ul>`;
 };
 
 const makeHistory = function (data) {
 	const historys = document.querySelector(".review-history");
 
 	let lists = "";
-	data.forEach((item, index) => {
+	data.history.forEach((item, index) => {
 		lists += `
 			<li class="timeline-item" data-value="${item.value}">
 				<span class="timeline-icon label label-${historyLabel(item.status)}">
@@ -218,8 +207,8 @@ const makeHistory = function (data) {
 				</span>
 				<h5 class="fw-bold">${item.title}</h5>
 				<time class="text-muted">${dateFormat(item.upd_dt)}</time>
-				<div class="text-muted timeline-item-summary">
-					${item.summary}
+				<div class="text-muted timeline-item--summary">
+					${historySummary(item.summary)}
 				</div>
 			</li>
 		`;
@@ -256,13 +245,12 @@ const historySummary = (summary) => {
 const historyReviewerStatus = (status) => {
 	let icon = "fa-spinner";
 	switch (status) {
-		case "reject":
+		case "Reject":
 			icon = "fa-ban";
 			break;
-		case "pass":
+		case "Accept":
 			icon = "fa-check";
 			break;
-		case "none":
 		default:
 			break;
 	}
@@ -304,7 +292,6 @@ var historyLabel = (name) => {
 		case "delete":
 			label = "important";
 			break;
-		case "start":
 		default:
 			break;
 	}

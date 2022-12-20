@@ -28,44 +28,19 @@
 			<div id="specification" class="tab-pane active">
 				<div class="row">
 					<div class="col-sm-12 col-print-12">
-						<div class="invoice-number text-align-right">#4346345 / 14 Aug 2013</div>
 						<div class="invoice-number-info text-align-right">
-							Some Invoice number description or whatever
+                            <a class="btn btn-info" id="show-info-delay" href="#"><i class="fa fa-spinner"></i> 보류</a>
+                            <a class="btn btn-danger" id="show-info-reject" href="#"><i class="fa fa-ban"></i> 거절</a>
+                            <a class="btn btn-success" id="show-info-accept" href="#"><i class="fa fa-check"></i> 승인</a>
 						</div>
 					</div>
 				</div>
 				<hr />
 				<section class="invoice-info well">
 					<div class="row">
-						<div class="col-sm-6 col-print-6">
-							<h4 class="details-title">Company Information</h4>
-							<h3 class="company-name">Wrapbootstrap LLC</h3>
-							<address>
-								<strong>2 Infinite Loop</strong><br />
-								Minsk, Belarus 220004<br />
-								088.253.5345<br />
-								<abbr title="Work email">e-mail:</abbr>
-								<a href="mailto:#">email@example.com</a><br />
-								<abbr title="Work Phone">phone:</abbr> (012) 345-678-901<br />
-								<abbr title="Work Fax">fax:</abbr> (012) 678-132-901
-							</address>
+						<div class="col-sm-6 col-print-6 pdServiceInfo">
 						</div>
-						<div class="col-sm-6 col-print-6 client-details">
-							<h4 class="details-title">Client Information</h4>
-							<h3 class="client-name">Veronica Niasvizhskaja</h3>
-							<address>
-								<strong>Consultant</strong> at <strong><a href="#">Allspana</a></strong
-								><br />
-								<abbr title="Work email">e-mail:</abbr>
-								<a href="mailto:#">maryna@allspana.by</a><br />
-								<abbr title="Work Phone">phone:</abbr> (012) 345-678-901<br />
-								<abbr title="Work Fax">fax:</abbr> (012) 678-132-901
-								<div class="separator line"></div>
-								<p class="margin-none">
-									<strong>Note:</strong><br />Some nights I stay up cashing in my bad
-									luck. Some nights I call it a draw
-								</p>
-							</address>
+						<div class="col-sm-6 col-print-6 Review-Detail-Div">
 						</div>
 					</div>
 				</section>
@@ -258,7 +233,7 @@
 		width: 100%;
 	}
 	.history-profile--name {
-		flex-basis: 110px;
+		flex-basis: 100%;
 	}
 	.history-profile .fa {
 		width: 16px;

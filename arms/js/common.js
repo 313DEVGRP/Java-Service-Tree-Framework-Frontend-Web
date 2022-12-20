@@ -154,6 +154,15 @@ function includeLayout() {
 	});
 }
 
+function getStrLimit(inputStr, limitCnt){
+	if(isEmpty(inputStr)){
+		return "";
+	}else if(inputStr.length >= limitCnt){
+		return inputStr.substr(0,limitCnt)+"...";
+	}else{
+		return inputStr;
+	}
+}
 
 //서버 바인딩 할 수가 없어서 프로토타입 목적으로 json 을 만들어서 로드하는 함수
 const getJsonForPrototype = function (url, bindTemplate) {
