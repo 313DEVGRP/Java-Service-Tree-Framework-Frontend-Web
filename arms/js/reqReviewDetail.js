@@ -141,8 +141,13 @@ function getReqReviewHistory() {
 
 	var searchParams = new URLSearchParams(location.search);
 	console.log(searchParams.get('c_id'));
+	var c_id = searchParams.get('c_id');
+	var c_review_pdservice_link = searchParams.get('c_review_pdservice_link');
+	var c_review_req_link = searchParams.get('c_review_req_link');
 
-	getJsonForPrototype("/auth-user/api/arms/reqReviewLog/getHistory.do?reqID=" + searchParams.get('c_id'), buildHistory);
+	var param = "?c_id=" + c_id + "&c_review_pdservice_link=" + c_review_pdservice_link + "&c_review_req_link=" + c_review_req_link;
+
+	getJsonForPrototype("/auth-user/api/arms/reqReviewLog/getHistory.do" + param, buildHistory);
 
 	// $.ajax({
 	// 	url: "/auth-user/api/arms/reqReviewLog/getHistory.do",
@@ -187,9 +192,12 @@ const buildHistory = function (data) {
 					${item.c_method}
 				</span>
 				<h5 class="fw-bold">${item.c_state}</h5>
-				<time class="text-muted">${dateFormat(item.c_date)}</time>
+				<time class="text-muted">${item.c_review_creat_date}</time>
 				<div class="text-muted timeline-item-summary">
-					ID:[${item.c_review_req_link}]-${item.c_review_req_name}
+				 <strong style="color: #a4c6ff">STATE:</strong> ${item.c_review_result_state}<br>
+					<strong style="color: #a4c6ff">ID:</strong> [${item.c_review_req_link}]-${item.c_review_req_name}<br>
+					<strong style="color: #a4c6ff">IN:</strong> ${item.c_review_responder}<br>
+					<strong style="color: #a4c6ff">OUT:</strong> ${item.c_review_sender}
 				</div>
 			</li>
 		`;
@@ -270,8 +278,8 @@ const historyProfile = (profile) => {
 	`;
 };
 
-const historyLabel = (name) => {
-	let label = "inverse";
+var historyLabel = (name) => {
+	var label = "inverse";
 
 	switch (name) {
 		case "close":
@@ -286,6 +294,15 @@ const historyLabel = (name) => {
 		case "review":
 		case "work":
 			label = "info";
+			break;
+		case "insert":
+			label = "success";
+			break;
+		case "update":
+			label = "warning";
+			break;
+		case "delete":
+			label = "important";
 			break;
 		case "start":
 		default:
