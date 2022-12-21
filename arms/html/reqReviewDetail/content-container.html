@@ -20,7 +20,7 @@
 					<a href="#specification" data-toggle="tab">Specification</a>
 				</li>
 				<li>
-					<a href="#diff" data-toggle="tab">Code diff</a>
+					<a href="#reqInfo" data-toggle="tab">Requirement Info</a>
 				</li>
 			</ul>
 		</header>
@@ -78,7 +78,168 @@
 					</div>
 				</section>
 			</div>
-			<div id="diff" class="diff-container tab-pane"></div>
+			<div id="reqInfo" class="tab-pane clearfix">
+
+				<div class="row">
+					<div class="col-sm-12 col-print-12">
+						<div class="invoice-number-info text-align-right">
+							<a class="btn btn-info" id="show-info-delay2" href="#"><i class="fa fa-spinner"></i> 보류</a>
+							<a class="btn btn-danger" id="show-info-reject2" href="#"><i class="fa fa-ban"></i> 거절</a>
+							<a class="btn btn-success" id="show-info-accept2" href="#"><i class="fa fa-check"></i> 승인</a>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<h4 class="details-title">Requirement Information</h4>
+				<form class="form-horizontal well" method="post">
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-pdService-name">
+								요구사항 연관 제품(서비스)&nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-pdService-name"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-pdService-version">
+								요구사항 연관 버전 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-pdService-version"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-id">
+								요구사항 아이디 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-id"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-name">
+								요구사항 제목 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-name"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-priority">
+								요구사항 우선순위 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<div id="detailView-req-priority" class="btn-group" data-toggle="buttons">
+										<label class="btn btn-warning">
+											<input type="radio" name="options" id="detailView-req-priority-option1"> 낮음
+										</label>
+										<label class="btn btn-warning">
+											<input type="radio" name="options" id="detailView-req-priority-option2"> 중간
+										</label>
+										<label class="btn btn-warning">
+											<input type="radio" name="options" id="detailView-req-priority-option3"> 높음
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-status">
+								요구사항 상태 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-status"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-writer">
+								요구사항 작성자 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-writer"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="detailView-req-write-date">
+								요구사항 최근 작성일 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>&nbsp;
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+									<a href="#" id="detailView-req-write-date"></a>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">
+								요구사항 리뷰어 &nbsp;
+							</label>
+							<div class="input-wrap col-sm-8">
+												<span class="input-group-addon">
+													<i class="fa fa-users"></i>
+												</span>&nbsp;
+								<div>
+									<a href="#" id="detailView-req-reviewer01"></a><br>
+									<a href="#" id="detailView-req-reviewer02"></a><br>
+									<a href="#" id="detailView-req-reviewer03"></a><br>
+									<a href="#" id="detailView-req-reviewer04"></a><br>
+									<a href="#" id="detailView-req-reviewer05"></a><br>
+								</div>
+							</div>
+						</div>
+						<br>
+					</fieldset>
+
+				</form>
+				<div class="control-group well">
+					<label class="control-label" style="margin-top: 10px">
+						요구사항 내용 &nbsp;
+					</label>
+					<div class="col-sm-8" style="margin-top: 10px;margin-bottom: 10px">
+						문서로 보기 : <button type="button" class="btn btn-warning">새 창으로 제품(서비스) 내용 보기</button>
+					</div>
+					<br><br><br>
+					<div class="col-sm-12" id="detailView-req-contents">
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 </div>
@@ -193,6 +354,104 @@
 	.d2h-file-name-wrapper > svg {
 		width: 22px;
 	}
+
+
+	.modalDarkBack{
+		background: rgb(51 51 51 / 94%) !important;
+		border: 1px solid rgb(51 51 51) !important;
+	}
+
+	.new-tab-open .product-handler,
+	.new-tab-open .pull-right {
+		display: none;
+	}
+
+	.product-handler {
+		display: flex;
+		justify-content: space-between;
+	}
+	.product-handler__group {
+		display: flex;
+		gap: 7px;
+	}
+	.product-handler .btn-block {
+		margin: 0;
+		max-width: 160px;
+	}
+	.btn:focus,
+	.btn:active:focus {
+		outline: 0px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+	.input-wrap {
+		display: flex;
+		height: 30px;
+		margin-bottom: 7px;
+	}
+	.input-wrap .input-group-addon {
+		width: 40px;
+		height: 30px;
+	}
+	.input-wrap .select2-selection--single,
+	.input-wrap .select2-selection--multiple {
+		height: 30px !important;
+		min-height: 30px !important;
+	}
+	.input-wrap .select2-selection__placeholder {
+		padding-left: 2px !important;
+	}
+	.input-wrap .select2-selection--multiple ul {
+		padding-left: 10px !important;
+	}
+	.input-wrap .select2-search--inline,
+	.input-wrap .select2-search--inline input {
+		width: 100% !important;
+	}
+	.form-control:focus {
+		box-shadow: none;
+	}
+
+	#service-reviewers,
+	#service-reviewers a {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 0;
+	}
+
+	#service-reviewers a {
+		gap: 5px;
+	}
+
+	.profile-image {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+	.profile-image img {
+		width: 100%;
+	}
+
+	.btn-transparent.active {
+		color: white;
+		background: rgba(51, 51, 51, 0.55);
+		color: #ffffff;
+		background-color: #e5603b;
+		border-color: rgba(0, 0, 0, 0.15);
+	}
+	.btn:focus, .btn.focus, .btn:active:focus, .btn:active.focus, .btn.active:focus, .btn.active.focus {
+		outline: 0px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+	.select2-search__field::-webkit-input-placeholder,
+	.select2-search__field::placeholder {
+		color: #999 !important;
+		padding-left: 6px;
+	}
+
+
+
 </style>
 <script
 	type="text/javascript"

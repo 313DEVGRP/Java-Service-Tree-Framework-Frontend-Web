@@ -11,7 +11,7 @@ function execArmsDocReady() {
 
 	//getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
 
-	includeDiff();
+	//includeDiff();
 
 	getReqReviewHistory();
 
@@ -19,8 +19,166 @@ function execArmsDocReady() {
 
 	getReqComment();
 
+	setDetailAndEditViewTab();
+
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// pdService 정보 가져오기
+///////////////////////////////////////////////////////////////////////////////
+function getPdServiceInfo() {
+	//정보 셋팅
+	var searchParams = new URLSearchParams(location.search);
+	var c_review_pdservice_link = searchParams.get('c_review_pdservice_link');
+	var c_review_req_link = searchParams.get('c_review_req_link');
+
+	$.ajax({
+		url: "/auth-user/api/arms/pdService/getNode.do",
+		data: {
+			c_id: c_review_pdservice_link,
+		},
+		type: "GET",
+		progress: true
+	}).done(function(data) {
+
+		var selectedPdServiceText = data.c_title;
+		if(isEmpty(selectedPdServiceText)){
+			$('#detailView-req-pdService-name').text("");
+		}else{
+			$('#detailView-req-pdService-name').text(selectedPdServiceText);
+		}
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// version 정보 가져오기
+///////////////////////////////////////////////////////////////////////////////
+function getVersionInfo(c_version_link) {
+	//정보 셋팅
+	//특수 문자 중에 콤마는 빼고 지움
+	var reg = /[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+	c_version_link_str = c_version_link.replace(reg,'');
+
+	$.ajax({
+		url: "/auth-user/api/arms/pdServiceVersion/getVersions.do",
+		data: {
+			c_ids: c_version_link_str,
+		},
+		type: "GET",
+		progress: true
+	}).done(function(data) {
+
+		// for(var key in data){
+		// 	var value = data[key];
+		// 	console.log(key + "=" + value);
+		// }
+
+		var list = "";
+		for (var i = 0; i < data.length ; i++) {
+			console.log( "loop check i = " + i );
+			list = list + data[i].c_title;
+			if( i == data.length-1){
+
+			}else{
+				list = list + " , ";
+			}
+		}
+
+		$('#detailView-req-pdService-version').text(list);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//상세 보기 탭 & 편집 탭
+////////////////////////////////////////////////////////////////////////////////////////
+function setDetailAndEditViewTab(){
+
+	//정보 셋팅
+	var searchParams = new URLSearchParams(location.search);
+	var c_id = searchParams.get('c_id');
+	var c_review_pdservice_link = searchParams.get('c_review_pdservice_link');
+	var c_review_req_link = searchParams.get('c_review_req_link');
+
+	var tableName = "T_ARMS_REQADD_" + c_review_pdservice_link;
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + c_review_req_link,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType : "json",
+		progress: true
+	}).done(function(data) {
+
+		// ------------------ 상세보기 ------------------ //
+		bindDataDetailTab(data);
+
+	}).fail(function(e) {
+	}).always(function() {
+	});
+}
+
+// ------------------ 상세보기 ------------------ //
+function bindDataDetailTab(ajaxData){
+
+	//제품(서비스) 데이터 바인딩
+	getPdServiceInfo();
+
+	//Version 데이터 바인딩
+	if(isEmpty(ajaxData.c_version_link)){
+		$('#detailView-req-pdService-version').text("요구사항에 등록된 버전이 없습니다.");
+	}else{
+		getVersionInfo(ajaxData.c_version_link);
+	}
+
+
+	$('#detailView-req-id').text(ajaxData.c_id);
+	$('#detailView-req-name').text(ajaxData.c_title);
+
+	//우선순위 셋팅
+	$('#detailView-req-priority').children('.btn.active').removeClass("active");
+	var slectReqPriorityID = "detailView-req-priority-option" + ajaxData.c_priority;
+	$('#'+slectReqPriorityID).parent().addClass("active");
+
+	$('#detailView-req-status').text(ajaxData.c_req_status);
+	$('#detailView-req-writer').text(ajaxData.c_writer);
+	$('#detailView-req-write-date').text(`${getStrLimit(ajaxData.c_writer_date,35)}`);
+
+	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
+		$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+	} else {
+		$("#detailView-req-reviewer01").text(`${getStrLimit(ajaxData.c_reviewer01,40)}`);
+	}
+	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
+		$("#detailView-req-reviewer02").text("");
+	} else {
+		$("#detailView-req-reviewer02").text(`${getStrLimit(ajaxData.c_reviewer02,40)}`);
+	}
+	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
+		$("#detailView-req-reviewer03").text("");
+	} else {
+		$("#detailView-req-reviewer03").text(`${getStrLimit(ajaxData.c_reviewer03,40)}`);
+	}
+	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
+		$("#detailView-req-reviewer04").text("");
+	} else {
+		$("#detailView-req-reviewer04").text(`${getStrLimit(ajaxData.c_reviewer04,40)}`);
+	}
+	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
+		$("#detailView-req-reviewer05").text("");
+	} else {
+		$("#detailView-req-reviewer05").text(`${getStrLimit(ajaxData.c_reviewer05,40)}`);
+	}
+	$("#detailView-req-contents").html(ajaxData.c_contents);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 커멘트 조회
@@ -49,7 +207,24 @@ function getReqComment() {
 
 		history.innerHTML = '';
 
-		let lists = "";
+		let lists = "<div class=\"chat-message\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t<div class=\"sender pull-right\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t<div class=\"icon\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"../reference/lightblue4/docs/img/avatars/5.png\" class=\"img-circle\" alt=\"\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t<div class=\"time\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t\t3 min\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t\t\t\t\t<div class=\"chat-message-body on-left\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t<span class=\"arrow\"></span>\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t<div class=\"sender\"><a href=\"#\">Cenhelm Houston</a></div>\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t<div class=\"text\">\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t\tPretty good. Doing my homework.. No one rejects, dislikes, or avoids\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t\tpleasure itself, because it is pleasure, but because\n" +
+			"\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t\t\t\t</div>";
 		data.forEach((item, index) => {
 			lists += `
 							<div class="chat-message">
@@ -431,7 +606,7 @@ function set_Review_Result(reviewResult){
 		progress: true
 	}).done(function(data) {
 
-		includeDiff();
+		//includeDiff();
 
 		getReqReviewHistory();
 
@@ -468,7 +643,7 @@ $("#new-message-btn").click(function () {
 
 		jSuccess("커멘트가 입력되었습니다.");
 
-		includeDiff();
+		//includeDiff();
 
 		getReqReviewHistory();
 
