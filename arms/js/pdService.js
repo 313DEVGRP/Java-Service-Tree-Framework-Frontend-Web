@@ -215,7 +215,7 @@ $('#editView-pdService-reviewers').on('select2:select', function (e) {
 
 
 // document ready
-$(function () {
+function execArmsDocReady () {
 
 	// 사이드 메뉴 색상 설정
 	setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
@@ -240,7 +240,7 @@ $(function () {
 			}
 		}
 	});
-});
+};
 
 /** file upload **/
 $(function () {
@@ -506,20 +506,20 @@ $("#regist-pdService").click(function () {
 	var reviewers03 = "none";
 	var reviewers04 = "none";
 	var reviewers05 = "none";
-	if ($('#editView-pdService-reviewers').select2('data')[0] != undefined) {
-		reviewers01 = $('#editView-pdService-reviewers').select2('data')[0].text;
+	if ($('#popup-editView-pdService-reviewers').select2('data')[0] != undefined) {
+		reviewers01 = $('#popup-editView-pdService-reviewers').select2('data')[0].text;
 	}
-	if ($('#editView-pdService-reviewers').select2('data')[1] != undefined) {
-		reviewers02 = $('#editView-pdService-reviewers').select2('data')[1].text;
+	if ($('#popup-editView-pdService-reviewers').select2('data')[1] != undefined) {
+		reviewers02 = $('#popup-editView-pdService-reviewers').select2('data')[1].text;
 	}
-	if ($('#editView-pdService-reviewers').select2('data')[2] != undefined) {
-		reviewers03 = $('#editView-pdService-reviewers').select2('data')[2].text;
+	if ($('#popup-editView-pdService-reviewers').select2('data')[2] != undefined) {
+		reviewers03 = $('#popup-editView-pdService-reviewers').select2('data')[2].text;
 	}
-	if ($('#editView-pdService-reviewers').select2('data')[3] != undefined) {
-		reviewers04 = $('#editView-pdService-reviewers').select2('data')[3].text;
+	if ($('#popup-editView-pdService-reviewers').select2('data')[3] != undefined) {
+		reviewers04 = $('#popup-editView-pdService-reviewers').select2('data')[3].text;
 	}
-	if ($('#editView-pdService-reviewers').select2('data')[4] != undefined) {
-		reviewers05 = $('#editView-pdService-reviewers').select2('data')[4].text;
+	if ($('#popup-editView-pdService-reviewers').select2('data')[4] != undefined) {
+		reviewers05 = $('#popup-editView-pdService-reviewers').select2('data')[4].text;
 	}
 
 	$.ajax({
