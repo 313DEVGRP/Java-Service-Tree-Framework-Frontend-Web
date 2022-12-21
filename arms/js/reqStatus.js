@@ -4,7 +4,7 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 
-$(function () {
+function execArmsDocReady() {
 
 	//좌측 메뉴
 	setSideMenu(
@@ -18,7 +18,7 @@ $(function () {
 	//버전 멀티 셀렉트 박스 이니시에이터
 	makeVersionMultiSelectBox();
 
-});
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //제품 서비스 셀렉트 박스

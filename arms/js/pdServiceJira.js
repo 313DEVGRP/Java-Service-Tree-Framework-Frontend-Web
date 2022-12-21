@@ -8,13 +8,13 @@ let dataTableRef; // 데이터테이블 참조 변수
 let selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이디
 let versionList;
 
-$(function () {
+function execArmsDocReady() {
 
 	setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
 
 	dataTableLoad();
 
-});
+};
 
 // --- 데이터 테이블 설정 --- //
 function dataTableLoad() {

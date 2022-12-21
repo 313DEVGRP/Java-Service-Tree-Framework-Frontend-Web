@@ -10,7 +10,7 @@ CKEDITOR.replace("extendModalEditor");
 
 
 // document ready
-$(function () {
+function execArmsDocReady() {
 
 	//사이드 메뉴 처리
 	setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
@@ -62,7 +62,7 @@ $(function () {
 
 
 
-});
+};
 
 // --- 데이터 테이블 설정 --- //
 $(function () {
@@ -73,7 +73,7 @@ $(function () {
 		{ data: "c_title" },
 	];
 	var rowsGroupList = [];
-	dataTableBuild("#pdserviceTable", "pdService", "/getMonitor.do", columnList, rowsGroupList);
+	dataTableBuild("#pdserviceTable", "pdService", "/getPdServiceMonitor.do", columnList, rowsGroupList);
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style

@@ -396,7 +396,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				"types",
 				"hotkeys",
 				"contextmenu",
-				"checkbox",
+				// "checkbox",
 			],
 			themes: { theme: ["lightblue4"] },
 			//contextmenu

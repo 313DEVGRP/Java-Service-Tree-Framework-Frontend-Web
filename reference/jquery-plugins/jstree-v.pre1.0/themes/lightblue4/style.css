@@ -4,7 +4,7 @@
  * Supported plugins: ui (hovered, clicked), checkbox, contextmenu, search
  */
 
-.jstree-lightblue4 li, 
+.jstree-lightblue4 li,
 .jstree-lightblue4 ins { background-image:url("313devgrp.png"); background-repeat:no-repeat; background-color:transparent; }
 .jstree-lightblue4 li { background-position:-90px 0; background-repeat:repeat-y; }
 .jstree-lightblue4 li.jstree-last { background:transparent; }
@@ -22,7 +22,7 @@
  */
 .jstree-lightblue4.jstree-focused { background:transparent;}
 
-.jstree-lightblue4 .jstree-no-dots li, 
+.jstree-lightblue4 .jstree-no-dots li,
 .jstree-lightblue4 .jstree-no-dots .jstree-leaf > ins { background:transparent; }
 .jstree-lightblue4 .jstree-no-dots .jstree-open > ins { background-position:-18px 0; }
 .jstree-lightblue4 .jstree-no-dots .jstree-closed > ins { background-position:0 0; }
@@ -49,13 +49,13 @@
 .jstree-lightblue4 .jstree-locked a { color:silver; cursor:lightblue4; }
 
 #vakata-contextmenu { border: 0px !important; }
-#vakata-contextmenu.jstree-lightblue4-context, 
+#vakata-contextmenu.jstree-lightblue4-context,
 #vakata-contextmenu.jstree-lightblue4-context li ul { background: rgba(51, 51, 51, 0.95);}
 #vakata-contextmenu.jstree-lightblue4-context li { }
 #vakata-contextmenu.jstree-lightblue4-context a { color:white; }
-#vakata-contextmenu.jstree-lightblue4-context a:hover, 
+#vakata-contextmenu.jstree-lightblue4-context a:hover,
 #vakata-contextmenu.jstree-lightblue4-context .vakata-hover > a { padding:0 5px; background:#e8eff7; color:black; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px; }
-#vakata-contextmenu.jstree-lightblue4-context li.jstree-contextmenu-disabled a, 
+#vakata-contextmenu.jstree-lightblue4-context li.jstree-contextmenu-disabled a,
 #vakata-contextmenu.jstree-lightblue4-context li.jstree-contextmenu-disabled a:hover { color:silver; background:transparent; border:0; padding:1px 4px; }
 #vakata-contextmenu.jstree-lightblue4-context li.vakata-separator { background: rgba(51, 51, 51, 0.95); margin:0; }
 #vakata-contextmenu.jstree-lightblue4-context li ul { margin-left:-4px; }
@@ -63,10 +63,10 @@
 #vakata-contextmenu li.vakata-separator { border-top: 0px !important; }
 
 /* IE6 BEGIN */
-.jstree-lightblue4 li, 
+.jstree-lightblue4 li,
 .jstree-lightblue4 ins,
-#vakata-dragged.jstree-lightblue4 .jstree-invalid, 
-#vakata-dragged.jstree-lightblue4 .jstree-ok, 
+#vakata-dragged.jstree-lightblue4 .jstree-invalid,
+#vakata-dragged.jstree-lightblue4 .jstree-ok,
 #jstree-marker.jstree-lightblue4 { _background-image:url("d.gif"); }
 .jstree-lightblue4 .jstree-open ins { _background-position:-72px 0; }
 .jstree-lightblue4 .jstree-closed ins { _background-position:-54px 0; }
@@ -93,6 +93,16 @@
     padding: 1px 2px;
     margin: 0;
 }
+
+.jstree li {
+    display: block;
+    min-height: 24px;
+    line-height: 24px;
+    white-space: nowrap;
+    margin-left: 24px;
+    min-width: 24px;
+}
+
 
 .jstree-rename-input {
     color: #666666;

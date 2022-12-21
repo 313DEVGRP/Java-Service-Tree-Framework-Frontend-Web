@@ -4,7 +4,7 @@
 var selectedJsTreeId; // 요구사항 아이디
 var defaultTypeDataTable;
 
-$(function () {
+function execArmsDocReady() {
 
 	//좌측 메뉴
 	setSideMenu(
@@ -28,7 +28,7 @@ $(function () {
 	makeDatePicker($("#btn-start-calendar-popup"));
 	makeDatePicker($("#btn-end-calendar-popup"));
 
-});
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //슬림스크롤
@@ -893,9 +893,32 @@ function registNewPopup(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// 팝업에서 등록 모드에 따라서, 정보를 보여주거나 감추는 역할
+///////////////////////////////////////////////////////////////////////////////
+$('.form-horizontal input[name=reqType]').on('change', function() {
+
+	if ( $('input[name=reqType]:checked').val() == "default" ){
+
+		$('#popupVersionDiv').show();
+		$('#popupReviewerDiv').show();
+		$('#popupPriorityDiv').show();
+
+	}else{
+
+		$('#popupVersionDiv').hide();
+		$('#popupReviewerDiv').hide();
+		$('#popupPriorityDiv').hide();
+
+	}
+
+});
+
+
+///////////////////////////////////////////////////////////////////////////////
 // 팝업에서 신규 요구사항 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
 $("#save-req").click(function () {
+
 	var reviewers01 = "none";
 	var reviewers02 = "none";
 	var reviewers03 = "none";
@@ -925,11 +948,11 @@ $("#save-req").click(function () {
 		data: {
 			ref: selectedJsTreeId,
 			c_title: $("#req-title").val(),
-			c_type: "default",
+			c_type: $('input[name=reqType]:checked').val(),
 			c_pdservice_link: $('#country').val(),
 			c_version_link: JSON.stringify($('#popup-version').val()),
 			c_jira_link: "inherit",
-			c_writer: "admin",
+			c_writer: "["+userName+"]" + " - " + userID,
 			c_writer_date: new Date(),
 			c_priority: 2,
 			c_reviewer01: reviewers01,

@@ -738,6 +738,28 @@
             <div class="modal-body" style="padding: 5px">
                 <form class="form-horizontal" method="post">
                     <fieldset>
+                        <br>
+                        <div class="control-group col-sm-12">
+                            <div class="controls form-group  col-sm-1">
+                                &nbsp;
+                            </div>
+                            <label for="title" class="control-label" style="color: #f8f8f8;">요구사항 등록 모드 <span class="required">*</span>
+                                <span class="input-group-addon" style="display: inline !important;">
+                                    <i class="glyphicon glyphicon-gift"></i>
+                                </span>
+                            </label>
+                            <div class="controls form-group col-sm-8">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-transparent btn-sm active" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        <input type="radio" name="reqType" value="default"> 일반 요구사항 등록 모드
+                                    </label>
+                                    <label class="btn btn-transparent btn-sm" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        <input type="radio" name="reqType" value="folder"> 폴더 형식으로 등록
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="control-group col-sm-12">
                             <div class="controls form-group  col-sm-1">
                                 &nbsp;
@@ -751,7 +773,7 @@
                                 <input type="text" id="disabled-input-pdservice" class="form-control" disabled="disabled" value="">
                             </div>
                         </div>
-                        <div class="control-group col-sm-12">
+                        <div class="control-group col-sm-12" id="popupVersionDiv">
                             <div class="controls form-group  col-sm-1">
                                 &nbsp;
                             </div>
@@ -764,7 +786,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="control-group">
+                        <div class="control-group col-sm-12" id="popupReviewerDiv">
                             <div class="controls form-group  col-sm-1">
                                 &nbsp;
                             </div>
@@ -780,7 +802,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="control-group col-sm-12">
+                        <div class="control-group col-sm-12" id="popupPriorityDiv">
                             <div class="controls form-group  col-sm-1">
                                 &nbsp;
                             </div>
