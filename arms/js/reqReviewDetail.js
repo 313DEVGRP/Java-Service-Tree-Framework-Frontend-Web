@@ -44,6 +44,34 @@ function getReqComment() {
 	}).done(function(data) {
 		console.log(data);
 
+		//////////////////////////////////////////////////////////////////////////////////
+		var history = document.querySelector(".chat-messages");
+
+		history.innerHTML = '';
+
+		let lists = "";
+		data.forEach((item, index) => {
+			lists += `
+							<div class="chat-message">
+								<div class="sender pull-left">
+									<div class="icon">
+										<img src="../reference/light-blue/img/15.jpg" class="img-circle" alt="" />
+									</div>
+							</div>
+							<div class="chat-message-body">
+								<span class="arrow"></span>
+								<div class="sender"><a href="#">${getStrLimit(item.c_sender,30)}</a> ( ${item.c_comment_date} )</div>
+							<div class="text">${item.c_comment}</div>
+							</div>
+							</div>
+		`;
+		});
+
+		history.innerHTML = `${lists}`;
+		//////////////////////////////////////////////////////////////////////////////////
+
+
+
 	}).fail(function(e) {
 	}).always(function() {
 	});
@@ -445,6 +473,8 @@ $("#new-message-btn").click(function () {
 		getReqReviewHistory();
 
 		getReqAdd();
+
+		getReqComment();
 
 	}).fail(function(e) {
 	}).always(function() {
