@@ -1063,7 +1063,7 @@
 					}, this));
 		},
 		defaults : {
-			select_limit : -1, // 0, 1, 2 ... or -1 for unlimited
+			select_limit : 1, // 0, 1, 2 ... or -1 for unlimited
 			select_multiple_modifier : "ctrl", // on, or ctrl, shift, alt
 			select_range_modifier : "shift",
 			selected_parent_close : "select_parent", // false, "deselect", "select_parent"
