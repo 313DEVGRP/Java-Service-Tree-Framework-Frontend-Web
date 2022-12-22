@@ -21,21 +21,30 @@
 		</header>
 		<div class="body">
 			<blockquote class="font13">1. 제품(서비스) 선택</blockquote>
-            <button class="btn btn-primary btn-block"
-                    data-target="#myModal2"
-                    data-toggle="modal"
-                    id="modalPopupId"
-                    type="button">
-                신규 제품(서비스) 등록하기
-            </button>
-			<div class="box box-primary" style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+			<button
+				class="btn btn-primary btn-block"
+				data-target="#myModal2"
+				data-toggle="modal"
+				id="modalPopupId"
+				type="button"
+			>
+				신규 제품(서비스) 등록하기
+			</button>
+			<div
+				class="box box-primary"
+				style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important"
+			>
 				<div class="box-body">
-					<table cellspacing="0" class="display responsive no-wrap" id="pdserviceTable">
+					<table
+						cellspacing="0"
+						class="display responsive no-wrap"
+						id="pdserviceTable"
+					>
 						<thead>
-						<tr>
-							<th>c_id</th>
-							<th>c_title</th>
-						</tr>
+							<tr>
+								<th>c_id</th>
+								<th>c_title</th>
+							</tr>
 						</thead>
 					</table>
 				</div>
@@ -54,13 +63,13 @@
 			<div class="widget-controls">
 				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
 				<a data-widgster="expand" title="Expand" href="#"
-				><i class="glyphicon glyphicon-chevron-up"></i
+					><i class="glyphicon glyphicon-chevron-up"></i
 				></a>
 				<a data-widgster="collapse" title="Collapse" href="#"
-				><i class="glyphicon glyphicon-chevron-down"></i
+					><i class="glyphicon glyphicon-chevron-down"></i
 				></a>
 				<a data-widgster="close" title="Close" href="#"
-				><i class="glyphicon glyphicon-remove"></i
+					><i class="glyphicon glyphicon-remove"></i
 				></a>
 			</div>
 		</header>
@@ -82,7 +91,11 @@
 							</ul>
 						</header>
 						<div class="body tab-content">
-							<div id="stats" class="tab-pane active clearfix" style="padding-top: 10px !important">
+							<div
+								id="stats"
+								class="tab-pane active clearfix"
+								style="padding-top: 10px !important"
+							>
 								<form class="form-horizontal" method="post">
 									<fieldset>
 										<div class="control-group">
@@ -91,9 +104,11 @@
 											</label>
 											<div class="input-wrap col-sm-8">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
-												</span>&nbsp;
-												<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+													<i class="glyphicon glyphicon-gift"></i> </span
+												>&nbsp;
+												<div
+													style="display: flex; align-items: center; gap: 10px; padding: 0"
+												>
 													<a href="#" id="detailView-pdService-name"></a>
 												</div>
 											</div>
@@ -103,22 +118,20 @@
 												제품(서비스) 오너 &nbsp;
 											</label>
 											<div class="input-wrap col-sm-8">
-												<span class="input-group-addon">
-													<i class="fa fa-user"></i>
-												</span>&nbsp;
-												<div style="display: flex; align-items: center; gap: 10px; padding: 0;">
+												<span class="input-group-addon"> <i class="fa fa-user"></i> </span
+												>&nbsp;
+												<div
+													style="display: flex; align-items: center; gap: 10px; padding: 0"
+												>
 													<a href="#" id="detailView-pdService-owner"></a>
 												</div>
 											</div>
 										</div>
 										<div class="control-group">
-											<label class="control-label">
-												제품(서비스) 리뷰어 &nbsp;
-											</label>
+											<label class="control-label"> 제품(서비스) 리뷰어 &nbsp; </label>
 											<div class="input-wrap col-sm-8">
-												<span class="input-group-addon">
-													<i class="fa fa-users"></i>
-												</span>&nbsp;
+												<span class="input-group-addon"> <i class="fa fa-users"></i> </span
+												>&nbsp;
 												<div>
 													<a href="#" id="detailView-pdService-reviewer01"></a>
 													<a href="#" id="detailView-pdService-reviewer02"></a>
@@ -129,16 +142,18 @@
 											</div>
 										</div>
 										<div class="control-group">
-                                            <label class="control-label" style="margin-top: 10px">
-                                                제품(서비스) 컨텐츠 &nbsp;
-                                            </label>
-                                            <div class="col-sm-8" style="margin-top: 10px">
-                                                문서로 보기 : <button type="button" class="btn btn-warning">새 창으로 제품(서비스) 내용 보기</button>
-                                            </div>
-                                            <br><br><br>
-                                            <div class="col-sm-12" id="detailView-pdService-contents">
-                                            </div>
-                                        </div>
+											<label class="control-label" style="margin-top: 10px">
+												제품(서비스) 컨텐츠 &nbsp;
+											</label>
+											<div class="col-sm-8" style="margin-top: 10px">
+												문서로 보기 :
+												<button type="button" class="btn btn-warning">
+													새 창으로 제품(서비스) 내용 보기
+												</button>
+											</div>
+											<br /><br /><br />
+											<div class="col-sm-12" id="detailView-pdService-contents"></div>
+										</div>
 									</fieldset>
 								</form>
 							</div>
@@ -147,20 +162,18 @@
 									<form class="form-horizontal" method="post">
 										<fieldset>
 											<div class="control-group">
-												<label class="control-label">
-													제품(서비스) 이름 &nbsp;
-												</label>
+												<label class="control-label"> 제품(서비스) 이름 &nbsp; </label>
 												<div class="input-wrap col-sm-8">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
-												</span>
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-gift"></i>
+													</span>
 													<input
-															id="editView-pdService-name"
-															class="form-control font13 darkBack"
-															style="color: #f8f8f8"
-															size="16"
-															type="text"
-															placeholder="service name ###"
+														id="editView-pdService-name"
+														class="form-control font13 darkBack"
+														style="color: #f8f8f8"
+														size="16"
+														type="text"
+														placeholder="service name ###"
 													/>
 												</div>
 											</div>
@@ -169,30 +182,49 @@
 													제품(서비스) 오너 &nbsp;
 												</label>
 												<div class="input-wrap col-sm-8">
-												<span class="input-group-addon">
-													<i class="fa fa-user"></i>
-												</span>
-													<select id="editView-pdService-owner"
-                                                            class="js-data-example-ajax form-control font13 darkBack"
-                                                            style="width: 100%"></select>
+													<span class="input-group-addon">
+														<i class="fa fa-user"></i>
+													</span>
+													<select
+														id="editView-pdService-owner"
+														class="js-data-example-ajax form-control font13 darkBack"
+														style="width: 100%"
+													></select>
 												</div>
 											</div>
 											<div class="control-group">
-												<label class="control-label" for="editView-pdService-reviewers">요구사항 리뷰어 &nbsp;</label>
-												<div class="controls form-group" style="margin-bottom: 10px;">
+												<label class="control-label" for="editView-pdService-reviewers"
+													>요구사항 리뷰어 &nbsp;</label
+												>
+												<div class="controls form-group" style="margin-bottom: 10px">
 													<div class="input-group">
 														<span class="input-group-addon"><i class="fa fa-users"></i></span>
-														<select id="editView-pdService-reviewers" class="js-data-example-ajax form-control font13 darkBack"
-																name="selectedReviewers[]" multiple="multiple" style="width: 100%;"></select>
+														<select
+															id="editView-pdService-reviewers"
+															class="js-data-example-ajax form-control font13 darkBack"
+															name="selectedReviewers[]"
+															multiple="multiple"
+															style="width: 100%"
+														></select>
 													</div>
 												</div>
 											</div>
 											<div class="control-group">
-												<label class="control-label" for="prepended-input" style="margin-top: 10px">
+												<label
+													class="control-label"
+													for="prepended-input"
+													style="margin-top: 10px"
+												>
 													제품(서비스) 컨텐츠 &nbsp;
 												</label>
-                                                <div class="box box-primary" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 35px !important;">
-                                                </div>
+												<div
+													class="box box-primary"
+													style="
+														border-top-color: #bbbbbb;
+														border-top-width: 0px;
+														margin-bottom: 35px !important;
+													"
+												></div>
 												<div class="controls form-group">
 													<div class="col-sm-12">
 														<div id="input_pdservice_editor" class="darkBack">
@@ -204,95 +236,120 @@
 										</fieldset>
 									</form>
 								</div>
-								<div class="form-actions" style="float: right; margin-top: 0px !important;">
+								<div
+									class="form-actions"
+									style="float: right; margin-top: 0px !important"
+								>
 									<div>
-										<button class="btn btn-warning"
-												data-target="#myModal1"
-												data-toggle="modal"
-												id="extendModalPopupId"
-												type="button">
+										<button
+											class="btn btn-warning"
+											data-target="#myModal1"
+											data-toggle="modal"
+											id="extendModalPopupId"
+											type="button"
+										>
 											팝업 창으로 편집 하기
 										</button>
-										<button type="button" id="pdServiceUpdate" class="btn btn-success">제품(서비스) 변경 사항 저장</button>
+										<button type="button" id="pdServiceUpdate" class="btn btn-success">
+											제품(서비스) 변경 사항 저장
+										</button>
 									</div>
 								</div>
 							</div>
 							<div id="dropdown1" class="tab-pane">
+								<p>제품(서비스) ""을(를) 삭제 하시겠습니까?</p>
 								<p>
-									제품(서비스) ""을(를) 삭제 하시겠습니까?
+									<strong
+										>Jira 프로젝트에서 제품(서비스)와 연관된 버전은 삭제되지
+										않습니다.</strong
+									>
 								</p>
-								<p><strong>Jira 프로젝트에서 제품(서비스)와 연관된 버전은 삭제되지 않습니다.</strong></p>
-								<p><strong>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong></p>
-								<p><strong>( 주의하세요 ) 삭제된 요구사항과 연결되 Jira 이슈는 유지됩니다.</strong></p>
-								<p><strong>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong></p>
+								<p>
+									<strong
+										>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong
+									>
+								</p>
+								<p>
+									<strong
+										>( 주의하세요 ) 삭제된 요구사항과 연결되 Jira 이슈는
+										유지됩니다.</strong
+									>
+								</p>
+								<p>
+									<strong
+										>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong
+									>
+								</p>
 								<div>
-									<button id="delete-pdService" class="btn btn-danger">제품(서비스) 삭제</button>
+									<button id="delete-pdService" class="btn btn-danger">
+										제품(서비스) 삭제
+									</button>
 									<button class="btn btn-default">Cancel</button>
 								</div>
 							</div>
-                            <div class="body-middle">
-                                <form
-                                        id="fileupload"
-                                        action="uploadFileToNode.do"
-                                        method="POST"
-                                        enctype="multipart/form-data"
-                                >
-                                    <input type="hidden" id="fileIdLink" value="">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div id="dropzone" class="dropzone">
-                                                <i class="fa fa-cloud-upload"></i>
-                                                Drop files here
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 fileupload-progress fade font12">
-                                            <!-- The global progress bar -->
-                                            <div
-                                                    class="progress progress-success progress-striped active font12"
-                                                    role="progressbar"
-                                                    aria-valuemin="0"
-                                                    aria-valuemax="100"
-                                            >
-                                                <div class="bar" style="width: 0%"></div>
-                                            </div>
-                                            <!-- The extended global progress information -->
-                                            <div class="progress-extended font12">&nbsp;</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-actions fileupload-buttonbar no-margin">
-                                        <span class="btn btn-sm btn-inverse fileinput-button">
-                                            <i class="fa fa-plus"></i>
-                                            <span>Add files...</span>
-                                            <input type="file" name="files[]" multiple="" />
-                                        </span>
-                                        <button type="submit" class="btn btn-inverse btn-sm start">
-                                            <i class="fa fa-upload"></i>
-                                            <span>Start upload</span>
-                                        </button>
-                                        <button type="reset" class="btn btn-inverse btn-sm cancel">
-                                            <i class="fa fa-ban"></i>
-                                            <span>Cancel upload</span>
-                                        </button>
-                                    </div>
-                                    <div class="fileupload-loading">
-                                        <i class="fa fa-spin fa-spinner"></i>
-                                    </div>
-                                    <!-- The table listing the files available for upload/download -->
-                                    <table
-                                            role="presentation"
-                                            class="table table-striped"
-                                            style="margin-bottom: 5px"
-                                    >
-                                        <tbody
-                                                class="files"
-                                                data-toggle="modal-gallery"
-                                                data-target="#modal-gallery"
-                                        ></tbody>
-                                    </table>
-                                </form>
-                            </div>
+							<div class="body-middle">
+								<form
+									id="fileupload"
+									action="uploadFileToNode.do"
+									method="POST"
+									enctype="multipart/form-data"
+								>
+									<input type="hidden" id="fileIdLink" value="" />
+									<div class="row">
+										<div class="col-md-12">
+											<div id="dropzone" class="dropzone">
+												<i class="fa fa-cloud-upload"></i>
+												Drop files here
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12 fileupload-progress fade font12">
+											<!-- The global progress bar -->
+											<div
+												class="progress progress-success progress-striped active font12"
+												role="progressbar"
+												aria-valuemin="0"
+												aria-valuemax="100"
+											>
+												<div class="bar" style="width: 0%"></div>
+											</div>
+											<!-- The extended global progress information -->
+											<div class="progress-extended font12">&nbsp;</div>
+										</div>
+									</div>
+									<div class="form-actions fileupload-buttonbar no-margin">
+										<span class="btn btn-sm btn-inverse fileinput-button">
+											<i class="fa fa-plus"></i>
+											<span>Add files...</span>
+											<input type="file" name="files[]" multiple="" />
+										</span>
+										<button type="submit" class="btn btn-inverse btn-sm start">
+											<i class="fa fa-upload"></i>
+											<span>Start upload</span>
+										</button>
+										<button type="reset" class="btn btn-inverse btn-sm cancel">
+											<i class="fa fa-ban"></i>
+											<span>Cancel upload</span>
+										</button>
+									</div>
+									<div class="fileupload-loading">
+										<i class="fa fa-spin fa-spinner"></i>
+									</div>
+									<!-- The table listing the files available for upload/download -->
+									<table
+										role="presentation"
+										class="table table-striped"
+										style="margin-bottom: 5px"
+									>
+										<tbody
+											class="files"
+											data-toggle="modal-gallery"
+											data-target="#modal-gallery"
+										></tbody>
+									</table>
+								</form>
+							</div>
 						</div>
 					</section>
 				</div>
@@ -302,33 +359,33 @@
 </div>
 
 <div
-		id="myModal1"
-		class="modal fade"
-		role="dialog"
-		aria-labelledby="myModalLabel"
-		aria-hidden="true"
-		style="display: none"
+	id="myModal1"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="myModalLabel"
+	aria-hidden="true"
+	style="display: none"
 >
 	<div class="modal-dialog" style="width: 90%; height: 70%">
 		<div class="modal-content modalDarkBack">
 			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
 				<button
-						type="button"
-						class="close"
-						data-dismiss="modal"
-						aria-hidden="true"
-						style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
+					type="button"
+					class="close"
+					data-dismiss="modal"
+					aria-hidden="true"
+					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
 				>
 					×
 				</button>
 				<h4
-						class="modal-title font14"
-						id="myModalLabel1"
-						style="color: #f8f8f8; text-align: left; padding: 5px"
+					class="modal-title font14"
+					id="myModalLabel1"
+					style="color: #f8f8f8; text-align: left; padding: 5px"
 				>
-                                                <span class="font13" style="font-weight: bold">
-                                                    <i class="fa fa-edit"></i> 신규 제품(서비스) 등록 팝업
-                                                </span>
+					<span class="font13" style="font-weight: bold">
+						<i class="fa fa-edit"></i> 신규 제품(서비스) 등록 팝업
+					</span>
 					<section class="search-result" style="border-left: 5px solid #e5603b">
 						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
 							a-RMS에 신규 제품(서비스)에 버전을 등록합니다.
@@ -340,63 +397,73 @@
 				<form class="form-horizontal" method="post">
 					<fieldset>
 						<div class="control-group">
-							<label class="control-label" style="color: #f8f8f8;">
+							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 이름 &nbsp;
 							</label>
 							<div class="input-wrap col-sm-8">
-                                            <span class="input-group-addon">
-                                                <i class="glyphicon glyphicon-gift"></i>
-                                            </span>
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-gift"></i>
+								</span>
 								<div class="col-sm-8">
 									<input
-											id="extend-editView-pdService-name"
-											class="form-control font13 darkBack"
-											style="color: #f8f8f8"
-											size="16"
-											type="text"
-											placeholder="service name ###"
+										id="extend-editView-pdService-name"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="service name ###"
 									/>
 								</div>
 							</div>
 						</div>
 						<div class="control-group" for="popup-editView-pdService-owner">
-							<label class="control-label" style="color: #f8f8f8;">
+							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 오너 &nbsp;
 							</label>
 							<div class="input-wrap col-sm-8">
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-users"></i>
-                                            </span>
+								<span class="input-group-addon">
+									<i class="fa fa-users"></i>
+								</span>
 								<div class="col-sm-8">
-									<select id="extend-editView-pdService-owner"
-											class="js-data-example-ajax form-control font13 darkBack"
-											style="width: 100%;"></select>
+									<select
+										id="extend-editView-pdService-owner"
+										class="js-data-example-ajax form-control font13 darkBack"
+										style="width: 100%"
+									></select>
 								</div>
 							</div>
 						</div>
 						<div class="control-group" id="extend-editView-pdService-reviewer">
-							<label class="control-label" style="color: #f8f8f8;">
+							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 리뷰어 &nbsp;
 							</label>
 							<div class="input-wrap col-sm-8">
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-users"></i>
-                                            </span>
+								<span class="input-group-addon">
+									<i class="fa fa-users"></i>
+								</span>
 								<div class="col-sm-8">
-									<select id="extend-editView-pdService-reviewers"
-											class="js-data-example-ajax form-control font13 darkBack"
-											name="selectedReviewers[]"
-											multiple="multiple"
-											style="width: 100%;"></select>
+									<select
+										id="extend-editView-pdService-reviewers"
+										class="js-data-example-ajax form-control font13 darkBack"
+										name="selectedReviewers[]"
+										multiple="multiple"
+										style="width: 100%"
+									></select>
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" style="margin-top: 10px; color: #f8f8f8;">
+							<label class="control-label" style="margin-top: 10px; color: #f8f8f8">
 								제품(서비스) 컨텐츠 &nbsp;
 							</label>
-							<div class="box box-primary" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 35px !important;">
-							</div>
+							<div
+								class="box box-primary"
+								style="
+									border-top-color: #bbbbbb;
+									border-top-width: 0px;
+									margin-bottom: 35px !important;
+								"
+							></div>
 							<div class="controls form-group">
 								<div class="col-sm-12">
 									<div id="extendModalEditor" class="darkBack">
@@ -408,17 +475,25 @@
 					</fieldset>
 				</form>
 			</div>
-			<div class="modal-footer"
-				 style="
-                 background-color: transparent;
-                 padding: 5px;
-                 text-align: right;
-                 border-top: 0px;">
-				<button type="button" id="extendClose-pdService" class="btn btn-default" data-dismiss="modal">
+			<div
+				class="modal-footer"
+				style="
+					background-color: transparent;
+					padding: 5px;
+					text-align: right;
+					border-top: 0px;
+				"
+			>
+				<button
+					type="button"
+					id="extendClose-pdService"
+					class="btn btn-default"
+					data-dismiss="modal"
+				>
 					Close
 				</button>
 				<button type="button" id="extendUpdate-pdService" class="btn btn-success">
-                    제품(서비스) 변경 사항 저장
+					제품(서비스) 변경 사항 저장
 				</button>
 			</div>
 		</div>
@@ -427,33 +502,33 @@
 	<!-- /.modal-dialog -->
 </div>
 <div
-		id="myModal2"
-		class="modal fade"
-		role="dialog"
-		aria-labelledby="myModalLabel"
-		aria-hidden="true"
-		style="display: none"
+	id="myModal2"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="myModalLabel"
+	aria-hidden="true"
+	style="display: none"
 >
 	<div class="modal-dialog" style="width: 90%; height: 70%">
 		<div class="modal-content modalDarkBack">
 			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
 				<button
-						type="button"
-						class="close"
-						data-dismiss="modal"
-						aria-hidden="true"
-						style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
+					type="button"
+					class="close"
+					data-dismiss="modal"
+					aria-hidden="true"
+					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
 				>
 					×
 				</button>
 				<h4
-						class="modal-title font14"
-						id="myModalLabel2"
-						style="color: #f8f8f8; text-align: left; padding: 5px"
+					class="modal-title font14"
+					id="myModalLabel2"
+					style="color: #f8f8f8; text-align: left; padding: 5px"
 				>
-                                                <span class="font13" style="font-weight: bold">
-                                                    <i class="fa fa-edit"></i> 신규 제품(서비스) 등록 팝업
-                                                </span>
+					<span class="font13" style="font-weight: bold">
+						<i class="fa fa-edit"></i> 신규 제품(서비스) 등록 팝업
+					</span>
 					<section class="search-result" style="border-left: 5px solid #e5603b">
 						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
 							a-RMS에 신규 제품(서비스)에 버전을 등록합니다.
@@ -465,63 +540,73 @@
 				<form class="form-horizontal" method="post">
 					<fieldset>
 						<div class="control-group">
-							<label class="control-label" style="color: #f8f8f8;">
+							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 이름 &nbsp;
 							</label>
 							<div class="input-wrap col-sm-8">
-                                            <span class="input-group-addon">
-                                                <i class="glyphicon glyphicon-gift"></i>
-                                            </span>
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-gift"></i>
+								</span>
 								<div class="col-sm-8">
 									<input
-											id="popup-editView-pdService-name"
-											class="form-control font13 darkBack"
-											style="color: #f8f8f8"
-											size="16"
-											type="text"
-											placeholder="service name ###"
+										id="popup-editView-pdService-name"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="service name ###"
 									/>
 								</div>
 							</div>
 						</div>
 						<div class="control-group" for="popup-editView-pdService-owner">
-							<label class="control-label" style="color: #f8f8f8;">
+							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 오너 &nbsp;
 							</label>
 							<div class="input-wrap col-sm-8">
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-users"></i>
-                                            </span>
+								<span class="input-group-addon">
+									<i class="fa fa-users"></i>
+								</span>
 								<div class="col-sm-8">
-									<select id="popup-editView-pdService-owner"
-											class="js-data-example-ajax form-control font13 darkBack"
-											style="width: 100%;"></select>
+									<select
+										id="popup-editView-pdService-owner"
+										class="js-data-example-ajax form-control font13 darkBack"
+										style="width: 100%"
+									></select>
 								</div>
 							</div>
 						</div>
 						<div class="control-group" id="popup-editView-pdService-reviewer">
-							<label class="control-label" style="color: #f8f8f8;">
+							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 리뷰어 &nbsp;
 							</label>
 							<div class="input-wrap col-sm-8">
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-users"></i>
-                                            </span>
+								<span class="input-group-addon">
+									<i class="fa fa-users"></i>
+								</span>
 								<div class="col-sm-8">
-									<select id="popup-editView-pdService-reviewers"
-											class="js-data-example-ajax form-control font13 darkBack"
-											name="selectedReviewers[]"
-											multiple="multiple"
-											style="width: 100%;"></select>
+									<select
+										id="popup-editView-pdService-reviewers"
+										class="js-data-example-ajax form-control font13 darkBack"
+										name="selectedReviewers[]"
+										multiple="multiple"
+										style="width: 100%"
+									></select>
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" style="margin-top: 10px; color: #f8f8f8;">
+							<label class="control-label" style="margin-top: 10px; color: #f8f8f8">
 								제품(서비스) 컨텐츠 &nbsp;
 							</label>
-							<div class="box box-primary" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 35px !important;">
-							</div>
+							<div
+								class="box box-primary"
+								style="
+									border-top-color: #bbbbbb;
+									border-top-width: 0px;
+									margin-bottom: 35px !important;
+								"
+							></div>
 							<div class="controls form-group">
 								<div class="col-sm-12">
 									<div id="modal-editor" class="darkBack">
@@ -533,13 +618,21 @@
 					</fieldset>
 				</form>
 			</div>
-			<div class="modal-footer"
-				 style="
-                 background-color: transparent;
-                 padding: 5px;
-                 text-align: right;
-                 border-top: 0px;">
-				<button type="button" id="close-pdService" class="btn btn-default" data-dismiss="modal">
+			<div
+				class="modal-footer"
+				style="
+					background-color: transparent;
+					padding: 5px;
+					text-align: right;
+					border-top: 0px;
+				"
+			>
+				<button
+					type="button"
+					id="close-pdService"
+					class="btn btn-default"
+					data-dismiss="modal"
+				>
 					Close
 				</button>
 				<button type="button" id="regist-pdService" class="btn btn-primary">
@@ -553,11 +646,10 @@
 </div>
 <!-- page specific application css/js -->
 <style>
-
-    .modalDarkBack{
-        background: rgb(51 51 51 / 94%) !important;
-        border: 1px solid rgb(51 51 51) !important;
-    }
+	.modalDarkBack {
+		background: rgb(51 51 51 / 94%) !important;
+		border: 1px solid rgb(51 51 51) !important;
+	}
 
 	.new-tab-open .product-handler,
 	.new-tab-open .pull-right {
@@ -633,14 +725,12 @@
 	.profile-image img {
 		width: 100%;
 	}
-
 </style>
 <script type="text/javascript" charset="utf-8">
 	//<![CDATA[
 
 	// 초기 개발 및 확인 용도
-	$(function () {
-    });
+	$(function () {});
 
 	//]]>
 </script>

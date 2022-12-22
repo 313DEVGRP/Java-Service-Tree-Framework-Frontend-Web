@@ -1,191 +1,327 @@
 <div class="col-lg-4">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-sort-amount-asc"></i> 요구사항 조회
-                </span>
-            </h4>
-            <div class="actions">
-                <button class="btn btn-transparent btn-xs" onclick="$('#demo').jstree('open_all');">Show All
-                    <i class="fa fa-arrow-down"></i>
-                </button>
-            </div>
-        </header>
-        <div class="body">
-            <blockquote class="font13">1. 제품(서비스) : 버전 : 요구사항 선택</blockquote>
-            <div class="wrapper">
-                <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
-                    <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
-                        <select id="country" required="required"
-                                data-placeholder="Select Product(Service)" class="select-block-level chzn-select"
-                                tabindex="-1"
-                                name="country"  class="darkBack">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
-                        <select multiple="multiple" id="multiVersion" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
-                        </select>
-                    </div>
-                </div>
-                <div class="progress progress-xs mt-xs mb-0">
-                    <div class="progress-bar progress-bar-striped" style="width: 100%"></div>
-                </div>
-                <div id="mmenu" style="padding-bottom: 5px; padding-top: 15px;">
-                    <form class="form-search no-margin" role="form">
-                        <div class="input-group">
-                            <input type="search" id="text" class="form-control searchDarkBack" style="color: #f8f8f8;" placeholder="찾을 노드 이름 입력" data-tooltip="Press Enter To Node To Search">
-                            <span class="input-group-btn">
-                                <button type="button" id="search" title="Search" class="btn btn-default btn-sm">
-                                    Search
-                                </button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-                <div id="productTree" style="padding-top: 5px; overflow: hidden;" class="darkBack"></div>
-                <div style="margin-top: 10px;" class="darkBack">
-                    설명
-                </div>
-            </div>
-        </div>
-    </section>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-sort-amount-asc"></i> 요구사항 조회
+				</span>
+			</h4>
+			<div class="actions">
+				<button
+					class="btn btn-transparent btn-xs"
+					onclick="$('#demo').jstree('open_all');"
+				>
+					Show All
+					<i class="fa fa-arrow-down"></i>
+				</button>
+			</div>
+		</header>
+		<div class="body">
+			<blockquote class="font13">
+				1. 제품(서비스) : 버전 : 요구사항 선택
+			</blockquote>
+			<div class="wrapper">
+				<div
+					class="control-group"
+					class="darkBack"
+					style="padding-bottom: 10px; border: 0"
+				>
+					<div
+						class="controls form-group"
+						class="darkBack"
+						style="margin-bottom: 5px !important"
+					>
+						<select
+							id="country"
+							required="required"
+							data-placeholder="Select Product(Service)"
+							class="select-block-level chzn-select"
+							tabindex="-1"
+							name="country"
+							class="darkBack"
+						>
+							<option value=""></option>
+						</select>
+					</div>
+					<div
+						class="controls form-group"
+						class="darkBack"
+						style="margin-bottom: 5px !important"
+					>
+						<select
+							multiple="multiple"
+							id="multiVersion"
+							class="multiple-select btn-block darkBack"
+							placeholder="&nbsp;&nbsp;Select Version"
+						></select>
+					</div>
+				</div>
+				<div class="progress progress-xs mt-xs mb-0">
+					<div class="progress-bar progress-bar-striped" style="width: 100%"></div>
+				</div>
+				<div id="mmenu" style="padding-bottom: 5px; padding-top: 15px">
+					<form class="form-search no-margin" role="form">
+						<div class="input-group">
+							<input
+								type="search"
+								id="text"
+								class="form-control searchDarkBack"
+								style="color: #f8f8f8"
+								placeholder="찾을 노드 이름 입력"
+								data-tooltip="Press Enter To Node To Search"
+							/>
+							<span class="input-group-btn">
+								<button
+									type="button"
+									id="search"
+									title="Search"
+									class="btn btn-default btn-sm"
+								>
+									Search
+								</button>
+							</span>
+						</div>
+					</form>
+				</div>
+				<div
+					id="productTree"
+					style="padding-top: 5px; overflow: hidden"
+					class="darkBack"
+				></div>
+				<div style="margin-top: 10px" class="darkBack">설명</div>
+			</div>
+		</div>
+	</section>
 </div>
 
 <div class="col-lg-8">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-edit"></i> 요구사항 등록
-                </span>
-            </h4>
-            <div class="widget-controls">
-                <a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
-                <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                <a data-widgster="collapse" title="Collapse" href="#"><i
-                        class="glyphicon glyphicon-chevron-down"></i></a>
-                <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-            </div>
-        </header>
-        <div class="body">
-            <div class="box box-primary" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 35px !important;">
-                <div class="box-body">
-                    <div class="form-group" style="padding-top: 10px;">
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input" style="vertical-align: center">요구사항 등록 모드 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group" style="text-align: left;">
-                                    <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-transparent btn-sm active">
-                                            <input type="radio"> 요구사항 변경 모드
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">제품(서비스) &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">버전 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">요구사항 제목 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="editor" class="darkBack">
-                        <p>입력란이 좁다면 하단에 새창으로 띄우기를 클릭하세요.</p>
-                    </div>
-                </div>
-                <p class="pull-right" style="padding-top: 10px;"><a class="btn btn-info" id="show-info-message" href="#">제품(서비스) 등록</a></p>
-                <p class="pull-right" style="padding-top: 10px; padding-right: 10px;">
-                    <button type="button" class="btn btn-success" id="modalPopupId"
-                            data-toggle="modal" data-target="#myModal2">새창으로 편집</button>
-                </p>
-                <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                    <div class="modal-dialog" style="width: 90%; height: 90%">
-                        <div class="modal-content darkBack">
-
-                            <div class="modal-header" style="padding: 0px; border-bottom: 0px">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style=" color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px;">×</button>
-                                <h4 class="modal-title font14" id="myModalLabel2" style="color: #f8f8f8;text-align: left; padding: 5px;">
-                                    <span class="font13" style="font-weight: bold;">
-                                        <i class="fa fa-edit"></i> 제품(서비스) 신규 등록 팝업
-                                    </span>
-                                    <section class="search-result" style="border-left: 5px solid #e5603b;">
-                                        <p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px;"> 입력한 내용은 부모창과 동기화 됩니다. 부모창에서 등록하기를 진행해야 저장됩니다.</p>
-                                    </section>
-                                </h4>
-                            </div>
-                            <div class="modal-body" style="padding: 5px;">
-                                <div id="modal-editor" class="darkBack">
-                                    <p>입력란이 좁다면 하단에 새창으로 띄우기를 클릭하세요.</p>
-                                </div>
-                            </div>
-                            <div class="modal-footer" style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px;">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div>
-            </div>
-        </div>
-    </section>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-edit"></i> 요구사항 등록
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+				<a data-widgster="expand" title="Expand" href="#"
+					><i class="glyphicon glyphicon-chevron-up"></i
+				></a>
+				<a data-widgster="collapse" title="Collapse" href="#"
+					><i class="glyphicon glyphicon-chevron-down"></i
+				></a>
+				<a data-widgster="close" title="Close" href="#"
+					><i class="glyphicon glyphicon-remove"></i
+				></a>
+			</div>
+		</header>
+		<div class="body">
+			<div
+				class="box box-primary"
+				style="
+					border-top-color: #bbbbbb;
+					border-top-width: 0px;
+					margin-bottom: 35px !important;
+				"
+			>
+				<div class="box-body">
+					<div class="form-group" style="padding-top: 10px">
+						<div class="control-group">
+							<label
+								class="control-label"
+								for="prepended-input"
+								style="vertical-align: center"
+								>요구사항 등록 모드 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group" style="text-align: left">
+									<span class="input-group-addon"><i class="fa fa-sliders"></i></span>
+									<div class="btn-group" data-toggle="buttons">
+										<label class="btn btn-transparent btn-sm active">
+											<input type="radio" /> 요구사항 변경 모드
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>제품(서비스) &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<input
+										id="prepended-input"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="제품(서비스)명을 입력해 주세요"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input">버전 &nbsp;</label>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<input
+										id="prepended-input"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="제품(서비스)명을 입력해 주세요"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>요구사항 제목 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<input
+										id="prepended-input"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="제품(서비스)명을 입력해 주세요"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="editor" class="darkBack">
+						<p>입력란이 좁다면 하단에 새창으로 띄우기를 클릭하세요.</p>
+					</div>
+				</div>
+				<p class="pull-right" style="padding-top: 10px">
+					<a class="btn btn-info" id="show-info-message" href="#"
+						>제품(서비스) 등록</a
+					>
+				</p>
+				<p class="pull-right" style="padding-top: 10px; padding-right: 10px">
+					<button
+						type="button"
+						class="btn btn-success"
+						id="modalPopupId"
+						data-toggle="modal"
+						data-target="#myModal2"
+					>
+						새창으로 편집
+					</button>
+				</p>
+				<div
+					id="myModal2"
+					class="modal fade"
+					tabindex="-1"
+					role="dialog"
+					aria-labelledby="myModalLabel"
+					aria-hidden="true"
+					style="display: none"
+				>
+					<div class="modal-dialog" style="width: 90%; height: 90%">
+						<div class="modal-content darkBack">
+							<div class="modal-header" style="padding: 0px; border-bottom: 0px">
+								<button
+									type="button"
+									class="close"
+									data-dismiss="modal"
+									aria-hidden="true"
+									style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
+								>
+									×
+								</button>
+								<h4
+									class="modal-title font14"
+									id="myModalLabel2"
+									style="color: #f8f8f8; text-align: left; padding: 5px"
+								>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-edit"></i> 제품(서비스) 신규 등록 팝업
+									</span>
+									<section class="search-result" style="border-left: 5px solid #e5603b">
+										<p
+											style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px"
+										>
+											입력한 내용은 부모창과 동기화 됩니다. 부모창에서 등록하기를 진행해야
+											저장됩니다.
+										</p>
+									</section>
+								</h4>
+							</div>
+							<div class="modal-body" style="padding: 5px">
+								<div id="modal-editor" class="darkBack">
+									<p>입력란이 좁다면 하단에 새창으로 띄우기를 클릭하세요.</p>
+								</div>
+							</div>
+							<div
+								class="modal-footer"
+								style="
+									background-color: transparent;
+									padding: 5px;
+									text-align: right;
+									border-top: 0px;
+								"
+							>
+								<button type="button" class="btn btn-default" data-dismiss="modal">
+									Close
+								</button>
+								<button type="button" class="btn btn-primary">Save changes</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+			</div>
+		</div>
+	</section>
 </div>
 
 <!-- page specific application css/js -->
 <style type="text/css">
-.btn-transparent.active {
-    color: white;
-    background: rgba(51, 51, 51, 0.55);
-    color: #ffffff;
-    background-color: #e5603b;
-    border-color: rgba(0, 0, 0, 0.15);
-}
-.btn:focus, .btn.focus, .btn:active:focus, .btn:active.focus, .btn.active:focus, .btn.active.focus {
-    outline: 0px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-}
-.select2-search__field::-webkit-input-placeholder,
-.select2-search__field::placeholder {
-    color: #999 !important;
-    padding-left: 6px;
-}
+	.btn-transparent.active {
+		color: white;
+		background: rgba(51, 51, 51, 0.55);
+		color: #ffffff;
+		background-color: #e5603b;
+		border-color: rgba(0, 0, 0, 0.15);
+	}
+	.btn:focus,
+	.btn.focus,
+	.btn:active:focus,
+	.btn:active.focus,
+	.btn.active:focus,
+	.btn.active.focus {
+		outline: 0px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+	.select2-search__field::-webkit-input-placeholder,
+	.select2-search__field::placeholder {
+		color: #999 !important;
+		padding-left: 6px;
+	}
 </style>
 <script type="text/javascript" charset="utf-8">
-    //<![CDATA[
+	//<![CDATA[
 
-    // 초기 개발 및 확인 용도
+	// 초기 개발 및 확인 용도
 
+	$(function () {});
 
-    $(function () {
-
-
-    });
-
-    //]]>
+	//]]>
 </script>
-<script type="text/javascript" src='js/reqChange.js' charset="utf-8"></script>
+<script type="text/javascript" src="js/reqChange.js" charset="utf-8"></script>

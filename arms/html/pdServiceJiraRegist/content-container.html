@@ -1,347 +1,471 @@
 <div class="col-lg-4">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-sort-amount-asc"></i> 제품(서비스) 조회
-                </span>
-            </h4>
-            <div class="actions">
-                <button class="btn btn-transparent btn-xs" onclick="$('#demo').jstree('open_all');">Show All
-                    <i class="fa fa-arrow-down"></i>
-                </button>
-            </div>
-        </header>
-        <div class="body">
-            <div class="wrapper">
-                <div id="mmenu" style="padding-bottom: 5px;">
-                    <form class="form-search no-margin" role="form">
-                        <div class="input-group">
-                            <input type="search" id="text" class="form-control searchDarkBack" style="color: #f8f8f8;" placeholder="찾을 노드 이름 입력" data-tooltip="Press Enter To Node To Search">
-                            <span class="input-group-btn">
-                                <button type="button" id="search" title="Search" class="btn btn-default btn-sm">
-                                    Search
-                                </button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-                <div id="pdServiceTree" style="padding-top: 5px;" class="darkBack"></div>
-                <div style="margin-top: 10px;" class="darkBack">
-                    설명
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="widget">
-        <header>
-            <h5>
-                <i class="fa fa-check-square-o"></i>
-                제품(서비스) Version 조회
-            </h5>
-        </header>
-        <div class="body">
-            <div class="panel-group" id="versionAccordion">
-            </div>
-        </div>
-    </section>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-sort-amount-asc"></i> 제품(서비스) 조회
+				</span>
+			</h4>
+			<div class="actions">
+				<button
+					class="btn btn-transparent btn-xs"
+					onclick="$('#demo').jstree('open_all');"
+				>
+					Show All
+					<i class="fa fa-arrow-down"></i>
+				</button>
+			</div>
+		</header>
+		<div class="body">
+			<div class="wrapper">
+				<div id="mmenu" style="padding-bottom: 5px">
+					<form class="form-search no-margin" role="form">
+						<div class="input-group">
+							<input
+								type="search"
+								id="text"
+								class="form-control searchDarkBack"
+								style="color: #f8f8f8"
+								placeholder="찾을 노드 이름 입력"
+								data-tooltip="Press Enter To Node To Search"
+							/>
+							<span class="input-group-btn">
+								<button
+									type="button"
+									id="search"
+									title="Search"
+									class="btn btn-default btn-sm"
+								>
+									Search
+								</button>
+							</span>
+						</div>
+					</form>
+				</div>
+				<div id="pdServiceTree" style="padding-top: 5px" class="darkBack"></div>
+				<div style="margin-top: 10px" class="darkBack">설명</div>
+			</div>
+		</div>
+	</section>
+	<section class="widget">
+		<header>
+			<h5>
+				<i class="fa fa-check-square-o"></i>
+				제품(서비스) Version 조회
+			</h5>
+		</header>
+		<div class="body">
+			<div class="panel-group" id="versionAccordion"></div>
+		</div>
+	</section>
 </div>
 
 <div class="col-lg-8">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-edit"></i> Jira 리스트
-                </span>
-            </h4>
-            <div class="widget-controls">
-                <a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
-                <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                <a data-widgster="collapse" title="Collapse" href="#"><i
-                        class="glyphicon glyphicon-chevron-down"></i></a>
-                <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-            </div>
-        </header>
-        <div class="body">
-            <blockquote class="font13">
-                상세 보기는 리스트 클릭
-            </blockquote>
-            <div class="box box-primary" style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important;">
-                <div class="box-body">
-                    <table id="jstreeTable" class="display responsive no-wrap" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th>c_id</th>
-                            <th>c_parentid</th>
-                            <th>c_position</th>
-                            <th>c_left</th>
-                            <th>c_right</th>
-                            <th>c_level</th>
-                            <th>c_title</th>
-                            <th>c_type</th>
-                            <th>c_pdservicejira_detail</th>
-                            <th>c_pdservicejira_con_name</th>
-                            <th>c_pdservicejira_con_user</th>
-                            <th>c_pdservicejira_con_pass</th>
-                            <th>c_pdservicejira_con_token</th>
-                            <th>c_pdservicejira_con_jql</th>
-                            <th>jiraConPassMode</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer" style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px;">
-                <button id="selectView" type="button" class="btn btn-primary">Select View</button>
-            </div>
-        </div>
-    </section>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-edit"></i> Jira 리스트
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+				<a data-widgster="expand" title="Expand" href="#"
+					><i class="glyphicon glyphicon-chevron-up"></i
+				></a>
+				<a data-widgster="collapse" title="Collapse" href="#"
+					><i class="glyphicon glyphicon-chevron-down"></i
+				></a>
+				<a data-widgster="close" title="Close" href="#"
+					><i class="glyphicon glyphicon-remove"></i
+				></a>
+			</div>
+		</header>
+		<div class="body">
+			<blockquote class="font13">상세 보기는 리스트 클릭</blockquote>
+			<div
+				class="box box-primary"
+				style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important"
+			>
+				<div class="box-body">
+					<table id="jstreeTable" class="display responsive no-wrap" cellspacing="0">
+						<thead>
+							<tr>
+								<th>c_id</th>
+								<th>c_parentid</th>
+								<th>c_position</th>
+								<th>c_left</th>
+								<th>c_right</th>
+								<th>c_level</th>
+								<th>c_title</th>
+								<th>c_type</th>
+								<th>c_pdservicejira_detail</th>
+								<th>c_pdservicejira_con_name</th>
+								<th>c_pdservicejira_con_user</th>
+								<th>c_pdservicejira_con_pass</th>
+								<th>c_pdservicejira_con_token</th>
+								<th>c_pdservicejira_con_jql</th>
+								<th>jiraConPassMode</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+			<div
+				class="modal-footer"
+				style="
+					background-color: transparent;
+					padding: 5px;
+					text-align: right;
+					border-top: 0px;
+				"
+			>
+				<button id="selectView" type="button" class="btn btn-primary">
+					Select View
+				</button>
+			</div>
+		</div>
+	</section>
 </div>
 
 <div class="col-lg-12">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-edit"></i> 연결할 Jira 등록 / 변경
-                </span>
-            </h4>
-            <div class="widget-controls">
-                <a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
-                <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                <a data-widgster="collapse" title="Collapse" href="#"><i
-                        class="glyphicon glyphicon-chevron-down"></i></a>
-                <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-            </div>
-        </header>
-        <div class="body">
-            <div class="box box-primary" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 35px !important;">
-                <div class="box-body">
-                    <div class="form-group" style="margin-bottom: 0px; padding-top: 10px;">
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 등록 모드 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8" style="text-align: left;">
-                                    <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-transparent btn-sm active">
-                                            <input type="radio"> 신규 등록 모드
-                                        </label>
-                                        <label class="btn btn-transparent btn-sm">
-                                            <input type="radio"> 업데이트 모드
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 이름 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 Username &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8" style="text-align: left;">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <select class="js-data-example-ajax form-control font13 darkBack" placeholder="제품(서비스)의 관리자를 등록해 주세요"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 모드 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8" style="text-align: left;">
-                                    <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-transparent btn-sm active">
-                                            <input type="radio"> Password
-                                        </label>
-                                        <label class="btn btn-transparent btn-sm">
-                                            <input type="radio"> Token
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 Password &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8">
-                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                    <input type="password" class="form-control darkBack" style="color: #f8f8f8;" id="password-field" placeholder="Password">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 Token &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8">
-                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                    <input type="password" class="form-control darkBack" style="color: #f8f8f8;" id="password-field" placeholder="Token">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 URL &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-8">
-                                    <span class="input-group-addon"><i class="fa fa-anchor"></i></span>
-                                    <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="Jira Root Url 을 입력해 주세요">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 조회 JQL &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;padding-bottom: 4px;">
-                                <div class="input-group col-sm-8">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <textarea id="description" rows="5" name="text" class="form-control darkBack"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="pull-right" style="padding-top: 10px;"><a class="btn btn-info" id="show-info-message" href="#">Jira 등록</a></p>
-                        <p class="pull-right" style="padding-top: 10px; padding-right: 10px;">
-                            <button type="button" class="btn btn-success" id="jiraJqlTest"
-                                    data-toggle="modal" data-target="#myModal2">Jira JQL Test</button>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" style="padding: 10px;">
-            <section class="widget padding-increased" style="margin-bottom: 5px;text-align: left;">
-                <header>
-                    <h4>
-                        Search Results
-                    </h4>
-                    <hr/>
-                </header>
-                <div class="body no-margin">
-                    <section class="search-result">
-                        <h4 style="font-size:13px">Next generation admin template</h4>
-                        <p class="text-success"><small>themeforest.com</small></p>
-                        <p>Not just usual Metro. But something bigger. Not just usual widgets, but real widgets.
-                            Not just yet another admin template, but next generation admin template.</p>
-                    </section>
-                    <section class="search-result">
-                        <h4 style="font-size:13px">Try. Posted by Okendoken</h4>
-                        <p class="text-success"><small>okendoken.com</small></p>
-                        <p>You will never know exactly how something will go until you try it.
-                            You can think three hundred times and still have no precise result.</p>
-                    </section>
-                    <section class="search-result">
-                        <h4 style="font-size:13px">Can I use CSS3 Radial-Gradient?</h4>
-                        <p class="text-success"><small>okendoken.com</small></p>
-                        <p>Yes you can! Further more, you should! It let's you create really beautiful images
-                        either for elements or for the entire background.</p>
-                    </section>
-                    <section class="search-result">
-                        <h4 style="font-size:13px">Element standards</h4>
-                        <p class="text-success"><small>wikipedia.com</small></p>
-                        <p>HTML elements are defined in a series of freely available open standards issued since
-                            1995, initially by the IETF and subsequently by the W3C.</p>
-                    </section>
-                    <section class="search-result">
-                        <h4 style="font-size:13px">Vitaut the Great</h4>
-                        <p class="text-success"><small>www.belarusguide.com</small></p>
-                        <p>the Great Prince of the Grand Duchy of Lithuania he had stopped the invasion to Europe
-                            of Timur (Tamerlan) from Asia heading a big Army of Belarusians, Lithuanians.</p>
-                    </section>
-                    <section class="search-result">
-                        <h4 style="font-size:13px">The origins of the Grand Duchy of Litva</h4>
-                        <p class="text-success"><small>www.belarusguide.com</small></p>
-                        <p>Who are the Belarusians, anyway? What is this strange country - Belarus - which appeared
-                            on the map a few years ago, a country that used to be called Belorussia, Byelorussia or even White Russia?</p>
-                    </section>
-                    <div class="text-align-center">
-                        <ul class="pagination">
-                            <li class="disabled"><a href="#">Prev</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">Next</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-edit"></i> 연결할 Jira 등록 / 변경
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+				<a data-widgster="expand" title="Expand" href="#"
+					><i class="glyphicon glyphicon-chevron-up"></i
+				></a>
+				<a data-widgster="collapse" title="Collapse" href="#"
+					><i class="glyphicon glyphicon-chevron-down"></i
+				></a>
+				<a data-widgster="close" title="Close" href="#"
+					><i class="glyphicon glyphicon-remove"></i
+				></a>
+			</div>
+		</header>
+		<div class="body">
+			<div
+				class="box box-primary"
+				style="
+					border-top-color: #bbbbbb;
+					border-top-width: 0px;
+					margin-bottom: 35px !important;
+				"
+			>
+				<div class="box-body">
+					<div class="form-group" style="margin-bottom: 0px; padding-top: 10px">
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 등록 모드 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8" style="text-align: left">
+									<span class="input-group-addon"><i class="fa fa-sliders"></i></span>
+									<div class="btn-group" data-toggle="buttons">
+										<label class="btn btn-transparent btn-sm active">
+											<input type="radio" /> 신규 등록 모드
+										</label>
+										<label class="btn btn-transparent btn-sm">
+											<input type="radio" /> 업데이트 모드
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 이름 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<input
+										id="prepended-input"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="제품(서비스)명을 입력해 주세요"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 Username &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8" style="text-align: left">
+									<span class="input-group-addon"><i class="fa fa-user"></i></span>
+									<select
+										class="js-data-example-ajax form-control font13 darkBack"
+										placeholder="제품(서비스)의 관리자를 등록해 주세요"
+									></select>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 모드 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8" style="text-align: left">
+									<span class="input-group-addon"><i class="fa fa-sliders"></i></span>
+									<div class="btn-group" data-toggle="buttons">
+										<label class="btn btn-transparent btn-sm active">
+											<input type="radio" /> Password
+										</label>
+										<label class="btn btn-transparent btn-sm">
+											<input type="radio" /> Token
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 Password &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8">
+									<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+									<input
+										type="password"
+										class="form-control darkBack"
+										style="color: #f8f8f8"
+										id="password-field"
+										placeholder="Password"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 Token &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8">
+									<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+									<input
+										type="password"
+										class="form-control darkBack"
+										style="color: #f8f8f8"
+										id="password-field"
+										placeholder="Token"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 URL &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-8">
+									<span class="input-group-addon"><i class="fa fa-anchor"></i></span>
+									<input
+										id="prepended-input"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="Jira Root Url 을 입력해 주세요"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 조회 JQL &nbsp;</label
+							>
+							<div
+								class="controls form-group"
+								style="margin-bottom: 10px; padding-bottom: 4px"
+							>
+								<div class="input-group col-sm-8">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<textarea
+										id="description"
+										rows="5"
+										name="text"
+										class="form-control darkBack"
+									></textarea>
+								</div>
+							</div>
+						</div>
+						<p class="pull-right" style="padding-top: 10px">
+							<a class="btn btn-info" id="show-info-message" href="#">Jira 등록</a>
+						</p>
+						<p class="pull-right" style="padding-top: 10px; padding-right: 10px">
+							<button
+								type="button"
+								class="btn btn-success"
+								id="jiraJqlTest"
+								data-toggle="modal"
+								data-target="#myModal2"
+							>
+								Jira JQL Test
+							</button>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="padding: 10px">
+			<section
+				class="widget padding-increased"
+				style="margin-bottom: 5px; text-align: left"
+			>
+				<header>
+					<h4>Search Results</h4>
+					<hr />
+				</header>
+				<div class="body no-margin">
+					<section class="search-result">
+						<h4 style="font-size: 13px">Next generation admin template</h4>
+						<p class="text-success"><small>themeforest.com</small></p>
+						<p>
+							Not just usual Metro. But something bigger. Not just usual widgets, but
+							real widgets. Not just yet another admin template, but next generation
+							admin template.
+						</p>
+					</section>
+					<section class="search-result">
+						<h4 style="font-size: 13px">Try. Posted by Okendoken</h4>
+						<p class="text-success"><small>okendoken.com</small></p>
+						<p>
+							You will never know exactly how something will go until you try it. You
+							can think three hundred times and still have no precise result.
+						</p>
+					</section>
+					<section class="search-result">
+						<h4 style="font-size: 13px">Can I use CSS3 Radial-Gradient?</h4>
+						<p class="text-success"><small>okendoken.com</small></p>
+						<p>
+							Yes you can! Further more, you should! It let's you create really
+							beautiful images either for elements or for the entire background.
+						</p>
+					</section>
+					<section class="search-result">
+						<h4 style="font-size: 13px">Element standards</h4>
+						<p class="text-success"><small>wikipedia.com</small></p>
+						<p>
+							HTML elements are defined in a series of freely available open standards
+							issued since 1995, initially by the IETF and subsequently by the W3C.
+						</p>
+					</section>
+					<section class="search-result">
+						<h4 style="font-size: 13px">Vitaut the Great</h4>
+						<p class="text-success"><small>www.belarusguide.com</small></p>
+						<p>
+							the Great Prince of the Grand Duchy of Lithuania he had stopped the
+							invasion to Europe of Timur (Tamerlan) from Asia heading a big Army of
+							Belarusians, Lithuanians.
+						</p>
+					</section>
+					<section class="search-result">
+						<h4 style="font-size: 13px">The origins of the Grand Duchy of Litva</h4>
+						<p class="text-success"><small>www.belarusguide.com</small></p>
+						<p>
+							Who are the Belarusians, anyway? What is this strange country - Belarus -
+							which appeared on the map a few years ago, a country that used to be
+							called Belorussia, Byelorussia or even White Russia?
+						</p>
+					</section>
+					<div class="text-align-center">
+						<ul class="pagination">
+							<li class="disabled"><a href="#">Prev</a></li>
+							<li class="active"><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</div>
+	</section>
 </div>
 
 <!-- page specific application css/js -->
 <style type="text/css">
+	.btn-transparent.active {
+		color: white;
+		background: rgba(51, 51, 51, 0.55);
+		color: #ffffff;
+		background-color: #e5603b;
+		border-color: rgba(0, 0, 0, 0.15);
+	}
+	.btn:focus,
+	.btn.focus,
+	.btn:active:focus,
+	.btn:active.focus,
+	.btn.active:focus,
+	.btn.active.focus {
+		outline: 0px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
 
-.btn-transparent.active {
-    color: white;
-    background: rgba(51, 51, 51, 0.55);
-    color: #ffffff;
-    background-color: #e5603b;
-    border-color: rgba(0, 0, 0, 0.15);
-}
-.btn:focus, .btn.focus, .btn:active:focus, .btn:active.focus, .btn.active:focus, .btn.active.focus {
-    outline: 0px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-}
-
-/***********************************/
-/**          SEARCH              **/
-/**********************************/
-.search-result {
-  padding: 5px 15px 5px 10px;
-  margin-bottom: 10px;
-}
-.search-result h4 {
-  margin: 0;
-}
-.search-result:nth-child(even) {
-  border-left: 5px solid #585858;
-  background: rgba(51, 51, 51, 0.55);
-}
-.search-result:nth-child(odd) {
-  border-left: 5px solid #919191;
-}
-.search-result:hover {
-  cursor: pointer;
-  padding-left: 10px;
-  border-left-color: #e5603b;
-  -webkit-transition: border-left-color 0.2s;
-  -moz-transition: border-left-color 0.2s;
-  -o-transition: border-left-color 0.2s;
-  transition: border-left-color 0.2s;
-}
-.search-result > p {
-  margin-bottom: 0px;
-}
+	/***********************************/
+	/**          SEARCH              **/
+	/**********************************/
+	.search-result {
+		padding: 5px 15px 5px 10px;
+		margin-bottom: 10px;
+	}
+	.search-result h4 {
+		margin: 0;
+	}
+	.search-result:nth-child(even) {
+		border-left: 5px solid #585858;
+		background: rgba(51, 51, 51, 0.55);
+	}
+	.search-result:nth-child(odd) {
+		border-left: 5px solid #919191;
+	}
+	.search-result:hover {
+		cursor: pointer;
+		padding-left: 10px;
+		border-left-color: #e5603b;
+		-webkit-transition: border-left-color 0.2s;
+		-moz-transition: border-left-color 0.2s;
+		-o-transition: border-left-color 0.2s;
+		transition: border-left-color 0.2s;
+	}
+	.search-result > p {
+		margin-bottom: 0px;
+	}
 </style>
 <script type="text/javascript" charset="utf-8">
-    //<![CDATA[
+	//<![CDATA[
 
-    // 초기 개발 및 확인 용도
-    (function( $ ){
+	// 초기 개발 및 확인 용도
+	(function ($) {
+		let menu;
 
-                    let menu;
+		function draw(main) {
+			main.html("");
 
-                    function draw(main){
-
-                        main.html("");
-
-                        let data = `
+			let data = `
                                         <li class='list-group-item json-menu-header'>
                                             product name
                                         </li>
                                     `;
 
-                        for(let i = 0; i < menu.length; i++){
-
-                            data += `
+			for (let i = 0; i < menu.length; i++) {
+				data += `
                                         <div class="panel">
                                             <div class="panel-heading">
                                                 <a class="accordion-toggle collapsed" data-toggle="collapse" href="#jsonItem${i}">
@@ -355,63 +479,65 @@
                                             </div>
                                         </div>
                                     `;
+			}
 
-                        }
+			main.html(data);
+		}
 
-                        main.html(data);
+		$.fn.jsonMenu = function (action, items, options) {
+			$(this).addClass("json-menu");
+			if (action == "add") {
+				menu.body.push(items);
+				draw($(this));
+			} else if (action == "set") {
+				menu = items;
+				draw($(this));
+			}
+			return this;
+		};
+	})(jQuery);
 
-                    }
+	$(function () {
+		$.ajax("/auth-user/api/arms/pdversion/getChildNode.do?c_id=1")
+			.done(function (json) {
+				console.log(json);
+				$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
+			})
+			.fail(function (jqXHR) {
+				console.log("error");
+			})
+			.always(function (jqXHR) {
+				console.log("finished");
+			});
+	});
 
-                    $.fn.jsonMenu = function(action, items, options){
-                        $(this).addClass("json-menu")
-                        if(action == "add"){
-                            menu.body.push(items);
-                            draw($(this));
-                        } else if(action == "set"){
-                            menu = items;
-                            draw($(this));
-                        }
-                        return this;
-                    }
-                 })( jQuery );
+	$("#jiraJqlTest").click(function () {
+		$.post(
+			"/auth-user/api/arms/pdServiceJira/getTestConnectionJira.do",
+			{
+				Name: "ajax",
+				Age: "10",
+			},
+			function (jqXHR) {
+				alert("success");
+			},
+			"json" /* xml, text, script, html */
+		)
+			.done(function (jqXHR) {
+				alert("second success");
+			})
+			.fail(function (jqXHR) {
+				alert("error");
+			})
+			.always(function (jqXHR) {
+				alert("finished");
+			});
+	});
 
-    $(function () {
-
-        $.ajax( "/auth-user/api/arms/pdversion/getChildNode.do?c_id=1")
-        .done(function(json) {
-            console.log(json);
-            $("#versionAccordion").jsonMenu("set", json,{speed:5000});
-        })
-        .fail(function(jqXHR) {
-            console.log( "error" );
-        })
-        .always(function(jqXHR) {
-            console.log( "finished" );
-        });
-
-
-    });
-
-
-    $( "#jiraJqlTest" ).click(function() {
-
-        $.post( "/auth-user/api/arms/pdServiceJira/getTestConnectionJira.do", {
-            Name: 'ajax',
-            Age: '10'
-        }, function(jqXHR) {
-            alert( "success" );
-        }, 'json' /* xml, text, script, html */)
-        .done(function(jqXHR) {
-            alert( "second success" );
-        })
-        .fail(function(jqXHR) {
-            alert( "error" );
-        })
-        .always(function(jqXHR) {
-            alert( "finished" );
-        });
-    });
-
-    //]]>
+	//]]>
 </script>
-<script type="text/javascript" src='js/pdServiceJiraRegist.js' charset="utf-8"></script>
+<script
+	type="text/javascript"
+	src="js/pdServiceJiraRegist.js"
+	charset="utf-8"
+></script>

@@ -1,310 +1,422 @@
 <div class="col-lg-12">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-edit"></i> Jira 상세 조회
-                </span>
-            </h4>
-            <div class="widget-controls">
-                <a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
-                <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                <a data-widgster="collapse" title="Collapse" href="#"><i
-                        class="glyphicon glyphicon-chevron-down"></i></a>
-                <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-            </div>
-        </header>
-        <div class="body">
-            <div class="box box-primary col-md-6" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 5px !important;">
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 이름 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-6">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <input id="prepended-input" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 조회 JQL &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;padding-bottom: 4px;">
-                                <div class="input-group col-sm-6">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <textarea id="description" rows="5" name="text" class="form-control darkBack"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="box box-primary col-md-6" style="border-top-color: #bbbbbb; border-top-width: 0px; margin-bottom: 5px !important;">
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 Username &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-6" style="text-align: left;">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <select class="js-data-example-ajax form-control font13 darkBack"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 모드 &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-6" style="text-align: left;">
-                                    <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-transparent btn-sm active">
-                                            <input type="radio"> Password
-                                        </label>
-                                        <label class="btn btn-transparent btn-sm">
-                                            <input type="radio"> Token
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 Password &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-6">
-                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                    <input type="password" class="form-control darkBack" style="color: #f8f8f8;" id="password-field" placeholder="Password" disabled>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="prepended-input">Jira 연결 Token &nbsp;</label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group col-sm-6">
-                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                    <input type="password" class="form-control darkBack" style="color: #f8f8f8;" id="password-field" placeholder="Token" disabled>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-edit"></i> Jira 상세 조회
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+				<a data-widgster="expand" title="Expand" href="#"
+					><i class="glyphicon glyphicon-chevron-up"></i
+				></a>
+				<a data-widgster="collapse" title="Collapse" href="#"
+					><i class="glyphicon glyphicon-chevron-down"></i
+				></a>
+				<a data-widgster="close" title="Close" href="#"
+					><i class="glyphicon glyphicon-remove"></i
+				></a>
+			</div>
+		</header>
+		<div class="body">
+			<div
+				class="box box-primary col-md-6"
+				style="
+					border-top-color: #bbbbbb;
+					border-top-width: 0px;
+					margin-bottom: 5px !important;
+				"
+			>
+				<div class="box-body">
+					<div class="form-group">
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 이름 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-6">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<input
+										id="prepended-input"
+										class="form-control font13 darkBack"
+										style="color: #f8f8f8"
+										size="16"
+										type="text"
+										placeholder="제품(서비스)명을 입력해 주세요"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 조회 JQL &nbsp;</label
+							>
+							<div
+								class="controls form-group"
+								style="margin-bottom: 10px; padding-bottom: 4px"
+							>
+								<div class="input-group col-sm-6">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<textarea
+										id="description"
+										rows="5"
+										name="text"
+										class="form-control darkBack"
+									></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				class="box box-primary col-md-6"
+				style="
+					border-top-color: #bbbbbb;
+					border-top-width: 0px;
+					margin-bottom: 5px !important;
+				"
+			>
+				<div class="box-body">
+					<div class="form-group">
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 Username &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-6" style="text-align: left">
+									<span class="input-group-addon"><i class="fa fa-user"></i></span>
+									<select
+										class="js-data-example-ajax form-control font13 darkBack"
+									></select>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 모드 &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-6" style="text-align: left">
+									<span class="input-group-addon"><i class="fa fa-sliders"></i></span>
+									<div class="btn-group" data-toggle="buttons">
+										<label class="btn btn-transparent btn-sm active">
+											<input type="radio" /> Password
+										</label>
+										<label class="btn btn-transparent btn-sm">
+											<input type="radio" /> Token
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 Password &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-6">
+									<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+									<input
+										type="password"
+										class="form-control darkBack"
+										style="color: #f8f8f8"
+										id="password-field"
+										placeholder="Password"
+										disabled
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="prepended-input"
+								>Jira 연결 Token &nbsp;</label
+							>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group col-sm-6">
+									<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+									<input
+										type="password"
+										class="form-control darkBack"
+										style="color: #f8f8f8"
+										id="password-field"
+										placeholder="Token"
+										disabled
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <section class="widget" style="margin-bottom: 5px; margin-top: 10px;">
-                        <div class="body no-margin">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form class="form-inline form-search no-margin text-align-center" role="form">
-                                        <div class="input-group" style="width: 80%">
-                                            <input type="search" class="form-control darkBack" style="color: #f8f8f8;" placeholder="Keywords: Node.js, History">
-                                            <span class="input-group-btn" style="width: 70px;">
-                                                <button class="btn btn-primary" style="text-align: left;">
-                                                    Search
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <section class="widget padding-increased" style="margin-bottom: 5px;">
-                        <header>
-                            <h4>
-                                Search Results
-                            </h4>
-                            <hr/>
-                        </header>
-                        <div class="body no-margin">
-                            <section class="search-result">
-                                <h4 style="font-size:13px">Next generation admin template</h4>
-                                <p class="text-success"><small>themeforest.com</small></p>
-                                <p>Not just usual Metro. But something bigger. Not just usual widgets, but real widgets.
-                                    Not just yet another admin template, but next generation admin template.</p>
-                            </section>
-                            <section class="search-result">
-                                <h4 style="font-size:13px">Try. Posted by Okendoken</h4>
-                                <p class="text-success"><small>okendoken.com</small></p>
-                                <p>You will never know exactly how something will go until you try it.
-                                    You can think three hundred times and still have no precise result.</p>
-                            </section>
-                            <section class="search-result">
-                                <h4 style="font-size:13px">Can I use CSS3 Radial-Gradient?</h4>
-                                <p class="text-success"><small>okendoken.com</small></p>
-                                <p>Yes you can! Further more, you should! It let's you create really beautiful images
-                                either for elements or for the entire background.</p>
-                            </section>
-                            <section class="search-result">
-                                <h4 style="font-size:13px">Element standards</h4>
-                                <p class="text-success"><small>wikipedia.com</small></p>
-                                <p>HTML elements are defined in a series of freely available open standards issued since
-                                    1995, initially by the IETF and subsequently by the W3C.</p>
-                            </section>
-                            <section class="search-result">
-                                <h4 style="font-size:13px">Vitaut the Great</h4>
-                                <p class="text-success"><small>www.belarusguide.com</small></p>
-                                <p>the Great Prince of the Grand Duchy of Lithuania he had stopped the invasion to Europe
-                                    of Timur (Tamerlan) from Asia heading a big Army of Belarusians, Lithuanians.</p>
-                            </section>
-                            <section class="search-result">
-                                <h4 style="font-size:13px">The origins of the Grand Duchy of Litva</h4>
-                                <p class="text-success"><small>www.belarusguide.com</small></p>
-                                <p>Who are the Belarusians, anyway? What is this strange country - Belarus - which appeared
-                                    on the map a few years ago, a country that used to be called Belorussia, Byelorussia or even White Russia?</p>
-                            </section>
-                            <div class="text-align-center">
-                                <ul class="pagination">
-                                    <li class="disabled"><a href="#">Prev</a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#">Next</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
+			<div class="row">
+				<div class="col-md-12">
+					<section class="widget" style="margin-bottom: 5px; margin-top: 10px">
+						<div class="body no-margin">
+							<div class="row">
+								<div class="col-md-12">
+									<form
+										class="form-inline form-search no-margin text-align-center"
+										role="form"
+									>
+										<div class="input-group" style="width: 80%">
+											<input
+												type="search"
+												class="form-control darkBack"
+												style="color: #f8f8f8"
+												placeholder="Keywords: Node.js, History"
+											/>
+											<span class="input-group-btn" style="width: 70px">
+												<button class="btn btn-primary" style="text-align: left">
+													Search
+												</button>
+											</span>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<section class="widget padding-increased" style="margin-bottom: 5px">
+						<header>
+							<h4>Search Results</h4>
+							<hr />
+						</header>
+						<div class="body no-margin">
+							<section class="search-result">
+								<h4 style="font-size: 13px">Next generation admin template</h4>
+								<p class="text-success"><small>themeforest.com</small></p>
+								<p>
+									Not just usual Metro. But something bigger. Not just usual widgets, but
+									real widgets. Not just yet another admin template, but next generation
+									admin template.
+								</p>
+							</section>
+							<section class="search-result">
+								<h4 style="font-size: 13px">Try. Posted by Okendoken</h4>
+								<p class="text-success"><small>okendoken.com</small></p>
+								<p>
+									You will never know exactly how something will go until you try it. You
+									can think three hundred times and still have no precise result.
+								</p>
+							</section>
+							<section class="search-result">
+								<h4 style="font-size: 13px">Can I use CSS3 Radial-Gradient?</h4>
+								<p class="text-success"><small>okendoken.com</small></p>
+								<p>
+									Yes you can! Further more, you should! It let's you create really
+									beautiful images either for elements or for the entire background.
+								</p>
+							</section>
+							<section class="search-result">
+								<h4 style="font-size: 13px">Element standards</h4>
+								<p class="text-success"><small>wikipedia.com</small></p>
+								<p>
+									HTML elements are defined in a series of freely available open
+									standards issued since 1995, initially by the IETF and subsequently by
+									the W3C.
+								</p>
+							</section>
+							<section class="search-result">
+								<h4 style="font-size: 13px">Vitaut the Great</h4>
+								<p class="text-success"><small>www.belarusguide.com</small></p>
+								<p>
+									the Great Prince of the Grand Duchy of Lithuania he had stopped the
+									invasion to Europe of Timur (Tamerlan) from Asia heading a big Army of
+									Belarusians, Lithuanians.
+								</p>
+							</section>
+							<section class="search-result">
+								<h4 style="font-size: 13px">The origins of the Grand Duchy of Litva</h4>
+								<p class="text-success"><small>www.belarusguide.com</small></p>
+								<p>
+									Who are the Belarusians, anyway? What is this strange country - Belarus
+									- which appeared on the map a few years ago, a country that used to be
+									called Belorussia, Byelorussia or even White Russia?
+								</p>
+							</section>
+							<div class="text-align-center">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">2</a></li>
+									<li><a href="#">3</a></li>
+									<li><a href="#">4</a></li>
+									<li><a href="#">5</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
 
-            <div class="box-footer" style="background-color: transparent; padding: 5px; text-align: left; border-top: 0px;">
-                <button id="selectList" type="button" class="btn btn-success">Jira List 조회 돌아가기</button>
-            </div>
-        </div>
-    </section>
+			<div
+				class="box-footer"
+				style="
+					background-color: transparent;
+					padding: 5px;
+					text-align: left;
+					border-top: 0px;
+				"
+			>
+				<button id="selectList" type="button" class="btn btn-success">
+					Jira List 조회 돌아가기
+				</button>
+			</div>
+		</div>
+	</section>
 </div>
 
 <!-- page specific application css/js -->
 <style type="text/css">
-.btn-transparent.active {
-    color: white;
-    background: rgba(51, 51, 51, 0.55);
-    color: #ffffff;
-    background-color: #e5603b;
-    border-color: rgba(0, 0, 0, 0.15);
-}
-.btn:focus, .btn.focus, .btn:active:focus, .btn:active.focus, .btn.active:focus, .btn.active.focus {
-    outline: 0px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-}
-.select2-search__field::-webkit-input-placeholder,
-.select2-search__field::placeholder {
-    color: #999 !important;
-    padding-left: 6px;
-}
+	.btn-transparent.active {
+		color: white;
+		background: rgba(51, 51, 51, 0.55);
+		color: #ffffff;
+		background-color: #e5603b;
+		border-color: rgba(0, 0, 0, 0.15);
+	}
+	.btn:focus,
+	.btn.focus,
+	.btn:active:focus,
+	.btn:active.focus,
+	.btn.active:focus,
+	.btn.active.focus {
+		outline: 0px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+	.select2-search__field::-webkit-input-placeholder,
+	.select2-search__field::placeholder {
+		color: #999 !important;
+		padding-left: 6px;
+	}
 
-
-/***********************************/
-/**          SEARCH              **/
-/**********************************/
-.search-result {
-  padding: 5px 15px 5px 10px;
-  margin-bottom: 10px;
-}
-.search-result h4 {
-  margin: 0;
-}
-.search-result:nth-child(even) {
-  border-left: 5px solid #585858;
-  background: rgba(51, 51, 51, 0.55);
-}
-.search-result:nth-child(odd) {
-  border-left: 5px solid #919191;
-}
-.search-result:hover {
-  cursor: pointer;
-  padding-left: 10px;
-  border-left-color: #e5603b;
-  -webkit-transition: border-left-color 0.2s;
-  -moz-transition: border-left-color 0.2s;
-  -o-transition: border-left-color 0.2s;
-  transition: border-left-color 0.2s;
-}
-.search-result > p {
-  margin-bottom: 0px;
-}
+	/***********************************/
+	/**          SEARCH              **/
+	/**********************************/
+	.search-result {
+		padding: 5px 15px 5px 10px;
+		margin-bottom: 10px;
+	}
+	.search-result h4 {
+		margin: 0;
+	}
+	.search-result:nth-child(even) {
+		border-left: 5px solid #585858;
+		background: rgba(51, 51, 51, 0.55);
+	}
+	.search-result:nth-child(odd) {
+		border-left: 5px solid #919191;
+	}
+	.search-result:hover {
+		cursor: pointer;
+		padding-left: 10px;
+		border-left-color: #e5603b;
+		-webkit-transition: border-left-color 0.2s;
+		-moz-transition: border-left-color 0.2s;
+		-o-transition: border-left-color 0.2s;
+		transition: border-left-color 0.2s;
+	}
+	.search-result > p {
+		margin-bottom: 0px;
+	}
 </style>
 <script type="text/javascript" charset="utf-8">
-    //<![CDATA[
+	//<![CDATA[
 
-    // 초기 개발 및 확인 용도
-    $(function () {
+	// 초기 개발 및 확인 용도
+	$(function () {
+		// --- select2 설정 --- //
+		$(".js-data-example-ajax").select2({
+			ajax: {
+				url: "https://api.github.com/search/repositories",
+				dataType: "json",
+				delay: 250,
+				data: function (params) {
+					return {
+						q: params.term, // search term
+						page: params.page,
+					};
+				},
+				processResults: function (data, params) {
+					// parse the results into the format expected by Select2
+					// since we are using custom formatting functions we do not need to
+					// alter the remote JSON data, except to indicate that infinite
+					// scrolling can be used
+					params.page = params.page || 1;
 
-        // --- select2 설정 --- //
-        $(".js-data-example-ajax").select2({
-            ajax: {
-                url: "https://api.github.com/search/repositories",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-                    // parse the results into the format expected by Select2
-                    // since we are using custom formatting functions we do not need to
-                    // alter the remote JSON data, except to indicate that infinite
-                    // scrolling can be used
-                    params.page = params.page || 1;
+					return {
+						results: data.items,
+						pagination: {
+							more: params.page * 30 < data.total_count,
+						},
+					};
+				},
+				cache: true,
+			},
+			placeholder: "Jira 연결 Account 등록",
+			minimumInputLength: 1,
+			templateResult: formatRepo,
+			templateSelection: formatRepoSelection,
+		});
 
-                    return {
-                        results: data.items,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            placeholder: 'Jira 연결 Account 등록',
-            minimumInputLength: 1,
-            templateResult: formatRepo,
-            templateSelection: formatRepoSelection
-        });
+		function formatRepo(repo) {
+			if (repo.loading) {
+				return repo.text;
+			}
 
-        function formatRepo (repo) {
-            if (repo.loading) {
-                return repo.text;
-            }
+			var $container = $(
+				"<div class='select2-result-repository clearfix'>" +
+					"<div class='select2-result-repository__meta'>" +
+					"<div class='select2-result-repository__title'></div>" +
+					"<div class='select2-result-repository__description'></div>" +
+					"<div class='select2-result-repository__statistics'>" +
+					"<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> </div>" +
+					"<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> </div>" +
+					"<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> </div>" +
+					"</div>" +
+					"</div>" +
+					"</div>"
+			);
 
-            var $container = $(
-                "<div class='select2-result-repository clearfix'>" +
-                "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'></div>" +
-                "<div class='select2-result-repository__description'></div>" +
-                "<div class='select2-result-repository__statistics'>" +
-                "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> </div>" +
-                "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> </div>" +
-                "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> </div>" +
-                "</div>" +
-                "</div>" +
-                "</div>"
-            );
+			$container.find(".select2-result-repository__title").text(repo.full_name);
+			$container
+				.find(".select2-result-repository__description")
+				.text(repo.description);
+			$container
+				.find(".select2-result-repository__forks")
+				.append(repo.forks_count + " Forks");
+			$container
+				.find(".select2-result-repository__stargazers")
+				.append(repo.stargazers_count + " Stars");
+			$container
+				.find(".select2-result-repository__watchers")
+				.append(repo.watchers_count + " Watchers");
 
-            $container.find(".select2-result-repository__title").text(repo.full_name);
-            $container.find(".select2-result-repository__description").text(repo.description);
-            $container.find(".select2-result-repository__forks").append(repo.forks_count + " Forks");
-            $container.find(".select2-result-repository__stargazers").append(repo.stargazers_count + " Stars");
-            $container.find(".select2-result-repository__watchers").append(repo.watchers_count + " Watchers");
+			return $container;
+		}
 
-            return $container;
-        }
+		function formatRepoSelection(repo) {
+			return repo.full_name || repo.text;
+		}
+		// Code for the menu buttons
+	});
 
-        function formatRepoSelection (repo) {
-            return repo.full_name || repo.text;
-        }
-        // Code for the menu buttons
-
-    });
-
-    //]]>
+	//]]>
 </script>
-<script type="text/javascript" src='js/pdServiceJiraListView.js' charset="utf-8"></script>
+<script
+	type="text/javascript"
+	src="js/pdServiceJiraListView.js"
+	charset="utf-8"
+></script>

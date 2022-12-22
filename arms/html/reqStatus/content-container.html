@@ -1,324 +1,415 @@
 <div class="col-lg-12">
-    <section class="widget">
-        <header>
-            <h4>
-                <span class="font13" style="font-weight: bold;">
-                    <i class="fa fa-edit"></i> 요구사항 리스트
-                </span>
-            </h4>
-            <div class="widget-controls">
-                <a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
-                <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                <a data-widgster="collapse" title="Collapse" href="#"><i
-                        class="glyphicon glyphicon-chevron-down"></i></a>
-                <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-            </div>
-        </header>
-        <div class="body">
-            <blockquote class="font13">
-                상세 보기는 리스트 클릭
-            </blockquote>
-            <div class="row">
-                <div class="col-md-4 well">
-                    <legend>
-                        Search
-                    </legend>
-                    <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
-                        <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
-                            <select id="country" required="required"
-                                    data-placeholder="Select Product(Service)" class="select-block-level chzn-select"
-                                    tabindex="-1"
-                                    name="country"  class="darkBack">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
-                        <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
-                            <select multiple="multiple" id="multiVersion" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 well">
-                    <legend>
-                        Filter
-                    </legend>
-                    <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
-                        <div class="checkbox">
-                            <input id="checkbox1" type="checkbox" data-check-all="">
-                            <label for="checkbox1">disable 된 요구사항 필터</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 well">
-                    <legend>
-                        Export
-                    </legend>
-                    <div class="control-group" class="darkBack" style="padding-bottom: 10px; border: 0;">
-                        <div id="filterTopCriteria">
-                            <button id="copychecker" type="button" class="btn btn-danger" data-placement="top" data-original-title=".btn .btn-danger">
-                                copy
-                            </button>
-                            <button id="csvchecker" type="button" class="btn btn-danger" data-placement="top" data-original-title=".btn .btn-danger">
-                                csv
-                            </button>
-                            <button id="excelhecker" type="button" class="btn btn-danger" data-placement="top" data-original-title=".btn .btn-danger">
-                                excel
-                            </button>
-                            <button id="pdfchecker" type="button" class="btn btn-danger" data-placement="top" data-original-title=".btn .btn-danger">
-                                pdf
-                            </button>
-                            <button id="printchecker" type="button" class="btn btn-danger" data-placement="top" data-original-title=".btn .btn-danger">
-                                print
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="progress progress-xs mt-xs mb-0 active">
-                <div class="progress-bar progress-bar-striped" style="width: 100%"></div>
-            </div>
-            <div class="box box-primary" style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important;">
-                <div class="box-body">
-                    <table id="reqStatusTable" class="display responsive no-wrap" cellspacing="0">
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
+	<section class="widget">
+		<header>
+			<h4>
+				<span class="font13" style="font-weight: bold">
+					<i class="fa fa-edit"></i> 요구사항 리스트
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+				<a data-widgster="expand" title="Expand" href="#"
+					><i class="glyphicon glyphicon-chevron-up"></i
+				></a>
+				<a data-widgster="collapse" title="Collapse" href="#"
+					><i class="glyphicon glyphicon-chevron-down"></i
+				></a>
+				<a data-widgster="close" title="Close" href="#"
+					><i class="glyphicon glyphicon-remove"></i
+				></a>
+			</div>
+		</header>
+		<div class="body">
+			<blockquote class="font13">상세 보기는 리스트 클릭</blockquote>
+			<div class="row">
+				<div class="col-md-4 well">
+					<legend>Search</legend>
+					<div
+						class="control-group"
+						class="darkBack"
+						style="padding-bottom: 10px; border: 0"
+					>
+						<div
+							class="controls form-group"
+							class="darkBack"
+							style="margin-bottom: 5px !important"
+						>
+							<select
+								id="country"
+								required="required"
+								data-placeholder="Select Product(Service)"
+								class="select-block-level chzn-select"
+								tabindex="-1"
+								name="country"
+								class="darkBack"
+							>
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+					<div
+						class="control-group"
+						class="darkBack"
+						style="padding-bottom: 10px; border: 0"
+					>
+						<div
+							class="controls form-group"
+							class="darkBack"
+							style="margin-bottom: 5px !important"
+						>
+							<select
+								multiple="multiple"
+								id="multiVersion"
+								class="multiple-select btn-block darkBack"
+								placeholder="&nbsp;&nbsp;Select Version"
+							></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 well">
+					<legend>Filter</legend>
+					<div
+						class="control-group"
+						class="darkBack"
+						style="padding-bottom: 10px; border: 0"
+					>
+						<div class="checkbox">
+							<input id="checkbox1" type="checkbox" data-check-all="" />
+							<label for="checkbox1">disable 된 요구사항 필터</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 well">
+					<legend>Export</legend>
+					<div
+						class="control-group"
+						class="darkBack"
+						style="padding-bottom: 10px; border: 0"
+					>
+						<div id="filterTopCriteria">
+							<button
+								id="copychecker"
+								type="button"
+								class="btn btn-danger"
+								data-placement="top"
+								data-original-title=".btn .btn-danger"
+							>
+								copy
+							</button>
+							<button
+								id="csvchecker"
+								type="button"
+								class="btn btn-danger"
+								data-placement="top"
+								data-original-title=".btn .btn-danger"
+							>
+								csv
+							</button>
+							<button
+								id="excelhecker"
+								type="button"
+								class="btn btn-danger"
+								data-placement="top"
+								data-original-title=".btn .btn-danger"
+							>
+								excel
+							</button>
+							<button
+								id="pdfchecker"
+								type="button"
+								class="btn btn-danger"
+								data-placement="top"
+								data-original-title=".btn .btn-danger"
+							>
+								pdf
+							</button>
+							<button
+								id="printchecker"
+								type="button"
+								class="btn btn-danger"
+								data-placement="top"
+								data-original-title=".btn .btn-danger"
+							>
+								print
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="progress progress-xs mt-xs mb-0 active">
+				<div class="progress-bar progress-bar-striped" style="width: 100%"></div>
+			</div>
+			<div
+				class="box box-primary"
+				style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important"
+			>
+				<div class="box-body">
+					<table
+						id="reqStatusTable"
+						class="display responsive no-wrap"
+						cellspacing="0"
+					></table>
+				</div>
+			</div>
+		</div>
+	</section>
 </div>
-
-
 
 <div
-        id="myModal1"
-        class="modal fade"
-        role="dialog"
-        aria-labelledby="myModalLabel"
-        aria-hidden="true"
-        style="display: none"
+	id="myModal1"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="myModalLabel"
+	aria-hidden="true"
+	style="display: none"
 >
-    <div class="modal-dialog" style="width: 90%; height: 70%">
-        <div class="modal-content modalDarkBack">
-            <div class="modal-header" style="padding: 0px; border-bottom: 0px">
-                <button
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-hidden="true"
-                        style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
-                >
-                    ×
-                </button>
-                <h4
-                        class="modal-title font14"
-                        id="myModalLabel1"
-                        style="color: #f8f8f8; text-align: left; padding: 5px"
-                >
-                    <span class="font13" style="font-weight: bold">
-                        <i class="fa fa-edit"></i> 신규 요구사항 등록 팝업
-                    </span>
-                    <section class="search-result" style="border-left: 5px solid #e5603b">
-                        <p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
-                            a-RMS에 신규 요구사항을 등록합니다.
-                        </p>
-                    </section>
-                </h4>
-            </div>
-            <div class="modal-body" style="padding: 5px">
-                <form class="form-horizontal" method="post">
-                    <fieldset>
-                        <div class="control-group col-sm-12">
-                            <div class="controls form-group  col-sm-1">
-                                &nbsp;
-                            </div>
-                            <label for="title" class="control-label" style="color: #f8f8f8;">반영 제품(서비스) <span class="required">*</span>
-                                <span class="input-group-addon" style="display: inline !important;">
-                                    <i class="glyphicon glyphicon-gift"></i>
-                                </span>
-                            </label>
-                            <div class="controls form-group  col-sm-8">
-                                <input type="text" id="disabled-input-pdservice" class="form-control" disabled="disabled" value="">
-                            </div>
-                        </div>
-                        <div class="control-group col-sm-12">
-                            <div class="controls form-group  col-sm-1">
-                                &nbsp;
-                            </div>
-                            <label for="title" class="control-label" style="color: #f8f8f8;">반영 버전 <span class="required">*</span>
-                                <span class="input-group-addon" style="display: inline !important;">
-                                    <i class="glyphicon glyphicon-gift"></i>
-                                </span></label>
-                            <div class="controls form-group  col-sm-8">
-                                <select multiple="multiple" id="popup-version" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="controls form-group  col-sm-1">
-                                &nbsp;
-                            </div>
-                            <label class="control-label" for="editView-req-reviewers" style="color: #f8f8f8;">
-                                반영 리뷰어 &nbsp;
-                                <span class="required">*</span>
-                            </label>
-                            <div class="controls form-group" style="margin-bottom: 10px;">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                    <select id="popup-pdService-reviewers" class="js-data-example-ajax form-control font13 darkBack"
-                                            name="selectedReviewers[]" multiple="multiple" style="width: 100%;"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group col-sm-12">
-                            <div class="controls form-group  col-sm-1">
-                                &nbsp;
-                            </div>
-                            <label class="control-label" style="color: #f8f8f8;">
-                                요구사항 우선순위
-                                <span class="required">*</span>
-                                <span class="input-group-addon" style="display: inline !important;">
-                                    <i class="glyphicon glyphicon-gift"></i>
-                                </span>
-                            </label>
-                            <div class="controls form-group col-sm-8">
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-warning">
-                                        <input type="radio" name="options" id="option1"> 낮음
-                                    </label>
-                                    <label class="btn btn-warning">
-                                        <input type="radio" name="options" id="option2"> 중간
-                                    </label>
-                                    <label class="btn btn-warning">
-                                        <input type="radio" name="options" id="option3"> 높음
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group col-sm-12">
-                            <div class="controls form-group  col-sm-1">
-                                &nbsp;
-                            </div>
-                            <label for="req-title" class="control-label" style="color: #f8f8f8;">요구사항 제목 <span class="required">*</span>
-                                <span class="input-group-addon" style="display: inline !important;">
-                                    <i class="glyphicon glyphicon-gift"></i>
-                                </span></label>
-                            <div class="controls form-group  col-sm-8">
-                                <input type="text" id="req-title" name="title" class="form-control parsley-validated" required="required">
-                            </div>
-                        </div>
-                        <div class="control-group col-sm-12">
-                            <div class="controls form-group  col-sm-1">
-                                &nbsp;
-                            </div>
-                            <label for="modalEditor" class="control-label" style="color: #f8f8f8;">요구사항 내용 <span class="required">*</span>
-                                <span class="input-group-addon" style="display: inline !important;">
-                                    <i class="glyphicon glyphicon-gift"></i>
-                                </span></label>
-                            <div class="controls form-group  col-sm-12">
-                                <div id="modalEditor" class="darkBack">
-                                    <p>요구사항 내용을 기록합니다.</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="modal-footer" style="
-                 background-color: transparent;
-                 padding: 5px;
-                 text-align: right;
-                 border-top: 0px;">
-                <button type="button" id="close-req" class="btn btn-default" data-dismiss="modal">
-                    Close
-                </button>
-                <button type="button" id="save-req" class="btn btn-success">
-                    신규 요구사항 저장
-                </button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+	<div class="modal-dialog" style="width: 90%; height: 70%">
+		<div class="modal-content modalDarkBack">
+			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
+				<button
+					type="button"
+					class="close"
+					data-dismiss="modal"
+					aria-hidden="true"
+					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
+				>
+					×
+				</button>
+				<h4
+					class="modal-title font14"
+					id="myModalLabel1"
+					style="color: #f8f8f8; text-align: left; padding: 5px"
+				>
+					<span class="font13" style="font-weight: bold">
+						<i class="fa fa-edit"></i> 신규 요구사항 등록 팝업
+					</span>
+					<section class="search-result" style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
+							a-RMS에 신규 요구사항을 등록합니다.
+						</p>
+					</section>
+				</h4>
+			</div>
+			<div class="modal-body" style="padding: 5px">
+				<form class="form-horizontal" method="post">
+					<fieldset>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label for="title" class="control-label" style="color: #f8f8f8"
+								>반영 제품(서비스) <span class="required">*</span>
+								<span class="input-group-addon" style="display: inline !important">
+									<i class="glyphicon glyphicon-gift"></i>
+								</span>
+							</label>
+							<div class="controls form-group col-sm-8">
+								<input
+									type="text"
+									id="disabled-input-pdservice"
+									class="form-control"
+									disabled="disabled"
+									value=""
+								/>
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label for="title" class="control-label" style="color: #f8f8f8"
+								>반영 버전 <span class="required">*</span>
+								<span class="input-group-addon" style="display: inline !important">
+									<i class="glyphicon glyphicon-gift"></i> </span
+							></label>
+							<div class="controls form-group col-sm-8">
+								<select
+									multiple="multiple"
+									id="popup-version"
+									class="multiple-select btn-block darkBack"
+									placeholder="&nbsp;&nbsp;Select Version"
+								></select>
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label
+								class="control-label"
+								for="editView-req-reviewers"
+								style="color: #f8f8f8"
+							>
+								반영 리뷰어 &nbsp;
+								<span class="required">*</span>
+							</label>
+							<div class="controls form-group" style="margin-bottom: 10px">
+								<div class="input-group">
+									<span class="input-group-addon"
+										><i class="glyphicon glyphicon-gift"></i
+									></span>
+									<select
+										id="popup-pdService-reviewers"
+										class="js-data-example-ajax form-control font13 darkBack"
+										name="selectedReviewers[]"
+										multiple="multiple"
+										style="width: 100%"
+									></select>
+								</div>
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label class="control-label" style="color: #f8f8f8">
+								요구사항 우선순위
+								<span class="required">*</span>
+								<span class="input-group-addon" style="display: inline !important">
+									<i class="glyphicon glyphicon-gift"></i>
+								</span>
+							</label>
+							<div class="controls form-group col-sm-8">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-warning">
+										<input type="radio" name="options" id="option1" /> 낮음
+									</label>
+									<label class="btn btn-warning">
+										<input type="radio" name="options" id="option2" /> 중간
+									</label>
+									<label class="btn btn-warning">
+										<input type="radio" name="options" id="option3" /> 높음
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label for="req-title" class="control-label" style="color: #f8f8f8"
+								>요구사항 제목 <span class="required">*</span>
+								<span class="input-group-addon" style="display: inline !important">
+									<i class="glyphicon glyphicon-gift"></i> </span
+							></label>
+							<div class="controls form-group col-sm-8">
+								<input
+									type="text"
+									id="req-title"
+									name="title"
+									class="form-control parsley-validated"
+									required="required"
+								/>
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label for="modalEditor" class="control-label" style="color: #f8f8f8"
+								>요구사항 내용 <span class="required">*</span>
+								<span class="input-group-addon" style="display: inline !important">
+									<i class="glyphicon glyphicon-gift"></i> </span
+							></label>
+							<div class="controls form-group col-sm-12">
+								<div id="modalEditor" class="darkBack">
+									<p>요구사항 내용을 기록합니다.</p>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+				class="modal-footer"
+				style="
+					background-color: transparent;
+					padding: 5px;
+					text-align: right;
+					border-top: 0px;
+				"
+			>
+				<button
+					type="button"
+					id="close-req"
+					class="btn btn-default"
+					data-dismiss="modal"
+				>
+					Close
+				</button>
+				<button type="button" id="save-req" class="btn btn-success">
+					신규 요구사항 저장
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
 </div>
-
 
 <!-- page specific application css/js -->
 <style type="text/css">
-    .modalDarkBack{
-        background: rgb(51 51 51 / 94%) !important;
-        border: 1px solid rgb(51 51 51) !important;
-    }
+	.modalDarkBack {
+		background: rgb(51 51 51 / 94%) !important;
+		border: 1px solid rgb(51 51 51) !important;
+	}
 
-    .well {
-        min-height: 20px;
-        padding: 19px;
-        height: 160px !important;
-        margin-bottom: 20px;
-        background-color: rgba(51, 51, 51, 0.3);
-        border: 1px solid transparent;
-        border-radius: 3px;
-        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
-        box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
-    }
+	.well {
+		min-height: 20px;
+		padding: 19px;
+		height: 160px !important;
+		margin-bottom: 20px;
+		background-color: rgba(51, 51, 51, 0.3);
+		border: 1px solid transparent;
+		border-radius: 3px;
+		-webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+		box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+	}
 
-    .btn {
-        display: inline-block;
-        margin-bottom: 4px !important;
-        font-weight: 300;
-        text-align: center;
-        vertical-align: middle;
-        touch-action: manipulation;
-        cursor: pointer;
-        background-image: none;
-        border: 1px solid transparent;
-        white-space: nowrap;
-        padding: 5px 12px;
-        font-size: 13px;
-        line-height: 1.428571429;
-        border-radius: 3px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
+	.btn {
+		display: inline-block;
+		margin-bottom: 4px !important;
+		font-weight: 300;
+		text-align: center;
+		vertical-align: middle;
+		touch-action: manipulation;
+		cursor: pointer;
+		background-image: none;
+		border: 1px solid transparent;
+		white-space: nowrap;
+		padding: 5px 12px;
+		font-size: 13px;
+		line-height: 1.428571429;
+		border-radius: 3px;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
 
-    legend {
-        display: block;
-        width: 100%;
-        padding: 0;
-        margin-bottom: 18px;
-        font-size: 14px !important;
-        line-height: inherit;
-        color: #ffffff;
-        border: 0;
-        border-bottom: 1px dashed #e5e5e5 !important;
-    }
+	legend {
+		display: block;
+		width: 100%;
+		padding: 0;
+		margin-bottom: 18px;
+		font-size: 14px !important;
+		line-height: inherit;
+		color: #ffffff;
+		border: 0;
+		border-bottom: 1px dashed #e5e5e5 !important;
+	}
 
-    .btn-transparent.active {
-        color: white;
-        background: rgba(51, 51, 51, 0.55);
-        color: #ffffff;
-        background-color: #e5603b;
-        border-color: rgba(0, 0, 0, 0.15);
-    }
-    .btn:focus, .btn.focus, .btn:active:focus, .btn:active.focus, .btn.active:focus, .btn.active.focus {
-        outline: 0px auto -webkit-focus-ring-color;
-        outline-offset: -2px;
-    }
+	.btn-transparent.active {
+		color: white;
+		background: rgba(51, 51, 51, 0.55);
+		color: #ffffff;
+		background-color: #e5603b;
+		border-color: rgba(0, 0, 0, 0.15);
+	}
+	.btn:focus,
+	.btn.focus,
+	.btn:active:focus,
+	.btn:active.focus,
+	.btn.active:focus,
+	.btn.active.focus {
+		outline: 0px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
 </style>
 <script type="text/javascript" charset="utf-8">
-    //<![CDATA[
+	//<![CDATA[
 
-    // 초기 개발 및 확인 용도
-    $(function () {
+	// 초기 개발 및 확인 용도
+	$(function () {});
 
-
-    });
-
-
-    //]]>
+	//]]>
 </script>
-<script type="text/javascript" src='js/reqStatus.js' charset="utf-8"></script>
+<script type="text/javascript" src="js/reqStatus.js" charset="utf-8"></script>
