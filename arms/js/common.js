@@ -825,7 +825,7 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 		order: orderList,
 		buttons: buttonList,
 		language: {
-			processing: '<img src="./img/earth.gif" height="90px" width="90px"> '
+			processing: '<img src="./img/Curve-Loading.gif" width="300px" height="200px">'
 		},
 		drawCallback: function() {
 			console.log("dataTableBuild :: drawCallback");

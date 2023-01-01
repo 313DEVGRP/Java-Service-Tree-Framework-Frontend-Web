@@ -530,7 +530,9 @@ function pdServiceDataTableClick(c_id) {
 		});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 신규 제품(서비스) 등록 버튼
+////////////////////////////////////////////////////////////////////////////////////////
 $("#regist-pdService").click(function () {
 	var reviewers01 = "none";
 	var reviewers02 = "none";
@@ -576,7 +578,22 @@ $("#regist-pdService").click(function () {
 				dataTableRef.ajax.reload();
 			},
 		},
-	});
+		success:function(res){
+	},
+ beforeSend:function(){
+		$("#regist-pdService").hide();
+		$('.loader').removeClass('hide');
+	},
+ complete:function(){
+	},
+ error:function(e){
+	}
+	}).done(function(data) {
+	}).fail(function(e) {
+	}).always(function() {
+		$('.loader').addClass('hide');
+		$("#regist-pdService").show();
+	});;
 });
 
 // 신규 제품(서비스) 삭제 버튼
