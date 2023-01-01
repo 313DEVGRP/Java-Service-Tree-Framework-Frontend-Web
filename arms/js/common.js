@@ -825,7 +825,8 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 		order: orderList,
 		buttons: buttonList,
 		language: {
-			processing: '<img src="./img/Curve-Loading.gif" width="300px" height="200px">'
+			processing: '',
+			loadingRecords: '<span class="spinner" style="font-size: 14px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>'
 		},
 		drawCallback: function() {
 			console.log("dataTableBuild :: drawCallback");
