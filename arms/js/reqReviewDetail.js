@@ -285,27 +285,27 @@ function getReqAdd() {
 								<span class="history-profile--name"><i class="fa fa-sliders"></i> 리뷰어의 리뷰상황</span>
 							</li>
 							<li class="history-profile">
-								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--image"><i class="fa fa-user"></i></span>
 								<span class="history-profile--name">${getStrLimit(json.c_reviewer01,30)}</span>
 								${historyReviewerStatus(json.c_reviewer01_status)}
 							</li>
 							<li class="history-profile">
-								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--image"><i class="fa fa-user"></i></span>
 								<span class="history-profile--name">${getStrLimit(json.c_reviewer02,30)}</span>
 								${historyReviewerStatus(json.c_reviewer02_status)}
 							</li>
 							<li class="history-profile">
-								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--image"><i class="fa fa-user"></i></span>
 								<span class="history-profile--name">${getStrLimit(json.c_reviewer03,30)}</span>
 								${historyReviewerStatus(json.c_reviewer03_status)}
 							</li>
 							<li class="history-profile">
-								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--image"><i class="fa fa-user"></i></span>
 								<span class="history-profile--name">${getStrLimit(json.c_reviewer04,30)}</span>
 								${historyReviewerStatus(json.c_reviewer04_status)}
 							</li>
 							<li class="history-profile">
-								<span class="history-profile--image"><img src="../reference/light-blue/img/13.jpg" /></span>
+								<span class="history-profile--image"><i class="fa fa-user"></i></span>
 								<span class="history-profile--name">${getStrLimit(json.c_reviewer05,30)}</span>
 								${historyReviewerStatus(json.c_reviewer05_status)}
 							</li>
