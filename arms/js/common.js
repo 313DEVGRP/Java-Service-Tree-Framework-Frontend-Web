@@ -216,7 +216,7 @@ const ajaxGet = (url) =>
 
 
 // --- 왼쪽 사이드 메뉴 설정 --- //
-function setSideMenu( categoryName, listName, collapse = "product-elements-collapse") {
+function setSideMenu( categoryName, listName, collapse) {
 	console.log("setSideMenu :: categoryName -> " + categoryName + ", listName -> " + listName);
 	setTimeout(function () {
 		$(`#${categoryName}`).css({ color: "lightblue" });

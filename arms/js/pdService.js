@@ -14,7 +14,7 @@ var dataTableRef; // 데이터테이블 참조 변수
 function execArmsDocReady () {
 
 	// 사이드 메뉴 색상 설정
-	setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
+	setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage", "product-elements-collapse");
 
 	// 파일 업로드 관련 레이어 숨김 처리
 	$('.body-middle').hide();
@@ -22,12 +22,16 @@ function execArmsDocReady () {
 	// 데이터 테이블 로드 함수
 	dataTableLoad();
 
+	// --- 에디터 설정 --- //
+	CKEDITOR.replace("input_pdservice_editor");
+	CKEDITOR.replace("extendModalEditor");
+	CKEDITOR.replace("modal-editor");
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //탭 클릭 이벤트 처리
 ////////////////////////////////////////////////////////////////////////////////////////
-// 탭 클릭 이벤트
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	var target = $(e.target).attr("href"); // activated tab
 
@@ -41,11 +45,6 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		}
 	}
 });
-
-// --- 에디터 설정 --- //
-CKEDITOR.replace("input_pdservice_editor");
-CKEDITOR.replace("extendModalEditor");
-CKEDITOR.replace("modal-editor");
 
 // --- 팝업 띄울때 사이즈 조정 -- //
 $("#modalPopupId").click(function () {
@@ -163,7 +162,9 @@ $("#extendModalPopupId").click(function () {
 
 });
 
+////////////////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 $(".js-data-example-ajax").select2({
 	maximumSelectionLength: 5,
 	width: 'resolve',
@@ -251,8 +252,9 @@ $('#editView-pdService-reviewers').on('select2:select', function (e) {
 });
 
 
-
-/** file upload **/
+////////////////////////////////////////////////////////////////////////////////////////
+// --- file upload --- //
+////////////////////////////////////////////////////////////////////////////////////////
 $(function () {
 	'use strict';
 
@@ -300,7 +302,9 @@ $('#fileupload').bind('fileuploadsubmit', function (e, data) {
 	}
 });
 
+////////////////////////////////////////////////////////////////////////////////////////
 // --- 데이터 테이블 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 function dataTableLoad() {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
@@ -364,6 +368,11 @@ function dataTableClick(selectedData) {
 	}).done(function (result) {
 		$(this).fileupload('option', 'done').call(this, null, { result: result });
 	});
+
+}
+
+//데이터 테이블 ajax load 이후 콜백.
+function dataTableCallBack(){
 
 }
 
@@ -596,7 +605,9 @@ $("#regist-pdService").click(function () {
 	});;
 });
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 신규 제품(서비스) 삭제 버튼
+////////////////////////////////////////////////////////////////////////////////////////
 $("#delete-pdService").click(function () {
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/removeNode.do",
@@ -616,7 +627,9 @@ $("#delete-pdService").click(function () {
 	});
 });
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 제품(서비스) 변경 저장 버튼
+////////////////////////////////////////////////////////////////////////////////////////
 $("#pdServiceUpdate").click(function () {
 
 	var owner = "none";
@@ -668,7 +681,9 @@ $("#pdServiceUpdate").click(function () {
 });
 
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 팝업에서 제품(서비스) 변경 저장 버튼
+////////////////////////////////////////////////////////////////////////////////////////
 $("#extendUpdate-pdService").click(function () {
 
 	var owner = "none";
@@ -743,8 +758,3 @@ $("#extendUpdate-pdService").click(function () {
 		},
 	});
 });
-
-//데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(){
-
-}
