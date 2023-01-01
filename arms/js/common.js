@@ -786,3 +786,91 @@ var isEmpty = function(value){
 		return false
 	}
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//데이터 테이블
+////////////////////////////////////////////////////////////////////////////////////////
+// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
+function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList) {
+
+	var jQueryElementID = jquerySelector; //"#reqStatusTable";
+	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+	var jQueryElementStr = jQueryElementID.replace(reg,'');
+	console.log("jQueryElementStr ======== " + jQueryElementStr );
+	console.log("dataTableBuild :: jQueryElementID -> " + jQueryElementID);
+	console.log("dataTableBuild :: columnList -> " + columnList);
+	console.log("dataTableBuild :: rowsGroupList -> " + rowsGroupList);
+
+	console.log("dataTableBuild :: href: " + $(location).attr("href"));
+	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
+	console.log("dataTableBuild :: host: " + $(location).attr("host"));
+	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
+	console.log("dataTableBuild :: search: " + $(location).attr("search"));
+	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
+	console.log("dataTableBuild :: port: " + $(location).attr("port"));
+
+	var tempDataTable = $(jQueryElementID).DataTable({
+		ajax: {
+			url: ajaxUrl,
+			dataSrc: ''
+		},
+		destroy: true,
+		processing: true,
+		responsive: false,
+		columns: columnList,
+		rowsGroup: rowsGroupList,
+		columnDefs: columnDefList,
+		select: selectList,
+		order: orderList,
+		buttons: buttonList,
+		language: {
+			processing: '<img src="./img/earth.gif" height="90px" width="90px"> '
+		},
+		drawCallback: function() {
+			console.log("dataTableBuild :: drawCallback");
+			if ($.isFunction(dataTableCallBack )) {
+				//데이터 테이블 그리고 난 후 시퀀스 이벤트
+				dataTableCallBack();
+			}
+		}
+	});
+
+	$(jQueryElementID + " tbody").on("click", "tr", function () {
+
+		if ($(this).hasClass("selected")) {
+			$(this).removeClass("selected");
+		} else {
+			tempDataTable.$("tr.selected").removeClass("selected");
+			$(this).addClass("selected");
+		}
+
+		var selectedData = tempDataTable.row(this).data();
+		selectedData.selectedIndex = $(this).closest('tr').index();
+
+		var info = tempDataTable.page.info();
+		console.log( 'Show page: '+info.page+' of '+info.pages );
+		selectedData.selectedPage = info.page;
+
+		dataTableClick(selectedData);
+	});
+
+	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
+	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
+	//min-height: 30px;
+
+	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$("body").find("[aria-controls='" + jQueryElementStr + "']").css("width", "100px");
+	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
+
+	$.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) {
+		console.log(message);
+		jError("Notification : <strong>Ajax Error</strong>, retry plz !");
+	};
+
+	return tempDataTable;
+}
+// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
