@@ -16,7 +16,7 @@ $(function () {
 	authUserCheck();
 
 	/* include 레이아웃 html 파일을 로드하는 함수 */
-	includeLayout();
+	//includeLayout();
 
 	/* 맨위로 아이콘 */
 	rightBottomTopForwardIcon();
@@ -113,10 +113,6 @@ function getUserInfo() {
 					console.log("authUserCheck :: userGroups = " + userGroups);
 					console.log("authUserCheck :: userID = " + userID);
 					console.log("authUserCheck :: userRealmRoles = " + userRealmRoles);
-
-					if ($.isFunction(execArmsDocReady)) {
-						execArmsDocReady();
-					}
 
 				}
 			},
@@ -875,3 +871,47 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 	return tempDataTable;
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
+
+////////////////////////////////////////////////////////////////////////////////////////
+//공통 AJAX
+////////////////////////////////////////////////////////////////////////////////////////
+function ajax_build(ajaxUrl, ajaxType, ajaxSendData, funcDone, funcBefor, funcAlways) {
+
+	$.ajax({
+		url: ajaxUrl,
+		type: ajaxType,
+		data: ajaxSendData,
+		statusCode: {
+			200: function () {
+				console.log("ajax_build :: url = " + ajaxUrl);
+			},
+			401: function (n) {
+				location.href = "/sso/login";
+			},
+			403: function (n) {
+				console.log("403 return");
+			},
+		},
+		success:function(res){
+
+		},
+		beforeSend:function(){
+
+			$('.loader').removeClass('hide');
+			funcBefor();
+
+		},
+		complete:function(){
+		},
+		error:function(e){
+		}
+	}).done(function(data) {
+		funcDone(data);
+	}).fail(function(e) {
+
+	}).always(function() {
+		$('.loader').addClass('hide');
+		funcAlways();
+	});
+
+}

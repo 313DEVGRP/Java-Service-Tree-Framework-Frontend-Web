@@ -388,6 +388,11 @@ function pdServiceDataTableClick(c_id) {
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
 		method: "GET", // HTTP 요청 메소드(GET, POST 등)
 		dataType: "json", // 서버에서 보내줄 데이터의 타입
+		beforeSend:function(){
+
+			$('.loader').removeClass('hide');
+
+		},
 	})
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
@@ -536,6 +541,7 @@ function pdServiceDataTableClick(c_id) {
 		//
 		.always(function (xhr, status) {
 			console.log(xhr + status);
+			$('.loader').addClass('hide');
 		});
 }
 
