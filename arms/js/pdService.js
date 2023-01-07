@@ -358,6 +358,7 @@ function dataTableClick(selectedData) {
 	// Load existing files:
 	var $fileupload = $('#fileupload');
 	// Load existing files:
+
 	$.ajax({
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},

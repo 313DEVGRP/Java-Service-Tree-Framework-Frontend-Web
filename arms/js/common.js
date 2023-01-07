@@ -4,7 +4,7 @@
 
 $(function () {
 
-// Page load & 상단 페이지 로드 프로그래스바
+	// Page load & 상단 페이지 로드 프로그래스바
 	topbarConfig();
 	topbar.show();
 	setTimeout(function () {
@@ -15,16 +15,15 @@ $(function () {
 	/* 로그인 인증 여부 체크 함수 */
 	authUserCheck();
 
-	/* include 레이아웃 html 파일을 로드하는 함수 */
-	//includeLayout();
-
 	/* 맨위로 아이콘 */
 	rightBottomTopForwardIcon();
+
+	ajax_setup();
 
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//Common Variable
+//인증관련 공통 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 var userName;
 var userApplicationRoles;
@@ -35,7 +34,9 @@ var userID;
 var userRealmRoles;
 var permissions;
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 상단 페이지 로드 프로그래스바 설정
+////////////////////////////////////////////////////////////////////////////////////////
 function topbarConfig() {
 	topbar.config({
 		autoRun: true,
@@ -53,8 +54,9 @@ function topbarConfig() {
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////
 // 맨위로 아이콘
+////////////////////////////////////////////////////////////////////////////////////////
 function rightBottomTopForwardIcon(){
 	$("#topicon").click(function () {
 		$("html, body").animate({ scrollTop: 0 }, 400);
@@ -62,7 +64,9 @@ function rightBottomTopForwardIcon(){
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 로그인 인증 여부 체크 함수
+////////////////////////////////////////////////////////////////////////////////////////
 function authUserCheck() {
 	$.ajax({
 		url: "/auth-check" + "/identity",
@@ -85,6 +89,9 @@ function authUserCheck() {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+// 사용자 정보 로드 함수
+////////////////////////////////////////////////////////////////////////////////////////
 function getUserInfo() {
 	$.ajax({
 		url: "/auth-check/getUsers/"+userName,
@@ -120,36 +127,12 @@ function getUserInfo() {
 				location.href = "/sso/login";
 			},
 		},
-	}).done(function(data) {
-
-		// for(var key in data){
-		// 	var value = data[key];
-		// 	console.log(key + "=" + value);
-		// }
-		//
-		// var loopCount = 3;
-		// for (var i = 0; i < loopCount ; i++) {
-		// 	console.log( "loop check i = " + i );
-		// }
-
-	}).fail(function(e) {
-	}).always(function() {
 	});
 }
 
-// include 레이아웃 html 파일을 로드하는 함수
-function includeLayout() {
-	var includeArea = $("[data-include]");
-	var self, url;
-	$.each(includeArea, function () {
-		self = $(this);
-		url = self.data("include");
-		self.load(url, function () {
-			self.removeAttr("data-include");
-		});
-	});
-}
-
+////////////////////////////////////////////////////////////////////////////////////////
+// 유틸 : 말줄임표
+////////////////////////////////////////////////////////////////////////////////////////
 function getStrLimit(inputStr, limitCnt){
 	if(isEmpty(inputStr)){
 		return "";
@@ -160,13 +143,9 @@ function getStrLimit(inputStr, limitCnt){
 	}
 }
 
-//서버 바인딩 할 수가 없어서 프로토타입 목적으로 json 을 만들어서 로드하는 함수
-const getJsonForPrototype = function (url, bindTemplate) {
-	ajaxGet(url).then(function (data) {
-		bindTemplate(data);
-	});
-};
-
+////////////////////////////////////////////////////////////////////////////////////////
+// 유틸 : 타임스탭프 - 날짜 포맷터
+////////////////////////////////////////////////////////////////////////////////////////
 function dateFormat(timestamp) {
 	var d = new Date(timestamp ), // Convert the passed timestamp to milliseconds
 		yyyy = d.getFullYear(),
@@ -194,24 +173,9 @@ function dateFormat(timestamp) {
 	return time;
 }
 
-const ajaxGet = (url) =>
-	$.ajax({
-		url,
-		type: "GET",
-		timeout: 7313,
-		global: false,
-		statusCode: {
-			200: function (data) {
-				return data.responseJSON;
-			},
-			401: function (n) {
-				location.href = "/sso/login";
-			},
-		},
-	});
-
-
+////////////////////////////////////////////////////////////////////////////////////////
 // --- 왼쪽 사이드 메뉴 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 function setSideMenu( categoryName, listName, collapse) {
 	console.log("setSideMenu :: categoryName -> " + categoryName + ", listName -> " + listName);
 	setTimeout(function () {
@@ -225,134 +189,9 @@ function setSideMenu( categoryName, listName, collapse) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// buildDataTables
-///////////////////////////////////////////////////////////////////////////////
-
-
-// --- 데이터 테이블 설정 ( 곧 삭제 대상 ) --- //
-function setTable(tableDataUrl, dataList, options = null, selectedView = null) {
-	jstreeDataTableReload(tableDataUrl, dataList, options, selectedView);
-
-	//datatable 좌상단 datarow combobox style
-	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
-	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-}
-
-// --- 데이터 테이블 설정 ( 곧 삭제 대상 ) --- //
-function jstreeDataTableReload(tableDataUrl, dataList, options, selectedView) {
-	console.log("href: " + $(location).attr("href"));
-	console.log("protocol: " + $(location).attr("protocol"));
-	console.log("host: " + $(location).attr("host"));
-	console.log("pathname: " + $(location).attr("pathname"));
-	console.log("search: " + $(location).attr("search"));
-	console.log("hostname: " + $(location).attr("hostname"));
-	console.log("port: " + $(location).attr("port"));
-
-	var isDevelopingToRoute = "/auth-user";
-	var tableOptions = options
-		? options
-		: {
-				ajax: {
-					url: isDevelopingToRoute + tableDataUrl,
-					dataSrc: "",
-				},
-				destroy: true,
-				processing: true,
-				responsive: true,
-				select: true,
-				columns: dataList,
-		  };
-
-	var tempDataTable = $("#jstreeTable").DataTable({
-		...tableOptions,
-	});
-
-	$("#jstreeTable tbody").on("click", "tr", function () {
-		var data = tempDataTable.row(this).data();
-		console.log(data);
-		//alert( 'You clicked on '+ data.c_title +'\'s row' );
-	});
-
-	$("#jstreeTable").css("width", "100%");
-
-	selectedView &&
-		$("#selectView").click(function () {
-			var selectedItem = tempDataTable.rows(".selected").data()[0].c_id;
-			console.log(selectedItem);
-			location.href = `${selectedView}.html?c_id=${selectedItem}`;
-		});
-}
-
-// --- dataTable build 설정 --- //
-function dataTableBuild(jQueryElementID, serviceNameForURL, endPointUrl="/getMonitor.do", columnList, rowsGroupList = null){
-
-	console.log("dataTableBuild :: jQueryElementID -> " + jQueryElementID + ", serviceNameForURL -> " + serviceNameForURL);
-	console.log("dataTableBuild :: columnList -> " + columnList + ", rowsGroupList -> " + rowsGroupList);
-
-	console.log("dataTableBuild :: href: " + $(location).attr("href"));
-	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
-	console.log("dataTableBuild :: host: " + $(location).attr("host"));
-	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
-	console.log("dataTableBuild :: search: " + $(location).attr("search"));
-	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
-	console.log("dataTableBuild :: port: " + $(location).attr("port"));
-
-	var authCheckURL = "/auth-user";
-
-	var tempDataTable = $(jQueryElementID).DataTable({
-		ajax: {
-			url: authCheckURL + "/api/arms/" + serviceNameForURL + endPointUrl,
-			dataSrc: "",
-		},
-		destroy: true,
-		processing: true,
-		responsive: false,
-		columns: columnList,
-		rowsGroup: rowsGroupList,
-		columnDefs: [
-			{
-				targets: -1,
-				className: "dt-body-left",
-			},
-		],
-		drawCallback: function() {
-			console.log("dataTableBuild :: drawCallback");
-			if ($.isFunction(dataTableCallBack )) {
-				dataTableCallBack();
-			}
-		}
-	});
-
-	$(jQueryElementID + " tbody").on("click", "tr", function () {
-
-		if ($(this).hasClass("selected")) {
-			$(this).removeClass("selected");
-		} else {
-			tempDataTable.$("tr.selected").removeClass("selected");
-			$(this).addClass("selected");
-		}
-
-		var selectedData = tempDataTable.row(this).data();
-		selectedData.selectedIndex = $(this).closest('tr').index();
-
-		var info = tempDataTable.page.info();
-		console.log( 'Showing page: '+info.page+' of '+info.pages );
-		selectedData.selectedPage = info.page;
-
-		dataTableClick(selectedData);
-	});
-
-	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
-	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-	//min-height: 30px;
-
-	return tempDataTable;
-}
-
-// --- jstree build 설정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
+// -- jstree build 설정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
 function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 
 	console.log("jsTreeBuild :: jQueryElementID -> " + jQueryElementID + ", serviceNameForURL -> "+ serviceNameForURL);
@@ -774,12 +613,14 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // UTIL : 널 체크
+////////////////////////////////////////////////////////////////////////////////////////
 var isEmpty = function(value){
 	if( value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) ){
-		return true
+		return true;
 	}else{
-		return false
+		return false;
 	}
 };
 
@@ -873,18 +714,12 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//공통 AJAX
+//공통 AJAX setup 처리
 ////////////////////////////////////////////////////////////////////////////////////////
-function ajax_build(ajaxUrl, ajaxType, ajaxSendData, funcDone, funcBefor, funcAlways) {
+function ajax_setup() {
 
-	$.ajax({
-		url: ajaxUrl,
-		type: ajaxType,
-		data: ajaxSendData,
+	$.ajaxSetup({
 		statusCode: {
-			200: function () {
-				console.log("ajax_build :: url = " + ajaxUrl);
-			},
 			401: function (n) {
 				location.href = "/sso/login";
 			},
@@ -892,26 +727,16 @@ function ajax_build(ajaxUrl, ajaxType, ajaxSendData, funcDone, funcBefor, funcAl
 				console.log("403 return");
 			},
 		},
-		success:function(res){
-
-		},
-		beforeSend:function(){
-
+		beforeSend:function(xhr){
 			$('.loader').removeClass('hide');
-			funcBefor();
-
 		},
-		complete:function(){
+		complete:function(xhr,status){
+			$('.loader').addClass('hide');
 		},
-		error:function(e){
-		}
-	}).done(function(data) {
-		funcDone(data);
-	}).fail(function(e) {
-
-	}).always(function() {
-		$('.loader').addClass('hide');
-		funcAlways();
+		error:function(xhr,status,error){
+			jError("데이터 처리 중 에러가 발생했습니다.");
+		},
 	});
+
 
 }
