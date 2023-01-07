@@ -1,15 +1,17 @@
-let selectId; // 제품 아이디
-let selectName; // 제품 이름
-let selectVersion; // 선택한 버전 아이디
+////////////////////////////////////////////////////////////////////////////////////////
+//Page 전역 변수
+////////////////////////////////////////////////////////////////////////////////////////
+var selectId; // 제품 아이디
+var selectName; // 제품 이름
+var selectedIndex; // 데이터테이블 선택한 인덱스
+var selectedPage; // 데이터테이블 선택한 인덱스
+var selectVersion; // 선택한 버전 아이디
+var dataTableRef; // 데이터테이블 참조 변수
 
-// --- 에디터 설정 --- //
-CKEDITOR.replace("input_pdservice_editor");
-CKEDITOR.replace("extendModalEditor");
 
-
-
-
-// document ready
+////////////////////////////////////////////////////////////////////////////////////////
+//Document Ready
+////////////////////////////////////////////////////////////////////////////////////////
 function execArmsDocReady() {
 
 	//사이드 메뉴 처리
@@ -20,71 +22,63 @@ function execArmsDocReady() {
 		autoclose: true,
 	});
 
-
-
-
-	// const makeDatePicker = (calender) => {
-
-	// 	const Inputs = $(calender).parent().prev();
-	// 	console.log('ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ호출', Inputs.val())
-
-
-	// 	calender
-	// 		.datepicker({
-	// 			autoclose: true,
-	// 		})
-	// 		.on("changeDate", function (ev) {
-	// 			const Input = $(this).parent().prev();
-	// 			Input.val(calender.data("date"));
-	// 			if (Input.attr("id") === "input_pdservice_start_date") {
-	// 				$("#versionStartDate").text(calender.data("date"));
-	// 			} else if (Input.attr("id") === "input_pdservice_end_date") {
-	// 				$("#versionEndDate").text(calender.data("date"));
-	// 			}
-	// 			calender.datepicker("hide");
-	// 		});
-	// };
-
-	// const $btnCalendar = $("#btn-select-calendar");
-	// const $btnEndCalendar = $("#btn-end-calendar");
-	// const $btnCalendarPopup = $("#btn-select-calendar-popup");
-	// const $btnEndCalendarPopup = $("#btn-end-calendar-popup");
-
-	// makeDatePicker($btnCalendar);
-	// makeDatePicker($btnEndCalendar);
-	// makeDatePicker($btnCalendarPopup);
-	// makeDatePicker($btnEndCalendarPopup);
+	// --- 에디터 설정 --- //
+	CKEDITOR.replace("input_pdservice_editor");
+	CKEDITOR.replace("extendModalEditor");
 
 	makeDatePicker($("#btn-select-calendar"));
 	makeDatePicker($("#btn-end-calendar"));
 	makeDatePicker($("#btn-select-calendar-popup"));
 	makeDatePicker($("#btn-end-calendar-popup"));
 
+	// --- 데이터 테이블 설정 --- //
+	dataTableLoad()
 
+}
 
-};
-
+////////////////////////////////////////////////////////////////////////////////////////
 // --- 데이터 테이블 설정 --- //
-$(function () {
-
+////////////////////////////////////////////////////////////////////////////////////////
+function dataTableLoad() {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
-		{ data: "c_id" },
-		{ data: "c_title" },
+		{ name: "c_id",
+			title: "제품(서비스) 아이디",
+			data: "c_id",
+			visible: false
+		},
+		{
+			name: "c_title",
+			title: "제품(서비스) 이름",
+			data:   "c_title",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					return '<label style="color: #a4c6ff">' + data + '</label>';
+				}
+
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
 	];
 	var rowsGroupList = [];
-	dataTableBuild("#pdserviceTable", "pdService", "/getPdServiceMonitor.do", columnList, rowsGroupList);
+	var columnDefList = [];
+	var selectList = {};
+	var orderList = [[ 1, 'asc' ]];
+	var buttonList = [];
 
-	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$("body").find("[aria-controls='pdserviceTable']").css("width", "100px");
-	$("select[name=pdserviceTable_length]").css("width", "50px");
-});
+	var jquerySelector = "#pdserviceTable";
+	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
+	var jsonRoot = "";
+
+	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+}
 
 //datepicker 만들기
 function makeDatePicker (calender) {
 
-	const Inputs = $(calender).parent().prev().val();
+	var Inputs = $(calender).parent().prev().val();
 	$(calender).attr('data-date', Inputs)
 
 	calender
@@ -93,7 +87,7 @@ function makeDatePicker (calender) {
 		})
 		.datepicker("update", Inputs)
 		.on("changeDate", function (ev) {
-			const Input = $(this).parent().next();
+			var Input = $(this).parent().next();
 			Input.val(calender.data("date"));
 			if (Input.attr("id") === "input_pdservice_start_date") {
 				$("#versionStartDate").text(calender.data("date"));
