@@ -721,9 +721,11 @@ function ajax_setup() {
 	$.ajaxSetup({
 		statusCode: {
 			401: function (n) {
+				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
 				location.href = "/sso/login";
 			},
 			403: function (n) {
+				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
 				console.log("403 return");
 			},
 		},
@@ -765,12 +767,6 @@ function ajax_sample() {
 				//////////////////////////////////////////////////////////
 				jSuccess("신규 제품 등록이 완료 되었습니다.");
 
-			},
-			401: function(n) {
-				location.href = "/sso/login";
-			},
-			403: function(n) {
-				console.log("403 return");
 			},
 		},
 		beforeSend:function(){
