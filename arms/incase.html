@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>Atlassian RMS</title>
+    <title>Atlassian RMS</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -60,10 +60,10 @@
     <link href="../reference/lightblue4/docs/css/application.css" rel="stylesheet">
     <link href="css/override.css" rel="stylesheet">
     <script>
-        /* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
-           chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
-                      https://code.google.com/p/chromium/issues/detail?id=332189
-        */
+					/* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
+                       chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
+                                  https://code.google.com/p/chromium/issues/detail?id=332189
+                    */
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -76,64 +76,69 @@
     <!-- ANALYTICS START -->
     <!-- https://www.google.com/analytics/settings/home?scid=18527803 web log Analyzer  -->
     <script type="text/javascript">
-        //<![CDATA[
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-18527803-1']);
-        _gaq.push(['_trackPageview']);
-        _gaq.push(['_trackPageLoadTime']);
-        (function() {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-        //]]>
+					//<![CDATA[
+					var _gaq = _gaq || [];
+					_gaq.push(['_setAccount', 'UA-18527803-1']);
+					_gaq.push(['_trackPageview']);
+					_gaq.push(['_trackPageLoadTime']);
+					(function() {
+						var ga = document.createElement('script');
+						ga.type = 'text/javascript';
+						ga.async = true;
+						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+						var s = document.getElementsByTagName('script')[0];
+						s.parentNode.insertBefore(ga, s);
+					})();
+					//]]>
     </script>
     <!-- ANALYTICS END -->
     <!-- NAVER ANALYTICS START -->
     <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
     <script type="text/javascript">
-        if (!wcs_add) var wcs_add = {};
-        wcs_add["wa"] = "1244b972beb34c";
-        wcs_do();
+					if (!wcs_add) var wcs_add = {};
+					wcs_add["wa"] = "1244b972beb34c";
+					wcs_do();
     </script>
     <!-- NAVER ANALYTICS END -->
 </head>
 <body>
-    <div class="logo" data-include="html/main/page-logo.html"></div>
 
-    <nav id="sidebar" class="sidebar nav-collapse collapse" data-include="html/main/page-sidebar.html"></nav>
+<div class="wrap">
 
-    <div class="wrap">
+    <div class="logo" data-include="html/template/page-logo.html"></div>
 
-        <header class="page-header" data-include="html/main/page-header.html"></header>
+    <div class="content container">
 
-        <div class="content container">
+        <div class="row" data-include="html/template/content-container.html"></div>
 
-            <section class="widgetheader" data-include="html/wizard/content-header.html"></section>
-
-            <div class="row" data-include="html/wizard/content-container.html"></div>
-
-            <footer class="content-footer pull-right" data-include="html/main/content-footer.html"></footer>
-
-        </div>
-
-        <div class="loader-wrap hiding hide">
-            <i class="fa fa-circle-o-notch fa-spin"></i>
-        </div>
+        <footer class="content-footer pull-right" data-include="html/template/content-footer.html"></footer>
 
     </div>
+
+</div>
+
+<div class="loader animated fadeIn darkBack hide" style="z-index: 999999;">
+        <span class="spinner" style="font-size: 14px !important;">
+            <i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.
+        </span>
+</div>
 
 <div id="topicon" style="opacity: 1;"><img src="./img/topicon.gif" alt="맨위로"></div>
 
 <!-- common libraries. required for every page-->
 <script src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
+<script src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
 <script src="../reference/lightblue4/docs/lib/jquery-pjax/jquery.pjax.js"></script>
 <script src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
 <script src="../reference/lightblue4/docs/lib/widgster/widgster.js"></script>
 <script src="../reference/lightblue4/docs/lib/underscore/underscore.js"></script>
+
+<!-- jquery plugins -->
+<script src="../reference/light-blue/lib/jquery-maskedinput/jquery.maskedinput.js"></script>
+<script src="../reference/light-blue/lib/parsley/parsley.js"> </script>
+<script src="../reference/light-blue/lib/jquery.autogrow-textarea.js"></script>
+<script src="../reference/light-blue/lib/jquery.ui.touch-punch.js"></script>
+<script src="../reference/light-blue/lib/jquery.nestable.js"></script>
 
 <!-- jquery upload plugins -->
 <script src="../reference/light-blue/lib/icheck.js/jquery.icheck.js"></script>
@@ -153,6 +158,7 @@
 <!-- The File Upload user interface plugin -->
 <script src="../reference/light-blue/lib/jquery.fileupload-ui.js"></script>
 
+
 <!-- common application js -->
 <script src="../reference/lightblue4/docs/js/app.js"></script>
 <script src="../reference/lightblue4/docs/js/settings.js"></script>
@@ -167,6 +173,10 @@
 
 <!-- page interaction -->
 <script src="../reference/jquery-plugins/topbar.js"></script>
+
+<!-- 날짜 선택 -->
+<script src="../reference/light-blue/lib/bootstrap-datepicker.js"></script>
+
 
 <!-- common templates -->
 <script type="text/template" id="settings-template">
@@ -301,7 +311,11 @@
 <script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.js' charset="utf-8"></script>
 <script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.js' charset="utf-8"></script>
 <script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.js' charset="utf-8"></script>
-<script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/custom.rowGroup.js' charset="utf-8"></script>
+<script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/arms_dataTables.rowsGroup.js' charset="utf-8"></script>
+
+<script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js' charset="utf-8"></script>
+<script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js' charset="utf-8"></script>
+<script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js' charset="utf-8"></script>
 
 <!-- ckeditor4 -->
 <script type="text/javascript" src="../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js" charset="utf-8"></script>
@@ -313,8 +327,74 @@
 <script type="text/javascript" src='../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js' charset="utf-8"></script>
 <script type="text/javascript" src='../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js' charset="utf-8"></script>
 
+<link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css" media="screen"/>
+<script type="text/javascript" src="../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.js" charset="utf-8"></script>
+
+<!-- notification popup -->
+<script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger.js"></script>
+<script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger-theme-flat.js"></script>
+<script src="../reference/lightblue4/docs/js/ui-notifications.js"></script>
+
+<!-- code diff -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css"/>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
+
+
 <!-- page js -->
 <script type="text/javascript" src='js/common.js' charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+	//<![CDATA[
 
+	$(function () {
+		var urlParams = new URL(location.href).searchParams;
+		var page = urlParams.get('page');
+
+		includeLayout(page);
+
+		$.getScript('js/' + page + ".js", function(){
+			if ($.isFunction(execArmsDocReady)) {
+				execArmsDocReady();
+			}
+		});
+
+
+	});
+
+	// include 레이아웃 html 파일을 로드하는 함수
+	function includeLayout(page) {
+		var includeArea = $("[data-include]");
+		var self, url;
+		$.each(includeArea, function () {
+
+			self = $(this);
+			url = self.data("include");
+			console.log(url);
+
+			if( url.indexOf( "content-header" ) !== -1 ){
+
+				url = "html/" + page + "/content-header.html";
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
+
+			}else if( url.indexOf( "content-container" ) !== -1 ){
+
+				url = "html/" + page + "/content-container.html";
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
+
+			}else{
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
+			}
+
+		});
+	}
+
+	//]]>
+</script>
 </body>
 </html>

@@ -60,10 +60,10 @@
     <link href="../reference/lightblue4/docs/css/application.css" rel="stylesheet">
     <link href="css/override.css" rel="stylesheet">
     <script>
-					/* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
-                       chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
-                                  https://code.google.com/p/chromium/issues/detail?id=332189
-                    */
+    /* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
+       chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
+                  https://code.google.com/p/chromium/issues/detail?id=332189
+    */
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -120,8 +120,10 @@
 
     </div>
 
-    <div class="loader-wrap hiding hide">
-        <i class="fa fa-circle-o-notch fa-spin"></i>
+    <div class="loader animated fadeIn darkBack hide" style="z-index: 999999;">
+        <span class="spinner" style="font-size: 14px !important;">
+            <i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.
+        </span>
     </div>
 
 </div>
@@ -338,11 +340,17 @@
 <script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger-theme-flat.js"></script>
 <script src="../reference/lightblue4/docs/js/ui-notifications.js"></script>
 
+<!-- code diff -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css"/>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
+
+
 <!-- page js -->
 <script type="text/javascript" src='js/common.js' charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 	//<![CDATA[
-    
+
 	$(function () {
 		var urlParams = new URL(location.href).searchParams;
 		var page = urlParams.get('page');
