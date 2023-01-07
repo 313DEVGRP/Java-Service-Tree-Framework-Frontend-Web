@@ -101,7 +101,9 @@
     </script>
     <!-- NAVER ANALYTICS END -->
 </head>
+
 <body>
+
 <div class="logo" data-include="html/template/page-logo.html"></div>
 
 <nav id="sidebar" class="sidebar nav-collapse collapse" data-include="html/template/page-sidebar.html"></nav>
@@ -363,6 +365,13 @@
             }
         });
 
+        var onlyContents = urlParams.get('withoutLayer');
+        if(isEmpty(onlyContents)){
+            $("body").removeAttr('class');
+        }else{
+            $("body").addClass('sidebar-hidden');
+            $("header.page-header").hide();
+        }
 
 	});
 
