@@ -733,10 +733,55 @@ function ajax_setup() {
 		complete:function(xhr,status){
 			$('.loader').addClass('hide');
 		},
-		error:function(xhr,status,error){
-			jError("데이터 처리 중 에러가 발생했습니다.");
-		},
 	});
 
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//공통 AJAX SAMPLE
+////////////////////////////////////////////////////////////////////////////////////////
+function ajax_sample() {
+
+	$.ajax({
+		url: "요청을 보낼 URL",
+		type: "요청 type(GET 혹은 POST)을 명시",
+		data: "서버로 보내지는 데이터",
+		contentType: "서버로 보내지는 데이터의 content-type, 기본값은 application/x-www-form-urlencoded",
+		dataType: "서버 응답으로 받는 데이터 타입",
+		statusCode: {
+			200: function(data) {
+
+				//////////////////////////////////////////////////////////
+				console.log("ajax_build :: url = " + ajaxUrl);
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+
+				var loopCount = 3;
+				for (var i = 0; i < loopCount; i++) {
+					console.log("loop check i = " + i);
+				}
+				//////////////////////////////////////////////////////////
+				jSuccess("신규 제품 등록이 완료 되었습니다.");
+
+			},
+			401: function(n) {
+				location.href = "/sso/login";
+			},
+			403: function(n) {
+				console.log("403 return");
+			},
+		},
+		beforeSend:function(){
+			//$("#regist-pdService").hide(); 버튼 감추기
+		},
+		complete:function(){
+			//$("#regist-pdService").show(); 버튼 보이기
+		},
+		error:function(e){
+			jError("신규 제품 등록 중 에러가 발생했습니다.");
+		}
+	});
 
 }

@@ -46,13 +46,16 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	}
 });
 
-// --- 팝업 띄울때 사이즈 조정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
+// --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
 $("#modalPopupId").click(function () {
 	var height = $(document).height() - 600;
 	$(".modal-body")
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
 });
+
 $("#extendModalPopupId").click(function () {
 	var height = $(document).height() - 1000;
 	$(".modal-body")
@@ -202,7 +205,9 @@ $(".js-data-example-ajax").select2({
 	templateSelection: formatUserSelection,
 });
 
+////////////////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 function formatUser(jsonData) {
 	var $container = $(
 		"<div class='select2-result-jsonData clearfix'>" +
@@ -221,7 +226,9 @@ function formatUser(jsonData) {
 	return $container;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) templateSelection 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 function formatUserSelection(jsonData) {
 
 	if (jsonData.id == '') {
@@ -238,7 +245,9 @@ function formatUserSelection(jsonData) {
 	return jsonData.text;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 $('#popup-editView-pdService-reviewer').on('select2:select', function (e) {
 	var heightValue = $('#popup-editView-pdService-reviewer').height();
 	var resultValue = heightValue + 20;
@@ -377,9 +386,11 @@ function dataTableCallBack(){
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 //제품(서비스) 클릭할 때 동작하는 함수
 //1. 상세보기 데이터 바인딩
 //2. 편집하기 데이터 바인딩
+////////////////////////////////////////////////////////////////////////////////////////
 function pdServiceDataTableClick(c_id) {
 
 	selectVersion = c_id;
@@ -592,24 +603,19 @@ $("#regist-pdService").click(function () {
 				$('#close-pdService').trigger('click');
 				//데이터 테이블 데이터 재 로드
 				dataTableRef.ajax.reload();
+				jSuccess("신규 제품 등록이 완료 되었습니다.");
 			},
 		},
-		success:function(res){
-	},
- beforeSend:function(){
-		$("#regist-pdService").hide();
-		$('.loader').removeClass('hide');
-	},
- complete:function(){
-	},
- error:function(e){
-	}
-	}).done(function(data) {
-	}).fail(function(e) {
-	}).always(function() {
-		$('.loader').addClass('hide');
-		$("#regist-pdService").show();
-	});;
+		beforeSend:function(){
+			$("#regist-pdService").hide();
+		},
+		complete:function(){
+			$("#regist-pdService").show();
+		},
+		error:function(e){
+			jError("신규 제품 등록 중 에러가 발생했습니다.");
+		}
+	});
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////
