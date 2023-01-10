@@ -18,9 +18,68 @@ $(function () {
 	/* 맨위로 아이콘 */
 	rightBottomTopForwardIcon();
 
-	ajax_setup();
+	var urlParams = new URL(location.href).searchParams;
+	if(ajax_setup()){
+
+		var page = urlParams.get('page');
+
+		if(includeLayout(page)) {
+
+			$.getScript('js/' + page + ".js", function(){
+				if ($.isFunction(execArmsDocReady)) {
+					execArmsDocReady();
+				}
+			});
+
+		}
+
+	}
+
+
+	var onlyContents = urlParams.get('withoutLayer');
+	if(isEmpty(onlyContents)){
+		$("body").removeAttr('class');
+	}else{
+		$("body").addClass('sidebar-hidden');
+		$("header.page-header").hide();
+	}
 
 });
+
+// include 레이아웃 html 파일을 로드하는 함수
+function includeLayout(page) {
+	var includeArea = $("[data-include]");
+	var self, url;
+	$.each(includeArea, function () {
+
+		self = $(this);
+		url = self.data("include");
+		console.log(url);
+
+		if( url.indexOf( "content-header" ) !== -1 ){
+
+			url = "html/" + page + "/content-header.html";
+			self.load(url, function () {
+				self.removeAttr("data-include");
+			});
+
+		}else if( url.indexOf( "content-container" ) !== -1 ){
+
+			url = "html/" + page + "/content-container.html";
+			self.load(url, function () {
+				self.removeAttr("data-include");
+			});
+
+		}else{
+			self.load(url, function () {
+				self.removeAttr("data-include");
+			});
+		}
+
+	});
+
+	return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //인증관련 공통 변수
@@ -654,7 +713,7 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 		},
 		destroy: true,
 		processing: true,
-		responsive: false,
+		responsive: true,
 		columns: columnList,
 		rowsGroup: rowsGroupList,
 		columnDefs: columnDefList,
@@ -718,24 +777,29 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 ////////////////////////////////////////////////////////////////////////////////////////
 function ajax_setup() {
 
-	$.ajaxSetup({
-		statusCode: {
-			401: function (n) {
+	$(document)
+		.ajaxStart(function () {
+			$('.loader').removeClass('hide');
+		})
+		.ajaxSend(function (event, jqXHR, ajaxOptions) {})
+		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {})
+		.ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+			if ( jqXHR.status== 401 ) {
 				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
 				location.href = "/sso/login";
-			},
-			403: function (n) {
+			}
+			else if ( jqXHR.status== 403 ) {
 				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
-				console.log("403 return");
-			},
-		},
-		beforeSend:function(xhr){
-			$('.loader').removeClass('hide');
-		},
-		complete:function(xhr,status){
+			}
+
+		})
+		.ajaxComplete(function (event, jqXHR, ajaxOptions) {})
+		.ajaxStop(function () {
 			$('.loader').addClass('hide');
-		},
-	});
+		});
+
+
+	return true;
 
 }
 

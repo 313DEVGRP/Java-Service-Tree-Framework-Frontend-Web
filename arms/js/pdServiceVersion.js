@@ -32,7 +32,7 @@ function execArmsDocReady() {
 	makeDatePicker($("#btn-end-calendar-popup"));
 
 	// --- 데이터 테이블 설정 --- //
-	dataTableLoad()
+	dataTableLoad();
 
 }
 
@@ -313,18 +313,6 @@ function dataLoad(getSelectedText, selectedText) {
 			$("#btn-enabled-date").val(json[0].c_start_date);
 			$("#btn-end-date").val(json[0].c_end_date);
 			CKEDITOR.instances.extendModalEditor.setData(json[0].c_contents);
-
-
-
-
-
-
-			//데이터 로드를 사용자에게 알리기
-			Messenger().post({
-				message: 'Version Data 조회를 완료하였습니다.',
-				type: 'success',
-				showCloseButton: true
-			});
 		});
 }
 
