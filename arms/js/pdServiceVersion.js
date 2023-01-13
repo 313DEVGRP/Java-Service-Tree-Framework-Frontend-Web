@@ -12,7 +12,7 @@ var dataTableRef; // 데이터테이블 참조 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
-function execArmsDocReady() {
+function execDocReady() {
 
 	//사이드 메뉴 처리
 	setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
@@ -53,7 +53,7 @@ function dataTableLoad() {
 			data:   "c_title",
 			render: function (data, type, row, meta) {
 				if (type === 'display') {
-					return '<label style="color: #a4c6ff">' + data + '</label>';
+					return '<label style="color: #f8f8f8">' + data + '</label>';
 				}
 
 				return data;

@@ -3,8 +3,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
+var dataTableRef;
 
-function execArmsDocReady() {
+function execDocReady() {
 
 	//좌측 메뉴
 	setSideMenu(
@@ -18,7 +19,7 @@ function execArmsDocReady() {
 	//버전 멀티 셀렉트 박스 이니시에이터
 	makeVersionMultiSelectBox();
 
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //제품 서비스 셀렉트 박스
@@ -157,24 +158,17 @@ function  makeSlimScroll(targetElement) {
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function common_dataTableLoad(selectId, endPointUrl) {
 
-	var jQueryElementID = "#reqStatusTable";
-	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-	var jQueryElementStr = jQueryElementID.replace(reg,'');
-	console.log("jQueryElementStr ======== " + jQueryElementStr );
-	var serviceNameForURL = "reqStatus";
-	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
 		{ name: "c_pdservice_link",
-				title: "제품(서비스) 아이디",
-				data: "c_pdservice_link",
-			 visible: false
+			title: "제품(서비스) 아이디",
+			data: "c_pdservice_link",
+			visible: false
 		},
 		{ name: "c_pdservice_name",
 			title: "제품(서비스)",
 			data: "c_pdservice_name",
 			visible: true
 		},
-
 		{ name: "c_version_link",
 			title: "제품(서비스) 버전 아이디",
 			data: "c_version_link",
@@ -185,7 +179,6 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			data: "c_version_name",
 			visible: true
 		},
-
 		{ name: "c_jira_project_link",
 			title: "지라 프로젝트 아이디",
 			data: "c_jira_project_link",
@@ -200,13 +193,11 @@ function common_dataTableLoad(selectId, endPointUrl) {
 					var link = 'http://www.313.co.kr/jira/browse/';
 					return '<a href="' + link + row.c_jira_project_key + '" target="_blank">' + data + '</a>';
 				}
-
 				return data;
 			},
 			className: "dt-body-center",
 			visible: true
 		},
-
 		{ name: "c_jira_version_link",
 			title: "지라 프로젝트 버전 아이디",
 			data: "c_jira_version_link",
@@ -217,151 +208,112 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			data: "c_jira_version_name",
 			visible: true
 		},
-
 		{ name: "c_req_link",
 			title: "요구사항 아이디",
 			data: "c_req_link",
 			visible: false
 		},
-		{ name: "c_req_name",
+		{
+			name: "c_req_name",
 			title: "요구사항",
-			data: "c_req_name",
+			data:   "c_req_name",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					if ( isEmpty(data) ){
+						return "";
+					}else {
+						return '<div style="white-space: nowrap;">' + data + '</div>';
+					}
+				}
+				return data;
+			},
+			className: "dt-body-left",
 			visible: true
 		},
-
 		{
 			name: "c_jira_req_issue_key",
 			title: "JIRA 이슈",
 			data:   "c_jira_req_issue_key",
 			render: function (data, type, row, meta) {
 				if (type === 'display') {
-					var link = 'http://www.313.co.kr/jira/browse/';
-					return '<a href="' + link + row.c_jira_req_issue_key + '" target="_blank">' + data + '</a>';
+					if ( isEmpty(data) ){
+						return "";
+					}else {
+						var link = 'http://www.313.co.kr/jira/browse/';
+						return '<a href="' + link + row.c_jira_req_issue_key + '" target="_blank">' + data + '</a>';
+					}
 				}
-
 				return data;
 			},
 			className: "dt-body-center",
 			visible: true
 		},
-		{ name: "c_jira_req_issue_id",
-			title: "JIRA 이슈 아이디",
-			data: "c_jira_req_issue_id",
-			visible: false
-		},
-
 		{
 			name: "c_jira_req_issue_id",
 			title: "SubTask",
-			data:   "c_jira_req_subtaskissue",
-			render: function ( data, type, row ) {
-				if ( isEmpty(data) || data == "[]" ) {
-					return 'no data';
-				}else{
-					//data-target="#myModal1" data-toggle="modal"
-					return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#myModal1" data-toggle="modal">SubTask</label>';
+			data:   "c_jira_req_issue_id",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					if ( isEmpty(data) || data == '[]' ) {
+						return 'no data';
+					}else{
+						return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#myModal1" data-toggle="modal">SubTask</label>';
+					}
 				}
+				return data;
 			},
-			className: "dt-body-center",
+			className: "dt-body-left",
 			visible: true
 		},
 		{
 			name: "c_jira_req_linkingissue",
-			title: "SubTask",
+			title: "LinkIssue",
 			data:   "c_jira_req_linkingissue",
-			render: function ( data, type, row ) {
-				if ( isEmpty(data) || data == "[]" ) {
-					return 'no data';
-				}else{
-					//data-target="#myModal1" data-toggle="modal"
-					return '<label id="newReqRegist01" class="btn btn-primary btn-sm" data-target="#myModal1" data-toggle="modal">LinkIssue</label>';
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					if ( isEmpty(data) || data == "[]" ) {
+						return 'no data';
+					}else{
+						return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#myModal1" data-toggle="modal">LinkIssue</label>';
+					}
 				}
+				return data;
 			},
-			className: "dt-body-center",
+			className: "dt-body-left",
 			visible: true
-		},
+		}
 
 	];
 	var rowsGroupList = [
 		"c_pdservice_name:name",
 		"c_version_name:name",
-		"c_jira_project_name:name",
-		"c_jira_version_name:name"
 	];
-	var columnDefList = [];
-	var selectList = {};
+	var columnDefList = [{
+		orderable: false,
+		className: 'select-checkbox',
+		targets: 0
+	}];
 	var orderList = [[ 1, 'asc' ]];
-	console.log("defaultType_dataTableLoad selectId -> " + selectId);
-	console.log("dataTableBuild :: jQueryElementID -> " + jQueryElementID + ", serviceNameForURL -> " + serviceNameForURL);
-	console.log("dataTableBuild :: columnList -> " + columnList + ", rowsGroupList -> " + rowsGroupList);
-
-	console.log("dataTableBuild :: href: " + $(location).attr("href"));
-	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
-	console.log("dataTableBuild :: host: " + $(location).attr("host"));
-	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
-	console.log("dataTableBuild :: search: " + $(location).attr("search"));
-	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
-	console.log("dataTableBuild :: port: " + $(location).attr("port"));
-
-	var authCheckURL = "/auth-user";
-
-	var tempDataTable = $(jQueryElementID).DataTable({
-		ajax: {
-			url: authCheckURL + "/api/arms/" + serviceNameForURL + endPointUrl,
-			dataSrc: ''
-		},
-		destroy: true,
-		processing: true,
-		responsive: false,
-		columns: columnList,
-		rowsGroup: rowsGroupList,
-		columnDefs: columnDefList,
-		select: selectList,
-		order: orderList,
-		buttons: [
-			'copy', 'csv', 'excel', 'pdf', 'print'
-		],
-		drawCallback: function() {
-			console.log("dataTableBuild :: drawCallback");
-			if ($.isFunction(dataTableCallBack )) {
-				dataTableCallBack();
-			}
+	var jquerySelector = "#reqStatusTable";
+	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+	var jsonRoot = '';
+	var buttonList = [
+		'copy', 'excel', 'print', {
+			extend: 'csv',
+			text: 'Export csv',
+			charset: 'utf-8',
+			extension: '.csv',
+			fieldSeparator: ',',
+			fieldBoundary: '',
+			bom: true
+		},{
+			extend: 'pdfHtml5',
+			orientation: 'landscape',
+			pageSize: 'LEGAL'
 		}
-	});
-
-	reqStatusDataTable = tempDataTable;
-
-	$(jQueryElementID + " tbody").on("click", "tr", function () {
-
-		if ($(this).hasClass("selected")) {
-			$(this).removeClass("selected");
-		} else {
-			tempDataTable.$("tr.selected").removeClass("selected");
-			$(this).addClass("selected");
-		}
-
-		var selectedData = tempDataTable.row(this).data();
-		selectedData.selectedIndex = $(this).closest('tr').index();
-
-		var info = tempDataTable.page.info();
-		console.log( 'Showing page: '+info.page+' of '+info.pages );
-		selectedData.selectedPage = info.page;
-
-		dataTableClick(selectedData);
-	});
-
-	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
-	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-	//min-height: 30px;
-
-	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$("body").find("[aria-controls='" + jQueryElementStr + "']").css("width", "100px");
-	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
-
-	return tempDataTable;
+	];
+	var selectList = {};
+	reqStatusDataTable = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
@@ -372,7 +324,7 @@ function dataTableClick(selectedData) {
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(){
-
+	console.log("check");
 }
 
 $('#checkbox1').click(function(){

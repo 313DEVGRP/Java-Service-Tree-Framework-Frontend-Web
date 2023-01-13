@@ -305,6 +305,7 @@ table.dataTable td {
     padding-top: 0.25em;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button {
+    line-height: 1.0 !important;
     box-sizing: border-box;
     display: inline-block;
     min-width: 1.5em;

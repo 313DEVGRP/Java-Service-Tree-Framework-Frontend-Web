@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
-
 $(function () {
 
 	// Page load & 상단 페이지 로드 프로그래스바
@@ -12,27 +11,23 @@ $(function () {
 		topbar.hide();
 	}, 2000);
 
-	/* 로그인 인증 여부 체크 함수 */
-	authUserCheck();
-
 	/* 맨위로 아이콘 */
 	rightBottomTopForwardIcon();
 
 	var urlParams = new URL(location.href).searchParams;
+	var page = urlParams.get('page');
+
 	if(ajax_setup()){
-
-		var page = urlParams.get('page');
-
 		if(includeLayout(page)) {
-
-			$.getScript('js/' + page + ".js", function(){
-				if ($.isFunction(execArmsDocReady)) {
-					execArmsDocReady();
-				}
-			});
-
+			if(authUserCheck()){
+				$.getScript('js/' + page + ".js", function(){
+					setTimeout(function(){
+						/* 로그인 인증 여부 체크 함수 */
+							execDocReady();
+					},500);
+				});
+			}
 		}
-
 	}
 
 
@@ -140,12 +135,11 @@ function authUserCheck() {
 				permissions = json.permissions;
 
 				getUserInfo();
-			},
-			401: function (n) {
-				location.href = "/sso/login";
-			},
+			}
 		},
 	});
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -179,13 +173,9 @@ function getUserInfo() {
 					console.log("authUserCheck :: userGroups = " + userGroups);
 					console.log("authUserCheck :: userID = " + userID);
 					console.log("authUserCheck :: userRealmRoles = " + userRealmRoles);
-
 				}
-			},
-			401: function (n) {
-				location.href = "/sso/login";
-			},
-		},
+			}
+		}
 	});
 }
 
@@ -202,9 +192,24 @@ function getStrLimit(inputStr, limitCnt){
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// 유틸 : 타임스탭프 - 날짜 포맷터
-////////////////////////////////////////////////////////////////////////////////////////
+//서버 바인딩 할 수가 없어서 프로토타입 목적으로 json 을 만들어서 로드하는 함수
+var getJsonForPrototype = function (url, bindTemplate) {
+	ajaxGet(url).then(function (data) {
+		bindTemplate(data);
+	});
+};
+var ajaxGet = (url) =>
+	$.ajax({
+		url,
+		type: "GET",
+		global: false,
+		statusCode: {
+			200: function (data) {
+				return data.responseJSON;
+			},
+		},
+	});
+
 function dateFormat(timestamp) {
 	var d = new Date(timestamp ), // Convert the passed timestamp to milliseconds
 		yyyy = d.getFullYear(),
@@ -687,30 +692,40 @@ var isEmpty = function(value){
 ////////////////////////////////////////////////////////////////////////////////////////
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
-// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList) {
-
-	var jQueryElementID = jquerySelector; //"#reqStatusTable";
+function dataTable_build(
+	jquerySelector,
+	ajaxUrl,
+	jsonRoot,
+	columnList,
+	rowsGroupList,
+	columnDefList,
+	selectList,
+	orderList,
+	buttonList
+) {
+	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-	var jQueryElementStr = jQueryElementID.replace(reg,'');
-	console.log("jQueryElementStr ======== " + jQueryElementStr );
-	console.log("dataTableBuild :: jQueryElementID -> " + jQueryElementID);
-	console.log("dataTableBuild :: columnList -> " + columnList);
-	console.log("dataTableBuild :: rowsGroupList -> " + rowsGroupList);
+	var jQueryElementStr = jQueryElementID.replace(reg, '');
+	console.log('dataTableBuild :: jQueryElementStr -> ' + jQueryElementStr);
+	console.log('dataTableBuild :: jQueryElementID -> ' + jQueryElementID);
+	console.log('dataTableBuild :: columnList -> ' + columnList);
+	console.log('dataTableBuild :: rowsGroupList -> ' + rowsGroupList);
 
-	console.log("dataTableBuild :: href: " + $(location).attr("href"));
-	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
-	console.log("dataTableBuild :: host: " + $(location).attr("host"));
-	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
-	console.log("dataTableBuild :: search: " + $(location).attr("search"));
-	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
-	console.log("dataTableBuild :: port: " + $(location).attr("port"));
+	console.log('dataTableBuild :: href: ' + $(location).attr('href'));
+	console.log('dataTableBuild :: protocol: ' + $(location).attr('protocol'));
+	console.log('dataTableBuild :: host: ' + $(location).attr('host'));
+	console.log('dataTableBuild :: pathname: ' + $(location).attr('pathname'));
+	console.log('dataTableBuild :: search: ' + $(location).attr('search'));
+	console.log('dataTableBuild :: hostname: ' + $(location).attr('hostname'));
+	console.log('dataTableBuild :: port: ' + $(location).attr('port'));
+	console.log('dataTableBuild :: ajaxUrl: ' + ajaxUrl);
 
 	var tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {
 			url: ajaxUrl,
-			dataSrc: ''
+			dataSrc: jsonRoot,
 		},
+		stateSave: true,
 		destroy: true,
 		processing: true,
 		responsive: true,
@@ -722,31 +737,31 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 		buttons: buttonList,
 		language: {
 			processing: '',
-			loadingRecords: '<span class="spinner" style="font-size: 14px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>'
+			loadingRecords:
+				'<span class="spinner" style="font-size: 14px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>',
 		},
-		drawCallback: function() {
-			console.log("dataTableBuild :: drawCallback");
-			if ($.isFunction(dataTableCallBack )) {
+		drawCallback: function () {
+			console.log('dataTableBuild :: drawCallback');
+			if ($.isFunction(dataTableCallBack)) {
 				//데이터 테이블 그리고 난 후 시퀀스 이벤트
 				dataTableCallBack();
 			}
-		}
+		},
 	});
 
-	$(jQueryElementID + " tbody").on("click", "tr", function () {
-
-		if ($(this).hasClass("selected")) {
-			$(this).removeClass("selected");
+	$(jQueryElementID + ' tbody').on('click', 'tr', function () {
+		if ($(this).hasClass('selected')) {
+			$(this).removeClass('selected');
 		} else {
-			tempDataTable.$("tr.selected").removeClass("selected");
-			$(this).addClass("selected");
+			tempDataTable.$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
 		}
 
 		var selectedData = tempDataTable.row(this).data();
 		selectedData.selectedIndex = $(this).closest('tr').index();
 
 		var info = tempDataTable.page.info();
-		console.log( 'Show page: '+info.page+' of '+info.pages );
+		console.log('Show page: ' + info.page + ' of ' + info.pages);
 		selectedData.selectedPage = info.page;
 
 		dataTableClick(selectedData);
@@ -754,23 +769,27 @@ function dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGrou
 
 	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
-	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
-	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
+	$('.dataTables_length').find('select:eq(0)').addClass('darkBack');
+	$('.dataTables_length').find('select:eq(0)').css('min-height', '30px');
+	$(jQueryElementID + "_wrapper").css("border-top", "1px solid rgba(51, 51, 51, 0.3)");
+	$(jQueryElementID + "_wrapper").css("padding-top", "5px");
 	//min-height: 30px;
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
-	$("body").find("[aria-controls='" + jQueryElementStr + "']").css("width", "100px");
-	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
+	$('body')
+		.find("[aria-controls='" + jQueryElementStr + "']")
+		.css('width', '50px');
+	$("input[type=search]").css('width', '100px');
+	$('select[name=' + jQueryElementStr + ']').css('width', '50px');
 
-	$.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) {
+	$.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
 		console.log(message);
-		jError("Notification : <strong>Ajax Error</strong>, retry plz !");
+		jError('Notification : <strong>Ajax Error</strong>, retry plz !');
 	};
 
 	return tempDataTable;
 }
-// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //공통 AJAX setup 처리
@@ -784,6 +803,7 @@ function ajax_setup() {
 		.ajaxSend(function (event, jqXHR, ajaxOptions) {})
 		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {})
 		.ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+			$('.loader').addClass('hide');
 			if ( jqXHR.status== 401 ) {
 				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
 				location.href = "/sso/login";
@@ -791,9 +811,10 @@ function ajax_setup() {
 			else if ( jqXHR.status== 403 ) {
 				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
 			}
-
 		})
-		.ajaxComplete(function (event, jqXHR, ajaxOptions) {})
+		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
+			$('.loader').addClass('hide');
+		})
 		.ajaxStop(function () {
 			$('.loader').addClass('hide');
 		});

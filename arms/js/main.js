@@ -1,6 +1,6 @@
-$(function () {
+function execDocReady() {
     setSideMenu();
-});
+}
 
 function setSideMenu() {
     setTimeout(function(){

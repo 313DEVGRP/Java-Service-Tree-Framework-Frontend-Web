@@ -4,7 +4,7 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 
-function execArmsDocReady() {
+function execDocReady() {
 
 	//좌측 메뉴
 	setSideMenu(
@@ -13,7 +13,7 @@ function execArmsDocReady() {
 		"requirement-elements-collapse"
 	);
 
-	getJsonForPrototype("./js/reviewClassify.json", makeClassifyMenus);
+	getJsonForPrototype("./mock/reviewClassify.json", makeClassifyMenus);
 
 	var externalData = "";
 	var jquerySelectorID = "#reqReviewTable";

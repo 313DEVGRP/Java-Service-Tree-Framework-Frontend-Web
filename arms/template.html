@@ -76,28 +76,28 @@
     <!-- ANALYTICS START -->
     <!-- https://www.google.com/analytics/settings/home?scid=18527803 web log Analyzer  -->
     <script type="text/javascript">
-					//<![CDATA[
-					var _gaq = _gaq || [];
-					_gaq.push(['_setAccount', 'UA-18527803-1']);
-					_gaq.push(['_trackPageview']);
-					_gaq.push(['_trackPageLoadTime']);
-					(function() {
-						var ga = document.createElement('script');
-						ga.type = 'text/javascript';
-						ga.async = true;
-						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-						var s = document.getElementsByTagName('script')[0];
-						s.parentNode.insertBefore(ga, s);
-					})();
-					//]]>
+        //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-18527803-1']);
+        _gaq.push(['_trackPageview']);
+        _gaq.push(['_trackPageLoadTime']);
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+        //]]>
     </script>
     <!-- ANALYTICS END -->
     <!-- NAVER ANALYTICS START -->
     <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
     <script type="text/javascript">
-					if (!wcs_add) var wcs_add = {};
-					wcs_add["wa"] = "1244b972beb34c";
-					wcs_do();
+        if (!wcs_add) var wcs_add = {};
+        wcs_add["wa"] = "1244b972beb34c";
+        wcs_do();
     </script>
     <!-- NAVER ANALYTICS END -->
 </head>
@@ -165,7 +165,6 @@
 <!-- The File Upload user interface plugin -->
 <script src="../reference/light-blue/lib/jquery.fileupload-ui.js"></script>
 
-
 <!-- common application js -->
 <script src="../reference/lightblue4/docs/js/app.js"></script>
 <script src="../reference/lightblue4/docs/js/settings.js"></script>
@@ -177,6 +176,27 @@
 <script src="../reference/lightblue4/docs/lib/backbone.localStorage/build/backbone.localStorage.min.js"></script>
 <script src="../reference/lightblue4/docs/lib/d3/d3.min.js"></script>
 <script src="../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js"></script>
+<!-- d3, nvd3-->
+<!--
+<script src="../reference/light-blue/lib/nvd3/lib/d3.v2.js"></script>
+<script src="../reference/light-blue/lib/nvd3/nv.d3.custom.js"></script>
+-->
+<!-- nvd3 models -->
+<script src="../reference/light-blue/lib/nvd3/src/models/scatter.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/axis.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/legend.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/stackedArea.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/stackedAreaChart.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/line.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/pie.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/pieChartTotal.js"></script>
+<script src="../reference/light-blue/lib/nvd3/stream_layers.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/lineChart.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/multiBar.js"></script>
+<script src="../reference/light-blue/lib/nvd3/src/models/multiBarChart.js"></script>
+
+<!-- bootstrap default plugins -->
+<script src="../reference/light-blue/lib/bootstrap/tooltip.js"></script>
 
 <!-- page interaction -->
 <script src="../reference/jquery-plugins/topbar.js"></script>
@@ -323,6 +343,9 @@
 <script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js' charset="utf-8"></script>
 <script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js' charset="utf-8"></script>
 <script type="text/javascript" src='../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js' charset="utf-8"></script>
+<script type="text/javascript" src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js" charset="utf-8"></script>
 
 <!-- ckeditor4 -->
 <script type="text/javascript" src="../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js" charset="utf-8"></script>
@@ -346,7 +369,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css"/>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
-
 
 <!-- page js -->
 <script type="text/javascript" src='js/common.js' charset="utf-8"></script>

@@ -2,7 +2,7 @@
 //Document Ready ( execArmsDocReady )
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 사이드 메뉴 -- //
-function execArmsDocReady() {
+function execDocReady() {
 	setSideMenu(
 		"sidebar_menu_requirement",
 		"sidebar_menu_requirement_review",

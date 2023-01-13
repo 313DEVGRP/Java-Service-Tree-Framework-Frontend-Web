@@ -81,73 +81,48 @@
 				</div>
 				<div class="col-md-4 well">
 					<legend>Export</legend>
-					<div
-						class="control-group"
-						class="darkBack"
-						style="padding-bottom: 10px; border: 0"
-					>
-						<div id="filterTopCriteria">
-							<button
-								id="copychecker"
-								type="button"
-								class="btn btn-danger"
-								data-placement="top"
-								data-original-title=".btn .btn-danger"
-							>
-								copy
-							</button>
-							<button
-								id="csvchecker"
-								type="button"
-								class="btn btn-danger"
-								data-placement="top"
-								data-original-title=".btn .btn-danger"
-							>
-								csv
-							</button>
-							<button
-								id="excelhecker"
-								type="button"
-								class="btn btn-danger"
-								data-placement="top"
-								data-original-title=".btn .btn-danger"
-							>
-								excel
-							</button>
-							<button
-								id="pdfchecker"
-								type="button"
-								class="btn btn-danger"
-								data-placement="top"
-								data-original-title=".btn .btn-danger"
-							>
-								pdf
-							</button>
-							<button
-								id="printchecker"
-								type="button"
-								class="btn btn-danger"
-								data-placement="top"
-								data-original-title=".btn .btn-danger"
-							>
-								print
-							</button>
-						</div>
-					</div>
 				</div>
-			</div>
-			<div class="progress progress-xs mt-xs mb-0 active">
-				<div class="progress-bar progress-bar-striped" style="width: 100%"></div>
 			</div>
 			<div
 				class="box box-primary"
 				style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important"
 			>
+				<div style="float: left;">
+					<button class="btn btn-default btn-sm" id="copychecker" type="button">
+						Copy
+					</button>
+					<button type="button" id="csvchecker" class="btn btn-default btn-sm">
+						CSV
+					</button>
+					<button type="button" id="excelchecker" class="btn btn-default btn-sm">
+						Excel
+					</button>
+					<button type="button" id="printchecker" class="btn btn-default btn-sm">
+						Print
+					</button>
+					<button type="button" id="pdfchecker" class="btn btn-default btn-sm">
+						PDF
+					</button>
+				</div>
+				<div style="float: right;">
+					<button class="btn btn-primary btn-sm" type="button">
+						추가
+					</button>
+					<button class="btn btn-success btn-sm" type="button">
+						수정
+					</button>
+					<button class="btn btn-danger btn-sm" type="button">
+						삭제
+					</button>
+					<button class="btn btn-warning btn-sm" type="button">
+						기타
+					</button>
+				</div>
 				<div class="box-body">
 					<table
 						id="reqStatusTable"
-						class="display responsive no-wrap"
-						cellspacing="0"
+						class="display"
+						style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3);"
 					></table>
 				</div>
 			</div>
@@ -412,4 +387,3 @@
 
 	//]]>
 </script>
-<script type="text/javascript" src="js/reqStatus.js" charset="utf-8"></script>

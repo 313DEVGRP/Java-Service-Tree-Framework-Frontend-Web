@@ -4,7 +4,7 @@
 var selectedJsTreeId; // 요구사항 아이디
 var defaultTypeDataTable;
 
-function execArmsDocReady() {
+function execDocReady() {
 
 	//좌측 메뉴
 	setSideMenu(
@@ -186,17 +186,28 @@ function jsTreeClick(selectedNodeID) {
 // --- Root, Drive, Folder 데이터 테이블 설정 --- //
 function dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
-	var columnList = [
-		{ data: "c_id" },
-		{ data: "c_left" },
-		{ data: "c_title" },
-	];
-	var rowsGroupList = [];
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
 
 	var dataTableRef;
 	if(selectId == 2){
-		dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getMonitor.do", columnList, rowsGroupList);
+		// 데이터 테이블 컬럼 및 열그룹 구성
+		var columnList = [
+			{ data: "c_id" },
+			{ data: "c_left" },
+			{ data: "c_title" },
+		];
+		var rowsGroupList = [];
+		var columnDefList = [];
+		var selectList = {};
+		var orderList = [[ 1, 'asc' ]];
+		var buttonList = [];
+
+		var jquerySelector = "#reqTable";
+		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getMonitor.do";
+		var jsonRoot = "";
+
+		dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+
 	}else{
 
 		//select node 정보를 가져온다.
@@ -207,8 +218,26 @@ function dataTableLoad(selectId) {
 			dataType : "json",
 			progress: true,
 			success: function(data) {
-				var paramUrl = "c_id=313&c_left=" + data.c_left + "&c_right=" + data.c_right;
-				dataTableRef = dataTableBuild("#reqTable", "reqAdd/" + tableName, "/getChildNodeWithParent.do?"+paramUrl, columnList, rowsGroupList);
+				// 데이터 테이블 컬럼 및 열그룹 구성
+				var columnList = [
+					{ data: "c_id" },
+					{ data: "c_left" },
+					{ data: "c_title" },
+				];
+				var rowsGroupList = [];
+				var columnDefList = [];
+				var selectList = {};
+				var orderList = [[ 1, 'asc' ]];
+				var buttonList = [];
+
+				var jquerySelector = "#reqTable";
+				var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do";
+				var jsonRoot = "";
+				var paramUrl = "?c_id=313&c_left=" + data.c_left + "&c_right=" + data.c_right;
+				ajaxUrl = ajaxUrl + paramUrl;
+
+				dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+
 			}
 		}).done(function(data) {
 		}).fail(function(e) {
@@ -217,10 +246,6 @@ function dataTableLoad(selectId) {
 
 	}
 
-	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$("body").find("[aria-controls='pdserviceTable']").css("width", "100px");
-	$("select[name=pdserviceTable_length]").css("width", "50px");
 }
 
 // --- default 데이터 테이블 설정 --- //

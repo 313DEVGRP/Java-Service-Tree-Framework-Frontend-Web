@@ -1,14 +1,14 @@
-let selectId; // 제품 아이디
-let selectName; // 제품 이름
-let selectedIndex; // 데이터테이블 선택한 인덱스
-let selectedPage; // 데이터테이블 선택한 인덱스
-let selectVersion; // 선택한 버전 아이디
-let selectVersionName; // 선택한 버전 이름
-let dataTableRef; // 데이터테이블 참조 변수
-let selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이디
-let versionList;
+var selectId; // 제품 아이디
+var selectName; // 제품 이름
+var selectedIndex; // 데이터테이블 선택한 인덱스
+var selectedPage; // 데이터테이블 선택한 인덱스
+var selectVersion; // 선택한 버전 아이디
+var selectVersionName; // 선택한 버전 이름
+var dataTableRef; // 데이터테이블 참조 변수
+var selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이디
+var versionList;
 
-function execArmsDocReady() {
+function execDocReady() {
 
 	setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
 
@@ -20,16 +20,38 @@ function execArmsDocReady() {
 function dataTableLoad() {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
-		{ data: "c_id" },
-		{ data: "c_title" },
+		{ name: "c_id",
+			title: "제품(서비스) 아이디",
+			data: "c_id",
+			visible: false
+		},
+		{
+			name: "c_title",
+			title: "제품(서비스) 이름",
+			data:   "c_title",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					return '<label style="color: #f8f8f8">' + data + '</label>';
+				}
+
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
 	];
 	var rowsGroupList = [];
-	dataTableRef = dataTableBuild("#pdserviceTable","pdService", "/getPdServiceMonitor.do",columnList, rowsGroupList);
+	var columnDefList = [];
+	var selectList = {};
+	var orderList = [[ 1, 'asc' ]];
+	var buttonList = [];
 
-	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$("body").find("[aria-controls='pdserviceTable']").css("width", "100px");
-	$("select[name=pdserviceTable_length]").css("width", "50px");
+	var jquerySelector = "#pdserviceTable";
+	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
+	var jsonRoot = "";
+
+	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
