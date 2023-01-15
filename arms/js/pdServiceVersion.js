@@ -26,10 +26,14 @@ function execDocReady() {
 	CKEDITOR.replace("input_pdservice_editor");
 	CKEDITOR.replace("extendModalEditor");
 
-	makeDatePicker($("#btn-select-calendar"));
-	makeDatePicker($("#btn-end-calendar"));
-	makeDatePicker($("#btn-select-calendar-popup"));
-	makeDatePicker($("#btn-end-calendar-popup"));
+	$('#btn-select-calendar').attr('data-date', getToday());
+	makeDatePicker($('#btn-select-calendar'));
+	$('#btn-end-calendar').attr('data-date', getToday());
+	makeDatePicker($('#btn-end-calendar'));
+	$('#btn-select-calendar-popup').attr('data-date', getToday());
+	makeDatePicker($('#btn-select-calendar-popup'));
+	$('#btn-end-calendar-popup').attr('data-date', getToday());
+	makeDatePicker($('#btn-end-calendar-popup'));
 
 	// --- 데이터 테이블 설정 --- //
 	dataTableLoad();
@@ -79,6 +83,7 @@ function dataTableLoad() {
 function makeDatePicker (calender) {
 
 	var Inputs = $(calender).parent().prev().val();
+
 	$(calender).attr('data-date', Inputs)
 
 	calender
@@ -89,6 +94,7 @@ function makeDatePicker (calender) {
 		.on("changeDate", function (ev) {
 			var Input = $(this).parent().next();
 			Input.val(calender.data("date"));
+			console.log(calender + " == " + Input.attr("id"));
 			if (Input.attr("id") === "input_pdservice_start_date") {
 				$("#versionStartDate").text(calender.data("date"));
 			} else if (Input.attr("id") === "input_pdservice_end_date") {

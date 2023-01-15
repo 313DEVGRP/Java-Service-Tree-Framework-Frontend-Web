@@ -240,7 +240,6 @@
 																	id="btn-select-calendar"
 																	class="btn btn-danger"
 																	data-date-format="yyyy/mm/dd"
-																	data-date="2022/11/11"
 																>
 																	<i class="fa fa-calendar"></i>
 																</a>
@@ -262,7 +261,7 @@
 													class="control-label"
 													for="tooltip-enabled"
 													style="color: #f8f8f8; width: 25% !important"
-													>종료 날짜</label
+													>종료 날짜 : </label
 												>
 												<div class="controls form-group">
 													<div class="col-sm-8">
@@ -270,10 +269,9 @@
 															<span class="input-group-btn">
 																<a
 																	href="#"
-																	id="btn-end-calendar-popup"
+																	id="btn-end-calendar"
 																	class="btn btn-danger"
 																	data-date-format="yyyy/mm/dd"
-																	data-date="2022/11/11"
 																>
 																	<i class="fa fa-calendar"></i>
 																</a>
@@ -358,201 +356,204 @@
 					</section>
 				</div>
 			</div>
-			<div
-				id="myModal2"
-				class="modal fade"
-				tabindex="-1"
-				role="dialog"
-				aria-labelledby="myModalLabel"
-				aria-hidden="true"
-				style="display: none"
-			>
-				<div class="modal-dialog" style="width: 90%; height: 90%">
-					<div class="modal-content modalDarkBack">
-						<div class="modal-header" style="padding: 0px; border-bottom: 0px">
-							<button
-								type="button"
-								class="close"
-								data-dismiss="modal"
-								aria-hidden="true"
-								style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
-							>
-								×
-							</button>
-							<h4
-								class="modal-title font14"
-								id="myModalLabel2"
-								style="color: #f8f8f8; text-align: left; padding: 5px"
-							>
-								<i class="fa fa-edit"></i>
-								<span class="font13" id="modalTitle" style="font-weight: bold">
+		</div>
+	</section>
+</div>
+
+<div
+		id="myModal2"
+		class="modal fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="myModalLabel"
+		aria-hidden="true"
+		style="display: none"
+>
+	<div class="modal-dialog" style="width: 90%; height: 90%">
+		<div class="modal-content modalDarkBack">
+			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
+				<button
+						type="button"
+						class="close"
+						data-dismiss="modal"
+						aria-hidden="true"
+						style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
+				>
+					×
+				</button>
+				<h4
+						class="modal-title font14"
+						id="myModalLabel2"
+						style="color: #f8f8f8; text-align: left; padding: 5px"
+				>
+					<i class="fa fa-edit"></i>
+					<span class="font13" id="modalTitle" style="font-weight: bold">
 									제품(서비스) 신규 버전 등록 팝업</span
-								>
-								<section class="search-result" style="border-left: 5px solid #e5603b">
-									<p
-										id="modalSub"
-										style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px"
-									>
-										선택한 제품(서비스)에 버전을 등록합니다.
-									</p>
-								</section>
-							</h4>
+					>
+					<section class="search-result" style="border-left: 5px solid #e5603b">
+						<p
+								id="modalSub"
+								style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px"
+						>
+							선택한 제품(서비스)에 버전을 등록합니다.
+						</p>
+					</section>
+				</h4>
+			</div>
+			<div class="modal-body" style="padding: 5px">
+				<form class="form-horizontal" method="post">
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label" style="color: #f8f8f8"
+							>제품<sup>서비스</sup> 이름 :
+							</label>
+							<div class="controls form-group">
+								<div class="col-sm-8">
+									<input
+											type="text"
+											id="tooltip-enabled-service-name"
+											class="form-control"
+											data-placement="top"
+											data-original-title="Some explanation text here"
+											placeholder="Product(Service) name"
+									/>
+								</div>
+							</div>
 						</div>
-						<div class="modal-body" style="padding: 5px">
-							<form class="form-horizontal" method="post">
-								<fieldset>
-									<div class="control-group">
-										<label class="control-label" style="color: #f8f8f8"
-											>제품<sup>서비스</sup> 이름 :
-										</label>
-										<div class="controls form-group">
-											<div class="col-sm-8">
-												<input
-													type="text"
-													id="tooltip-enabled-service-name"
-													class="form-control"
-													data-placement="top"
-													data-original-title="Some explanation text here"
-													placeholder="Product(Service) name"
-												/>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" style="color: #f8f8f8">버전 : </label>
-										<div class="controls form-group">
-											<div class="col-sm-8">
-												<input
-													type="text"
-													id="tooltip-enabled-service-version"
-													class="form-control"
-													data-placement="top"
-													data-original-title="Some explanation text here"
-													placeholder="Product(Service) version"
-												/>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" style="color: #f8f8f8">
-											시작 날짜
-											<span class="help-block">Some help text</span>
-										</label>
-										<div class="controls form-group">
-											<div class="col-sm-8">
-												<div class="input-group">
-													<input
-														id="btn-enabled-date"
-														class="form-control"
-														type="text"
-														name="btn-enabled-date"
-														value=""
-														pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
-													/>
-
-													<span class="input-group-btn">
-														<a
-															href="#"
-															id="btn-select-calendar-popup"
-															class="btn btn-danger"
-															data-date-format="yyyy/mm/dd"
-															data-date="2022/11/15"
-														>
-															<i class="fa fa-calendar"></i>
-														</a>
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="tooltip-enabled"
-											style="color: #f8f8f8"
-											>종료 날짜</label
-										>
-										<div class="controls form-group">
-											<div class="col-sm-8">
-												<div class="input-group">
-													<input
-														id="btn-end-date"
-														class="form-control"
-														type="text"
-														name="btn-enabled-date"
-														value=""
-														pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
-													/>
-
-													<span class="input-group-btn">
-														<a
-															href="#"
-															id="btn-end-calendar"
-															class="btn btn-danger"
-															data-date-format="yyyy/mm/dd"
-															data-date="2022/11/11"
-														>
-															<i class="fa fa-calendar"></i>
-														</a>
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label class="control-label" for="max-length" style="color: #f8f8f8"
-											>버전 내용</label
-										>
-										<div class="controls form-group">
-											<div class="col-sm-12">
-												<div id="extendModalEditor" class="darkBack">
-													<p>버전에 포함될 기능을 요약합니다.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</fieldset>
-							</form>
+						<div class="control-group">
+							<label class="control-label" style="color: #f8f8f8">버전 : </label>
+							<div class="controls form-group">
+								<div class="col-sm-8">
+									<input
+											type="text"
+											id="tooltip-enabled-service-version"
+											class="form-control"
+											data-placement="top"
+											data-original-title="Some explanation text here"
+											placeholder="Product(Service) version"
+									/>
+								</div>
+							</div>
 						</div>
-						<div
-							class="modal-footer"
-							style="
+						<div class="control-group">
+							<label class="control-label" style="color: #f8f8f8">
+								시작 날짜
+								<span class="help-block">Some help text</span>
+							</label>
+							<div class="controls form-group">
+								<div class="col-sm-8">
+									<div class="input-group">
+										<span class="input-group-btn">
+											<a
+													href="#"
+													id="btn-select-calendar-popup"
+													class="btn btn-danger"
+													data-date-format="yyyy/mm/dd"
+											>
+												<i class="fa fa-calendar"></i>
+											</a>
+										</span>
+										<input
+												id="btn-enabled-date"
+												class="form-control"
+												type="text"
+												name="btn-enabled-date"
+												value=""
+												pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+										/>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label
+									class="control-label"
+									for="tooltip-enabled"
+									style="color: #f8f8f8"
+							>종료 날짜 : </label
+							>
+							<div class="controls form-group">
+								<div class="col-sm-8">
+									<div class="input-group">
+										<span class="input-group-btn">
+											<a
+													href="#"
+													id="btn-end-calendar-popup"
+													class="btn btn-danger"
+													data-date-format="yyyy/mm/dd"
+											>
+												<i class="fa fa-calendar"></i>
+											</a>
+										</span>
+										<input
+												id="btn-end-date"
+												class="form-control"
+												type="text"
+												name="btn-enabled-date"
+												value=""
+												pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="max-length" style="color: #f8f8f8"
+							>버전 내용</label
+							>
+							<div class="controls form-group">
+								<div class="col-sm-12">
+									<div id="extendModalEditor" class="darkBack">
+										<p>버전에 포함될 기능을 요약합니다.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+					class="modal-footer"
+					style="
 								background-color: transparent;
 								padding: 5px;
 								text-align: right;
 								border-top: 0px;
 							"
-						>
-							<button
-								type="button"
-								id="close-version"
-								class="btn btn-default"
-								data-dismiss="modal"
-							>
-								Close
-							</button>
-							<button
-								type="button"
-								id="extendUpdate-pdService-version"
-								class="btn btn-primary"
-								onClick="modalPopupUpdate()"
-							>
-								Save Changes
-							</button>
-						</div>
-					</div>
-					<!-- /.modal-content -->
-				</div>
-				<!-- /.modal-dialog -->
+			>
+				<button
+						type="button"
+						id="close-version"
+						class="btn btn-default"
+						data-dismiss="modal"
+				>
+					Close
+				</button>
+				<button
+						type="button"
+						id="extendUpdate-pdService-version"
+						class="btn btn-primary"
+						onClick="modalPopupUpdate()"
+				>
+					Save Changes
+				</button>
 			</div>
 		</div>
-	</section>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
 </div>
 
 <!-- page specific application css/js -->
 <style type="text/css">
 	.modalDarkBack {
-		background: rgb(51 51 51 / 94%) !important;
+		background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+		background-color: rgba(102, 105, 104, 0.9);
+		background: radial-gradient(farthest-side ellipse at 10% 0, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+		background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+		background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+		padding-bottom: 10px;
 		border: 1px solid rgb(51 51 51) !important;
 	}
 

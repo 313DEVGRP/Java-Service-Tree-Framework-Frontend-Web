@@ -237,6 +237,11 @@ function dateFormat(timestamp) {
 	return time;
 }
 
+function getToday() {
+	var date = new Date();
+	return date.getFullYear() + "/" + ("0" + (date.getMonth() + 1) ).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
