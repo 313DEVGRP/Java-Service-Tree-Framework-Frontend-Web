@@ -19,7 +19,7 @@
                     <div class="controls form-group" class="darkBack" style="margin-bottom: 5px !important;">
                         <select id="country" required="required"
                                 data-placeholder="Select Product(Service)" class="select-block-level chzn-select"
-                                tabindex="-1"
+                                tabindex="-1" style="width:100% !important;"
                                 name="country"  class="darkBack">
                             <option value=""></option>
                         </select>
@@ -395,7 +395,8 @@
                                         a-RMS의 신규 요구사항 등록하기
                                     </label>
                                 </div>
-                                <table cellspacing="0" class="display responsive no-wrap" id="reqTable">
+                                <table class="display" id="reqTable"
+                                       style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3);">
                                     <thead>
                                     <tr>
                                         <th>c_id</th>
@@ -425,15 +426,8 @@
                                         요구사항 - JIRA 연결 정보 변경하기 ( 선택한 요구사항 한정 )
                                     </label>
                                 </div>
-                                <table cellspacing="0" class="display no-wrap" id="jiraVerTable" style="width: 100% !important;">
-                                    <thead>
-                                    <tr>
-                                        <th><input type="checkbox" name="checkall" id="checkall"></th>
-                                        <th>제품(서비스)</th>
-                                        <th>버전 이름</th>
-                                        <th>JIRA Project</th>
-                                    </tr>
-                                    </thead>
+                                <table class="display" id="jiraVerTable"
+                                       style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3);">
                                 </table>
                             </div>
 
@@ -1321,13 +1315,3 @@
         background: #eeeeee;
     }
 </style>
-<script type="text/javascript" charset="utf-8">
-    //<![CDATA[
-
-    // 초기 개발 및 확인 용도
-    $(function () {
-
-    });
-
-    //]]>
-</script>

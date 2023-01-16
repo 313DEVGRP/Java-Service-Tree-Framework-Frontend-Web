@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedJsTreeId; // 요구사항 아이디
 var defaultTypeDataTable;
+var tempDataTable;
 
 function execDocReady() {
 
@@ -269,13 +270,14 @@ function defaultType_dataTableLoad(selectId) {
 				}
 				return data;
 			},
-			className: "dt-body-center"
+			className: 'dt-body-center',
+			title: '<input type="checkbox" name="checkall" id="checkall">'
 		},
-		{ data: "c_pdservice_name" },
-		{ data: "c_pdservice_version_name" },
-		{ data: "c_pdservice_jira_name"}
+		{ name: 'c_pdservice_name', title: '제품(서비스)', data: 'c_pdservice_name', className: "dt-body-center", visible: true },
+		{ name: 'c_pdservice_version_name', title: '버전 이름', data: 'c_pdservice_version_name', className: "dt-body-center", visible: true },
+		{ name: 'c_pdservice_jira_name', title: 'JIRA Project', data: 'c_pdservice_jira_name', className: "dt-body-center", visible: true },
 	];
-	var rowsGroupList = [];
+	var rowsGroupList = null;
 	var columnDefList = [
 		{
 			orderable: false,
@@ -302,7 +304,7 @@ function defaultType_dataTableLoad(selectId) {
 
 	var authCheckURL = "/auth-user";
 
-	var tempDataTable = $(jQueryElementID).DataTable({
+	tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {
 			url: authCheckURL + "/api/arms/" + serviceNameForURL + endPointUrl,
 			dataSrc: ''
@@ -367,6 +369,28 @@ function dataTableCallBack(){
 	setDocViewTab();
 	//상세보기 탭 셋팅
 	setDetailAndEditViewTab();
+
+	$('input[name="jiraVerList"]').click(function() {
+
+		var allPages = tempDataTable.cells( ).nodes( );
+		if( $("#checkall").val() == 'on'){
+			$('#checkall').prop('checked', false);
+		}
+	});
+
+	$("#checkall").click(function(){
+
+		var allPages = tempDataTable.cells( ).nodes( );
+
+		if($(this).prop("checked")){
+			tempDataTable.rows().select();
+			$(allPages).find('input[type="checkbox"]').prop('checked', true);
+		}
+		else {
+			tempDataTable.rows().deselect();
+			$(allPages).find('input[type="checkbox"]').prop('checked', false);
+		}
+	});
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //파일 관리 : fileupload
