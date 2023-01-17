@@ -27,6 +27,8 @@ function execDocReady () {
 	CKEDITOR.replace("extendModalEditor");
 	CKEDITOR.replace("modal-editor");
 
+	$('#popup-editView-pdService-name').tooltip();
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

@@ -55,46 +55,95 @@ body {
   background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
   padding-bottom: 10px;
 }
+/* 스크롤 테마 */
+body::-webkit-scrollbar {
+  width: 8px;  /* 스크롤바의 너비 */
+  height: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  height: 30%; /* 스크롤바의 길이 */
+  background: #343434; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: radial-gradient(
+          farthest-side ellipse at 10% 0,
+          rgba(40, 40, 40, 0.9),
+          rgba(90, 100, 130, 0.89),
+          rgba(60, 60, 60, 0.9)
+  ),
+  url('../../reference/light-blue/img/bgnoise_lg_dark.png');
+  background: -webkit-radial-gradient(
+          10% 0,
+          farthest-side ellipse,
+          rgba(40, 40, 40, 0.9),
+          rgba(90, 100, 130, 0.89),
+          rgba(60, 60, 60, 0.9)
+  ),
+  url('../../reference/light-blue/img/bgnoise_lg_dark.png');
+  background: -moz-radial-gradient(
+          10% 0,
+          farthest-side ellipse,
+          rgba(40, 40, 40, 0.9),
+          rgba(90, 100, 130, 0.89),
+          rgba(60, 60, 60, 0.9)
+  ),
+  url('../../reference/light-blue/img/bgnoise_lg_dark.png');  /*스크롤바 뒷 배경 색상*/
+}
+
 /* Font */
 .jstree-default-context{
   font-family: 'Nanum Gothic';
   font-size: 12px;
+  color: #f8f8f8;
 }
 .font10{
   font-family: 'Nanum Gothic';
   font-size: 10px;
+  color: #f8f8f8;
 }
 .font11{
   font-family: 'Nanum Gothic';
   font-size: 11px;
+  color: #f8f8f8;
 }
 .font12{
   font-family: 'Nanum Gothic';
   font-size: 12px;
+  color: #f8f8f8;
 }
 .font13{
   font-family: 'Nanum Gothic';
   font-size: 13px;
+  color: #f8f8f8;
 }
 .font14{
   font-family: 'Nanum Gothic';
   font-size: 14px;
+  color: #f8f8f8;
 }
 .font15{
   font-family: 'Nanum Gothic';
   font-size: 15px;
+  color: #f8f8f8;
 }
 .font16{
   font-family: 'Nanum Gothic';
   font-size: 16px;
+  color: #f8f8f8;
 }
 .font17{
   font-family: 'Nanum Gothic';
   font-size: 17px;
+  color: #f8f8f8;
 }
 .font18{
   font-family: 'Nanum Gothic';
   font-size: 18px;
+  color: #f8f8f8;
 }
 
 .content {
@@ -449,4 +498,43 @@ body {
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
   border-right: 5px solid rgba(26, 26, 26, 0.425);
+}
+
+
+
+.modalDarkBack {
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background-color: rgba(102, 105, 104, 0.9);
+  background: radial-gradient(farthest-side ellipse at 10% 0, rgba(25, 25, 25, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(25, 25, 25, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(25, 25, 25, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  padding-bottom: 10px;
+  border: 1px solid rgb(51 51 51) !important;
+}
+
+.tooltip-inner {
+  max-width: 100% !important;
+}
+
+
+#service-reviewers,
+#service-reviewers a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+}
+
+#service-reviewers a {
+  gap: 5px;
+}
+
+.profile-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.profile-image img {
+  width: 100%;
 }

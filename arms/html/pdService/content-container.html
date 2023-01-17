@@ -360,8 +360,8 @@
 	aria-hidden="true"
 	style="display: none"
 >
-	<div class="modal-dialog" style="width: 90%; height: 70%">
-		<div class="modal-content modalDarkBack">
+	<div class="modal-dialog modalDarkBack" style="width: 80%; height: 80%">
+		<div class="modal-content">
 			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
 				<button
 					type="button"
@@ -378,10 +378,10 @@
 					style="color: #f8f8f8; text-align: left; padding: 5px"
 				>
 					<span class="font13" style="font-weight: bold">
-						<i class="fa fa-edit"></i> 신규 제품(서비스) 등록 팝업
+						<i class="fa fa-edit"></i> 신규 제품(서비스) 수정 팝업
 					</span>
-					<section class="search-result" style="border-left: 5px solid #e5603b">
-						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
+					<section class="search-result" style="border-left: 5px solid #e5603b; padding-top: 10px;">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px;">
 							a-RMS에 신규 제품(서비스)에 버전을 등록합니다.
 						</p>
 					</section>
@@ -495,64 +495,54 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
+
 <div
 	id="myModal2"
 	class="modal fade"
 	role="dialog"
 	aria-labelledby="myModalLabel"
 	aria-hidden="true"
-	style="display: none"
->
-	<div class="modal-dialog" style="width: 90%; height: 70%">
+	style="display: none; border-radius: 10px;">
+
+	<div class="modal-dialog" style="width: 80%; height: 80%">
 		<div class="modal-content modalDarkBack">
-			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
-				<button
-					type="button"
-					class="close"
-					data-dismiss="modal"
-					aria-hidden="true"
-					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
-				>
-					×
-				</button>
-				<h4
-					class="modal-title font14"
+			<div class="modal-header" style="padding: 0px; border-bottom: 1px">
+				<h4 class="modal-title font14"
 					id="myModalLabel2"
-					style="color: #f8f8f8; text-align: left; padding: 5px"
-				>
+					style="color: #f8f8f8; text-align: left; padding: 5px" >
 					<span class="font13" style="font-weight: bold">
 						<i class="fa fa-edit"></i> 신규 제품(서비스) 등록 팝업
 					</span>
 					<section class="search-result" style="border-left: 5px solid #e5603b">
-						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px;">
 							a-RMS에 신규 제품(서비스)에 버전을 등록합니다.
 						</p>
 					</section>
 				</h4>
+				<div class="widget-controls" style="padding-top: 10px;">
+					<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+					<a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
+					<a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+					<a data-widgster="close" title="Close" href="#" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></a>
+				</div>
 			</div>
-			<div class="modal-body" style="padding: 5px">
+			<div class="modal-body" style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px;">
 				<form class="form-horizontal" method="post">
 					<fieldset>
-						<div class="control-group">
-							<label class="control-label" style="color: #f8f8f8">
-								제품(서비스) 이름 &nbsp;
-							</label>
-							<div class="input-wrap col-sm-8">
+						<div class="control-group" for="popup-editView-pdService-name">
+							<label class="control-label font13">제품(서비스) 이름 : </label>
+							<div class="controls form-group input-group" style="margin-left: 180px;">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
-								<div class="col-sm-8">
-									<input
-										id="popup-editView-pdService-name"
-										class="form-control font13 darkBack"
-										style="color: #f8f8f8"
-										size="16"
-										type="text"
-										placeholder="service name ###"
-									/>
-								</div>
+								<input type="text" id="popup-editView-pdService-name" name="popup-editView-pdService-name"
+									   class="form-control parsley-validated font13 darkBack"
+									   data-placement="top" data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+									   required="required" placeholder="service name">
+								<span class="input-group-addon font11">INFO : 제품(서비스) 이름은 중복될 수 없습니다.</span>
 							</div>
 						</div>
+
 						<div class="control-group" for="popup-editView-pdService-owner">
 							<label class="control-label" style="color: #f8f8f8">
 								제품(서비스) 오너 &nbsp;
@@ -638,90 +628,3 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
-<!-- page specific application css/js -->
-<style>
-	.modalDarkBack {
-		background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-		background-color: rgba(102, 105, 104, 0.9);
-		background: radial-gradient(farthest-side ellipse at 10% 0, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-		background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-		background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(40, 40, 40, 0.9), rgba(90, 100, 130, 0.89), rgba(60, 60, 60, 0.9)), url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-		padding-bottom: 10px;
-		border: 1px solid rgb(51 51 51) !important;
-	}
-
-	.new-tab-open .product-handler,
-	.new-tab-open .pull-right {
-		display: none;
-	}
-
-	.product-handler {
-		display: flex;
-		justify-content: space-between;
-	}
-	.product-handler__group {
-		display: flex;
-		gap: 7px;
-	}
-	.product-handler .btn-block {
-		margin: 0;
-		max-width: 160px;
-	}
-	.btn:focus,
-	.btn:active:focus {
-		outline: 0px auto -webkit-focus-ring-color;
-		outline-offset: -2px;
-	}
-	.control-group {
-		overflow: hidden;
-	}
-	.input-wrap {
-		display: flex;
-		height: 30px;
-		margin-bottom: 7px;
-	}
-	.input-wrap .input-group-addon {
-		width: 40px;
-		height: 30px;
-	}
-	.input-wrap .select2-selection--single,
-	.input-wrap .select2-selection--multiple {
-		height: 30px !important;
-		min-height: 30px !important;
-	}
-	.input-wrap .select2-selection__placeholder {
-		padding-left: 2px !important;
-	}
-	.input-wrap .select2-selection--multiple ul {
-		padding-left: 10px !important;
-	}
-	.input-wrap .select2-search--inline,
-	.input-wrap .select2-search--inline input {
-		width: 100% !important;
-	}
-	.form-control:focus {
-		box-shadow: none;
-	}
-
-	#service-reviewers,
-	#service-reviewers a {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		padding: 0;
-	}
-
-	#service-reviewers a {
-		gap: 5px;
-	}
-
-	.profile-image {
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-		overflow: hidden;
-	}
-	.profile-image img {
-		width: 100%;
-	}
-</style>
