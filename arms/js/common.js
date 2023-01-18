@@ -731,6 +731,7 @@ function dataTable_build(
 			dataSrc: jsonRoot,
 		},
 		stateSave: true,
+		stateDuration: -1,
 		destroy: true,
 		processing: true,
 		responsive: true,

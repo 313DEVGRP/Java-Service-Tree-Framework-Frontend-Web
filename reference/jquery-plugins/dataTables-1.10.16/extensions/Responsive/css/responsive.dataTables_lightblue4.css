@@ -94,7 +94,7 @@ table.dataTable > tbody > tr.child ul.dtr-details {
     padding: 0;
 }
 table.dataTable > tbody > tr.child ul.dtr-details li {
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid #977777;
     padding: 0.5em 0;
 }
 table.dataTable > tbody > tr.child ul.dtr-details li:first-child {
