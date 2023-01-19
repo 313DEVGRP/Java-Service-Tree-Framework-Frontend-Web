@@ -384,7 +384,7 @@ function dataTableClick(selectedData) {
 }
 
 //데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(){
+function dataTableCallBack(settings, json){
 
 }
 

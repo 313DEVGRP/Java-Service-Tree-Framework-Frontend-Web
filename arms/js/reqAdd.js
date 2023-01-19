@@ -317,10 +317,10 @@ function defaultType_dataTableLoad(selectId) {
 		columnDefs: columnDefList,
 		select: selectList,
 		order: orderList,
-		drawCallback: function() {
+		initComplete: function(settings, json) {
 			console.log("dataTableBuild :: drawCallback");
 			if ($.isFunction(dataTableCallBack )) {
-				dataTableCallBack();
+				dataTableCallBack(settings, json);
 			}
 		}
 	});
@@ -365,7 +365,7 @@ function dataTableClick(selectedData) {
 }
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
-function dataTableCallBack(){
+function dataTableCallBack(settings, json){
 	setDocViewTab();
 	//상세보기 탭 셋팅
 	setDetailAndEditViewTab();

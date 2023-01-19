@@ -323,7 +323,7 @@ function dataTableClick(selectedData) {
 }
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
-function dataTableCallBack(){
+function dataTableCallBack(settings, json){
 	console.log("check");
 }
 
