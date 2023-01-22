@@ -542,59 +542,41 @@
 								<span class="input-group-addon font11">INFO : 제품(서비스) 이름은 중복될 수 없습니다.</span>
 							</div>
 						</div>
-
 						<div class="control-group" for="popup-editView-pdService-owner">
-							<label class="control-label" style="color: #f8f8f8">
-								제품(서비스) 오너 &nbsp;
-							</label>
-							<div class="input-wrap col-sm-8">
+							<label class="control-label font13">제품(서비스) 오너 : </label>
+							<div class="controls form-group input-group" style="margin-left: 180px;">
 								<span class="input-group-addon">
 									<i class="fa fa-users"></i>
 								</span>
-								<div class="col-sm-8">
-									<select
-										id="popup-editView-pdService-owner"
-										class="js-data-example-ajax form-control font13 darkBack"
-										style="width: 100%"
-									></select>
-								</div>
+								<select type="text" id="popup-editView-pdService-owner" name="popup-editView-pdService-owner"
+									   class="js-data-example-ajax form-control parsley-validated font13 darkBack"
+									   data-placement="top" data-original-title="제품(서비스) 오너(책임자)는 1명입니다."
+										required="required" placeholder="service name"></select>
+								<span class="input-group-addon font11">INFO : 제품(서비스) 오너(책임자)는 1명입니다.</span>
 							</div>
 						</div>
-						<div class="control-group" id="popup-editView-pdService-reviewer">
-							<label class="control-label" style="color: #f8f8f8">
-								제품(서비스) 리뷰어 &nbsp;
-							</label>
-							<div class="input-wrap col-sm-8">
+						<div class="control-group" id="popup-editView-pdService-reviewer" for="popup-editView-pdService-reviewers">
+							<label class="control-label font13">제품(서비스) 리뷰어 : </label>
+							<div class="controls form-group input-group" style="margin-left: 180px;">
 								<span class="input-group-addon">
 									<i class="fa fa-users"></i>
 								</span>
-								<div class="col-sm-8">
-									<select
-										id="popup-editView-pdService-reviewers"
-										class="js-data-example-ajax form-control font13 darkBack"
-										name="selectedReviewers[]"
+								<select type="text" id="popup-editView-pdService-reviewers" name="selectedReviewers[]"
 										multiple="multiple"
-										style="width: 100%"
-									></select>
-								</div>
+										class="js-data-example-ajax form-control parsley-validated font13 darkBack"
+										data-placement="top" data-original-title="제품(서비스) 리뷰어는 최대 5명입니다."
+										required="required" placeholder="service name"></select>
+									<span class="input-group-addon font11">INFO : 제품(서비스) 리뷰어는 최대 5명입니다.</span>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" style="margin-top: 10px; color: #f8f8f8">
-								제품(서비스) 컨텐츠 &nbsp;
+							<label class="control-label" style="color: #f8f8f8">
+								제품(서비스) 컨텐츠 :
 							</label>
-							<div
-								class="box box-primary"
-								style="
-									border-top-color: #bbbbbb;
-									border-top-width: 0px;
-									margin-bottom: 35px !important;
-								"
-							></div>
 							<div class="controls form-group">
-								<div class="col-sm-12">
+								<div class="col-sm-12" style="padding-top: 10px;">
 									<div id="modal-editor" class="darkBack">
-										<p>버전에 포함될 기능을 요약합니다.</p>
+										<p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
 									</div>
 								</div>
 							</div>

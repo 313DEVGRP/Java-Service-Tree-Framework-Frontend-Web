@@ -538,3 +538,8 @@ body::-webkit-scrollbar-track {
 .profile-image img {
   width: 100%;
 }
+
+/* select2 위드 값 */
+.select2-container {
+    width: 100% !important;
+}
