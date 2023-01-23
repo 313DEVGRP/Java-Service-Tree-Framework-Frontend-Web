@@ -331,7 +331,7 @@ function dataTableLoad() {
 			data:   "c_title",
 			render: function (data, type, row, meta) {
 				if (type === 'display') {
-					return '<label style="color: #f8f8f8">' + data + '</label>';
+					return '<label style="color: #a4c6ff">' + data + '</label>';
 				}
 
 				return data;
@@ -412,11 +412,12 @@ function pdServiceDataTableClick(c_id) {
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
 
-			$("#detailView-pdService-name").text(json.c_title);
+			//$("#detailView-pdService-name").val(json.c_title);
+			$('input[name=detailView-pdService-name]').val(json.c_title);
 			if (json.c_owner == null || json.c_owner == "none") {
-				$("#detailView-pdService-owner").text("책임자가 존재하지 않습니다.");
+				$('input[name=detailView-pdService-owner]').val("책임자가 존재하지 않습니다.");
 			} else {
-				$("#detailView-pdService-owner").text(json.c_owner);
+				$('input[name=detailView-pdService-owner]').val(json.c_owner);
 			}
 
 			if (json.c_reviewer01 == null || json.c_reviewer01 == "none") {

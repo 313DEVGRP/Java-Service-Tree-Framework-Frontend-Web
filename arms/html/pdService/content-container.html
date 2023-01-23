@@ -92,47 +92,91 @@
 							>
 								<form class="form-horizontal" method="post">
 									<fieldset>
+										<div class="control-group" for="detailView-pdService-name">
+											<label class="control-label font13">제품(서비스) 이름 : </label>
+											<div class="controls form-group input-group" style="margin-left: 180px;">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-gift"></i>
+											</span>
+												<input 	type="text" id=detailView-pdService-name" name="detailView-pdService-name"
+													   	class="form-control parsley-validated font13 darkBack"
+													   	data-placement="top" data-original-title="수정은 편집 탭에서 해주세요"
+													   	required="required" placeholder="service name" disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important;">
+												<span class="input-group-addon font11">
+													INFO : 수정은 편집 탭에서 해주세요</span>
+											</div>
+										</div>
+										<div class="control-group" for="detailView-pdService-owner">
+											<label class="control-label font13">제품(서비스) 오너 : </label>
+											<div class="controls form-group input-group" style="margin-left: 180px;">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-gift"></i>
+											</span>
+												<input type="text" id=detailView-pdService-owner" name="detailView-pdService-owner"
+													   class="form-control parsley-validated font13 darkBack"
+													   data-placement="top" data-original-title="책임자 변경"
+													   required="required" placeholder="service name" disabled="disabled"
+													   style="border: 0px !important; color: #a4c6ff !important;"">
+												<span class="input-group-addon font11">INFO : 책임자 확인</span>
+											</div>
+										</div>
 										<div class="control-group">
-											<label class="control-label" for="prepended-input">
-												제품(서비스) 이름 &nbsp;
-											</label>
-											<div class="input-wrap col-sm-8">
+											<label class="control-label font13">제품(서비스) 리뷰어 : </label>
+											<div class="controls input-group" style="margin-left: 180px;">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i> </span
-												>&nbsp;
-												<div
-													style="display: flex; align-items: center; gap: 10px; padding: 0"
-												>
-													<a href="#" id="detailView-pdService-name"></a>
-												</div>
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+												<input type="text" id="detailView-pdService-reviewer01"
+													   class="form-control parsley-validated font13 darkBack"
+													   data-placement="top" data-original-title="공동 책임자"
+													   required="required" placeholder="service name" disabled="disabled"
+													   style="border: 0px !important;">
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label" for="prepended-input">
-												제품(서비스) 오너 &nbsp;
-											</label>
-											<div class="input-wrap col-sm-8">
-												<span class="input-group-addon"> <i class="fa fa-user"></i> </span
-												>&nbsp;
-												<div
-													style="display: flex; align-items: center; gap: 10px; padding: 0"
-												>
-													<a href="#" id="detailView-pdService-owner"></a>
-												</div>
+											<div class="controls input-group" style="margin-left: 180px;">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+												<input type="text" id="detailView-pdService-reviewer02"
+													   class="form-control parsley-validated font13 darkBack"
+													   data-placement="top" data-original-title="공동 책임자"
+													   required="required" placeholder="service name" disabled="disabled"
+													   style="border: 0px !important;">
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label"> 제품(서비스) 리뷰어 &nbsp; </label>
-											<div class="input-wrap col-sm-8">
-												<span class="input-group-addon"> <i class="fa fa-users"></i> </span
-												>&nbsp;
-												<div>
-													<a href="#" id="detailView-pdService-reviewer01"></a>
-													<a href="#" id="detailView-pdService-reviewer02"></a>
-													<a href="#" id="detailView-pdService-reviewer03"></a>
-													<a href="#" id="detailView-pdService-reviewer04"></a>
-													<a href="#" id="detailView-pdService-reviewer05"></a>
-												</div>
+											<div class="controls input-group" style="margin-left: 180px;">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+												<input type="text" id="detailView-pdService-reviewer03"
+													   class="form-control parsley-validated font13 darkBack"
+													   data-placement="top" data-original-title="공동 책임자"
+													   required="required" placeholder="service name" disabled="disabled"
+													   style="border: 0px !important;">
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+											<div class="controls input-group" style="margin-left: 180px;">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+												<input type="text" id="detailView-pdService-reviewer04"
+													   class="form-control parsley-validated font13 darkBack"
+													   data-placement="top" data-original-title="공동 책임자"
+													   required="required" placeholder="service name" disabled="disabled"
+													   style="border: 0px !important;">
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+											<div class="controls input-group" style="margin-left: 180px;">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+												<input type="text" id="detailView-pdService-reviewer05"
+													   class="form-control parsley-validated font13 darkBack"
+													   data-placement="top" data-original-title="공동 책임자"
+													   required="required" placeholder="service name" disabled="disabled"
+													   style="border: 0px !important;">
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 										</div>
 										<div class="control-group">
@@ -146,7 +190,7 @@
 												</button>
 											</div>
 											<br /><br /><br />
-											<div class="col-sm-12" id="detailView-pdService-contents"></div>
+											<div class="col-sm-12 darkBack" id="detailView-pdService-contents"></div>
 										</div>
 									</fieldset>
 								</form>
