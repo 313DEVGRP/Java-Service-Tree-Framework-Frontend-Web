@@ -29,6 +29,8 @@ function execDocReady () {
 
 	$('#popup-editView-pdService-name').tooltip();
 
+	select2_Setting();
+
 
 }
 
@@ -37,9 +39,16 @@ function execDocReady () {
 ////////////////////////////////////////////////////////////////////////////////////////
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	var target = $(e.target).attr("href"); // activated tab
+	console.log(target);
 
-	if (target == "#dropdown1") {
+	if (target == '#dropdown1') {
 		$('.body-middle').hide();
+
+		if( isEmpty(selectId) ){
+			jError("선택된 제품(서비스)가 없습니다. 오류는 무시됩니다.");
+		}else{
+			$('#deleteText').text($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
+		}
 	} else {
 		if (selectId == undefined) {
 			$('.body-middle').hide();
@@ -171,42 +180,46 @@ $("#extendModalPopupId").click(function () {
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
-$(".js-data-example-ajax").select2({
-	maximumSelectionLength: 5,
-	width: 'resolve',
-	ajax: {
-		url: function (params) {
-			return '/auth-check/getUsers/' + params.term;
-		},
-		dataType: "json",
-		delay: 250,
-		//data: function (params) {
-		//    return {
-		//        q: params.term, // search term
-		//        page: params.page,
-		//    };
-		//},
-		processResults: function (data, params) {
-			// parse the results into the format expected by Select2
-			// since we are using custom formatting functions we do not need to
-			// alter the remote JSON data, except to indicate that infinite
-			// scrolling can be used
-			params.page = params.page || 1;
+function select2_Setting(){
 
-			return {
-				results: data,
-				pagination: {
-					more: params.page * 30 < data.total_count,
-				},
-			};
+	$(".js-data-example-ajax").select2({
+		maximumSelectionLength: 5,
+		width: 'resolve',
+		ajax: {
+			url: function (params) {
+				return '/auth-check/getUsers/' + params.term;
+			},
+			dataType: "json",
+			delay: 250,
+			//data: function (params) {
+			//    return {
+			//        q: params.term, // search term
+			//        page: params.page,
+			//    };
+			//},
+			processResults: function (data, params) {
+				// parse the results into the format expected by Select2
+				// since we are using custom formatting functions we do not need to
+				// alter the remote JSON data, except to indicate that infinite
+				// scrolling can be used
+				params.page = params.page || 1;
+
+				return {
+					results: data,
+					pagination: {
+						more: params.page * 30 < data.total_count,
+					},
+				};
+			},
+			cache: true,
 		},
-		cache: true,
-	},
-	placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
-	minimumInputLength: 1,
-	templateResult: formatUser,
-	templateSelection: formatUserSelection,
-});
+		placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
+		minimumInputLength: 1,
+		templateResult: formatUser,
+		templateSelection: formatUserSelection,
+	});
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
@@ -247,21 +260,6 @@ function formatUserSelection(jsonData) {
 	}
 	return jsonData.text;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////
-// --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
-////////////////////////////////////////////////////////////////////////////////////////
-// $('#popup-editView-pdService-reviewer').on('select2:select', function (e) {
-// 	var heightValue = $('#popup-editView-pdService-reviewer').height();
-// 	var resultValue = heightValue + 20;
-// 	$('#popup-editView-pdService-reviewer').css('height', resultValue + 'px');
-// });
-
-$('#editView-pdService-reviewers').on('select2:select', function (e) {
-	var heightValue = $('#editView-pdService-reviewer').height();
-	var resultValue = heightValue + 20;
-	$('#editView-pdService-reviewer').css('height', resultValue + 'px');
-});
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -413,37 +411,41 @@ function pdServiceDataTableClick(c_id) {
 		.done(function (json) {
 
 			//$("#detailView-pdService-name").val(json.c_title);
-			$('input[name=detailView-pdService-name]').val(json.c_title);
-			if (json.c_owner == null || json.c_owner == "none") {
-				$('input[name=detailView-pdService-owner]').val("책임자가 존재하지 않습니다.");
+			$('#detailView-pdService-name').val(json.c_title);
+			if ( isEmpty(json.c_owner) || json.c_owner == "none") {
+				$('#detailView-pdService-owner').val("책임자가 존재하지 않습니다.");
 			} else {
-				$('input[name=detailView-pdService-owner]').val(json.c_owner);
+				$('#detailView-pdService-owner').val(json.c_owner);
 			}
 
-			if (json.c_reviewer01 == null || json.c_reviewer01 == "none") {
-				$("#detailView-pdService-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+			if ( isEmpty(json.c_reviewer01) || json.c_reviewer01 == "none" ) {
+				$('#detailView-pdService-reviewer01').val("리뷰어(연대책임자)가 존재하지 않습니다.");
 			} else {
-				$("#detailView-pdService-reviewer01").text(json.c_reviewer01);
+				$('#detailView-pdService-reviewer01').val(json.c_reviewer01);
 			}
 
-			if (json.c_reviewer02 == null || json.c_reviewer02 == "none") {
+			if ( isEmpty(json.c_reviewer02) || json.c_reviewer02 == "none") {
+				$('#detailView-pdService-reviewer02').val("2번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailView-pdService-reviewer02").text(json.c_reviewer02);
+				$("#detailView-pdService-reviewer02").val(json.c_reviewer02);
 			}
 
-			if (json.c_reviewer03 == null || json.c_reviewer03 == "none") {
+			if ( isEmpty(json.c_reviewer03) || json.c_reviewer03 == "none") {
+				$('#detailView-pdService-reviewer03').val("3번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailView-pdService-reviewer03").text(json.c_reviewer03);
+				$("#detailView-pdService-reviewer03").val(json.c_reviewer03);
 			}
 
-			if (json.c_reviewer04 == null || json.c_reviewer04 == "none") {
+			if ( isEmpty(json.c_reviewer04) || json.c_reviewer04 == "none") {
+				$('#detailView-pdService-reviewer04').val("4번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailView-pdService-reviewer04").text(json.c_reviewer04);
+				$("#detailView-pdService-reviewer04").val(json.c_reviewer04);
 			}
 
-			if (json.c_reviewer05 == null || json.c_reviewer05 == "none") {
+			if ( isEmpty(json.c_reviewer05) || json.c_reviewer05 == "none") {
+				$('#detailView-pdService-reviewer05').val("5번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailView-pdService-reviewer05").text(json.c_reviewer05);
+				$("#detailView-pdService-reviewer05").val(json.c_reviewer05);
 			}
 			$("#detailView-pdService-contents").html(json.c_contents);
 
@@ -559,6 +561,8 @@ function pdServiceDataTableClick(c_id) {
 			console.log(xhr + status);
 			$('.loader').addClass('hide');
 		});
+
+	$('#deleteText').text($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

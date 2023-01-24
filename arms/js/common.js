@@ -248,11 +248,11 @@ function getToday() {
 function setSideMenu( categoryName, listName, collapse) {
 	console.log("setSideMenu :: categoryName -> " + categoryName + ", listName -> " + listName);
 	setTimeout(function () {
-		$(`#${categoryName}`).css({ color: "lightblue" });
+		$(`#${categoryName}`).css({ color: "#a4c6ff" });
 		$(`#${categoryName}`).css({ "font-weight": "900" });
 
 		$(`#${listName}`).addClass("active");
-		$(`#${listName}`).css({ color: "lightblue" });
+		$(`#${listName}`).css({ color: "#a4c6ff" });
 		$(`#${listName}`).css({ "font-weight": "900" });
 	}, 1000);
 }

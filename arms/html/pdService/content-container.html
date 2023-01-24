@@ -98,7 +98,7 @@
 											<span class="input-group-addon">
 												<i class="glyphicon glyphicon-gift"></i>
 											</span>
-												<input 	type="text" id=detailView-pdService-name" name="detailView-pdService-name"
+												<input 	type="text" id="detailView-pdService-name" name="detailView-pdService-name"
 													   	class="form-control parsley-validated font13 darkBack"
 													   	data-placement="top" data-original-title="수정은 편집 탭에서 해주세요"
 													   	required="required" placeholder="service name" disabled="disabled"
@@ -113,11 +113,11 @@
 											<span class="input-group-addon">
 												<i class="glyphicon glyphicon-gift"></i>
 											</span>
-												<input type="text" id=detailView-pdService-owner" name="detailView-pdService-owner"
+												<input type="text" id="detailView-pdService-owner" name="detailView-pdService-owner"
 													   class="form-control parsley-validated font13 darkBack"
 													   data-placement="top" data-original-title="책임자 변경"
 													   required="required" placeholder="service name" disabled="disabled"
-													   style="border: 0px !important; color: #a4c6ff !important;"">
+													   style="border: 0px !important; color: #a4c6ff !important;">
 												<span class="input-group-addon font11">INFO : 책임자 확인</span>
 											</div>
 										</div>
@@ -127,55 +127,55 @@
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input type="text" id="detailView-pdService-reviewer01"
+												<input type="text" id="detailView-pdService-reviewer01" name="detailView-pdService-reviewer01"
 													   class="form-control parsley-validated font13 darkBack"
 													   data-placement="top" data-original-title="공동 책임자"
 													   required="required" placeholder="service name" disabled="disabled"
-													   style="border: 0px !important;">
+                                                       style="border: 0px !important; color: #a4c6ff !important;">
 												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 											<div class="controls input-group" style="margin-left: 180px;">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input type="text" id="detailView-pdService-reviewer02"
+												<input type="text" id="detailView-pdService-reviewer02" name="detailView-pdService-reviewer02"
 													   class="form-control parsley-validated font13 darkBack"
 													   data-placement="top" data-original-title="공동 책임자"
 													   required="required" placeholder="service name" disabled="disabled"
-													   style="border: 0px !important;">
+                                                       style="border: 0px !important; color: #a4c6ff !important;">
 												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 											<div class="controls input-group" style="margin-left: 180px;">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input type="text" id="detailView-pdService-reviewer03"
+												<input type="text" id="detailView-pdService-reviewer03" name="detailView-pdService-reviewer03"
 													   class="form-control parsley-validated font13 darkBack"
 													   data-placement="top" data-original-title="공동 책임자"
 													   required="required" placeholder="service name" disabled="disabled"
-													   style="border: 0px !important;">
+                                                       style="border: 0px !important; color: #a4c6ff !important;">
 												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 											<div class="controls input-group" style="margin-left: 180px;">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input type="text" id="detailView-pdService-reviewer04"
+												<input type="text" id="detailView-pdService-reviewer04" name="detailView-pdService-reviewer04"
 													   class="form-control parsley-validated font13 darkBack"
 													   data-placement="top" data-original-title="공동 책임자"
 													   required="required" placeholder="service name" disabled="disabled"
-													   style="border: 0px !important;">
+                                                       style="border: 0px !important; color: #a4c6ff !important;">
 												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 											<div class="controls input-group" style="margin-left: 180px;">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input type="text" id="detailView-pdService-reviewer05"
+												<input type="text" id="detailView-pdService-reviewer05" name="detailView-pdService-reviewer05"
 													   class="form-control parsley-validated font13 darkBack"
 													   data-placement="top" data-original-title="공동 책임자"
 													   required="required" placeholder="service name" disabled="disabled"
-													   style="border: 0px !important;">
+                                                       style="border: 0px !important; color: #a4c6ff !important;">
 												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 										</div>
@@ -190,7 +190,8 @@
 												</button>
 											</div>
 											<br /><br /><br />
-											<div class="col-sm-12 darkBack" id="detailView-pdService-contents"></div>
+											<div class="col-sm-12 darkBack" id="detailView-pdService-contents"
+                                                 style="padding-top: 10px;padding-bottom: 10px;"></div>
 										</div>
 									</fieldset>
 								</form>
@@ -199,93 +200,65 @@
 								<div>
 									<form class="form-horizontal" method="post">
 										<fieldset>
-											<div class="control-group">
-												<label class="control-label"> 제품(서비스) 이름 &nbsp; </label>
-												<div class="input-wrap col-sm-8">
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-gift"></i>
-													</span>
-													<input
-														id="editView-pdService-name"
-														class="form-control font13 darkBack"
-														style="color: #f8f8f8"
-														size="16"
-														type="text"
-														placeholder="service name ###"
-													/>
-												</div>
-											</div>
-											<div class="control-group">
-												<label class="control-label" for="editView-pdService-owner">
-													제품(서비스) 오너 &nbsp;
-												</label>
-												<div class="input-wrap col-sm-8">
-													<span class="input-group-addon">
-														<i class="fa fa-user"></i>
-													</span>
-													<select
-														id="editView-pdService-owner"
-														class="js-data-example-ajax form-control font13 darkBack"
-														style="width: 100%"
-													></select>
-												</div>
-											</div>
-											<div class="control-group">
-												<label class="control-label" for="editView-pdService-reviewers"
-													>요구사항 리뷰어 &nbsp;</label
-												>
-												<div class="controls form-group" style="margin-bottom: 10px">
-													<div class="input-group">
-														<span class="input-group-addon"><i class="fa fa-users"></i></span>
-														<select
-															id="editView-pdService-reviewers"
-															class="js-data-example-ajax form-control font13 darkBack"
-															name="selectedReviewers[]"
-															multiple="multiple"
-															style="width: 100%"
-														></select>
-													</div>
-												</div>
-											</div>
-											<div class="control-group">
-												<label
-													class="control-label"
-													for="prepended-input"
-													style="margin-top: 10px"
-												>
-													제품(서비스) 컨텐츠 &nbsp;
-												</label>
-												<div
-													class="box box-primary"
-													style="
-														border-top-color: #bbbbbb;
-														border-top-width: 0px;
-														margin-bottom: 35px !important;
-													"
-												></div>
-												<div class="controls form-group">
-													<div class="col-sm-12">
-														<div id="input_pdservice_editor" class="darkBack">
-															<p>버전에 포함될 기능을 요약합니다.</p>
-														</div>
-													</div>
-												</div>
-											</div>
+                                            <div class="control-group" for="editView-pdService-name">
+                                                <label class="control-label font13">제품(서비스) 이름 : </label>
+                                                <div class="controls form-group input-group" style="margin-left: 180px;">
+                                                    <span class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-gift"></i>
+                                                    </span>
+                                                    <input 	type="text" id="editView-pdService-name" name="editView-pdService-name"
+                                                              class="form-control parsley-validated font13 darkBack"
+                                                              data-placement="top" data-original-title="수정은 편집 탭에서 해주세요"
+                                                              required="required" placeholder="service name"
+                                                              style="border: 0px !important; color: #a4c6ff !important;">
+                                                    <span class="input-group-addon font11">INFO : 제품(서비스) 명은 중복 될 수 없습니다.</span>
+                                                </div>
+                                            </div>
+                                            <div class="control-group" for="editView-pdService-owner">
+                                                <label class="control-label font13">제품(서비스) 오너 : </label>
+                                                <div class="controls form-group input-group" style="margin-left: 180px;">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <select type="text" id="editView-pdService-owner" name="editView-pdService-owner"
+                                                        class="js-data-example-ajax form-control parsley-validated font13 darkBack"
+                                                        data-placement="top" data-original-title="책임자 변경"
+                                                        required="required" placeholder="service name"
+                                                        style="border: 0px !important; color: #a4c6ff !important;"></select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group" for="editView-pdService-reviewers">
+                                                <label class="control-label font13">제품(서비스) 리뷰어 : </label>
+                                                <div class="controls form-group input-group" style="margin-left: 180px;">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                    <select type="text" id="editView-pdService-reviewers" name="selectedReviewers[]"
+                                                            multiple="multiple"
+                                                            class="js-data-example-ajax form-control parsley-validated font13 darkBack"
+                                                            data-placement="top" data-original-title="제품(서비스) 리뷰어는 최대 5명입니다."
+                                                            required="required" placeholder="service name"></select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" style="color: #f8f8f8">
+                                                    제품(서비스) 컨텐츠 :
+                                                </label>
+                                                <div class="controls form-group">
+                                                    <div class="col-sm-12" style="padding-top: 10px;">
+                                                        <div id="input_pdservice_editor">
+                                                            <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 										</fieldset>
 									</form>
 								</div>
-								<div
-									class="form-actions"
-									style="float: right; margin-top: 0px !important"
-								>
+								<div class="form-actions" style="float: right; margin-top: 0px !important">
 									<div>
-										<button
-											class="btn btn-warning"
-											data-target="#myModal1"
-											data-toggle="modal"
-											id="extendModalPopupId"
-											type="button"
-										>
+										<button class="btn btn-warning" data-target="#myModal1" data-toggle="modal"
+											    id="extendModalPopupId" type="button">
 											팝업 창으로 편집 하기
 										</button>
 										<button type="button" id="pdServiceUpdate" class="btn btn-success">
@@ -295,28 +268,18 @@
 								</div>
 							</div>
 							<div id="dropdown1" class="tab-pane">
-								<p>제품(서비스) ""을(를) 삭제 하시겠습니까?</p>
+								<p>제품(서비스) " <label id="deleteText" style="color: #a4c6ff; font-weight: bold"></label> "을(를) 삭제 하시겠습니까?</p>
 								<p>
-									<strong
-										>Jira 프로젝트에서 제품(서비스)와 연관된 버전은 삭제되지
-										않습니다.</strong
-									>
+									<strong>Jira 프로젝트에서 제품(서비스)와 연관된 버전은 삭제되지 않습니다.</strong>
 								</p>
 								<p>
-									<strong
-										>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong
-									>
+									<strong>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong>
 								</p>
 								<p>
-									<strong
-										>( 주의하세요 ) 삭제된 요구사항과 연결되 Jira 이슈는
-										유지됩니다.</strong
-									>
+									<strong>( 주의하세요 ) 삭제된 요구사항과 연결되 Jira 이슈는  유지됩니다.</strong>
 								</p>
 								<p>
-									<strong
-										>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong
-									>
+									<strong>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong>
 								</p>
 								<div>
 									<button id="delete-pdService" class="btn btn-danger">
@@ -402,114 +365,84 @@
 	role="dialog"
 	aria-labelledby="myModalLabel"
 	aria-hidden="true"
-	style="display: none"
->
-	<div class="modal-dialog modalDarkBack" style="width: 80%; height: 80%">
-		<div class="modal-content">
-			<div class="modal-header" style="padding: 0px; border-bottom: 0px">
-				<button
-					type="button"
-					class="close"
-					data-dismiss="modal"
-					aria-hidden="true"
-					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px"
-				>
-					×
-				</button>
-				<h4
-					class="modal-title font14"
-					id="myModalLabel1"
-					style="color: #f8f8f8; text-align: left; padding: 5px"
-				>
+	style="display: none; border-radius: 10px;">
+	<div class="modal-dialog" style="width: 80%; height: 80%">
+		<div class="modal-content modalDarkBack">
+            <div class="modal-header" style="padding: 0px; border-bottom: 1px">
+                <h4 class="modal-title font14"
+                    id="myModalLabel1"
+                    style="color: #f8f8f8; text-align: left; padding: 5px" >
 					<span class="font13" style="font-weight: bold">
 						<i class="fa fa-edit"></i> 신규 제품(서비스) 수정 팝업
 					</span>
-					<section class="search-result" style="border-left: 5px solid #e5603b; padding-top: 10px;">
-						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px;">
-							a-RMS에 신규 제품(서비스)에 버전을 등록합니다.
-						</p>
-					</section>
-				</h4>
-			</div>
-			<div class="modal-body" style="padding: 5px">
+                    <section class="search-result" style="border-left: 5px solid #e5603b">
+                        <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px;">
+                            a-RMS에 신규 제품(서비스)의 정보를 수정합니다.
+                        </p>
+                    </section>
+                </h4>
+                <div class="widget-controls" style="padding-top: 10px;">
+                    <a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
+                    <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                    <a data-widgster="close" title="Close" href="#" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+			<div class="modal-body" style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px;">
 				<form class="form-horizontal" method="post">
 					<fieldset>
-						<div class="control-group">
-							<label class="control-label" style="color: #f8f8f8">
-								제품(서비스) 이름 &nbsp;
-							</label>
-							<div class="input-wrap col-sm-8">
+                        <div class="control-group" for="popup-editView-pdService-name">
+                            <label class="control-label font13">제품(서비스) 이름 : </label>
+                            <div class="controls form-group input-group" style="margin-left: 180px;">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
-								<div class="col-sm-8">
-									<input
-										id="extend-editView-pdService-name"
-										class="form-control font13 darkBack"
-										style="color: #f8f8f8"
-										size="16"
-										type="text"
-										placeholder="service name ###"
-									/>
-								</div>
-							</div>
-						</div>
-						<div class="control-group" for="popup-editView-pdService-owner">
-							<label class="control-label" style="color: #f8f8f8">
-								제품(서비스) 오너 &nbsp;
-							</label>
-							<div class="input-wrap col-sm-8">
+                                <input type="text" id="extend-editView-pdService-name" name="extend-editView-pdService-name"
+                                       class="form-control parsley-validated font13 darkBack"
+                                       data-placement="top" data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+                                       required="required" placeholder="service name">
+                                <span class="input-group-addon font11">INFO : 제품(서비스) 이름은 중복될 수 없습니다.</span>
+                            </div>
+                        </div>
+                        <div class="control-group" for="extend-editView-pdService-owner">
+                            <label class="control-label font13">제품(서비스) 오너 : </label>
+                            <div class="controls form-group input-group" style="margin-left: 180px;">
 								<span class="input-group-addon">
 									<i class="fa fa-users"></i>
 								</span>
-								<div class="col-sm-8">
-									<select
-										id="extend-editView-pdService-owner"
-										class="js-data-example-ajax form-control font13 darkBack"
-										style="width: 100%"
-									></select>
-								</div>
-							</div>
-						</div>
-						<div class="control-group" id="extend-editView-pdService-reviewer">
-							<label class="control-label" style="color: #f8f8f8">
-								제품(서비스) 리뷰어 &nbsp;
-							</label>
-							<div class="input-wrap col-sm-8">
+                                <select type="text" id="extend-editView-pdService-owner" name="extend-editView-pdService-owner"
+                                        class="js-data-example-ajax form-control parsley-validated font13 darkBack"
+                                        data-placement="top" data-original-title="제품(서비스) 오너(책임자)는 1명입니다."
+                                        required="required" placeholder="service name"></select>
+                                <span class="input-group-addon font11">INFO : 제품(서비스) 오너(책임자)는 1명입니다.</span>
+                            </div>
+                        </div>
+                        <div class="control-group" id="extend-editView-pdService-reviewer" for="extend-editView-pdService-reviewers">
+                            <label class="control-label font13">제품(서비스) 리뷰어 : </label>
+                            <div class="controls form-group input-group" style="margin-left: 180px;">
 								<span class="input-group-addon">
 									<i class="fa fa-users"></i>
 								</span>
-								<div class="col-sm-8">
-									<select
-										id="extend-editView-pdService-reviewers"
-										class="js-data-example-ajax form-control font13 darkBack"
-										name="selectedReviewers[]"
-										multiple="multiple"
-										style="width: 100%"
-									></select>
-								</div>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" style="margin-top: 10px; color: #f8f8f8">
-								제품(서비스) 컨텐츠 &nbsp;
-							</label>
-							<div
-								class="box box-primary"
-								style="
-									border-top-color: #bbbbbb;
-									border-top-width: 0px;
-									margin-bottom: 35px !important;
-								"
-							></div>
-							<div class="controls form-group">
-								<div class="col-sm-12">
-									<div id="extendModalEditor" class="darkBack">
-										<p>버전에 포함될 기능을 요약합니다.</p>
-									</div>
-								</div>
-							</div>
-						</div>
+                                <select type="text" id="extend-editView-pdService-reviewers" name="selectedReviewers[]"
+                                        multiple="multiple"
+                                        class="js-data-example-ajax form-control parsley-validated font13 darkBack"
+                                        data-placement="top" data-original-title="제품(서비스) 리뷰어는 최대 5명입니다."
+                                        required="required" placeholder="service name"></select>
+                                <span class="input-group-addon font11">INFO : 제품(서비스) 리뷰어는 최대 5명입니다.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" style="color: #f8f8f8">
+                                제품(서비스) 컨텐츠 :
+                            </label>
+                            <div class="controls form-group">
+                                <div class="col-sm-12" style="padding-top: 10px;">
+                                    <div id="extendModalEditor">
+                                        <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					</fieldset>
 				</form>
 			</div>
@@ -610,7 +543,7 @@
 										class="js-data-example-ajax form-control parsley-validated font13 darkBack"
 										data-placement="top" data-original-title="제품(서비스) 리뷰어는 최대 5명입니다."
 										required="required" placeholder="service name"></select>
-									<span class="input-group-addon font11">INFO : 제품(서비스) 리뷰어는 최대 5명입니다.</span>
+                                <span class="input-group-addon font11">INFO : 제품(서비스) 리뷰어는 최대 5명입니다.</span>
 							</div>
 						</div>
 						<div class="control-group">
