@@ -57,7 +57,7 @@ function dataTableLoad() {
 			data:   "c_title",
 			render: function (data, type, row, meta) {
 				if (type === 'display') {
-					return '<label style="color: #f8f8f8">' + data + '</label>';
+					return '<label style="color: #a4c6ff">' + data + '</label>';
 				}
 
 				return data;
@@ -144,31 +144,6 @@ function modalPopup(popupName) {
 		.css("height", height + "px");
 }
 
-// 신규버전 등록 팝업
-// $("#modalPopupId").click(function () {
-// 	$("#modalTitle").text('제품(서비스) 신규 버전 등록 팝업');
-// 	$("#modalSub").text('선택한 제품(서비스)에 버전을 등록합니다.');
-
-// 	var height = $(document).height() - 800;
-// 	$(".modal-body")
-// 		.find(".cke_contents:eq(0)")
-// 		.css("height", height + "px");
-// });
-
-
-// 편집하기 팝업창으로 보기 팝업
-// $("#versionPopup").click(function () {
-
-// 	var height = $(document).height() - 800;
-// 	console.log('height', height)
-// 	$(".modal-body")
-// 		.find(".cke_contents:eq(0)")
-// 		.css("height", height + "px");
-// });
-
-
-
-
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(selectedData) {
 
@@ -245,7 +220,6 @@ function modalPopupNewUpdate() {
 		},
 		statusCode: {
 			200: function () {
-				console.log("성공!");
 				//모달 팝업 끝내고
 				jSuccess("데이터가 저장되었습니다.");
 				$('#close-version').trigger('click');
@@ -324,7 +298,7 @@ function dataLoad(getSelectedText, selectedText) {
 
 // versionlist 이니셜라이즈
 (function ($) {
-	let menu;
+	var menu;
 	$.fn.jsonMenu = function (action, items, options) {
 		$(this).addClass("json-menu");
 		if (action == "add") {
@@ -342,7 +316,7 @@ function dataLoad(getSelectedText, selectedText) {
 function draw(main, menu) {
 	main.html("");
 
-	let data = `
+	var data = `
 			   <li class='list-group-item json-menu-header'>
 				   <strong>product service name</strong>
 			   </li>
@@ -355,11 +329,11 @@ function draw(main, menu) {
 					onClick="modalPopup('modalPopupId')"
 				>신규 버전 등록하기</button>`;
 
-	for (let i = 0; i < menu.length; i++) {
+	for (var i = 0; i < menu.length; i++) {
 		data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" data-toggle="collapse" href="" onclick="versionClick(${menu[i].c_id}); return false;">
+					   <a class="accordion-toggle collapsed" data-toggle="collapse" style="color: #a4c6ff" onclick="versionClick(${menu[i].c_id}); return false;">
 						   ${menu[i].c_title}
 					   </a>
 				   </div>

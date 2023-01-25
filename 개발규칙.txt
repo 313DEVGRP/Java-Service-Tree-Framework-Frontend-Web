@@ -1,41 +1,7 @@
-Name	Value/Description
-async	Boolean 값
-요청이 비동기식으로 처리되는지 여부를 나타낸다.
-기본값은 true
-beforeSend(xhr)	요청을 보내기 전에 실행되는 함수
-cache	Boolean 값
-브라우저가 요청된 페이지를 캐싱해야 하는지 여부를 나타낸다.
-기본값은 true
-complete(xhr,status)	요청이 완료됐을 때 실행되는 함수
-contentType	서버로 보내지는 데이터의 content-type
-기본값은 “application/x-www-form-urlencoded"
-context
-data	서버로 보내지는 데이터를 의미
-dataFilter(data,type)	XMLHttpRequest의 응답 데이터를 처리할 때 사용되는 함수
-dataType	서버 응답으로 받는 데이터 타입
-error(xhr,status,error)	요청이 실패했을 때 실행되는 함수
-global	Boolean 값
-요청에 대해 전역 AJAX 이벤트를 실행할 지 여부를 명시함
-기본값은 true
-ifModified	Boolean 값
-마지막 요청 이후에 응답이 변경됐을 때만 처리하는지를 명시
-기본값은 false
-jsonp	jsonp 요청에서 callback 함수를 오버라이딩하는 문자열
-jsonpCallback	jsonp 요청에서 callback 함수 이름을 나타낸다.
-password	HTTP 접근 인증(access authentication) 요청에 사용할 password를 나타낸다.
-processData	Boolean 값
-요청으로 보낸 데이터를 query string 형태로 변환할지 여부를 나타낸다.
-기본값은 true
-scriptCharset	요청할 때의 charset을 나타낸다.
-success(result,status,xhr)	요청이 성공했을 때 수행되는 함수
-timeout	요청에 대해 로컬의 응답제한시간(timeout)을 밀리초로 나타낸다.
-traditional	Boolean 값
-파라미터 직렬화를 기존 방식으로 사용할 지 여부를 나타낸다.
-type	요청 type(GET 혹은 POST)을 명시함
-url	요청을 보낼 URL을 나타낸다.
-기본값은 현재페이지
-username	HTTP 접근 인증(access authentication) 요청에 사용할 username을 나타낸다.
-xhr
+태그의 속성은 한줄에 하나씩 ( 샘플은 pdService/content-container.html 참고 )
+id 속성은 - 를 사용하여 네임 규칙을 적용
+카멜 케이스를 쓰되, 첫번째 대문자 이후 2번째 대문자 부터는 가독성을 위해서 "-"를 연결하여 쓸것.
 
-
-XMLHttpRequest 오브젝트를 생성할 때 사용하는 함수
+데이터의 글씨 색상은 style="color: #a4c6ff" 을 사용하여 구분짓게 하고
+버튼의 색상은 파란색은 신규 추가, 녹색은 업데이트, 빨간색은 삭제로 구분한다.
+오렌지색은 선택값을 구분하기 위하여 사용하여 색상을 난잡하게 쓰지 않도록 한다.
