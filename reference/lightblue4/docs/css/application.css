@@ -15389,7 +15389,7 @@ textarea + .help-block,
 }
 
 .panel .panel-heading a[data-toggle="collapse"].collapsed:before {
-  transform: rotate(90deg);
+  transform: rotate(270deg);
 }
 
 .panel-body {
@@ -23084,7 +23084,7 @@ table.table thead .sorting_desc_disabled {
   padding: 8px 10px;
   background: rgba(51, 51, 51, 0.3);
   position: relative;
-  border-left: 2px solid rgba(26, 26, 26, 0.425);
+  border-left: 2px solid #e5603b;
   border-radius: 3px;
 }
 
@@ -23115,7 +23115,7 @@ table.table thead .sorting_desc_disabled {
   height: 0;
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  border-right: 5px solid rgba(26, 26, 26, 0.425);
+  border-right: 5px solid #e5603b;
 }
 
 /***********************************/

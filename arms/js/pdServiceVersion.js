@@ -269,7 +269,18 @@ function dataLoad(getSelectedText, selectedText) {
 			console.log("dataLoad :: success -> ", json);
 			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
 			//version text setting
-			$(".list-group-item").text(selectedText);
+
+		var selectedHtml = `<div class="chat-message">
+			<div class="chat-message-body" style="margin-left: 0px !important;">
+				<span class="arrow"></span>
+				<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : </div>
+			<div class="text" style="color: #a4c6ff;">
+			` + selectedText + `
+			</div>
+			</div>
+			</div>`;
+
+			$(".list-group-item").html(selectedHtml);
 			$("#tooltip-enabled-service-name").val(selectedText);
 
 			// 상세보기
@@ -317,23 +328,29 @@ function draw(main, menu) {
 	main.html("");
 
 	var data = `
-			   <li class='list-group-item json-menu-header'>
+			   <li class='list-group-item json-menu-header' style="padding: 0px;">
 				   <strong>product service name</strong>
 			   </li>
-			   <button
-					type="button"
-					class="btn btn-primary btn-block"
-					id="modalPopupId"
-					data-toggle="modal"
-					data-target="#myModal2"
-					onClick="modalPopup('modalPopupId')"
-				>신규 버전 등록하기</button>`;
+			   <button type="button"
+														class="btn btn-primary btn-block"
+														id="modalPopupId"
+														data-toggle="modal"
+														data-target="#myModal2"
+														style="margin-bottom: 10px; margin-top: 10px;"
+														onClick="modalPopup('modalPopupId')">
+							신규 버전 등록하기
+						</button>`;
 
 	for (var i = 0; i < menu.length; i++) {
 		data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" data-toggle="collapse" style="color: #a4c6ff" onclick="versionClick(${menu[i].c_id}); return false;">
+					   <a class="accordion-toggle collapsed" 
+					   			data-toggle="collapse"
+					   			name="versionLink_List"
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;" 
+					   			onclick="versionClick(this, ${menu[i].c_id}); 
+					   			return false;">
 						   ${menu[i].c_title}
 					   </a>
 				   </div>
@@ -346,8 +363,16 @@ function draw(main, menu) {
 //버전 클릭할 때 동작하는 함수
 //1. 상세보기 데이터 바인딩
 //2. 편집하기 데이터 바인딩
-function versionClick(c_id) {
+function versionClick(element, c_id) {
+
+	$("a[name='versionLink_List']").each(function() {
+		this.style.background = "";
+	});
+	element.style.background = "rgba(229, 96, 59, 0.20)";
+	console.log(element);
+
 	selectVersion = c_id;
+
 	$.ajax({
 		url: "/auth-user/api/arms/pdServiceVersion/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
@@ -357,13 +382,17 @@ function versionClick(c_id) {
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
 			console.log(" -> " + json.c_contents);
-			$("#pdServiceName").text($(".list-group-item").text());
+
+
+			$("#pdServiceName").text($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
+
+
 			$("#pdServiceVersion").text(json.c_title);
 			$("#versionStartDate").text(json.c_start_date);
 			$("#versionEndDate").text(json.c_end_date);
 			$("#versionContents").html(json.c_contents);
 
-			$("#input_pdserviceName").val($(".list-group-item").text());
+			$("#input_pdserviceName").val($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
 			$("#input_pdserviceVersion").val(json.c_title);
 			$("#input_pdservice_start_date").val(json.c_start_date);
 			$("#input_pdservice_end_date").val(json.c_end_date);

@@ -31,7 +31,7 @@ function dataTableLoad() {
 			data:   "c_title",
 			render: function (data, type, row, meta) {
 				if (type === 'display') {
-					return '<label style="color: #f8f8f8">' + data + '</label>';
+					return '<label style="color: #a4c6ff">' + data + '</label>';
 				}
 
 				return data;
@@ -79,8 +79,19 @@ function dataLoad(getSelectedText, selectedText) {
 			console.log("dataLoad :: success -> ", json);
 			versionList = json;
 			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
+
+
 			//version text setting
-			$(".list-group-item").text(selectedText);
+			var selectedHtml = `<div class="chat-message">
+			<div class="chat-message-body" style="margin-left: 0px !important;">
+				<span class="arrow"></span>
+				<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : </div>
+			<div class="text" style="color: #a4c6ff;">
+			` + selectedText + `
+			</div>
+			</div>
+			</div>`;
+			$(".list-group-item").html(selectedHtml);
 			$("#tooltip-enabled-service-name").val(selectedText);
 
 			updateD3ByVersionList();
@@ -116,8 +127,8 @@ function dataLoad(getSelectedText, selectedText) {
 function draw(main, menu) {
 	main.html("");
 
-	let data = `
-			   <li class='list-group-item json-menu-header'>
+	var data = `
+			   <li class='list-group-item json-menu-header' style="padding: 0px; margin-bottom: 10px;">
 				   <strong>product service name</strong>
 			   </li>`;
 
@@ -125,7 +136,12 @@ function draw(main, menu) {
 		data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" data-toggle="collapse" href="" onclick="versionClick(${menu[i].c_id}, '${menu[i].c_title}'); return false;">
+					   <a class="accordion-toggle collapsed" 
+					   			data-toggle="collapse"
+					   			name="versionLink_List"
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
+					   			href="javascript:void(0);"
+					   			onclick="versionClick(this, ${menu[i].c_id}, '${menu[i].c_title}');">
 						   ${menu[i].c_title}
 					   </a>
 				   </div>
@@ -136,7 +152,14 @@ function draw(main, menu) {
 }
 
 //버전 클릭할 때 동작하는 함수
-function versionClick(c_id, c_title) {
+function versionClick(element, event, c_id, c_title) {
+
+	$("a[name='versionLink_List']").each(function() {
+		this.style.background = "";
+	});
+	element.style.background = "rgba(229, 96, 59, 0.20)";
+	console.log(element);
+
 	selectVersion = c_id;
 	selectVersionName= c_title;
  console.log("selectVersion" + selectVersion);
@@ -184,6 +207,8 @@ function versionClick(c_id, c_title) {
 	}).always(function() {
 		console.log("always call");
 	});
+
+	return false;
 
 }
 
