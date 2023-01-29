@@ -79,7 +79,7 @@ $("#extendModalPopupId").click(function () {
 	CKEDITOR.instances.extendModalEditor.setData(editorData);
 
 	var selectedId = $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id;
-	console.log("selectedId ->" + selectedId);
+	console.log("selectedId →" + selectedId);
 
 	// 제품(서비스) 이름
 	$("#extend-editView-pdService-name").val($("#editView-pdService-name").val());

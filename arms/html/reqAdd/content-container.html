@@ -244,7 +244,8 @@
                                                 문서로 보기 : <button type="button" class="btn btn-warning">새 창으로 제품(서비스) 내용 보기</button>
                                             </div>
                                             <br><br><br>
-                                            <div class="col-sm-12" id="detailView-req-contents">
+                                            <div class="col-sm-12 darkBack"
+                                                 id="detailView-req-contents">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -253,7 +254,7 @@
                             <div id="edit" class="tab-pane" style="padding-top: 10px !important">
                                 <div class="form-group" style="padding-top: 10px;">
                                     <div class="control-group">
-                                        <label class="control-label" style="vertical-align: center">요구사항 등록 모드 &nbsp;</label>
+                                        <label class="control-label" style="vertical-align: center">요구사항 등록 모드 : </label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group" style="text-align: left;">
                                                 <span class="input-group-addon"><i class="fa fa-sliders"></i></span>
@@ -266,102 +267,205 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-pdService-name">요구사항 연관 제품(서비스) &nbsp;</label>
+                                        <label class="control-label" for="editView-req-pdService-name">요구사항 제품(서비스) : </label>
                                         <div class="controls form-group" style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-pdService-name" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <input id="editView-req-pdService-name"
+                                                       disabled="disabled"
+                                                       class="form-control font13 darkBack"
+                                                       style="color: #a4c6ff;"
+                                                       size="16"
+                                                       type="text"
+                                                       placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editMultiVersion">요구사항 연관 버전 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editMultiVersion">
+                                            요구사항 연관 버전 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <select multiple="multiple" id="editMultiVersion" class="multiple-select btn-block darkBack" placeholder="&nbsp;&nbsp;Select Version">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <select multiple="multiple"
+                                                        id="editMultiVersion"
+                                                        class="multiple-select btn-block darkBack"
+                                                        placeholder="Select Version"
+                                                        style="color: #a4c6ff;">
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-id">요구사항 아이디 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-id">
+                                            요구사항 아이디 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-id" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <input id="editView-req-id"
+                                                       disabled="disabled"
+                                                       class="form-control font13 darkBack"
+                                                       style="color: #a4c6ff;"
+                                                       size="16"
+                                                       type="text"
+                                                       placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-name">요구사항 제목 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-name">
+                                            요구사항 제목 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-name" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <input id="editView-req-name"
+                                                       class="form-control font13 darkBack"
+                                                       style="color: #a4c6ff;"
+                                                       size="16"
+                                                       type="text"
+                                                       placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-priority">요구사항 우선순위 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-priority">
+                                            요구사항 우선순위 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <div id="editView-req-priority" class="btn-group" data-toggle="buttons">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <div id="editView-req-priority"
+                                                     class="btn-group"
+                                                     data-toggle="buttons">
                                                     <label class="btn btn-warning">
-                                                        <input type="radio" name="options" id="editView-req-priority-option1"> 낮음
+                                                        <input type="radio" name="options" id="editView-req-priority-option1">
+                                                        낮음
                                                     </label>
                                                     <label class="btn btn-warning">
-                                                        <input type="radio" name="options" id="editView-req-priority-option2"> 중간
+                                                        <input type="radio" name="options" id="editView-req-priority-option2">
+                                                        중간
                                                     </label>
                                                     <label class="btn btn-warning">
-                                                        <input type="radio" name="options" id="editView-req-priority-option3"> 높음
+                                                        <input type="radio" name="options" id="editView-req-priority-option3">
+                                                        높음
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-status">요구사항 상태 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-status">
+                                            요구사항 상태 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-status" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <input id="editView-req-status"
+                                                       disabled="disabled"
+                                                       class="form-control font13 darkBack"
+                                                       style="color: #a4c6ff;"
+                                                       size="16"
+                                                       type="text"
+                                                       placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-writer">요구사항 작성자 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-writer">
+                                            요구사항 작성자 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-writer" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <input id="editView-req-writer"
+                                                       disabled="disabled"
+                                                       class="form-control font13 darkBack"
+                                                       style="color: #a4c6ff;"
+                                                       size="16"
+                                                       type="text"
+                                                       placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-write-date">요구사항 최근 작성일 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-write-date">
+                                            요구사항 최근 작성일 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <input id="editView-req-write-date" disabled="disabled" class="form-control font13 darkBack" style="color: #f8f8f8;" size="16" type="text" placeholder="제품(서비스)명을 입력해 주세요">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <input id="editView-req-write-date"
+                                                       disabled="disabled"
+                                                       class="form-control font13 darkBack"
+                                                       style="color: #a4c6ff;"
+                                                       size="16"
+                                                       type="text"
+                                                       placeholder="제품(서비스)명을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editView-req-reviewers">요구사항 리뷰어 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
+                                        <label class="control-label"
+                                               for="editView-req-reviewers">
+                                            요구사항 리뷰어 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
-                                                <select id="editView-req-reviewers" class="js-data-example-ajax form-control font13 darkBack"
-                                                        name="selectedReviewers[]" multiple="multiple" style="width: 100%;"></select>
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-gift"></i>
+                                                </span>
+                                                <select id="editView-req-reviewers"
+                                                        class="js-data-example-ajax form-control font13 darkBack"
+                                                        name="selectedReviewers[]"
+                                                        multiple="multiple"
+                                                        style="width: 100%; color: #a4c6ff;">
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="editTabmodalEditor">요구사항 내용 &nbsp;</label>
-                                        <div class="controls form-group" style="margin-bottom: 10px;">
-                                            <div class="input-group" style="padding-top: 5px;">
+                                        <label class="control-label"
+                                               for="editTabmodalEditor">
+                                            요구사항 내용 :
+                                        </label>
+                                        <div class="controls form-group"
+                                             style="margin-bottom: 10px;">
+                                            <div class="input-group"
+                                                 style="padding-top: 5px;">
                                                 <code>
                                                     <i class="fa fa-long-arrow-right"></i>
                                                     입력창이 좁다면 하단의 팝업으로 편집하기를 활용하세요

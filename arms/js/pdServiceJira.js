@@ -73,10 +73,10 @@ function dataTableClick(selectedData){
 function dataLoad(getSelectedText, selectedText) {
 
 	// ajax 처리 후 에디터 바인딩.
-	console.log("dataLoad :: getSelectedID -> " + getSelectedText);
+	console.log("dataLoad :: getSelectedID → " + getSelectedText);
 	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText)
 		.done(function (json) {
-			console.log("dataLoad :: success -> ", json);
+			console.log("dataLoad :: success → ", json);
 			versionList = json;
 			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
 
@@ -96,12 +96,6 @@ function dataLoad(getSelectedText, selectedText) {
 
 			updateD3ByVersionList();
 
-			//데이터 로드를 사용자에게 알리기
-			Messenger().post({
-				message: 'Version Data 조회를 완료하였습니다.',
-				type: 'success',
-				showCloseButton: true
-			});
 		});
 
 
@@ -140,7 +134,6 @@ function draw(main, menu) {
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
 					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
-					   			href="javascript:void(0);"
 					   			onclick="versionClick(this, ${menu[i].c_id}, '${menu[i].c_title}');">
 						   ${menu[i].c_title}
 					   </a>
@@ -152,7 +145,7 @@ function draw(main, menu) {
 }
 
 //버전 클릭할 때 동작하는 함수
-function versionClick(element, event, c_id, c_title) {
+function versionClick(element, c_id, c_title) {
 
 	$("a[name='versionLink_List']").each(function() {
 		this.style.background = "";
@@ -207,8 +200,6 @@ function versionClick(element, event, c_id, c_title) {
 	}).always(function() {
 		console.log("always call");
 	});
-
-	return false;
 
 }
 

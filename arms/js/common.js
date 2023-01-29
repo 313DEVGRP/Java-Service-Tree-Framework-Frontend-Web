@@ -107,6 +107,21 @@ function topbarConfig() {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+//슬림스크롤
+////////////////////////////////////////////////////////////////////////////////////////
+function  makeSlimScroll(targetElement) {
+	$(targetElement).slimScroll({
+		height: '200px',
+		railVisible: true,
+		railColor: '#222',
+		railOpacity: 0.3,
+		wheelStep: 10,
+		allowPageScroll: false,
+		disableFadeOut: false
+	});
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 맨위로 아이콘
@@ -246,7 +261,7 @@ function getToday() {
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function setSideMenu( categoryName, listName, collapse) {
-	console.log("setSideMenu :: categoryName -> " + categoryName + ", listName -> " + listName);
+	console.log("setSideMenu :: categoryName → " + categoryName + ", listName → " + listName);
 	setTimeout(function () {
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });
 		$(`#${categoryName}`).css({ "font-weight": "900" });
@@ -263,28 +278,27 @@ function setSideMenu( categoryName, listName, collapse) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 
-	console.log("jsTreeBuild :: jQueryElementID -> " + jQueryElementID + ", serviceNameForURL -> "+ serviceNameForURL);
+	console.log("common :: jsTreeBuild : ( jQueryElementID ) → " + jQueryElementID);
+	console.log("common :: jsTreeBuild : ( serviceNameForURL ) → "+ serviceNameForURL);
 
-	console.log("jsTreeBuild :: href: " + $(location).attr("href"));
-	console.log("jsTreeBuild :: protocol: " + $(location).attr("protocol"));
-	console.log("jsTreeBuild :: host: " + $(location).attr("host"));
-	console.log("jsTreeBuild :: pathname: " + $(location).attr("pathname"));
-	console.log("jsTreeBuild :: search: " + $(location).attr("search"));
-	console.log("jsTreeBuild :: hostname: " + $(location).attr("hostname"));
-	console.log("jsTreeBuild :: port: " + $(location).attr("port"));
-
-	var authCheckURL = "/auth-user";
+	console.log("common :: jsTreeBuild : ( href ) → " + $(location).attr("href"));
+	console.log("common :: jsTreeBuild : ( protocol ) → " + $(location).attr("protocol"));
+	console.log("common :: jsTreeBuild : ( host ) → " + $(location).attr("host"));
+	console.log("common :: jsTreeBuild : ( pathname ) → " + $(location).attr("pathname"));
+	console.log("common :: jsTreeBuild : ( search ) → " + $(location).attr("search"));
+	console.log("common :: jsTreeBuild : ( hostname ) → " + $(location).attr("hostname"));
+	console.log("common :: jsTreeBuild : ( port ) → " + $(location).attr("port"));
 
 	$(jQueryElementID)
 		.bind("before.jstree", function (e, data) {
 			$("#alog").append(data.func + "<br />");
 			$("li:not([rel='drive']).jstree-open > a > .jstree-icon").css(
 				"background-image",
-				"url(http://www.a-rms.net/313devgrp/reference/jquery-plugins/jstree-v.pre1.0/themes/toolbar_open.png)"
+				"url(../reference/jquery-plugins/jstree-v.pre1.0/themes/toolbar_open.png)"
 			);
 			$("li:not([rel='drive']).jstree-closed > a > .jstree-icon").css(
 				"background-image",
-				"url(http://www.a-rms.net/313devgrp/reference/jquery-plugins/jstree-v.pre1.0/themes/ic_explorer.png)"
+				"url(../reference/jquery-plugins/jstree-v.pre1.0/themes/ic_explorer.png)"
 			);
 		})
 		.jstree({
@@ -404,8 +418,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				// All the options are almost the same as jQuery's AJAX (read the docs)
 				ajax: {
 					// the URL to fetch the data
-					url:
-						authCheckURL + "/api/arms/" + serviceNameForURL + "/getChildNode.do",
+					url: serviceNameForURL + "/getChildNode.do",
 					cache : false,
 					// the `data` function is executed in the instance's scope
 					// the parameter is the node being loaded
@@ -429,8 +442,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				// As this has been a common question - async search
 				// Same as above - the `ajax` config option is actually jQuery's AJAX object
 				ajax: {
-					url:
-						authCheckURL + "/api/arms/" + serviceNameForURL + "/searchNode.do",
+					url: serviceNameForURL + "/searchNode.do",
 					// You get the search string as a parameter
 					data: function (str) {
 						return {
@@ -504,8 +516,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			},
 		})
 		.bind("create.jstree", function (e, data) {
-			$.post(
-				authCheckURL + "/api/arms/" + serviceNameForURL + "/addNode.do",
+			$.post( serviceNameForURL + "/addNode.do",
 				{
 					ref: data.rslt.parent.attr("id").replace("node_", "").replace("copy_", ""),
 					c_position: data.rslt.position,
@@ -527,7 +538,8 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 							}
 						);
 					}
-					jsTreeBuild(jQueryElementID, serviceNameForURL);
+					//jsTreeBuild(jQueryElementID, serviceNameForURL);
+					$(jQueryElementID).jstree('refresh');
 				}
 			);
 		})
@@ -536,8 +548,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				$.ajax({
 					async: false,
 					type: "POST",
-					url:
-						authCheckURL + "/api/arms/" + serviceNameForURL + "/removeNode.do",
+					url: serviceNameForURL + "/removeNode.do",
 					data: {
 						c_id: this.id.replace("node_", "").replace("copy_", ""),
 					},
@@ -551,14 +562,14 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								}
 							);
 						}
-						jsTreeBuild(jQueryElementID, serviceNameForURL);
+						//jsTreeBuild(jQueryElementID, serviceNameForURL);
+						$(jQueryElementID).jstree('refresh');
 					},
 				});
 			});
 		})
 		.bind("rename.jstree", function (e, data) {
-			$.post(
-				authCheckURL + "/api/arms/" + serviceNameForURL + "/alterNode.do",
+			$.post( serviceNameForURL + "/alterNode.do",
 				{
 					c_id: data.rslt.obj.attr("id").replace("node_", "").replace("copy_", ""),
 					c_title: data.rslt.new_name,
@@ -577,13 +588,13 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 							}
 						);
 					}
-					jsTreeBuild(jQueryElementID, serviceNameForURL);
+					//jsTreeBuild(jQueryElementID, serviceNameForURL);
+					$(jQueryElementID).jstree('refresh');
 				}
 			);
 		})
 		.bind("set_type.jstree", function (e, data) {
-			$.post(
-				authCheckURL + "/api/arms/" + serviceNameForURL + "/alterNodeType.do",
+			$.post( serviceNameForURL + "/alterNodeType.do",
 				{
 					c_id: data.rslt.obj.attr("id").replace("node_", "").replace("copy_", ""),
 					c_title: data.rslt.new_name,
@@ -599,7 +610,8 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 							}
 						);
 					}
-					jsTreeBuild(jQueryElementID, serviceNameForURL);
+					//jsTreeBuild(jQueryElementID, serviceNameForURL);
+					$(jQueryElementID).jstree('refresh');
 				}
 			);
 		})
@@ -608,7 +620,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				$.ajax({
 					async: false,
 					type: "POST",
-					url: authCheckURL + "/api/arms/" + serviceNameForURL + "/moveNode.do",
+					url: serviceNameForURL + "/moveNode.do",
 					data: {
 						c_id: $(this).attr("id").replace("node_", "").replace("copy_", ""),
 						ref:
@@ -629,7 +641,11 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								data.inst.refresh(data.inst._get_parent(data.rslt.oc));
 							}
 						}
+
 						jNotify("Notification : <strong>Move Node</strong> Complete !");
+
+						$(jQueryElementID).jstree('refresh');
+
 						if (typeof Chat != "undefined") {
 							Chat.sendMessage(
 								"노드가 이동되었습니다. 이동된 노드의 아이디는 " + r.c_id,
@@ -638,7 +654,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								}
 							);
 						}
-						jsTreeBuild(jQueryElementID, serviceNameForURL);
+
 					},
 				});
 			});
@@ -711,10 +727,10 @@ function dataTable_build(
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg, '');
-	console.log('dataTableBuild :: jQueryElementStr -> ' + jQueryElementStr);
-	console.log('dataTableBuild :: jQueryElementID -> ' + jQueryElementID);
-	console.log('dataTableBuild :: columnList -> ' + columnList);
-	console.log('dataTableBuild :: rowsGroupList -> ' + rowsGroupList);
+	console.log('dataTableBuild :: jQueryElementStr → ' + jQueryElementStr);
+	console.log('dataTableBuild :: jQueryElementID → ' + jQueryElementID);
+	console.log('dataTableBuild :: columnList → ' + columnList);
+	console.log('dataTableBuild :: rowsGroupList → ' + rowsGroupList);
 
 	console.log('dataTableBuild :: href: ' + $(location).attr('href'));
 	console.log('dataTableBuild :: protocol: ' + $(location).attr('protocol'));
@@ -744,7 +760,7 @@ function dataTable_build(
 		language: {
 			processing: '',
 			loadingRecords:
-				'<span class="spinner" style="font-size: 14px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>',
+				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>',
 		},
 		initComplete: function (settings, json) {
 			console.log('dataTableBuild :: drawCallback');
@@ -806,8 +822,12 @@ function ajax_setup() {
 		.ajaxStart(function () {
 			$('.loader').removeClass('hide');
 		})
-		.ajaxSend(function (event, jqXHR, ajaxOptions) {})
-		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {})
+		.ajaxSend(function (event, jqXHR, ajaxOptions) {
+
+		})
+		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {
+
+		})
 		.ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
 			$('.loader').addClass('hide');
 			if ( jqXHR.status== 401 ) {

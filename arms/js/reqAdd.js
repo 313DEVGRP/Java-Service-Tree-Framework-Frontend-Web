@@ -29,23 +29,7 @@ function execDocReady() {
 	makeDatePicker($("#btn-start-calendar-popup"));
 	makeDatePicker($("#btn-end-calendar-popup"));
 
-};
-
-////////////////////////////////////////////////////////////////////////////////////////
-//슬림스크롤
-////////////////////////////////////////////////////////////////////////////////////////
-function  makeSlimScroll(targetElement) {
-	$(targetElement).slimScroll({
-		height: '200px',
-		railVisible: true,
-		railColor: '#222',
-		railOpacity: 0.3,
-		wheelStep: 10,
-		allowPageScroll: false,
-		disableFadeOut: false
-	});
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //제품 서비스 셀렉트 박스
@@ -62,23 +46,38 @@ function makePdServiceSelectBox(){
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",
-		progress: true
-	}).done(function(data) {
+		progress: true,
+		statusCode: {
+			200: function(data) {
 
-		for(var k in data){
-			var obj = data[k];
-			var newOption = new Option(obj.c_title, obj.c_id, false, false);
-			$('#country').append(newOption).trigger('change');
+				//////////////////////////////////////////////////////////
+				for(var k in data){
+					var obj = data[k];
+					var newOption = new Option(obj.c_title, obj.c_id, false, false);
+					$('#country').append(newOption).trigger('change');
+				}
+				//////////////////////////////////////////////////////////
+				jSuccess("제품(서비스) 조회가 완료 되었습니다.");
+
+			},
+		},
+		beforeSend:function(){
+			//$("#regist-pdService").hide(); 버튼 감추기
+		},
+		complete:function(){
+			//$("#regist-pdService").show(); 버튼 보이기
+		},
+		error:function(e){
+			jError("제품(서비스) 조회 중 에러가 발생했습니다.");
 		}
-	}).fail(function(e) {
-	}).always(function() {
 	});
 
 } // end makePdServiceSelectBox()
 
 $('#country').on("select2:open", function () {
-	//슬림스크롤
+
 	makeSlimScroll(".select2-results__options");
+	
 });
 
 // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
@@ -108,30 +107,43 @@ function bind_VersionData_By_PdService(){
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",
-		progress: true
-	}).done(function(data) {
+		progress: true,
+		statusCode: {
+			200: function(data) {
 
-		for(var k in data){
-			var obj = data[k];
-			var $opt = $('<option />', {
-				value: obj.c_id,
-				text: obj.c_title,
-			})
+				//////////////////////////////////////////////////////////
+				for(var k in data){
+					var obj = data[k];
+					var $opt = $('<option />', {
+						value: obj.c_id,
+						text: obj.c_title,
+					})
 
-			//$('#multiVersion').append($opt);
-			//$('#editMultiVersion').append($opt);
-			$('.multiple-select').append($opt);
+					//$('#multiVersion').append($opt);
+					//$('#editMultiVersion').append($opt);
+					$('.multiple-select').append($opt);
+				}
+
+				if(data.length > 0){
+					console.log("display 재설정.");
+				}
+				//$('#multiVersion').multipleSelect('refresh');
+				//$('#editMultiVersion').multipleSelect('refresh');
+				$('.multiple-select').multipleSelect('refresh');
+				//////////////////////////////////////////////////////////
+				jSuccess("버전 조회가 완료 되었습니다.");
+
+			},
+		},
+		beforeSend:function(){
+			//$("#regist-pdService").hide(); 버튼 감추기
+		},
+		complete:function(){
+			//$("#regist-pdService").show(); 버튼 보이기
+		},
+		error:function(e){
+			jError("버전 조회 중 에러가 발생했습니다.");
 		}
-
-		if(data.length > 0){
-			console.log("display 재설정.");
-		}
-		//$('#multiVersion').multipleSelect('refresh');
-		//$('#editMultiVersion').multipleSelect('refresh');
-		$('.multiple-select').multipleSelect('refresh');
-
-	}).fail(function(e) {
-	}).always(function() {
 	});
 }
 
@@ -139,7 +151,11 @@ function bind_VersionData_By_PdService(){
 //요구사항 :: jsTree
 ////////////////////////////////////////////////////////////////////////////////////////
 function build_ReqData_By_PdService(){
-	jsTreeBuild("#productTree", "reqAdd/T_ARMS_REQADD_" + $('#country').val());
+
+	var jQueryElementID = "#productTree";
+	var serviceNameForURL = "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + $('#country').val();
+
+	jsTreeBuild( jQueryElementID, serviceNameForURL );
 }
 
 // --- 요구사항 (jstree) 선택 이벤트 --- //
@@ -290,9 +306,9 @@ function defaultType_dataTableLoad(selectId) {
 		selector: 'td:first-child'
 	};
 	var orderList = [[ 1, 'asc' ]];
-	console.log("defaultType_dataTableLoad selectId -> " + selectId);
-	console.log("dataTableBuild :: jQueryElementID -> " + jQueryElementID + ", serviceNameForURL -> " + serviceNameForURL);
-	console.log("dataTableBuild :: columnList -> " + columnList + ", rowsGroupList -> " + rowsGroupList);
+	console.log("defaultType_dataTableLoad selectId → " + selectId);
+	console.log("dataTableBuild :: jQueryElementID → " + jQueryElementID + ", serviceNameForURL → " + serviceNameForURL);
+	console.log("dataTableBuild :: columnList → " + columnList + ", rowsGroupList → " + rowsGroupList);
 
 	console.log("dataTableBuild :: href: " + $(location).attr("href"));
 	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
@@ -1228,29 +1244,6 @@ $("#logSearch").click(function () {
 
 
 });
-
-///////////////////////////////////////////////////////////////////////////////
-// 전체 AJAX 통신에 대한 이벤트 콜백 처리.
-///////////////////////////////////////////////////////////////////////////////
-$(document)
-	.ajaxStart(function(){
-		jNotify('<span class="spinner"><i class="fa fa-spinner fa-spin"></i> 서버와 통신 중 입니다.</span>');
-	})
-	.ajaxStop(function(){
-		console.log("ajaxStop");
-	})
-	.ajaxComplete(function(){
-		console.log("ajaxComplete");
-	})
-	.ajaxSuccess(function(){
-		console.log("ajaxComplete");
-	})
-	.ajaxError(function(){
-		console.log("ajaxComplete");
-	})
-	.ajaxSend(function(){
-		console.log("ajaxComplete");
-	});
 
 ///////////////////////////////////////////////////////////////////////////////
 // 탭 클릭 이벤트

@@ -263,10 +263,10 @@ function modalPopupUpdate() {
 function dataLoad(getSelectedText, selectedText) {
 
 	// ajax 처리 후 에디터 바인딩.
-	console.log("dataLoad :: getSelectedID -> " + getSelectedText);
+	console.log("dataLoad :: getSelectedID → " + getSelectedText);
 	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText)
 		.done(function (json) {
-			console.log("dataLoad :: success -> ", json);
+			console.log("dataLoad :: success → ", json);
 			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
 			//version text setting
 
@@ -381,7 +381,7 @@ function versionClick(element, c_id) {
 	})
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
-			console.log(" -> " + json.c_contents);
+			console.log(" → " + json.c_contents);
 
 
 			$("#pdServiceName").text($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
