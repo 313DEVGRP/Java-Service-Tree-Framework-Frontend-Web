@@ -327,6 +327,10 @@ function dataTableCallBack(settings, json){
 	console.log("check");
 }
 
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
+}
+
 $('#checkbox1').click(function(){
 
 	var checked = $('#checkbox1').is(':checked');

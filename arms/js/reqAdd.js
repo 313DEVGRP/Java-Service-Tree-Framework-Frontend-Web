@@ -289,9 +289,9 @@ function defaultType_dataTableLoad(selectId) {
 			className: 'dt-body-center',
 			title: '<input type="checkbox" name="checkall" id="checkall">'
 		},
-		{ name: 'c_pdservice_name', title: '제품(서비스)', data: 'c_pdservice_name', className: "dt-body-center", visible: true },
+		{ name: 'c_pdservice_name', title: '제품(서비스)', data: 'c_pdservice_name', className: "dt-body-left", visible: true },
 		{ name: 'c_pdservice_version_name', title: '버전 이름', data: 'c_pdservice_version_name', className: "dt-body-center", visible: true },
-		{ name: 'c_pdservice_jira_name', title: 'JIRA Project', data: 'c_pdservice_jira_name', className: "dt-body-center", visible: true },
+		{ name: 'c_pdservice_jira_name', title: 'JIRA Project', data: 'c_pdservice_jira_name', className: "dt-body-left", visible: true },
 	];
 	var rowsGroupList = null;
 	var columnDefList = [
@@ -407,6 +407,10 @@ function dataTableCallBack(settings, json){
 			$(allPages).find('input[type="checkbox"]').prop('checked', false);
 		}
 	});
+}
+
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //파일 관리 : fileupload

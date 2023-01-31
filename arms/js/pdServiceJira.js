@@ -69,6 +69,10 @@ function dataTableClick(selectedData){
 	updateD3ByDataTable();
 }
 
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
+}
+
 // 버전 리스트를 재로드하는 함수 ( 버전 추가, 갱신, 삭제 시 호출 )
 function dataLoad(getSelectedText, selectedText) {
 

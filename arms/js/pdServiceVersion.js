@@ -419,3 +419,7 @@ function versionClick(element, c_id) {
 function dataTableCallBack(settings, json){
 
 }
+
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
+}

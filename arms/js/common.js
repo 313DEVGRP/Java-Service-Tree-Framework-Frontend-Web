@@ -769,6 +769,13 @@ function dataTable_build(
 				dataTableCallBack(settings, json);
 			}
 		},
+		drawCallback: function(tableInfo) {
+			console.log("dataTableBuild :: drawCallback");
+			if ($.isFunction(dataTableDrawCallback)) {
+				//데이터 테이블 그리고 난 후 시퀀스 이벤트
+				dataTableDrawCallback(tableInfo);
+			}
+		}
 	});
 
 	$(jQueryElementID + ' tbody').on('click', 'tr', function () {
@@ -783,7 +790,6 @@ function dataTable_build(
 		selectedData.selectedIndex = $(this).closest('tr').index();
 
 		var info = tempDataTable.page.info();
-		console.log('Show page: ' + info.page + ' of ' + info.pages);
 		selectedData.selectedPage = info.page;
 
 		dataTableClick(selectedData);

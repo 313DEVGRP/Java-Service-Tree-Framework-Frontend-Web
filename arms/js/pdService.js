@@ -387,6 +387,10 @@ function dataTableCallBack(settings, json){
 
 }
 
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //제품(서비스) 클릭할 때 동작하는 함수
 //1. 상세보기 데이터 바인딩
