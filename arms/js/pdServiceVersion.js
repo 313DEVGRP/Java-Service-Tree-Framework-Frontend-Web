@@ -17,7 +17,7 @@ function execDocReady() {
 	//사이드 메뉴 처리
 	setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
 
-	// DataPicker 처리 부분 ( 팝업 레이어 )
+	// DatㄷPicker 처리 부분 ( 팝업 레이어 )
 	$(".date-picker").datepicker({
 		autoclose: true,
 	});
@@ -26,10 +26,28 @@ function execDocReady() {
 	CKEDITOR.replace("input_pdservice_editor");
 	CKEDITOR.replace("extendModalEditor");
 
-	$('#btn-select-calendar').attr('data-date', getToday());
-	makeDatePicker($('#btn-select-calendar'));
-	$('#btn-end-calendar').attr('data-date', getToday());
-	makeDatePicker($('#btn-end-calendar'));
+	$("#btn-select-calendar").click(function (){
+
+	});
+	$('#btn-select-calendar').datetimepicker({
+		//date: new Date(),
+		viewMode: 'YMDHMS',
+		//date selection event
+		onDateChange: function() {
+			//logEvent('onDateChange', this.getValue());
+
+			console.log(this.getText());
+			console.log(this.getText('YYYY-MM-DD'));
+			console.log(this.getValue());
+			//$('#date-text1-1').text(this.getText());
+			//$('#date-text-ymd1-1').text(this.getText('YYYY-MM-DD'));
+			//$('#date-value1-1').text(this.getValue());
+		}
+	});
+	// $('#btn-select-calendar').attr('data-date', getToday());
+	// makeDatePicker($('#btn-select-calendar'));
+	// $('#btn-end-calendar').attr('data-date', getToday());
+	// makeDatePicker($('#btn-end-calendar'));
 	$('#btn-select-calendar-popup').attr('data-date', getToday());
 	makeDatePicker($('#btn-select-calendar-popup'));
 	$('#btn-end-calendar-popup').attr('data-date', getToday());
