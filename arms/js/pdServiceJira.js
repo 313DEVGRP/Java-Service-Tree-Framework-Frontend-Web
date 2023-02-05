@@ -151,11 +151,15 @@ function draw(main, menu) {
 //버전 클릭할 때 동작하는 함수
 function versionClick(element, c_id, c_title) {
 
-	$("a[name='versionLink_List']").each(function() {
-		this.style.background = "";
-	});
-	element.style.background = "rgba(229, 96, 59, 0.20)";
-	console.log(element);
+	if( isEmpty(element)){
+		console.log("element is empty");
+	}else{
+		$("a[name='versionLink_List']").each(function() {
+			this.style.background = "";
+		});
+		element.style.background = "rgba(229, 96, 59, 0.20)";
+		console.log("element is = " + element);
+	}
 
 	selectVersion = c_id;
 	selectVersionName= c_title;
@@ -226,7 +230,7 @@ $("#pdServiceConnect").click(function () {
 			},
 			progress: true
 		}).done(function(data) {
-			versionClick(selectVersion);
+			versionClick(null, selectVersion, '');
 		}).fail(function(e) {
 			console.log("fail call");
 		}).always(function() {

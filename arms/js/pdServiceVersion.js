@@ -395,8 +395,8 @@ function versionClick(element, c_id) {
 
 
 			$("#pdServiceVersion").text(json.c_title);
-			$("#versionStartDate").text(json.c_start_date);
-			$("#versionEndDate").text(json.c_end_date);
+			$("#versionStartDate").val(json.c_start_date);
+			$("#versionEndDate").val(json.c_end_date);
 			$("#versionContents").html(json.c_contents);
 
 			$("#input_pdserviceName").val($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);

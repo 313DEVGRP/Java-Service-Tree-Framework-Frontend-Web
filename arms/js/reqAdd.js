@@ -270,12 +270,6 @@ function dataTableLoad(selectId) {
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function defaultType_dataTableLoad(selectId) {
 
-	var jQueryElementID = "#jiraVerTable";
-	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-	var jQueryElementStr = jQueryElementID.replace(reg,'');
-	console.log("jQueryElementStr ======== " + jQueryElementStr );
-	var serviceNameForURL = "pdServiceJiraVer";
-	var endPointUrl = "/getMonitor_Without_Root.do";
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
 		{
@@ -306,72 +300,15 @@ function defaultType_dataTableLoad(selectId) {
 		selector: 'td:first-child'
 	};
 	var orderList = [[ 1, 'asc' ]];
-	console.log("defaultType_dataTableLoad selectId → " + selectId);
-	console.log("dataTableBuild :: jQueryElementID → " + jQueryElementID + ", serviceNameForURL → " + serviceNameForURL);
-	console.log("dataTableBuild :: columnList → " + columnList + ", rowsGroupList → " + rowsGroupList);
+	var buttonList = [];
 
-	console.log("dataTableBuild :: href: " + $(location).attr("href"));
-	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
-	console.log("dataTableBuild :: host: " + $(location).attr("host"));
-	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
-	console.log("dataTableBuild :: search: " + $(location).attr("search"));
-	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
-	console.log("dataTableBuild :: port: " + $(location).attr("port"));
+	var jquerySelector = "#jiraVerTable";
+	var ajaxUrl = "/auth-user/api/arms/pdServiceJiraVer/getMonitor_Without_Root.do";
+	var jsonRoot = "";
 
-	var authCheckURL = "/auth-user";
+	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
 
-	tempDataTable = $(jQueryElementID).DataTable({
-		ajax: {
-			url: authCheckURL + "/api/arms/" + serviceNameForURL + endPointUrl,
-			dataSrc: ''
-		},
-		destroy: true,
-		processing: true,
-		responsive: true,
-		columns: columnList,
-		rowsGroup: rowsGroupList,
-		columnDefs: columnDefList,
-		select: selectList,
-		order: orderList,
-		initComplete: function(settings, json) {
-			console.log("dataTableBuild :: drawCallback");
-			if ($.isFunction(dataTableCallBack )) {
-				dataTableCallBack(settings, json);
-			}
-		}
-	});
-
-	$(jQueryElementID + " tbody").on("click", "tr", function () {
-
-		if ($(this).hasClass("selected")) {
-			$(this).removeClass("selected");
-		} else {
-			tempDataTable.$("tr.selected").removeClass("selected");
-			$(this).addClass("selected");
-		}
-
-		var selectedData = tempDataTable.row(this).data();
-		selectedData.selectedIndex = $(this).closest('tr').index();
-
-		var info = tempDataTable.page.info();
-		console.log( 'Showing page: '+info.page+' of '+info.pages );
-		selectedData.selectedPage = info.page;
-
-		dataTableClick(selectedData);
-	});
-
-	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
-	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-	//min-height: 30px;
-
-	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$("body").find("[aria-controls='" + jQueryElementStr + "']").css("width", "100px");
-	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
-
-	return tempDataTable;
+	return dataTableRef;
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
@@ -632,54 +569,54 @@ function bindDataDetailTab(ajaxData){
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = $('#country').select2('data')[0].text;
 	if(isEmpty(selectedPdServiceText)){
-		$('#detailView-req-pdService-name').text("");
+		$('#detailView-req-pdService-name').val("");
 	}else{
-		$('#detailView-req-pdService-name').text(selectedPdServiceText);
+		$('#detailView-req-pdService-name').val(selectedPdServiceText);
 	}
 
 	//Version 데이터 바인딩
 	var selectedVersionText = $('#editMultiVersion').multipleSelect('getSelects', 'text');
 	if ( isEmpty(selectedVersionText)){
-		$('#detailView-req-pdService-version').text("요구사항에 등록된 버전이 없습니다.");
+		$('#detailView-req-pdService-version').val("요구사항에 등록된 버전이 없습니다.");
 	}else {
-		$('#detailView-req-pdService-version').text(selectedVersionText);
+		$('#detailView-req-pdService-version').val(selectedVersionText);
 	}
-	$('#detailView-req-id').text(ajaxData.c_id);
-	$('#detailView-req-name').text(ajaxData.c_title);
+	$('#detailView-req-id').val(ajaxData.c_id);
+	$('#detailView-req-name').val(ajaxData.c_title);
 
 	//우선순위 셋팅
 	$('#detailView-req-priority').children('.btn.active').removeClass("active");
-	var slectReqPriorityID = "detailView-req-priority-option" + ajaxData.c_priority;
-	$('#'+slectReqPriorityID).parent().addClass("active");
+	var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
+	$('#'+select_Req_Priority_ID).parent().addClass("active");
 
-	$('#detailView-req-status').text(ajaxData.c_req_status);
-	$('#detailView-req-writer').text(ajaxData.c_writer);
-	$('#detailView-req-write-date').text(ajaxData.c_writer_date);
+	$('#detailView-req-status').val(ajaxData.c_req_status);
+	$('#detailView-req-writer').val(ajaxData.c_writer);
+	$('#detailView-req-write-date').val(ajaxData.c_writer_date);
 
 	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
-		$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+		$("#detailView-req-reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
 	} else {
-		$("#detailView-req-reviewer01").text(ajaxData.c_reviewer01);
+		$("#detailView-req-reviewer01").val(ajaxData.c_reviewer01);
 	}
 	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
-		$("#detailView-req-reviewer02").text("");
+		$("#detailView-req-reviewer02").val("2번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailView-req-reviewer02").text(ajaxData.c_reviewer02);
+		$("#detailView-req-reviewer02").val(ajaxData.c_reviewer02);
 	}
 	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
-		$("#detailView-req-reviewer03").text("");
+		$("#detailView-req-reviewer03").val("3번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailView-req-reviewer03").text(ajaxData.c_reviewer03);
+		$("#detailView-req-reviewer03").val(ajaxData.c_reviewer03);
 	}
 	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
-		$("#detailView-req-reviewer04").text("");
+		$("#detailView-req-reviewer04").val("4번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailView-req-reviewer04").text(ajaxData.c_reviewer04);
+		$("#detailView-req-reviewer04").val(ajaxData.c_reviewer04);
 	}
 	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
-		$("#detailView-req-reviewer05").text("");
+		$("#detailView-req-reviewer05").val("5번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailView-req-reviewer05").text(ajaxData.c_reviewer05);
+		$("#detailView-req-reviewer05").val(ajaxData.c_reviewer05);
 	}
 	$("#detailView-req-contents").html(ajaxData.c_contents);
 }
