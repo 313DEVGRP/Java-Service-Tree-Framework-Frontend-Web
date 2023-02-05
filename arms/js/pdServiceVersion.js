@@ -26,32 +26,34 @@ function execDocReady() {
 	CKEDITOR.replace("input_pdservice_editor");
 	CKEDITOR.replace("extendModalEditor");
 
+	$('#input_pdservice_start_date').datetimepicker({
+		allowTimes:['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'],
+	});
 	$("#btn-select-calendar").click(function (){
-
+		$('#input_pdservice_start_date').datetimepicker('show');
 	});
-	$('#btn-select-calendar').datetimepicker({
-		//date: new Date(),
-		viewMode: 'YMDHMS',
-		//date selection event
-		onDateChange: function() {
-			//logEvent('onDateChange', this.getValue());
 
-			console.log(this.getText());
-			console.log(this.getText('YYYY-MM-DD'));
-			console.log(this.getValue());
-			//$('#date-text1-1').text(this.getText());
-			//$('#date-text-ymd1-1').text(this.getText('YYYY-MM-DD'));
-			//$('#date-value1-1').text(this.getValue());
-		}
+	$('#input_pdservice_end_date').datetimepicker({
+		allowTimes:['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'],
 	});
-	// $('#btn-select-calendar').attr('data-date', getToday());
-	// makeDatePicker($('#btn-select-calendar'));
-	// $('#btn-end-calendar').attr('data-date', getToday());
-	// makeDatePicker($('#btn-end-calendar'));
-	$('#btn-select-calendar-popup').attr('data-date', getToday());
-	makeDatePicker($('#btn-select-calendar-popup'));
-	$('#btn-end-calendar-popup').attr('data-date', getToday());
-	makeDatePicker($('#btn-end-calendar-popup'));
+	$("#btn-end-calendar").click(function (){
+		$('#input_pdservice_start_date').datetimepicker('show');
+	});
+
+
+	$('#btn-enabled-date').datetimepicker({
+		allowTimes:['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'],
+	});
+	$("#btn-select-calendar-popup").click(function (){
+		$('#input_pdservice_start_date').datetimepicker('show');
+	});
+
+	$('#btn-end-date').datetimepicker({
+		allowTimes:['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'],
+	});
+	$("#btn-end-calendar-popup").click(function (){
+		$('#input_pdservice_start_date').datetimepicker('show');
+	});
 
 	// --- 데이터 테이블 설정 --- //
 	dataTableLoad();
@@ -97,30 +99,24 @@ function dataTableLoad() {
 	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
 }
 
-//datepicker 만들기
-function makeDatePicker (calender) {
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(selectedData) {
 
-	var Inputs = $(calender).parent().prev().val();
+	$("#versionContents").html("");
+	selectId = selectedData.c_id;
+	selectName = selectedData.c_title;
+	console.log('selectedData.c_id : ', selectedData.c_id);
+	dataLoad(selectedData.c_id, selectedData.c_title);
+}
 
-	$(calender).attr('data-date', Inputs)
+//데이터 테이블 ajax load 이후 콜백.
+function dataTableCallBack(settings, json){
 
-	calender
-		.datepicker({
-			autoclose: true,
-		})
-		.datepicker("update", Inputs)
-		.on("changeDate", function (ev) {
-			var Input = $(this).parent().next();
-			Input.val(calender.data("date"));
-			console.log(calender + " == " + Input.attr("id"));
-			if (Input.attr("id") === "input_pdservice_start_date") {
-				$("#versionStartDate").text(calender.data("date"));
-			} else if (Input.attr("id") === "input_pdservice_end_date") {
-				$("#versionEndDate").text(calender.data("date"));
-			}
-			calender.datepicker("hide");
-		});
-};
+}
+
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
+}
 
 
 // --- 팝업 띄울때 사이즈 조정 -- //
@@ -138,7 +134,7 @@ function modalPopup(popupName) {
 		$("#tooltip-enabled-service-version").val('');
 		$("#btn-enabled-date").val('');
 		$("#btn-end-date").val('');
-		CKEDITOR.instances["extendModalEditor"].setData('');
+		CKEDITOR.instances.extendModalEditor.setData('');
 
 	} else {
 		// 편집하기 버튼의 팝업으로 보기
@@ -152,7 +148,6 @@ function modalPopup(popupName) {
 		$("#btn-enabled-date").val($("#input_pdservice_start_date").val());
 		$("#btn-end-date").val($("#input_pdservice_end_date").val());
 		var editorData = CKEDITOR.instances["input_pdservice_editor"].getData();
-		console.log('ddd', editorData)
 		CKEDITOR.instances.extendModalEditor.setData(editorData);
 	}
 
@@ -160,16 +155,6 @@ function modalPopup(popupName) {
 	$(".modal-body")
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
-}
-
-// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(selectedData) {
-
-	$("#versionContents").html("");
-	selectId = selectedData.c_id;
-	selectName = selectedData.c_title;
-	console.log('selectedData.c_id : ', selectedData.c_id);
-	dataLoad(selectedData.c_id, selectedData.c_title);
 }
 
 
@@ -203,7 +188,7 @@ $("#versionUpdate").click(function () {
 		data: {
 			c_id: selectVersion,
 			c_title: $("#input_pdserviceVersion").val(),
-			c_contents: CKEDITOR.instances["input_pdservice_editor"].getData(),
+			c_contents: CKEDITOR.instances.input_pdservice_editor.getData(),
 			c_start_date: $("#input_pdservice_start_date").val(),
 			c_end_date: $("#input_pdservice_end_date").val(),
 		},
@@ -232,7 +217,7 @@ function modalPopupNewUpdate() {
 			c_type: "default",
 			c_pdservice_link: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
 			// c_contents: CKEDITOR.instances["modal-editor"].getData(),
-			c_contents: CKEDITOR.instances["extendModalEditor"].getData(),
+			c_contents: CKEDITOR.instances.extendModalEditor.getData(),
 			c_start_date: $("#btn-enabled-date").val(),
 			c_end_date: $("#btn-end-date").val(),
 		},
@@ -258,7 +243,7 @@ function modalPopupUpdate() {
 		data: {
 			c_id: selectVersion,
 			c_title: $("#tooltip-enabled-service-version").val(),
-			c_contents: CKEDITOR.instances["extendModalEditor"].getData(),
+			c_contents: CKEDITOR.instances.extendModalEditor.getData(),
 			c_start_date: $("#btn-enabled-date").val(),
 			c_end_date: $("#btn-end-date").val(),
 		},
@@ -303,24 +288,28 @@ function dataLoad(getSelectedText, selectedText) {
 
 			// 상세보기
 			selectVersion = json[0].c_id;
-			$("#pdServiceName").text(selectedText);
-			$("#pdServiceVersion").text(json[0].c_title);
-			$("#versionStartDate").text(json[0].c_start_date);
-			$("#versionEndDate").text(json[0].c_end_date);
+			$("#pdServiceName").val(selectedText);
+			$("#pdServiceVersion").val(json[0].c_title);
+
+			$("#versionStartDate").val(json[0].c_start_date);
+			$("#versionEndDate").val(json[0].c_end_date);
+
 			$("#versionContents").html(json[0].c_contents);
 
 			// 상세보기 편집하기
 			$("#input_pdserviceName").val(selectedText);
 			$("#input_pdserviceVersion").val(json[0].c_title);
-			$("#input_pdservice_start_date").val(json[0].c_start_date);
-			$("#input_pdservice_end_date").val(json[0].c_end_date);
+
+
+			$('#input_pdservice_start_date').datetimepicker({value: json[0].c_start_date + ' 09:00', step:10});
+			$('#input_pdservice_end_date').datetimepicker({value: json[0].c_end_date + ' 18:00', step:10});
 			CKEDITOR.instances.input_pdservice_editor.setData(json[0].c_contents);
 
 			//편집하기 팝업
 			$("#tooltip-enabled-service-name").val(selectedText);
 			$("#tooltip-enabled-service-version").val(json[0].c_title);
-			$("#btn-enabled-date").val(json[0].c_start_date);
-			$("#btn-end-date").val(json[0].c_end_date);
+			$('#btn-enabled-date').datetimepicker({value: json[0].c_start_date + ' 09:00', step:10});
+			$('#btn-end-date').datetimepicker({value: json[0].c_end_date + ' 18:00', step:10});
 			CKEDITOR.instances.extendModalEditor.setData(json[0].c_contents);
 		});
 }
@@ -416,10 +405,10 @@ function versionClick(element, c_id) {
 			$("#input_pdservice_end_date").val(json.c_end_date);
 			CKEDITOR.instances.input_pdservice_editor.setData(json.c_contents);
 
-			makeDatePicker($("#btn-select-calendar"));
-			makeDatePicker($("#btn-end-calendar"));
-			makeDatePicker($("#btn-select-calendar-popup"));
-			makeDatePicker($("#btn-end-calendar-popup"));
+			$('#input_pdservice_start_date').datetimepicker({value: json.c_start_date + ' 09:00', step:10});
+			$('#input_pdservice_end_date').datetimepicker({value: json.c_end_date + ' 18:00', step:10});
+			$('#btn-enabled-date').datetimepicker({value: json.c_start_date + ' 09:00', step:10});
+			$('#btn-end-date').datetimepicker({value: json.c_end_date + ' 18:00', step:10});
 
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
@@ -431,13 +420,4 @@ function versionClick(element, c_id) {
 			$("#text").html("요청이 완료되었습니다!");
 			console.log(xhr + status);
 		});
-}
-
-//데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(settings, json){
-
-}
-
-function dataTableDrawCallback(tableInfo) {
-	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
 }

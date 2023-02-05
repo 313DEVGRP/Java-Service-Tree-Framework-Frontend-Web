@@ -93,78 +93,78 @@
 								<form class="form-horizontal" method="post">
 									<fieldset>
 										<div class="control-group">
-											<label class="control-label font13"
-												   style="width: 25% !important">
-												제품(서비스) :
-											</label>
-											<div class="controls form-group input-group">
+											<label for="pdServiceName" class="control-label" style="width: 100px !important;">제품(서비스) : </label>
+											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<span class="input-group-addon font13"
-													  style=" width: 100%;
-													  		  color: #a4c6ff;
-													  		  padding: 7px 12px;
-													  		  text-align: left !important;"
-													  id="pdServiceName">
-													&nbsp;
+												<input type="text"
+													   id="pdServiceName"
+													   name="pdServiceName"
+													   class="form-control parsley-validated font13 darkBack"
+													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
+													   placeholder="제품(서비스) 이름"
+													   required="required" />
+												<span class="input-group-addon font11">
+													<i class="fa fa-question-circle"></i>
+													중복 불가
 												</span>
 											</div>
 										</div>
 										<div class="control-group">
-											<label class="control-label font13"
-												   style="width: 25% !important">
-												버전 :
-											</label>
-											<div class="controls form-group input-group">
+											<label for="pdServiceVersion" class="control-label" style="width: 100px !important;">버전 : </label>
+											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<span class="input-group-addon font13"
-													  style=" width: 100%;
-													  		  color: #a4c6ff;
-													  		  padding: 7px 12px;
-													  		  text-align: left !important;"
-													  id="pdServiceVersion">
-													&nbsp;
+												<input type="text"
+													   id="pdServiceVersion"
+													   name="pdServiceVersion"
+													   class="form-control parsley-validated font13 darkBack"
+													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
+													   placeholder="x.x.x"
+													   required="required" />
+												<span class="input-group-addon font11">
+													<i class="fa fa-question-circle"></i>
+													ex: X.X.X
 												</span>
 											</div>
 										</div>
 										<div class="control-group">
-											<label class="control-label font13"
-												   style="width: 25% !important">
-												시작 날짜 :
-											</label>
-											<div class="controls form-group input-group">
+											<label for="versionStartDate" class="control-label" style="width: 100px !important;">시작 날짜 : </label>
+											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<span class="input-group-addon font13"
-													  style=" width: 100%;
-													  		  color: #a4c6ff;
-													  		  padding: 7px 12px;
-													  		  text-align: left !important;"
-													  id="versionStartDate">
-													&nbsp;
+												<input type="text"
+													   id="versionStartDate"
+													   name="versionStartDate"
+													   class="form-control parsley-validated font13 darkBack"
+													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
+													   placeholder="yyyy/mm/dd hh:mm"
+													   required="required" />
+												<span class="input-group-addon font11">
+													<i class="fa fa-question-circle"></i>
+													버전 구현 시작일
 												</span>
 											</div>
 										</div>
 										<div class="control-group">
-											<label class="control-label font13"
-												   style="width: 25% !important">
-												종료 날짜 :
-											</label>
-											<div class="controls form-group input-group">
+											<label for="versionEndDate" class="control-label" style="width: 100px !important;">종료 날짜 : </label>
+											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<span class="input-group-addon font13"
-													  style=" width: 100%;
-													  		  color: #a4c6ff;
-													  		  padding: 7px 12px;
-													  		  text-align: left !important;"
-													  id="versionEndDate">
-													&nbsp;
+												<input type="text"
+													   id="versionEndDate"
+													   name="versionEndDate"
+													   class="form-control parsley-validated font13 darkBack"
+													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
+													   placeholder="yyyy/mm/dd hh:mm"
+													   required="required" />
+												<span class="input-group-addon font11">
+													<i class="fa fa-question-circle"></i>
+													버전 구현 종료일
 												</span>
 											</div>
 										</div>
