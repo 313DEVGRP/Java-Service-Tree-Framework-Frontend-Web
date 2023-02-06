@@ -138,7 +138,7 @@ function draw(main, menu) {
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
 					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
-					   			onclick="versionClick(this, ${menu[i].c_id}, '${menu[i].c_title}');">
+					   			onclick="versionClick(this, ${menu[i].c_id});">
 						   ${menu[i].c_title}
 					   </a>
 				   </div>
@@ -149,20 +149,20 @@ function draw(main, menu) {
 }
 
 //버전 클릭할 때 동작하는 함수
-function versionClick(element, c_id, c_title) {
+function versionClick(element, c_id) {
 
-	if( isEmpty(element)){
+	$("a[name='versionLink_List']").each(function() {
+		this.style.background = "";
+	});
+
+	if( element == null ){
 		console.log("element is empty");
 	}else{
-		$("a[name='versionLink_List']").each(function() {
-			this.style.background = "";
-		});
 		element.style.background = "rgba(229, 96, 59, 0.20)";
 		console.log("element is = " + element);
 	}
 
 	selectVersion = c_id;
-	selectVersionName= c_title;
  console.log("selectVersion" + selectVersion);
 	$(".searchable").multiSelect('deselect_all');
 
@@ -214,7 +214,7 @@ function versionClick(element, c_id, c_title) {
 // 제품(서비스)-버전-지라 저장
 $("#pdServiceConnect").click(function () {
 
-	if($("#pdServiceConnect").hasClass("btn-primary") === true) {
+	if($("#pdServiceConnect").hasClass("btn-primary") == true) {
 
 		// data가 존재하지 않음.
 		$.ajax({
@@ -230,13 +230,13 @@ $("#pdServiceConnect").click(function () {
 			},
 			progress: true
 		}).done(function(data) {
-			versionClick(null, selectVersion, '');
+			versionClick(null, selectVersion);
 		}).fail(function(e) {
 			console.log("fail call");
 		}).always(function() {
 			console.log("always call");
 		});
-	} else if($("#pdServiceConnect").hasClass("btn-success") === true) {
+	} else if($("#pdServiceConnect").hasClass("btn-success") == true) {
 		// data가 이미 있음
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceConnect/updateNode.do",
@@ -251,7 +251,7 @@ $("#pdServiceConnect").click(function () {
 			},
 			progress: true
 		}).done(function(data) {
-			versionClick(selectVersion);
+			versionClick(null, selectVersion);
 		}).fail(function(e) {
 			console.log("fail call");
 		}).always(function() {

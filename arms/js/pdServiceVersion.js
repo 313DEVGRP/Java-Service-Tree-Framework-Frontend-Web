@@ -349,7 +349,22 @@ function draw(main, menu) {
 						</button>`;
 
 	for (var i = 0; i < menu.length; i++) {
-		data += `
+		if ( i == 0 ){
+			data += `
+			   <div class="panel">
+				   <div class="panel-heading">
+					   <a class="accordion-toggle collapsed" 
+					   			data-toggle="collapse"
+					   			name="versionLink_List"
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);" 
+					   			onclick="versionClick(this, ${menu[i].c_id}); 
+					   			return false;">
+						   ${menu[i].c_title}
+					   </a>
+				   </div>
+			   </div>`;
+		}else{
+			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
 					   <a class="accordion-toggle collapsed" 
@@ -362,6 +377,7 @@ function draw(main, menu) {
 					   </a>
 				   </div>
 			   </div>`;
+		}
 	}
 
 	main.html(data);
@@ -393,8 +409,7 @@ function versionClick(element, c_id) {
 
 			$("#pdServiceName").text($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
 
-
-			$("#pdServiceVersion").text(json.c_title);
+			$("#pdServiceVersion").val(json.c_title);
 			$("#versionStartDate").val(json.c_start_date);
 			$("#versionEndDate").val(json.c_end_date);
 			$("#versionContents").html(json.c_contents);
