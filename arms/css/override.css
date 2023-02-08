@@ -635,3 +635,22 @@ select option {
         opacity: 0;
     }
 }
+
+/* 유니타이핑 */
+#blinker{
+  -webkit-animation: blink 1.2s step-end infinite;
+  -moz-animation: blink 1.2s step-end infinite;
+  animation: blink 1.2s step-end infinite;
+}
+@keyframes blink {
+  from, to { opacity: 0; }
+  50% { opacity: 1; }
+}
+@-webkit-keyframes blink {
+  from, to { opacity: 0; }
+  50% { opacity: 1; }
+}
+@-moz-keyframes blink {
+  from, to { opacity: 0; }
+  50% { opacity: 1; }
+}
