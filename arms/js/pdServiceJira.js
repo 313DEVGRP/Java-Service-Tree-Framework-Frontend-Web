@@ -61,9 +61,15 @@ function dataTableClick(selectedData){
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
 	$("#versionContents").html("");
-	
+
+	$(".searchable").multiSelect('deselect_all');
+	$("#pdServiceConnect").removeClass("btn-success");
+	$("#pdServiceConnect").addClass("btn-primary");
+	$("#pdServiceConnect").text("제품(서비스) Jira 연결 등록");
+
 	// 연계 이벤트 - 버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
+
 
 	// D3 업데이트
 	updateD3ByDataTable();
@@ -131,7 +137,21 @@ function draw(main, menu) {
 			   </li>`;
 
 	for (let i = 0; i < menu.length; i++) {
-		data += `
+		if( i == 0){
+			data += `
+			   <div class="panel">
+				   <div class="panel-heading">
+					   <a class="accordion-toggle collapsed" 
+					   			data-toggle="collapse"
+					   			name="versionLink_List"
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);"
+					   			onclick="versionClick(this, ${menu[i].c_id});">
+						   ${menu[i].c_title}
+					   </a>
+				   </div>
+			   </div>`;
+		}else{
+			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
 					   <a class="accordion-toggle collapsed" 
@@ -143,6 +163,7 @@ function draw(main, menu) {
 					   </a>
 				   </div>
 			   </div>`;
+		}
 	}
 
 	main.html(data);
