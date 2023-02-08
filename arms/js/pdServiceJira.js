@@ -55,7 +55,8 @@ function dataTableLoad() {
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(selectedData){
+function dataTableClick(tempDataTable, selectedData){
+
 	selectedIndex = selectedData.selectedIndex;
 	selectedPage = selectedData.selectedPage;
 	selectId = selectedData.c_id;
@@ -70,9 +71,9 @@ function dataTableClick(selectedData){
 	// 연계 이벤트 - 버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
 
-
 	// D3 업데이트
 	updateD3ByDataTable();
+
 }
 
 function dataTableDrawCallback(tableInfo) {
@@ -105,6 +106,10 @@ function dataLoad(getSelectedText, selectedText) {
 			$("#tooltip-enabled-service-name").val(selectedText);
 
 			updateD3ByVersionList();
+
+			setTimeout(function () {
+				$('#pdService_Version_First_Child').trigger('click');
+			}, 500);
 
 		});
 
@@ -143,6 +148,7 @@ function draw(main, menu) {
 				   <div class="panel-heading">
 					   <a class="accordion-toggle collapsed" 
 					   			data-toggle="collapse"
+					   			id="pdService_Version_First_Child"
 					   			name="versionLink_List"
 					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);"
 					   			onclick="versionClick(this, ${menu[i].c_id});">

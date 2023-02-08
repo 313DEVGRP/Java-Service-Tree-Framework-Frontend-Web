@@ -100,12 +100,14 @@ function dataTableLoad() {
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(selectedData) {
+function dataTableClick(tempDataTable, selectedData) {
 
 	$("#versionContents").html("");
+
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
 	console.log('selectedData.c_id : ', selectedData.c_id);
+
 	dataLoad(selectedData.c_id, selectedData.c_title);
 }
 
@@ -269,6 +271,7 @@ function dataLoad(getSelectedText, selectedText) {
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
 	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText)
 		.done(function (json) {
+
 			console.log("dataLoad :: success → ", json);
 			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
 			//version text setting

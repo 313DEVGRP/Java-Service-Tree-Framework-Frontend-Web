@@ -313,7 +313,7 @@ function defaultType_dataTableLoad(selectId) {
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(selectedData) {
+function dataTableClick(tempDataTable, selectedData) {
 	console.log(selectedData);
 }
 

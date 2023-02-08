@@ -792,7 +792,7 @@ function dataTable_build(
 		var info = tempDataTable.page.info();
 		selectedData.selectedPage = info.page;
 
-		dataTableClick(selectedData);
+		dataTableClick(tempDataTable, selectedData);
 	});
 
 	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
