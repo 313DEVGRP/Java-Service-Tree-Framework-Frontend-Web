@@ -887,10 +887,10 @@ function ajax_sample() {
 			},
 		},
 		beforeSend:function(){
-			//$("#regist-pdService").hide(); 버튼 감추기
+			//$("#regist_pdService").hide(); 버튼 감추기
 		},
 		complete:function(){
-			//$("#regist-pdService").show(); 버튼 보이기
+			//$("#regist_pdService").show(); 버튼 보이기
 		},
 		error:function(e){
 			jError("신규 제품 등록 중 에러가 발생했습니다.");

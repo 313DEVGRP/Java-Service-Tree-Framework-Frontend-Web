@@ -62,10 +62,10 @@ function makePdServiceSelectBox(){
 			},
 		},
 		beforeSend:function(){
-			//$("#regist-pdService").hide(); 버튼 감추기
+			//$("#regist_pdService").hide(); 버튼 감추기
 		},
 		complete:function(){
-			//$("#regist-pdService").show(); 버튼 보이기
+			//$("#regist_pdService").show(); 버튼 보이기
 		},
 		error:function(e){
 			jError("제품(서비스) 조회 중 에러가 발생했습니다.");
@@ -77,7 +77,7 @@ function makePdServiceSelectBox(){
 $('#country').on("select2:open", function () {
 
 	makeSlimScroll(".select2-results__options");
-	
+
 });
 
 // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
@@ -136,10 +136,10 @@ function bind_VersionData_By_PdService(){
 			},
 		},
 		beforeSend:function(){
-			//$("#regist-pdService").hide(); 버튼 감추기
+			//$("#regist_pdService").hide(); 버튼 감추기
 		},
 		complete:function(){
-			//$("#regist-pdService").show(); 버튼 보이기
+			//$("#regist_pdService").show(); 버튼 보이기
 		},
 		error:function(e){
 			jError("버전 조회 중 에러가 발생했습니다.");
@@ -162,7 +162,7 @@ function build_ReqData_By_PdService(){
 function jsTreeClick(selectedNodeID) {
 	selectedJsTreeId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
 	var selectRel = selectedNodeID.attr("rel");
-	
+
 	//요구사항 타입에 따라서 탭의 설정을 변경
 	if(selectRel == "default"){
 		$('#defaultTab').get(0).click();
@@ -1260,7 +1260,7 @@ $("#req_JiraVer_Connect_Change").click(function () {
 
 	//반영할 테이블 네임 값 셋팅
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
-	
+
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
 		data: {

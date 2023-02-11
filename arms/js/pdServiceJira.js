@@ -46,7 +46,7 @@ function dataTableLoad() {
 	var orderList = [[ 1, 'asc' ]];
 	var buttonList = [];
 
-	var jquerySelector = "#pdserviceTable";
+	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
 	var jsonRoot = "";
 
@@ -146,7 +146,7 @@ function draw(main, menu) {
 			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" 
+					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
 					   			id="pdService_Version_First_Child"
 					   			name="versionLink_List"
@@ -160,7 +160,7 @@ function draw(main, menu) {
 			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" 
+					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
 					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
@@ -198,7 +198,7 @@ function versionClick(element, c_id) {
 		url: "/auth-user/api/arms/pdServiceConnect/getExistNode.do",
 		type: "GET",
 		data: {
-			c_pdservice_id: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
+			c_pdservice_id: $('#pdservice_table').DataTable().rows('.selected').data()[0].c_id,
 			c_pdservice_version_id: c_id
 		},
 		contentType: "application/json;charset=UTF-8",
@@ -251,7 +251,7 @@ $("#pdServiceConnect").click(function () {
 				ref: 2,
 				c_title: "a-RMS pdService-Version-Jira Connect Data",
 				c_type: "default",
-				c_pdservice_id: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
+				c_pdservice_id: $('#pdservice_table').DataTable().rows('.selected').data()[0].c_id,
 				c_pdservice_version_id: selectVersion,
 				c_pdservice_jira_ids: JSON.stringify($('#multiselect').val()),
 			},
@@ -272,7 +272,7 @@ $("#pdServiceConnect").click(function () {
 				c_id: selectConnectID,
 				c_title: "a-RMS pdService-Version-Jira Connect Data",
 				c_type: "default",
-				c_pdservice_id: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
+				c_pdservice_id: $('#pdservice_table').DataTable().rows('.selected').data()[0].c_id,
 				c_pdservice_version_id: selectVersion,
 				c_pdservice_jira_ids: JSON.stringify($('#multiselect').val()),
 			},

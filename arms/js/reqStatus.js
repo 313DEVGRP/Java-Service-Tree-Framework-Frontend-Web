@@ -257,7 +257,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 					if ( isEmpty(data) || data == '[]' ) {
 						return 'no data';
 					}else{
-						return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#myModal1" data-toggle="modal">SubTask</label>';
+						return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#my_modal1" data-toggle="modal">SubTask</label>';
 					}
 				}
 				return data;
@@ -274,7 +274,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 					if ( isEmpty(data) || data == "[]" ) {
 						return 'no data';
 					}else{
-						return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#myModal1" data-toggle="modal">LinkIssue</label>';
+						return '<label id="newReqRegist01" class="btn btn-success btn-sm" data-target="#my_modal1" data-toggle="modal">LinkIssue</label>';
 					}
 				}
 				return data;

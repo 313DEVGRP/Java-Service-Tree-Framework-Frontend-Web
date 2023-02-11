@@ -24,7 +24,7 @@ function execDocReady() {
 
 	// --- 에디터 설정 --- //
 	CKEDITOR.replace("input_pdservice_editor");
-	CKEDITOR.replace("extendModalEditor");
+	CKEDITOR.replace("extend_modal_editor");
 
 	$('#input_pdservice_start_date').datetimepicker({
 		allowTimes:['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'],
@@ -92,7 +92,7 @@ function dataTableLoad() {
 	var orderList = [[ 1, 'asc' ]];
 	var buttonList = [];
 
-	var jquerySelector = "#pdserviceTable";
+	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
 	var jsonRoot = "";
 
@@ -125,32 +125,32 @@ function dataTableDrawCallback(tableInfo) {
 
 function modalPopup(popupName) {
 
-	if (popupName === 'modalPopupId') {
+	if (popupName === 'modal_popup_id') {
 		// modalPopupId = 신규버전 등록하기
 		$("#modalTitle").text('제품(서비스) 신규 버전 등록 팝업');
 		$("#modalSub").text('선택한 제품(서비스)에 버전을 등록합니다.');
-		$('#extendUpdate-pdService-version').attr('onClick', 'modalPopupNewUpdate()')
-		$('#extendUpdate-pdService-version').text('Save');
+		$('#extendUpdate_pdService_version').attr('onClick', 'modalPopupNewUpdate()')
+		$('#extendUpdate_pdService_version').text('Save');
 
 
 		$("#tooltip-enabled-service-version").val('');
 		$("#btn-enabled-date").val('');
 		$("#btn-end-date").val('');
-		CKEDITOR.instances.extendModalEditor.setData('');
+		CKEDITOR.instances.extend_modal_editor.setData('');
 
 	} else {
 		// 편집하기 버튼의 팝업으로 보기
 		$("#modalTitle").text('제품(서비스) 버전 등록 / 변경');
 		$("#modalSub").text('선택한 제품(서비스)에 버전을 등록/변경 합니다.');
-		$('#extendUpdate-pdService-version').attr('onClick', 'modalPopupUpdate()')
-		$('#extendUpdate-pdService-version').text('Save Changes');
+		$('#extendUpdate_pdService_version').attr('onClick', 'modalPopupUpdate()')
+		$('#extendUpdate_pdService_version').text('Save Changes');
 
 		//팝업 데이터
 		$("#tooltip-enabled-service-version").val($("#input_pdserviceVersion").val());
 		$("#btn-enabled-date").val($("#input_pdservice_start_date").val());
 		$("#btn-end-date").val($("#input_pdservice_end_date").val());
 		var editorData = CKEDITOR.instances["input_pdservice_editor"].getData();
-		CKEDITOR.instances.extendModalEditor.setData(editorData);
+		CKEDITOR.instances.extend_modal_editor.setData(editorData);
 	}
 
 	var height = $(document).height() - 800;
@@ -217,9 +217,9 @@ function modalPopupNewUpdate() {
 			ref: 2,
 			c_title: $("#tooltip-enabled-service-version").val(),
 			c_type: "default",
-			c_pdservice_link: $('#pdserviceTable').DataTable().rows('.selected').data()[0].c_id,
-			// c_contents: CKEDITOR.instances["modal-editor"].getData(),
-			c_contents: CKEDITOR.instances.extendModalEditor.getData(),
+			c_pdservice_link: $('#pdservice_table').DataTable().rows('.selected').data()[0].c_id,
+			// c_contents: CKEDITOR.instances["modal_editor"].getData(),
+			c_contents: CKEDITOR.instances.extend_modal_editor.getData(),
 			c_start_date: $("#btn-enabled-date").val(),
 			c_end_date: $("#btn-end-date").val(),
 		},
@@ -245,7 +245,7 @@ function modalPopupUpdate() {
 		data: {
 			c_id: selectVersion,
 			c_title: $("#tooltip-enabled-service-version").val(),
-			c_contents: CKEDITOR.instances.extendModalEditor.getData(),
+			c_contents: CKEDITOR.instances.extend_modal_editor.getData(),
 			c_start_date: $("#btn-enabled-date").val(),
 			c_end_date: $("#btn-end-date").val(),
 		},
@@ -313,7 +313,7 @@ function dataLoad(getSelectedText, selectedText) {
 			$("#tooltip-enabled-service-version").val(json[0].c_title);
 			$('#btn-enabled-date').datetimepicker({value: json[0].c_start_date + ' 09:00', step:10});
 			$('#btn-end-date').datetimepicker({value: json[0].c_end_date + ' 18:00', step:10});
-			CKEDITOR.instances.extendModalEditor.setData(json[0].c_contents);
+			CKEDITOR.instances.extend_modal_editor.setData(json[0].c_contents);
 		});
 }
 
@@ -343,11 +343,11 @@ function draw(main, menu) {
 			   </li>
 			   <button type="button"
 														class="btn btn-primary btn-block"
-														id="modalPopupId"
+														id="modal_popup_id"
 														data-toggle="modal"
-														data-target="#myModal2"
+														data-target="#my_modal2"
 														style="margin-bottom: 10px; margin-top: 10px;"
-														onClick="modalPopup('modalPopupId')">
+														onClick="modalPopup('modal_popup_id')">
 							신규 버전 등록하기
 						</button>`;
 
@@ -356,11 +356,11 @@ function draw(main, menu) {
 			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" 
+					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
-					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);" 
-					   			onclick="versionClick(this, ${menu[i].c_id}); 
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);"
+					   			onclick="versionClick(this, ${menu[i].c_id});
 					   			return false;">
 						   ${menu[i].c_title}
 					   </a>
@@ -370,11 +370,11 @@ function draw(main, menu) {
 			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
-					   <a class="accordion-toggle collapsed" 
+					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
-					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;" 
-					   			onclick="versionClick(this, ${menu[i].c_id}); 
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
+					   			onclick="versionClick(this, ${menu[i].c_id});
 					   			return false;">
 						   ${menu[i].c_title}
 					   </a>
@@ -410,14 +410,14 @@ function versionClick(element, c_id) {
 			console.log(" → " + json.c_contents);
 
 
-			$("#pdServiceName").text($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
+			$("#pdServiceName").text($('#pdservice_table').DataTable().rows('.selected').data()[0].c_title);
 
 			$("#pdServiceVersion").val(json.c_title);
 			$("#versionStartDate").val(json.c_start_date);
 			$("#versionEndDate").val(json.c_end_date);
 			$("#versionContents").html(json.c_contents);
 
-			$("#input_pdserviceName").val($('#pdserviceTable').DataTable().rows('.selected').data()[0].c_title);
+			$("#input_pdserviceName").val($('#pdservice_table').DataTable().rows('.selected').data()[0].c_title);
 			$("#input_pdserviceVersion").val(json.c_title);
 			$("#input_pdservice_start_date").val(json.c_start_date);
 			$("#input_pdservice_end_date").val(json.c_end_date);
