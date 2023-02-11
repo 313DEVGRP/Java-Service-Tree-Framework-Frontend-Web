@@ -27,7 +27,7 @@ nv.addGraph(function() {
         .tickFormat(function(d) { return d3.time.format('%b %d')(new Date(d)) });
     var data = testData(['Unique', 'Visits'], 30);
     data[0].area = true;
-    d3.select('#visits-chart svg')
+    d3.select('#visits_chart svg')
         .datum(data)
         .transition().duration(500)
         .call(chart);
@@ -72,19 +72,19 @@ $(function(){
     function drawSparkLines(){
         options.lineColor = $green;
         options.fillColor = 'rgba(86, 188, 118, 0.1)';
-        $('#direct-trend').sparkline(values[0], options );
+        $('#direct_trend').sparkline(values[0], options );
         options.lineColor = $orange;
         options.fillColor = 'rgba(234, 200, 94, 0.1)';
-        $('#refer-trend').sparkline(values[1], options );
+        $('#refer_trend').sparkline(values[1], options );
         options.lineColor = $blue;
         options.fillColor = 'rgba(106, 141, 167, 0.1)';
-        $('#social-trend').sparkline(values[2], options );
+        $('#social_trend').sparkline(values[2], options );
         options.lineColor = $red;
         options.fillColor = 'rgba(229, 96, 59, 0.1)';
-        $('#search-trend').sparkline(values[3], options );
+        $('#search_trend').sparkline(values[3], options );
         options.lineColor = $white;
         options.fillColor = 'rgba(255, 255, 255, 0.1)';
-        $('#internal-trend').sparkline(values[4], options );
+        $('#internal_trend').sparkline(values[4], options );
     }
     var sparkResize;
 
@@ -122,7 +122,7 @@ $(function(){
         railVisible: true
     });
 
-    $("#chat-messages").slimscroll({
+    $("#chat_messages").slimscroll({
         height: '240px',
         size: '5px',
         alwaysVisible: true,

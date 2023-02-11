@@ -62,13 +62,13 @@ $(function(){
             el: $("#chat"),
 
             events: {
-                "keypress #new-message":  "createOnEnter",
-                "click #new-message-btn": "createOnClick"
+                "keypress #new_message":  "createOnEnter",
+                "click #new_message_btn": "createOnClick"
             },
 
             initialize: function() {
 
-                this.input = this.$("#new-message");
+                this.input = this.$("#new_message");
 
                 this.listenTo(Messages, 'add', this.addOne);
                 this.listenTo(Messages, 'all', this.render);
@@ -78,7 +78,7 @@ $(function(){
 
             addOne: function(message) {
                 var view = new MessageView({model: message});
-                this.$("#chat-messages").append(view.render().el);
+                this.$("#chat_messages").append(view.render().el);
             },
 
             createOnEnter: function(e) {
@@ -89,7 +89,7 @@ $(function(){
                     Messages.create({text: this.input.val()});
                     this.input.val('');
 
-                    var view = this.$("#chat-messages")[0];
+                    var view = this.$("#chat_messages")[0];
                     view.scrollTop = view.scrollHeight;
                 }
             },
@@ -101,7 +101,7 @@ $(function(){
                     Messages.create({text: this.input.val()});
                     this.input.val('');
 
-                    var view = this.$("#chat-messages")[0];
+                    var view = this.$("#chat_messages")[0];
                     view.scrollTop = view.scrollHeight;
                 }
             }

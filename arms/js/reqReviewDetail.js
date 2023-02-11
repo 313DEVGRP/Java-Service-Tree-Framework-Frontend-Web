@@ -621,7 +621,7 @@ function set_Review_Result(reviewResult){
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 - 커멘트 등록
 ///////////////////////////////////////////////////////////////////////////////
-$("#new-message-btn").click(function () {
+$("#new_message_btn").click(function () {
 	//정보 셋팅
 	var searchParams = new URLSearchParams(location.search);
 	var c_id = searchParams.get('c_id');
@@ -635,7 +635,7 @@ $("#new-message-btn").click(function () {
 			c_review_pdservice_link: c_review_pdservice_link,
 			c_review_req_link: c_review_req_link,
 			reviewer: "["+userName+"]" + " - " + userID,
-			comment: $('#new-message').val()
+			comment: $('#new_message').val()
 		},
 		type: "POST",
 		progress: true
