@@ -93,14 +93,14 @@
 								<form class="form-horizontal" method="post">
 									<fieldset>
 										<div class="control-group">
-											<label for="pdServiceName" class="control-label" style="width: 100px !important;">제품(서비스) : </label>
+											<label for="pdService_name" class="control-label" style="width: 100px !important;">제품(서비스) : </label>
 											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
 												<input type="text"
-													   id="pdServiceName"
-													   name="pdServiceName"
+													   id="pdService_name"
+													   name="pdService_name"
 													   class="form-control parsley-validated font13 darkBack"
 													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
 													   placeholder="제품(서비스) 이름"
@@ -112,14 +112,14 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label for="pdServiceVersion" class="control-label" style="width: 100px !important;">버전 : </label>
+											<label for="pdService_version" class="control-label" style="width: 100px !important;">버전 : </label>
 											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
 												<input type="text"
-													   id="pdServiceVersion"
-													   name="pdServiceVersion"
+													   id="pdService_version"
+													   name="pdService_version"
 													   class="form-control parsley-validated font13 darkBack"
 													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
 													   placeholder="x.x.x"
@@ -131,14 +131,14 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label for="versionStartDate" class="control-label" style="width: 100px !important;">시작 날짜 : </label>
+											<label for="version_start_date" class="control-label" style="width: 100px !important;">시작 날짜 : </label>
 											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
 												<input type="text"
-													   id="versionStartDate"
-													   name="versionStartDate"
+													   id="version_start_date"
+													   name="version_start_date"
 													   class="form-control parsley-validated font13 darkBack"
 													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
 													   placeholder="yyyy/mm/dd hh:mm"
@@ -150,14 +150,14 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label for="versionEndDate" class="control-label" style="width: 100px !important;">종료 날짜 : </label>
+											<label for="version_end_date" class="control-label" style="width: 100px !important;">종료 날짜 : </label>
 											<div class="controls form-group input-group" style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
 												<input type="text"
-													   id="versionEndDate"
-													   name="versionEndDate"
+													   id="version_end_date"
+													   name="version_end_date"
 													   class="form-control parsley-validated font13 darkBack"
 													   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important;"
 													   placeholder="yyyy/mm/dd hh:mm"
@@ -177,7 +177,7 @@
 												 style="padding-top: 10px;
 														padding-bottom: 10px;
     													margin-top: 10px;"
-												 id="versionContents">Version Contents</div>
+												 id="version_contents">Version Contents</div>
 										</div>
 									</fieldset>
 								</form>
@@ -240,7 +240,7 @@
 												<div class="controls form-group input-group">
 													<span class="input-group-btn">
 														<a href="#"
-														   id="btn-select-calendar"
+														   id="btn_select_calendar"
 														   class="btn btn-danger"
 														   style="background-color: #e5603b !important;
 																  border: 1px solid transparent !important;"
@@ -251,7 +251,7 @@
 													<input id="input_pdservice_start_date"
 														   class="form-control darkBack"
 														   type="text"
-														   name="btn-enabled-date"
+														   name="btn_enabled_date"
 														   value=""
 														   style="color: #a4c6ff"
 														   pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"/>
@@ -267,7 +267,7 @@
 												<div class="controls form-group input-group">
 													<span class="input-group-btn">
 														<a href="#"
-														   id="btn-end-calendar"
+														   id="btn_end_calendar"
 														   class="btn btn-danger"
 														   style="background-color: #e5603b !important;
 																  border: 1px solid transparent !important;"
@@ -278,7 +278,7 @@
 													<input id="input_pdservice_end_date"
 														   class="form-control darkBack"
 														   type="text"
-														   name="btn-enabled-date"
+														   name="btn_enabled_date"
 														   value=""
 														   style="color: #a4c6ff"
 														   pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"/>
@@ -309,7 +309,7 @@
 									<div>
 										<button
 											type="button"
-											id="versionPopup"
+											id="version_popup"
 											class="btn btn-warning"
 											data-toggle="modal"
 											data-target="#my_modal2"
@@ -317,7 +317,7 @@
 										>
 											팝업 창으로 보기
 										</button>
-										<button type="button" id="versionUpdate" class="btn btn-success">
+										<button type="button" id="version_update" class="btn btn-success">
 											Save Changes
 										</button>
 									</div>
@@ -343,7 +343,7 @@
 									>
 								</p>
 								<div>
-									<button id="delVersion" class="btn btn-danger">Delete Version</button>
+									<button id="del_version" class="btn btn-danger">Delete Version</button>
 									<button class="btn btn-default">Cancel</button>
 								</div>
 							</div>
@@ -375,12 +375,12 @@
 						style="color: #f8f8f8; text-align: left; padding: 5px"
 				>
 					<i class="fa fa-edit"></i>
-					<span class="font13" id="modalTitle" style="font-weight: bold">
+					<span class="font13" id="modal_title" style="font-weight: bold">
 									제품(서비스) 신규 버전 등록 팝업</span
 					>
 					<section class="search-result" style="border-left: 5px solid #e5603b">
 						<p
-								id="modalSub"
+								id="modal_sub"
 								style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px"
 						>
 							선택한 제품(서비스)에 버전을 등록합니다.
@@ -398,7 +398,7 @@
 							<div class="controls form-group">
 								<div class="col-sm-8">
 									<input type="text"
-										   id="tooltip-enabled-service-name"
+										   id="tooltip_enabled_service_name"
 										   class="form-control darkBack"
 										   data-placement="top"
 										   data-original-title="Some explanation text here"
@@ -414,7 +414,7 @@
 							<div class="controls form-group">
 								<div class="col-sm-8">
 									<input type="text"
-										   id="tooltip-enabled-service-version"
+										   id="tooltip_enabled_service_version"
 										   class="form-control darkBack"
 										   data-placement="top"
 										   data-original-title="Some explanation text here"
@@ -433,16 +433,16 @@
 									<div class="input-group">
 										<span class="input-group-btn">
 											<a href="#"
-											   id="btn-select-calendar-popup"
+											   id="btn_select_calendar_popup"
 											   class="btn btn-danger"
 											   data-date-format="yyyy/mm/dd">
 												<i class="fa fa-calendar"></i>
 											</a>
 										</span>
-										<input id="btn-enabled-date"
+										<input id="btn_enabled_date"
 											   class="form-control darkBack"
 											   type="text"
-											   name="btn-enabled-date"
+											   name="btn_enabled_date"
 											   value=""
 											   style="color: #a4c6ff"
 											   pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"/>
@@ -460,16 +460,16 @@
 									<div class="input-group">
 										<span class="input-group-btn">
 											<a href="#"
-											   id="btn-end-calendar-popup"
+											   id="btn_end_calendar_popup"
 											   class="btn btn-danger"
 											   data-date-format="yyyy/mm/dd">
 												<i class="fa fa-calendar"></i>
 											</a>
 										</span>
-										<input id="btn-end-date"
+										<input id="btn_end_date"
 											   class="form-control darkBack"
 											   type="text"
-											   name="btn-enabled-date"
+											   name="btn_enabled_date"
 											   value=""
 											   style="color: #a4c6ff"
 											   pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"/>
@@ -504,7 +504,7 @@
 			>
 				<button
 						type="button"
-						id="close-version"
+						id="close_version"
 						class="btn btn-default"
 						data-dismiss="modal"
 				>

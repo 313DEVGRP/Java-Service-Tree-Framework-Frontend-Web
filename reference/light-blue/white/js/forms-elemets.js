@@ -114,11 +114,11 @@ $(function(){
     $('.date-picker').datepicker({
         autoclose: true
     });
-    var $btnCalendar = $('#btn-select-calendar');
+    var $btnCalendar = $('#btn_select_calendar');
     $btnCalendar.datepicker({
         autoclose: true
     }).on('changeDate', function(ev){
-            $('#btn-enabled-date').val($btnCalendar.data('date'));
+            $('#btn_enabled_date').val($btnCalendar.data('date'));
         $btnCalendar.datepicker('hide');
     });
 

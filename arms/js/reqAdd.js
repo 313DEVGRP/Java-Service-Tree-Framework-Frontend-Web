@@ -27,7 +27,7 @@ function execDocReady() {
 	CKEDITOR.replace("editTabModalEditor");
 
 	makeDatePicker($("#btn-start-calendar-popup"));
-	makeDatePicker($("#btn-end-calendar-popup"));
+	makeDatePicker($("#btn_end_calendar_popup"));
 
 }
 

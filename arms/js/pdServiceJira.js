@@ -61,7 +61,7 @@ function dataTableClick(tempDataTable, selectedData){
 	selectedPage = selectedData.selectedPage;
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
-	$("#versionContents").html("");
+	$("#version_contents").html("");
 
 	$(".searchable").multiSelect('deselect_all');
 	$("#pdService_connect").removeClass("btn-success");
@@ -103,7 +103,7 @@ function dataLoad(getSelectedText, selectedText) {
 			</div>
 			</div>`;
 			$(".list-group-item").html(selectedHtml);
-			$("#tooltip-enabled-service-name").val(selectedText);
+			$("#tooltip_enabled_service_name").val(selectedText);
 
 			updateD3ByVersionList();
 
