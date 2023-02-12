@@ -273,7 +273,7 @@ function dataLoad(getSelectedText, selectedText) {
 		.done(function (json) {
 
 			console.log("dataLoad :: success → ", json);
-			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
+			$("#version_accordion").jsonMenu("set", json, { speed: 5000 });
 			//version text setting
 
 		var selectedHtml = `<div class="chat-message">

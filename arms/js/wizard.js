@@ -68,7 +68,7 @@ $(function () {
     $.ajax( "/auth-user/api/arms/pdversion/getChildNode.do?c_id=1")
         .done(function(json) {
             console.log(json);
-            $("#versionAccordion").jsonMenu("set", json,{speed:5000});
+            $("#version_accordion").jsonMenu("set", json,{speed:5000});
         })
         .fail(function(jqXHR) {
             console.log( "error" );
@@ -132,7 +132,7 @@ var root;
 //edit 313devops
 //var viewerWidth = $(document).width();
 //var viewerHeight = $(document).height();
-var viewerWidth = $("#tree-container").outerHeight();
+var viewerWidth = $("#tree_container").outerHeight();
 var viewerHeight = 295;
 
 var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
@@ -285,7 +285,7 @@ function initiateDrag(d, domNode) {
 
 // define the baseSvg, attaching a class for styling and the zoomListener
 var baseSvg = d3
-    .select("#tree-container")
+    .select("#tree_container")
     .append("svg")
     .attr("width", viewerWidth)
     .attr("height", viewerHeight)

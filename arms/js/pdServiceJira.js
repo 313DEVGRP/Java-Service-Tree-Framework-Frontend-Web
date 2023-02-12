@@ -64,9 +64,9 @@ function dataTableClick(tempDataTable, selectedData){
 	$("#versionContents").html("");
 
 	$(".searchable").multiSelect('deselect_all');
-	$("#pdServiceConnect").removeClass("btn-success");
-	$("#pdServiceConnect").addClass("btn-primary");
-	$("#pdServiceConnect").text("제품(서비스) Jira 연결 등록");
+	$("#pdService_connect").removeClass("btn-success");
+	$("#pdService_connect").addClass("btn-primary");
+	$("#pdService_connect").text("제품(서비스) Jira 연결 등록");
 
 	// 연계 이벤트 - 버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
@@ -89,7 +89,7 @@ function dataLoad(getSelectedText, selectedText) {
 		.done(function (json) {
 			console.log("dataLoad :: success → ", json);
 			versionList = json;
-			$("#versionAccordion").jsonMenu("set", json, { speed: 5000 });
+			$("#version_accordion").jsonMenu("set", json, { speed: 5000 });
 
 
 			//version text setting
@@ -215,14 +215,14 @@ function versionClick(element, c_id) {
 		}
 
 		if(versionClickData.length == 0){
-			$("#pdServiceConnect").removeClass("btn-success");
-			$("#pdServiceConnect").addClass("btn-primary");
-			$("#pdServiceConnect").text("제품(서비스) Jira 연결 등록");
+			$("#pdService_connect").removeClass("btn-success");
+			$("#pdService_connect").addClass("btn-primary");
+			$("#pdService_connect").text("제품(서비스) Jira 연결 등록");
 			updateD3ByMultiSelect();
 		}else{
-			$("#pdServiceConnect").removeClass("btn-primary");
-			$("#pdServiceConnect").addClass("btn-success");
-			$("#pdServiceConnect").text("제품(서비스) Jira 연결 변경");
+			$("#pdService_connect").removeClass("btn-primary");
+			$("#pdService_connect").addClass("btn-success");
+			$("#pdService_connect").text("제품(서비스) Jira 연결 변경");
 
 			console.log("jsonData[0].c_pdservice_jira_ids - " + versionClickData[0].c_pdservice_jira_ids);
 			$('#multiselect').multiSelect('select', versionClickData[0].c_pdservice_jira_ids.split(","));
@@ -239,9 +239,9 @@ function versionClick(element, c_id) {
 }
 
 // 제품(서비스)-버전-지라 저장
-$("#pdServiceConnect").click(function () {
+$("#pdService_connect").click(function () {
 
-	if($("#pdServiceConnect").hasClass("btn-primary") == true) {
+	if($("#pdService_connect").hasClass("btn-primary") == true) {
 
 		// data가 존재하지 않음.
 		$.ajax({
@@ -263,7 +263,7 @@ $("#pdServiceConnect").click(function () {
 		}).always(function() {
 			console.log("always call");
 		});
-	} else if($("#pdServiceConnect").hasClass("btn-success") == true) {
+	} else if($("#pdService_connect").hasClass("btn-success") == true) {
 		// data가 이미 있음
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceConnect/updateNode.do",
@@ -315,7 +315,7 @@ var root;
 //edit 313devops
 //var viewerWidth = $(document).width();
 //var viewerHeight = $(document).height();
-var viewerWidth = $("#tree-container").outerHeight();
+var viewerWidth = $("#tree_container").outerHeight();
 var viewerHeight = 295;
 
 var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
@@ -468,7 +468,7 @@ function initiateDrag(d, domNode) {
 
 // define the baseSvg, attaching a class for styling and the zoomListener
 var baseSvg = d3
-	.select("#tree-container")
+	.select("#tree_container")
 	.append("svg")
 	.attr("width", viewerWidth)
 	.attr("height", viewerHeight)
