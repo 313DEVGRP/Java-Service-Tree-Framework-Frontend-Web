@@ -257,6 +257,23 @@ function getToday() {
 	return date.getFullYear() + "/" + ("0" + (date.getMonth() + 1) ).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
 }
 
+// 최대값, 최소값
+function maxValue(arr) {
+	if (isEmpty(arr)) {
+		return [];
+	} else {
+		return arr.reduce((max, val) => max > val ? max : val);
+	}
+}
+
+function minValue(arr) {
+	if (isEmpty(arr)) {
+		return [];
+	} else {
+		return arr.reduce((min, val) => min < val ? min : val);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////

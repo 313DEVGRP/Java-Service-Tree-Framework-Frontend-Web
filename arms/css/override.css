@@ -666,3 +666,37 @@ select option {
   border-image: linear-gradient(0.25turn, #979797, #979797, rgb(0 0 0 / 0%));
   border-image-slice: 1;
 }
+
+/*데이터피커 css 처리*/
+  .xdsoft_datetimepicker .xdsoft_label {
+    display: inline;
+    position: relative;
+    z-index: 9999;
+    margin: 0;
+    padding: 5px 3px;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: bold;
+    background-color: #fff;
+    float: left;
+    width: 182px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+.xdsoft_datetimepicker .xdsoft_calendar th:first-child {
+  color: red !important;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar th:last-child {
+  color: blue !important;
+}
+
+
+.xdsoft_day_of_week0 {
+  color: red !important;
+}
+
+.xdsoft_day_of_week6 {
+  color: blue !important;
+}
