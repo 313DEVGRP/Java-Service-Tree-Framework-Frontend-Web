@@ -121,5 +121,5 @@ function jsTreeClick(selectedNodeID) {
 }
 
 function build_ReqData_By_PdService(){
-	jsTreeBuild("#productTree", "reqAdd/T_ARMS_REQADD_" + $('#country').val());
+	jsTreeBuild("#product_tree", "reqAdd/T_ARMS_REQADD_" + $('#country').val());
 }

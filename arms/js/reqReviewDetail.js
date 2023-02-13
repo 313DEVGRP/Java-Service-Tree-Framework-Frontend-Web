@@ -43,9 +43,9 @@ function getPdServiceInfo() {
 
 		var selectedPdServiceText = data.c_title;
 		if(isEmpty(selectedPdServiceText)){
-			$('#detailView-req-pdService-name').text("");
+			$('#detailview_req_pdservice_name').text("");
 		}else{
-			$('#detailView-req-pdService-name').text(selectedPdServiceText);
+			$('#detailview_req_pdservice_name').text(selectedPdServiceText);
 		}
 
 	}).fail(function(e) {
@@ -88,7 +88,7 @@ function getVersionInfo(c_version_link) {
 			}
 		}
 
-		$('#detailView-req-pdService-version').text(list);
+		$('#detailview_req_pdservice_version').text(list);
 
 	}).fail(function(e) {
 	}).always(function() {
@@ -134,50 +134,50 @@ function bindDataDetailTab(ajaxData){
 
 	//Version 데이터 바인딩
 	if(isEmpty(ajaxData.c_version_link)){
-		$('#detailView-req-pdService-version').text("요구사항에 등록된 버전이 없습니다.");
+		$('#detailview_req_pdservice_version').text("요구사항에 등록된 버전이 없습니다.");
 	}else{
 		getVersionInfo(ajaxData.c_version_link);
 	}
 
 
-	$('#detailView-req-id').text(ajaxData.c_id);
-	$('#detailView-req-name').text(ajaxData.c_title);
+	$('#detailview_req_id').text(ajaxData.c_id);
+	$('#detailview_req_name').text(ajaxData.c_title);
 
 	//우선순위 셋팅
-	$('#detailView-req-priority').children('.btn.active').removeClass("active");
+	$('#detailview_req_priority').children('.btn.active').removeClass("active");
 	var slectReqPriorityID = "detailView-req-priority-option" + ajaxData.c_priority;
 	$('#'+slectReqPriorityID).parent().addClass("active");
 
-	$('#detailView-req-status').text(ajaxData.c_req_status);
-	$('#detailView-req-writer').text(ajaxData.c_writer);
-	$('#detailView-req-write-date').text(`${getStrLimit(ajaxData.c_writer_date,35)}`);
+	$('#detailview_req_status').text(ajaxData.c_req_status);
+	$('#detailview_req_writer').text(ajaxData.c_writer);
+	$('#detailview_req_write_date').text(`${getStrLimit(ajaxData.c_writer_date,35)}`);
 
 	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
-		$("#detailView-req-reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+		$("#detailview_req_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
 	} else {
-		$("#detailView-req-reviewer01").text(`${getStrLimit(ajaxData.c_reviewer01,40)}`);
+		$("#detailview_req_reviewer01").text(`${getStrLimit(ajaxData.c_reviewer01,40)}`);
 	}
 	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
-		$("#detailView-req-reviewer02").text("");
+		$("#detailview_req_reviewer02").text("");
 	} else {
-		$("#detailView-req-reviewer02").text(`${getStrLimit(ajaxData.c_reviewer02,40)}`);
+		$("#detailview_req_reviewer02").text(`${getStrLimit(ajaxData.c_reviewer02,40)}`);
 	}
 	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
-		$("#detailView-req-reviewer03").text("");
+		$("#detailview_req_reviewer03").text("");
 	} else {
-		$("#detailView-req-reviewer03").text(`${getStrLimit(ajaxData.c_reviewer03,40)}`);
+		$("#detailview_req_reviewer03").text(`${getStrLimit(ajaxData.c_reviewer03,40)}`);
 	}
 	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
-		$("#detailView-req-reviewer04").text("");
+		$("#detailview_req_reviewer04").text("");
 	} else {
-		$("#detailView-req-reviewer04").text(`${getStrLimit(ajaxData.c_reviewer04,40)}`);
+		$("#detailview_req_reviewer04").text(`${getStrLimit(ajaxData.c_reviewer04,40)}`);
 	}
 	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
-		$("#detailView-req-reviewer05").text("");
+		$("#detailview_req_reviewer05").text("");
 	} else {
-		$("#detailView-req-reviewer05").text(`${getStrLimit(ajaxData.c_reviewer05,40)}`);
+		$("#detailview_req_reviewer05").text(`${getStrLimit(ajaxData.c_reviewer05,40)}`);
 	}
-	$("#detailView-req-contents").html(ajaxData.c_contents);
+	$("#detailview_req_contents").html(ajaxData.c_contents);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
