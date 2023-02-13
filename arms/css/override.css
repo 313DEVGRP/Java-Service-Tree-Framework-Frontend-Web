@@ -654,3 +654,15 @@ select option {
   from, to { opacity: 0; }
   50% { opacity: 1; }
 }
+
+/* 그라디언트 보더 */
+.gradient_left_border{
+  border-left: 1px solid transparent;
+  border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+  border-image-slice: 1;
+}
+.gradient_bottom_border{
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(0.25turn, #979797, #979797, rgb(0 0 0 / 0%));
+  border-image-slice: 1;
+}
