@@ -20,7 +20,7 @@ function execDocReady() {
 
 // make review classify menu
 var makeClassifyMenus = function (data) {
-	var reviewClassify = document.getElementById("review-classify");
+	var reviewClassify = document.getElementById("review_classify");
 	var menus = "";
 	data.forEach(
 		(item) =>
@@ -88,7 +88,7 @@ function dataTableLoad() {
 	var orderList = [[ 1, 'asc' ]];
 	var buttonList = [];
 
-	var jquerySelector = "#reqReviewTable";
+	var jquerySelector = "#reqreview_table";
 	var ajaxUrl = "/auth-user/api/arms/reqReview/getMonitor_Without_Root.do?reviewer=" + userName + "&filter=All";
 	var jsonRoot = "result";
 
@@ -116,7 +116,7 @@ function dataTableDrawCallback(tableInfo) {
 
 
 // side menu click
-$("#review-classify").click(async function (ev) {
+$("#review_classify").click(async function (ev) {
 	var li = ev.target.parentNode;
 	for (var item of ev.currentTarget.children) {
 		item.classList.remove("active");
@@ -125,9 +125,9 @@ $("#review-classify").click(async function (ev) {
 	li.classList.add("active");
 
 
-	$('#reqReviewTable').dataTable().empty();
+	$('#reqreview_table').dataTable().empty();
 	var externalData = "";
-	var jquerySelectorID = "#reqReviewTable";
+	var jquerySelectorID = "#reqreview_table";
 	var ajaxUrl = "/auth-user/api/arms/reqReview/getMonitor_Without_Root.do?reviewer=" + userName + "&filter=" + li.dataset.c_review_result_state;
 	var columnList = [
 		{ name: "c_id",
