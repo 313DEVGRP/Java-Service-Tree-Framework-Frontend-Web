@@ -79,7 +79,7 @@ function dataTableLoad() {
 			title: "리뷰 생성일",
 			data: "c_review_creat_date",
 			visible: true
-		},
+		}
 
 	];
 	var rowsGroupList = [];
@@ -91,8 +91,10 @@ function dataTableLoad() {
 	var jquerySelector = "#reqreview_table";
 	var ajaxUrl = "/auth-user/api/arms/reqReview/getMonitor_Without_Root.do?reviewer=" + userName + "&filter=All";
 	var jsonRoot = "result";
+	var isServerSide = true;
 
-	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+	reqStatusDataTable = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList,
+		columnDefList, selectList, orderList, buttonList, isServerSide);
 }
 
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
@@ -113,70 +115,3 @@ function dataTableCallBack(settings, json){
 function dataTableDrawCallback(tableInfo) {
 	$("#" + tableInfo.sInstance).DataTable().columns.adjust().responsive.recalc();
 }
-
-
-// side menu click
-$("#review_classify").click(async function (ev) {
-	var li = ev.target.parentNode;
-	for (var item of ev.currentTarget.children) {
-		item.classList.remove("active");
-	}
-
-	li.classList.add("active");
-
-
-	$('#reqreview_table').dataTable().empty();
-	var externalData = "";
-	var jquerySelectorID = "#reqreview_table";
-	var ajaxUrl = "/auth-user/api/arms/reqReview/getMonitor_Without_Root.do?reviewer=" + userName + "&filter=" + li.dataset.c_review_result_state;
-	var columnList = [
-		{ name: "c_id",
-			title: "ID",
-			data: "c_id",
-			visible: true
-		},
-		{ name: "c_review_pdservice_name",
-			title: "제품(서비스)",
-			data: "c_review_pdservice_name",
-			visible: true
-		},
-		{ name: "c_review_req_link",
-			title: "요구사항 아이디",
-			data: "c_review_req_link",
-			visible: false
-		},
-		{ name: "c_review_req_name",
-			title: "요구사항",
-			data: "c_review_req_name",
-			visible: true
-		},
-		{ name: "c_review_sender",
-			title: "리뷰 요청인",
-			data: "c_review_sender",
-			visible: true
-		},
-		{ name: "c_review_responder",
-			title: "리뷰 응답인",
-			data: "c_review_responder",
-			visible: true
-		},
-		{ name: "c_review_result_state",
-			title: "리뷰 상태",
-			data: "c_review_result_state",
-			visible: true
-		},
-		{ name: "c_review_creat_date",
-			title: "리뷰 생성일",
-			data: "c_review_creat_date",
-			visible: true
-		},
-
-	];
-	var rowsGroupList = [];
-	var columnDefList = [];
-	var selectList = {};
-	var buttonList = [];
-	reqStatusDataTable = common_dataTableLoad(externalData, jquerySelectorID, ajaxUrl, columnList, rowsGroupList, columnDefList, selectList, buttonList);
-
-
-});

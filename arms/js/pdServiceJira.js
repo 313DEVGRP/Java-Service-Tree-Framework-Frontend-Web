@@ -49,8 +49,10 @@ function dataTableLoad() {
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
 	var jsonRoot = "";
+	var isServerSide = false;
 
-	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList,
+		columnDefList, selectList, orderList, buttonList, isServerSide);
 
 }
 

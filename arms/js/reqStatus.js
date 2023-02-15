@@ -313,7 +313,9 @@ function common_dataTableLoad(selectId, endPointUrl) {
 		}
 	];
 	var selectList = {};
-	reqStatusDataTable = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+	var isServerSide = false;
+	reqStatusDataTable = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList,
+		selectList, orderList, buttonList, isServerSide);
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 

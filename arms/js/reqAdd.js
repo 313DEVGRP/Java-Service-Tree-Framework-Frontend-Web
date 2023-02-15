@@ -222,8 +222,10 @@ function dataTableLoad(selectId) {
 		var jquerySelector = "#req_table";
 		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getMonitor.do";
 		var jsonRoot = "";
+		var isServerSide = false;
 
-		dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+		dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList,
+			columnDefList, selectList, orderList, buttonList, isServerSide);
 
 	}else{
 
@@ -252,8 +254,10 @@ function dataTableLoad(selectId) {
 				var jsonRoot = "";
 				var paramUrl = "?c_id=313&c_left=" + data.c_left + "&c_right=" + data.c_right;
 				ajaxUrl = ajaxUrl + paramUrl;
+				var isServerSide = false;
 
-				dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+				dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList,
+					selectList, orderList, buttonList, isServerSide);
 
 			}
 		}).done(function(data) {
@@ -305,8 +309,10 @@ function defaultType_dataTableLoad(selectId) {
 	var jquerySelector = "#jira_ver_table";
 	var ajaxUrl = "/auth-user/api/arms/pdServiceJiraVer/getMonitor_Without_Root.do";
 	var jsonRoot = "";
+	var isServerSide = false;
 
-	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList, selectList, orderList, buttonList);
+	dataTableRef = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList,
+		selectList, orderList, buttonList, isServerSide);
 
 	return dataTableRef;
 }

@@ -739,7 +739,8 @@ function dataTable_build(
 	columnDefList,
 	selectList,
 	orderList,
-	buttonList
+	buttonList,
+	isServerSide
 ) {
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
@@ -763,6 +764,7 @@ function dataTable_build(
 			url: ajaxUrl,
 			dataSrc: jsonRoot,
 		},
+		serverSide: isServerSide,
 		stateSave: true,
 		stateDuration: -1,
 		destroy: true,
