@@ -1,8 +1,8 @@
 {
-	"formatOnSave": true,
-	"tabWidth": 1,
-	"proseWrap": "always",
-	"enableDebugLogs": true,
+	"printWidth": 120,
+	"endOfLine": "auto",
+	"singleQuote": true,
+	"trailingComma": "none",
 	"useTabs": true,
-	"endOfLine": "auto"
+	"bracketSameLine": true
 }

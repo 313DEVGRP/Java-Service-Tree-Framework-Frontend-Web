@@ -8102,6 +8102,7 @@ textarea + .help-block,
 .btn-group > .btn:active,
 .btn-group > .btn.active {
     z-index: auto;
+    color: #a4c6ff;
 }
 
 /* line 266, D:/projects/admin/white/sass/_bootstrap-override.scss */
