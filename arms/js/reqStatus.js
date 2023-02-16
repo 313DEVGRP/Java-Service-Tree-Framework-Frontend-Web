@@ -137,20 +137,6 @@ function bind_VersionData_By_PdService(){
 	});
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//슬림스크롤
-////////////////////////////////////////////////////////////////////////////////////////
-function  makeSlimScroll(targetElement) {
-	$(targetElement).slimScroll({
-		height: '200px',
-		railVisible: true,
-		railColor: '#222',
-		railOpacity: 0.3,
-		wheelStep: 10,
-		allowPageScroll: false,
-		disableFadeOut: false
-	});
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //데이터 테이블
@@ -195,7 +181,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 				}
 				return data;
 			},
-			className: "dt-body-center",
+			className: "dt-body-left",
 			visible: true
 		},
 		{ name: "c_jira_version_link",
@@ -206,6 +192,23 @@ function common_dataTableLoad(selectId, endPointUrl) {
 		{ name: "c_jira_version_name",
 			title: "JIRA Version",
 			data: "c_jira_version_name",
+			visible: true
+		},
+		{
+			name: "c_jira_version_name",
+			title: "JIRA Version",
+			data:   "c_jira_version_name",
+			render: function (data, type, row, meta) {
+				if (type === 'display') {
+					if (isEmpty(data)) {
+						return "";
+					} else {
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					}
+				}
+				return data;
+			},
+			className: "dt-body-left",
 			visible: true
 		},
 		{ name: "c_req_link",
@@ -245,7 +248,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 				}
 				return data;
 			},
-			className: "dt-body-center",
+			className: "dt-body-left",
 			visible: true
 		},
 		{
@@ -314,6 +317,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 	];
 	var selectList = {};
 	var isServerSide = false;
+
 	reqStatusDataTable = dataTable_build(jquerySelector, ajaxUrl, jsonRoot, columnList, rowsGroupList, columnDefList,
 		selectList, orderList, buttonList, isServerSide);
 }

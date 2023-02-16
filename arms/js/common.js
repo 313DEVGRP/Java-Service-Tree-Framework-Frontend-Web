@@ -782,7 +782,7 @@ function dataTable_build(
 				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>',
 		},
 		initComplete: function (settings, json) {
-			console.log('dataTableBuild :: drawCallback');
+			console.log('dataTableBuild :: drawCallmakeSlimScrollback');
 			if ($.isFunction(dataTableCallBack)) {
 				//데이터 테이블 그리고 난 후 시퀀스 이벤트
 				dataTableCallBack(settings, json);
