@@ -313,7 +313,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 		targets: 0
 	}];
 	var orderList = [[ 1, 'asc' ]];
-	var jquerySelector = "#reqStatusTable";
+	var jquerySelector = "#reqstatustable";
 	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
 	var jsonRoot = '';
 	var buttonList = [

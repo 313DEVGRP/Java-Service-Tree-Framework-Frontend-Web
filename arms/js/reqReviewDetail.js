@@ -572,15 +572,15 @@ index 0000001..0ddf2ba
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 - 승인 클릭
 ///////////////////////////////////////////////////////////////////////////////
-$("#show-info-accept").click(function () {
+$("#show_info_accept").click(function () {
 	set_Review_Result("Accept");
 });
 
-$("#show-info-reject").click(function () {
+$("#show_info_reject").click(function () {
 	set_Review_Result("Reject");
 });
 
-$("#show-info-delay").click(function () {
+$("#show_info_delay").click(function () {
 	set_Review_Result("Delay");
 });
 
