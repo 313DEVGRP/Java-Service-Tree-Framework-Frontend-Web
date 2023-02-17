@@ -114,29 +114,45 @@ function bind_VersionData_By_PdService(){
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType : "json",
-		progress: true
-	}).done(function(data) {
+		progress: true,
+		statusCode: {
+			200: function(data) {
 
-		for(var k in data){
-			var obj = data[k];
-			var $opt = $('<option />', {
-				value: obj.c_id,
-				text: obj.c_title,
-			})
+				//////////////////////////////////////////////////////////
+				for(var k in data){
+					var obj = data[k];
+					var $opt = $('<option />', {
+						value: obj.c_id,
+						text: " " + obj.c_title,
+					});
 
-			$('.multiple-select').append($opt);
+					//$('#multiversion').append($opt);
+					//$('#edit_multi_version').append($opt);
+					$('.multiple-select').append($opt);
+				}
+
+				if(data.length > 0){
+					console.log("display 재설정.");
+				}
+				//$('#multiversion').multipleSelect('refresh');
+				//$('#edit_multi_version').multipleSelect('refresh');
+				$('.multiple-select').multipleSelect('refresh');
+				//////////////////////////////////////////////////////////
+				jSuccess("버전 조회가 완료 되었습니다.");
+
+			},
+		},
+		beforeSend:function(){
+			//$("#regist_pdService").hide(); 버튼 감추기
+		},
+		complete:function(){
+			//$("#regist_pdService").show(); 버튼 보이기
+		},
+		error:function(e){
+			jError("버전 조회 중 에러가 발생했습니다.");
 		}
-
-		if(data.length > 0){
-			console.log("display 재설정.");
-		}
-		$('.multiple-select').multipleSelect('refresh');
-
-	}).fail(function(e) {
-	}).always(function() {
 	});
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //데이터 테이블

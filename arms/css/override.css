@@ -663,7 +663,7 @@ select option {
 }
 .gradient_bottom_border{
   border-bottom: 1px solid transparent;
-  border-image: linear-gradient(0.25turn, #979797, #979797, rgb(0 0 0 / 0%));
+  border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
   border-image-slice: 1;
 }
 

@@ -117,7 +117,7 @@ function bind_VersionData_By_PdService(){
 					var $opt = $('<option />', {
 						value: obj.c_id,
 						text: obj.c_title,
-					})
+					});
 
 					//$('#multiversion').append($opt);
 					//$('#edit_multi_version').append($opt);

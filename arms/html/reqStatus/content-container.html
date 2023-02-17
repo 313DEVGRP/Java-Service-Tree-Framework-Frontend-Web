@@ -2,86 +2,92 @@
 	<section class="widget">
 		<header>
 			<h4>
-				<span class="font13" style="font-weight: bold">
-					<i class="fa fa-edit"></i> 요구사항 리스트
-				</span>
+				<span class="font13" style="font-weight: bold"> <i class="fa fa-edit"></i> 요구사항 리스트 </span>
 			</h4>
 			<div class="widget-controls">
 				<a title="Options" href="#"><i class="glyphicon glyphicon-cog"></i></a>
-				<a data-widgster="expand" title="Expand" href="#"
-					><i class="glyphicon glyphicon-chevron-up"></i
-				></a>
-				<a data-widgster="collapse" title="Collapse" href="#"
-					><i class="glyphicon glyphicon-chevron-down"></i
-				></a>
-				<a data-widgster="close" title="Close" href="#"
-					><i class="glyphicon glyphicon-remove"></i
-				></a>
+				<a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
+				<a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+				<a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
 			</div>
 		</header>
 		<div class="body">
-			<blockquote class="font13">상세 보기는 리스트 클릭</blockquote>
 			<div class="row">
-				<div class="col-md-4 well">
-					<legend>Search</legend>
-					<div
-						class="control-group"
-						class="darkBack"
-						style="padding-bottom: 10px; border: 0"
-					>
-						<div
-							class="controls form-group"
-							class="darkBack"
-							style="margin-bottom: 5px !important"
-						>
-							<select
-								id="country"
-								required="required"
-								data-placeholder="Select Product(Service)"
-								class="select-block-level chzn-select darkBack"
-								tabindex="-1"
-								name="country"
-								style="width:100% !important;"
-							>
-								<option value=""></option>
-							</select>
+				<div class="col-md-12">
+					<section class="widget" style="margin-bottom: 0px !important;">
+						<header>
+							<label><strong>Search</strong></label>
+						</header>
+						<div class="body">
+							<div class="row">
+								<div class="col-md-4">
+									<blockquote class="font12">
+										<strong>1. Service 를 선택해 주세요</strong>
+									</blockquote>
+									<div
+											class="control-group"
+											class="darkBack"
+											style="padding-bottom: 10px; border: 0"
+									>
+										<div
+												class="controls form-group"
+												class="darkBack"
+												style="margin-bottom: 5px !important"
+										>
+											<select
+													id="country"
+													required="required"
+													data-placeholder="Select Product(Service)"
+													class="select-block-level chzn-select darkBack"
+													tabindex="-1"
+													name="country"
+													style="width:100% !important;"
+											>
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<blockquote class="font12">
+										<strong>1. Service 를 선택해 주세요</strong>
+									</blockquote>
+									<div
+											class="control-group"
+											class="darkBack"
+											style="padding-bottom: 10px; border: 0"
+									>
+										<div
+												class="controls form-group"
+												class="darkBack"
+												style="margin-bottom: 5px !important"
+										>
+											<select
+													multiple="multiple"
+													id="multiversion"
+													class="multiple-select btn-block darkBack"
+													placeholder="&nbsp;&nbsp;Select Version"
+											></select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<blockquote class="font12">
+										<strong>1. Service 를 선택해 주세요</strong>
+									</blockquote>
+									<div class="control-group darkBack"
+										 style="border: 0; padding-bottom: 2px !important; border-radius: 5px;">
+										<div class="checkbox" style="margin-left: 4px; margin-bottom: 1px !important; margin-top: 5px !important;">
+											<input id="checkbox1" type="checkbox" data-check-all="" />
+											<label for="checkbox1">disable 된 요구사항 필터</label>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div
-						class="control-group"
-						class="darkBack"
-						style="padding-bottom: 10px; border: 0"
-					>
-						<div
-							class="controls form-group"
-							class="darkBack"
-							style="margin-bottom: 5px !important"
-						>
-							<select
-								multiple="multiple"
-								id="multiversion"
-								class="multiple-select btn-block darkBack"
-								placeholder="&nbsp;&nbsp;Select Version"
-							></select>
-						</div>
-					</div>
+					</section>
 				</div>
-				<div class="col-md-4 well">
-					<legend>Filter</legend>
-					<div
-						class="control-group"
-						class="darkBack"
-						style="padding-bottom: 10px; border: 0"
-					>
-						<div class="checkbox">
-							<input id="checkbox1" type="checkbox" data-check-all="" />
-							<label for="checkbox1">disable 된 요구사항 필터</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 well">
-					<legend>Export</legend>
-				</div>
+
 			</div>
 		</div>
 	</section>
@@ -106,17 +112,13 @@
 					<section class="widget" style="margin-bottom: 0px !important;">
 						<header>
 							<label><strong>Service - Application List</strong></label>
-							<div style="float: right">
-								<button type="button" id="noneFilter" class="btn btn-default btn-sm">
-									<span class="glyphicon glyphicon-repeat"></span>
-									Refresh
-								</button>
-							</div>
 						</header>
 						<div class="body">
-							<blockquote class="font12" id="target_app_Html">
+							<blockquote class="font12" style="margin: 0 0 5px !important;">
 								<strong>1. Service 를 선택해 주세요</strong>
 							</blockquote>
+							<div class="gradient_bottom_border"></div>
+							<div style="width: 100%; height: 10px;"></div>
 							<div style="float: left;">
 								<button class="btn btn-default btn-sm" id="copychecker" type="button">
 									Copy
@@ -230,11 +232,3 @@
 		outline-offset: -2px;
 	}
 </style>
-<script type="text/javascript" charset="utf-8">
-	//<![CDATA[
-
-	// 초기 개발 및 확인 용도
-	$(function () {});
-
-	//]]>
-</script>
