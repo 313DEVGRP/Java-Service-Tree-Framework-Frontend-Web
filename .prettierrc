@@ -8,5 +8,6 @@
 	"singleAttributePerLine": true,
 	"bracketSpacing": true,
 	"jsxBracketSameLine": true,
-	"semi": true
+	"semi": true,
+	"htmlWhitespaceSensitivity": "ignore"
 }
