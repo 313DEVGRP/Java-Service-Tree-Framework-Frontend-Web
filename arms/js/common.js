@@ -140,7 +140,7 @@ function authUserCheck() {
 				userName = json.name;
 				permissions = json.permissions;
 
-				var account_html = "<img" + " src='./img/bestqulity.png'" + "alt=''" + "class='img-circle' />";
+				var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
 				account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.name + "</span>";
 				$(".account-picture").append(account_html);
 
