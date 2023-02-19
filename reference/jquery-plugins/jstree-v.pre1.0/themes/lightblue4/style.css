@@ -96,11 +96,11 @@
 
 .jstree li {
     display: block;
-    min-height: 24px;
-    line-height: 24px;
+    min-height: 26px;
+    line-height: 26px;
     white-space: nowrap;
-    margin-left: 24px;
-    min-width: 24px;
+    margin-left: 25px;
+    min-width: 25px;
 }
 
 

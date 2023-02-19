@@ -959,9 +959,6 @@ select option {
 .input-wrap .select2-search--inline input {
   width: 100% !important;
 }
-.form-control:focus {
-  box-shadow: none;
-}
 
 #service-reviewers,
 #service-reviewers a {
@@ -1368,11 +1365,6 @@ select option {
   -o-transition: width 0.2s;
   transition: width 0.2s;
 }
-label {
-  display: inline-block;
-  margin-bottom: 5px;
-  font-weight: 300;
-}
 
 .review-content {
   margin-top: 20px;
@@ -1581,9 +1573,6 @@ label {
 .input-wrap .select2-search--inline input {
   width: 100% !important;
 }
-.form-control:focus {
-  box-shadow: none;
-}
 
 #service-reviewers,
 #service-reviewers a {
@@ -1643,4 +1632,29 @@ legend {
 
 p {
   margin: 0 !important;
+}
+
+.meltin-btn {
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 5px 5px 10px rgb(59 60 63), -5px -5px 10px rgb(56 58 61);
+  transition: background-color 0.15s ease-in-out, border 0.15s ease-in-out, box-shadow 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+.meltin-form-control {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #7b8ab8;
+  background-color: #f0f5fa;
+  background-clip: padding-box;
+  border: 0 solid #bed1e6;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.375rem;
+  box-shadow: inset 2px 2px 8px rgb(55 94 148 / 30%), inset -3px -2px 5px rgb(255 255 255 / 80%);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }

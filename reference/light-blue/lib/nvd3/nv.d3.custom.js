@@ -283,7 +283,7 @@ nv.utils.windowResize = function(fun){
     window.onresize = function(e) {
         if (typeof oldresize == 'function') oldresize(e);
         fun(e);
-    }
+    };
 }
 
 // Backwards compatible way to implement more d3-like coloring of graphs.
