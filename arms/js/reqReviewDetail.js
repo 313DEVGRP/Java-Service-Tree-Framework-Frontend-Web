@@ -6,7 +6,7 @@ function execDocReady() {
 	setSideMenu(
 		"sidebar_menu_requirement",
 		"sidebar_menu_requirement_review",
-		"requirement-elements-collapse"
+		"requirement_elements_collapse"
 	);
 
 	//getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
