@@ -7,13 +7,13 @@ var reqStatusDataTable;
 function execDocReady() {
 	//좌측 메뉴
 	setTimeout(function () {
-		$('#sidebar_menu_dashboard').css({ color: '#a4c6ff' });
-		$('#sidebar_menu_dashboard').css({ 'font-weight': '900' });
+		$("#sidebar_menu_dashboard").css({ color: "#a4c6ff" });
+		$("#sidebar_menu_dashboard").css({ "font-weight": "900" });
 	}, 1000);
 
-	var testData = testData(['Search', 'Referral', 'Direct', 'Organic'], 25), // just 25 points, since there are lots of charts
-		pieSelect = d3.select('#sources-chart-pie'),
-		pieFooter = d3.select('#data-chart-footer'),
+	var testData = testData(["Search", "Referral", "Direct", "Organic"], 25), // just 25 points, since there are lots of charts
+		pieSelect = d3.select("#sources-chart-pie"),
+		pieFooter = d3.select("#data-chart-footer"),
 		stackedChart,
 		lineChart,
 		pieChart,
@@ -21,7 +21,7 @@ function execDocReady() {
 
 	function pieChartUpdate(d) {
 		d.disabled = !d.disabled;
-		d3.select(this).classed('disabled', d.disabled);
+		d3.select(this).classed("disabled", d.disabled);
 		if (
 			!pieChart.pie
 				.values()(testData)
@@ -35,15 +35,15 @@ function execDocReady() {
 					d.disabled = false;
 					return d;
 				});
-			pieFooter.selectAll('.control').classed('disabled', false);
+			pieFooter.selectAll(".control").classed("disabled", false);
 		}
-		d3.select('#sources-chart-pie svg').transition().call(pieChart);
+		d3.select("#sources-chart-pie svg").transition().call(pieChart);
 	}
 
 	var lineResize;
 	function lineChartOperaHack() {
 		//lineChart is somehow not rendered correctly after updates. Need to reupdate
-		if (navigator.userAgent.indexOf('Opera')) {
+		if (navigator.userAgent.indexOf("Opera")) {
 			clearTimeout(lineResize);
 			lineResize = setTimeout(lineChart.update, 300);
 		}
@@ -64,11 +64,11 @@ function execDocReady() {
 			{
 				area: true,
 				values: sin,
-				key: 'Sine Wave'
+				key: "Sine Wave"
 			},
 			{
 				values: cos,
-				key: 'Cosine Wave'
+				key: "Cosine Wave"
 			}
 		];
 	}
@@ -100,10 +100,10 @@ function execDocReady() {
 			.showLabels(false)
 			.showLegend(false)
 			.tooltipContent(function (key, y, e, graph) {
-				return '<h4>' + key + '</h4>' + '<p>' + y + '</p>';
+				return "<h4>" + key + "</h4>" + "<p>" + y + "</p>";
 			})
 			.total(function (count) {
-				return "<div class='visits'>" + count + '<br/> visits </div>';
+				return "<div class='visits'>" + count + "<br/> visits </div>";
 			})
 			.donut(true);
 		chart.pie.margin({ top: 10, bottom: -20 });
@@ -112,22 +112,22 @@ function execDocReady() {
 			return d.y;
 		});
 		pieFooter
-			.append('div')
-			.classed('controls', true)
-			.selectAll('div')
+			.append("div")
+			.classed("controls", true)
+			.selectAll("div")
 			.data(testData)
 			.enter()
-			.append('div')
-			.classed('control', true)
-			.style('border-top', function (d, i) {
-				return '3px solid ' + COLOR_VALUES[i];
+			.append("div")
+			.classed("control", true)
+			.style("border-top", function (d, i) {
+				return "3px solid " + COLOR_VALUES[i];
 			})
 			.html(function (d) {
 				return (
-					"<div class='key'>" + d.key + '</div>' + "<div class='value'>" + Math.floor((100 * d.y) / sum) + '%</div>'
+					"<div class='key'>" + d.key + "</div>" + "<div class='value'>" + Math.floor((100 * d.y) / sum) + "%</div>"
 				);
 			})
-			.on('click', function (d) {
+			.on("click", function (d) {
 				pieChartUpdate.apply(this, [d]);
 				setTimeout(function () {
 					stackedChart.update();
@@ -138,7 +138,7 @@ function execDocReady() {
 				}, 100);
 			});
 
-		d3.select('#sources-chart-pie svg').datum([testData]).transition(500).call(chart);
+		d3.select("#sources-chart-pie svg").datum([testData]).transition(500).call(chart);
 		nv.utils.windowResize(chart.update);
 
 		pieChart = chart;
@@ -154,13 +154,13 @@ function execDocReady() {
 			.controlsColor([$white, $white, $white])
 			.showLegend(false);
 
-		chart.yAxis.showMaxMin(false).ticks(0).tickFormat(d3.format(',.f'));
+		chart.yAxis.showMaxMin(false).ticks(0).tickFormat(d3.format(",.f"));
 
 		chart.xAxis.showMaxMin(false).tickFormat(function (d) {
-			return d3.time.format('%b %d')(new Date(d));
+			return d3.time.format("%b %d")(new Date(d));
 		});
 
-		d3.select('#sources-chart-bar svg').datum(testData).transition().duration(500).call(chart);
+		d3.select("#sources-chart-bar svg").datum(testData).transition().duration(500).call(chart);
 
 		nv.utils.windowResize(chart.update);
 
@@ -176,25 +176,25 @@ function execDocReady() {
 			.color(keyColor)
 			.showControls(false)
 			.showLegend(false)
-			.style('stream')
+			.style("stream")
 			.controlsColor([$textColor, $textColor, $textColor]);
 
-		chart.yAxis.showMaxMin(false).tickFormat(d3.format(',f'));
+		chart.yAxis.showMaxMin(false).tickFormat(d3.format(",f"));
 
 		chart.xAxis.showMaxMin(false).tickFormat(function (d) {
-			return d3.time.format('%b %d')(new Date(d));
+			return d3.time.format("%b %d")(new Date(d));
 		});
 
-		d3.select('#sources-chart-stacked svg').datum(testData).transition().duration(500).call(chart);
+		d3.select("#sources-chart-stacked svg").datum(testData).transition().duration(500).call(chart);
 		nv.utils.windowResize(chart.update);
 
-		chart.stacked.dispatch.on('areaClick.updateExamples', function (e) {
+		chart.stacked.dispatch.on("areaClick.updateExamples", function (e) {
 			setTimeout(function () {
 				lineChart.update();
 				pieChart.update();
 				barChart.update();
 
-				pieSelect.selectAll('.control').classed('disabled', function (d) {
+				pieSelect.selectAll(".control").classed("disabled", function (d) {
 					return d.disabled;
 				});
 			}, 100);
@@ -212,17 +212,17 @@ function execDocReady() {
 			.showLegend(false)
 			.color(keyColor);
 
-		chart.yAxis.showMaxMin(false).tickFormat(d3.format(',.f'));
+		chart.yAxis.showMaxMin(false).tickFormat(d3.format(",.f"));
 
 		chart.xAxis.showMaxMin(false).tickFormat(function (d) {
-			return d3.time.format('%b %d')(new Date(d));
+			return d3.time.format("%b %d")(new Date(d));
 		});
 
 		//just to make it look different
 		testData[0].area = true;
 		testData[3].area = true;
 
-		d3.select('#sources-chart-line svg')
+		d3.select("#sources-chart-line svg")
 			//.datum(sinAndCos())
 			.datum(testData)
 			.transition()

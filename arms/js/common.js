@@ -2,7 +2,6 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function () {
-
 	// Page load & 상단 페이지 로드 프로그래스바
 	topbarConfig();
 	topbar.show();
@@ -15,30 +14,28 @@ $(function () {
 	rightBottomTopForwardIcon();
 
 	var urlParams = new URL(location.href).searchParams;
-	var page = urlParams.get('page');
+	var page = urlParams.get("page");
 
-	if(ajax_setup()){
-		if(includeLayout(page)) {
-			if(authUserCheck()){
-				$.getScript('js/' + page + ".js", function(){
-					setTimeout(function(){
+	if (ajax_setup()) {
+		if (includeLayout(page)) {
+			if (authUserCheck()) {
+				$.getScript("js/" + page + ".js", function () {
+					setTimeout(function () {
 						/* 로그인 인증 여부 체크 함수 */
-							execDocReady();
-					},500);
+						execDocReady();
+					}, 500);
 				});
 			}
 		}
 	}
 
-
-	var onlyContents = urlParams.get('withoutLayer');
-	if(isEmpty(onlyContents)){
-		$("body").removeAttr('class');
-	}else{
-		$("body").addClass('sidebar-hidden');
+	var onlyContents = urlParams.get("withoutLayer");
+	if (isEmpty(onlyContents)) {
+		$("body").removeAttr("class");
+	} else {
+		$("body").addClass("sidebar-hidden");
 		$("header.page-header").hide();
 	}
-
 });
 
 // include 레이아웃 html 파일을 로드하는 함수
@@ -46,31 +43,25 @@ function includeLayout(page) {
 	var includeArea = $("[data-include]");
 	var self, url;
 	$.each(includeArea, function () {
-
 		self = $(this);
 		url = self.data("include");
 		console.log(url);
 
-		if( url.indexOf( "content-header" ) !== -1 ){
-
+		if (url.indexOf("content-header") !== -1) {
 			url = "html/" + page + "/content-header.html";
 			self.load(url, function () {
 				self.removeAttr("data-include");
 			});
-
-		}else if( url.indexOf( "content-container" ) !== -1 ){
-
+		} else if (url.indexOf("content-container") !== -1) {
 			url = "html/" + page + "/content-container.html";
 			self.load(url, function () {
 				self.removeAttr("data-include");
 			});
-
-		}else{
+		} else {
 			self.load(url, function () {
 				self.removeAttr("data-include");
 			});
 		}
-
 	});
 
 	return true;
@@ -100,21 +91,21 @@ function topbarConfig() {
 			".25": "rgba(52,  152, 219, .9)",
 			".50": "rgba(241, 196, 15,  .9)",
 			".75": "rgba(230, 126, 34,  .9)",
-			"1.0": "rgba(211, 84,  0,   .9)",
+			"1.0": "rgba(211, 84,  0,   .9)"
 		},
 		shadowBlur: 10,
-		shadowColor: "rgba(0,   0,   0,   .6)",
+		shadowColor: "rgba(0,   0,   0,   .6)"
 	});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //슬림스크롤
 ////////////////////////////////////////////////////////////////////////////////////////
-function  makeSlimScroll(targetElement) {
+function makeSlimScroll(targetElement) {
 	$(targetElement).slimScroll({
-		height: '200px',
+		height: "200px",
 		railVisible: true,
-		railColor: '#222',
+		railColor: "#222",
 		railOpacity: 0.3,
 		wheelStep: 10,
 		allowPageScroll: false,
@@ -122,11 +113,10 @@ function  makeSlimScroll(targetElement) {
 	});
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // 맨위로 아이콘
 ////////////////////////////////////////////////////////////////////////////////////////
-function rightBottomTopForwardIcon(){
+function rightBottomTopForwardIcon() {
 	$("#topicon").click(function () {
 		$("html, body").animate({ scrollTop: 0 }, 400);
 		return false;
@@ -138,20 +128,25 @@ function rightBottomTopForwardIcon(){
 ////////////////////////////////////////////////////////////////////////////////////////
 function authUserCheck() {
 	$.ajax({
-		url: "/auth-check" + "/identity",
+		url: "/auth-check/identity",
 		type: "GET",
 		timeout: 7313,
 		global: false,
 		statusCode: {
 			200: function (json) {
 				console.log("authUserCheck :: userName = " + json.name);
-				console.log("authUserCheck :: permissions = " + json.permissions);
+				console.log("authUserCheck :: permissions = ");
+				console.log(json.permissions);
 				userName = json.name;
 				permissions = json.permissions;
 
+				var account_html = "<img" + " src='./img/roundarms.png'" + "alt=''" + "class='img-circle' />";
+				account_html = account_html + json.name;
+				$(".account-picture").append(account_html);
+
 				getUserInfo();
 			}
-		},
+		}
 	});
 
 	return true;
@@ -162,7 +157,7 @@ function authUserCheck() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function getUserInfo() {
 	$.ajax({
-		url: "/auth-check/getUsers/"+userName,
+		url: "/auth-check/getUsers/" + userName,
 		data: {
 			sendData: ""
 		},
@@ -171,11 +166,11 @@ function getUserInfo() {
 		statusCode: {
 			200: function (json) {
 				console.log("authUserCheck length = :: " + json.length);
-				if( json.length > 1 ){
+				if (json.length > 1) {
 					jError("중복된 사용자가 있습니다.");
-				}else if( json.length == 0 ){
+				} else if (json.length == 0) {
 					jError("사용자 정보가 조회되지 않습니다.");
-				}else {
+				} else {
 					userApplicationRoles = json[0].applicationRoles;
 					userAttributes = json[0].attributes;
 					userEnabled = json[0].enabled;
@@ -197,12 +192,12 @@ function getUserInfo() {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 유틸 : 말줄임표
 ////////////////////////////////////////////////////////////////////////////////////////
-function getStrLimit(inputStr, limitCnt){
-	if(isEmpty(inputStr)){
+function getStrLimit(inputStr, limitCnt) {
+	if (isEmpty(inputStr)) {
 		return "";
-	}else if(inputStr.length >= limitCnt){
-		return inputStr.substr(0,limitCnt)+"...";
-	}else{
+	} else if (inputStr.length >= limitCnt) {
+		return inputStr.substr(0, limitCnt) + "...";
+	} else {
 		return inputStr;
 	}
 }
@@ -221,40 +216,40 @@ var ajaxGet = (url) =>
 		statusCode: {
 			200: function (data) {
 				return data.responseJSON;
-			},
-		},
+			}
+		}
 	});
 
 function dateFormat(timestamp) {
-	var d = new Date(timestamp ), // Convert the passed timestamp to milliseconds
+	var d = new Date(timestamp), // Convert the passed timestamp to milliseconds
 		yyyy = d.getFullYear(),
-		mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
-		dd = ('0' + d.getDate()).slice(-2),         // Add leading 0.
+		mm = ("0" + (d.getMonth() + 1)).slice(-2), // Months are zero based. Add leading 0.
+		dd = ("0" + d.getDate()).slice(-2), // Add leading 0.
 		hh = d.getHours(),
 		h = hh,
-		min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
-		ampm = 'AM',
+		min = ("0" + d.getMinutes()).slice(-2), // Add leading 0.
+		ampm = "AM",
 		time;
 
 	if (hh > 12) {
 		h = hh - 12;
-		ampm = 'PM';
+		ampm = "PM";
 	} else if (hh === 12) {
 		h = 12;
-		ampm = 'PM';
+		ampm = "PM";
 	} else if (hh == 0) {
 		h = 12;
 	}
 
 	// ie: 2013-02-18, 8:35 AM
-	time = yyyy + '년' + mm + '월' + dd + '일 - ' + h + ':' + min + ' ' + ampm;
+	time = yyyy + "년" + mm + "월" + dd + "일 - " + h + ":" + min + " " + ampm;
 
 	return time;
 }
 
 function getToday() {
 	var date = new Date();
-	return date.getFullYear() + "/" + ("0" + (date.getMonth() + 1) ).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+	return date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
 }
 
 // 최대값, 최소값
@@ -262,7 +257,7 @@ function maxValue(arr) {
 	if (isEmpty(arr)) {
 		return [];
 	} else {
-		return arr.reduce((max, val) => max > val ? max : val);
+		return arr.reduce((max, val) => (max > val ? max : val));
 	}
 }
 
@@ -270,14 +265,14 @@ function minValue(arr) {
 	if (isEmpty(arr)) {
 		return [];
 	} else {
-		return arr.reduce((min, val) => min < val ? min : val);
+		return arr.reduce((min, val) => (min < val ? min : val));
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
-function setSideMenu( categoryName, listName, collapse) {
+function setSideMenu(categoryName, listName, collapse) {
 	console.log("setSideMenu :: categoryName → " + categoryName + ", listName → " + listName);
 	setTimeout(function () {
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });
@@ -289,14 +284,12 @@ function setSideMenu( categoryName, listName, collapse) {
 	}, 1000);
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // -- jstree build 설정 -- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function jsTreeBuild(jQueryElementID, serviceNameForURL) {
-
 	console.log("common :: jsTreeBuild : ( jQueryElementID ) → " + jQueryElementID);
-	console.log("common :: jsTreeBuild : ( serviceNameForURL ) → "+ serviceNameForURL);
+	console.log("common :: jsTreeBuild : ( serviceNameForURL ) → " + serviceNameForURL);
 
 	console.log("common :: jsTreeBuild : ( href ) → " + $(location).attr("href"));
 	console.log("common :: jsTreeBuild : ( protocol ) → " + $(location).attr("protocol"));
@@ -320,18 +313,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 		})
 		.jstree({
 			// List of active plugins
-			plugins: [
-				"themes",
-				"json_data",
-				"ui",
-				"crrm",
-				"cookies",
-				"dnd",
-				"search",
-				"types",
-				"hotkeys",
-				"contextmenu",
-			],
+			plugins: ["themes", "json_data", "ui", "crrm", "cookies", "dnd", "search", "types", "hotkeys", "contextmenu"],
 			themes: { theme: ["lightblue4"] },
 			//contextmenu
 			contextmenu: {
@@ -350,10 +332,10 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								action: function (obj) {
 									this.create(obj, "last", {
 										attr: {
-											rel: "default",
-										},
+											rel: "default"
+										}
 									});
-								},
+								}
 							},
 							create_folder: {
 								seperator_before: false,
@@ -362,12 +344,12 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								action: function (obj) {
 									this.create(obj, "last", {
 										attr: {
-											rel: "folder",
-										},
+											rel: "folder"
+										}
 									});
-								},
-							},
-						},
+								}
+							}
+						}
 					},
 					ccp: {
 						separator_before: false,
@@ -382,10 +364,10 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								action: function (obj) {
 									this.cut(obj, "last", {
 										attr: {
-											rel: "default",
-										},
+											rel: "default"
+										}
 									});
-								},
+								}
 							},
 							paste: {
 								seperator_before: false,
@@ -394,10 +376,10 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 								action: function (obj) {
 									this.paste(obj, "last", {
 										attr: {
-											rel: "folder",
-										},
+											rel: "folder"
+										}
 									});
-								},
+								}
 							},
 
 							changeType: {
@@ -411,7 +393,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 										label: "toFile",
 										action: function (obj) {
 											this.set_type("default");
-										},
+										}
 									},
 									toFolder: {
 										seperator_before: false,
@@ -419,13 +401,13 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 										label: "toFolder",
 										action: function (obj) {
 											this.set_type("folder");
-										},
-									},
-								},
-							},
-						},
-					},
-				},
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			},
 
 			// I usually configure the plugin that handles the data first
@@ -436,7 +418,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				ajax: {
 					// the URL to fetch the data
 					url: serviceNameForURL + "/getChildNode.do",
-					cache : false,
+					cache: false,
 					// the `data` function is executed in the instance's scope
 					// the parameter is the node being loaded
 					// (may be -1, 0, or undefined when loading the root nodes)
@@ -444,15 +426,13 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						// the result is fed to the AJAX request `data` option
 						console.log("jsTreeBuild :: json data load :: data = " + JSON.stringify(n));
 						return {
-							c_id: n.attr
-								? n.attr("id").replace("node_", "").replace("copy_", "")
-								: 1,
+							c_id: n.attr ? n.attr("id").replace("node_", "").replace("copy_", "") : 1
 						};
 					},
 					success: function (n) {
 						jSuccess("Product(service) Data Load Complete");
-					},
-				},
+					}
+				}
 			},
 			// Configuring the search plugin
 			search: {
@@ -463,13 +443,13 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					// You get the search string as a parameter
 					data: function (str) {
 						return {
-							searchString: str,
+							searchString: str
 						};
 					},
 					success: function (n) {
 						jSuccess("search data complete");
-					},
-				},
+					}
+				}
 			},
 			// Using types - most of the time this is an overkill
 			// read the docs carefully to decide whether you need types
@@ -489,56 +469,55 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						valid_children: "none",
 						// If we specify an icon for the default type it WILL OVERRIDE the theme icons
 						icon: {
-							image:
-								"../reference/jquery-plugins/jstree-v.pre1.0/themes/attibutes.png",
-						},
+							image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/attibutes.png"
+						}
 					},
 					// The `folder` type
 					folder: {
 						// can have files and other folders inside of it, but NOT `drive` nodes
 						valid_children: ["default", "folder"],
 						icon: {
-							image:
-								"../reference/jquery-plugins/jstree-v.pre1.0/themes/ic_explorer.png",
-						},
+							image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/ic_explorer.png"
+						}
 					},
 					// The `drive` nodes
 					drive: {
 						// can have files and folders inside, but NOT other `drive` nodes
 						valid_children: ["default", "folder"],
 						icon: {
-							image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/home.png",
+							image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/home.png"
 						},
 						// those prevent the functions with the same name to be used on `drive` nodes
 						// internally the `before` event is used
 						start_drag: false,
 						move_node: false,
 						delete_node: false,
-						remove: false,
-					},
-				},
+						remove: false
+					}
+				}
 			},
 			// UI & core - the nodes to initially select and open will be overwritten by the cookie plugin
 
 			// the UI plugin - it handles selecting/deselecting/hovering nodes
 			ui: {
 				// this makes the node with ID node_4 selected onload
-				initially_select: ["node_4"],
+				initially_select: ["node_4"]
 			},
 			// the core plugin - not many options here
 			core: {
 				// just open those two nodes up
 				// as this is an AJAX enabled tree, both will be downloaded from the server
-				initially_open: ["node_2", "node_3"],
-			},
+				initially_open: ["node_2", "node_3"]
+			}
 		})
 		.bind("create.jstree", function (e, data) {
-			$.post( serviceNameForURL + "/addNode.do",
+			$.post(
+				serviceNameForURL + "/addNode.do",
 				{
 					ref: data.rslt.parent.attr("id").replace("node_", "").replace("copy_", ""),
 					c_position: data.rslt.position,
 					c_title: data.rslt.name,
-					c_type: data.rslt.obj.attr("rel"),
+					c_type: data.rslt.obj.attr("rel")
 				},
 				function (r) {
 					if (r.status) {
@@ -548,15 +527,12 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						$.jstree.rollback(data.rlbk);
 					}
 					if (typeof Chat != "undefined") {
-						Chat.sendMessage(
-							"노드를 추가했습니다. 추가된 노드의 아이디는 " + r.id,
-							function (data) {
-								console.log("jsTreeBuild :: create :: data = " + data);
-							}
-						);
+						Chat.sendMessage("노드를 추가했습니다. 추가된 노드의 아이디는 " + r.id, function (data) {
+							console.log("jsTreeBuild :: create :: data = " + data);
+						});
 					}
 					//jsTreeBuild(jQueryElementID, serviceNameForURL);
-					$(jQueryElementID).jstree('refresh');
+					$(jQueryElementID).jstree("refresh");
 				}
 			);
 		})
@@ -567,30 +543,28 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					type: "POST",
 					url: serviceNameForURL + "/removeNode.do",
 					data: {
-						c_id: this.id.replace("node_", "").replace("copy_", ""),
+						c_id: this.id.replace("node_", "").replace("copy_", "")
 					},
 					success: function (r) {
 						jNotify("Notification : <strong>Remove Node</strong>, Complete !");
 						if (typeof Chat != "undefined") {
-							Chat.sendMessage(
-								"노드를 삭제했습니다. 삭제된 노드의 아이디는 " + r.c_id,
-								function (data) {
-									console.log("jsTreeBuild :: remove :: data = " + data);
-								}
-							);
+							Chat.sendMessage("노드를 삭제했습니다. 삭제된 노드의 아이디는 " + r.c_id, function (data) {
+								console.log("jsTreeBuild :: remove :: data = " + data);
+							});
 						}
 						//jsTreeBuild(jQueryElementID, serviceNameForURL);
-						$(jQueryElementID).jstree('refresh');
-					},
+						$(jQueryElementID).jstree("refresh");
+					}
 				});
 			});
 		})
 		.bind("rename.jstree", function (e, data) {
-			$.post( serviceNameForURL + "/alterNode.do",
+			$.post(
+				serviceNameForURL + "/alterNode.do",
 				{
 					c_id: data.rslt.obj.attr("id").replace("node_", "").replace("copy_", ""),
 					c_title: data.rslt.new_name,
-					c_type: data.rslt.obj.attr("rel"),
+					c_type: data.rslt.obj.attr("rel")
 				},
 				function (r) {
 					if (!r.status) {
@@ -598,37 +572,32 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					}
 					jSuccess("Rename Node Complete");
 					if (typeof Chat != "undefined") {
-						Chat.sendMessage(
-							"노드의 이름을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id,
-							function (data) {
-								console.log("jsTreeBuild :: rename :: data = " + data);
-							}
-						);
+						Chat.sendMessage("노드의 이름을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id, function (data) {
+							console.log("jsTreeBuild :: rename :: data = " + data);
+						});
 					}
 					//jsTreeBuild(jQueryElementID, serviceNameForURL);
-					$(jQueryElementID).jstree('refresh');
+					$(jQueryElementID).jstree("refresh");
 				}
 			);
 		})
 		.bind("set_type.jstree", function (e, data) {
-			$.post( serviceNameForURL + "/alterNodeType.do",
+			$.post(
+				serviceNameForURL + "/alterNodeType.do",
 				{
 					c_id: data.rslt.obj.attr("id").replace("node_", "").replace("copy_", ""),
 					c_title: data.rslt.new_name,
-					c_type: data.rslt.obj.attr("rel"),
+					c_type: data.rslt.obj.attr("rel")
 				},
 				function (r) {
 					jSuccess("Node Type Change");
 					if (typeof Chat != "undefined") {
-						Chat.sendMessage(
-							"노드의 타입을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id,
-							function (data) {
-								console.log("jsTreeBuild :: set_type :: data = " + data);
-							}
-						);
+						Chat.sendMessage("노드의 타입을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id, function (data) {
+							console.log("jsTreeBuild :: set_type :: data = " + data);
+						});
 					}
 					//jsTreeBuild(jQueryElementID, serviceNameForURL);
-					$(jQueryElementID).jstree('refresh');
+					$(jQueryElementID).jstree("refresh");
 				}
 			);
 		})
@@ -640,14 +609,11 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					url: serviceNameForURL + "/moveNode.do",
 					data: {
 						c_id: $(this).attr("id").replace("node_", "").replace("copy_", ""),
-						ref:
-							data.rslt.cr === -1
-								? 1
-								: data.rslt.np.attr("id").replace("node_", "").replace("copy_", ""),
+						ref: data.rslt.cr === -1 ? 1 : data.rslt.np.attr("id").replace("node_", "").replace("copy_", ""),
 						c_position: data.rslt.cp + i,
 						c_title: data.rslt.name,
 						copy: data.rslt.cy ? 1 : 0,
-						multiCounter: i,
+						multiCounter: i
 					},
 					success: function (r) {
 						if (r.status) {
@@ -661,18 +627,14 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 
 						jNotify("Notification : <strong>Move Node</strong> Complete !");
 
-						$(jQueryElementID).jstree('refresh');
+						$(jQueryElementID).jstree("refresh");
 
 						if (typeof Chat != "undefined") {
-							Chat.sendMessage(
-								"노드가 이동되었습니다. 이동된 노드의 아이디는 " + r.c_id,
-								function (data) {
-									console.log("jsTreeBuild :: move_node :: data = " + data);
-								}
-							);
+							Chat.sendMessage("노드가 이동되었습니다. 이동된 노드의 아이디는 " + r.c_id, function (data) {
+								console.log("jsTreeBuild :: move_node :: data = " + data);
+							});
 						}
-
-					},
+					}
 				});
 			});
 		})
@@ -688,9 +650,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			}
 		})
 		.bind("loaded.jstree", function (event, data) {
-			setTimeout(function(){
-				$(jQueryElementID).jstree('open_all');
-			},1500);
+			setTimeout(function () {
+				$(jQueryElementID).jstree("open_all");
+			}, 1500);
 		});
 
 	$("#mmenu input, #mmenu button").click(function () {
@@ -699,8 +661,8 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			case "add_folder":
 				$(jQueryElementID).jstree("create", null, "last", {
 					attr: {
-						rel: this.id.toString().replace("add_", ""),
-					},
+						rel: this.id.toString().replace("add_", "")
+					}
 				});
 				break;
 			case "search":
@@ -718,14 +680,18 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // UTIL : 널 체크
 ////////////////////////////////////////////////////////////////////////////////////////
-var isEmpty = function(value){
-	if( value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) ){
+var isEmpty = function (value) {
+	if (
+		value == "" ||
+		value == null ||
+		value == undefined ||
+		(value != null && typeof value == "object" && !Object.keys(value).length)
+	) {
 		return true;
-	}else{
+	} else {
 		return false;
 	}
 };
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //데이터 테이블
@@ -744,25 +710,25 @@ function dataTable_build(
 ) {
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-	var jQueryElementStr = jQueryElementID.replace(reg, '');
-	console.log('dataTableBuild :: jQueryElementStr → ' + jQueryElementStr);
-	console.log('dataTableBuild :: jQueryElementID → ' + jQueryElementID);
-	console.log('dataTableBuild :: columnList → ' + columnList);
-	console.log('dataTableBuild :: rowsGroupList → ' + rowsGroupList);
+	var jQueryElementStr = jQueryElementID.replace(reg, "");
+	console.log("dataTableBuild :: jQueryElementStr → " + jQueryElementStr);
+	console.log("dataTableBuild :: jQueryElementID → " + jQueryElementID);
+	console.log("dataTableBuild :: columnList → " + columnList);
+	console.log("dataTableBuild :: rowsGroupList → " + rowsGroupList);
 
-	console.log('dataTableBuild :: href: ' + $(location).attr('href'));
-	console.log('dataTableBuild :: protocol: ' + $(location).attr('protocol'));
-	console.log('dataTableBuild :: host: ' + $(location).attr('host'));
-	console.log('dataTableBuild :: pathname: ' + $(location).attr('pathname'));
-	console.log('dataTableBuild :: search: ' + $(location).attr('search'));
-	console.log('dataTableBuild :: hostname: ' + $(location).attr('hostname'));
-	console.log('dataTableBuild :: port: ' + $(location).attr('port'));
-	console.log('dataTableBuild :: ajaxUrl: ' + ajaxUrl);
+	console.log("dataTableBuild :: href: " + $(location).attr("href"));
+	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
+	console.log("dataTableBuild :: host: " + $(location).attr("host"));
+	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
+	console.log("dataTableBuild :: search: " + $(location).attr("search"));
+	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
+	console.log("dataTableBuild :: port: " + $(location).attr("port"));
+	console.log("dataTableBuild :: ajaxUrl: " + ajaxUrl);
 
 	var tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {
 			url: ajaxUrl,
-			dataSrc: jsonRoot,
+			dataSrc: jsonRoot
 		},
 		serverSide: isServerSide,
 		stateSave: true,
@@ -777,18 +743,18 @@ function dataTable_build(
 		order: orderList,
 		buttons: buttonList,
 		language: {
-			processing: '',
+			processing: "",
 			loadingRecords:
-				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>',
+				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>'
 		},
 		initComplete: function (settings, json) {
-			console.log('dataTableBuild :: drawCallmakeSlimScrollback');
+			console.log("dataTableBuild :: drawCallmakeSlimScrollback");
 			if ($.isFunction(dataTableCallBack)) {
 				//데이터 테이블 그리고 난 후 시퀀스 이벤트
 				dataTableCallBack(settings, json);
 			}
 		},
-		drawCallback: function(tableInfo) {
+		drawCallback: function (tableInfo) {
 			console.log("dataTableBuild :: drawCallback");
 			if ($.isFunction(dataTableDrawCallback)) {
 				//데이터 테이블 그리고 난 후 시퀀스 이벤트
@@ -797,16 +763,16 @@ function dataTable_build(
 		}
 	});
 
-	$(jQueryElementID + ' tbody').on('click', 'tr', function () {
-		if ($(this).hasClass('selected')) {
-			$(this).removeClass('selected');
+	$(jQueryElementID + " tbody").on("click", "tr", function () {
+		if ($(this).hasClass("selected")) {
+			$(this).removeClass("selected");
 		} else {
-			tempDataTable.$('tr.selected').removeClass('selected');
-			$(this).addClass('selected');
+			tempDataTable.$("tr.selected").removeClass("selected");
+			$(this).addClass("selected");
 		}
 
 		var selectedData = tempDataTable.row(this).data();
-		selectedData.selectedIndex = $(this).closest('tr').index();
+		selectedData.selectedIndex = $(this).closest("tr").index();
 
 		var info = tempDataTable.page.info();
 		selectedData.selectedPage = info.page;
@@ -816,23 +782,23 @@ function dataTable_build(
 
 	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
-	$('.dataTables_length').find('select:eq(0)').addClass('darkBack');
-	$('.dataTables_length').find('select:eq(0)').css('min-height', '30px');
+	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
+	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
 	$(jQueryElementID + "_wrapper").css("border-top", "1px solid rgba(51, 51, 51, 0.3)");
 	$(jQueryElementID + "_wrapper").css("padding-top", "5px");
 	//min-height: 30px;
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
-	$('body')
+	$("body")
 		.find("[aria-controls='" + jQueryElementStr + "']")
-		.css('width', '50px');
-	$("input[type=search]").css('width', '100px');
-	$('select[name=' + jQueryElementStr + ']').css('width', '50px');
+		.css("width", "50px");
+	$("input[type=search]").css("width", "100px");
+	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
 
 	$.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
 		console.log(message);
-		jError('Notification : <strong>Ajax Error</strong>, retry plz !');
+		jError("Notification : <strong>Ajax Error</strong>, retry plz !");
 	};
 
 	return tempDataTable;
@@ -842,44 +808,35 @@ function dataTable_build(
 //공통 AJAX setup 처리
 ////////////////////////////////////////////////////////////////////////////////////////
 function ajax_setup() {
-
 	$(document)
 		.ajaxStart(function () {
-			$('.loader').removeClass('hide');
+			$(".loader").removeClass("hide");
 		})
-		.ajaxSend(function (event, jqXHR, ajaxOptions) {
-
-		})
-		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {
-
-		})
+		.ajaxSend(function (event, jqXHR, ajaxOptions) {})
+		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {})
 		.ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-			$('.loader').addClass('hide');
-			if ( jqXHR.status== 401 ) {
+			$(".loader").addClass("hide");
+			if (jqXHR.status == 401) {
 				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
 				location.href = "/sso/login";
-			}
-			else if ( jqXHR.status== 403 ) {
+			} else if (jqXHR.status == 403) {
 				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
 			}
 		})
 		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
-			$('.loader').addClass('hide');
+			$(".loader").addClass("hide");
 		})
 		.ajaxStop(function () {
-			$('.loader').addClass('hide');
+			$(".loader").addClass("hide");
 		});
 
-
 	return true;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //공통 AJAX SAMPLE
 ////////////////////////////////////////////////////////////////////////////////////////
 function ajax_sample() {
-
 	$.ajax({
 		url: "요청을 보낼 URL",
 		type: "요청 type(GET 혹은 POST)을 명시",
@@ -887,8 +844,7 @@ function ajax_sample() {
 		contentType: "서버로 보내지는 데이터의 content-type, 기본값은 application/x-www-form-urlencoded",
 		dataType: "서버 응답으로 받는 데이터 타입",
 		statusCode: {
-			200: function(data) {
-
+			200: function (data) {
 				//////////////////////////////////////////////////////////
 				console.log("ajax_build :: url = " + ajaxUrl);
 				for (var key in data) {
@@ -902,18 +858,16 @@ function ajax_sample() {
 				}
 				//////////////////////////////////////////////////////////
 				jSuccess("신규 제품 등록이 완료 되었습니다.");
-
-			},
+			}
 		},
-		beforeSend:function(){
+		beforeSend: function () {
 			//$("#regist_pdservice").hide(); 버튼 감추기
 		},
-		complete:function(){
+		complete: function () {
 			//$("#regist_pdservice").show(); 버튼 보이기
 		},
-		error:function(e){
+		error: function (e) {
 			jError("신규 제품 등록 중 에러가 발생했습니다.");
 		}
 	});
-
 }
