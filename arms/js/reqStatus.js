@@ -143,10 +143,10 @@ function bind_VersionData_By_PdService(){
 			},
 		},
 		beforeSend:function(){
-			//$("#regist_pdService").hide(); 버튼 감추기
+			//$("#regist_pdservice").hide(); 버튼 감추기
 		},
 		complete:function(){
-			//$("#regist_pdService").show(); 버튼 보이기
+			//$("#regist_pdservice").show(); 버튼 보이기
 		},
 		error:function(e){
 			jError("버전 조회 중 에러가 발생했습니다.");

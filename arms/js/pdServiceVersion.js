@@ -131,8 +131,8 @@ function modalPopup(popupName) {
 		// modalPopupId = 신규버전 등록하기
 		$("#modal_title").text('제품(서비스) 신규 버전 등록 팝업');
 		$("#modal_sub").text('선택한 제품(서비스)에 버전을 등록합니다.');
-		$('#extendUpdate_pdService_version').attr('onClick', 'modalPopupNewUpdate()')
-		$('#extendUpdate_pdService_version').text('Save');
+		$('#extendupdate_pdservice_version').attr('onClick', 'modalPopupNewUpdate()')
+		$('#extendupdate_pdservice_version').text('Save');
 
 
 		$("#tooltip_enabled_service_version").val('');
@@ -144,11 +144,11 @@ function modalPopup(popupName) {
 		// 편집하기 버튼의 팝업으로 보기
 		$("#modal_title").text('제품(서비스) 버전 등록 / 변경');
 		$("#modal_sub").text('선택한 제품(서비스)에 버전을 등록/변경 합니다.');
-		$('#extendUpdate_pdService_version').attr('onClick', 'modalPopupUpdate()')
-		$('#extendUpdate_pdService_version').text('Save Changes');
+		$('#extendupdate_pdservice_version').attr('onClick', 'modalPopupUpdate()')
+		$('#extendupdate_pdservice_version').text('Save Changes');
 
 		//팝업 데이터
-		$("#tooltip_enabled_service_version").val($("#input_pdserviceVersion").val());
+		$("#tooltip_enabled_service_version").val($("#input_pdservice_version").val());
 		$("#btn_enabled_date").val($("#input_pdservice_start_date").val());
 		$("#btn_end_date").val($("#input_pdservice_end_date").val());
 		var editorData = CKEDITOR.instances["input_pdservice_editor"].getData();
@@ -191,7 +191,7 @@ $("#version_update").click(function () {
 		type: "POST",
 		data: {
 			c_id: selectVersion,
-			c_title: $("#input_pdserviceVersion").val(),
+			c_title: $("#input_pdservice_version").val(),
 			c_contents: CKEDITOR.instances.input_pdservice_editor.getData(),
 			c_start_date: $("#input_pdservice_start_date").val(),
 			c_end_date: $("#input_pdservice_end_date").val(),
@@ -293,8 +293,8 @@ function dataLoad(getSelectedText, selectedText) {
 
 			// 상세보기
 			selectVersion = json[0].c_id;
-			$("#pdService_name").val(selectedText);
-			$("#pdService_version").val(json[0].c_title);
+			$("#pdservice_name").val(selectedText);
+			$("#pdservice_version").val(json[0].c_title);
 
 			$("#version_start_date").val(json[0].c_start_date);
 			$("#version_end_date").val(json[0].c_end_date);
@@ -302,8 +302,8 @@ function dataLoad(getSelectedText, selectedText) {
 			$("#version_contents").html(json[0].c_contents);
 
 			// 상세보기 편집하기
-			$("#input_pdserviceName").val(selectedText);
-			$("#input_pdserviceVersion").val(json[0].c_title);
+			$("#input_pdservice_name").val(selectedText);
+			$("#input_pdservice_version").val(json[0].c_title);
 
 
 			$('#input_pdservice_start_date').datetimepicker({value: json[0].c_start_date + ' 09:00', step:10});
@@ -412,15 +412,15 @@ function versionClick(element, c_id) {
 			console.log(" → " + json.c_contents);
 
 
-			$("#pdService_name").text($('#pdservice_table').DataTable().rows('.selected').data()[0].c_title);
+			$("#pdservice_name").text($('#pdservice_table').DataTable().rows('.selected').data()[0].c_title);
 
-			$("#pdService_version").val(json.c_title);
+			$("#pdservice_version").val(json.c_title);
 			$("#version_start_date").val(json.c_start_date);
 			$("#version_end_date").val(json.c_end_date);
 			$("#version_contents").html(json.c_contents);
 
-			$("#input_pdserviceName").val($('#pdservice_table').DataTable().rows('.selected').data()[0].c_title);
-			$("#input_pdserviceVersion").val(json.c_title);
+			$("#input_pdservice_name").val($('#pdservice_table').DataTable().rows('.selected').data()[0].c_title);
+			$("#input_pdservice_version").val(json.c_title);
 			$("#input_pdservice_start_date").val(json.c_start_date);
 			$("#input_pdservice_end_date").val(json.c_end_date);
 			CKEDITOR.instances.input_pdservice_editor.setData(json.c_contents);

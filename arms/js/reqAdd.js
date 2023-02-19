@@ -62,10 +62,10 @@ function makePdServiceSelectBox(){
 			},
 		},
 		beforeSend:function(){
-			//$("#regist_pdService").hide(); 버튼 감추기
+			//$("#regist_pdservice").hide(); 버튼 감추기
 		},
 		complete:function(){
-			//$("#regist_pdService").show(); 버튼 보이기
+			//$("#regist_pdservice").show(); 버튼 보이기
 		},
 		error:function(e){
 			jError("제품(서비스) 조회 중 에러가 발생했습니다.");
@@ -136,10 +136,10 @@ function bind_VersionData_By_PdService(){
 			},
 		},
 		beforeSend:function(){
-			//$("#regist_pdService").hide(); 버튼 감추기
+			//$("#regist_pdservice").hide(); 버튼 감추기
 		},
 		complete:function(){
-			//$("#regist_pdService").show(); 버튼 보이기
+			//$("#regist_pdservice").show(); 버튼 보이기
 		},
 		error:function(e){
 			jError("버전 조회 중 에러가 발생했습니다.");
@@ -397,10 +397,10 @@ $(function () {
 
 $('#fileupload').bind('fileuploadsubmit', function (e, data) {
 	// The example input, doesn't have to be part of the upload form:
-	var input = $('#fileIdLink');
+	var input = $('#fileIdlink');
 	var tableName = "T_ARMS_REQADD_" + $('#country').val();
-	data.formData = { fileIdLink: input.val(), c_title: tableName };
-	if (!data.formData.fileIdLink) {
+	data.formData = { fileIdlink: input.val(), c_title: tableName };
+	if (!data.formData.fileIdlink) {
 		data.context.find('button').prop('disabled', false);
 		input.focus();
 		return false;
@@ -408,7 +408,7 @@ $('#fileupload').bind('fileuploadsubmit', function (e, data) {
 });
 
 function get_FileList_By_Req() {
-	$('#fileIdLink').val(selectedJsTreeId);
+	$('#fileIdlink').val(selectedJsTreeId);
 	//jstree click 시 file 컨트롤
 	//파일 리스트 초기화
 	$("table tbody.files").empty();
@@ -419,7 +419,7 @@ function get_FileList_By_Req() {
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
 		url: '/auth-user/api/arms/fileRepository/getFilesByNode.do',
-		data: { fileIdLink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $('#country').val() },
+		data: { fileIdlink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $('#country').val() },
 		dataType: 'json',
 		context: $fileupload[0]
 	}).done(function (result) {
@@ -564,7 +564,7 @@ function bindDataEditlTab(ajaxData){
 
 	// ------------------------- reviewer end --------------------------------//
 	$('#editview_req_status').val(ajaxData.c_req_status);
-	$('#editView-req-writer').val(ajaxData.c_writer);
+	$('#editview_req_writer').val(ajaxData.c_writer);
 	$('#editview_req_write_date').val(ajaxData.c_writer_date);
 	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_contents);
 }
@@ -1097,14 +1097,14 @@ $("#logsearch").click(function () {
 		for(var k in data){
 			var obj = data[k];
 
-			console.log("jsonIndex[" + k +"]=" + "obj.fileIdLink => " + obj.fileIdLink); //t_arms_filerepository
+			console.log("jsonIndex[" + k +"]=" + "obj.fileIdlink => " + obj.fileIdlink); //t_arms_filerepository
 			console.log("jsonIndex[" + k +"]=" + "obj.c_pdservice_jira_ids => " + obj.c_pdservice_jira_ids); //t_arms_pdserviceconnect
 			console.log("jsonIndex[" + k +"]=" + "obj.c_jira_con_passmode => " + obj.c_jira_con_passmode); //t_arms_pdservicjira
 			console.log("jsonIndex[" + k +"]=" + "obj.c_end_date => " + obj.c_end_date); //t_arms_pdservicversion
 			console.log("jsonIndex[" + k +"]=" + "obj.c_fileid_link => " + obj.c_fileid_link); //t_arms_pdservice
 			console.log("jsonIndex[" + k +"]=" + "obj.c_req_status => " + obj.c_req_status); //t_arms_reqadd
 
-			if(!isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			if(!isEmpty(obj.fileIdlink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_filerepository
 				if(obj.c_title=="pdService"){
 
@@ -1134,19 +1134,19 @@ $("#logsearch").click(function () {
 					$('.timeline.timeline-inverse').append(add_t_arms_filerepository);
 				}
 
-			}else if(isEmpty(obj.fileIdLink) && !isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdlink) && !isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdserviceconnect
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && !isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdlink) && isEmpty(obj.c_pdservice_jira_ids) && !isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdservicjira
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && !isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdlink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && !isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdservicversion
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && !isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdlink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && !isEmpty(obj.c_fileid_link) && isEmpty(obj.c_req_status)){
 				//t_arms_pdservice
 
-			}else if(isEmpty(obj.fileIdLink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && !isEmpty(obj.c_req_status)){
+			}else if(isEmpty(obj.fileIdlink) && isEmpty(obj.c_pdservice_jira_ids) && isEmpty(obj.c_jira_con_passmode) && isEmpty(obj.c_end_date) && isEmpty(obj.c_fileid_link) && !isEmpty(obj.c_req_status)){
 				//t_arms_reqadd
 				var timestamp_t_arms_reqadd = new Date(obj.c_date);
 				var datetime_t_arms_reqadd = timestamp_t_arms_reqadd.getFullYear()+"/"+(timestamp_t_arms_reqadd.getMonth()+1)+"/"+timestamp_t_arms_reqadd.getDate()+

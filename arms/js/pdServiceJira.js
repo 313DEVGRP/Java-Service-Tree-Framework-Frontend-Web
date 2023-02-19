@@ -66,9 +66,9 @@ function dataTableClick(tempDataTable, selectedData){
 	$("#version_contents").html("");
 
 	$(".searchable").multiSelect('deselect_all');
-	$("#pdService_connect").removeClass("btn-success");
-	$("#pdService_connect").addClass("btn-primary");
-	$("#pdService_connect").text("제품(서비스) Jira 연결 등록");
+	$("#pdservice_connect").removeClass("btn-success");
+	$("#pdservice_connect").addClass("btn-primary");
+	$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
 
 	// 연계 이벤트 - 버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
@@ -217,14 +217,14 @@ function versionClick(element, c_id) {
 		}
 
 		if(versionClickData.length == 0){
-			$("#pdService_connect").removeClass("btn-success");
-			$("#pdService_connect").addClass("btn-primary");
-			$("#pdService_connect").text("제품(서비스) Jira 연결 등록");
+			$("#pdservice_connect").removeClass("btn-success");
+			$("#pdservice_connect").addClass("btn-primary");
+			$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
 			updateD3ByMultiSelect();
 		}else{
-			$("#pdService_connect").removeClass("btn-primary");
-			$("#pdService_connect").addClass("btn-success");
-			$("#pdService_connect").text("제품(서비스) Jira 연결 변경");
+			$("#pdservice_connect").removeClass("btn-primary");
+			$("#pdservice_connect").addClass("btn-success");
+			$("#pdservice_connect").text("제품(서비스) Jira 연결 변경");
 
 			console.log("jsonData[0].c_pdservice_jira_ids - " + versionClickData[0].c_pdservice_jira_ids);
 			$('#multiselect').multiSelect('select', versionClickData[0].c_pdservice_jira_ids.split(","));
@@ -241,9 +241,9 @@ function versionClick(element, c_id) {
 }
 
 // 제품(서비스)-버전-지라 저장
-$("#pdService_connect").click(function () {
+$("#pdservice_connect").click(function () {
 
-	if($("#pdService_connect").hasClass("btn-primary") == true) {
+	if($("#pdservice_connect").hasClass("btn-primary") == true) {
 
 		// data가 존재하지 않음.
 		$.ajax({
@@ -265,7 +265,7 @@ $("#pdService_connect").click(function () {
 		}).always(function() {
 			console.log("always call");
 		});
-	} else if($("#pdService_connect").hasClass("btn-success") == true) {
+	} else if($("#pdservice_connect").hasClass("btn-success") == true) {
 		// data가 이미 있음
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceConnect/updateNode.do",
