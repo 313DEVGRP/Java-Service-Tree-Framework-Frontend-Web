@@ -286,7 +286,8 @@ function dataLoad(getSelectedText, selectedText) {
 			` + selectedText + `
 			</div>
 			</div>
-			</div>`;
+			</div>
+			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
 
 			$(".list-group-item").html(selectedHtml);
 			$("#tooltip_enabled_service_name").val(selectedText);
@@ -348,10 +349,11 @@ function draw(main, menu) {
 														id="modal_popup_id"
 														data-toggle="modal"
 														data-target="#my_modal2"
-														style="margin-bottom: 10px; margin-top: 10px;"
+														style="margin-bottom: 10px !important; margin-top: 10px;"
 														onClick="modalPopup('modal_popup_id')">
 							신규 버전 등록하기
-						</button>`;
+						</button>
+						<div class="gradient_bottom_border" style="width: 100%; height: 2px; margin-bottom: 10px;"></div>`;
 
 	for (var i = 0; i < menu.length; i++) {
 		if ( i == 0 ){

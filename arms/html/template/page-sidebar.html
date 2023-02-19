@@ -4,7 +4,7 @@
 	<li
 		class=""
 		id="sidebar_menu_dashboard">
-		<a href="template.html?page=main">
+		<a href="template.html?page=dashboard">
 			<i class="fa fa-home"></i>
 			<span class="name">Dashboard</span>
 		</a>
@@ -107,20 +107,41 @@
 	<li>
 		<a href="#">
 			<!-- yep, .circle again -->
-			<i class="fa fa-circle text-success"></i>
-			<span class="label-name">My Recent</span>
+			<i class="fa fa-circle" style="color: #a4c6ff;"></i>
+			<span class="label-name font11">데이터 ( data )</span>
+		</a>
+	</li>
+	<li>
+		<a href="#">
+			<!-- yep, .circle again -->
+			<i class="fa fa-circle" style="color: #e5603b;"></i>
+			<span class="label-name font11">선택된 ( selected )</span>
+		</a>
+	</li>
+	<li>
+		<a href="#">
+			<!-- yep, .circle again -->
+			<i class="fa fa-circle" style="color: #E49400;"></i>
+			<span class="label-name font11">유틸 ( util )</span>
 		</a>
 	</li>
 	<li>
 		<a href="#">
 			<i class="fa fa-circle text-primary"></i>
-			<span class="label-name">Starred</span>
+			<span class="label-name font11">신규 ( insert )</span>
+		</a>
+	</li>
+	<li>
+		<a href="#">
+			<!-- yep, .circle again -->
+			<i class="fa fa-circle text-success"></i>
+			<span class="label-name font11">수정 ( update )</span>
 		</a>
 	</li>
 	<li>
 		<a href="#">
 			<i class="fa fa-circle text-danger"></i>
-			<span class="label-name">Background</span>
+			<span class="label-name font11">삭제 ( delete )</span>
 		</a>
 	</li>
 </ul>
@@ -145,41 +166,4 @@
 		</div>
 		<small>Calculating x-axis bias... 65%</small>
 	</div>
-	<div class="alert fade in">
-		<a
-			href="#"
-			class="close"
-			data-dismiss="alert"
-			aria-hidden="true">
-			&times;
-		</a>
-		<span class="text-white fw-semi-bold">Personal Responsibility</span>
-		<br />
-		<div class="progress progress-xs mt-xs mb-0">
-			<div
-				class="progress-bar progress-bar-danger"
-				style="width: 23%"></div>
-		</div>
-		<small>Provide required notes</small>
-	</div>
 </div>
-
-<style>
-	.side-nav .category-wrap {
-		margin: 0;
-		border: none;
-		border-radius: 0;
-	}
-	.side-nav li a,
-	.side-nav .category-label {
-		color: inherit;
-		transition: background-color 0.2s;
-		text-decoration: none;
-		display: block;
-		padding: 10px;
-		border-radius: 6px;
-	}
-	.category-wrap li a {
-		padding: 4px 10px 4px 35px;
-	}
-</style>
