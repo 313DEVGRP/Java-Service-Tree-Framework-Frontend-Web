@@ -11,7 +11,7 @@ function execDocReady() {
 	setSideMenu(
 		"sidebar_menu_requirement",
 		"sidebar_menu_requirement_status",
-		"requirement-elements-collapse"
+		"requirement_elements_collapse"
 	);
 
 	//제품(서비스) 셀렉트 박스 이니시에이터

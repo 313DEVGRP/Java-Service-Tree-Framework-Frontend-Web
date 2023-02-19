@@ -11,7 +11,7 @@ function execDocReady() {
 	setSideMenu(
 		"sidebar_menu_requirement",
 		"sidebar_menu_requirement_regist",
-		"requirement-elements-collapse"
+		"requirement_elements_collapse"
 	);
 
 	//신규 요구사항 등록 버튼 숨김
