@@ -50,6 +50,7 @@
 		"grunt-serve": "^0.1.6",
 		"grunt-text-replace": "^0.4.0",
 		"less": "^3",
+		"prettier": "2.8.4",
 		"serve-static": "^1.15.0"
 	},
 	"eslintConfig": {
