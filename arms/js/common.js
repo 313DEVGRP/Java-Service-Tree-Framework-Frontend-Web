@@ -708,6 +708,11 @@ function dataTable_build(
 	buttonList,
 	isServerSide
 ) {
+
+	var jQueryElementID = jquerySelector;
+	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+	var jQueryElementStr = jQueryElementID.replace(reg, "");
+
 	var responsiveRender = {
 		details: {
 			renderer: function (api, rowIdx, columns) {
@@ -715,13 +720,13 @@ function dataTable_build(
 				var data = $.map(columns, function (col, i) {
 					return col.hidden
 						? "<div class='gradient_bottom_border' style='margin-bottom: 5px;float:left;width:180px;'>" +
-								"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" +
-								col.title +
-								"</strong></div>" +
-								"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" +
-								col.data +
-								"</div>" +
-								"</div>"
+						"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" +
+						col.title +
+						"</strong></div>" +
+						"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" +
+						col.data +
+						"</div>" +
+						"</div>"
 						: "";
 				}).join("");
 				outer += data;
@@ -732,10 +737,6 @@ function dataTable_build(
 			}
 		}
 	};
-
-	var jQueryElementID = jquerySelector;
-	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-	var jQueryElementStr = jQueryElementID.replace(reg, "");
 
 	console.log("dataTableBuild :: jQueryElementStr → " + jQueryElementStr);
 	console.log("dataTableBuild :: jQueryElementID → " + jQueryElementID);
