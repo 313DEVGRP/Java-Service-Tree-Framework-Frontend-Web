@@ -726,10 +726,12 @@ function dataTable_build(
 	columnDefList,
 	selectList,
 	orderList,
-	buttonList
+	buttonList,
+	isServerSide
 ) {
 	var responsiveRender = true;
-	return dataTable_childRenderBuild(jquerySelector,
+	return dataTable_childRenderBuild(
+		jquerySelector,
 		ajaxUrl,
 		jsonRoot,
 		responsiveRender,
@@ -738,20 +740,24 @@ function dataTable_build(
 		columnDefList,
 		selectList,
 		orderList,
-		buttonList);
+		buttonList,
+		isServerSide
+	);
 }
 
-function dataTable_childRenderBuild(jquerySelector,
-																															ajaxUrl,
-																															jsonRoot,
-																															responsiveRender,
-																															columnList,
-																															rowsGroupList,
-																															columnDefList,
-																															selectList,
-																															orderList,
-																															buttonList) {
-
+function dataTable_childRenderBuild(
+	jquerySelector,
+	ajaxUrl,
+	jsonRoot,
+	responsiveRender,
+	columnList,
+	rowsGroupList,
+	columnDefList,
+	selectList,
+	orderList,
+	buttonList,
+	isServerSide
+) {
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg, "");
@@ -917,13 +923,12 @@ function ajax_sample() {
 	});
 }
 
-
 //데이터 테이블 하위에 상세 리스트 보이는거 지우기
 // Enumerate all rows
 $("#hostTable")
 	.DataTable()
 	.rows()
-	.every(function() {
+	.every(function () {
 		// If row has details expanded
 		if (this.child.isShown()) {
 			// Collapse row details
