@@ -696,27 +696,6 @@ var isEmpty = function (value) {
 ////////////////////////////////////////////////////////////////////////////////////////
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
-// var responsiveRender = {
-// 	details: {
-// 		renderer: function(api, rowIdx, columns) {
-// 			var outer = "<tr data-dt-row=" + rowIdx + " data-dt-column='0'><td>";
-// 			var data = $.map(columns, function(col, i) {
-// 				return col.hidden ?
-// 					"<div class='gradient_bottom_border' style='margin-bottom: 5px;float:left;width:180px;'>" +
-// 					"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" + col.title + "</strong></div>" +
-// 					"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" + col.data + "</div>" +
-// 					"</div>" : "";
-// 			}).join("");
-// 			outer += data;
-// 			outer += "</td></tr>";
-// 			data = outer;
-//
-// 			return data ?
-// 				$("<table/>").append(data) :
-// 				false;
-// 		}
-// 	}
-// };
 function dataTable_build(
 	jquerySelector,
 	ajaxUrl,
@@ -729,35 +708,31 @@ function dataTable_build(
 	buttonList,
 	isServerSide
 ) {
-	var responsiveRender = true;
-	return dataTable_childRenderBuild(
-		jquerySelector,
-		ajaxUrl,
-		jsonRoot,
-		responsiveRender,
-		columnList,
-		rowsGroupList,
-		columnDefList,
-		selectList,
-		orderList,
-		buttonList,
-		isServerSide
-	);
-}
+	var responsiveRender = {
+		details: {
+			renderer: function (api, rowIdx, columns) {
+				var outer = "<tr data-dt-row=" + rowIdx + " data-dt-column='0'><td>";
+				var data = $.map(columns, function (col, i) {
+					return col.hidden
+						? "<div class='gradient_bottom_border' style='margin-bottom: 5px;float:left;width:180px;'>" +
+								"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" +
+								col.title +
+								"</strong></div>" +
+								"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" +
+								col.data +
+								"</div>" +
+								"</div>"
+						: "";
+				}).join("");
+				outer += data;
+				outer += "</td></tr>";
+				data = outer;
 
-function dataTable_childRenderBuild(
-	jquerySelector,
-	ajaxUrl,
-	jsonRoot,
-	responsiveRender,
-	columnList,
-	rowsGroupList,
-	columnDefList,
-	selectList,
-	orderList,
-	buttonList,
-	isServerSide
-) {
+				return data ? $("<table/>").append(data) : false;
+			}
+		}
+	};
+
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg, "");
@@ -786,7 +761,7 @@ function dataTable_childRenderBuild(
 		stateDuration: -1,
 		destroy: true,
 		processing: true,
-		responsive: true,
+		responsive: responsiveRender,
 		columns: columnList,
 		rowsGroup: rowsGroupList,
 		columnDefs: columnDefList,
