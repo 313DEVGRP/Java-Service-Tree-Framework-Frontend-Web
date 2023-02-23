@@ -4,14 +4,74 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
-
+@font-face {
+  font-family: "Nanum Gothic";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot"); /* IE9 Compat Modes */
+  src: local("NanumGothic"),
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot?#iefix")
+  format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff2")
+  format("woff2"),
+    /* Super Modern Browsers */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff") format("woff"),
+    /* Modern Browsers */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.ttf")
+  format("truetype"),
+    /* Safari, Android, iOS */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.svg#NanumGothic")
+  format("svg"); /* Legacy iOS */
+}
+/* nanum-gothic-800 - latin_korean */
+@font-face {
+  font-family: "Nanum Gothic";
+  font-style: normal;
+  font-weight: 800;
+  src: url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.eot"); /* IE9 Compat Modes */
+  src: local("NanumGothic ExtraBold"), local("NanumGothic-ExtraBold"),
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.eot?#iefix")
+  format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.woff2")
+  format("woff2"),
+    /* Super Modern Browsers */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.woff") format("woff"),
+    /* Modern Browsers */ url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.ttf")
+  format("truetype"),
+    /* Safari, Android, iOS */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.svg#NanumGothic")
+  format("svg"); /* Legacy iOS */
+}
+/* nanum-gothic-700 - latin_korean */
+@font-face {
+  font-family: "Nanum Gothic";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.eot"); /* IE9 Compat Modes */
+  src: local("NanumGothic Bold"), local("NanumGothic-Bold"),
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.eot?#iefix")
+  format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.woff2")
+  format("woff2"),
+    /* Super Modern Browsers */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.woff") format("woff"),
+    /* Modern Browsers */ url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.ttf")
+  format("truetype"),
+    /* Safari, Android, iOS */
+  url("../../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.svg#NanumGothic")
+  format("svg"); /* Legacy iOS */
+}
+html,
+body {
+  font-family: "Nanum Gothic" !important;
+}
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
 body {
-  font-family: "Open Sans", sans-serif;
   color: #272829;
 }
+
 
 a {
   color: #149ddd;
@@ -21,15 +81,6 @@ a {
 a:hover {
   color: #37b3ed;
   text-decoration: none;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Raleway", sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -78,7 +129,34 @@ h6 {
   z-index: 9997;
   transition: all 0.5s;
   padding: 0 15px;
-  background: #040b14;
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="),
+  url("../../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background-color: rgba(102, 105, 104, 0.9);
+  background: radial-gradient(
+          farthest-side ellipse at 10% 0,
+          rgba(40, 40, 40, 0.9),
+          rgba(77, 77, 80, 0.95),
+          rgba(60, 60, 60, 0.95)
+  ),
+  url("../../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background: -webkit-radial-gradient(
+          10% 0,
+          farthest-side ellipse,
+          rgba(40, 40, 40, 0.9),
+          rgba(77, 77, 80, 0.95),
+          rgba(60, 60, 60, 0.95)
+  ),
+  url("../../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background: -moz-radial-gradient(
+          10% 0,
+          farthest-side ellipse,
+          rgba(40, 40, 40, 0.9),
+          rgba(77, 77, 80, 0.95),
+          rgba(60, 60, 60, 0.95)
+  ),
+  url("../../../reference/light-blue/img/bgnoise_lg_dark.png");
+  padding-bottom: 10px;
+  border: 1px solid rgb(51 51 51) !important;
   overflow-y: auto;
 }
 
@@ -86,7 +164,6 @@ h6 {
   margin: 15px auto;
   display: block;
   width: 120px;
-  border: 8px solid #2c2f3f;
 }
 
 #header .profile h1 {
@@ -96,7 +173,6 @@ h6 {
   font-weight: 600;
   -moz-text-align-last: center;
   text-align-last: center;
-  font-family: "Poppins", sans-serif;
 }
 
 #header .profile h1 a,
@@ -261,7 +337,6 @@ h6 {
   color: #fff;
   margin-bottom: 50px;
   font-size: 26px;
-  font-family: "Poppins", sans-serif;
 }
 
 #hero p span {
@@ -397,7 +472,7 @@ section {
 .facts .count-box p {
   padding: 15px 0 0 0;
   margin: 0 0 0 60px;
-  font-family: "Raleway", sans-serif;
+  
   font-size: 14px;
   color: #122f57;
 }
@@ -408,7 +483,7 @@ section {
   margin-top: 20px;
   color: #122f57;
   font-size: 15px;
-  font-family: "Poppins", sans-serif;
+  
   transition: ease-in-out 0.3s;
 }
 
@@ -432,7 +507,7 @@ section {
   text-transform: uppercase;
   display: block;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  
   color: #050d18;
 }
 
@@ -476,7 +551,7 @@ section {
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: "Poppins", sans-serif;
+  
   color: #050d18;
   margin-bottom: 10px;
 }
@@ -1081,7 +1156,8 @@ section {
   bottom: 0;
   width: 300px;
   z-index: 9999;
-  background: #040b14;
+  background: rgba(51, 51, 51, 0.4) !important;
+  border: 1px solid rgba(51, 51, 51, 0.425) !important;
 }
 
 #footer .copyright {

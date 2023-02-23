@@ -89,6 +89,7 @@ body {
 	padding-bottom: 10px;
 	background-attachment: fixed;
 }
+
 /* 스크롤 테마 */
 body::-webkit-scrollbar {
 	width: 8px; /* 스크롤바의 너비 */
