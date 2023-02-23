@@ -154,20 +154,13 @@
 		<link
 			href="css/override.css"
 			rel="stylesheet" />
-		<script>
-			/* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
-       chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
-                  https://code.google.com/p/chromium/issues/detail?id=332189
-    */
-		</script>
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="../reference/jquery-plugins/html5shiv.js"></script>
+			<script src="../reference/jquery-plugins/respond.js"></script>
 		<![endif]-->
-
 	</head>
 
 	<body style="overflow-x: hidden">
@@ -557,16 +550,18 @@
 		<script src="../reference/lightblue4/docs/js/ui-notifications.js"></script>
 
 		<!-- code diff -->
-		<!--<link-->
-			<!--rel="stylesheet"-->
-			<!--href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css" />-->
-		<!--<link-->
-			<!--rel="stylesheet"-->
-			<!--type="text/css"-->
-			<!--href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />-->
-		<!--<script-->
-			<!--type="text/javascript"-->
-			<!--src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>-->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../reference/jquery-plugins/highlight.js-10.7.2/src/styles/github.css"
+			media="screen" />
+		<script src="../reference/jquery-plugins/highlight.js-10.7.2/src/highlight.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../reference/jquery-plugins/diff2html-2.12.2/dist/diff2html.css"
+			media="screen" />
+		<script src="../reference/jquery-plugins/diff2html-2.12.2/dist/diff2html.js"></script>
 
 		<!-- page js -->
 		<script
