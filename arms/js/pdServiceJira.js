@@ -90,7 +90,7 @@ function dataTableDrawCallback(tableInfo) {
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText).done(function (json) {
+	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
 		versionList = json;
 		$("#version_accordion").jsonMenu("set", json, { speed: 5000 });

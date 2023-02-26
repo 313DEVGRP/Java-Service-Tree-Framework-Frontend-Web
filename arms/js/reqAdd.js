@@ -92,7 +92,7 @@ function makeVersionMultiSelectBox() {
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + $("#country").val(),
+		url: "/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + $("#country").val(),
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",

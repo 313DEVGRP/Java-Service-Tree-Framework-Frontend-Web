@@ -57,7 +57,7 @@ function getVersionInfo(c_version_link) {
 	c_version_link_str = c_version_link.replace(reg, "");
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/getVersions.do",
+		url: "/auth-user/api/arms/pdServiceVersion/getVersionListByCids.do",
 		data: {
 			c_ids: c_version_link_str
 		},

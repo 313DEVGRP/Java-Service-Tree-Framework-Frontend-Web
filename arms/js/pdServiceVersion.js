@@ -15,7 +15,7 @@ function execDocReady() {
 	//사이드 메뉴 처리
 	setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
 
-	// DatㄷPicker 처리 부분 ( 팝업 레이어 )
+	// DatePicker 처리 부분 ( 팝업 레이어 )
 	$(".date-picker").datepicker({
 		autoclose: true
 	});
@@ -27,29 +27,17 @@ function execDocReady() {
 	$("#input_pdservice_start_date").datetimepicker({
 		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
 	});
-	$("#btn_select_calendar").click(function () {
-		$("#input_pdservice_start_date").datetimepicker("show");
-	});
 
 	$("#input_pdservice_end_date").datetimepicker({
 		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-	});
-	$("#btn_end_calendar").click(function () {
-		$("#input_pdservice_start_date").datetimepicker("show");
 	});
 
 	$("#btn_enabled_date").datetimepicker({
 		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
 	});
-	$("#btn_select_calendar_popup").click(function () {
-		$("#input_pdservice_start_date").datetimepicker("show");
-	});
 
 	$("#btn_end_date").datetimepicker({
 		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-	});
-	$("#btn_end_calendar_popup").click(function () {
-		$("#input_pdservice_start_date").datetimepicker("show");
 	});
 
 	// --- 데이터 테이블 설정 --- //
@@ -184,8 +172,8 @@ $("#del_version").click(function () {
 $("#version_update").click(function () {
 	console.log("update btn");
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/updateVersionNode.do",
-		type: "POST",
+		url: "/auth-user/api/arms/pdServiceVersion/updateNode.do",
+		type: "put",
 		data: {
 			c_id: selectVersion,
 			c_title: $("#input_pdservice_version").val(),
@@ -237,8 +225,8 @@ function modalPopupNewUpdate() {
 // 버전 팝업 수정 업데이트
 function modalPopupUpdate() {
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/updateVersionNode.do",
-		type: "POST",
+		url: "/auth-user/api/arms/pdServiceVersion/updateNode.do",
+		type: "put",
 		data: {
 			c_id: selectVersion,
 			c_title: $("#tooltip_enabled_service_version").val(),
@@ -263,7 +251,7 @@ function modalPopupUpdate() {
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersion.do?c_id=" + getSelectedText).done(function (json) {
+	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
 		$("#version_accordion").jsonMenu("set", json, { speed: 5000 });
 		//version text setting

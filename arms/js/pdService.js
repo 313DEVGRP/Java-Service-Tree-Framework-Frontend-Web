@@ -39,6 +39,10 @@ function execDocReady() {
 	save_btn_click();
 
 	delete_btn_click();
+
+	update_btn_click();
+
+	popup_update_btn_click();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -628,7 +632,7 @@ function delete_btn_click(){
 	$("#delete_pdservice").click(function () {
 		$.ajax({
 			url: "/auth-user/api/arms/pdService/removeNode.do",
-			type: "POST",
+			type: "delete",
 			data: {
 				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id
 			},
@@ -678,7 +682,7 @@ function update_btn_click() {
 
 		$.ajax({
 			url: "/auth-user/api/arms/pdService/updateNode.do",
-			type: "POST",
+			type: "put",
 			data: {
 				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
 				c_title: $("#editview_pdservice_name").val(),
@@ -732,7 +736,7 @@ function popup_update_btn_click() {
 
 		$.ajax({
 			url: "/auth-user/api/arms/pdService/updateNode.do",
-			type: "POST",
+			type: "put",
 			data: {
 				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
 				c_title: $("#extend_editview_pdservice_name").val(),
