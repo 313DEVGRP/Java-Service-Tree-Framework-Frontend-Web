@@ -656,7 +656,7 @@ $("#pdservice_update").click(function () {
 	}
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/updatePdServiceNode.do",
+		url: "/auth-user/api/arms/pdService/updateNode.do",
 		type: "POST",
 		data: {
 			c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
@@ -708,7 +708,7 @@ $("#extendupdate_pdservice").click(function () {
 	}
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/updatePdServiceNode.do",
+		url: "/auth-user/api/arms/pdService/updateNode.do",
 		type: "POST",
 		data: {
 			c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,

@@ -68,7 +68,7 @@ $i: 1;
 .sidebar{
   position: absolute;
   @media (min-height: 940px) {
-    position: fixed;
+    position: absolute;
   }
   width: 160px;
   padding: 10px 0;

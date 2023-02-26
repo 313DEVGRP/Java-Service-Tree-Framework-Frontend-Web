@@ -20815,7 +20815,7 @@ a.text-gray-lighter:focus {
 
 @media (min-height: 940px) {
   .sidebar {
-    position: fixed;
+    position: absolute;
   }
 }
 
