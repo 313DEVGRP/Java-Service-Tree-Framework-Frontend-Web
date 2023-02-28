@@ -20779,7 +20779,6 @@ a.text-gray-lighter:focus {
   box-sizing: content-box;
   position: absolute;
   left: 65px;
-  top: 17px;
   z-index: 1;
 }
 
@@ -22372,7 +22371,6 @@ ol.text-list {
     left: 5%;
     right: auto;
     padding-right: 5px;
-    top: 20px;
   }
   .widget-404-search, .widget-404 {
     width: 402px;
