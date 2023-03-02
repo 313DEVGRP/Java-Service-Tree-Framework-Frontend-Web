@@ -27,7 +27,7 @@
 		"R2": "^1.4.3",
 		"eslint": "^7.32.0",
 		"eslint-plugin-vue": "^8.0.3",
-		"grunt": "^1.5.3",
+		"grunt": "^1.6.1",
 		"grunt-bootlint": "^0.12.4",
 		"grunt-cli": "^1.4.3",
 		"grunt-connect-proxy": "^0.2.0",
