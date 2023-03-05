@@ -152,7 +152,7 @@ $("#del_version").click(function () {
 	console.log("delete btn");
 	$.ajax({
 		url: "/auth-user/api/arms/pdServiceVersion/removeNode.do",
-		type: "POST",
+		type: "DELETE",
 		data: {
 			c_id: selectVersion
 		},
