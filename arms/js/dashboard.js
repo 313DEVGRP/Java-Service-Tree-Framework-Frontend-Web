@@ -4,6 +4,7 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 
+
 function execDocReady() {
 	//좌측 메뉴
 	setTimeout(function () {
@@ -274,4 +275,34 @@ function execDocReady() {
 			};
 		});
 	}
+
+	function tsExample(){
+		// interface IPerson {
+		// 	name: String
+		// 	age: Number
+		// 	marry: Boolean
+		// 	family?: Object
+		// 	hobby?: any
+		// 	dead?: undefined
+		// }
+
+
+		// class PersonImp implements IPerson{
+		// 	// IPerson 을 인용해서,
+		// 	// interface에 쓴 값을 다시 constructor안에 선언하는 이유는 interface에 선언한 값은 ~한 속성이 있어야 한다는 규약일뿐 선언된건 없음,
+		// 	// class 몸통엔 반드시 멤버속성이 등록되어 있어야 하므로 constructor안에 값을 써 줘야 사용 가능함.
+		// 	constructor(public name: string, public age : number , public marry : Boolean, public family? : Object, public	hobby?: any,
+		// 		public dead?: undefined ){}
+		// }
+
+		// let jeck: IPerson = {name: 'jeck', age:18, marry: false}
+		// let {name , age} = jeck
+		// console.log(name, age) // jeck, 18
+
+		// // 타입변환
+		// const num: number = 123;
+		// const str: string = num as string; // num 변수를 string 타입으로 변환
+
+	}
+
 }

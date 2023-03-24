@@ -26,27 +26,27 @@ module.exports = function (grunt) { // jshint ignore:line
             ].concat(defaultMiddleware);
           }
         },
-        proxies: [
-         // 선생님용
-          {
-            context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout'],
-            host: '127.0.0.1',
-            port: 13131,
-            https: false,
-            changeOrigin: true
-          }
-        ]
-
         // proxies: [
-        //   // 주희 용
+        //  // 선생님용
         //   {
         //     context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout'],
-        //     host: 'www.313.co.kr',
-        //     port: 80,
+        //     host: '127.0.0.1',
+        //     port: 13131,
         //     https: false,
         //     changeOrigin: true
         //   }
         // ]
+
+        proxies: [
+          // 주희 용
+          {
+            context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout'],
+            host: 'www.313.co.kr',
+            port: 80,
+            https: false,
+            changeOrigin: true
+          }
+        ]
       },
     },
     watch: {
