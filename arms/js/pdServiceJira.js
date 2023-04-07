@@ -198,7 +198,7 @@ function versionClick(element, c_id) {
 
 	// 이미 등록된 제품(서비스)-버전-지라 연결 정보가 있는지 확인
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceConnect/getExistNode.do",
+		url: "/auth-user/api/arms/mapPdServiceNJira/getExistNode.do",
 		type: "GET",
 		data: {
 			c_pdservice_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
@@ -245,7 +245,7 @@ $("#pdservice_connect").click(function () {
 	if ($("#pdservice_connect").hasClass("btn-primary") == true) {
 		// data가 존재하지 않음.
 		$.ajax({
-			url: "/auth-user/api/arms/pdServiceConnect/addNode.do",
+			url: "/auth-user/api/arms/mapPdServiceNJira/addNode.do",
 			type: "POST",
 			data: {
 				ref: 2,
@@ -269,7 +269,7 @@ $("#pdservice_connect").click(function () {
 	} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
 		// data가 이미 있음
 		$.ajax({
-			url: "/auth-user/api/arms/pdServiceConnect/updateNode.do",
+			url: "/auth-user/api/arms/mapPdServiceNJira/updateNode.do",
 			type: "POST",
 			data: {
 				c_id: selectConnectID,
@@ -863,7 +863,7 @@ centerNode(root);
 $(function () {
 	// JIRA 프로젝트 데이터 로드 후 멀티 셀렉트 빌드 하고 슬림스크롤 적용
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceJira/getChildNode.do?c_id=2",
+		url: "/auth-user/api/arms/jiraProject/getChildNode.do?c_id=2",
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",

@@ -21,15 +21,26 @@ $(function () {
         )
     );
 
-    // Load existing files:
+    // // Load existing files:
+    // $.ajax({
+    //     // Uncomment the following to send cross-domain cookies:
+    //     //xhrFields: {withCredentials: true},
+    //     url: $fileupload.fileupload('option', 'url'),
+    //     dataType: 'json',
+    //     context: $fileupload[0]
+    // }).done(function (result) {
+    //     $(this).fileupload('option', 'done').call(this, null, {result: result});
+    // });
+
     $.ajax({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: $fileupload.fileupload('option', 'url'),
-        dataType: 'json',
+        url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
+        data: { fileIdLink: 4 },
+        dataType: "json",
         context: $fileupload[0]
     }).done(function (result) {
-        $(this).fileupload('option', 'done').call(this, null, {result: result});
+        $(this).fileupload("option", "done").call(this, null, { result: result });
     });
 
 });

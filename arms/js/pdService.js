@@ -111,7 +111,7 @@ function popup_size_setting(){
 
 		// Modal 창에 데이터 셋팅
 		if (owner == null || owner == "none") {
-			console.log("pdServiceDataTableClick :: json.c_owner empty");
+			console.log("pdServiceDataTableClick :: json.c_pdservice_owner empty");
 		} else {
 			var newOption = new Option(owner, owner, true, true);
 			$("#extend_editview_pdservice_owner").append(newOption).trigger("change");
@@ -285,25 +285,12 @@ function file_upload_setting() {
 		dropZone: $("#dropzone")
 	});
 
-	// Enable iframe cross-domain access via redirect option:
-	$fileupload.fileupload("option", "redirect", window.location.href.replace(/\/[^\/]*$/, "/cors/result.html?%s"));
-
-	// Load existing files:
-	$.ajax({
-		// Uncomment the following to send cross-domain cookies:
-		//xhrFields: {withCredentials: true},
-		url: $fileupload.fileupload("option", "url"),
-		dataType: "json",
-		context: $fileupload[0]
-	}).done(function (result) {
-		$(this).fileupload("option", "done").call(this, null, { result: result });
-	});
 
 	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
 		// The example input, doesn't have to be part of the upload form:
 		var input = $("#fileIdlink");
-		data.formData = { fileIdlink: input.val() };
-		if (!data.formData.fileIdlink) {
+		data.formData = { pdservice_link: input.val() };
+		if (!data.formData.pdservice_link) {
 			data.context.find("button").prop("disabled", false);
 			input.focus();
 			return false;
@@ -359,6 +346,7 @@ function dataTableLoad() {
 	);
 }
 
+
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
 	selectedIndex = selectedData.selectedIndex;
@@ -381,7 +369,7 @@ function dataTableClick(tempDataTable, selectedData) {
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
 		url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-		data: { fileIdlink: selectId, c_title: "pdService" },
+		data: { fileIdLink: selectId },
 		dataType: "json",
 		context: $fileupload[0]
 	}).done(function (result) {
@@ -390,7 +378,10 @@ function dataTableClick(tempDataTable, selectedData) {
 }
 
 //데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(settings, json) {}
+function dataTableCallBack(settings, json) {
+
+
+}
 
 function dataTableDrawCallback(tableInfo) {
 	$("#" + tableInfo.sInstance)
@@ -420,52 +411,52 @@ function pdServiceDataTableClick(c_id) {
 		.done(function (json) {
 			//$("#detailview_pdservice_name").val(json.c_title);
 			$("#detailview_pdservice_name").val(json.c_title);
-			if (isEmpty(json.c_owner) || json.c_owner == "none") {
+			if (isEmpty(json.c_pdservice_owner) || json.c_pdservice_owner == "none") {
 				$("#detailview_pdservice_owner").val("책임자가 존재하지 않습니다.");
 			} else {
-				$("#detailview_pdservice_owner").val(json.c_owner);
+				$("#detailview_pdservice_owner").val(json.c_pdservice_owner);
 			}
 
-			if (isEmpty(json.c_reviewer01) || json.c_reviewer01 == "none") {
+			if (isEmpty(json.c_pdservice_reviewer01) || json.c_pdservice_reviewer01 == "none") {
 				$("#detailview_pdservice_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
 			} else {
-				$("#detailview_pdservice_reviewer01").val(json.c_reviewer01);
+				$("#detailview_pdservice_reviewer01").val(json.c_pdservice_reviewer01);
 			}
 
-			if (isEmpty(json.c_reviewer02) || json.c_reviewer02 == "none") {
+			if (isEmpty(json.c_pdservice_reviewer02) || json.c_pdservice_reviewer02 == "none") {
 				$("#detailview_pdservice_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailview_pdservice_reviewer02").val(json.c_reviewer02);
+				$("#detailview_pdservice_reviewer02").val(json.c_pdservice_reviewer02);
 			}
 
-			if (isEmpty(json.c_reviewer03) || json.c_reviewer03 == "none") {
+			if (isEmpty(json.c_pdservice_reviewer03) || json.c_pdservice_reviewer03 == "none") {
 				$("#detailview_pdservice_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailview_pdservice_reviewer03").val(json.c_reviewer03);
+				$("#detailview_pdservice_reviewer03").val(json.c_pdservice_reviewer03);
 			}
 
-			if (isEmpty(json.c_reviewer04) || json.c_reviewer04 == "none") {
+			if (isEmpty(json.c_pdservice_reviewer04) || json.c_pdservice_reviewer04 == "none") {
 				$("#detailview_pdservice_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailview_pdservice_reviewer04").val(json.c_reviewer04);
+				$("#detailview_pdservice_reviewer04").val(json.c_pdservice_reviewer04);
 			}
 
-			if (isEmpty(json.c_reviewer05) || json.c_reviewer05 == "none") {
+			if (isEmpty(json.c_pdservice_reviewer05) || json.c_pdservice_reviewer05 == "none") {
 				$("#detailview_pdservice_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
 			} else {
-				$("#detailview_pdservice_reviewer05").val(json.c_reviewer05);
+				$("#detailview_pdservice_reviewer05").val(json.c_pdservice_reviewer05);
 			}
-			$("#detailview_pdservice_contents").html(json.c_contents);
+			$("#detailview_pdservice_contents").html(json.c_pdservice_contents);
 
 			$("#editview_pdservice_name").val(json.c_title);
 
 			//clear
 			$("#editview_pdservice_owner").val(null).trigger("change");
 
-			if (json.c_owner == null || json.c_owner == "none") {
-				console.log("pdServiceDataTableClick :: json.c_owner empty");
+			if (json.c_pdservice_owner == null || json.c_pdservice_owner == "none") {
+				console.log("pdServiceDataTableClick :: json.c_pdservice_owner empty");
 			} else {
-				var newOption = new Option(json.c_owner, json.c_owner, true, true);
+				var newOption = new Option(json.c_pdservice_owner, json.c_pdservice_owner, true, true);
 				$("#editview_pdservice_owner").append(newOption).trigger("change");
 			}
 			// -------------------- reviewer setting -------------------- //
@@ -473,72 +464,72 @@ function pdServiceDataTableClick(c_id) {
 			$("#editview_pdservice_reviewers").val(null).trigger("change");
 
 			var selectedReviewerArr = [];
-			if (json.c_reviewer01 == null || json.c_reviewer01 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_reviewer01 empty");
+			if (json.c_pdservice_reviewer01 == null || json.c_pdservice_reviewer01 == "none") {
+				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer01 empty");
 			} else {
-				selectedReviewerArr.push(json.c_reviewer01);
+				selectedReviewerArr.push(json.c_pdservice_reviewer01);
 				// Set the value, creating a new option if necessary
-				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_reviewer01 + "']").length) {
-					console.log('option[value=\'" + json.c_reviewer01 + "\']"' + "already exist");
+				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer01 + "']").length) {
+					console.log('option[value=\'" + json.c_pdservice_reviewer01 + "\']"' + "already exist");
 				} else {
 					// Create a DOM Option and pre-select by default
-					var newOption01 = new Option(json.c_reviewer01, json.c_reviewer01, true, true);
+					var newOption01 = new Option(json.c_pdservice_reviewer01, json.c_pdservice_reviewer01, true, true);
 					// Append it to the select
 					$("#editview_pdservice_reviewers").append(newOption01).trigger("change");
 				}
 			}
-			if (json.c_reviewer02 == null || json.c_reviewer02 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_reviewer02 empty");
+			if (json.c_pdservice_reviewer02 == null || json.c_pdservice_reviewer02 == "none") {
+				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer02 empty");
 			} else {
-				selectedReviewerArr.push(json.c_reviewer02);
+				selectedReviewerArr.push(json.c_pdservice_reviewer02);
 				// Set the value, creating a new option if necessary
-				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_reviewer02 + "']").length) {
-					console.log('option[value=\'" + json.c_reviewer02 + "\']"' + "already exist");
+				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer02 + "']").length) {
+					console.log('option[value=\'" + json.c_pdservice_reviewer02 + "\']"' + "already exist");
 				} else {
 					// Create a DOM Option and pre-select by default
-					var newOption02 = new Option(json.c_reviewer02, json.c_reviewer02, true, true);
+					var newOption02 = new Option(json.c_pdservice_reviewer02, json.c_pdservice_reviewer02, true, true);
 					// Append it to the select
 					$("#editview_pdservice_reviewers").append(newOption02).trigger("change");
 				}
 			}
-			if (json.c_reviewer03 == null || json.c_reviewer03 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_reviewer03 empty");
+			if (json.c_pdservice_reviewer03 == null || json.c_pdservice_reviewer03 == "none") {
+				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer03 empty");
 			} else {
-				selectedReviewerArr.push(json.c_reviewer03);
+				selectedReviewerArr.push(json.c_pdservice_reviewer03);
 				// Set the value, creating a new option if necessary
-				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_reviewer03 + "']").length) {
-					console.log('option[value=\'" + json.c_reviewer03 + "\']"' + "already exist");
+				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer03 + "']").length) {
+					console.log('option[value=\'" + json.c_pdservice_reviewer03 + "\']"' + "already exist");
 				} else {
 					// Create a DOM Option and pre-select by default
-					var newOption03 = new Option(json.c_reviewer03, json.c_reviewer03, true, true);
+					var newOption03 = new Option(json.c_pdservice_reviewer03, json.c_pdservice_reviewer03, true, true);
 					// Append it to the select
 					$("#editview_pdservice_reviewers").append(newOption03).trigger("change");
 				}
 			}
-			if (json.c_reviewer04 == null || json.c_reviewer04 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_reviewer04 empty");
+			if (json.c_pdservice_reviewer04 == null || json.c_pdservice_reviewer04 == "none") {
+				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer04 empty");
 			} else {
-				selectedReviewerArr.push(json.c_reviewer04);
+				selectedReviewerArr.push(json.c_pdservice_reviewer04);
 				// Set the value, creating a new option if necessary
-				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_reviewer04 + "']").length) {
-					console.log('option[value=\'" + json.c_reviewer04 + "\']"' + "already exist");
+				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer04 + "']").length) {
+					console.log('option[value=\'" + json.c_pdservice_reviewer04 + "\']"' + "already exist");
 				} else {
 					// Create a DOM Option and pre-select by default
-					var newOption04 = new Option(json.c_reviewer04, json.c_reviewer04, true, true);
+					var newOption04 = new Option(json.c_pdservice_reviewer04, json.c_pdservice_reviewer04, true, true);
 					// Append it to the select
 					$("#editview_pdservice_reviewers").append(newOption04).trigger("change");
 				}
 			}
-			if (json.c_reviewer05 == null || json.c_reviewer05 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_reviewer05 empty");
+			if (json.c_pdservice_reviewer05 == null || json.c_pdservice_reviewer05 == "none") {
+				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer05 empty");
 			} else {
-				selectedReviewerArr.push(json.c_reviewer05);
+				selectedReviewerArr.push(json.c_pdservice_reviewer05);
 				// Set the value, creating a new option if necessary
-				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_reviewer05 + "']").length) {
-					console.log('option[value=\'" + json.c_reviewer05 + "\']"' + "already exist");
+				if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer05 + "']").length) {
+					console.log('option[value=\'" + json.c_pdservice_reviewer05 + "\']"' + "already exist");
 				} else {
 					// Create a DOM Option and pre-select by default
-					var newOption05 = new Option(json.c_reviewer05, json.c_reviewer05, true, true);
+					var newOption05 = new Option(json.c_pdservice_reviewer05, json.c_pdservice_reviewer05, true, true);
 					// Append it to the select
 					$("#editview_pdservice_reviewers").append(newOption05).trigger("change");
 				}
@@ -547,7 +538,7 @@ function pdServiceDataTableClick(c_id) {
 
 			// ------------------------- reviewer end --------------------------------//
 
-			CKEDITOR.instances.input_pdservice_editor.setData(json.c_contents);
+			CKEDITOR.instances.input_pdservice_editor.setData(json.c_pdservice_contents);
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
 		.fail(function (xhr, status, errorThrown) {
@@ -595,13 +586,13 @@ function save_btn_click() {
 				ref: 2,
 				c_title: $("#popup_editview_pdservice_name").val(),
 				c_type: "default",
-				c_owner: $("#popup_editview_pdservice_owner").select2("data")[0].text,
-				c_reviewer01: reviewers01,
-				c_reviewer02: reviewers02,
-				c_reviewer03: reviewers03,
-				c_reviewer04: reviewers04,
-				c_reviewer05: reviewers05,
-				c_contents: CKEDITOR.instances.modal_editor.getData()
+				c_pdservice_owner: $("#popup_editview_pdservice_owner").select2("data")[0].text,
+				c_pdservice_reviewer01: reviewers01,
+				c_pdservice_reviewer02: reviewers02,
+				c_pdservice_reviewer03: reviewers03,
+				c_pdservice_reviewer04: reviewers04,
+				c_pdservice_reviewer05: reviewers05,
+				c_pdservice_contents: CKEDITOR.instances.modal_editor.getData()
 			},
 			statusCode: {
 				200: function () {
@@ -686,13 +677,13 @@ function update_btn_click() {
 			data: {
 				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
 				c_title: $("#editview_pdservice_name").val(),
-				c_owner: owner,
-				c_reviewer01: reviewers01,
-				c_reviewer02: reviewers02,
-				c_reviewer03: reviewers03,
-				c_reviewer04: reviewers04,
-				c_reviewer05: reviewers05,
-				c_contents: CKEDITOR.instances.input_pdservice_editor.getData()
+				c_pdservice_owner: owner,
+				c_pdservice_reviewer01: reviewers01,
+				c_pdservice_reviewer02: reviewers02,
+				c_pdservice_reviewer03: reviewers03,
+				c_pdservice_reviewer04: reviewers04,
+				c_pdservice_reviewer05: reviewers05,
+				c_pdservice_contents: CKEDITOR.instances.input_pdservice_editor.getData()
 			},
 			statusCode: {
 				200: function () {
@@ -740,13 +731,13 @@ function popup_update_btn_click() {
 			data: {
 				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
 				c_title: $("#extend_editview_pdservice_name").val(),
-				c_owner: owner,
-				c_reviewer01: reviewers01,
-				c_reviewer02: reviewers02,
-				c_reviewer03: reviewers03,
-				c_reviewer04: reviewers04,
-				c_reviewer05: reviewers05,
-				c_contents: CKEDITOR.instances.extend_modal_editor.getData()
+				c_pdservice_owner: owner,
+				c_pdservice_reviewer01: reviewers01,
+				c_pdservice_reviewer02: reviewers02,
+				c_pdservice_reviewer03: reviewers03,
+				c_pdservice_reviewer04: reviewers04,
+				c_pdservice_reviewer05: reviewers05,
+				c_pdservice_contents: CKEDITOR.instances.extend_modal_editor.getData()
 			},
 			statusCode: {
 				200: function () {

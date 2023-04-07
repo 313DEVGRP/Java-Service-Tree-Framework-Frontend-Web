@@ -273,30 +273,32 @@ function dataLoad(getSelectedText, selectedText) {
 		$(".list-group-item").html(selectedHtml);
 		$("#tooltip_enabled_service_name").val(selectedText);
 
-		// 상세보기
-		selectVersion = json[0].c_id;
-		$("#pdservice_name").val(selectedText);
-		$("#pdservice_version").val(json[0].c_title);
+		if( !isEmpty(json) ){
+			// 상세보기
+			selectVersion = json[0].c_id;
+			$("#pdservice_name").val(selectedText);
+			$("#pdservice_version").val(json[0].c_title);
 
-		$("#version_start_date").val(json[0].c_start_date);
-		$("#version_end_date").val(json[0].c_end_date);
+			$("#version_start_date").val(json[0].c_start_date);
+			$("#version_end_date").val(json[0].c_end_date);
 
-		$("#version_contents").html(json[0].c_contents);
+			$("#version_contents").html(json[0].c_contents);
 
-		// 상세보기 편집하기
-		$("#input_pdservice_name").val(selectedText);
-		$("#input_pdservice_version").val(json[0].c_title);
+			// 상세보기 편집하기
+			$("#input_pdservice_name").val(selectedText);
+			$("#input_pdservice_version").val(json[0].c_title);
 
-		$("#input_pdservice_start_date").datetimepicker({ value: json[0].c_start_date + " 09:00", step: 10 });
-		$("#input_pdservice_end_date").datetimepicker({ value: json[0].c_end_date + " 18:00", step: 10 });
-		CKEDITOR.instances.input_pdservice_editor.setData(json[0].c_contents);
+			$("#input_pdservice_start_date").datetimepicker({ value: json[0].c_start_date + " 09:00", step: 10 });
+			$("#input_pdservice_end_date").datetimepicker({ value: json[0].c_end_date + " 18:00", step: 10 });
+			CKEDITOR.instances.input_pdservice_editor.setData(json[0].c_contents);
 
-		//편집하기 팝업
-		$("#tooltip_enabled_service_name").val(selectedText);
-		$("#tooltip_enabled_service_version").val(json[0].c_title);
-		$("#btn_enabled_date").datetimepicker({ value: json[0].c_start_date + " 09:00", step: 10 });
-		$("#btn_end_date").datetimepicker({ value: json[0].c_end_date + " 18:00", step: 10 });
-		CKEDITOR.instances.extend_modal_editor.setData(json[0].c_contents);
+			//편집하기 팝업
+			$("#tooltip_enabled_service_name").val(selectedText);
+			$("#tooltip_enabled_service_version").val(json[0].c_title);
+			$("#btn_enabled_date").datetimepicker({ value: json[0].c_start_date + " 09:00", step: 10 });
+			$("#btn_end_date").datetimepicker({ value: json[0].c_end_date + " 18:00", step: 10 });
+			CKEDITOR.instances.extend_modal_editor.setData(json[0].c_contents);
+		}
 	});
 }
 

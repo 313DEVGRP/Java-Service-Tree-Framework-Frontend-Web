@@ -128,23 +128,31 @@ function rightBottomTopForwardIcon() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function authUserCheck() {
 	$.ajax({
-		url: "/auth-check/identity",
+		url: "/auth-user/me",
 		type: "GET",
 		timeout: 7313,
 		global: false,
 		statusCode: {
 			200: function (json) {
-				console.log("authUserCheck :: userName = " + json.name);
+				console.log("authUserCheck :: userName = " + json.preferred_username);
 				console.log("authUserCheck :: permissions = ");
-				console.log(json.permissions);
-				userName = json.name;
-				permissions = json.permissions;
+				console.log(json.realm_access.roles);
+				userName = json.preferred_username;
+				permissions = json.realm_access.roles;
 
 				var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
-				account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.name + "</span>";
+				account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
 				$(".account-picture").append(account_html);
 
-				getUserInfo();
+				//getUserInfo();
+			},
+			401: function (json) {
+				$(".loader").addClass("hide");
+				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
+				location.href = "/oauth2/authorization/middle-proxy";
+			},
+			403: function (json) {
+				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
 			}
 		}
 	});
@@ -845,7 +853,7 @@ function ajax_setup() {
 			$(".loader").addClass("hide");
 			if (jqXHR.status == 401) {
 				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
-				location.href = "/sso/login";
+				location.href = "/oauth2/authorization/middle-proxy";
 			} else if (jqXHR.status == 403) {
 				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
 			}
