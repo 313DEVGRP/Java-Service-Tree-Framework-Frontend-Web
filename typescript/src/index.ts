@@ -3,6 +3,7 @@ import CarImpl from "./standard/CarImpl";
 import CarExtImpl from "./standard/CarExtImpl";
 import ObjExtCarImpl from "./standard/ObjExtCarImpl";
 import Car from "./standard/Car";
+import { pdService } from "./tree/Pdservice";
 
 testMakePerson();
 
@@ -90,3 +91,35 @@ carExtImpl.stop();
 const objExtCarImpl = new ObjExtCarImpl("이름","색상","모델");
 console.log("<- 확장된 객체를 다시 확장한 인스턴스 사용 -> ");
 objExtCarImpl.start();
+
+
+const test5 = new pdService(333, 222, 11, 2, 4,  5, 'string','string',3,4, 'string','string','string','string','string','string','string','string','string','string','string','string','string','string')
+console.log('test5', test5)
+
+
+
+
+// c_id : 333,
+// c_parentid : 222,
+// c_positon : 11,
+// c_left : 2,
+// c_right : 4,
+// c_level : 5,
+// c_title : 'String',
+// c_type : 'String',
+// c_method : 5,
+// c_state : 6,
+// c_date : 'String',
+// c_pdservice_name : 'String',
+// c_pdservice_contents : 'String',
+// c_pdservice_etc : 'String',
+// c_pdservice_owner : 'String',
+// c_pdservice_reviewer01 : 'String',
+// c_pdservice_reviewer02 : 'String',
+// c_pdservice_reviewer03 : 'String',
+// c_pdservice_reviewer04 : 'String',
+// c_pdservice_reviewer05 : 'String',
+// c_pdservice_writer_name : 'String',
+// c_pdservice_writer_cn : 'String',
+// c_pdservice_writer_mail : 'String',
+// c_pdservice_writer_date : 'String',
