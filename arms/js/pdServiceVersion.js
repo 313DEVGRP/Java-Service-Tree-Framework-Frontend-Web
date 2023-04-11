@@ -197,19 +197,26 @@ $("#version_update").click(function () {
 //버전 팝업 신규 업데이트
 function modalPopupNewUpdate() {
 	console.log("save btn");
+
+	var send_data = {
+		c_id: selectId,
+		pdServiceVersionEntities: [
+			{
+				ref:2,
+				c_type: 'default',
+				c_title: $("#tooltip_enabled_service_version").val(),
+				c_contents: CKEDITOR.instances.extend_modal_editor.getData(),
+				c_start_date: $("#btn_enabled_date").val(),
+				c_end_date: $("#btn_end_date").val()
+			}
+		]
+	};
+
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/addNode.do",
+		url: "/auth-user/api/arms/pdService/addVersionToNode.do",
 		type: "POST",
-		data: {
-			ref: 2,
-			c_title: $("#tooltip_enabled_service_version").val(),
-			c_type: "default",
-			c_pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-			// c_contents: CKEDITOR.instances["modal_editor"].getData(),
-			c_contents: CKEDITOR.instances.extend_modal_editor.getData(),
-			c_start_date: $("#btn_enabled_date").val(),
-			c_end_date: $("#btn_end_date").val()
-		},
+		contentType : 'application/json; charset=utf-8',
+		data: JSON.stringify(send_data),
 		statusCode: {
 			200: function () {
 				//모달 팝업 끝내고
@@ -251,9 +258,9 @@ function modalPopupUpdate() {
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
+	$.ajax("/auth-user/api/arms/pdService/getNode.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
-		$("#version_accordion").jsonMenu("set", json, { speed: 5000 });
+		$("#version_accordion").jsonMenu("set", json.pdServiceVersionEntities, { speed: 5000 });
 		//version text setting
 
 		var selectedHtml =
@@ -273,31 +280,31 @@ function dataLoad(getSelectedText, selectedText) {
 		$(".list-group-item").html(selectedHtml);
 		$("#tooltip_enabled_service_name").val(selectedText);
 
-		if( !isEmpty(json) ){
+		if( !isEmpty(json.pdServiceVersionEntities) ){
 			// 상세보기
-			selectVersion = json[0].c_id;
+			selectVersion = json.pdServiceVersionEntities[0].c_id;
 			$("#pdservice_name").val(selectedText);
-			$("#pdservice_version").val(json[0].c_title);
+			$("#pdservice_version").val(json.pdServiceVersionEntities[0].c_title);
 
-			$("#version_start_date").val(json[0].c_start_date);
-			$("#version_end_date").val(json[0].c_end_date);
+			$("#version_start_date").val(json.pdServiceVersionEntities[0].c_start_date);
+			$("#version_end_date").val(json.pdServiceVersionEntities[0].c_end_date);
 
-			$("#version_contents").html(json[0].c_contents);
+			$("#version_contents").html(json.pdServiceVersionEntities[0].c_contents);
 
 			// 상세보기 편집하기
 			$("#input_pdservice_name").val(selectedText);
-			$("#input_pdservice_version").val(json[0].c_title);
+			$("#input_pdservice_version").val(json.pdServiceVersionEntities[0].c_title);
 
-			$("#input_pdservice_start_date").datetimepicker({ value: json[0].c_start_date + " 09:00", step: 10 });
-			$("#input_pdservice_end_date").datetimepicker({ value: json[0].c_end_date + " 18:00", step: 10 });
-			CKEDITOR.instances.input_pdservice_editor.setData(json[0].c_contents);
+			$("#input_pdservice_start_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 });
+			$("#input_pdservice_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 });
+			CKEDITOR.instances.input_pdservice_editor.setData(json.pdServiceVersionEntities[0].c_contents);
 
 			//편집하기 팝업
 			$("#tooltip_enabled_service_name").val(selectedText);
-			$("#tooltip_enabled_service_version").val(json[0].c_title);
-			$("#btn_enabled_date").datetimepicker({ value: json[0].c_start_date + " 09:00", step: 10 });
-			$("#btn_end_date").datetimepicker({ value: json[0].c_end_date + " 18:00", step: 10 });
-			CKEDITOR.instances.extend_modal_editor.setData(json[0].c_contents);
+			$("#tooltip_enabled_service_version").val(json.pdServiceVersionEntities[0].c_title);
+			$("#btn_enabled_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 });
+			$("#btn_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 });
+			CKEDITOR.instances.extend_modal_editor.setData(json.pdServiceVersionEntities[0].c_contents);
 		}
 	});
 }

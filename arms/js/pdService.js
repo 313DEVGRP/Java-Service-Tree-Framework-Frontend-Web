@@ -314,7 +314,6 @@ function dataTableLoad() {
 				if (type === "display") {
 					return '<label style="color: #a4c6ff">' + data + "</label>";
 				}
-
 				return data;
 			},
 			className: "dt-body-left",
@@ -329,7 +328,7 @@ function dataTableLoad() {
 
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
-	var jsonRoot = "";
+	var jsonRoot = "response";
 	var isServerSide = false;
 
 	dataTableRef = dataTable_build(
