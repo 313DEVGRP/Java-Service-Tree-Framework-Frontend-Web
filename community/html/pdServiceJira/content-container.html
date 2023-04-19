@@ -1,0 +1,174 @@
+<div class="col-lg-12">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i class="fa fa-sort-amount-asc"></i>
+					연결된 Jira 조회
+				</span>
+			</h4>
+			<div class="actions">
+				<button
+					class="btn btn-transparent btn-xs"
+					onclick="$('#demo').jstree('open_all');">
+					Show All
+					<i class="fa fa-arrow-down"></i>
+				</button>
+			</div>
+		</header>
+		<div class="body">
+			<div class="wrapper">
+				<div
+					style="margin-top: 10px; height: 300px"
+					class="darkBack">
+					<div id="tree_container"></div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<div class="col-lg-4">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i class="fa fa-edit"></i>
+					제품(서비스) 조회 및 선택
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+					title="Options"
+					href="#">
+					<i class="glyphicon glyphicon-cog"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="close"
+					title="Close"
+					href="#">
+					<i class="glyphicon glyphicon-remove"></i>
+				</a>
+			</div>
+		</header>
+		<div class="body">
+			<blockquote class="font13">1. 제품(서비스) 선택</blockquote>
+			<div
+				class="box box-primary"
+				style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+				<div class="box-body">
+					<table
+						id="pdservice_table"
+						class="display"
+						style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<div class="col-lg-3">
+	<div class="row">
+		<section class="widget">
+			<header>
+				<h5>
+					<i class="fa fa-check-square-o"></i>
+					제품(서비스) Version 조회
+				</h5>
+			</header>
+			<div class="body">
+				<blockquote class="font13">2. 버전 선택 및 등록</blockquote>
+				<div
+					class="panel-group"
+					id="version_accordion"></div>
+			</div>
+		</section>
+	</div>
+</div>
+
+<div class="col-lg-5">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i class="fa fa-edit"></i>
+					Jira 리스트
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+					title="Options"
+					href="#">
+					<i class="glyphicon glyphicon-cog"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="close"
+					title="Close"
+					href="#">
+					<i class="glyphicon glyphicon-remove"></i>
+				</a>
+			</div>
+		</header>
+		<div class="body">
+			<blockquote class="font13">3. 연결할 JIRA 프로젝트 선택</blockquote>
+			<div
+				class="box box-primary"
+				style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+				<div class="span12">
+					<div
+						class="alert info"
+						style="padding: 5px !important; margin-bottom: 5px !important">
+						<button
+							type="button"
+							id="pdservice_connect"
+							class="btn btn-primary"
+							style="width: 100% !important">
+							제품(서비스) Jira 연결 등록
+						</button>
+					</div>
+				</div>
+				<div class="span12">
+					<select
+						multiple
+						class="searchable"
+						name="searchable[]"
+						id="multiselect">
+						<!--
+                        <option value="elem_1" selected='selected'>elem 1</option>
+                        -->
+					</select>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

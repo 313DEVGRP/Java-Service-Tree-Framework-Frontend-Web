@@ -1,0 +1,241 @@
+<div class="col-lg-12">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i class="fa fa-edit"></i>
+					요구사항 리스트
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+					title="Options"
+					href="#">
+					<i class="glyphicon glyphicon-cog"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="close"
+					title="Close"
+					href="#">
+					<i class="glyphicon glyphicon-remove"></i>
+				</a>
+			</div>
+		</header>
+		<div class="body">
+			<div class="row">
+				<div class="col-md-12">
+					<section
+						class="widget"
+						style="margin-bottom: 0px !important">
+						<header>
+							<label><strong>Search</strong></label>
+						</header>
+						<div class="body">
+							<div class="row">
+								<div class="col-md-4">
+									<blockquote class="font12">
+										<strong>1. Service 를 선택해 주세요</strong>
+									</blockquote>
+									<div
+										class="control-group"
+										class="darkBack"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group"
+											class="darkBack"
+											style="margin-bottom: 5px !important">
+											<select
+												id="country"
+												required="required"
+												data-placeholder="Select Product(Service)"
+												class="select-block-level chzn-select darkBack"
+												tabindex="-1"
+												name="country"
+												style="width: 100% !important">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<blockquote class="font12">
+										<strong>2. Version 을 선택해 주세요</strong>
+									</blockquote>
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group"
+											style="margin-bottom: 5px !important">
+											<select
+												multiple="multiple"
+												id="multiversion"
+												class="multiple-select btn-block darkBack"
+												placeholder="&nbsp;&nbsp;Select Version"></select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<blockquote class="font12">
+										<strong>3. Disabled 요구사항을 제외할까요?</strong>
+									</blockquote>
+									<div
+										class="control-group darkBack"
+										style="border: 0; padding-bottom: 2px !important; border-radius: 5px">
+										<div
+											class="checkbox"
+											style="margin-left: 4px; margin-bottom: 1px !important; margin-top: 5px !important">
+											<input
+												id="checkbox1"
+												type="checkbox"
+												data-check-all="" />
+											<label for="checkbox1">disable 된 요구사항 필터</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<div class="col-lg-12">
+	<section
+		class="widget"
+		style="margin-bottom: 0px !important">
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i class="fa fa-edit"></i>
+					Host List
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+					title="Options"
+					href="#">
+					<i class="glyphicon glyphicon-cog"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="close"
+					title="Close"
+					href="#">
+					<i class="glyphicon glyphicon-remove"></i>
+				</a>
+			</div>
+		</header>
+		<div
+			class="body"
+			style="overflow: hidden">
+			<div class="row">
+				<div class="col-md-12">
+					<section
+						class="widget"
+						style="margin-bottom: 0px !important">
+						<header>
+							<label><strong>Service - Application List</strong></label>
+						</header>
+						<div class="body">
+							<blockquote
+								class="font12"
+								style="margin: 0 0 5px !important">
+								<strong>4. Product(Service) - Version - 요구사항 - Issue 를 확인하세요</strong>
+							</blockquote>
+							<div class="gradient_bottom_border"></div>
+							<div style="width: 100%; height: 10px"></div>
+							<div style="float: left">
+								<button
+									class="btn btn-default btn-sm"
+									id="copychecker"
+									type="button">
+									Copy
+								</button>
+								<button
+									type="button"
+									id="csvchecker"
+									class="btn btn-default btn-sm">
+									CSV
+								</button>
+								<button
+									type="button"
+									id="excelchecker"
+									class="btn btn-default btn-sm">
+									Excel
+								</button>
+								<button
+									type="button"
+									id="printchecker"
+									class="btn btn-default btn-sm">
+									Print
+								</button>
+								<button
+									type="button"
+									id="pdfchecker"
+									class="btn btn-default btn-sm">
+									PDF
+								</button>
+							</div>
+							<div style="float: right">
+								<button
+									class="btn btn-primary btn-sm"
+									type="button">
+									추가
+								</button>
+								<button
+									class="btn btn-success btn-sm"
+									type="button">
+									수정
+								</button>
+								<button
+									class="btn btn-danger btn-sm"
+									type="button">
+									삭제
+								</button>
+								<button
+									class="btn btn-warning btn-sm"
+									type="button">
+									기타
+								</button>
+							</div>
+							<table
+								id="reqstatustable"
+								class="display"
+								style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
