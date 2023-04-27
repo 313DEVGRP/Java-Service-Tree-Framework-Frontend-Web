@@ -42,7 +42,7 @@ function dataTableLoad() {
 
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
-	var jsonRoot = "";
+	var jsonRoot = "response";
 	var isServerSide = false;
 
 	dataTableRef = dataTable_build(
@@ -72,7 +72,7 @@ function dataTableClick(tempDataTable, selectedData) {
 	$("#pdservice_connect").addClass("btn-primary");
 	$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
 
-	// 연계 이벤트 - 버전 리스트 로드
+	//버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
 
 	// D3 업데이트
@@ -90,10 +90,10 @@ function dataTableDrawCallback(tableInfo) {
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
+	$.ajax("/auth-user/api/arms/pdService/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
-		versionList = json;
-		$("#version_accordion").jsonMenu("set", json, { speed: 5000 });
+		versionList = json.response;
+		$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
 
 		//version text setting
 		var selectedHtml =
@@ -102,8 +102,7 @@ function dataLoad(getSelectedText, selectedText) {
 				<span class="arrow"></span>
 				<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : </div>
 			<div class="text" style="color: #a4c6ff;">
-			` +
-			selectedText +
+			` +  selectedText +
 			`
 			</div>
 			</div>
