@@ -257,7 +257,8 @@ $("#pdservice_connect").click(function () {
 			progress: true
 		})
 			.done(function (data) {
-				versionClick(null, selectVersion);
+				//versionClick(null, selectVersion);
+				jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
 			})
 			.fail(function (e) {
 				console.log("fail call");
@@ -278,7 +279,8 @@ $("#pdservice_connect").click(function () {
 			progress: true
 		})
 			.done(function (data) {
-				versionClick(null, selectVersion);
+				//versionClick(null, selectVersion);
+				jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
 			})
 			.fail(function (e) {
 				console.log("fail call");
