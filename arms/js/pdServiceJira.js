@@ -197,11 +197,11 @@ function versionClick(element, c_id) {
 
 	// 이미 등록된 제품(서비스)-버전-지라 연결 정보가 있는지 확인
 	$.ajax({
-		url: "/auth-user/api/arms/mapPdServiceNJira/getExistNode.do",
+		url: "/auth-user/api/arms/globaltreemap/getConnectInfo/pdService/pdServiceVersion/jiraProject.do",
 		type: "GET",
 		data: {
-			c_pdservice_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-			c_pdservice_version_id: c_id
+			pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
+			pdserviceversion_link: c_id
 		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
@@ -209,10 +209,13 @@ function versionClick(element, c_id) {
 	})
 		.done(function (data) {
 			var versionClickData = [];
-			for (var k in data) {
-				var obj = data[k];
+
+			var multiSelectData = [];
+			for (var k in data.response) {
+				var obj = data.response[k];
 				//var jira_name = obj.c_title;
 				selectConnectID = obj.c_id;
+				multiSelectData.push(obj.jiraproject_link);
 				versionClickData.push(obj);
 			}
 
@@ -226,8 +229,8 @@ function versionClick(element, c_id) {
 				$("#pdservice_connect").addClass("btn-success");
 				$("#pdservice_connect").text("제품(서비스) Jira 연결 변경");
 
-				console.log("jsonData[0].c_pdservice_jira_ids - " + versionClickData[0].c_pdservice_jira_ids);
-				$("#multiselect").multiSelect("select", versionClickData[0].c_pdservice_jira_ids.split(","));
+				console.log("multiSelectData - " + multiSelectData.toString());
+				$("#multiselect").multiSelect("select", multiSelectData.toString().split(","));
 				updateD3ByMultiSelect();
 			}
 		})
@@ -244,14 +247,11 @@ $("#pdservice_connect").click(function () {
 	if ($("#pdservice_connect").hasClass("btn-primary") == true) {
 		// data가 존재하지 않음.
 		$.ajax({
-			url: "/auth-user/api/arms/mapPdServiceNJira/addNode.do",
+			url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
 			type: "POST",
 			data: {
-				ref: 2,
-				c_title: "a-RMS pdService-Version-Jira Connect Data",
-				c_type: "default",
-				c_pdservice_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				c_pdservice_version_id: selectVersion,
+				pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
+				pdserviceversion_link: selectVersion,
 				c_pdservice_jira_ids: JSON.stringify($("#multiselect").val())
 			},
 			progress: true
@@ -268,14 +268,11 @@ $("#pdservice_connect").click(function () {
 	} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
 		// data가 이미 있음
 		$.ajax({
-			url: "/auth-user/api/arms/mapPdServiceNJira/updateNode.do",
+			url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
 			type: "POST",
 			data: {
-				c_id: selectConnectID,
-				c_title: "a-RMS pdService-Version-Jira Connect Data",
-				c_type: "default",
-				c_pdservice_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				c_pdservice_version_id: selectVersion,
+				pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
+				pdserviceversion_link: selectVersion,
 				c_pdservice_jira_ids: JSON.stringify($("#multiselect").val())
 			},
 			progress: true
