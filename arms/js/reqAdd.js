@@ -44,8 +44,8 @@ function makePdServiceSelectBox() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
-				for (var k in data) {
-					var obj = data[k];
+				for (var k in data.response) {
+					var obj = data.response[k];
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
 					$("#country").append(newOption).trigger("change");
 				}
@@ -63,23 +63,26 @@ function makePdServiceSelectBox() {
 			jError("제품(서비스) 조회 중 에러가 발생했습니다.");
 		}
 	});
+
+
+	$("#country").on("select2:open", function () {
+		makeSlimScroll(".select2-results__options");
+	});
+
+	// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
+	$("#country").on("select2:select", function (e) {
+		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
+		// 디폴트는 base version 을 선택하게 하고 ( select all )
+
+		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
+		build_ReqData_By_PdService();
+
+		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
+		bind_VersionData_By_PdService();
+	});
+
 } // end makePdServiceSelectBox()
 
-$("#country").on("select2:open", function () {
-	makeSlimScroll(".select2-results__options");
-});
-
-// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
-$("#country").on("select2:select", function (e) {
-	// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
-	// 디폴트는 base version 을 선택하게 하고 ( select all )
-
-	//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
-	build_ReqData_By_PdService();
-
-	//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
-	bind_VersionData_By_PdService();
-});
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
@@ -92,16 +95,15 @@ function makeVersionMultiSelectBox() {
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + $("#country").val(),
+		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#country").val(),
 		type: "GET",
-		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
-				for (var k in data) {
-					var obj = data[k];
+				for (var k in data.response) {
+					var obj = data.response[k];
 					var $opt = $("<option />", {
 						value: obj.c_id,
 						text: obj.c_title
