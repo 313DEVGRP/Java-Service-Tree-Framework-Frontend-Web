@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang=zh>
+<meta charset=utf-8>
+<meta content="width=device-width,initial-scale=1" name=viewport>
+<title>Mind Map | Echatpro.com</title>
+<meta content="Echatpro.com Mind map" name=keywords>
+<meta content="" name=description>
+<link href=css/style.css rel=stylesheet>
+<div class=container>
+    <svg height=600 id=mindmap-svg width=1300></svg>
+</div>
+<script src=js/jquery-3.1.1.min.js></script>
+<script src=js/d3.v4.js></script>
+<script src="js/custom_mindmap_echatpro.js"></script>
+<script>
+    var n = d3.select("#mindmap-svg"), t = n.attr("width"), a = n.attr("height"), d = new MindMap;
+    d.svg(n);
+    d.size(t, a);
+
+    $(function () {
+        d3.json("graph.json", function (n, t) {
+            if (!n) {
+                (d.data(t), d.render())
+            }
+        })
+    })
+</script>

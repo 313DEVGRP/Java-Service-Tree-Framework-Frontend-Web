@@ -1,0 +1,52 @@
+
+.column{
+    display: inline-block;
+    float: left;
+    width: 25%;
+
+}
+
+.column li{
+    list-style:none;
+}
+
+ul{
+    margin: 0;
+    padding: 10px 0;
+    float:none;
+}
+
+li{
+	float:none;
+    cursor: pointer;
+    background-color: #00b7ee;
+    border-bottom: 1px solid #fff;
+    border-right:1px solid #fff ;
+    color: #fff;
+    padding: 10px 15px;
+    position:relative;
+}
+
+li:hover{
+    background-color: #3498db;
+}
+
+.choosen{
+    background-color: #3498db !important;
+}
+
+.page-arrow{
+	position:absolute;
+	right:10px;
+    top: 15px;
+    width:0px;
+    height:0px;
+    border-width:5px;
+    border-style:solid;
+    border-color:transparent transparent transparent #fff;
+}
+.page-btn{
+	position:absolute;
+	right:32px;
+	bottom:16px;
+}

@@ -1,0 +1,8 @@
+.timeline {
+    background: #ffffff;
+}
+
+.timeline tspan {
+    font-family: 微软雅黑;
+    cursor: default;
+}
