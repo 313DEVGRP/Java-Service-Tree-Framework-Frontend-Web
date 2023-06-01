@@ -1,0 +1,6 @@
+[
+    {"name": "All", "current": true, "c_review_result_state": "All"},
+    {"name": "In-Review", "c_review_result_state": "In-Review"},
+    {"name": "Out-Review", "c_review_result_state": "Out-Review"},
+    {"name": "Complete", "c_review_result_state": "Complete"}
+]
