@@ -154,7 +154,8 @@ $("#del_version").click(function () {
 		url: "/auth-user/api/arms/pdService/removeVersion.do",
 		type: "DELETE",
 		data: {
-			c_id: selectVersion
+			pdservice_c_id: selectId,
+			version_c_id: selectVersion
 		},
 		statusCode: {
 			200: function () {
