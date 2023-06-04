@@ -1769,3 +1769,35 @@ p {
 	box-shadow: inset 2px 2px 8px rgb(55 94 148 / 30%), inset -3px -2px 5px rgb(255 255 255 / 80%);
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+.tools[data-v-5f164deb] {
+	width: 80px;
+	height: 80px;
+	display: inline-block;
+	padding: 10px;
+	margin: 10px 10px 10px 10px;
+	border-radius: 10px;
+	background-color: #ddd;
+	box-shadow: 5px 5px 5px rgba(0,0,0,.301);
+}
+
+.tools span[data-v-5f164deb] {
+	display: flex;
+	flex-direction: column;
+	place-content: center;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.tool-img[data-v-5f164deb] {
+	width: 35px;
+	height: 35px;
+	margin-bottom: 5px;
+}
+
+.tool-name[data-v-5f164deb] {
+	color: #333;
+	font-size: 13px;
+	font-weight: 600;
+	white-space: nowrap;
+}
