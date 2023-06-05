@@ -36,7 +36,50 @@ $(function () {
 		$("body").addClass("sidebar-hidden");
 		$("header.page-header").hide();
 	}
+
+	dwr_login("test","admin");
+
 });
+
+
+document.write('<script type="text/javascript" src="/dwr/engine.js"></script>');
+document.write('<script type="text/javascript" src="/dwr/util.js"></script>');
+document.write('<script type="text/javascript" src="/dwr/interface/Chat.js"></script>');
+
+const makeSaveChatHistory = () => {
+	const chat_history = [];
+	return (userId, username, message, time) => {
+		chat_history.push({ userId, username, message, time });
+		console.log("chatHistory -> " + JSON.stringify(chat_history));
+		return chat_history;
+	};
+};
+
+const saveChatHistory = makeSaveChatHistory();
+
+function dwr_callback(userId, username, message, time) {
+	const lastMessage = { userId, username, message, time };
+	saveChatHistory(userId, username, message, time);
+
+	$(".notifications.pull-right").addClass("alert-created");
+	const alertDiv = $('<div/>').addClass('alert pull-right');
+	const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
+	const infoIcon = $('<i/>').addClass('fa fa-info-circle');
+	alertDiv.append(closeButton, infoIcon, lastMessage.message);
+	$(".notifications.pull-right .alert").remove();
+	$(".notifications.pull-right").append(alertDiv);
+}
+
+function dwr_login(userId,username){
+	dwr.engine.setActiveReverseAjax(true);
+	dwr.engine.setNotifyServerOnPageUnload(true);
+	dwr.engine.setErrorHandler(function () {
+		console.log("DWR Error");
+	});
+	Chat.login(userId,username);
+
+}
+
 
 // include 레이아웃 html 파일을 로드하는 함수
 function includeLayout(page) {
