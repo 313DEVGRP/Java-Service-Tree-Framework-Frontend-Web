@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gebo Admin Panel</title>
+    
+        <!-- Bootstrap framework -->
+            <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.min.css" />
+        <!-- breadcrumbs-->
+            <link rel="stylesheet" href="lib/jBreadcrumbs/css/BreadCrumb.css" />
+        <!-- tooltips-->
+            <link rel="stylesheet" href="lib/qtip2/jquery.qtip.min.css" />
+        <!-- notifications -->
+            <link rel="stylesheet" href="lib/sticky/sticky.css" />
+        <!-- code prettify -->
+            <link rel="stylesheet" href="lib/google-code-prettify/prettify.css" />    
+        <!-- notifications -->
+            <link rel="stylesheet" href="lib/sticky/sticky.css" />    
+        <!-- splashy icons -->
+            <link rel="stylesheet" href="img/splashy/splashy.css" />
+        <!-- colorbox -->
+            <link rel="stylesheet" href="lib/colorbox/colorbox.css" />  
+
+        <!-- gebo blue theme-->
+            <link rel="stylesheet" href="css/blue.css" id="link_theme" />
+        <!-- main styles -->
+            <link rel="stylesheet" href="css/style.css" />
+            
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans" />
+    
+        <!-- Favicon -->
+            <link rel="shortcut icon" href="favicon.ico" />
+        
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/ie.css" />
+            <script src="js/ie/html5.js"></script>
+        <![endif]-->
+        
+        <script>
+            //* hide all elements & show preloader
+            document.documentElement.className += 'js';
+        </script>
+    </head>
+    <body class="sidebar_hidden">
+        <div id="loading_layer" style="display:none"><img src="img/ajax_loader.gif" alt="" /></div>
+        
+        <div id="maincontainer" class="clearfix">
+            <!-- header -->
+            <header>
+                <div class="navbar navbar-fixed-top">
+                    <div class="navbar-inner">
+                        <div class="container-fluid">
+                            <a class="brand" href="dashboard.html"><i class="icon-home icon-white"></i> Gebo Admin</a>
+                            <ul class="nav user_menu pull-right">
+                                <li class="hidden-phone hidden-tablet">
+                                    <div class="nb_boxes clearfix">
+                                        <a data-toggle="modal" data-backdrop="static" href="#myMail" class="label ttip_b" title="New messages">25 <i class="splashy-mail_light"></i></a>
+                                        <a data-toggle="modal" data-backdrop="static" href="#myTasks" class="label ttip_b" title="New tasks">10 <i class="splashy-calendar_week"></i></a>
+                                    </div>
+                                </li>
+                                <li class="divider-vertical hidden-phone hidden-tablet"></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Johny Smith <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                    <li><a href="user_profile.html">My Profile</a></li>
+                                    <li><a href="javascrip:void(0)">Another action</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="login.html">Log Out</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="nav" id="mobile-nav">
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-list-alt icon-white"></i> Forms <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="form_elements.html">Form elements</a></li>
+                                        <li><a href="form_extended.html">Extended form elements</a></li>
+                                        <li><a href="form_validation.html">Form Validation</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-th icon-white"></i> Components <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="alerts_btns.html">Alerts & Buttons</a></li>
+                                        <li><a href="icons.html">Icons</a></li>
+                                        <li><a href="notifications.html">Notifications</a></li>
+                                        <li><a href="tables.html">Tables</a></li>
+                                        <li><a href="tables_more.html">Tables (more examples)</a></li>
+                                        <li><a href="tabs_accordion.html">Tabs & Accordion</a></li>
+                                        <li><a href="tooltips.html">Tooltips, Popovers</a></li>
+                                        <li><a href="typography.html">Typography</a></li>
+                                        <li><a href="widgets.html">Widget boxes</a></li>
+                                        <li class="dropdown">
+                                            <a href="#">Sub menu <b class="caret-right"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Sub menu 1.1</a></li>
+                                                <li><a href="#">Sub menu 1.2</a></li>
+                                                <li><a href="#">Sub menu 1.3</a></li>
+                                                <li>
+                                                    <a href="#">Sub menu 1.4 <b class="caret-right"></b></a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Sub menu 1.4.1</a></li>
+                                                        <li><a href="#">Sub menu 1.4.2</a></li>
+                                                        <li><a href="#">Sub menu 1.4.3</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-wrench icon-white"></i> Plugins <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="charts.html">Charts</a></li>
+                                        <li><a href="calendar.html">Calendar</a></li>
+                                        <li><a href="datatable.html">Datatable</a></li>
+                                        <li><a href="editable_elements.html">Editable elements</a></li>
+                                        <li><a href="file_manager.html">File Manager</a></li>
+                                        <li><a href="floating_header.html">Floating List Header</a></li>
+                                        <li><a href="google_maps.html">Google Maps</a></li>
+                                        <li><a href="gallery.html">Gallery Grid</a></li>
+                                        <li><a href="wizard.html">Wizard</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-file icon-white"></i> Pages <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="blog_page.html">Blog Page</a></li>
+                                        <li><a href="chat.html">Chat</a></li>
+                                        <li><a href="error_404.html">Error 404</a></li>
+                                        <li><a href="invoice.html">Invoice</a></li>
+                                        <li><a href="mailbox.html">Mailbox</a></li>
+                                        <li><a href="search_page.html">Search page</a></li>
+                                        <li><a href="user_profile.html">User profile</a></li>
+                                        <li><a href="user_static.html">User profile (static)</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                </li>
+                                <li>
+                                    <a href="documentation.html"><i class="icon-book icon-white"></i> Help</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal hide fade" id="myMail">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">×</button>
+                        <h3>New messages</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">In this table jquery plugin turns a table row into a clickable link.</div>
+                        <table class="table table-condensed table-striped" data-provides="rowlink">
+                            <thead>
+                                <tr>
+                                    <th>Sender</th>
+                                    <th>Subject</th>
+                                    <th>Date</th>
+                                    <th>Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Declan Pamphlett</td>
+                                    <td><a href="javascript:void(0)">Lorem ipsum dolor sit amet</a></td>
+                                    <td>23/05/2012</td>
+                                    <td>25KB</td>
+                                </tr>
+                                <tr>
+                                    <td>Erin Church</td>
+                                    <td><a href="javascript:void(0)">Lorem ipsum dolor sit amet</a></td>
+                                    <td>24/05/2012</td>
+                                    <td>15KB</td>
+                                </tr>
+                                <tr>
+                                    <td>Koby Auld</td>
+                                    <td><a href="javascript:void(0)">Lorem ipsum dolor sit amet</a></td>
+                                    <td>25/05/2012</td>
+                                    <td>28KB</td>
+                                </tr>
+                                <tr>
+                                    <td>Anthony Pound</td>
+                                    <td><a href="javascript:void(0)">Lorem ipsum dolor sit amet</a></td>
+                                    <td>25/05/2012</td>
+                                    <td>33KB</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" class="btn">Go to mailbox</a>
+                    </div>
+                </div>
+                <div class="modal hide fade" id="myTasks">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">×</button>
+                        <h3>New Tasks</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">In this table jquery plugin turns a table row into a clickable link.</div>
+                        <table class="table table-condensed table-striped" data-provides="rowlink">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Summary</th>
+                                    <th>Updated</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P-23</td>
+                                    <td><a href="javascript:void(0)">Admin should not break if URL&hellip;</a></td>
+                                    <td>23/05/2012</td>
+                                    <td class="tac"><span class="label label-important">High</span></td>
+                                    <td>Open</td>
+                                </tr>
+                                <tr>
+                                    <td>P-18</td>
+                                    <td><a href="javascript:void(0)">Displaying submenus in custom&hellip;</a></td>
+                                    <td>22/05/2012</td>
+                                    <td class="tac"><span class="label label-warning">Medium</span></td>
+                                    <td>Reopen</td>
+                                </tr>
+                                <tr>
+                                    <td>P-25</td>
+                                    <td><a href="javascript:void(0)">Featured image on post types&hellip;</a></td>
+                                    <td>22/05/2012</td>
+                                    <td class="tac"><span class="label label-success">Low</span></td>
+                                    <td>Updated</td>
+                                </tr>
+                                <tr>
+                                    <td>P-10</td>
+                                    <td><a href="javascript:void(0)">Multiple feed fixes and&hellip;</a></td>
+                                    <td>17/05/2012</td>
+                                    <td class="tac"><span class="label label-warning">Medium</span></td>
+                                    <td>Open</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" class="btn">Go to task manager</a>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- main content -->
+            <div id="contentwrapper">
+                <div class="main_content">
+                    
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="sepH_c">
+                                <div class="alert alert-info tac">
+                                    <strong>Thank you for purchasing Gebo Admin template.</strong><br />If you have any questions that are beyond the scope of this help file, please feel free to email via my user page contact form <a href="http://themeforest.net/user/tzd">here</a>.
+                                </div>
+                                <div class="sepH_c">
+                                    Author: tzd-themes.com<br />Updated: 15.03.2013<br/><span class="label label-info">v 1.8.1</span>
+                                </div>
+                                <h3 class="heading">About Gebo Admin template</h3>
+                                <div class="row-fluid">
+                                    <div class="span4">Gebo Admin is a fully featured, easily customizable backend template that can be use for any web aplication (cms,crm,statistics etc).</div>
+                                    <div class="span8">
+                                        <p class="sepH_a"><strong>Main features:</strong></p>
+                                        <ol>
+                                            <li>Responsive two column layout (hideable sidebar)</li>
+                                            <li>Fixed top bar</li>
+                                            <li>HTML5/CSS3</li>
+                                            <li>Based on Twitter Bootstrap Framework</li>
+                                            <li>Location finder (Google Maps)</li>
+                                            <li>Custom search page</li>
+                                            <li>Custom mailbox</li>
+                                            <li>Charts (lines, bars, pies)</li>
+                                            <li>Chat</li>
+                                            <li>User page (static)</li>
+                                            <li>Drag&amp;Drop Multiupload</li>
+                                            <li>Datepicker, Timepicker</li>
+                                            <li>Image grid</li>
+                                            <li>2 icon sets (glyphicons &amp; splashy icons)</li>
+                                            <li>Custom error page</li>
+                                            <li>Tables (static, dynamic, server side proccessing)</li>
+                                            <li>Notifications (sticky, modal boxes)</li>
+                                            <li>Responsive file explorer</li>
+                                            <li>WYSIWYG editor with integrated file explorer</li>
+                                            <li>Regular and extended form elements (sliders, progresbars, enchanced select elements, 2 column multiselect, styled form elements, colorpicker, masked inputs, tags handler and many more)</li>
+                                            <li>Tooltips (always visible in the viewport), Popovers</li>
+                                            <li>Bootstrap Javascript Plugins (modal, dropdown, tab, popover, collapse, typeahead, rowlink, fileupload )</li>
+                                            <li>Form Validation</li>
+                                            <li>Step by Step Wizard</li>
+                                            <li>Drag&Drop Widget Boxes</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="doc_sect">
+                                <div class="sepH_c">
+                                    <h3 class="heading">CSS Files</h3>
+                                    <div class="row-fluid">
+                                        <div class="span4">Gebo Admin uses couple of styling sheets to control visual apperance. There are 2 CSS files from bootstrap framework, main stylesheet, theme stylesheets, stylesheet for IE&lt;9 and plugins stylesheets.</div>
+                                        <div class="span8">
+                                            <ul class="unstyled">
+                                                <li>
+                                                    <code>bootstrap/css/bootstrap.min.css</code>, <code>bootstrap/css/bootstrap-responsive.min.css</code>
+                                                    <p class="sml_t">Minified stylesheets from bootstrap framework</p>
+                                                </li>
+                                                <li>
+                                                    <code>css/style.css</code>
+                                                    <p class="sml_t">Main Gebo Admin styleshet</p>
+                                                </li>
+                                                <li>
+                                                    <code>css/blue.css</code>, <code>css/brown.css</code>, <code>css/dark.css</code>, <code>css/green.css</code>, <code>css/eastern_blue.css</code>, <code>css/tamarillo.css</code>
+                                                    <p class="sml_t">Themes for Gebo Admin</p>
+                                                </li>
+                                                <li>
+                                                    <code>css/ie.css</code>
+                                                    <p class="sml_t">Styleshet for IE&lt;9 </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">JS Files</h3>
+                                    <div class="row-fluid">
+                                        <div class="span4">
+                                            <p>Gebo Admin uses many 3rd party js plugins. These plugins are located in <code>bootstrap/js/</code> (plugins from bootstrap framework), <code>js/</code> (small plugins) and <code>lib/</code> (more complex plugins).</p>
+                                            <p>Every plugin has own documentation, just click on plugin link.</p>
+                                            <p><span class="label label-important">Important</span> If you remove some elements from page you also need to remove coresponding js functions (if page doesn't render properly after that open firebug or other js console and check for errors)</p>
+                                        </div>
+                                        <div class="span8">
+                                            <ul class="unstyled">
+                                                <li>
+                                                    <code>bootstrap/js/bootstrap.min.js</code>
+                                                    <p class="sml_t">Plugins from bootstrap framework.</p>
+                                                    <ul class="list_a sepH_c">
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#modals">Modals</a></li>
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#dropdowns">Dropdowns</a></li>
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#tabs">Tabs</a></li>
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#tooltips">Tooltips</a></li>
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#popovers">Popovers</a></li>
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#collapse">Collapse</a></li>
+                                                        <li><a href="http://twitter.github.com/bootstrap/javascript.html#typeahead">Typeahead</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    Plugins located in <code>js/</code>
+                                                    <p class="sml_t">Configuration for plugins & small js plugins</p>
+                                                    <ul class="list_a sepH_c">
+                                                        <li><a href="http://dreamerslab.com/blog/en/get-hidden-elements-width-and-height-with-jquery/">Actual width/height of hidden DOM elements</a></li>
+                                                        <li><a href="http://www.script-tutorials.com/animated-jquery-progressbar/">Animated Progressbars</a></li>
+                                                        <li><a href="http://qwertypants.me/counter/">Character and Word Counter for textareas</a></li>
+                                                        <li><a href="https://github.com/carhartl/jquery-cookie">jQuery Cookie</a></li>
+                                                        <li><a href="http://gmap3.net/">GMAP3 (Google Maps)</a></li>
+                                                        <li><a href="http://www.wookmark.com/jquery-plugin">Grid layout</a></li>
+                                                        <li><a href="http://docs.jquery.com/Main_Page">jQuery Library</a></li>
+                                                        <li><a href="http://gsgd.co.uk/sandbox/jquery/easing/">jQuery Easing</a></li>
+                                                        <li><a href="http://jasny.github.com/bootstrap/javascript.html#fileupload">Fileupload (with thumbnails)</a></li>
+                                                        <li><a href="http://github.com/desandro/imagesloaded">ImagesLoaded</a></li>
+                                                        <li><a href="http://github.com/RobinHerbots/jquery.inputmask">Input Mask</a></li>
+                                                        <li><a href="https://github.com/thepeg/MediaTable">Responsive Table</a></li>
+                                                        <li><a href="http://jasny.github.com/bootstrap/javascript.html#rowlink">Rowlink</a></li>
+                                                        <li><a href="http://benpickles.github.com/peity/">Small charts</a></li>
+                                                        <li><a href="https://github.com/louisremi/jquery-smartresize">Special jQuery event that happens once after a window resize</a></li>
+                                                        <li><a href="http://www.jacklmoore.com/autosize" class="ext_disabled">Textarea autosize</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    Plugins located in <code>lib/</code>
+                                                    <p class="sml_t">More complex plugins</p>
+                                                    <ul class="list_a sepH_c">
+                                                        <li><a href="http://www.comparenetworks.com/developers/jqueryplugins/jbreadcrumb.html">Breadcrumbs</a></li>
+                                                        <li><a href="http://arshaw.com/fullcalendar/">Calendar</a></li>
+                                                        <li><a href="http://code.google.com/p/flot/">Charts</a></li>
+                                                        <li><a href="http://premiumsoftware.net/cleditor/">CLEditor</a></li>
+                                                        <li><a href="http://www.jacklmoore.com/colorbox">Colorbox</a></li>
+                                                        <li><a href="http://momentjs.com/">Date library</a></li>
+                                                        <li><a href="http://www.datatables.net/index">Datatables</a></li>
+                                                        <li><a href="https://code.google.com/p/dynatree/">Dynamic tree</a></li>
+                                                        <li><a href="https://github.com/eternicode/bootstrap-datepicker">Datepicker</a></li>
+                                                        <li><a href="http://vitalets.github.com/x-editable/index.html">Editable elements</a></li>
+                                                        <li><a href="http://harvesthq.github.com/chosen/">Enhanced select elements</a></li>
+                                                        <li><a href="http://opensource.teamdf.com/list/docs/">Floating header list</a></li>
+                                                        <li><a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">Form validation</a></li>
+                                                        <li><a href="http://kushagragour.in/lab/hint/">Hint CSS</a></li>
+                                                        <li><a href="http://jqueryui.com/demos/">jQuery UI</a></li>
+                                                        <li><a href="http://loudev.com/">2col Multiselect</a></li>
+                                                        <li><a href="http://uniformjs.com/">Nice form elements</a></li>
+                                                        <li><a href="http://danpalmer.me/jquery-complexify">Password strength checker</a></li>
+                                                        <li><a href="http://www.plupload.com/documentation.php">Plupload</a></li>
+                                                        <li><a href="https://github.com/javve/list">Searchable, sortable list</a></li>
+                                                        <li><a href="http://ssssnakes.com/smoke/">Smoke.js</a></li>
+                                                        <li><a href="http://thrivingkings.com/sticky/">Sticky notifications</a></li>
+                                                        <li><a href="http://code.google.com/p/google-code-prettify/">Syntax highlighting</a></li>
+                                                        <li><a href="http://ioncache.github.com/Tag-Handler/">Tag handler</a></li>
+                                                        <li><a href="http://craigsworks.com/projects/qtip2/docs">Tooltips</a></li>
+                                                        <li><a href="http://www.wbotelhos.com/stepy/">Wizard</a></li>
+                                                        <li><a href="http://www.tinymce.com/wiki.php">WYSIWG Editor</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    File manager <code>file-manager/</code>
+                                                    <ul class="list_a sepH_c">
+                                                        <li><a href="http://kcfinder.sunhater.com/">KC Finder</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Main structure</h3>
+                                    <div class="row-fluid">
+                                        <div class="span4">
+                                            <p class="sepH_b">Gebo uses a layout from <a href=http://twitter.github.com/bootstrap">Bootstrap Framework</a>. This layout is fully responsive, it looks good on desktop, tables and mobile devices. It has top fixed bar (collapsible on mobile devices), fluid content and sidebar with search form and collapsible menu.</p>
+                                            <p class="sepH_c">Extended documentation for fluid grid layout is <a href="http://twitter.github.com/bootstrap/scaffolding.html#fluidGridSystem">here</a>.</p>
+                                            <p>There is also option to make layout fixed, just add <code>gebo-fixed</code> class to body <code>&lt;body class="gebo-fixed"&gt;</code></p>
+                                        </div>
+                                        <div class="span8">
+<pre class="prettyprint linenums">
+&lt;head&gt;
+  //css files & google fonts
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="maincontainer"&gt;
+    &lt;div class="navbar navbar-fixed-top"&gt;
+      //top fixed navigation bar
+    &lt;/div&gt;
+    &lt;div id="contentwrapper"&gt;
+      &lt;div class="main_content"&gt;
+        //main content
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="sidebar"&gt;
+      //sidebar content
+    &lt;/div&gt;
+    //js scripts
+  &lt;/div&gt;
+&lt;/body&gt;
+</pre>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Top navigation</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <p>To enable mouseover in top bar navigation <strike>uncoment line 54 in gebo_comon.js <code>gebo_nav_mouseover.init();</code></strike> add <code>menu_hover</code> class to body tag: <code>&lt;body class="menu_hover"&gt;</code></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Dashoard quick access navigation</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <p>By default quick access navigation is centered, to align this navigation to the left add <code>iconNav_left</code> class - <code>&lt;ul class="dshb_icoNav iconNav_left"&gt;</code>, to the right <code>iconNav_right</code> - <code>&lt;ul class="dshb_icoNav iconNav_right"&gt;</code></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">External links</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <p>There is a js function (<code>gebo_external_links.init()</code> located in gebo_common.js) that changes all external links (icon and attribute <code>target="_blank"</code> is added). To disable this function for single link add <code>ext_disabled</code> class to this link: <code>&lt;a href="http://url.com" class="ext_disabled"&gt;</code>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Themes</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            There are 6 predefined themes <code>css/blue.css</code>, <code>css/brown.css</code>, <code>css/dark.css</code>, <code>css/green.css</code>, <code>css/eastern_blue.css</code>, <code>css/tamarillo.css</code>. You can easily create your own, just duplicate one of the theme file and set your colors. <br /><br />
+                                            To use Style switcher add
+<pre class="prettyprint linenums">
+&lt;div class=&quot;style_switcher&quot;&gt;
+  &lt;div class=&quot;sepH_c&quot;&gt;
+    &lt;p&gt;Colors:&lt;/p&gt;
+      &lt;div class=&quot;clearfix&quot;&gt;
+        &lt;a href=&quot;javascript:void(0)&quot; class=&quot;style_item jQclr blue_theme style_active&quot; title=&quot;blue&quot;&gt;blue&lt;/a&gt;
+        &lt;a href=&quot;javascript:void(0)&quot; class=&quot;style_item jQclr dark_theme&quot; title=&quot;dark&quot;&gt;dark&lt;/a&gt;
+        &lt;a href=&quot;javascript:void(0)&quot; class=&quot;style_item jQclr green_theme&quot; title=&quot;green&quot;&gt;green&lt;/a&gt;
+        &lt;a href=&quot;javascript:void(0)&quot; class=&quot;style_item jQclr brown_theme&quot; title=&quot;brown&quot;&gt;brown&lt;/a&gt;
+        &lt;a href=&quot;javascript:void(0)&quot; class=&quot;style_item jQclr eastern_blue_theme&quot; title=&quot;eastern_blue&quot;&gt;eastern blue&lt;/a&gt;
+        &lt;a href=&quot;javascript:void(0)&quot; class=&quot;style_item jQclr tamarillo_theme&quot; title=&quot;tamarillo&quot;&gt;tamarillo&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;sepH_c&quot;&gt;
+    &lt;p&gt;Backgrounds:&lt;/p&gt;
+    &lt;div class=&quot;clearfix&quot;&gt;
+      &lt;span class=&quot;style_item jQptrn style_active ptrn_def&quot; title=&quot;&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;ssw_ptrn_a style_item jQptrn&quot; title=&quot;ptrn_a&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;ssw_ptrn_b style_item jQptrn&quot; title=&quot;ptrn_b&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;ssw_ptrn_c style_item jQptrn&quot; title=&quot;ptrn_c&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;ssw_ptrn_d style_item jQptrn&quot; title=&quot;ptrn_d&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;ssw_ptrn_e style_item jQptrn&quot; title=&quot;ptrn_e&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;sepH_c&quot;&gt;
+    &lt;p&gt;Layout:&lt;/p&gt;
+    &lt;div class=&quot;clearfix&quot;&gt;
+      &lt;label class=&quot;radio inline&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;ssw_layout&quot; id=&quot;ssw_layout_fluid&quot; value=&quot;&quot; checked /&gt; Fluid&lt;/label&gt;
+      &lt;label class=&quot;radio inline&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;ssw_layout&quot; id=&quot;ssw_layout_fixed&quot; value=&quot;gebo-fixed&quot; /&gt; Fixed&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;sepH_c&quot;&gt;
+    &lt;p&gt;Sidebar position:&lt;/p&gt;
+    &lt;div class=&quot;clearfix&quot;&gt;
+      &lt;label class=&quot;radio inline&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;ssw_sidebar&quot; id=&quot;ssw_sidebar_left&quot; value=&quot;&quot; checked /&gt; Left&lt;/label&gt;
+      &lt;label class=&quot;radio inline&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;ssw_sidebar&quot; id=&quot;ssw_sidebar_right&quot; value=&quot;sidebar_right&quot; /&gt; Right&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;sepH_c&quot;&gt;
+    &lt;p&gt;Show top menu on:&lt;/p&gt;
+    &lt;div class=&quot;clearfix&quot;&gt;
+      &lt;label class=&quot;radio inline&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;ssw_menu&quot; id=&quot;ssw_menu_click&quot; value=&quot;&quot; checked /&gt; Click&lt;/label&gt;
+      &lt;label class=&quot;radio inline&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;ssw_menu&quot; id=&quot;ssw_menu_hover&quot; value=&quot;menu_hover&quot; /&gt; Hover&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+    
+  &lt;div class=&quot;gh_button-group&quot;&gt;
+    &lt;a href=&quot;#&quot; id=&quot;showCss&quot; class=&quot;btn btn-primary btn-mini&quot;&gt;Show CSS&lt;/a&gt;
+    &lt;a href=&quot;#&quot; id=&quot;resetDefault&quot; class=&quot;btn btn-mini&quot;&gt;Reset&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;hide&quot;&gt;
+    &lt;ul id=&quot;ssw_styles&quot;&gt;
+      &lt;li class=&quot;small ssw_mbColor sepH_a&quot; style=&quot;display:none&quot;&gt;body {&lt;span class=&quot;ssw_mColor sepH_a&quot; style=&quot;display:none&quot;&gt; color: #&lt;span&gt;&lt;/span&gt;;&lt;/span&gt; &lt;span class=&quot;ssw_bColor&quot; style=&quot;display:none&quot;&gt;background-color: #&lt;span&gt;&lt;/span&gt; &lt;/span&gt;}&lt;/li&gt;
+      &lt;li class=&quot;small ssw_lColor sepH_a&quot; style=&quot;display:none&quot;&gt;a { color: #&lt;span&gt;&lt;/span&gt; }&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+                                            after <code>&lt;body&gt;</code> and also include <code>gebo_common.js</code>.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Sidebar</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            Gebo Admin has two columns by default, main content and a hideable sidebar. This sidebar can be hidden on page load by adding <code>sidebar_hidden</code> class to body.<br/>
+                                            In this template sidebar state is saved to cookie. If you don't want this functionality just coment/remove some code in <code>js/gebo_common.js</code> (lines: 63-75;82;87).<br/>
+                                            There is also implemented scrollbar in this sidebar, if your content in sidebar is longer than window height then this scrollbar will show up.<br/>
+                                            If you want to move sidebar to right add <code>sidebar_right</code> to body: <code>&lt;body class="sidebar_right"&gt;</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Search Page</h3>
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            Search page result have two views: list view (default) and box view. You can change default view by adding <code>box_view</code> class to div with <code>search_panel</code> class.
+                                        </div>
+                                        <div class="span6">
+<pre class="prettyprint linenums">
+&lt;div class="search_panel box_view clearfix"&gt;
+//search results
+&lt;/div&gt;
+</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Layout, grid & elements</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            Gebo Admin is based on Bootstrap Framework, they have great documetation on <a href="http://twitter.github.com/bootstrap/index.html">http://twitter.github.com/bootstrap/index.html</a>.
+                                            If you need to find out how elements works, how to build custom layout or how to use their js plugins please use Bootstrap doumentation.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Credits</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <ul class="list_a">
+                                                <li>Bootstrap Framework <a href="http://twitter.github.com/bootstrap/index.html">http://twitter.github.com/bootstrap/index.html</a></li>
+                                                <li>Plugins mentioned in <strong>JS Files</strong> section</li>
+                                                <li>Video player <a href="http://videojs.com/">http://videojs.com</a></li>
+                                                <li>Glyphicons <a href="http://glyphicons.com/">http://glyphicons.com/</a></li>
+                                                <li>Splashy icons <a href="http://splashyfish.com/icons/">http://splashyfish.com/icons/</a></li>
+                                                <li>gcons icons <a href="http://www.greepit.com/open-source-icons-gcons/">http://www.greepit.com/open-source-icons-gcons/</a></li>
+                                                <li>Flag icons <a href="http://www.famfamfam.com/lab/icons/flags/">http://www.famfamfam.com/lab/icons/flags/</a></li>
+                                                <li>Google fonts <a href="http://www.google.com/webfonts">http://www.google.com/webfonts</a></li>
+                                                <li>Background patterns <a href="http://subtlepatterns.com/">http://subtlepatterns.com/</a></li>
+                                                <li>Calculator <a href="http://themeforest.net/user/maumao">maumao</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sepH_c">
+                                    <h3 class="heading">Changelog</h3>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <ul class="unstyled">
+                                                <li>v1.8.1 (15.03.2013)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>updated chosen plugin (0.9.12)</li>
+                                                        <li>fixed widget.html</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.8 (11.03.2013)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>updated jQuery (1.9.1)</li>
+                                                        <li>updated bootstrap framework (2.3.1)</li>
+                                                        <li>updated multi-select plugin (0.95)</li>
+                                                        <li>updated input mask plugin</li>
+                                                        <li>added toggle buttons</li>
+                                                        <li>added dynamic tree plugin</li>
+                                                        <li>added hint.css tooltips</li>
+                                                        <li>added click event for links in top menu</li>
+                                                        <li>fixed sidebar scroll</li>
+                                                        <li>fixed table tools issue with invisible layer</li>
+                                                        <li>fixed top bar dropdowns (mobile view)</li>
+                                                        <li>fixed some performance issues in ie8</li>
+                                                        <li>removed external links for buttons</li>
+                                                        <li>minor css/js fixes</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.7 (05.02.2013)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>updated jQuery (1.9)</li>
+                                                        <li>updated jquery UI (1.10.0)</li>
+                                                        <li>updated bootstrap framework (2.2.2)</li>
+                                                        <li>updated colorbox plugin (1.3.34)</li>
+                                                        <li>updated datatbles plugin (1.9.4)</li>
+                                                        <li>updated tag handler plugin (1.3.1)</li>
+                                                        <li>added table tools for datatables</li>
+                                                        <li>added editable elements</li>
+                                                        <li>added blog page</li>
+                                                        <li>fixed hover for top menu</li>
+                                                        <li>fixed datatables view on mobile devices</li>
+                                                        <li>changed scroller plugin (replaced by jQueryUI scroller plugin)</li>
+                                                        <li>minor css/js fixes</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.6 (05.11.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>Changed mobile menu</li>
+                                                        <li>New invoice page</li>
+                                                        <li>Updated 2 column multiselect</li>
+                                                        <li>Fixed issue with jquery cookie</li>
+                                                        <li>Fixed issue with tooltips (updated)</li>
+                                                        <li>Fixed issue with dropdowns (touch devices)</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.5 (19.09.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>Bootstrap Framework updated (v2.1.1)</li>
+                                                        <li>jQuery updated (v1.8.1)</li>
+                                                        <li>jQuery UI updated (v1.8.23)</li>
+                                                        <li>fullcalendar plugin updated (v1.5.4)</li>
+                                                        <li>datatables plugin updated (v1.9.3)</li>
+                                                        <li>fileupload and rowlink plugins updated</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.4 (30.08.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>added password strength checker plugin</li>
+                                                        <li>added "scroll to top" plugin</li>
+                                                        <li>added toolbar for pages</li>
+                                                        <li>added user avatar to top bar</li>
+                                                        <li>added fix for new Opera browser</li>
+                                                        <li>fixed sidebar bugs</li>
+                                                        <li>simplified use of style switcher</li>
+                                                        <li>fixed issue with drag&drop widgets</li>
+                                                        <li>changed login page (login box is now centered)</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.3 (25.07.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>added chat page (CLEditor plugin)</li>
+                                                        <li>added CLEditor plugin (chat page)</li>
+                                                        <li>added drag&drop feature to widget boxes</li>
+                                                        <li>added button state example</li>
+                                                        <li>added style switcher</li>
+                                                        <li>added background patterns</li>
+                                                        <li>added sub-menu to main menu</li>
+                                                        <li>added notification plugin (smoke.js)</li>
+                                                        <li>added pagination next, prev buttons for datatables</li>
+                                                        <li>added another calendar example (google calendar)</li>
+                                                        <li>added colorpicker plugin</li>
+                                                        <li>added static user page</li>
+                                                        <li>added option to move sidebar to the right</li>
+                                                        <li>added example with form elements inside modal window (fixed z-index issue)</li>
+                                                        <li>added simple calculator (contributed by maumao)</li>
+                                                        <li>added option to disable external link for single link</li>
+                                                        <li>made videos responsive</li>
+                                                        <li>updated timepicker plugin (new option: 24h or 12h)</li>
+                                                        <li>updated tinymce plugin</li>
+                                                        <li>simplified use of mouse hover event for top menu</li>
+                                                        <li>fixed datatables horizontal scroll example</li>
+                                                        <li>fixed search input in chosen plugin</li>
+                                                        <li>fixed search input for server side datatables (multiselect)</li>
+                                                        <li>fixed validation errors</li>
+                                                        <li>fixed page loader (high cpu usage)</li>
+                                                        <li>added changelog with information what files were changed/added in this update (changelog_files.html)</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.2 (22.06.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>new mailbox page (inbox, outbox, new message, message view)</li>
+                                                        <li>new widget boxes</li>
+                                                        <li>added drag&drop multiupload</li>
+                                                        <li>added scrollbar to sidebar</li>
+                                                        <li>added fixed layout option</li>
+                                                        <li>added preview for new icons</li>
+                                                        <li>added option to align dashoard quick access navigation</li>
+                                                        <li>added fix for ios orientation change</li>
+                                                        <li>improved documentation</li>
+                                                        <li>fixed small js, css bugs</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.1 (12.06.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>added 2 more colors (new colors for table header, charts, calendar events)</li>
+                                                        <li>added layout max width</li>
+                                                        <li>added mouseover as an option</li>
+                                                        <li>added mixed gallery (images and videos from youtube, vimeo, self hosted)</li>
+                                                        <li>added plus/minus icon for accordion</li>
+                                                        <li>added flag icons</li>
+                                                        <li>added dashoard quick access</li>
+                                                        <li>added drop down buttons</li>
+                                                        <li>added action button (delete,edit etc) for table</li>
+                                                        <li>added gallery table view with action button (delete,edit etc)</li>
+                                                        <li>added documentation for search results default view</li>
+                                                        <li>improved documentation</li>
+                                                        <li>fixed show/hide sidebarbar icon</li>
+                                                        <li>fixed login page validation</li>
+                                                        <li>fixed small css, js bugs</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="unstyled">
+                                                <li>v1.0 (02.06.2012)</li>
+                                                <li>
+                                                    <ul>
+                                                        <li>Initial release</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                </div>
+            </div>
+
+            <script src="js/jquery.min.js"></script>
+            <!-- smart resize event -->
+            <script src="js/jquery.debouncedresize.min.js"></script>
+            <!-- hidden elements width/height -->
+            <script src="js/jquery.actual.min.js"></script>
+            <!-- js cookie plugin -->
+            <script src="js/jquery_cookie.min.js"></script>
+            <!-- main bootstrap js -->
+            <script src="bootstrap/js/bootstrap.min.js"></script>
+            <!-- code prettifier -->
+            <script src="lib/google-code-prettify/prettify.min.js"></script>
+            <!-- tooltips -->
+            <script src="lib/qtip2/jquery.qtip.min.js"></script>
+            <!-- jBreadcrumbs -->
+            <script src="lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>
+            <!-- sticky messages -->
+            <script src="lib/sticky/sticky.min.js"></script>
+            <!-- fix for ios orientation change -->
+            <script src="js/ios-orientationchange-fix.js"></script>
+            <!-- scrollbar -->
+            <script src="lib/antiscroll/antiscroll.js"></script>
+            <script src="lib/antiscroll/jquery-mousewheel.js"></script>
+            <!-- lightbox -->
+            <script src="lib/colorbox/jquery.colorbox.min.js"></script>
+            <!-- mobile nav -->
+            <script src="js/selectNav.js"></script>
+            <!-- common functions -->
+            <script src="js/gebo_common.js"></script>
+    
+            <script>
+                $(document).ready(function() {
+                    //* show all elements & remove preloader
+                    setTimeout('$("html").removeClass("js")',1000);
+                });
+            </script>
+        
+        </div>
+    </body>
+</html>
