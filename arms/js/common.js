@@ -41,7 +41,9 @@ $(function () {
 
 });
 
-
+////////////////////////////////////////////////////////////////////////////////////////
+// DWR
+////////////////////////////////////////////////////////////////////////////////////////
 document.write('<script type="text/javascript" src="/dwr/engine.js"></script>');
 document.write('<script type="text/javascript" src="/dwr/util.js"></script>');
 document.write('<script type="text/javascript" src="/dwr/interface/Chat.js"></script>');
@@ -61,13 +63,13 @@ function dwr_callback(userId, username, message, time) {
 	const lastMessage = { userId, username, message, time };
 	saveChatHistory(userId, username, message, time);
 
-	$(".notifications.pull-right").addClass("alert-created");
+	$(".notifications").addClass("alert-created");
 	const alertDiv = $('<div/>').addClass('alert pull-right');
 	const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
 	const infoIcon = $('<i/>').addClass('fa fa-info-circle');
 	alertDiv.append(closeButton, infoIcon, lastMessage.message);
-	$(".notifications.pull-right .alert").remove();
-	$(".notifications.pull-right").append(alertDiv);
+	$(".notifications .alert").remove();
+	$(".notifications").append(alertDiv);
 }
 
 function dwr_login(userId,username){
@@ -80,8 +82,9 @@ function dwr_login(userId,username){
 
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////
 // include 레이아웃 html 파일을 로드하는 함수
+////////////////////////////////////////////////////////////////////////////////////////
 function includeLayout(page) {
 	var includeArea = $("[data-include]");
 	var self, url;
