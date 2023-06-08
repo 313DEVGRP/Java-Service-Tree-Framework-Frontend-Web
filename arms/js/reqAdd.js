@@ -7,7 +7,7 @@ var tempDataTable;
 
 function execDocReady() {
 	//좌측 메뉴
-	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist", "requirement_elements_collapse");
+	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
 
 	//신규 요구사항 등록 버튼 숨김
 	$(".newReqDiv").hide();

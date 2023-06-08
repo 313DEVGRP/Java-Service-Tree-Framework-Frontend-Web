@@ -7,7 +7,7 @@ var dataTableRef;
 
 function execDocReady() {
 	//좌측 메뉴
-	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status", "requirement_elements_collapse");
+	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
 
 	//제품(서비스) 셀렉트 박스 이니시에이터
 	makePdServiceSelectBox();

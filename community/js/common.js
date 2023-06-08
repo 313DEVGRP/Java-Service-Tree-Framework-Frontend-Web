@@ -278,7 +278,7 @@ function minValue(arr) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
-function setSideMenu(categoryName, listName, collapse) {
+function setSideMenu(categoryName, listName) {
 	console.log("setSideMenu :: categoryName → " + categoryName + ", listName → " + listName);
 	setTimeout(function () {
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });

@@ -7,10 +7,7 @@ var reqStatusDataTable;
 
 function execDocReady() {
 	//좌측 메뉴
-	setTimeout(function () {
-		$("#sidebar_menu_dashboard").css({ color: "#a4c6ff" });
-		$("#sidebar_menu_dashboard").css({ "font-weight": "900" });
-	}, 1000);
+	setSideMenu("sidebar_menu_dashboard", "");
 
 	var testData = testData(["Search", "Referral", "Direct", "Organic"], 25), // just 25 points, since there are lots of charts
 		pieSelect = d3.select("#sources-chart-pie"),

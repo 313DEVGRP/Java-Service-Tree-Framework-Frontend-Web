@@ -6,7 +6,7 @@ var reqStatusDataTable;
 
 function execDocReady() {
 	//좌측 메뉴
-	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_review", "requirement_elements_collapse");
+	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_review");
 
 	getJsonForPrototype("./mock/reviewClassify.json", makeClassifyMenus);
 

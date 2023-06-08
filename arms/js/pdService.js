@@ -13,7 +13,7 @@ var dataTableRef; // 데이터테이블 참조 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
 	// 사이드 메뉴 색상 설정
-	setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage", "product_elements_collapse");
+	setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
 
 	// 파일 업로드 관련 레이어 숨김 처리
 	$(".body-middle").hide();

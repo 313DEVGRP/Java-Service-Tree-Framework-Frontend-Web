@@ -3,9 +3,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
     //좌측 메뉴
-    setTimeout(function () {
-        $("#sidebar_menu_dashboard").css({ color: "#a4c6ff" });
-        $("#sidebar_menu_dashboard").css({ "font-weight": "900" });
-    }, 1000);
+    setSideMenu("sidebar_menu_contributors", "");
 
 }

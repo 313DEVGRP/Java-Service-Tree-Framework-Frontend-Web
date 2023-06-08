@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 사이드 메뉴 -- //
 function execDocReady() {
-	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_review", "requirement_elements_collapse");
+	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_review");
 
 	//getJsonForPrototype("./js/reviewDetailHistory.json", makeHistory);
 
