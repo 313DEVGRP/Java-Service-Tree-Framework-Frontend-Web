@@ -279,14 +279,20 @@ function minValue(arr) {
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function setSideMenu(categoryName, listName) {
-	console.log("setSideMenu :: categoryName → " + categoryName + ", listName → " + listName);
+	console.log("setSideMenu :: categoryName -> " + categoryName + ", listName -> " + listName);
 	setTimeout(function () {
-		$(`#${categoryName}`).css({ color: "#a4c6ff" });
-		$(`#${categoryName}`).css({ "font-weight": "900" });
+		var category = `${categoryName}`;
+		$("#"+category).css({ color: "#a4c6ff" });
+		$("#"+category).css({ "font-weight": "900" });
 
-		$(`#${listName}`).addClass("active");
-		$(`#${listName}`).css({ color: "#a4c6ff" });
-		$(`#${listName}`).css({ "font-weight": "900" });
+		var list = `${listName}`;
+		if( isEmpty(list) ){
+			console.log("setSideMenu :: listName is null");
+		}else{
+			$("#"+list).addClass("active");
+			$("#"+list).css({ color: "#a4c6ff" });
+			$("#"+list).css({ "font-weight": "900" });
+		}
 	}, 1000);
 }
 
