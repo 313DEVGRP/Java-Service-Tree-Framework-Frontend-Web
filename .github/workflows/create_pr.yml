@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@1.0.0
       - name: Create pull request
-        uses: thomaseizinger/create-pull-request@master
+        uses: 313DEVGRP/Java-Service-Tree-Framework-Frontend-Web@master
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           head: ${{ github.ref }}
