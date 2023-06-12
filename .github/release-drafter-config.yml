@@ -1,4 +1,4 @@
-name-template: 'v$RESOLVED_VERSION 🌈' ## 릴리즈 제목
+name-template: 'v$RESOLVED_VERSION' ## 릴리즈 제목
 tag-template: 'v$RESOLVED_VERSION' ## 태그
 categories:
   - title: '🚀 Features'
@@ -10,7 +10,7 @@ categories:
       - 'fix'
       - 'bugfix'
       - 'bug'
-  - title: '🧰 Maintenance'
+  - title: '🌈 Maintenance'
     label: 'chore'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
