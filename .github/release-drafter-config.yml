@@ -25,7 +25,7 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## 🚀 이번 버전에서는 어떤 게 바뀌었을까요?
+  ## 🚀 What has changed in this version?
   ---
   $CHANGES
-no-changes-template: '변경사항이 없습니다. 😖'
+no-changes-template: 'No changes.'
