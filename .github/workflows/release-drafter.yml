@@ -8,15 +8,30 @@ jobs:
   release-application:
     runs-on: ubuntu-latest
     steps:
-      - name: Github Release 최신 tag List
+      - name: Github Release Tag List Crawler
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GH_TOKEN }}
 
-      - name: GitHub project release 배포
+      - name: GitHub project release Deploy
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+autolabeler: # PR에 자동으로 label 붙혀주는 규칙
+  - label: 'chore'
+    files:
+      - '*.md'
+    title:
+      - '/chore/i'
+  - label: 'bug'
+    title:
+      - '/fix/i'
+      - '/hotfix/i'
+      - '/bug/i'
+  - label: 'feature'
+    title:
+      - '/feat/i'
+      - '/feature/i'
