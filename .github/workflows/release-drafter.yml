@@ -52,18 +52,3 @@ template: | # 릴리즈 내용
   ## Changes (v$RESOLVED_VERSION)
 
   $CHANGES
-autolabeler: # PR에 자동으로 label 붙혀주는 규칙
-  - label: 'chore'
-    files:
-      - '*.md'
-    title:
-      - '/chore/i'
-  - label: 'bug'
-    title:
-      - '/fix/i'
-      - '/hotfix/i'
-      - '/bug/i'
-  - label: 'feature'
-    title:
-      - '/feat/i'
-      - '/feature/i'
