@@ -1,7 +1,7 @@
 name: Release with commit
 
 on:
-  push:
+  pull_request:
     branches:
       - master
 
