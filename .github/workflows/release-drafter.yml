@@ -1,21 +1,21 @@
-# This is a basic workflow to help you get started with the GitHub Auto-Release on Commit Action.
-
-name: AutoRelease
+name: Release with commit
 
 on:
   push:
-    branches: [ master ]
-
+    branches:
+      - master
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Create a release draft for a version tag
-        id: create-release-draft
-        uses: ecampidoglio/auto-release-draft@v1
+      - uses: ChanTsune/release-with-commit@v2.8.0
         with:
-          repo-token: ${{ secrets.GH_TOKEN }}
-      - name: Print the URL of the release draft
-        if: steps.create-release-draft.outputs.release-url != ''
-        run: echo ${{ steps.create-release-draft.outputs.release-url }}
+          regexp: "Release ((\\d+([.]\\d+)*)-(alpha|beta|rc)\\d*)((\\s|\\S)*)"
+          regexp_options: "us"
+          release_name: "version $1"
+          tag_name: "v$1"
+          body: "$5"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}' # This token is provided by Actions, you do not need to create your own token
