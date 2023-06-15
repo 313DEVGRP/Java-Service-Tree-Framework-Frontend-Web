@@ -2161,3 +2161,33 @@ p[data-v-35dc3539] {
 		grid-template-columns:repeat(1,1fr)
 	}
 }
+
+.btn[data-v-d786200a] {
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 300;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid transparent;
+	white-space: nowrap;
+	padding: 4px 12px;
+	font-size: 13px;
+	line-height: 20px;
+	border-radius: 1px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+.btn-white[data-v-d786200a] {
+	background: none;
+	border: 2px solid #fff;
+	border-radius: 2px;
+}
+
+.content-section .btn[data-v-d786200a] {
+	color: #fff;
+	align-self: end;
+	margin-right: 10px;
+}
