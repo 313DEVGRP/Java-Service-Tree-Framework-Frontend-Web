@@ -895,7 +895,7 @@ select option {
 	stroke-width: 1.5px;
 }
 .node text {
-	font-size: 12px;
+	font-size: 13px;
 }
 .link {
 	fill: none;
