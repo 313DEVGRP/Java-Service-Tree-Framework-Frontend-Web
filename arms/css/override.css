@@ -910,10 +910,7 @@ select option {
 .ghostCircle.show {
 	display: block;
 }
-.ghostCircle,
-.activeDrag .ghostCircle {
-	display: none;
-}
+
 .btn:focus,
 .btn.focus,
 .btn:active:focus,
