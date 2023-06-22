@@ -22,9 +22,21 @@ function execDocReady() {
 	dataTableLoad();
 
 	// --- 에디터 설정 --- //
-	CKEDITOR.replace("input_pdservice_editor");
-	CKEDITOR.replace("extend_modal_editor");
-	CKEDITOR.replace("modal_editor");
+	window.CKEDITOR_BASEPATH = "/reference/jquery-plugins/ckeditor4-4.16.1/";
+	$.getScript("../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js").done(function (script, textStatus) {
+		var waitCKEDITOR = setInterval(function () {
+			try {
+				if (window.CKEDITOR) {
+					CKEDITOR.replace("input_pdservice_editor");
+					CKEDITOR.replace("extend_modal_editor");
+					CKEDITOR.replace("modal_editor");
+					clearInterval(waitCKEDITOR);
+				}
+			} catch (err) {
+				console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 313 /*milli*/);
+	});
 
 	$("#popup_editview_pdservice_name").tooltip();
 
