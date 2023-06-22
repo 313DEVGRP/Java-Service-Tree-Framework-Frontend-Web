@@ -883,6 +883,7 @@ select option {
 	background: rgba(0, 0, 0, 0.55) !important;
 }
 
+/* 연결차트 */
 .node {
 	cursor: pointer;
 }
