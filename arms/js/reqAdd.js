@@ -18,20 +18,23 @@ function execDocReady() {
 	makeVersionMultiSelectBox();
 
 	// --- 에디터 설정 --- //
-	window.CKEDITOR_BASEPATH = "/reference/jquery-plugins/ckeditor4-4.16.1/";
-	$.getScript("../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js").done(function (script, textStatus) {
-		var waitCKEDITOR = setInterval(function () {
-			try {
-				if (window.CKEDITOR) {
-					CKEDITOR.replace("modal_editor");
-					CKEDITOR.replace("edit_tabmodal_editor");
-					clearInterval(waitCKEDITOR);
-				}
-			} catch (err) {
-				console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
-			}
-		}, 313 /*milli*/);
-	});
+	// window.CKEDITOR_BASEPATH = "/reference/jquery-plugins/ckeditor4-4.16.1/";
+	// $.getScript("../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js").done(function (script, textStatus) {
+	// 	var waitCKEDITOR = setInterval(function () {
+	// 		try {
+	// 			if (window.CKEDITOR) {
+	// 				CKEDITOR.replace("modal_editor");
+	// 				CKEDITOR.replace("edit_tabmodal_editor");
+	// 				clearInterval(waitCKEDITOR);
+	// 			}
+	// 		} catch (err) {
+	// 			console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+	// 		}
+	// 	}, 313 /*milli*/);
+	// });
+
+	CKEDITOR.replace("modal_editor");
+	CKEDITOR.replace("edit_tabmodal_editor");
 
 	makeDatePicker($("#btn_start_calendar_popup"));
 	makeDatePicker($("#btn_end_calendar_popup"));
