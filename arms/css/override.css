@@ -17,44 +17,6 @@
 			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.svg#NanumGothic")
 			format("svg"); /* Legacy iOS */
 }
-/* nanum-gothic-800 - latin_korean */
-@font-face {
-	font-family: "Nanum Gothic";
-	font-style: normal;
-	font-weight: 800;
-	src: url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.eot"); /* IE9 Compat Modes */
-	src: local("NanumGothic ExtraBold"), local("NanumGothic-ExtraBold"),
-		url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.eot?#iefix")
-			format("embedded-opentype"),
-		/* IE6-IE8 */ url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.woff2")
-			format("woff2"),
-		/* Super Modern Browsers */
-			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.woff") format("woff"),
-		/* Modern Browsers */ url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.ttf")
-			format("truetype"),
-		/* Safari, Android, iOS */
-			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-800.svg#NanumGothic")
-			format("svg"); /* Legacy iOS */
-}
-/* nanum-gothic-700 - latin_korean */
-@font-face {
-	font-family: "Nanum Gothic";
-	font-style: normal;
-	font-weight: 700;
-	src: url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.eot"); /* IE9 Compat Modes */
-	src: local("NanumGothic Bold"), local("NanumGothic-Bold"),
-		url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.eot?#iefix")
-			format("embedded-opentype"),
-		/* IE6-IE8 */ url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.woff2")
-			format("woff2"),
-		/* Super Modern Browsers */
-			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.woff") format("woff"),
-		/* Modern Browsers */ url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.ttf")
-			format("truetype"),
-		/* Safari, Android, iOS */
-			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-700.svg#NanumGothic")
-			format("svg"); /* Legacy iOS */
-}
 html,
 body {
 	font-family: "Nanum Gothic" !important;

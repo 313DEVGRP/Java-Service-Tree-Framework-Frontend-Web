@@ -2,7 +2,7 @@
 var nv = window.nv || {};
 
 nv.version = '0.0.1a';
-nv.dev = true //set false when in production
+nv.dev = true; //set false when in production
 
 window.nv = nv;
 
@@ -282,7 +282,7 @@ nv.utils.windowResize = function(fun){
 
     window.onresize = function(e) {
         if (typeof oldresize == 'function') oldresize(e);
-        fun(e);
+        //fun(e);
     };
 }
 
