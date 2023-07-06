@@ -1,4 +1,46 @@
 @charset "UTF-8";
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local("Open Sans Light"), local("OpenSans-Light"), url(fonts/google/open-sans-light.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans"), local("OpenSans"), url(fonts/google/open-sans.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(fonts/google/open-sans-semibold.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(fonts/google/open-sans-bold.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local("Open Sans Italic"), local("OpenSans-Italic"), url(fonts/google/open-sans-italic.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300;
+  src: local("Open Sans Light Italic"), local("OpenSansLight-Italic"), url(fonts/google/open-sans-italic-light.woff) format("woff");
+}
+
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -6,6 +48,7 @@
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
+  font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -125,6 +168,7 @@ code,
 kbd,
 pre,
 samp {
+  font-family: monospace, monospace;
   font-size: 1em;
 }
 
@@ -1378,6 +1422,7 @@ html {
 }
 
 body {
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   line-height: 1.428571429;
   color: #f8f8f8;
@@ -1875,6 +1920,7 @@ code,
 kbd,
 pre,
 samp {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 code {
@@ -6905,6 +6951,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
+  font-family: "Open Sans", sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -7039,6 +7086,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
+  font-family: "Open Sans", sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -7341,6 +7389,7 @@ button.close {
   width: 20px;
   height: 20px;
   line-height: 1;
+  font-family: serif;
 }
 
 .carousel-control .icon-prev:before {
@@ -15908,6 +15957,7 @@ svg.nvd3-svg {
   border: 1px solid rgba(0, 0, 0, 0.2);
   z-index: 10000;
   display: block;
+  font-family: Arial, sans-serif;
   font-size: 13px;
   text-align: left;
   pointer-events: none;
@@ -17155,6 +17205,7 @@ select.selectpicker {
   border-color: #ccc;
   border-radius: 3px;
   color: #555;
+  font-family: "Open Sans", sans-serif;
   background-color: #fff;
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -17165,6 +17216,7 @@ select.selectpicker {
   border-color: #ccc;
   border-radius: 3px;
   color: #555;
+  font-family: "Open Sans", sans-serif;
   background-color: #fff;
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -17697,6 +17749,7 @@ select.selectpicker {
 }
 
 .rickshaw_graph .detail .x_label {
+  font-family: Arial, sans-serif;
   border-radius: 3px;
   padding: 6px;
   opacity: 0.5;
@@ -17721,6 +17774,7 @@ select.selectpicker {
   border-radius: 3px;
   padding: 0.25em;
   font-size: 12px;
+  font-family: Arial, sans-serif;
   opacity: 0;
   background: rgba(0, 0, 0, 0.4);
   color: white;
@@ -17813,6 +17867,7 @@ select.selectpicker {
 .rickshaw_graph .x_tick .title {
   position: absolute;
   font-size: 12px;
+  font-family: Arial, sans-serif;
   opacity: 0.5;
   white-space: nowrap;
   margin-left: 3px;
@@ -17970,6 +18025,7 @@ select.selectpicker {
 }
 
 .rickshaw_legend {
+  font-family: Arial;
   font-size: 12px;
   color: white;
   background: #404040;
@@ -18692,6 +18748,7 @@ ul.messenger-theme-air .messenger-spinner {
   border-radius: 3px;
   background: #292929;
   color: white;
+  font-family: sans-serif, Verdana;
   font-size: smaller;
   padding: 3px;
   pointer-events: none;
@@ -18894,6 +18951,7 @@ button::-moz-focus-inner {
   color: #FFF;
   font-style: normal;
   font-size: 28px;
+  font-family: Arial, Baskerville, monospace;
 }
 
 .mfp-close:hover, .mfp-close:focus {
@@ -19175,6 +19233,7 @@ img.mfp-img {
  */
 .nvtooltip {
   padding: 4px 10px;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
   text-align: center;
 }
@@ -19186,6 +19245,7 @@ img.mfp-img {
 
 svg text,
 .nvd3 text {
+  font: 300 12px "Open Sans", sans-serif;
   fill: #f8f8f8;
 }
 
@@ -19195,6 +19255,7 @@ svg text,
 }
 
 svg .title {
+  font: 700 13px "Open Sans", sans-serif;
 }
 
 .nvd3.nv-noData {
