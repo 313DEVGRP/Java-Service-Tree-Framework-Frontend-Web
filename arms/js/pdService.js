@@ -38,9 +38,9 @@ function execDocReady() {
 	// 	}, 313 /*milli*/);
 	// });
 
-	CKEDITOR.replace("input_pdservice_editor");
-	CKEDITOR.replace("extend_modal_editor");
-	CKEDITOR.replace("modal_editor");
+	CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" });
+	CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" });
+	CKEDITOR.replace("modal_editor",{ skin: "office2013" });
 
 	$("#popup_editview_pdservice_name").tooltip();
 
