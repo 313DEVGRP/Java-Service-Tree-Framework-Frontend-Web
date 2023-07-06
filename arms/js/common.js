@@ -20,10 +20,8 @@ $(function () {
 		if (includeLayout(page)) {
 			if (authUserCheck()) {
 				$.getScript("js/" + page + ".js", function () {
-					//setTimeout(function () {
-						/* 로그인 인증 여부 체크 함수 */
-						execDocReady();
-					//}, 313);
+					/* 로그인 인증 여부 체크 함수 */
+					execDocReady();
 				});
 			}
 		}
