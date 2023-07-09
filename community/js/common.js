@@ -910,17 +910,3 @@ function ajax_sample() {
 		}
 	});
 }
-
-//데이터 테이블 하위에 상세 리스트 보이는거 지우기
-// Enumerate all rows
-$("#hostTable")
-	.DataTable()
-	.rows()
-	.every(function () {
-		// If row has details expanded
-		if (this.child.isShown()) {
-			// Collapse row details
-			this.child.hide();
-			$(this.node()).removeClass("shown");
-		}
-	});
