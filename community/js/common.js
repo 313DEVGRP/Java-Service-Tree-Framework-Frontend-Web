@@ -16,16 +16,6 @@ $(function () {
 	var urlParams = new URL(location.href).searchParams;
 	var page = urlParams.get("page");
 
-	if (ajax_setup()) {
-		if (includeLayout(page)) {
-			$.getScript("js/" + page + ".js", function () {
-				setTimeout(function () {
-					/* 로그인 인증 여부 체크 함수 */
-					execDocReady();
-				}, 500);
-			});
-		}
-	}
 
 	var onlyContents = urlParams.get("withoutLayer");
 	if (isEmpty(onlyContents)) {
@@ -34,6 +24,26 @@ $(function () {
 		$("body").addClass("sidebar-hidden");
 		$("header.page-header").hide();
 	}
+
+	$.getStylesheet = function (href) {
+		$('<link/>', {
+			rel: 'stylesheet',
+			type: 'text/css',
+			href: href
+		}).appendTo('head');
+	};
+
+	if (ajax_setup()) {
+		if (includeLayout(page)) {
+			$.getScript("js/" + page + ".js", function () {
+				//setTimeout(function () {
+					/* 로그인 인증 여부 체크 함수 */
+					execDocReady();
+				//}, 500);
+			});
+		}
+	}
+
 });
 
 // include 레이아웃 html 파일을 로드하는 함수
