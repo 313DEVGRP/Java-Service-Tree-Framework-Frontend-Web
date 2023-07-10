@@ -111,18 +111,17 @@
             rel="stylesheet" />
 
     <!-- common libraries. required for every page-->
-    <script src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
-    <script src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
-    <script src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
 
-    <script src="../reference/lightblue4/docs/js/app.js"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/js/app.js"></script>
     <!-- page interaction -->
-    <script src="../reference/jquery-plugins/topbar.js"></script>
+    <script type="text/javascript" src="../reference/jquery-plugins/topbar.js"></script>
 
     <!-- page js -->
-    <script type="text/javascript"
-            src="js/common.js"
-            charset="utf-8"></script>
+    <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
 </head>
 
 <body style="overflow-x: hidden">
@@ -184,24 +183,6 @@
             <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
         </div>
     </div>
-</script>
-
-<!-- page specific scripts -->
-<script type="text/template"
-        id="sidebar-settings-template">
-    <% auto = sidebarState == 'auto'%>
-    <% if (auto) {%>
-    <button type="button"
-            data-value="icons"
-            class="btn-icons btn btn-transparent btn-sm">Icons</button>
-    <button type="button"
-            data-value="auto"
-            class="btn-auto btn btn-transparent btn-sm">Auto</button>
-    <%} else {%>
-    <button type="button"
-            data-value="auto"
-            class="btn btn-transparent btn-sm">Auto</button>
-    <% } %>
 </script>
 
 <!-- page template -->
