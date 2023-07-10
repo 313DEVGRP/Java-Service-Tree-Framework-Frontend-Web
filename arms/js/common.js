@@ -14,15 +14,49 @@ $(function () {
 	rightBottomTopForwardIcon();
 
 	var urlParams = new URL(location.href).searchParams;
-	var page = urlParams.get("page");
+	var onlyContents = urlParams.get("withoutLayer");
+	if (isEmpty(onlyContents)) {
+		$("body").removeAttr("class");
+	} else {
+		$("body").addClass("sidebar-hidden");
+		$("header.page-header").hide();
+	}
+
+	$.getStylesheet = function(href) {
+		$("<link/>", {
+			rel: "stylesheet",
+			type: "text/css",
+			href: href
+		}).appendTo("head");
+	};
+
+	$.getJavascript = function(href) {
+		$.ajax({
+			url: href,
+			dataType: "script",
+			async: false,
+			cache: true
+		});
+	};
 
 	if (ajax_setup()) {
+		var page = urlParams.get("page");
 		if (includeLayout(page)) {
-			if (authUserCheck()) {
+			var str = window.location.href;
+			if (str.indexOf("community") > 0) {
 				$.getScript("js/" + page + ".js", function () {
 					/* 로그인 인증 여부 체크 함수 */
 					execDocReady();
 				});
+			} else if (str.indexOf("arms") > 0) {
+				if (authUserCheck()) {
+					$.getScript("js/" + page + ".js", function () {
+						/* 로그인 인증 여부 체크 함수 */
+						execDocReady();
+					});
+				}
+			} else {
+				alert("who are you?");
 			}
 		}
 	}
@@ -330,10 +364,14 @@ function setSideMenu(categoryName, listName, collapse) {
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });
 		$(`#${categoryName}`).css({ "font-weight": "900" });
 
-		$(`#${listName}`).addClass("active");
-		$(`#${listName}`).css({ color: "#a4c6ff" });
-		$(`#${listName}`).css({ "font-weight": "900" });
-	}, 1000);
+		if(isEmpty(listName)){
+			console.log("listName → is null");
+		}else{
+			$(`#${listName}`).addClass("active");
+			$(`#${listName}`).css({ color: "#a4c6ff" });
+			$(`#${listName}`).css({ "font-weight": "900" });
+		}
+	}, 313);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -952,18 +990,19 @@ function ajax_sample() {
 }
 
 //데이터 테이블 하위에 상세 리스트 보이는거 지우기
-// Enumerate all rows
-$("#hostTable")
-	.DataTable()
-	.rows()
-	.every(function () {
-		// If row has details expanded
-		if (this.child.isShown()) {
-			// Collapse row details
-			this.child.hide();
-			$(this.node()).removeClass("shown");
-		}
-	});
+function hideDetail_Datagrid() {
+	$("#hostTable")
+		.DataTable()
+		.rows()
+		.every(function () {
+			// If row has details expanded
+			if (this.child.isShown()) {
+				// Collapse row details
+				this.child.hide();
+				$(this.node()).removeClass("shown");
+			}
+		});
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////

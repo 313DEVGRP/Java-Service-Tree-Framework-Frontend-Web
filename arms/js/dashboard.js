@@ -6,40 +6,44 @@ var reqStatusDataTable;
 
 
 function execDocReady() {
-	//좌측 메뉴
-	setTimeout(function () {
-		$("#sidebar_menu_dashboard").css({ color: "#a4c6ff" });
-		$("#sidebar_menu_dashboard").css({ "font-weight": "900" });
-	}, 1000);
 
-	function tsExample(){
-		// interface IPerson {
-		// 	name: String
-		// 	age: Number
-		// 	marry: Boolean
-		// 	family?: Object
-		// 	hobby?: any
-		// 	dead?: undefined
-		// }
+	$.when(
+		// $.getJavascript("../reference/light-blue/lib/vendor/jquery.ui.widget.js"),
+		// $.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js"),
+		// $.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js"),
+		// $.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js"),
+		// $.getJavascript("../reference/light-blue/lib/jquery.iframe-transport.js"),
+		// $.getJavascript("../reference/light-blue/lib/jquery.fileupload.js"),
+		// $.getJavascript("../reference/light-blue/lib/jquery.fileupload-fp.js"),
+		// $.getJavascript("../reference/light-blue/lib/jquery.fileupload-ui.js"),
 
+		// $.getJavascript("../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"),
 
-		// class PersonImp implements IPerson{
-		// 	// IPerson 을 인용해서,
-		// 	// interface에 쓴 값을 다시 constructor안에 선언하는 이유는 interface에 선언한 값은 ~한 속성이 있어야 한다는 규약일뿐 선언된건 없음,
-		// 	// class 몸통엔 반드시 멤버속성이 등록되어 있어야 하므로 constructor안에 값을 써 줘야 사용 가능함.
-		// 	constructor(public name: string, public age : number , public marry : Boolean, public family? : Object, public	hobby?: any,
-		// 		public dead?: undefined ){}
-		// }
+		// $.getJavascript("../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js"),
+		// $.getJavascript("../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js"),
+		// $.getJavascript("../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"),
+		// $.getJavascript("../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js"),
+		// $.getStylesheet("../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css"),
 
-		// let jeck: IPerson = {name: 'jeck', age:18, marry: false}
-		// let {name , age} = jeck
-		// console.log(name, age) // jeck, 18
+		// $.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
+		// $.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
+		// $.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
+		// $.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js")
+		//$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
+		//$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"),
+		//$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js")
+	).done(function() {
 
-		// // 타입변환
-		// const num: number = 123;
-		// const str: string = num as string; // num 변수를 string 타입으로 변환
+		//좌측 메뉴
+		setSideMenu("sidebar_menu_dashboard", "");
+	});
 
-	}
 
 }
 var testData = testData(['Search', 'Referral', 'Direct', 'Organic'],

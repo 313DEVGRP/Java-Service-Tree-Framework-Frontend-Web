@@ -107,7 +107,7 @@
             href="../reference/lightblue4/docs/css/application.min.css"
             rel="stylesheet" />
     <link
-            href="../arms/css/override.css"
+            href="css/override.css"
             rel="stylesheet" />
 
     <!-- common libraries. required for every page-->
@@ -125,88 +125,58 @@
 </head>
 
 <body style="overflow-x: hidden">
-<div    class="logo"
+<div
+        class="logo"
         data-include="html/template/page-logo.html"
-        style="left: 50px !important; position: absolute !important"></div>
+        style="left: 35px !important; position: absolute !important"></div>
 
-<nav    id="sidebar"
+<nav
+        id="sidebar"
         class="sidebar nav-collapse collapse"
         data-include="html/template/page-sidebar.html"></nav>
 
 <div class="wrap">
-    <header class="page-header"
+    <header
+            class="page-header"
             data-include="html/template/page-header.html"></header>
 
     <div class="content container">
-        <section    class="widgetheader"
-                    data-include="html/template/content-header.html"></section>
+        <section
+                class="widgetheader"
+                data-include="html/template/content-header.html"></section>
 
-        <div    class="row"
+        <div
+                class="row"
                 data-include="html/template/content-container.html"></div>
 
-        <footer class="content-footer pull-right"
+        <footer
+                class="content-footer pull-right"
                 data-include="html/template/content-footer.html"></footer>
     </div>
 </div>
 
-<div    class="loader animated fadeIn darkBack hide"
+<div
+        class="loader animated fadeIn darkBack hide"
         style="z-index: 999999">
-			<span   class="spinner"
+			<span
+                    class="spinner"
                     style="font-size: 13px !important">
 				<i class="fa fa-spinner fa-spin"></i>
 				데이터를 처리 중입니다.
 			</span>
 </div>
 
-<div    id="topicon"
+<div
+        id="topicon"
         style="opacity: 1">
-    <img    src="./img/topicon.gif"
+    <img
+            src="./img/topicon.gif"
             alt="맨위로" />
 </div>
 
-<!-- common templates -->
-<script type="text/template"
-        id="settings-template">
-    <div class="setting clearfix">
-        <div>Sidebar on the</div>
-        <div id="sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
-            <% onRight = sidebar == 'right'%>
-            <button type="button" data-value="left" class="btn btn-sm btn-default <%= onRight? '' : 'active' %>">Left</button>
-            <button type="button" data-value="right" class="btn btn-sm btn-default <%= onRight? 'active' : '' %>">Right</button>
-        </div>
-    </div>
-    <div class="setting clearfix">
-        <div>Sidebar</div>
-        <div id="display-sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
-            <% display = displaySidebar%>
-            <button type="button" data-value="true" class="btn btn-sm btn-default <%= display? 'active' : '' %>">Show</button>
-            <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
-        </div>
-    </div>
-</script>
-
-<!-- page template -->
-<script type="text/template"
-        id="message-template">
-    <div class="sender pull-left">
-        <div class="icon">
-            <img src="img/avatars/2.png" class="img-circle" alt="">
-        </div>
-        <div class="time">
-            just now
-        </div>
-    </div>
-    <div class="chat-message-body">
-        <span class="arrow"></span>
-        <div class="sender"><a href="#">Tikhon Laninga</a></div>
-        <div class="text">
-            <%- text %>
-        </div>
-    </div>
-</script>
-
 <!-- upload template -->
-<script id="template-upload"
+<script
+        id="template-upload"
         type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-upload fade">
@@ -241,7 +211,8 @@
 		</script>
 
 <!-- The template to display files available for download -->
-<script id="template-download"
+<script
+        id="template-download"
         type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-download fade">
@@ -269,5 +240,6 @@
 			</tr>
 			{% } %}
 		</script>
+
 </body>
 </html>

@@ -147,99 +147,17 @@
                 rel="stylesheet" />
 
         <!-- common libraries. required for every page-->
-        <script src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
-        <script src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
-        <script src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
 
+        <script type="text/javascript" src="../reference/lightblue4/docs/js/app.js"></script>
         <!-- page interaction -->
-        <script src="../reference/jquery-plugins/topbar.js"></script>
-
-        <script src="../reference/lightblue4/docs/js/app.js"></script>
-
-        <!-- JSTREE -->
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js"
-                charset="utf-8"></script>
-        <link   rel="stylesheet"
-                type="text/css"
-                href="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css"
-                media="screen" />
-
-        <!-- dataTable -->
-        <link   rel="stylesheet"
-                type="text/css"
-                href="../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"
-                media="screen" />
-        <link   rel="stylesheet"
-                type="text/css"
-                href="../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"
-                media="screen" />
-        <link   rel="stylesheet"
-                type="text/css"
-                href="../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"
-                media="screen" />
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowGroup.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.min.js"
-                charset="utf-8"></script>
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
-                charset="utf-8"></script>
-        <!--        <script type="text/javascript"-->
-        <!--                src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"-->
-        <!--                charset="utf-8"></script>-->
-        <!--        <script-->
-        <!--        	type="text/javascript"-->
-        <!--        	src="../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"-->
-        <!--        	charset="utf-8"></script>-->
-
-        <!-- ckeditor4 -->
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js"
-                charset="utf-8"></script>
-
-        <!-- multiselect -->
-        <link   rel="stylesheet"
-                type="text/css"
-                href="../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"
-                media="screen" />
-        <script type="text/javascript"
-                src="../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"
-                charset="utf-8"></script>
-
-        <!-- type effect -->
-        <script src="../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"></script>
+        <script type="text/javascript" src="../reference/jquery-plugins/topbar.js"></script>
 
         <!-- page js -->
-        <script type="text/javascript"
-                src="js/common.js"
-                charset="utf-8"></script>
+        <script type="text/javascript" src="../arms/js/common.js" charset="utf-8"></script>
 	</head>
 
 	<body style="overflow-x: hidden">
@@ -291,68 +209,6 @@
 				src="./img/topicon.gif"
 				alt="맨위로" />
 		</div>
-
-		<!-- common templates -->
-		<script
-			type="text/template"
-			id="settings-template">
-			<div class="setting clearfix">
-			    <div>Sidebar on the</div>
-			    <div id="sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
-			        <% onRight = sidebar == 'right'%>
-			        <button type="button" data-value="left" class="btn btn-sm btn-default <%= onRight? '' : 'active' %>">Left</button>
-			        <button type="button" data-value="right" class="btn btn-sm btn-default <%= onRight? 'active' : '' %>">Right</button>
-			    </div>
-			</div>
-			<div class="setting clearfix">
-			    <div>Sidebar</div>
-			    <div id="display-sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
-			        <% display = displaySidebar%>
-			        <button type="button" data-value="true" class="btn btn-sm btn-default <%= display? 'active' : '' %>">Show</button>
-			        <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
-			    </div>
-			</div>
-		</script>
-
-		<!-- page specific scripts -->
-		<script
-			type="text/template"
-			id="sidebar-settings-template">
-			<% auto = sidebarState == 'auto'%>
-			<% if (auto) {%>
-			<button type="button"
-			        data-value="icons"
-			        class="btn-icons btn btn-transparent btn-sm">Icons</button>
-			<button type="button"
-			        data-value="auto"
-			        class="btn-auto btn btn-transparent btn-sm">Auto</button>
-			<%} else {%>
-			<button type="button"
-			        data-value="auto"
-			        class="btn btn-transparent btn-sm">Auto</button>
-			<% } %>
-		</script>
-
-		<!-- page template -->
-		<script
-			type="text/template"
-			id="message-template">
-			<div class="sender pull-left">
-			    <div class="icon">
-			        <img src="img/avatars/2.png" class="img-circle" alt="">
-			    </div>
-			    <div class="time">
-			        just now
-			    </div>
-			</div>
-			<div class="chat-message-body">
-			    <span class="arrow"></span>
-			    <div class="sender"><a href="#">Tikhon Laninga</a></div>
-			    <div class="text">
-			        <%- text %>
-			    </div>
-			</div>
-		</script>
 
 		<!-- upload template -->
 		<script
