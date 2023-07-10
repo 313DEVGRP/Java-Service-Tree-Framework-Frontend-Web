@@ -145,6 +145,13 @@
 			href="./img/313_logo.ico"
 			type="image/x-icon" />
 
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="../reference/jquery-plugins/html5shiv.js"></script>
+            <script src="../reference/jquery-plugins/respond.js"></script>
+        <![endif]-->
+
 		<link
 			href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
 			rel="stylesheet" />
@@ -155,12 +162,16 @@
 			href="css/override.css"
 			rel="stylesheet" />
 
-		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-			<script src="../reference/jquery-plugins/html5shiv.js"></script>
-			<script src="../reference/jquery-plugins/respond.js"></script>
-		<![endif]-->
+        <!-- jquery and friends -->
+        <script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
+
+        <!-- bootstrap default plugins -->
+        <script src="../reference/light-blue/lib/bootstrap/transition.js"></script>
+        <script src="../reference/light-blue/lib/bootstrap/carousel.js"></script>
+
+        <!-- page specific -->
+        <script src="../reference/light-blue/js/landing.js"></script>
+
 	</head>
 	<body class="background landing">
 		<div class="container">
@@ -499,15 +510,5 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- jquery and friends -->
-		<script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
-
-		<!-- bootstrap default plugins -->
-		<script src="../reference/light-blue/lib/bootstrap/transition.js"></script>
-		<script src="../reference/light-blue/lib/bootstrap/carousel.js"></script>
-
-		<!-- page specific -->
-		<script src="../reference/light-blue/js/landing.js"></script>
 	</body>
 </html>

@@ -103,171 +103,370 @@
             href="./img/313_logo.ico"
             type="image/x-icon" />
 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="../reference/jquery-plugins/html5shiv.js"></script>
+        <script src="../reference/jquery-plugins/respond.js"></script>
+    <![endif]-->
+
     <link
-            href="../reference/lightblue4/docs/css/application.min.css"
+            href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
             rel="stylesheet" />
     <link
-            href="../arms/css/override.css"
+            href="../reference/light-blue/css/application.min.css"
+            rel="stylesheet" />
+    <link
+            href="css/override.css"
             rel="stylesheet" />
 
-    <!-- common libraries. required for every page-->
-    <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js"></script>
-    <script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
+    <!-- jquery and friends -->
+    <script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
 
-    <script type="text/javascript" src="../reference/lightblue4/docs/js/app.js"></script>
-    <!-- page interaction -->
-    <script type="text/javascript" src="../reference/jquery-plugins/topbar.js"></script>
+    <!-- bootstrap default plugins -->
+    <script src="../reference/light-blue/lib/bootstrap/transition.js"></script>
+    <script src="../reference/light-blue/lib/bootstrap/carousel.js"></script>
 
-    <!-- page js -->
-    <script type="text/javascript" src="../arms/js/common.js" charset="utf-8"></script>
+    <!-- page specific -->
+    <script src="../reference/light-blue/js/landing.js"></script>
 </head>
-
-<body style="overflow-x: hidden">
-<div    class="logo"
-        data-include="html/template/page-logo.html"
-        style="left: 50px !important; position: absolute !important"></div>
-
-<nav    id="sidebar"
-        class="sidebar nav-collapse collapse"
-        data-include="html/template/page-sidebar.html"></nav>
-
-<div class="wrap">
-    <header class="page-header"
-            data-include="html/template/page-header.html"></header>
-
-    <div class="content container">
-        <section    class="widgetheader"
-                    data-include="html/template/content-header.html"></section>
-
-        <div    class="row"
-                data-include="html/template/content-container.html"></div>
-
-        <footer class="content-footer pull-right"
-                data-include="html/template/content-footer.html"></footer>
+<body class="background landing">
+<div class="container">
+    <header class="page-header">
+        <div class="navbar">
+            <div class="logo pull-left">
+                <h4>
+                    <a href="index.html">
+                        <img
+                                src="./img/313_logo.png"
+                                width="170px" />
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <div
+                id="carousel-landing"
+                class="carousel slide carousel-landing carousel-fade">
+            <ol class="carousel-indicators">
+                <li
+                        data-target="#carousel-landing"
+                        data-slide-to="0"
+                        class="active"></li>
+                <li
+                        data-target="#carousel-landing"
+                        data-slide-to="1"
+                        class=""></li>
+                <li
+                        data-target="#carousel-landing"
+                        data-slide-to="2"
+                        class=""></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="animated fadeInLeftBig">
+                                <h1
+                                        class="slide-one-header"
+                                        style="font-size: 17px !important">
+                                    <strong>aRMS</strong>
+                                    <span>는</span>
+                                </h1>
+                                <p class="hidden-xs">
+                                    <strong>제품(서비스)</strong>
+                                    관점의 JIRA 전용 RMS 입니다.
+                                </p>
+                                <p class="hidden-xs">
+                                    제품(서비스) 중심으로 Jira Project를 분석하고,
+                                    <br />
+                                    제품(서비스) 중심으로 요구사항을 Jira Project 에 전파합니다.
+                                </p>
+                                <br />
+                                <p>
+                                    <a
+                                            href="template.html?page=dashboard"
+                                            class="btn btn-lg btn-white">
+                                        Preview &nbsp;
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                    <a
+                                            href="http://www.313.co.kr"
+                                            class="btn btn-lg btn-transparent">
+                                        Contact us &nbsp;
+                                        <i class="fa eicon-qq"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="text-align-center animated fadeInRightBig">
+                                <img
+                                        src="../reference/light-blue/img/jpeg/light-blue-preview-1.png"
+                                        alt="Second slide" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <h1
+                            class="slide-two-header text-align-center animated fadeInDown"
+                            style="font-size: 24px !important">
+                        <strong>aRMS</strong>
+                        <span class="font16">는</span>
+                        제품(서비스) 관점
+                        <span class="font16">으로</span>
+                        <strong>다양한 분석 지표</strong>
+                        <span class="font16">를 지속적으로 업데이트 및 제공합니다.</span>
+                    </h1>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="animated fadeInLeftBig">
+                                <p>
+                                    <a href="template.html?page=dashboard">
+                                        <img
+                                                src="../reference/light-blue/img/jpeg/light-blue-laptop-transparent.png"
+                                                alt="" />
+                                    </a>
+                                </p>
+                                <p class="text-align-center">
+                                    <a
+                                            href="template.html?page=dashboard"
+                                            class="btn btn-transparent btn-lg btn-version-preview">
+                                        Preview &nbsp;
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="animated fadeInRightBig">
+                                <p>
+                                    <a href="http://www.313.co.kr">
+                                        <img
+                                                src="../reference/light-blue/img/jpeg/light-blue-laptop-white.png"
+                                                alt="" />
+                                    </a>
+                                </p>
+                                <p class="text-align-center">
+                                    <a
+                                            href="http://www.313.co.kr"
+                                            class="btn btn-white btn-lg btn-version-preview">
+                                        Contact us &nbsp;
+                                        <i class="fa eicon-qq"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="animated fadeInLeft">
+                                <h1
+                                        class="slide-three-header"
+                                        style="font-size: 17px !important">
+                                    Jira를 쓰고 계십니까?
+                                    <br />
+                                    <br />
+                                    제품(서비스)를 만들고 계십니까?
+                                    <br />
+                                    <br />
+                                    <strong>aRMS가 필요합니다.!</strong>
+                                    <br />
+                                    <br />
+                                    제품(서비스)의 요구사항을 관리 하고,
+                                    <br />
+                                    <br />
+                                    제품(서비스)의 진척도를 확인 하고,
+                                    <br />
+                                    <br />
+                                    제품(서비스)의 출시를 결정 할 수 있습니다.
+                                </h1>
+                                <p>
+                                    <a
+                                            href="template.html?page=dashboard"
+                                            class="btn btn-white btn-lg"
+                                            target="_blank">
+                                        Test It
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <p
+                                    class="animated fadeInUp"
+                                    style="margin-top: 20px">
+                                <img
+                                        src="../reference/light-blue/img/jpeg/light-blue-phone.png"
+                                        alt="" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a
+                    class="left carousel-control carousel-control-landing"
+                    href="#carousel-landing"
+                    data-slide="prev">
+                <span class="icon-prev"></span>
+            </a>
+            <a
+                    class="right carousel-control carousel-control-landing"
+                    href="#carousel-landing"
+                    data-slide="next">
+                <span class="icon-next"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div
+        id="about"
+        class="widget widget-white widget-about">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <h2>
+                    atlassian
+                    <strong>RMS</strong>
+                </h2>
+                <p>
+                    atlassian
+                    <strong>Requirements Managment System</strong>
+                    은 전세계에서 유일한 Jira 를 기반한 요구사항 관리 시스템입니다.
+                </p>
+                <div class="row features">
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+												<span class="icon background-danger">
+													<i class="fa fa-bold"></i>
+												</span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Scope</h4>
+                                    <p>제품(서비스)의 요구사항이 Jira의 END USER 까지 공유</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+												<span class="icon background-warning">
+													<i class="fa fa-magic"></i>
+												</span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Cost</h4>
+                                    <p>
+                                        제품(서비스)의 Jira 분석
+                                        <br />
+                                        &#10132; 정확한 Resource 통계
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+												<span class="icon background-success">
+													<i class="fa fa-wrench"></i>
+												</span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Time</h4>
+                                    <p>
+                                        제품(서비스) Jira Project 맵핑
+                                        <br />
+                                        &#10132; 실질적인 진척도 측정
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="row features">
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+												<span class="icon background-primary">
+													<i class="fa fa-superscript"></i>
+												</span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>제품(서비스)</h4>
+                                    <p>
+                                        aRMS는 제품과 서비스를 기준
+                                        <br />
+                                        &#10132; 데이터를 구조화 합니다.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+												<span class="icon background-lime">
+													<i class="fa fa-check"></i>
+												</span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>요구사항</h4>
+                                    <p>
+                                        ARMS는 제품과 서비스를 기준
+                                        <br />
+                                        &#10132; 요구사항을 관리합니다.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+												<span class="icon background-info">
+													<i class="fa fa-css3"></i>
+												</span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Test(QA)</h4>
+                                    <p>
+                                        ARMS는 제품과 서비스를 기준
+                                        <br />
+                                        &#10132; 요구사항의 테스트를 관리
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div    class="loader animated fadeIn darkBack hide"
-        style="z-index: 999999">
-			<span   class="spinner"
-                    style="font-size: 13px !important">
-				<i class="fa fa-spinner fa-spin"></i>
-				데이터를 처리 중입니다.
-			</span>
-</div>
-
-<div    id="topicon"
-        style="opacity: 1">
-    <img    src="./img/topicon.gif"
-            alt="맨위로" />
-</div>
-
-<!-- common templates -->
-<script type="text/template"
-        id="settings-template">
-    <div class="setting clearfix">
-        <div>Sidebar on the</div>
-        <div id="sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
-            <% onRight = sidebar == 'right'%>
-            <button type="button" data-value="left" class="btn btn-sm btn-default <%= onRight? '' : 'active' %>">Left</button>
-            <button type="button" data-value="right" class="btn btn-sm btn-default <%= onRight? 'active' : '' %>">Right</button>
-        </div>
-    </div>
-    <div class="setting clearfix">
-        <div>Sidebar</div>
-        <div id="display-sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
-            <% display = displaySidebar%>
-            <button type="button" data-value="true" class="btn btn-sm btn-default <%= display? 'active' : '' %>">Show</button>
-            <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
-        </div>
-    </div>
-</script>
-
-<!-- page template -->
-<script type="text/template"
-        id="message-template">
-    <div class="sender pull-left">
-        <div class="icon">
-            <img src="img/avatars/2.png" class="img-circle" alt="">
-        </div>
-        <div class="time">
-            just now
-        </div>
-    </div>
-    <div class="chat-message-body">
-        <span class="arrow"></span>
-        <div class="sender"><a href="#">Tikhon Laninga</a></div>
-        <div class="text">
-            <%- text %>
-        </div>
-    </div>
-</script>
-
-<!-- upload template -->
-<script id="template-upload"
-        type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
-			<tr class="template-upload fade">
-			    <td class="preview"><span class="fade"></span></td>
-			    <td class="name"><span>{%=file.name%}</span></td>
-			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-			    {% if (file.error) { %}
-			    <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-			    {% } else if (o.files.valid && !i) { %}
-			    <td>
-			        <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-			            <div class="bar" style="width:0%;"></div>
-			        </div>
-			    </td>
-			    <td>{% if (!o.options.autoUpload) { %}
-			        <button class="btn btn-primary btn-sm start">
-			            <i class="fa fa-upload"></i>
-			            <span>Start</span>
-			        </button>
-			        {% } %}</td>
-			    {% } else { %}
-			    <td colspan="2"></td>
-			    {% } %}
-			    <td>{% if (!i) { %}
-			        <button class="btn btn-warning btn-sm cancel">
-			            <i class="fa fa-ban"></i>
-			            <span>Cancel</span>
-			        </button>
-			        {% } %}</td>
-			</tr>
-			{% } %}
-		</script>
-
-<!-- The template to display files available for download -->
-<script id="template-download"
-        type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
-			<tr class="template-download fade">
-			    {% if (file.error) { %}
-			    <td></td>
-			    <td class="name"><span>{%=file.name%}</span></td>
-			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-			    <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-			    {% } else { %}
-			    <td class="preview">{% if (file.thumbnail_url) { %}
-			        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
-			        {% } %}</td>
-			    <td class="name">
-			        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
-			    </td>
-			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-			    <td colspan="2"></td>
-			    {% } %}
-			    <td>
-			        <button class="btn btn-danger btn-sm delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-			        <i class="fa fa-trash"></i>
-			        <span>Delete</span>
-			        </button>
-			    </td>
-			</tr>
-			{% } %}
-		</script>
 </body>
 </html>
