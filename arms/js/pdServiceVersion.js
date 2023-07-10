@@ -44,8 +44,19 @@ function execDocReady() {
 		});
 
 		// --- 에디터 설정 --- //
-		CKEDITOR.replace("input_pdservice_editor");
-		CKEDITOR.replace("extend_modal_editor");
+		var waitCKEDITOR = setInterval(function () {
+			try {
+				if (window.CKEDITOR) {
+					if(window.CKEDITOR.status == "loaded") {
+						CKEDITOR.replace("input_pdservice_editor", {skin: "office2013"});
+						CKEDITOR.replace("extend_modal_editor", {skin: "office2013"});
+						clearInterval(waitCKEDITOR);
+					}
+				}
+			} catch (err) {
+				console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 313 /*milli*/);
 
 		$("#input_pdservice_start_date").datetimepicker({
 			allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]

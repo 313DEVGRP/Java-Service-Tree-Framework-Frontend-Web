@@ -61,8 +61,20 @@ function execDocReady() {
 		//버전 멀티 셀렉트 박스 이니시에이터
 		makeVersionMultiSelectBox();
 
-		CKEDITOR.replace("modal_editor");
-		CKEDITOR.replace("edit_tabmodal_editor");
+		// --- 에디터 설정 --- //
+		var waitCKEDITOR = setInterval(function () {
+			try {
+				if (window.CKEDITOR) {
+					if(window.CKEDITOR.status == "loaded") {
+						CKEDITOR.replace("modal_editor", {skin: "office2013"});
+						CKEDITOR.replace("edit_tabmodal_editor", {skin: "office2013"});
+						clearInterval(waitCKEDITOR);
+					}
+				}
+			} catch (err) {
+				console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 313 /*milli*/);
 
 		makeDatePicker($("#btn_start_calendar_popup"));
 		makeDatePicker($("#btn_end_calendar_popup"));

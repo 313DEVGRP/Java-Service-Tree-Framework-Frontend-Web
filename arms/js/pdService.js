@@ -43,6 +43,7 @@ function execDocReady() {
 		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
 		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
 		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js")
+
 	).done(function() {
 
 		// 사이드 메뉴 색상 설정
@@ -55,9 +56,20 @@ function execDocReady() {
 		dataTableLoad();
 
 		// --- 에디터 설정 --- //
-		CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" });
-		CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" });
-		CKEDITOR.replace("modal_editor",{ skin: "office2013" });
+		var waitCKEDITOR = setInterval(function () {
+			try {
+				if (window.CKEDITOR) {
+					if(window.CKEDITOR.status == "loaded"){
+						CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" });
+						CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" });
+						CKEDITOR.replace("modal_editor",{ skin: "office2013" });
+						clearInterval(waitCKEDITOR);
+					}
+				}
+			} catch (err) {
+				console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 313 /*milli*/);
 
 		$("#popup_editview_pdservice_name").tooltip();
 
