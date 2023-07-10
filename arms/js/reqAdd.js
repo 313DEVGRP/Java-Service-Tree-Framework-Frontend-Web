@@ -6,38 +6,75 @@ var defaultTypeDataTable;
 var tempDataTable;
 
 function execDocReady() {
-	//좌측 메뉴
-	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
 
-	//신규 요구사항 등록 버튼 숨김
-	$(".newReqDiv").hide();
 
-	//제품(서비스) 셀렉트 박스 이니시에이터
-	makePdServiceSelectBox();
-	//버전 멀티 셀렉트 박스 이니시에이터
-	makeVersionMultiSelectBox();
+	$.when(
+		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js"),
+		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js"),
+		$.getJavascript(
+			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js"
+		),
+		$.getJavascript("../reference/light-blue/lib/jquery.iframe-transport.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.fileupload.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.fileupload-fp.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.fileupload-ui.js"),
 
-	// --- 에디터 설정 --- //
-	// window.CKEDITOR_BASEPATH = "/reference/jquery-plugins/ckeditor4-4.16.1/";
-	// $.getScript("../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js").done(function (script, textStatus) {
-	// 	var waitCKEDITOR = setInterval(function () {
-	// 		try {
-	// 			if (window.CKEDITOR) {
-	// 				CKEDITOR.replace("modal_editor");
-	// 				CKEDITOR.replace("edit_tabmodal_editor");
-	// 				clearInterval(waitCKEDITOR);
-	// 			}
-	// 		} catch (err) {
-	// 			console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
-	// 		}
-	// 	}, 313 /*milli*/);
-	// });
+		$.getJavascript("../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"),
 
-	CKEDITOR.replace("modal_editor");
-	CKEDITOR.replace("edit_tabmodal_editor");
+		$.getJavascript("../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"),
 
-	makeDatePicker($("#btn_start_calendar_popup"));
-	makeDatePicker($("#btn_end_calendar_popup"));
+		$.getJavascript("../reference/light-blue/lib/bootstrap-datepicker.js"),
+		$.getStylesheet("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css"),
+		$.getJavascript("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"),
+
+		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
+		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
+		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
+		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
+
+		$.getJavascript("../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js"),
+		$.getJavascript("../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js"),
+		$.getJavascript("../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"),
+		$.getJavascript("../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js"),
+		$.getStylesheet("../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css"),
+
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js")
+	).done(function() {
+
+		//좌측 메뉴
+		setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
+
+		//신규 요구사항 등록 버튼 숨김
+		$(".newReqDiv").hide();
+
+		//제품(서비스) 셀렉트 박스 이니시에이터
+		makePdServiceSelectBox();
+		//버전 멀티 셀렉트 박스 이니시에이터
+		makeVersionMultiSelectBox();
+
+		CKEDITOR.replace("modal_editor");
+		CKEDITOR.replace("edit_tabmodal_editor");
+
+		makeDatePicker($("#btn_start_calendar_popup"));
+		makeDatePicker($("#btn_end_calendar_popup"));
+
+		autoCompleteForUser();
+	});
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -740,42 +777,45 @@ function setDocViewTab() {
 ///////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 설정 --- //
 ///////////////////////////////////////////////////////////////////////////////
-$(".js-data-example-ajax").select2({
-	maximumSelectionLength: 5,
-	width: "resolve",
-	ajax: {
-		url: function (params) {
-			return "/auth-check/getUsers/" + params.term;
-		},
-		dataType: "json",
-		delay: 250,
-		//data: function (params) {
-		//    return {
-		//        q: params.term, // search term
-		//        page: params.page,
-		//    };
-		//},
-		processResults: function (data, params) {
-			// parse the results into the format expected by Select2
-			// since we are using custom formatting functions we do not need to
-			// alter the remote JSON data, except to indicate that infinite
-			// scrolling can be used
-			params.page = params.page || 1;
+function autoCompleteForUser(){
+	$(".js-data-example-ajax").select2({
+		maximumSelectionLength: 5,
+		width: "resolve",
+		ajax: {
+			url: function (params) {
+				return "/auth-check/getUsers/" + params.term;
+			},
+			dataType: "json",
+			delay: 250,
+			//data: function (params) {
+			//    return {
+			//        q: params.term, // search term
+			//        page: params.page,
+			//    };
+			//},
+			processResults: function (data, params) {
+				// parse the results into the format expected by Select2
+				// since we are using custom formatting functions we do not need to
+				// alter the remote JSON data, except to indicate that infinite
+				// scrolling can be used
+				params.page = params.page || 1;
 
-			return {
-				results: data,
-				pagination: {
-					more: params.page * 30 < data.total_count
-				}
-			};
+				return {
+					results: data,
+					pagination: {
+						more: params.page * 30 < data.total_count
+					}
+				};
+			},
+			cache: true
 		},
-		cache: true
-	},
-	placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
-	minimumInputLength: 1,
-	templateResult: formatUser,
-	templateSelection: formatUserSelection
-});
+		placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
+		minimumInputLength: 1,
+		templateResult: formatUser,
+		templateSelection: formatUserSelection
+	});
+}
+
 
 // --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
 function formatUser(jsonData) {

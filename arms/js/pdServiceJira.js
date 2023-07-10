@@ -9,13 +9,46 @@ var selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이
 var versionList;
 
 function execDocReady() {
-	setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
 
-	dataTableLoad();
+	$.when(
+		$.getJavascript("../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"),
 
-	$.getScript("./js/pdServiceVersion/initd3chart.js").done(function (script, textStatus) {
-		console.log("트리 차트 생성");
+		$.getJavascript("../reference/lightblue4/docs/lib/d3/d3.min.js"),
+		$.getJavascript("../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js"),
+
+		$.getJavascript("../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"),
+
+		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
+		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
+		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
+		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
+
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js")
+	).done(function() {
+
+		setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
+
+		dataTableLoad();
+
+		$.getScript("./js/pdServiceVersion/initd3chart.js").done(function (script, textStatus) {
+			console.log("트리 차트 생성");
+		});
 	});
+
 }
 
 // --- 데이터 테이블 설정 --- //

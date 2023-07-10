@@ -6,13 +6,47 @@ var reqStatusDataTable;
 var dataTableRef;
 
 function execDocReady() {
-	//좌측 메뉴
-	setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
 
-	//제품(서비스) 셀렉트 박스 이니시에이터
-	makePdServiceSelectBox();
-	//버전 멀티 셀렉트 박스 이니시에이터
-	makeVersionMultiSelectBox();
+	$.when(
+		$.getJavascript("../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"),
+
+		$.getJavascript("../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"),
+
+		$.getJavascript("../reference/light-blue/lib/bootstrap-datepicker.js"),
+		$.getStylesheet("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css"),
+		$.getJavascript("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"),
+
+		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
+		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
+		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
+		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
+
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js")
+	).done(function() {
+
+		//좌측 메뉴
+		setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
+
+		//제품(서비스) 셀렉트 박스 이니시에이터
+		makePdServiceSelectBox();
+		//버전 멀티 셀렉트 박스 이니시에이터
+		makeVersionMultiSelectBox();
+	});
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -35,8 +69,12 @@ function makePdServiceSelectBox() {
 		.done(function (data) {
 			for (var k in data) {
 				var obj = data[k];
-				var newOption = new Option(obj.c_title, obj.c_id, false, false);
-				$("#country").append(newOption).trigger("change");
+				if ( isEmpty(obj)){
+					console.log("obj is null");
+				}else{
+					var newOption = new Option(obj.c_title, obj.c_id, false, false);
+					$("#country").append(newOption).trigger("change");
+				}
 			}
 		})
 		.fail(function (e) {})

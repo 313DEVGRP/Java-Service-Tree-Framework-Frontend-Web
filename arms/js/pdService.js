@@ -12,53 +12,76 @@ var dataTableRef; // 데이터테이블 참조 변수
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
-	// 사이드 메뉴 색상 설정
-	setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
 
-	// 파일 업로드 관련 레이어 숨김 처리
-	$(".body-middle").hide();
 
-	// 데이터 테이블 로드 함수
-	dataTableLoad();
+	$.when(
+		$.getJavascript("../reference/light-blue/lib/vendor/jquery.ui.widget.js"),
+		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js"),
+		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js"),
+		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.iframe-transport.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.fileupload.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.fileupload-fp.js"),
+		$.getJavascript("../reference/light-blue/lib/jquery.fileupload-ui.js"),
 
-	// --- 에디터 설정 --- //
-	// window.CKEDITOR_BASEPATH = "/reference/jquery-plugins/ckeditor4-4.16.1/";
-	// $.getScript("../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js").done(function (script, textStatus) {
-	// 	var waitCKEDITOR = setInterval(function () {
-	// 		try {
-	// 			if (window.CKEDITOR) {
-	// 				CKEDITOR.replace("input_pdservice_editor");
-	// 				CKEDITOR.replace("extend_modal_editor");
-	// 				CKEDITOR.replace("modal_editor");
-	// 				clearInterval(waitCKEDITOR);
-	// 			}
-	// 		} catch (err) {
-	// 			console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
-	// 		}
-	// 	}, 313 /*milli*/);
-	// });
+		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
+		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
+		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
+		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
 
-	CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" });
-	CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" });
-	CKEDITOR.replace("modal_editor",{ skin: "office2013" });
+		$.getJavascript("../reference/light-blue/lib/bootstrap-datepicker.js"),
+		$.getStylesheet("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css"),
+		$.getJavascript("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"),
 
-	$("#popup_editview_pdservice_name").tooltip();
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js")
+	).done(function() {
 
-	tab_click_event();
+		// 사이드 메뉴 색상 설정
+		setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
 
-	popup_size_setting();
+		// 파일 업로드 관련 레이어 숨김 처리
+		$(".body-middle").hide();
 
-	select2_setting();
+		// 데이터 테이블 로드 함수
+		dataTableLoad();
 
-	file_upload_setting();
+		// --- 에디터 설정 --- //
+		CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" });
+		CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" });
+		CKEDITOR.replace("modal_editor",{ skin: "office2013" });
 
-	save_btn_click();
+		$("#popup_editview_pdservice_name").tooltip();
 
-	delete_btn_click();
+		tab_click_event();
 
-	update_btn_click();
+		popup_size_setting();
 
-	popup_update_btn_click();
+		select2_setting();
+
+		file_upload_setting();
+
+		save_btn_click();
+
+		delete_btn_click();
+
+		update_btn_click();
+
+		popup_update_btn_click();
+	});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

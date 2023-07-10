@@ -12,51 +12,66 @@ var dataTableRef; // 데이터테이블 참조 변수
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
-	//사이드 메뉴 처리
-	setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
 
-	// DatePicker 처리 부분 ( 팝업 레이어 )
-	$(".date-picker").datepicker({
-		autoclose: true
+	$.when(
+		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
+		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
+		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
+		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
+		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
+
+		$.getJavascript("../reference/light-blue/lib/bootstrap-datepicker.js"),
+		$.getStylesheet("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css"),
+		$.getJavascript("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"),
+
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
+		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
+		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js")
+	).done(function() {
+
+		//사이드 메뉴 처리
+		setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
+
+		// DatePicker 처리 부분 ( 팝업 레이어 )
+		$(".date-picker").datepicker({
+			autoclose: true
+		});
+
+		// --- 에디터 설정 --- //
+		CKEDITOR.replace("input_pdservice_editor");
+		CKEDITOR.replace("extend_modal_editor");
+
+		$("#input_pdservice_start_date").datetimepicker({
+			allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+		});
+
+		$("#input_pdservice_end_date").datetimepicker({
+			allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+		});
+
+		$("#btn_enabled_date").datetimepicker({
+			allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+		});
+
+		$("#btn_end_date").datetimepicker({
+			allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+		});
+
+		// --- 데이터 테이블 설정 --- //
+		dataTableLoad();
 	});
 
-	// --- 에디터 설정 --- //
-	// window.CKEDITOR_BASEPATH = "/reference/jquery-plugins/ckeditor4-4.16.1/";
-	// $.getScript("../reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js").done(function (script, textStatus) {
-	// 	var waitCKEDITOR = setInterval(function () {
-	// 		try {
-	// 			if (window.CKEDITOR) {
-	// 				CKEDITOR.replace("input_pdservice_editor");
-	// 				CKEDITOR.replace("extend_modal_editor");
-	// 				clearInterval(waitCKEDITOR);
-	// 			}
-	// 		} catch (err) {
-	// 			console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
-	// 		}
-	// 	}, 313 /*milli*/);
-	// });
-
-	CKEDITOR.replace("input_pdservice_editor");
-	CKEDITOR.replace("extend_modal_editor");
-
-	$("#input_pdservice_start_date").datetimepicker({
-		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-	});
-
-	$("#input_pdservice_end_date").datetimepicker({
-		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-	});
-
-	$("#btn_enabled_date").datetimepicker({
-		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-	});
-
-	$("#btn_end_date").datetimepicker({
-		allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-	});
-
-	// --- 데이터 테이블 설정 --- //
-	dataTableLoad();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
