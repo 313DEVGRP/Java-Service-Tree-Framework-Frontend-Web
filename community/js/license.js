@@ -2,7 +2,12 @@
 //Document Ready ( execArmsDocReady )
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
-    //좌측 메뉴
-    setSideMenu("sidebar_menu_license", "");
 
+    $.when(
+        $.getJavascript("../reference/light-blue/lib/vendor/jquery.ui.widget.js")
+    ).done(function() {
+
+        //좌측 메뉴
+        setSideMenu("sidebar_menu_license", "");
+    });
 }
