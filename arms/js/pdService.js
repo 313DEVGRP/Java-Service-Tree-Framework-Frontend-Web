@@ -13,8 +13,8 @@ var dataTableRef; // 데이터테이블 참조 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
 
-
 	$.when(
+
 		$.getJavascript("../reference/light-blue/lib/vendor/jquery.ui.widget.js"),
 		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js"),
 		$.getJavascript("../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js"),
