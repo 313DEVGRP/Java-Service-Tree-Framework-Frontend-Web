@@ -43,7 +43,6 @@ $(function () {
 
 
 	if (ajax_setup()) {
-		$(".spinner").html("<i class=\"fa fa-empire fa-spin\"></i> 어플리케이션 API Data를 가져오는 중입니다...");
 		$(".loader").removeClass("hide");
 
 		var page = urlParams.get("page");
@@ -369,7 +368,8 @@ function setSideMenu(categoryName, listName, collapse) {
 			$(`#${listName}`).css({ color: "#a4c6ff" });
 			$(`#${listName}`).css({ "font-weight": "900" });
 		}
-	}, 313);
+		$(".spinner").html("<i class=\"fa fa-empire fa-spin\"></i> 어플리케이션 API Data를 가져오는 중입니다...");
+	}, 1000);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
