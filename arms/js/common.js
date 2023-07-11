@@ -362,7 +362,7 @@ function setSideMenu(categoryName, listName, collapse) {
 		$(`#${categoryName}`).css({ "font-weight": "900" });
 
 		if(isEmpty(listName)){
-			console.log("listName → is null");
+			console.log("setSideMenu :: listName → is null");
 		}else{
 			$(`#${listName}`).addClass("active");
 			$(`#${listName}`).css({ color: "#a4c6ff" });
