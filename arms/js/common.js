@@ -23,6 +23,7 @@ $(function () {
 	}
 
 	$.getStylesheet = function(href) {
+		$(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> 플러그인 스타일시트를 다운로드 중입니다...");
 		$("<link/>", {
 			rel: "stylesheet",
 			type: "text/css",
@@ -31,6 +32,7 @@ $(function () {
 	};
 
 	$.getJavascript = function(href) {
+		$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 자바스크립트 라이브러리를 다운로드 중입니다...");
 		$.ajax({
 			url: href,
 			dataType: "script",
@@ -39,7 +41,11 @@ $(function () {
 		});
 	};
 
+
 	if (ajax_setup()) {
+		$(".spinner").html("<i class=\"fa fa-empire fa-spin\"></i> 어플리케이션 API Data를 가져오는 중입니다...");
+		$(".loader").removeClass("hide");
+
 		var page = urlParams.get("page");
 		if (includeLayout(page)) {
 			var str = window.location.href;
@@ -59,14 +65,6 @@ $(function () {
 				alert("who are you?");
 			}
 		}
-	}
-
-	var onlyContents = urlParams.get("withoutLayer");
-	if (isEmpty(onlyContents)) {
-		$("body").removeAttr("class");
-	} else {
-		$("body").addClass("sidebar-hidden");
-		$("header.page-header").hide();
 	}
 
 	//dwr_login("test","admin");
@@ -929,8 +927,12 @@ function ajax_setup() {
 		.ajaxStart(function () {
 			$(".loader").removeClass("hide");
 		})
-		.ajaxSend(function (event, jqXHR, ajaxOptions) {})
-		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {})
+		.ajaxSend(function (event, jqXHR, ajaxOptions) {
+			//$(".loader").addClass("hide");
+		})
+		.ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {
+			//$(".loader").addClass("hide");
+		})
 		.ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
 			$(".loader").addClass("hide");
 			if (jqXHR.status == 401) {
@@ -938,10 +940,13 @@ function ajax_setup() {
 				location.href = "/oauth2/authorization/middle-proxy";
 			} else if (jqXHR.status == 403) {
 				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
+				location.href = "/oauth2/authorization/middle-proxy";
+			} else if (jqXHR.status == 500) {
+				jError("서버가 해당 요청을 이해했지만, 실행 할 수 없습니다.");
 			}
 		})
 		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
-			$(".loader").addClass("hide");
+			//$(".loader").addClass("hide");
 		})
 		.ajaxStop(function () {
 			$(".loader").addClass("hide");
