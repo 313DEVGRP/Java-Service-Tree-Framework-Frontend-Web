@@ -134,7 +134,18 @@ function makePdServiceSelectBox() {
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
-		build_ReqData_By_PdService();
+		//서비스(어플리케이션) 트리 로드
+		var waitJstree = setInterval(function() {
+			try {
+				if ($("#node_2").length == 0) {
+					build_ReqData_By_PdService();
+				} else {
+					clearInterval(waitJstree);
+				}
+			} catch (err) {
+				console.log("트리 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 500 /*milli*/);
 
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();

@@ -1,7 +1,18 @@
 // -- 사이드 메뉴 -- //
 $(function () {
 	setSideMenu();
-	jsTreeBuild("#pdService");
+	//서비스(어플리케이션) 트리 로드
+	var waitJstree = setInterval(function() {
+		try {
+			if ($("#node_2").length == 0) {
+				jsTreeBuild("#pdService");
+			} else {
+				clearInterval(waitJstree);
+			}
+		} catch (err) {
+			console.log("서비스 데이터 테이블 로드가 완료되지 않아서 초기화 재시도 중...");
+		}
+	}, 500 /*milli*/);
 });
 
 // --- jstree 설정 -- //
