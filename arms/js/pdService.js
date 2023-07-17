@@ -742,6 +742,11 @@ function update_btn_click() {
 			statusCode: {
 				200: function () {
 					jSuccess($("#editview_pdservice_name").val() + "의 데이터가 변경되었습니다.");
+
+					//데이터 테이블 데이터 재 로드
+					dataTableRef.ajax.reload(function (json) {
+						$("#pdservice_table tbody tr:eq(0)").click();
+					});
 				}
 			}
 		});
