@@ -40,7 +40,7 @@ function execDocReady() {
 		dataTableLoad();
 
 		$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
-			console.log("트리 차트 생성");
+			initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 		});
 	});
 

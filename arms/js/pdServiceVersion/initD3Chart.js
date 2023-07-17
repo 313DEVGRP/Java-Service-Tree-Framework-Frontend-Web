@@ -25,6 +25,8 @@ function initD3Chart(href) {
         d3.selectAll("#tree_container svg").remove();
 
         var treeData = data.response;
+        console.log("initD3Chart treeData");
+        console.log(treeData);
         // Calculate total nodes, max label length
         var totalNodes = 0;
         var maxLabelLength = 0;
@@ -70,6 +72,8 @@ function initD3Chart(href) {
             treeData,
             function(d) {
                 totalNodes++;
+                console.log("initD3Chart visit check d");
+                console.log(d);
                 maxLabelLength = Math.max(d.name.length, maxLabelLength);
             },
             function(d) {
