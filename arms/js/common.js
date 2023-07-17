@@ -204,39 +204,46 @@ function rightBottomTopForwardIcon() {
 // 로그인 인증 여부 체크 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function authUserCheck() {
-	$.ajax({
-		url: "/auth-user/me",
-		type: "GET",
-		timeout: 7313,
-		global: false,
-		statusCode: {
-			200: function (json) {
-				console.log("authUserCheck :: userName = " + json.preferred_username);
-				console.log("authUserCheck :: permissions = ");
-				console.log(json.realm_access.roles);
-				userName = json.preferred_username;
-				permissions = json.realm_access.roles;
 
-				var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
-				account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
-				$(".account-picture").append(account_html);
+	var str = window.location.href;
+	if (str.indexOf("community") > 0) {
+		runScript();
+	} else {
 
-				runScript();
-			},
-			401: function (json) {
-				$(".loader").addClass("hide");
-				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
-				location.href = "/oauth2/authorization/middle-proxy";
-				return false;
-			},
-			403: function (json) {
-				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
-				return false;
+		$.ajax({
+			url: "/auth-user/me",
+			type: "GET",
+			timeout: 7313,
+			global: false,
+			statusCode: {
+				200: function (json) {
+					console.log("authUserCheck :: userName = " + json.preferred_username);
+					console.log("authUserCheck :: permissions = ");
+					console.log(json.realm_access.roles);
+					userName = json.preferred_username;
+					permissions = json.realm_access.roles;
+
+					var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
+					account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
+					$(".account-picture").append(account_html);
+
+					runScript();
+				},
+				401: function (json) {
+					$(".loader").addClass("hide");
+					jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
+					location.href = "/oauth2/authorization/middle-proxy";
+					return false;
+				},
+				403: function (json) {
+					jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
+					return false;
+				}
 			}
-		}
-	});
+		});
 
-	return true;
+		return true;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
