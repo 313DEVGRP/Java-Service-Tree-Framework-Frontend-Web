@@ -26,29 +26,29 @@ module.exports = function (grunt) { // jshint ignore:line
             ].concat(defaultMiddleware);
           }
         },
-        // proxies: [
-        //  // 로컬 개발 및 테스트용
-        //   {
-        //     context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
-        //               '/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2'],
-        //     host: '127.0.0.1',
-        //     port: 13131,
-        //     https: false,
-        //     changeOrigin: true
-        //   }
-        // ]
-
         proxies: [
-          // 외부에서 개발
+         // 로컬 개발 및 테스트용
           {
             context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
                       '/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2'],
-            host: 'www.313.co.kr',
-            port: 80,
+            host: '127.0.0.1',
+            port: 13131,
             https: false,
             changeOrigin: true
           }
         ]
+
+        // proxies: [
+        //   // 외부에서 개발
+        //   {
+        //     context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
+        //               '/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2'],
+        //     host: 'www.313.co.kr',
+        //     port: 80,
+        //     https: false,
+        //     changeOrigin: true
+        //   }
+        // ]
       },
     },
     watch: {

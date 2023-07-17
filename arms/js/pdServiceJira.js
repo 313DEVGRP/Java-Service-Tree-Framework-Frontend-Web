@@ -108,7 +108,7 @@ function dataTableClick(tempDataTable, selectedData) {
 	dataLoad(selectedData.c_id, selectedData.c_title);
 
 	// D3 업데이트
-	updateD3ByDataTable();
+	//updateD3ByDataTable();
 }
 
 function dataTableDrawCallback(tableInfo) {
@@ -143,7 +143,7 @@ function dataLoad(getSelectedText, selectedText) {
 		$(".list-group-item").html(selectedHtml);
 		$("#tooltip_enabled_service_name").val(selectedText);
 
-		updateD3ByVersionList();
+		//updateD3ByVersionList();
 
 		setTimeout(function () {
 			$("#pdService_Version_First_Child").trigger("click");
@@ -255,7 +255,7 @@ function versionClick(element, c_id) {
 				$("#pdservice_connect").removeClass("btn-success");
 				$("#pdservice_connect").addClass("btn-primary");
 				$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
-				updateD3ByMultiSelect();
+				//updateD3ByMultiSelect();
 			} else {
 				$("#pdservice_connect").removeClass("btn-primary");
 				$("#pdservice_connect").addClass("btn-success");
@@ -263,7 +263,7 @@ function versionClick(element, c_id) {
 
 				console.log("multiSelectData - " + multiSelectData.toString());
 				$("#multiselect").multiSelect("select", multiSelectData.toString().split(","));
-				updateD3ByMultiSelect();
+				//updateD3ByMultiSelect();
 			}
 		})
 		.fail(function (e) {
@@ -406,90 +406,6 @@ function buildMultiSelect() {
 	});
 }
 
-/* ----------------------- click action ------------------------- */
-// var treeData = {
-// 	name: "product service name",
-// 	type: "Product(service)",
-// 	children: [
-// 		{
-// 			name: "Visualization",
-// 			type: "Jira JQL",
-// 			children: [
-// 				{
-// 					name: "test",
-// 					type: "Jira JQL",
-// 				},
-// 			],
-// 		},
-// 	],
-// };
-function updateD3ByDataTable() {
-	treeData.children = [];
-
-	treeData.name = selectName;
-	treeData.type = "product(service)";
-
-	update(treeData);
-}
-
-function updateD3ByVersionList() {
-	console.log("versionList - " + versionList);
-
-	treeData.children = [];
-	for (var k in versionList) {
-		var obj = versionList[k];
-		var item = {};
-		item["name"] = obj.c_title;
-		item["type"] = "version";
-		item.children = [];
-		treeData.children.push(item);
-	}
-	console.log("==== updateD3ByVersionList :: treeData :: start ===");
-	console.log(treeData);
-	console.log("==== updateD3ByVersionList :: treeData :: end ===");
-	update(treeData);
-}
-
-function updateD3ByMultiSelect() {
-	treeData.children = [];
-	var item = {};
-	item["name"] = selectVersionName;
-	item["type"] = "version";
-	item.children = [];
-	treeData.children.push(item);
-
-	var test = $("#multiselect :selected").val();
-	console.log("test-----" + test);
-	if ($("#multiselect :selected").val() == undefined) {
-		console.log("test-----");
-		item.children = [];
-	}
-	$("#multiselect :selected").each(function (i, sel) {
-		var temp = {};
-		temp["name"] = $(sel).text();
-		temp["type"] = "jira";
-		item.children.push(temp);
-	});
-
-	update(treeData);
-}
-
-function d3Update() {
-	if (typeof treeData.children == "undefined" || treeData.children == "" || treeData.children == null) {
-		console.log("it is not inner element");
-		treeData.children = [];
-	} else {
-		treeData.children.splice(0, treeData.children.length);
-	}
-
-	$("#sampleMultiTest :selected").each(function () {
-		item = {};
-		item["name"] = this.text;
-		item["type"] = "Jira JQL";
-		treeData.children.push(item);
-	});
-	update(root);
-}
 
 //데이터 테이블 ajax load 이후 콜백.
 function dataTableCallBack(settings, json) {}
