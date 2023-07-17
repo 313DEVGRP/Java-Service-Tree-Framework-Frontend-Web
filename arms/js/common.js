@@ -2,6 +2,11 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function () {
+	authUserCheck();
+});
+
+function runScript(){
+
 	// Page load & 상단 페이지 로드 프로그래스바
 	topbarConfig();
 	topbar.show();
@@ -54,12 +59,10 @@ $(function () {
 					execDocReady();
 				});
 			} else if (str.indexOf("arms") > 0) {
-				if (authUserCheck()) {
-					$.getScript("js/" + page + ".js", function () {
-						/* 로그인 인증 여부 체크 함수 */
-						execDocReady();
-					});
-				}
+				$.getScript("js/" + page + ".js", function () {
+					/* 로그인 인증 여부 체크 함수 */
+					execDocReady();
+				});
 			} else {
 				alert("who are you?");
 			}
@@ -67,8 +70,7 @@ $(function () {
 	}
 
 	//dwr_login("test","admin");
-
-});
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // DWR
@@ -219,15 +221,17 @@ function authUserCheck() {
 				account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
 				$(".account-picture").append(account_html);
 
-				//getUserInfo();
+				runScript();
 			},
 			401: function (json) {
 				$(".loader").addClass("hide");
 				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
 				location.href = "/oauth2/authorization/middle-proxy";
+				return false;
 			},
 			403: function (json) {
 				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
+				return false;
 			}
 		}
 	});

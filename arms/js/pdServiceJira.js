@@ -37,7 +37,17 @@ function execDocReady() {
 
 		setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
 
-		dataTableLoad();
+		// 데이터 테이블 로드 함수
+		var waitDataTable = setInterval(function () {
+			try {
+				if (!$.fn.DataTable.isDataTable("#pdservice_table")) {
+					dataTableLoad();
+					clearInterval(waitDataTable);
+				}
+			} catch (err) {
+				console.log("서비스 데이터 테이블 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 313 /*milli*/);
 
 		$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 			initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");

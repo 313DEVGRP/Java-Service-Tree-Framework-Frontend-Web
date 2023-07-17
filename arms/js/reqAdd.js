@@ -56,10 +56,23 @@ function execDocReady() {
 		//신규 요구사항 등록 버튼 숨김
 		$(".newReqDiv").hide();
 
-		//제품(서비스) 셀렉트 박스 이니시에이터
-		makePdServiceSelectBox();
-		//버전 멀티 셀렉트 박스 이니시에이터
-		makeVersionMultiSelectBox();
+		//Select2
+		var waitSelect2 = setInterval(function () {
+			try {
+				if ($(".ms-select-all") !== 3) {
+
+					//제품(서비스) 셀렉트 박스 이니시에이터
+					makePdServiceSelectBox();
+					//버전 멀티 셀렉트 박스 이니시에이터
+					makeVersionMultiSelectBox();
+					
+					clearInterval(waitSelect2);
+				}
+			} catch (err) {
+				console.log("서비스 데이터 테이블 로드가 완료되지 않아서 초기화 재시도 중...");
+			}
+		}, 313 /*milli*/);
+
 
 		// --- 에디터 설정 --- //
 		var waitCKEDITOR = setInterval(function () {
