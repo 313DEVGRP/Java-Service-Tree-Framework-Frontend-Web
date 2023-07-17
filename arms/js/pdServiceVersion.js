@@ -217,16 +217,19 @@ $("#del_version").click(function () {
 // 버전 업데이트 저장 버튼
 $("#version_update").click(function () {
 	console.log("update btn");
+
+	var send_data = {
+		c_id: selectVersion,
+		c_title: $("#input_pdservice_version").val(),
+		c_pds_version_contents: CKEDITOR.instances.input_pdservice_editor.getData(),
+		c_pds_version_start_date: $("#input_pdservice_start_date").val(),
+		c_pds_version_end_date: $("#input_pdservice_end_date").val()
+	};
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/updateNode.do",
+		url: "/auth-user/api/arms/pdServiceVersion/updateVersionNode.do?",
 		type: "put",
-		data: {
-			c_id: selectVersion,
-			c_title: $("#input_pdservice_version").val(),
-			c_pds_version_contents: CKEDITOR.instances.input_pdservice_editor.getData(),
-			c_pds_version_start_date: $("#input_pdservice_start_date").val(),
-			c_pds_version_end_date: $("#input_pdservice_end_date").val()
-		},
+		contentType : 'application/json; charset=utf-8',
+		data: JSON.stringify(send_data),
 		statusCode: {
 			200: function () {
 				console.log("성공!");
