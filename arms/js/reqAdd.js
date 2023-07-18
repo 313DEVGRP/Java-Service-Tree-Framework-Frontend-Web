@@ -65,7 +65,7 @@ function execDocReady() {
 					makePdServiceSelectBox();
 					//버전 멀티 셀렉트 박스 이니시에이터
 					makeVersionMultiSelectBox();
-					
+
 					clearInterval(waitSelect2);
 				}
 			} catch (err) {
@@ -217,6 +217,50 @@ function bind_VersionData_By_PdService() {
 			jError("버전 조회 중 에러가 발생했습니다.");
 		}
 	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//제품(서비스) 선택 후, 버전을 선택하면 동작하는 함수
+////////////////////////////////////////////////////////////////////////////////////////
+function changeMultipleSelected() {
+	var result = [];
+	$("#multiversion option:selected").map(function(a, item) {
+		result.push(item.innerText);
+	});
+	$("#select_Service").text(result);
+
+	var appIds = [""];
+	$("#multiversion option:selected").map(function(a, item) {
+		if (item.value !== "") {
+			item.value
+				.match(/\d+/g)
+				.map(String)
+				.map(function(a, item) {
+					appIds.push(a);
+				});
+		}
+	});
+
+	var mappedApps = [];
+	for (var appId of appIds) {
+		$("#product_tree #node_2 ul li").each(function(a, item) {
+			$(this)
+				.find("a i")
+				.each(function() {
+					$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
+				});
+			if (item.id.substring(item.id.indexOf("_") + 1) === appId) {
+				mappedApps.push($(this));
+				return false;
+			}
+		});
+	}
+
+	for (var mappedApp of mappedApps) {
+		mappedApp.find("a ins").each(function() {
+			$(this).replaceWith("<i class='fa fa-check' style='color: #1ea726'>&nbsp;&nbsp;</i>");
+		});
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
