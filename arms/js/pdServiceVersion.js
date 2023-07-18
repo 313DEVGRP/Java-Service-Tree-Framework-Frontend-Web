@@ -226,7 +226,7 @@ $("#version_update").click(function () {
 		c_pds_version_end_date: $("#input_pdservice_end_date").val()
 	};
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/updateVersionNode.do?",
+		url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link="+selectId,
 		type: "put",
 		contentType : 'application/json; charset=utf-8',
 		data: JSON.stringify(send_data),
