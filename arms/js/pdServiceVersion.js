@@ -48,8 +48,8 @@ function execDocReady() {
 			try {
 				if (window.CKEDITOR) {
 					if(window.CKEDITOR.status == "loaded") {
-						CKEDITOR.replace("input_pdservice_editor", {skin: "office2013"});
-						CKEDITOR.replace("extend_modal_editor", {skin: "office2013"});
+						CKEDITOR.replace("input_pdservice_editor", {skin: "prestige"});
+						CKEDITOR.replace("extend_modal_editor", {skin: "prestige"});
 						clearInterval(waitCKEDITOR);
 					}
 				}

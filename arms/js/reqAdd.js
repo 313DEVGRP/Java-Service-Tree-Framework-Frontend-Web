@@ -79,8 +79,8 @@ function execDocReady() {
 			try {
 				if (window.CKEDITOR) {
 					if(window.CKEDITOR.status == "loaded") {
-						CKEDITOR.replace("modal_editor", {skin: "office2013"});
-						CKEDITOR.replace("edit_tabmodal_editor", {skin: "office2013"});
+						CKEDITOR.replace("modal_editor", {skin: "prestige"});
+						CKEDITOR.replace("edit_tabmodal_editor", {skin: "prestige"});
 						clearInterval(waitCKEDITOR);
 					}
 				}
