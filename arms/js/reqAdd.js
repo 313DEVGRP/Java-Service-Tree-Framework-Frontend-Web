@@ -148,17 +148,7 @@ function makePdServiceSelectBox() {
 
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
 		//서비스(어플리케이션) 트리 로드
-		var waitJstree = setInterval(function() {
-			try {
-				if ($("#node_2").length == 0) {
-					build_ReqData_By_PdService();
-				} else {
-					clearInterval(waitJstree);
-				}
-			} catch (err) {
-				console.log("트리 로드가 완료되지 않아서 초기화 재시도 중...");
-			}
-		}, 500 /*milli*/);
+		build_ReqData_By_PdService();
 
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
@@ -1093,19 +1083,25 @@ $("#save_req").click(function () {
 			ref: selectedJsTreeId,
 			c_title: $("#req_title").val(),
 			c_type: $("input[name=reqType]:checked").val(),
-			c_pdservice_link: $("#country").val(),
-			c_version_link: JSON.stringify($("#popup_version").val()),
-			c_jira_link: "inherit",
-			c_writer: "[" + userName + "]" + " - " + userID,
-			c_writer_date: new Date(),
-			c_priority: 2,
-			c_reviewer01: reviewers01,
-			c_reviewer02: reviewers02,
-			c_reviewer03: reviewers03,
-			c_reviewer04: reviewers04,
-			c_reviewer05: reviewers05,
-			c_req_status: "Draft",
-			c_contents: CKEDITOR.instances["modal_editor"].getData()
+			c_req_pdservice_link: $("#country").val(),
+			c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
+			c_req_writer: "[" + userName + "]" + " - " + userID,
+			c_req_create_date: new Date(),
+			c_req_priority_link: $("input[name='req_priority']:checked").val(),
+			c_req_state_link: 3, //요구사항 생성.
+			c_req_reviewer01: reviewers01,
+			c_req_reviewer02: reviewers02,
+			c_req_reviewer03: reviewers03,
+			c_req_reviewer04: reviewers04,
+			c_req_reviewer05: reviewers05,
+			c_req_reviewer01_status: "Draft",
+			c_req_reviewer02_status: "Draft",
+			c_req_reviewer03_status: "Draft",
+			c_req_reviewer04_status: "Draft",
+			c_req_reviewer05_status: "Draft",
+			c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
+			c_req_desc: "설명",
+			c_req_etc: "비고"
 		},
 		statusCode: {
 			200: function () {

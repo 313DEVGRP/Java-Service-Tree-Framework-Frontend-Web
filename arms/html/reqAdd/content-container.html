@@ -1557,14 +1557,18 @@
 								class="control-label"
 								for="editview_req_reviewers"
 								style="color: #f8f8f8">
-								반영 리뷰어 &nbsp;
+								반영 리뷰어
 								<span class="required">*</span>
+                                <span
+                                        class="input-group-addon"
+                                        style="display: inline !important">
+									<i class="glyphicon glyphicon-gift"></i>
+								</span>
 							</label>
 							<div
 								class="controls form-group"
 								style="margin-bottom: 10px">
 								<div class="input-group">
-									<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
 									<select
 										id="popup_pdservice_reviewers"
 										class="js-data-example-ajax form-control font13 darkBack"
@@ -1594,24 +1598,24 @@
 									class="btn-group"
 									data-toggle="buttons">
 									<label class="btn btn-warning">
-										<input
-											type="radio"
-											name="options"
-											id="option1" />
+										<input  type="radio"
+											    name="req_priority"
+											    id="option1"
+                                                value="2"/>
 										낮음
 									</label>
 									<label class="btn btn-warning">
-										<input
-											type="radio"
-											name="options"
-											id="option2" />
+										<input  type="radio"
+											    name="req_priority"
+											    id="option2"
+                                                value="3"/>
 										중간
 									</label>
 									<label class="btn btn-warning">
-										<input
-											type="radio"
-											name="options"
-											id="option3" />
+										<input  type="radio"
+											    name="req_priority"
+											    id="option3"
+                                                value="4"/>
 										높음
 									</label>
 								</div>
