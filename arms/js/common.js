@@ -52,64 +52,12 @@ function runScript(){
 
 		var page = urlParams.get("page");
 		if (includeLayout(page)) {
-			var str = window.location.href;
-			if (str.indexOf("community") > 0) {
-				$.getScript("js/" + page + ".js", function () {
-					/* 로그인 인증 여부 체크 함수 */
-					execDocReady();
-				});
-			} else if (str.indexOf("arms") > 0) {
-				$.getScript("js/" + page + ".js", function () {
-					/* 로그인 인증 여부 체크 함수 */
-					execDocReady();
-				});
-			} else {
-				alert("who are you?");
-			}
+			$.getScript("js/" + page + ".js", function () {
+				/* 로그인 인증 여부 체크 함수 */
+				execDocReady();
+			});
 		}
 	}
-
-	//dwr_login("test","admin");
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// DWR
-////////////////////////////////////////////////////////////////////////////////////////
-// document.write('<script type="text/javascript" src="/dwr/engine.js"></script>');
-// document.write('<script type="text/javascript" src="/dwr/util.js"></script>');
-// document.write('<script type="text/javascript" src="/dwr/interface/Chat.js"></script>');
-
-const makeSaveChatHistory = () => {
-	const chat_history = [];
-	return (userId, username, message, time) => {
-		chat_history.push({ userId, username, message, time });
-		console.log("chatHistory -> " + JSON.stringify(chat_history));
-		return chat_history;
-	};
-};
-
-const saveChatHistory = makeSaveChatHistory();
-
-function dwr_callback(userId, username, message, time) {
-	const lastMessage = { userId, username, message, time };
-	saveChatHistory(userId, username, message, time);
-
-	$(".notifications").addClass("alert-created");
-	const alertDiv = $('<div/>').addClass('alert pull-right');
-	const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
-	const infoIcon = $('<i/>').addClass('fa fa-info-circle');
-	alertDiv.append(closeButton, infoIcon, lastMessage.message);
-	$(".notifications .alert").remove();
-	$(".notifications").append(alertDiv);
-}
-
-function dwr_login(userId,username){
-	dwr.engine.setActiveReverseAjax(true);
-	dwr.engine.setNotifyServerOnPageUnload(true);
-	dwr.engine.setErrorHandler(function () {
-		console.log("DWR Error");
-	});
-	Chat.login(userId,username);
 
 }
 
@@ -228,6 +176,7 @@ function authUserCheck() {
 					$(".account-picture").append(account_html);
 
 					runScript();
+					dwr_login(userName, userName);
 				},
 				401: function (json) {
 					$(".loader").addClass("hide");
