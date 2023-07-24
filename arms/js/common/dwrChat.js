@@ -20,13 +20,22 @@ function dwr_callback(userId, username, message, time) {
     const lastMessage = { userId, username, message, time };
     saveChatHistory(userId, username, message, time);
 
-    $(".notifications.pull-right").addClass("alert-created");
-    const alertDiv = $('<div/>').addClass('alert pull-right');
-    const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
-    const infoIcon = $('<i/>').addClass('fa fa-info-circle').css('margin-right', '5px');
-    alertDiv.append(closeButton, infoIcon, lastMessage.message);
-    $(".notifications.pull-right .alert").remove();
-    $(".notifications.pull-right").append(alertDiv);
+    if (message.indexOf("Engine]") >= 0){
+        Messenger().post({
+            message: message,
+            type: 'success',
+            showCloseButton: true
+        });
+    }else{
+        $(".notifications.pull-right").addClass("alert-created");
+        const alertDiv = $('<div/>').addClass('alert pull-right');
+        const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
+        const infoIcon = $('<i/>').addClass('fa fa-info-circle').css('margin-right', '5px');
+        alertDiv.append(closeButton, infoIcon, lastMessage.message);
+        $(".notifications.pull-right .alert").remove();
+        $(".notifications.pull-right").append(alertDiv);
+    }
+
 }
 
 function dwr_login(userId,username){
@@ -36,5 +45,33 @@ function dwr_login(userId,username){
         console.log("DWR Error");
     });
     Chat.login(userId,username);
+
+    buildMessage();
+}
+
+function buildMessage() {
+    var theme = 'air';
+
+    $.globalMessenger({ theme: theme });
+    Messenger.options = { theme: theme  };
+
+    //Messenger().post("Thanks for checking out Messenger!");
+
+
+    var loc = ['bottom', 'right'];
+
+    var $lsel = $('.location-selector');
+
+    var update = function(){
+        var classes = 'messenger-fixed';
+
+        for (var i=0; i < loc.length; i++)
+            classes += ' messenger-on-' + loc[i];
+
+        $.globalMessenger({ extraClasses: classes, theme: theme  });
+        Messenger.options = { extraClasses: classes, theme: theme };
+    };
+
+    update();
 
 }

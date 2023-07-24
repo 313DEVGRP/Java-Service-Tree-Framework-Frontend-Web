@@ -2151,3 +2151,15 @@ p[data-v-35dc3539] {
 	align-self: end;
 	margin-right: 10px;
 }
+
+.notifications .alert {
+	background-color: #e5603b;
+	border: none;
+	font-size: 12px;
+	line-height: 22px !important;
+	margin-bottom: 0;
+	padding: 3px 9px;
+	color: #f8f8f8 !important;
+	text-shadow: none;
+	border-radius: 3px;
+}

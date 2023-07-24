@@ -53,6 +53,9 @@ function runScript(){
 		var page = urlParams.get("page");
 		if (includeLayout(page)) {
 			$.getScript("js/" + page + ".js", function () {
+
+				$('.widget').widgster();
+
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
 			});

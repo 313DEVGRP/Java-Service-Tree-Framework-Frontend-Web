@@ -477,7 +477,7 @@ window.Messenger.Events = (function() {
         }
         this._hideTimeout = setTimeout(function() {
           return _this.hide();
-        }, this.options.hideAfter * 1000);
+        }, this.options.hideAfter * 10000);
       } else {
         this.$message.removeClass('messenger-will-hide-after');
       }
