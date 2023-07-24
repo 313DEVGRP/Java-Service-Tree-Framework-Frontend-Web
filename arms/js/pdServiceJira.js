@@ -49,6 +49,9 @@ function execDocReady() {
 			}
 		}, 313 /*milli*/);
 
+		setdata_for_multiSelect();
+		connect_pdservice_jira();
+
 		$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 			initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 		});
@@ -285,62 +288,64 @@ function versionClick(element, c_id) {
 }
 
 // 제품(서비스)-버전-지라 저장
-$("#pdservice_connect").click(function () {
-	if ($("#pdservice_connect").hasClass("btn-primary") == true) {
-		// data가 존재하지 않음.
-		$.ajax({
-			url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
-			type: "POST",
-			data: {
-				pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				pdserviceversion_link: selectVersion,
-				c_pdservice_jira_ids: JSON.stringify($("#multiselect").val())
-			},
-			progress: true
-		})
-			.done(function (data) {
-				//versionClick(null, selectVersion);
-				jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
+function connect_pdservice_jira(){
+	$("#pdservice_connect").click(function () {
+		if ($("#pdservice_connect").hasClass("btn-primary") == true) {
+			// data가 존재하지 않음.
+			$.ajax({
+				url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
+				type: "POST",
+				data: {
+					pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
+					pdserviceversion_link: selectVersion,
+					c_pdservice_jira_ids: JSON.stringify($("#multiselect").val())
+				},
+				progress: true
 			})
-			.fail(function (e) {
-				console.log("fail call");
+				.done(function (data) {
+					//versionClick(null, selectVersion);
+					jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
+				})
+				.fail(function (e) {
+					console.log("fail call");
+				})
+				.always(function () {
+					console.log("always call");
+				});
+		} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
+			// data가 이미 있음
+			$.ajax({
+				url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
+				type: "POST",
+				data: {
+					pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
+					pdserviceversion_link: selectVersion,
+					c_pdservice_jira_ids: JSON.stringify($("#multiselect").val())
+				},
+				progress: true
 			})
-			.always(function () {
-				console.log("always call");
-			});
-	} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
-		// data가 이미 있음
-		$.ajax({
-			url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
-			type: "POST",
-			data: {
-				pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				pdserviceversion_link: selectVersion,
-				c_pdservice_jira_ids: JSON.stringify($("#multiselect").val())
-			},
-			progress: true
-		})
-			.done(function (data) {
-				//versionClick(null, selectVersion);
-				jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
-			})
-			.fail(function (e) {
-				console.log("fail call");
-			})
-			.always(function () {
-				console.log("always call");
-			});
-	} else {
-		jError("who are you?");
-	}
-});
+				.done(function (data) {
+					//versionClick(null, selectVersion);
+					jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
+				})
+				.fail(function (e) {
+					console.log("fail call");
+				})
+				.always(function () {
+					console.log("always call");
+				});
+		} else {
+			jError("who are you?");
+		}
+	});
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // JIRA 프로젝트 데이터 로드 후 멀티 셀렉트 빌드 하고 슬림스크롤 적용
 ////////////////////////////////////////////////////////////////////////////////////////
 /* --------------------------- multi select & slim scroll ---------------------------------- */
-$(function () {
+function setdata_for_multiSelect() {
 	$.ajax({
 		url: "/auth-user/api/arms/jiraProject/getChildNode.do?c_id=2",
 		type: "GET",
@@ -374,14 +379,14 @@ $(function () {
 
 	//slim scroll
 	$(".ms-list").slimscroll();
-});
+}
 
 // 멀티 셀렉트 초기화 함수
 function buildMultiSelect() {
 	//multiselect
 	$(".searchable").multiSelect({
-		selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='try \"12\"'>",
-		selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='try \"4\"'>",
+		selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Search Jira Project'>",
+		selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Selected Jira Project'>",
 		afterInit: function (ms) {
 			var that = this,
 				$selectableSearch = that.$selectableUl.prev(),
