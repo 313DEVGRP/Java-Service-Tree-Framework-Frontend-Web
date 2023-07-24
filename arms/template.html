@@ -163,60 +163,55 @@
         <script type="text/javascript" src="../arms/js/common/dwrChat.js" charset="utf-8"></script>
 	</head>
 
-	<body style="overflow-x: hidden">
-		<div
-			class="logo"
-			data-include="html/template/page-logo.html"
-			style="left: 35px !important; position: absolute !important"></div>
+	<body   style="overflow-x: hidden">
+		<div    class="logo"
+			    data-include="html/template/page-logo.html"
+			    style="left: 35px !important; position: absolute !important">
+        </div>
 
-		<nav
-			id="sidebar"
-			class="sidebar nav-collapse collapse"
-			data-include="html/template/page-sidebar.html"></nav>
+		<nav    id="sidebar"
+			    class="sidebar nav-collapse collapse"
+			    data-include="html/template/page-sidebar.html">
+        </nav>
 
-		<div class="wrap">
-			<header
-				class="page-header"
-				data-include="html/template/page-header.html"></header>
+		<div    class="wrap">
+			<header class="page-header"
+				    data-include="html/template/page-header.html">
+            </header>
 
-			<div class="content container">
-				<section
-					class="widgetheader"
-					data-include="html/template/content-header.html"></section>
+			<div    class="content container">
+				<section    class="widgetheader"
+					        data-include="html/template/content-header.html">
+                </section>
 
-				<div
-					class="row"
-					data-include="html/template/content-container.html"></div>
+				<div    class="row"
+					    data-include="html/template/content-container.html">
+                </div>
 
-				<footer
-					class="content-footer pull-right"
-					data-include="html/template/content-footer.html"></footer>
+				<footer class="content-footer pull-right"
+					    data-include="html/template/content-footer.html">
+                </footer>
 			</div>
 		</div>
 
-		<div
-			class="loader animated fadeIn darkBack hide"
-			style="z-index: 999999">
-			<span
-				class="spinner"
-				style="font-size: 13px !important">
-				<i class="fa fa-empire fa-spin"></i>
+		<div    class="loader animated fadeIn darkBack hide"
+			    style="z-index: 999999">
+			<span   class="spinner"
+				    style="font-size: 13px !important">
+				<i  class="fa fa-empire fa-spin"></i>
 				어플리케이션 API Data를 가져오는 중입니다...
 			</span>
 		</div>
 
-		<div
-			id="topicon"
-			style="opacity: 1">
-			<img
-				src="./img/topicon.gif"
-				alt="맨위로" />
+		<div    id="topicon"
+			    style="opacity: 1">
+			<img    src="./img/topicon.gif"
+				    alt="맨위로" />
 		</div>
 
 		<!-- upload template -->
-		<script
-			id="template-upload"
-			type="text/x-tmpl">
+		<script id="template-upload"
+			    type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-upload fade">
 			    <td class="preview"><span class="fade"></span></td>
@@ -250,9 +245,8 @@
 		</script>
 
 		<!-- The template to display files available for download -->
-		<script
-			id="template-download"
-			type="text/x-tmpl">
+		<script id="template-download"
+			    type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-download fade">
 			    {% if (file.error) { %}
