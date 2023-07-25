@@ -25,13 +25,35 @@
 		</header>
 		<div class="body">
 			<blockquote class="font13">1. 제품(서비스) 선택</blockquote>
-			<button class="btn btn-primary btn-block"
-				    data-target="#my_modal2"
-                    data-toggle="modal"
-                    id="modal_popup_id"
-                    type="button">
-				    신규 제품(서비스) 등록하기
-			</button>
+            <div class="clearfix">
+                <div style="float: left">
+                    <button type="button" id="copychecker" class="btn btn-default btn-sm">
+                        Copy
+                    </button>
+                    <button type="button" id="csvchecker" class="btn btn-default btn-sm">
+                        CSV
+                    </button>
+                    <button type="button" id="excelchecker" class="btn btn-default btn-sm">
+                        Excel
+                    </button>
+<!--                    <button type="button" id="printchecker" class="btn btn-default btn-sm">-->
+<!--                        Print-->
+<!--                    </button>-->
+<!--                    <button type="button" id="pdfchecker" class="btn btn-default btn-sm">-->
+<!--                        PDF-->
+<!--                    </button>-->
+                </div>
+
+                <div style="float: right">
+                    <button class="btn btn-primary btn-block"
+                            data-target="#my_modal2"
+                            data-toggle="modal"
+                            id="modal_popup_id"
+                            type="button">
+                        제품(서비스) 추가
+                    </button>
+                </div>
+            </div>
 			<div class="box box-primary"
 				    style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
 				<div    class="box-body">
