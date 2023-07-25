@@ -62,6 +62,43 @@ function runScript(){
 
 }
 
+function loadPlugin(url) {
+	return new Promise(function(resolve, reject) {
+		$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 자바스크립트 라이브러리를 다운로드 중입니다...");
+		$.ajax({
+			url: url,
+			dataType: "script",
+			cache: true,
+			success: function() {
+				// The request was successful
+				console.log(url + ' 플러그인 로드 성공');
+				resolve(); // Promise를 성공 상태로 변경
+			},
+			error: function() {
+				// The request failed
+				console.error(url + ' 플러그인 로드 실패');
+				reject(); // Promise를 실패 상태로 변경
+			}
+		});
+	});
+}
+
+function loadPluginGroupSequentially(group) {
+	return group.reduce(function(promise, url) {
+		return promise.then(function() {
+			return loadPlugin(url);
+		});
+	}, Promise.resolve());
+}
+
+function loadPluginGroupsParallelAndSequential(groups) {
+	var promises = groups.map(function(group) {
+		return loadPluginGroupSequentially(group);
+	});
+	return Promise.all(promises);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // include 레이아웃 html 파일을 로드하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////

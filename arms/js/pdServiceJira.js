@@ -10,52 +10,62 @@ var versionList;
 
 function execDocReady() {
 
-	$.when(
-		$.getJavascript("../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"),
+	$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css");
+	$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css");
+	$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css");
 
-		$.getJavascript("../reference/lightblue4/docs/lib/d3/d3.min.js"),
-		$.getJavascript("../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js"),
+	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css");
+	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css");
+	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css");
 
-		$.getJavascript("../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"),
+	var pluginGroups = [
+		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+			"../reference/lightblue4/docs/lib/d3/d3.min.js",
+			"../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js",
+			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"],
 
-		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
-		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
-		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
-		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
-		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
-		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
-		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
+		[	"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
-		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
-		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
-		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js")
-	).done(function() {
+		[	"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"]
+		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+	];
 
-		setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
+	loadPluginGroupsParallelAndSequential(pluginGroups)
+		.then(function() {
 
-		// 데이터 테이블 로드 함수
-		var waitDataTable = setInterval(function () {
-			try {
-				if (!$.fn.DataTable.isDataTable("#pdservice_table")) {
-					dataTableLoad();
-					clearInterval(waitDataTable);
+			console.log('모든 플러그인 로드 완료');
+			setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
+
+			// 데이터 테이블 로드 함수
+			var waitDataTable = setInterval(function () {
+				try {
+					if (!$.fn.DataTable.isDataTable("#pdservice_table")) {
+						dataTableLoad();
+						clearInterval(waitDataTable);
+					}
+				} catch (err) {
+					console.log("서비스 데이터 테이블 로드가 완료되지 않아서 초기화 재시도 중...");
 				}
-			} catch (err) {
-				console.log("서비스 데이터 테이블 로드가 완료되지 않아서 초기화 재시도 중...");
-			}
-		}, 313 /*milli*/);
+			}, 313 /*milli*/);
 
-		setdata_for_multiSelect();
-		connect_pdservice_jira();
+			setdata_for_multiSelect();
+			connect_pdservice_jira();
 
-		$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
-			initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
+			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
+				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
+			});
+			// 스크립트 실행 로직을 이곳에 추가합니다.
+
+		})
+		.catch(function() {
+			console.error('플러그인 로드 중 오류 발생');
 		});
-	});
 
 }
 
