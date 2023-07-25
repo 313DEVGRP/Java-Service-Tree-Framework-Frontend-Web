@@ -46,7 +46,6 @@ function runScript(){
 		});
 	};
 
-
 	if (ajax_setup()) {
 		$(".loader").removeClass("hide");
 
@@ -54,10 +53,9 @@ function runScript(){
 		if (includeLayout(page)) {
 			$.getScript("js/" + page + ".js", function () {
 
-				$('.widget').widgster();
-
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
+				dwr_login(userName, userName);
 			});
 		}
 	}
@@ -179,7 +177,6 @@ function authUserCheck() {
 					$(".account-picture").append(account_html);
 
 					runScript();
-					dwr_login(userName, userName);
 				},
 				401: function (json) {
 					$(".loader").addClass("hide");
@@ -864,8 +861,6 @@ function dataTable_build(
 	//datatable 좌상단 datarow combobox style
 	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
 	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-	$(jQueryElementID + "_wrapper").css("border-top", "1px solid rgba(51, 51, 51, 0.3)");
-	$(jQueryElementID + "_wrapper").css("padding-top", "5px");
 	//min-height: 30px;
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
