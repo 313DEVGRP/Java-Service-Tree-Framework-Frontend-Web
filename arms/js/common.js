@@ -58,12 +58,13 @@ function loadPlugin(url) {
 				cache: true,
 				success: function() {
 					// The request was successful
-					console.log(url + ' 자바 스크립트 플러그인 로드 성공');
+
+					console.log( "[ common :: loadPlugin ] :: url = " + url + ' 자바 스크립트 플러그인 로드 성공');
 					resolve(); // Promise를 성공 상태로 변경
 				},
 				error: function() {
 					// The request failed
-					console.error(url + ' 플러그인 로드 실패');
+					console.error( "[ common :: loadPlugin ] :: url = " + url + ' 플러그인 로드 실패');
 					reject(); // Promise를 실패 상태로 변경
 				}
 			});
@@ -74,7 +75,7 @@ function loadPlugin(url) {
 				type: "text/css",
 				href: url
 			}).appendTo("head");
-			console.log(url + ' 스타일시트 플러그인 로드 성공');
+			console.log( "[ common :: loadPlugin ] :: url = " + url + ' 스타일시트 플러그인 로드 성공');
 			resolve();
 		}
 	});
@@ -114,7 +115,7 @@ function includeLayout(page) {
 	$.each(includeArea, function () {
 		self = $(this);
 		url = self.data("include");
-		console.log(url);
+		console.log ( "[ common :: authUserCheck ] page = " + url );
 
 		if (url.indexOf("content-header") !== -1) {
 			url = "html/" + page + "/content-header.html";
@@ -209,8 +210,8 @@ function authUserCheck() {
 			global: false,
 			statusCode: {
 				200: function (json) {
-					console.log("authUserCheck :: userName = " + json.preferred_username);
-					console.log("authUserCheck :: permissions = ");
+					console.log("[ common :: authUserCheck ] userName = " + json.preferred_username);
+					console.log("[ common :: authUserCheck ] permissions = ");
 					console.log(json.realm_access.roles);
 					userName = json.preferred_username;
 					permissions = json.realm_access.roles;
@@ -361,13 +362,13 @@ function minValue(arr) {
 // --- 왼쪽 사이드 메뉴 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function setSideMenu(categoryName, listName, collapse) {
-	console.log("setSideMenu :: categoryName → " + categoryName + ", listName → " + listName);
+	console.log("[ common :: setSideMenu ] :: categoryName → " + categoryName + ", listName → " + listName);
 	setTimeout(function () {
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });
 		$(`#${categoryName}`).css({ "font-weight": "900" });
 
 		if(isEmpty(listName)){
-			console.log("setSideMenu :: listName → is null");
+			console.log("[ common :: setSideMenu ] :: listName → is null");
 		}else{
 			$(`#${listName}`).addClass("active");
 			$(`#${listName}`).css({ color: "#a4c6ff" });
@@ -831,19 +832,18 @@ function dataTable_build(
 		}
 	};
 
-	console.log("dataTableBuild :: jQueryElementStr → " + jQueryElementStr);
-	console.log("dataTableBuild :: jQueryElementID → " + jQueryElementID);
-	console.log("dataTableBuild :: columnList → " + columnList);
-	console.log("dataTableBuild :: rowsGroupList → " + rowsGroupList);
-
-	console.log("dataTableBuild :: href: " + $(location).attr("href"));
-	console.log("dataTableBuild :: protocol: " + $(location).attr("protocol"));
-	console.log("dataTableBuild :: host: " + $(location).attr("host"));
-	console.log("dataTableBuild :: pathname: " + $(location).attr("pathname"));
-	console.log("dataTableBuild :: search: " + $(location).attr("search"));
-	console.log("dataTableBuild :: hostname: " + $(location).attr("hostname"));
-	console.log("dataTableBuild :: port: " + $(location).attr("port"));
-	console.log("dataTableBuild :: ajaxUrl: " + ajaxUrl);
+	console.log("[ common :: dataTableBuild ] :: jQueryElementStr → " + jQueryElementStr);
+	console.log("[ common :: dataTableBuild ] :: jQueryElementID → " + jQueryElementID);
+	console.log("[ common :: dataTableBuild ] :: columnList → " + columnList);
+	console.log("[ common :: dataTableBuild ] :: rowsGroupList → " + rowsGroupList);
+	console.log("[ common :: dataTableBuild ] :: href → " + $(location).attr("href"));
+	console.log("[ common :: dataTableBuild ] :: protocol → " + $(location).attr("protocol"));
+	console.log("[ common :: dataTableBuild ] :: host → " + $(location).attr("host"));
+	console.log("[ common :: dataTableBuild ] :: pathname → " + $(location).attr("pathname"));
+	console.log("[ common :: dataTableBuild ] :: search → " + $(location).attr("search"));
+	console.log("[ common :: dataTableBuild ] :: hostname → " + $(location).attr("hostname"));
+	console.log("[ common :: dataTableBuild ] :: port → " + $(location).attr("port"));
+	console.log("[ common :: dataTableBuild ] :: ajaxUrl → " + ajaxUrl);
 
 	var tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {

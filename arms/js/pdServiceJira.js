@@ -35,15 +35,22 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"]
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function() {
 
+			//vfs_fonts 파일이 커서 defer 처리 함.
+			setTimeout(function() {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 3000); // 2초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
+
 			setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
 
 			// 데이터 테이블 로드 함수

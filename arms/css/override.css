@@ -764,6 +764,11 @@ select option {
 	border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
 	border-image-slice: 1;
 }
+.gradient_middle_border {
+	border-bottom: 1px solid transparent;
+	border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #666666, rgb(0 0 0 / 0%));
+	border-image-slice: 1;
+}
 
 /*데이터피커 css 처리*/
 .xdsoft_datetimepicker .xdsoft_label {
@@ -2166,6 +2171,7 @@ p[data-v-35dc3539] {
 
 .icon-container {
 	margin-left: 5px;
+	margin-top: 2px;
 	position: relative;
 	display: inline-block;
 }

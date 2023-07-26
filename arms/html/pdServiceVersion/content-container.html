@@ -1,37 +1,79 @@
 <div class="col-lg-4">
 	<section class="widget">
-		<header>
-			<h4>
+        <header>
+            <h4>
 				<span   class="font13"
-					    style="font-weight: bold">
-                        <i class="fa fa-edit"></i>
-                        제품(서비스) 조회 및 선택
+                        style="font-weight: bold">
+					    <i  class="fa fa-edit"
+                            style="vertical-align: middle;font-size: 14px;"></i>
+					    제품(서비스) 조회 및 선택
 				</span>
-			</h4>
-			<div class="widget-controls">
-				<a  title="Options"
-					href="#">
-					<i class="glyphicon glyphicon-cog"></i>
-				</a>
-				<a  data-widgster="expand"
-					title="Expand"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-up"></i>
-				</a>
-				<a  data-widgster="collapse"
-					title="Collapse"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-down"></i>
-				</a>
-				<a  data-widgster="close"
-					title="Close"
-					href="#">
-					<i class="glyphicon glyphicon-remove"></i>
-				</a>
-			</div>
-		</header>
+            </h4>
+            <div class="widget-controls">
+                <div style="float: right; " class="icon-container">
+                    <i class="fa fa-question-circle"
+                       aria-hidden="true"
+                       style="color: rgba(255,255,255,.45); font-size: 17px !important;"></i>
+                    <span   class="tooltip-text"
+                            id="tooltip-text-wave"
+                            style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
+                        메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
+                    </span>
+                </div>
+                <div style="float: right; position: relative !important;"
+                     class="actions hidden">
+                    <button type="button"
+                            id="noneFilter"
+                            class="btn btn-transparent btn-xs"
+                            style="color: #f8f8f8; ">
+                        Refresh
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
 		<div class="body">
-			<blockquote class="font13">1. 제품(서비스) 선택</blockquote>
+            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+            <div class="clearfix"
+                 style="margin-bottom: 10px; margin-top: 10px;">
+                <div style="float: left">
+                    <button type="button"
+                            id="copychecker"
+                            class="btn btn-default btn-sm">
+                        Copy
+                    </button>
+                    <button type="button"
+                            id="csvchecker"
+                            class="btn btn-default btn-sm">
+                        CSV
+                    </button>
+                    <button type="button"
+                            id="excelchecker"
+                            class="btn btn-default btn-sm">
+                        Excel
+                    </button>
+                    <button type="button"
+                            id="printchecker"
+                            class="btn btn-default btn-sm hidden">
+                        Print
+                    </button>
+                    <button type="button"
+                            id="pdfchecker"
+                            class="btn btn-default btn-sm hidden">
+                        PDF
+                    </button>
+                </div>
+
+                <div style="float: right">
+                    <button class="btn btn-warning btn-block btn-sm"
+                            data-target="#my_modal2"
+                            data-toggle="modal"
+                            id="modal_popup_id"
+                            type="button">
+                        제품(서비스) 관리로 이동
+                    </button>
+                </div>
+            </div>
 			<div    class="box box-primary"
 				    style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
 				<div class="box-body">
@@ -46,14 +88,70 @@
 </div>
 <div class="col-lg-3">
 	<section class="widget">
-		<header>
-			<h5>
-				<i class="fa fa-check-square-o"></i>
-				제품(서비스) Version 조회
-			</h5>
-		</header>
+        <header>
+            <h4>
+				<span   class="font13"
+                        style="font-weight: bold">
+					    <i  class="fa fa-edit"
+                            style="vertical-align: middle;font-size: 14px;"></i>
+					    제품(서비스) Version 조회
+				</span>
+            </h4>
+            <div class="widget-controls">
+                <div style="float: right; " class="icon-container">
+                    <i class="fa fa-question-circle"
+                       aria-hidden="true"
+                       style="color: rgba(255,255,255,.45); font-size: 17px !important;"></i>
+                    <span   class="tooltip-text"
+                            id="tooltip-text-wave"
+                            style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
+                        메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
+                    </span>
+                </div>
+                <div style="float: right; position: relative !important;"
+                     class="actions hidden">
+                    <button type="button"
+                            id="noneFilter"
+                            class="btn btn-transparent btn-xs"
+                            style="color: #f8f8f8; ">
+                        Refresh
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
 		<div class="body">
-			<blockquote class="font13">2. 버전 선택 및 등록</blockquote>
+            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+            <div class="clearfix"
+                 id="default_non_version"
+                 style="margin-bottom: 10px; margin-top: 10px;">
+                <!-- 컴포넌트 대상 -->
+                <div id="selected_info"
+                     style="float: left; width: 100% !important;">
+                    <div    class="panel-group json-menu"
+                            style="margin-bottom: 0px !important">
+                        <li     class="list-group-item json-menu-header"
+                                style="padding: 0px">
+                            <div class="chat-message">
+                                <div    class="chat-message-body"
+                                        style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important;">
+                                    <span   class="arrow"
+                                            style="top: 10px !important;"></span>
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 5px">
+                                        선택된 제품(서비스) :
+                                        <span   id="select_Service"
+                                                style="color: #a4c6ff">
+                                                선택되지 않음
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+
+            </div>
 			<div    class="panel-group"
 				    id="version_accordion"></div>
 		</div>
@@ -62,37 +160,86 @@
 
 <div class="col-lg-5">
 	<section class="widget">
-		<header>
-			<h4>
+        <header>
+            <h4>
 				<span   class="font13"
-					    style="font-weight: bold">
-					<i class="fa fa-edit"></i>
-					제품(서비스) 버전 등록 / 변경
+                        style="font-weight: bold">
+					    <i  class="fa fa-edit"
+                            style="vertical-align: middle;font-size: 14px;"></i>
+					    제품(서비스) 버전 등록 / 변경
 				</span>
-			</h4>
-			<div class="widget-controls">
-				<a  title="Options"
-					href="#">
-					<i class="glyphicon glyphicon-cog"></i>
-				</a>
-				<a  data-widgster="expand"
-					title="Expand"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-up"></i>
-				</a>
-				<a  data-widgster="collapse"
-					title="Collapse"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-down"></i>
-				</a>
-				<a  data-widgster="close"
-					title="Close"
-					href="#">
-					<i class="glyphicon glyphicon-remove"></i>
-				</a>
-			</div>
-		</header>
+            </h4>
+            <div class="widget-controls">
+                <div style="float: right; " class="icon-container">
+                    <i class="fa fa-question-circle"
+                       aria-hidden="true"
+                       style="color: rgba(255,255,255,.45); font-size: 17px !important;"></i>
+                    <span   class="tooltip-text"
+                            id="tooltip-text-wave"
+                            style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
+                        메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
+                    </span>
+                </div>
+                <div style="float: right; position: relative !important;"
+                     class="actions hidden">
+                    <button type="button"
+                            id="noneFilter"
+                            class="btn btn-transparent btn-xs"
+                            style="color: #f8f8f8; ">
+                        Refresh
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
 		<div class="body">
+            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+            <div class="clearfix"
+                 style="margin-bottom: 10px; margin-top: 10px;">
+                <div style="float: left">
+                    <button type="button"
+                            id="copychecker"
+                            class="btn btn-default btn-sm">
+                        Copy
+                    </button>
+                    <button type="button"
+                            id="csvchecker"
+                            class="btn btn-default btn-sm hidden">
+                        CSV
+                    </button>
+                    <button type="button"
+                            id="excelchecker"
+                            class="btn btn-default btn-sm hidden">
+                        Excel
+                    </button>
+                    <button type="button"
+                            id="printchecker"
+                            class="btn btn-default btn-sm hidden">
+                        Print
+                    </button>
+                    <button type="button"
+                            id="pdfchecker"
+                            class="btn btn-default btn-sm hidden">
+                        PDF
+                    </button>
+                </div>
+
+                <div style="float: right">
+                    <button type="button"
+                            id="version_popup"
+                            class="btn btn-warning btn-sm"
+                            data-toggle="modal"
+                            data-target="#my_modal2"
+                            onClick="modalPopup('versionPopup')">
+                        팝업 창으로 보기
+                    </button>
+                    <button type="button"
+                            id="version_update"
+                            class="btn btn-success btn-sm">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
 			<div class="row">
 				<div class="col-md-12">
 					<section class="widget widget-tabs">
@@ -353,24 +500,6 @@
 											</div>
 										</fieldset>
 									</form>
-								</div>
-								<div    class="form-actions"
-									    style="float: right; margin-top: 0px !important">
-									<div>
-										<button type="button"
-                                                id="version_popup"
-                                                class="btn btn-warning"
-                                                data-toggle="modal"
-                                                data-target="#my_modal2"
-                                                onClick="modalPopup('versionPopup')">
-											    팝업 창으로 보기
-										</button>
-										<button type="button"
-                                                id="version_update"
-                                                class="btn btn-success">
-											    Save Changes
-										</button>
-									</div>
 								</div>
 							</div>
 							<div    id="dropdown1"

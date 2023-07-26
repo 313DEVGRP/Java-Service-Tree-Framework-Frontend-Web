@@ -37,14 +37,20 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"]
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function() {
 
+			//vfs_fonts 파일이 커서 defer 처리 함.
+			setTimeout(function() {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 3000); // 2초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
 			//사이드 메뉴 처리
@@ -160,6 +166,9 @@ function dataTableClick(tempDataTable, selectedData) {
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
 	console.log("selectedData.c_id : ", selectedData.c_id);
+
+	$("#default_non_version").empty();
+	$("#default_non_version").css("margin-bottom", "0px");
 
 	dataLoad(selectedData.c_id, selectedData.c_title);
 }
@@ -331,14 +340,14 @@ function dataLoad(getSelectedText, selectedText) {
 
 		var selectedHtml =
 			`<div class="chat-message">
-			<div class="chat-message-body" style="margin-left: 0px !important;">
-				<span class="arrow"></span>
-				<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : </div>
-			<div class="text" style="color: #a4c6ff;">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow"></span>
+					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </div>
+				<div class="text" style="color: #a4c6ff;">
 			` +
 			selectedText +
 			`
-			</div>
+				</div>
 			</div>
 			</div>
 			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
@@ -400,15 +409,15 @@ function draw(main, menu) {
 				   <strong>product service name</strong>
 			   </li>
 			   <button type="button"
-														class="btn btn-primary btn-block"
-														id="modal_popup_id"
-														data-toggle="modal"
-														data-target="#my_modal2"
-														style="margin-bottom: 10px !important; margin-top: 10px;"
-														onClick="modalPopup('modal_popup_id')">
-							신규 버전 등록하기
-						</button>
-						<div class="gradient_bottom_border" style="width: 100%; height: 2px; margin-bottom: 10px;"></div>`;
+					class="btn btn-primary btn-block btn-sm"
+					id="modal_popup_id"
+					data-toggle="modal"
+					data-target="#my_modal2"
+					style="margin-bottom: 10px !important; margin-top: 10px;"
+					onClick="modalPopup('modal_popup_id')">
+					신규 버전 등록하기
+				</button>
+				<div class="gradient_bottom_border" style="width: 100%; height: 2px; margin-bottom: 10px;"></div>`;
 
 	for (var i = 0; i < menu.length; i++) {
 		if (i == 0) {

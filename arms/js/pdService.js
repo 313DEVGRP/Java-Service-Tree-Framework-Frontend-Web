@@ -60,8 +60,8 @@ function execDocReady() {
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
 			}, 3000); // 2초 후에 실행됩니다.
-
 			console.log('모든 플러그인 로드 완료');
+
 			// 사이드 메뉴 색상 설정
 			setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
 

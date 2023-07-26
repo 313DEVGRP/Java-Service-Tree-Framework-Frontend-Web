@@ -4,38 +4,38 @@
 			<h4>
 				<span   class="font13"
 					    style="font-weight: bold">
-					    <i class="fa fa-edit"></i>
+					    <i  class="fa fa-edit"
+                            style="vertical-align: middle;font-size: 14px;"></i>
 					    제품(서비스) 조회 및 선택
 				</span>
 			</h4>
 			<div class="widget-controls">
-                <div class="icon-container">
+                <div style="float: right; " class="icon-container">
                     <i class="fa fa-question-circle"
                        aria-hidden="true"
-                       style="color: rgba(255,255,255,.45);"></i>
+                       style="color: rgba(255,255,255,.45); font-size: 17px !important;"></i>
                     <span   class="tooltip-text"
                             id="tooltip-text-wave"
                             style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
                         메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
                     </span>
                 </div>
-			</div>
-		</header>
-		<div class="body">
-			<blockquote class="font13">
-                1. 제품(서비스) 선택
                 <div style="float: right; position: relative !important;"
-                     class="actions">
+                     class="actions hidden">
                     <button type="button"
                             id="noneFilter"
-                            class="btn btn-transparent btn-xs">
+                            class="btn btn-transparent btn-xs"
+                            style="color: #f8f8f8; ">
                         Refresh
                         <span class="glyphicon glyphicon-repeat"></span>
                     </button>
                 </div>
-            </blockquote>
+			</div>
+		</header>
+		<div class="body">
+            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
             <div class="clearfix"
-                 style="margin-bottom: 9px;">
+                 style="margin-bottom: 10px; margin-top: 10px;">
                 <div style="float: left">
                     <button type="button"
                             id="copychecker"
@@ -52,16 +52,20 @@
                             class="btn btn-default btn-sm">
                         Excel
                     </button>
-<!--                    <button type="button" id="printchecker" class="btn btn-default btn-sm">-->
-<!--                        Print-->
-<!--                    </button>-->
-<!--                    <button type="button" id="pdfchecker" class="btn btn-default btn-sm">-->
-<!--                        PDF-->
-<!--                    </button>-->
+                    <button type="button"
+                            id="printchecker"
+                            class="btn btn-default btn-sm hidden">
+                        Print
+                    </button>
+                    <button type="button"
+                            id="pdfchecker"
+                            class="btn btn-default btn-sm hidden">
+                        PDF
+                    </button>
                 </div>
 
                 <div style="float: right">
-                    <button class="btn btn-primary btn-block"
+                    <button class="btn btn-primary btn-block btn-sm"
                             data-target="#my_modal2"
                             data-toggle="modal"
                             id="modal_popup_id"
@@ -88,69 +92,91 @@
 			<h4>
 				<span   class="font13"
 					    style="font-weight: bold">
-					    <i class="fa fa-edit"></i>
+					    <i  class="fa fa-edit"
+                            style="vertical-align: middle;font-size: 14px;"></i>
 					    제품(서비스) 상세 보기 / 변경
 				</span>
 			</h4>
             <div class="widget-controls">
-                <div class="icon-container">
+                <div style="float: right; " class="icon-container">
                     <i class="fa fa-question-circle"
                        aria-hidden="true"
-                       style="color: rgba(255,255,255,.45);"></i>
+                       style="color: rgba(255,255,255,.45); font-size: 17px !important;"></i>
                     <span   class="tooltip-text"
                             id="tooltip-text-wave"
                             style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
                         메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
                     </span>
                 </div>
-            </div>
-		</header>
-		<div class="body">
-            <blockquote class="font13">
-                2. 제품(서비스) 관리
                 <div style="float: right; position: relative !important;"
                      class="actions hidden">
                     <button type="button"
                             id="noneFilter"
-                            class="btn btn-transparent btn-xs">
+                            class="btn btn-transparent btn-xs"
+                            style="color: #f8f8f8; ">
                         Refresh
                         <span class="glyphicon glyphicon-repeat"></span>
                     </button>
                 </div>
-            </blockquote>
+            </div>
+		</header>
+		<div class="body">
+            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
             <div class="clearfix"
-                 style="margin-bottom: 9px;">
-                <div style="float: left"
-                     class="hidden">
-                    <button type="button"
-                            id="copychecker"
-                            class="btn btn-default btn-sm">
-                        Copy
-                    </button>
-                    <button type="button"
-                            id="csvchecker"
-                            class="btn btn-default btn-sm">
-                        CSV
-                    </button>
-                    <button type="button"
-                            id="excelchecker"
-                            class="btn btn-default btn-sm">
-                        Excel
-                    </button>
-                    <button type="button" id="printchecker"
-                            class="btn btn-default btn-sm">
-                        Print
-                    </button>
-                    <button type="button" id="pdfchecker"
-                            class="btn btn-default btn-sm">
-                        PDF
-                    </button>
+                 style="margin-bottom: 10px; margin-top: 10px;">
+                <!-- 컴포넌트 대상 -->
+                <div id="selected_info"
+                     style="float: left">
+                    <div    class="panel-group json-menu"
+                            id="versionAccordion"
+                            style="margin-bottom: 0px !important">
+                        <li     class="list-group-item json-menu-header"
+                                style="padding: 0px">
+                            <div class="chat-message">
+                                <div    class="chat-message-body"
+                                        style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important;">
+                                    <span   class="arrow"
+                                            style="top: 10px !important;"></span>
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 5px">
+                                        선택된 제품(서비스) :
+                                        <span   id="select_Service"
+                                                style="color: #a4c6ff">
+                                                선택되지 않음
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
                 </div>
 
                 <div style="float: right">
                     <button type="button"
-                            class="btn btn-warning">
+                            class="btn btn-warning btn-sm">
                         새 창으로 제품(서비스) 내용 보기
+                    </button>
+                </div>
+                <div style="float: right"
+                     class="hidden">
+                    <button class="btn btn-warning btn-sm"
+                            data-target="#my_modal1"
+                            data-toggle="modal"
+                            id="extend_modal_popup_id"
+                            type="button">
+                        팝업 창으로 편집 하기
+                    </button>
+                    <button type="button"
+                            id="pdservice_update"
+                            class="btn btn-success btn-sm">
+                        제품(서비스) 변경 사항 저장
+                    </button>
+                </div>
+                <div style="float: right"
+                     class="hidden">
+                    <button id="delete_pdservice"
+                            class="btn btn-danger btn-sm">
+                        제품(서비스) 삭제
                     </button>
                 </div>
             </div>
@@ -415,23 +441,6 @@
 										</fieldset>
 									</form>
 								</div>
-								<div    class="form-actions"
-									    style="float: right; margin-top: 0px !important">
-									<div>
-										<button class="btn btn-warning"
-                                                data-target="#my_modal1"
-                                                data-toggle="modal"
-                                                id="extend_modal_popup_id"
-                                                type="button">
-											팝업 창으로 편집 하기
-										</button>
-										<button type="button"
-                                                id="pdservice_update"
-                                                class="btn btn-success">
-											제품(서비스) 변경 사항 저장
-										</button>
-									</div>
-								</div>
 							</div>
 							<div    id="dropdown1"
 								    class="tab-pane">
@@ -442,9 +451,11 @@
                                     </label>
 									"을(를) 삭제 하시겠습니까?
 								</p>
+                                <br>
 								<p>
 									<strong>Jira 프로젝트에서 제품(서비스)와 연관된 버전은 삭제되지 않습니다.</strong>
 								</p>
+                                <br>
 								<p>
 									<strong>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong>
 								</p>
@@ -454,13 +465,6 @@
 								<p>
 									<strong>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong>
 								</p>
-								<div>
-									<button id="delete_pdservice"
-										    class="btn btn-danger">
-										제품(서비스) 삭제
-									</button>
-									<button class="btn btn-default">Cancel</button>
-								</div>
 							</div>
 							<div class="body-middle">
 								<form   id="fileupload"
