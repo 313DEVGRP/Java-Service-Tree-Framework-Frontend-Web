@@ -92,29 +92,68 @@
 					    제품(서비스) 상세 보기 / 변경
 				</span>
 			</h4>
-			<div class="widget-controls">
-				<a  title="Options"
-					href="#">
-					<i class="glyphicon glyphicon-cog"></i>
-				</a>
-				<a  data-widgster="expand"
-					title="Expand"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-up"></i>
-				</a>
-				<a  data-widgster="collapse"
-					title="Collapse"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-down"></i>
-				</a>
-				<a  data-widgster="close"
-					title="Close"
-					href="#">
-					<i class="glyphicon glyphicon-remove"></i>
-				</a>
-			</div>
+            <div class="widget-controls">
+                <div class="icon-container">
+                    <i class="fa fa-question-circle"
+                       aria-hidden="true"
+                       style="color: rgba(255,255,255,.45);"></i>
+                    <span   class="tooltip-text"
+                            id="tooltip-text-wave"
+                            style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
+                        메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
+                    </span>
+                </div>
+            </div>
 		</header>
 		<div class="body">
+            <blockquote class="font13">
+                2. 제품(서비스) 관리
+                <div style="float: right; position: relative !important;"
+                     class="actions hidden">
+                    <button type="button"
+                            id="noneFilter"
+                            class="btn btn-transparent btn-xs">
+                        Refresh
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </button>
+                </div>
+            </blockquote>
+            <div class="clearfix"
+                 style="margin-bottom: 9px;">
+                <div style="float: left"
+                     class="hidden">
+                    <button type="button"
+                            id="copychecker"
+                            class="btn btn-default btn-sm">
+                        Copy
+                    </button>
+                    <button type="button"
+                            id="csvchecker"
+                            class="btn btn-default btn-sm">
+                        CSV
+                    </button>
+                    <button type="button"
+                            id="excelchecker"
+                            class="btn btn-default btn-sm">
+                        Excel
+                    </button>
+                    <button type="button" id="printchecker"
+                            class="btn btn-default btn-sm">
+                        Print
+                    </button>
+                    <button type="button" id="pdfchecker"
+                            class="btn btn-default btn-sm">
+                        PDF
+                    </button>
+                </div>
+
+                <div style="float: right">
+                    <button type="button"
+                            class="btn btn-warning">
+                        새 창으로 제품(서비스) 내용 보기
+                    </button>
+                </div>
+            </div>
 			<div class="row">
 				<div class="col-md-12">
 					<section class="widget widget-tabs">
@@ -280,16 +319,8 @@
 										<div class="control-group">
 											<label  class="control-label"
 												    style="margin-top: 10px">
-												제품(서비스) 컨텐츠 &nbsp;
+												제품(서비스) 컨텐츠 :
 											</label>
-											<div    class="col-sm-8"
-												    style="margin-top: 10px">
-												문서로 보기 :
-												<button type="button"
-													    class="btn btn-warning">
-													새 창으로 제품(서비스) 내용 보기
-												</button>
-											</div>
 											<br />
 											<br />
 											<br />
