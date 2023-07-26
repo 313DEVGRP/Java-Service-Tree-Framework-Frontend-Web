@@ -27,24 +27,6 @@ function runScript(){
 		$("header.page-header").hide();
 	}
 
-	$.getStylesheet = function(href) {
-		$(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> 플러그인 스타일시트를 다운로드 중입니다...");
-		$("<link/>", {
-			rel: "stylesheet",
-			type: "text/css",
-			href: href
-		}).appendTo("head");
-	};
-
-	$.getJavascript = function(href) {
-		$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 자바스크립트 라이브러리를 다운로드 중입니다...");
-		$.ajax({
-			url: href,
-			dataType: "script",
-			async: false,
-			cache: true
-		});
-	};
 
 	if (ajax_setup()) {
 		$(".loader").removeClass("hide");
@@ -62,6 +44,9 @@ function runScript(){
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+// 플러그인 로드 모듈 ( 병렬 시퀀스 )
+////////////////////////////////////////////////////////////////////////////////////////
 function loadPlugin(url) {
 	return new Promise(function(resolve, reject) {
 
