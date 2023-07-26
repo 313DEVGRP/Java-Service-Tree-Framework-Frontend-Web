@@ -10,26 +10,24 @@ var versionList;
 
 function execDocReady() {
 
-	$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css");
-
-	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css");
-
 	var pluginGroups = [
 		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/lightblue4/docs/lib/d3/d3.min.js",
 			"../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"],
 
-		[	"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
+			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
-		[	"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
+		[	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"]

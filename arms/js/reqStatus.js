@@ -7,49 +7,72 @@ var dataTableRef;
 
 function execDocReady() {
 
-	$.when(
-		$.getJavascript("../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"),
 
-		$.getJavascript("../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"),
+	var pluginGroups = [
+		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+			"../reference/light-blue/lib/jquery.fileupload.js",
+			"../reference/light-blue/lib/jquery.fileupload-fp.js",
+			"../reference/light-blue/lib/jquery.fileupload-ui.js",
+			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
+			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
+			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
+			"../reference/light-blue/lib/jquery.iframe-transport.js"],
 
-		$.getJavascript("../reference/light-blue/lib/bootstrap-datepicker.js"),
-		$.getStylesheet("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css"),
-		$.getJavascript("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"),
+		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
+			"../reference/light-blue/lib/bootstrap-datepicker.js",
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"],
 
-		$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"),
-		$.getJavascript("../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"),
-		$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"),
-		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"),
-		$.getJavascript("../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"),
-		$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"),
-		$.getJavascript("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"),
+		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
+			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
-		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"),
-		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"),
-		$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"),
-		$.getJavascript("../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js")
+		[	"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
+			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
+			"../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"]
+		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+	];
 
-	).done(function() {
+	loadPluginGroupsParallelAndSequential(pluginGroups)
+		.then(function() {
 
-		//좌측 메뉴
-		setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
+			console.log('모든 플러그인 로드 완료');
 
-		$(".ms-select-all")
+			//좌측 메뉴
+			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
 
-		//제품(서비스) 셀렉트 박스 이니시에이터
-		makePdServiceSelectBox();
-		//버전 멀티 셀렉트 박스 이니시에이터
-		makeVersionMultiSelectBox();
-	});
+			$(".ms-select-all")
+
+			//제품(서비스) 셀렉트 박스 이니시에이터
+			makePdServiceSelectBox();
+			//버전 멀티 셀렉트 박스 이니시에이터
+			makeVersionMultiSelectBox();
+			// 스크립트 실행 로직을 이곳에 추가합니다.
+
+		})
+		.catch(function() {
+			console.error('플러그인 로드 중 오류 발생');
+		});
+
+
 
 }
 

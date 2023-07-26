@@ -13,17 +13,6 @@ var dataTableRef; // 데이터테이블 참조 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
 
-	$.getStylesheet("../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css");
-
-	$.getStylesheet("../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css");
-
-	$.getStylesheet("../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css");
-
-	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css");
-	$.getStylesheet("../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css");
-
 	var pluginGroups = [
 		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
 			"../reference/light-blue/lib/jquery.fileupload.js",
@@ -34,15 +23,22 @@ function execDocReady() {
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
 			"../reference/light-blue/lib/jquery.iframe-transport.js"],
 
-		[	"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
+			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
-		[	"../reference/light-blue/lib/bootstrap-datepicker.js",
+		[	"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
+			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"],
 
-		[	"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
+		[	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
+			"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js"]

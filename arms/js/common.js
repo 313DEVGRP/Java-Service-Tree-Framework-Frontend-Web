@@ -64,23 +64,44 @@ function runScript(){
 
 function loadPlugin(url) {
 	return new Promise(function(resolve, reject) {
-		$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 자바스크립트 라이브러리를 다운로드 중입니다...");
-		$.ajax({
-			url: url,
-			dataType: "script",
-			cache: true,
-			success: function() {
-				// The request was successful
-				console.log(url + ' 플러그인 로드 성공');
-				resolve(); // Promise를 성공 상태로 변경
-			},
-			error: function() {
-				// The request failed
-				console.error(url + ' 플러그인 로드 실패');
-				reject(); // Promise를 실패 상태로 변경
-			}
-		});
+
+		if( isJavaScriptFile(url) ){
+			$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i>" + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
+			$.ajax({
+				url: url,
+				dataType: "script",
+				cache: true,
+				success: function() {
+					// The request was successful
+					console.log(url + ' 자바 스크립트 플러그인 로드 성공');
+					resolve(); // Promise를 성공 상태로 변경
+				},
+				error: function() {
+					// The request failed
+					console.error(url + ' 플러그인 로드 실패');
+					reject(); // Promise를 실패 상태로 변경
+				}
+			});
+		} else {
+			$(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i>" + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
+			$("<link/>", {
+				rel: "stylesheet",
+				type: "text/css",
+				href: url
+			}).appendTo("head");
+			console.log(url + ' 스타일시트 플러그인 로드 성공');
+			resolve();
+		}
 	});
+}
+
+function getFileNameFromURL(url) {
+	var parts = url.split('/');
+	return parts[parts.length - 1];
+}
+
+function isJavaScriptFile(filename) {
+	return filename.endsWith('.js');
 }
 
 function loadPluginGroupSequentially(group) {
