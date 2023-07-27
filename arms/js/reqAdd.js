@@ -9,19 +9,20 @@ function execDocReady() {
 
 	var pluginGroups = [
 		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/light-blue/lib/jquery.fileupload.js",
-			"../reference/light-blue/lib/jquery.fileupload-fp.js",
-			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
-			"../reference/light-blue/lib/jquery.iframe-transport.js"],
+			"../reference/light-blue/lib/jquery.iframe-transport.js",
+			"../reference/light-blue/lib/jquery.fileupload.js",
+			"../reference/light-blue/lib/jquery.fileupload-fp.js",
+			"../reference/light-blue/lib/jquery.fileupload-ui.js"],
 
 		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
-			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"],
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -61,7 +62,8 @@ function execDocReady() {
 			}, 3000); // 2초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
-			//좌측 메뉴
+			//사이드 메뉴 처리
+			$('.widget').widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
 
 			//신규 요구사항 등록 버튼 숨김
@@ -104,6 +106,18 @@ function execDocReady() {
 			makeDatePicker($("#btn_end_calendar_popup"));
 
 			autoCompleteForUser();
+			selected_after_action_for_select2();
+			click_btn_for_new_req();
+			switch_action_for_mode();
+
+			click_btn_for_req_update();
+			click_btn_for_search_history();
+			change_tab_action();
+			click_btn_for_connect_req_jira();
+
+			init_fileupload();
+
+			save_req();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 		})
@@ -509,12 +523,12 @@ function dataTableDrawCallback(tableInfo) {
 		.columns.adjust()
 		.responsive.recalc();
 }
-////////////////////////////////////////////////////////////////////////////////////////
-//파일 관리 : fileupload
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /** file upload 이니시에이터 **/
-$(function () {
-	"use strict";
+////////////////////////////////////////////////////////////////////////////////////////
+function init_fileupload() {
 
 	// Initialize the jQuery File Upload widget:
 	var $fileupload = $("#fileupload");
@@ -537,21 +551,22 @@ $(function () {
 		dataType: "json",
 		context: $fileupload[0]
 	}).done(function (result) {
-		$(this).fileupload("option", "done").call(this, null, { result: result });
+		$(this).fileupload("option", "done").call(this, null, {result: result});
 	});
-});
 
-$("#fileupload").bind("fileuploadsubmit", function (e, data) {
-	// The example input, doesn't have to be part of the upload form:
-	var input = $("#fileIdlink");
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
-	data.formData = { fileIdlink: input.val(), c_title: tableName };
-	if (!data.formData.fileIdlink) {
-		data.context.find("button").prop("disabled", false);
-		input.focus();
-		return false;
-	}
-});
+
+	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
+		// The example input, doesn't have to be part of the upload form:
+		var input = $("#fileIdlink");
+		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		data.formData = {fileIdlink: input.val(), c_title: tableName};
+		if (!data.formData.fileIdlink) {
+			data.context.find("button").prop("disabled", false);
+			input.focus();
+			return false;
+		}
+	});
+}
 
 function get_FileList_By_Req() {
 	$("#fileIdlink").val(selectedJsTreeId);
@@ -930,23 +945,29 @@ function formatUserSelection(jsonData) {
 	return jsonData.text;
 }
 
+///////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 선택하고 나면 선택된 데이터 공간을 벌리기위한 설정 --- //
-$("#editview_req_reviewers").on("select2:select", function (e) {
-	console.log("select2:select");
-});
+///////////////////////////////////////////////////////////////////////////////
+function selected_after_action_for_select2() {
+	$("#editview_req_reviewers").on("select2:select", function (e) {
+		console.log("select2:select");
+	});
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 신규 요구사항 팝업 데이터 셋팅
 ///////////////////////////////////////////////////////////////////////////////
-$("#new_reqregist01").click(function () {
-	registNewPopup();
-});
-$("#new_req_regist02").click(function () {
-	registNewPopup();
-});
-$("#new_req_regist03").click(function () {
-	registNewPopup();
-});
+function click_btn_for_new_req() {
+	$("#new_reqregist01").click(function () {
+		registNewPopup();
+	});
+	$("#new_req_regist02").click(function () {
+		registNewPopup();
+	});
+	$("#new_req_regist03").click(function () {
+		registNewPopup();
+	});
+}
 
 function registNewPopup() {
 	var height = $(document).height() - 700;
@@ -1054,140 +1075,147 @@ function registNewPopup() {
 ///////////////////////////////////////////////////////////////////////////////
 // 팝업에서 등록 모드에 따라서, 정보를 보여주거나 감추는 역할
 ///////////////////////////////////////////////////////////////////////////////
-$(".form-horizontal input[name=reqType]").on("change", function () {
-	if ($("input[name=reqType]:checked").val() == "default") {
-		$("#popup_version_div").show();
-		$("#popup_reviewer_div").show();
-		$("#popup_priority_div").show();
-	} else {
-		$("#popup_version_div").hide();
-		$("#popup_reviewer_div").hide();
-		$("#popup_priority_div").hide();
-	}
-});
+function switch_action_for_mode() {
+	$(".form-horizontal input[name=reqType]").on("change", function () {
+		if ($("input[name=reqType]:checked").val() == "default") {
+			$("#popup_version_div").show();
+			$("#popup_reviewer_div").show();
+			$("#popup_priority_div").show();
+		} else {
+			$("#popup_version_div").hide();
+			$("#popup_reviewer_div").hide();
+			$("#popup_priority_div").hide();
+		}
+	});
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 팝업에서 신규 요구사항 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
-$("#save_req").click(function () {
-	var reviewers01 = "none";
-	var reviewers02 = "none";
-	var reviewers03 = "none";
-	var reviewers04 = "none";
-	var reviewers05 = "none";
-	if ($("#popup_pdservice_reviewers").select2("data")[0] != undefined) {
-		reviewers01 = $("#popup_pdservice_reviewers").select2("data")[0].text;
-	}
-	if ($("#popup_pdservice_reviewers").select2("data")[1] != undefined) {
-		reviewers02 = $("#popup_pdservice_reviewers").select2("data")[1].text;
-	}
-	if ($("#popup_pdservice_reviewers").select2("data")[2] != undefined) {
-		reviewers03 = $("#popup_pdservice_reviewers").select2("data")[2].text;
-	}
-	if ($("#popup_pdservice_reviewers").select2("data")[3] != undefined) {
-		reviewers04 = $("#popup_pdservice_reviewers").select2("data")[3].text;
-	}
-	if ($("#popup_pdservice_reviewers").select2("data")[4] != undefined) {
-		reviewers05 = $("#popup_pdservice_reviewers").select2("data")[4].text;
-	}
+function save_req() {
 
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
-
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
-		type: "POST",
-		data: {
-			ref: selectedJsTreeId,
-			c_title: $("#req_title").val(),
-			c_type: $("input[name=reqType]:checked").val(),
-			c_req_pdservice_link: $("#country").val(),
-			c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
-			c_req_writer: "[" + userName + "]" + " - " + userID,
-			c_req_create_date: new Date(),
-			c_req_priority_link: $("input[name='req_priority']:checked").val(),
-			c_req_state_link: 3, //요구사항 생성.
-			c_req_reviewer01: reviewers01,
-			c_req_reviewer02: reviewers02,
-			c_req_reviewer03: reviewers03,
-			c_req_reviewer04: reviewers04,
-			c_req_reviewer05: reviewers05,
-			c_req_reviewer01_status: "Draft",
-			c_req_reviewer02_status: "Draft",
-			c_req_reviewer03_status: "Draft",
-			c_req_reviewer04_status: "Draft",
-			c_req_reviewer05_status: "Draft",
-			c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
-			c_req_desc: "설명",
-			c_req_etc: "비고"
-		},
-		statusCode: {
-			200: function () {
-				$("#product_tree").jstree("refresh");
-				$("#close_req").trigger("click");
-				jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
-			}
+	$("#save_req").click(function () {
+		var reviewers01 = "none";
+		var reviewers02 = "none";
+		var reviewers03 = "none";
+		var reviewers04 = "none";
+		var reviewers05 = "none";
+		if ($("#popup_pdservice_reviewers").select2("data")[0] != undefined) {
+			reviewers01 = $("#popup_pdservice_reviewers").select2("data")[0].text;
 		}
+		if ($("#popup_pdservice_reviewers").select2("data")[1] != undefined) {
+			reviewers02 = $("#popup_pdservice_reviewers").select2("data")[1].text;
+		}
+		if ($("#popup_pdservice_reviewers").select2("data")[2] != undefined) {
+			reviewers03 = $("#popup_pdservice_reviewers").select2("data")[2].text;
+		}
+		if ($("#popup_pdservice_reviewers").select2("data")[3] != undefined) {
+			reviewers04 = $("#popup_pdservice_reviewers").select2("data")[3].text;
+		}
+		if ($("#popup_pdservice_reviewers").select2("data")[4] != undefined) {
+			reviewers05 = $("#popup_pdservice_reviewers").select2("data")[4].text;
+		}
+
+		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
+			type: "POST",
+			data: {
+				ref: selectedJsTreeId,
+				c_title: $("#req_title").val(),
+				c_type: $("input[name=reqType]:checked").val(),
+				c_req_pdservice_link: $("#country").val(),
+				c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
+				c_req_writer: "[" + userName + "]" + " - " + userID,
+				c_req_create_date: new Date(),
+				c_req_priority_link: $("input[name='req_priority']:checked").val(),
+				c_req_state_link: 3, //요구사항 생성.
+				c_req_reviewer01: reviewers01,
+				c_req_reviewer02: reviewers02,
+				c_req_reviewer03: reviewers03,
+				c_req_reviewer04: reviewers04,
+				c_req_reviewer05: reviewers05,
+				c_req_reviewer01_status: "Draft",
+				c_req_reviewer02_status: "Draft",
+				c_req_reviewer03_status: "Draft",
+				c_req_reviewer04_status: "Draft",
+				c_req_reviewer05_status: "Draft",
+				c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
+				c_req_desc: "설명",
+				c_req_etc: "비고"
+			},
+			statusCode: {
+				200: function () {
+					$("#product_tree").jstree("refresh");
+					$("#close_req").trigger("click");
+					jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
+				}
+			}
+		});
 	});
-});
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 편집 탭 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
-$("#edit_tab_req_update").click(function () {
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
-	var reqName = $("#editview_req_name").val();
+function click_btn_for_req_update(){
+	$("#edit_tab_req_update").click(function () {
+		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		var reqName = $("#editview_req_name").val();
 
-	var reviewers01 = "none";
-	var reviewers02 = "none";
-	var reviewers03 = "none";
-	var reviewers04 = "none";
-	var reviewers05 = "none";
-	if ($("#editview_req_reviewers").select2("data")[0] != undefined) {
-		reviewers01 = $("#editview_req_reviewers").select2("data")[0].text;
-	}
-	if ($("#editview_req_reviewers").select2("data")[1] != undefined) {
-		reviewers02 = $("#editview_req_reviewers").select2("data")[1].text;
-	}
-	if ($("#editview_req_reviewers").select2("data")[2] != undefined) {
-		reviewers03 = $("#editview_req_reviewers").select2("data")[2].text;
-	}
-	if ($("#editview_req_reviewers").select2("data")[3] != undefined) {
-		reviewers04 = $("#editview_req_reviewers").select2("data")[3].text;
-	}
-	if ($("#editview_req_reviewers").select2("data")[4] != undefined) {
-		reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
-	}
-
-	//우선 순위 값 셋팅
-	var priorityValue = $("#editview_req_priority").children(".btn.active").children("input").attr("id");
-	priorityValue = priorityValue.replace("editview_req_priority-option", "");
-
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
-		type: "POST",
-		data: {
-			c_id: $("#editview_req_id").val(),
-			c_title: $("#editview_req_name").val(),
-			c_version_link: JSON.stringify($("#edit_multi_version").val()),
-			c_writer: "admin",
-			c_writer_date: new Date(),
-			c_priority: priorityValue,
-			c_reviewer01: reviewers01,
-			c_reviewer02: reviewers02,
-			c_reviewer03: reviewers03,
-			c_reviewer04: reviewers04,
-			c_reviewer05: reviewers05,
-			c_req_status: "ChangeReq",
-			c_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
-		},
-		statusCode: {
-			200: function () {
-				$("#product_tree").jstree("refresh");
-				jSuccess(reqName + "의 데이터가 변경되었습니다.");
-			}
+		var reviewers01 = "none";
+		var reviewers02 = "none";
+		var reviewers03 = "none";
+		var reviewers04 = "none";
+		var reviewers05 = "none";
+		if ($("#editview_req_reviewers").select2("data")[0] != undefined) {
+			reviewers01 = $("#editview_req_reviewers").select2("data")[0].text;
 		}
+		if ($("#editview_req_reviewers").select2("data")[1] != undefined) {
+			reviewers02 = $("#editview_req_reviewers").select2("data")[1].text;
+		}
+		if ($("#editview_req_reviewers").select2("data")[2] != undefined) {
+			reviewers03 = $("#editview_req_reviewers").select2("data")[2].text;
+		}
+		if ($("#editview_req_reviewers").select2("data")[3] != undefined) {
+			reviewers04 = $("#editview_req_reviewers").select2("data")[3].text;
+		}
+		if ($("#editview_req_reviewers").select2("data")[4] != undefined) {
+			reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
+		}
+
+		//우선 순위 값 셋팅
+		var priorityValue = $("#editview_req_priority").children(".btn.active").children("input").attr("id");
+		priorityValue = priorityValue.replace("editview_req_priority-option", "");
+
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
+			type: "POST",
+			data: {
+				c_id: $("#editview_req_id").val(),
+				c_title: $("#editview_req_name").val(),
+				c_version_link: JSON.stringify($("#edit_multi_version").val()),
+				c_writer: "admin",
+				c_writer_date: new Date(),
+				c_priority: priorityValue,
+				c_reviewer01: reviewers01,
+				c_reviewer02: reviewers02,
+				c_reviewer03: reviewers03,
+				c_reviewer04: reviewers04,
+				c_reviewer05: reviewers05,
+				c_req_status: "ChangeReq",
+				c_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
+			},
+			statusCode: {
+				200: function () {
+					$("#product_tree").jstree("refresh");
+					jSuccess(reqName + "의 데이터가 변경되었습니다.");
+				}
+			}
+		});
 	});
-});
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 달력
@@ -1211,70 +1239,158 @@ function makeDatePicker(calender) {
 ///////////////////////////////////////////////////////////////////////////////
 // History TAB 검색 버튼
 ///////////////////////////////////////////////////////////////////////////////
-$("#logsearch").click(function () {
-	$(".timeline-item-body").remove();
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
+function click_btn_for_search_history(){
+	$("#logsearch").click(function () {
+		$(".timeline-item-body").remove();
+		var tableName = "T_ARMS_REQADD_" + $("#country").val();
 
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getHistory.do",
-		type: "GET",
-		data: {
-			startDate: $("#input_req_start_date").val(),
-			endDate: $("#input_req_end_date").val()
-		},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function () {
-				console.log("성공!");
-				jSuccess("데이터 조회가 완료되었습니다.");
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getHistory.do",
+			type: "GET",
+			data: {
+				startDate: $("#input_req_start_date").val(),
+				endDate: $("#input_req_end_date").val()
+			},
+			contentType: "application/json;charset=UTF-8",
+			dataType: "json",
+			progress: true,
+			statusCode: {
+				200: function () {
+					console.log("성공!");
+					jSuccess("데이터 조회가 완료되었습니다.");
+				}
 			}
-		}
-	})
-		.done(function (data) {
-			for (var k in data) {
-				var obj = data[k];
+		})
+			.done(function (data) {
+				for (var k in data) {
+					var obj = data[k];
 
-				console.log("jsonIndex[" + k + "]=" + "obj.fileIdlink => " + obj.fileIdlink); //t_arms_filerepository
-				console.log("jsonIndex[" + k + "]=" + "obj.c_pdservice_jira_ids => " + obj.c_pdservice_jira_ids); //t_arms_pdserviceconnect
-				console.log("jsonIndex[" + k + "]=" + "obj.c_jira_con_passmode => " + obj.c_jira_con_passmode); //t_arms_pdservicjira
-				console.log("jsonIndex[" + k + "]=" + "obj.c_end_date => " + obj.c_end_date); //t_arms_pdservicversion
-				console.log("jsonIndex[" + k + "]=" + "obj.c_fileid_link => " + obj.c_fileid_link); //t_arms_pdservice
-				console.log("jsonIndex[" + k + "]=" + "obj.c_req_status => " + obj.c_req_status); //t_arms_reqadd
+					console.log("jsonIndex[" + k + "]=" + "obj.fileIdlink => " + obj.fileIdlink); //t_arms_filerepository
+					console.log("jsonIndex[" + k + "]=" + "obj.c_pdservice_jira_ids => " + obj.c_pdservice_jira_ids); //t_arms_pdserviceconnect
+					console.log("jsonIndex[" + k + "]=" + "obj.c_jira_con_passmode => " + obj.c_jira_con_passmode); //t_arms_pdservicjira
+					console.log("jsonIndex[" + k + "]=" + "obj.c_end_date => " + obj.c_end_date); //t_arms_pdservicversion
+					console.log("jsonIndex[" + k + "]=" + "obj.c_fileid_link => " + obj.c_fileid_link); //t_arms_pdservice
+					console.log("jsonIndex[" + k + "]=" + "obj.c_req_status => " + obj.c_req_status); //t_arms_reqadd
 
-				if (
-					!isEmpty(obj.fileIdlink) &&
-					isEmpty(obj.c_pdservice_jira_ids) &&
-					isEmpty(obj.c_jira_con_passmode) &&
-					isEmpty(obj.c_end_date) &&
-					isEmpty(obj.c_fileid_link) &&
-					isEmpty(obj.c_req_status)
-				) {
-					//t_arms_filerepository
-					if (obj.c_title == "pdService") {
-					} else {
-						var timestamp_t_arms_filerepository = new Date(obj.c_date);
-						var datetime_t_arms_filerepository =
-							timestamp_t_arms_filerepository.getFullYear() +
+					if (
+						!isEmpty(obj.fileIdlink) &&
+						isEmpty(obj.c_pdservice_jira_ids) &&
+						isEmpty(obj.c_jira_con_passmode) &&
+						isEmpty(obj.c_end_date) &&
+						isEmpty(obj.c_fileid_link) &&
+						isEmpty(obj.c_req_status)
+					) {
+						//t_arms_filerepository
+						if (obj.c_title == "pdService") {
+						} else {
+							var timestamp_t_arms_filerepository = new Date(obj.c_date);
+							var datetime_t_arms_filerepository =
+								timestamp_t_arms_filerepository.getFullYear() +
+								"/" +
+								(timestamp_t_arms_filerepository.getMonth() + 1) +
+								"/" +
+								timestamp_t_arms_filerepository.getDate() +
+								" " +
+								timestamp_t_arms_filerepository.getHours() +
+								":" +
+								timestamp_t_arms_filerepository.getMinutes();
+
+							var add_t_arms_filerepository =
+								'<li class="timeline-item-body">\n' +
+								'	<i class="fa fa-check-square-o bg-maroon"></i>\n' +
+								'	<div class="timeline-item">\n' +
+								'		<span class="arrow"></span>\n' +
+								'		<span class="time"><i class="fa fa-clock-o"></i>' +
+								datetime_t_arms_filerepository +
+								"</span>\n" +
+								'		<h3 class="timeline-header"><a href="#">기획</a> <small class="font11">요구사항 파일 로그</small></h3>\n' +
+								'		<div class="timeline-body col-md-4 font11">\n' +
+								'			<a href="#" target="_blank" class="btn bg-maroon btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> 로그 자세히 보기</a>\n' +
+								"		</div>\n" +
+								' <div class="timeline-footer col-md-8 font12 fontw600">\n' +
+								"  저장된 액션 : " +
+								obj.c_state +
+								"<br>\n" +
+								"  저장된 액션 : " +
+								obj.c_method +
+								"<br>\n" +
+								"  저장된 파일 이름 : " +
+								obj.fileName +
+								"<br>\n" +
+								"  저장된 파일 타입 : " +
+								obj.contentType +
+								"\n" +
+								"  </div>\n" +
+								" </div>\n" +
+								"</li>";
+							$(".timeline.timeline-inverse").append(add_t_arms_filerepository);
+						}
+					} else if (
+						isEmpty(obj.fileIdlink) &&
+						!isEmpty(obj.c_pdservice_jira_ids) &&
+						isEmpty(obj.c_jira_con_passmode) &&
+						isEmpty(obj.c_end_date) &&
+						isEmpty(obj.c_fileid_link) &&
+						isEmpty(obj.c_req_status)
+					) {
+						//t_arms_pdserviceconnect
+					} else if (
+						isEmpty(obj.fileIdlink) &&
+						isEmpty(obj.c_pdservice_jira_ids) &&
+						!isEmpty(obj.c_jira_con_passmode) &&
+						isEmpty(obj.c_end_date) &&
+						isEmpty(obj.c_fileid_link) &&
+						isEmpty(obj.c_req_status)
+					) {
+						//t_arms_pdservicjira
+					} else if (
+						isEmpty(obj.fileIdlink) &&
+						isEmpty(obj.c_pdservice_jira_ids) &&
+						isEmpty(obj.c_jira_con_passmode) &&
+						!isEmpty(obj.c_end_date) &&
+						isEmpty(obj.c_fileid_link) &&
+						isEmpty(obj.c_req_status)
+					) {
+						//t_arms_pdservicversion
+					} else if (
+						isEmpty(obj.fileIdlink) &&
+						isEmpty(obj.c_pdservice_jira_ids) &&
+						isEmpty(obj.c_jira_con_passmode) &&
+						isEmpty(obj.c_end_date) &&
+						!isEmpty(obj.c_fileid_link) &&
+						isEmpty(obj.c_req_status)
+					) {
+						//t_arms_pdservice
+					} else if (
+						isEmpty(obj.fileIdlink) &&
+						isEmpty(obj.c_pdservice_jira_ids) &&
+						isEmpty(obj.c_jira_con_passmode) &&
+						isEmpty(obj.c_end_date) &&
+						isEmpty(obj.c_fileid_link) &&
+						!isEmpty(obj.c_req_status)
+					) {
+						//t_arms_reqadd
+						var timestamp_t_arms_reqadd = new Date(obj.c_date);
+						var datetime_t_arms_reqadd =
+							timestamp_t_arms_reqadd.getFullYear() +
 							"/" +
-							(timestamp_t_arms_filerepository.getMonth() + 1) +
+							(timestamp_t_arms_reqadd.getMonth() + 1) +
 							"/" +
-							timestamp_t_arms_filerepository.getDate() +
+							timestamp_t_arms_reqadd.getDate() +
 							" " +
-							timestamp_t_arms_filerepository.getHours() +
+							timestamp_t_arms_reqadd.getHours() +
 							":" +
-							timestamp_t_arms_filerepository.getMinutes();
+							timestamp_t_arms_reqadd.getMinutes();
 
-						var add_t_arms_filerepository =
+						var add_t_arms_reqadd =
 							'<li class="timeline-item-body">\n' +
 							'	<i class="fa fa-check-square-o bg-maroon"></i>\n' +
 							'	<div class="timeline-item">\n' +
 							'		<span class="arrow"></span>\n' +
 							'		<span class="time"><i class="fa fa-clock-o"></i>' +
-							datetime_t_arms_filerepository +
+							datetime_t_arms_reqadd +
 							"</span>\n" +
-							'		<h3 class="timeline-header"><a href="#">기획</a> <small class="font11">요구사항 파일 로그</small></h3>\n' +
+							'		<h3 class="timeline-header"><a href="#">기획</a> <small class="font11">요구사항 등록,변경,삭제 로그</small></h3>\n' +
 							'		<div class="timeline-body col-md-4 font11">\n' +
 							'			<a href="#" target="_blank" class="btn bg-maroon btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> 로그 자세히 보기</a>\n' +
 							"		</div>\n" +
@@ -1285,216 +1401,134 @@ $("#logsearch").click(function () {
 							"  저장된 액션 : " +
 							obj.c_method +
 							"<br>\n" +
-							"  저장된 파일 이름 : " +
-							obj.fileName +
+							"  저장된 요구사항 이름 : " +
+							obj.c_title +
 							"<br>\n" +
-							"  저장된 파일 타입 : " +
-							obj.contentType +
+							"  저장된 제품(서비스) 아이디 : " +
+							obj.c_pdservice_link +
+							"<br>\n" +
+							"  저장된 요구사항 상태 : " +
+							obj.c_req_status +
 							"\n" +
 							"  </div>\n" +
 							" </div>\n" +
 							"</li>";
-						$(".timeline.timeline-inverse").append(add_t_arms_filerepository);
+						$(".timeline.timeline-inverse").append(add_t_arms_reqadd);
+					} else {
+						console.log("정의되지 않은 타입의 객체 데이터 확인 :: " + obj);
 					}
-				} else if (
-					isEmpty(obj.fileIdlink) &&
-					!isEmpty(obj.c_pdservice_jira_ids) &&
-					isEmpty(obj.c_jira_con_passmode) &&
-					isEmpty(obj.c_end_date) &&
-					isEmpty(obj.c_fileid_link) &&
-					isEmpty(obj.c_req_status)
-				) {
-					//t_arms_pdserviceconnect
-				} else if (
-					isEmpty(obj.fileIdlink) &&
-					isEmpty(obj.c_pdservice_jira_ids) &&
-					!isEmpty(obj.c_jira_con_passmode) &&
-					isEmpty(obj.c_end_date) &&
-					isEmpty(obj.c_fileid_link) &&
-					isEmpty(obj.c_req_status)
-				) {
-					//t_arms_pdservicjira
-				} else if (
-					isEmpty(obj.fileIdlink) &&
-					isEmpty(obj.c_pdservice_jira_ids) &&
-					isEmpty(obj.c_jira_con_passmode) &&
-					!isEmpty(obj.c_end_date) &&
-					isEmpty(obj.c_fileid_link) &&
-					isEmpty(obj.c_req_status)
-				) {
-					//t_arms_pdservicversion
-				} else if (
-					isEmpty(obj.fileIdlink) &&
-					isEmpty(obj.c_pdservice_jira_ids) &&
-					isEmpty(obj.c_jira_con_passmode) &&
-					isEmpty(obj.c_end_date) &&
-					!isEmpty(obj.c_fileid_link) &&
-					isEmpty(obj.c_req_status)
-				) {
-					//t_arms_pdservice
-				} else if (
-					isEmpty(obj.fileIdlink) &&
-					isEmpty(obj.c_pdservice_jira_ids) &&
-					isEmpty(obj.c_jira_con_passmode) &&
-					isEmpty(obj.c_end_date) &&
-					isEmpty(obj.c_fileid_link) &&
-					!isEmpty(obj.c_req_status)
-				) {
-					//t_arms_reqadd
-					var timestamp_t_arms_reqadd = new Date(obj.c_date);
-					var datetime_t_arms_reqadd =
-						timestamp_t_arms_reqadd.getFullYear() +
-						"/" +
-						(timestamp_t_arms_reqadd.getMonth() + 1) +
-						"/" +
-						timestamp_t_arms_reqadd.getDate() +
-						" " +
-						timestamp_t_arms_reqadd.getHours() +
-						":" +
-						timestamp_t_arms_reqadd.getMinutes();
+				} //for end
 
-					var add_t_arms_reqadd =
-						'<li class="timeline-item-body">\n' +
-						'	<i class="fa fa-check-square-o bg-maroon"></i>\n' +
-						'	<div class="timeline-item">\n' +
-						'		<span class="arrow"></span>\n' +
-						'		<span class="time"><i class="fa fa-clock-o"></i>' +
-						datetime_t_arms_reqadd +
-						"</span>\n" +
-						'		<h3 class="timeline-header"><a href="#">기획</a> <small class="font11">요구사항 등록,변경,삭제 로그</small></h3>\n' +
-						'		<div class="timeline-body col-md-4 font11">\n' +
-						'			<a href="#" target="_blank" class="btn bg-maroon btn-xs" style="font-size: 11px;"><i class="fa fa-share"></i> 로그 자세히 보기</a>\n' +
-						"		</div>\n" +
-						' <div class="timeline-footer col-md-8 font12 fontw600">\n' +
-						"  저장된 액션 : " +
-						obj.c_state +
-						"<br>\n" +
-						"  저장된 액션 : " +
-						obj.c_method +
-						"<br>\n" +
-						"  저장된 요구사항 이름 : " +
-						obj.c_title +
-						"<br>\n" +
-						"  저장된 제품(서비스) 아이디 : " +
-						obj.c_pdservice_link +
-						"<br>\n" +
-						"  저장된 요구사항 상태 : " +
-						obj.c_req_status +
-						"\n" +
-						"  </div>\n" +
-						" </div>\n" +
-						"</li>";
-					$(".timeline.timeline-inverse").append(add_t_arms_reqadd);
-				} else {
-					console.log("정의되지 않은 타입의 객체 데이터 확인 :: " + obj);
-				}
-			} //for end
-
-			var endPointHtmlStr =
-				"<!-- END timeline item -->\n" +
-				'                                    <li class="timeline-item-body">\n' +
-				'                                        <i class="fa fa-clock-o bg-gray"></i>\n' +
-				"                                    </li>";
-			$(".timeline.timeline-inverse").append(endPointHtmlStr);
-		})
-		.fail(function (e) {})
-		.always(function () {});
-});
+				var endPointHtmlStr =
+					"<!-- END timeline item -->\n" +
+					'                                    <li class="timeline-item-body">\n' +
+					'                                        <i class="fa fa-clock-o bg-gray"></i>\n' +
+					"                                    </li>";
+				$(".timeline.timeline-inverse").append(endPointHtmlStr);
+			})
+			.fail(function (e) {})
+			.always(function () {});
+	});
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 탭 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
-$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
-	var target = $(e.target).attr("href"); // activated tab
+function change_tab_action(){
+	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
+		var target = $(e.target).attr("href"); // activated tab
 
-	if (target == "#jira") {
-		console.log("jira tab click event");
-		//1-1. 제품(서비스) 아이디를 기준으로, -- $('#country').val()
-		//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
-		//2. 요구사항 테이블 ( REQADD ) 을 검색하여
-		//3. JIRA_VER 정보에 체크해 주기.
-		//제품 서비스 셀렉트 박스 데이터 바인딩
-		//요구사항 클릭하면 자세히보기 탭으로 가니까 이 로직은 유효하다.
-		var tableName = "T_ARMS_REQADD_" + $("#country").val();
-		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do",
-			data: {
-				c_id: selectedJsTreeId
-			},
-			type: "GET",
-			contentType: "application/json;charset=UTF-8",
-			dataType: "json",
-			progress: true
-		})
-			.done(function (data) {
-				console.log(data.c_jira_ver_link);
-
-				for (var key in data) {
-					var value = data[key];
-					//console.log(key + "=" + value);
-				}
-
-				if (isEmpty(data.c_jira_ver_link)) {
-					console.log("jiraVerArr is empty");
-				} else {
-					var jiraVerArrStr = data.c_jira_ver_link;
-					//특수 문자 중에 콤마는 빼고 지움
-					var reg = /[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-					jiraVerArrStr = jiraVerArrStr.replace(reg, "");
-					var jiraVerArr = jiraVerArrStr.split(",");
-
-					var loopCount = jiraVerArr.length;
-
-					for (var i = 0; i < loopCount; i++) {
-						console.log("loop check i = " + i);
-						console.log("loop check value = " + jiraVerArr[i]);
-						$("input:checkbox[value='" + jiraVerArr[i] + "']").prop("checked", true);
-					}
-				}
+		if (target == "#jira") {
+			console.log("jira tab click event");
+			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#country').val()
+			//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
+			//2. 요구사항 테이블 ( REQADD ) 을 검색하여
+			//3. JIRA_VER 정보에 체크해 주기.
+			//제품 서비스 셀렉트 박스 데이터 바인딩
+			//요구사항 클릭하면 자세히보기 탭으로 가니까 이 로직은 유효하다.
+			var tableName = "T_ARMS_REQADD_" + $("#country").val();
+			$.ajax({
+				url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do",
+				data: {
+					c_id: selectedJsTreeId
+				},
+				type: "GET",
+				contentType: "application/json;charset=UTF-8",
+				dataType: "json",
+				progress: true
 			})
-			.fail(function (e) {})
-			.always(function () {});
-	}
-});
+				.done(function (data) {
+					console.log(data.c_jira_ver_link);
+
+					for (var key in data) {
+						var value = data[key];
+						//console.log(key + "=" + value);
+					}
+
+					if (isEmpty(data.c_jira_ver_link)) {
+						console.log("jiraVerArr is empty");
+					} else {
+						var jiraVerArrStr = data.c_jira_ver_link;
+						//특수 문자 중에 콤마는 빼고 지움
+						var reg = /[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+						jiraVerArrStr = jiraVerArrStr.replace(reg, "");
+						var jiraVerArr = jiraVerArrStr.split(",");
+
+						var loopCount = jiraVerArr.length;
+
+						for (var i = 0; i < loopCount; i++) {
+							console.log("loop check i = " + i);
+							console.log("loop check value = " + jiraVerArr[i]);
+							$("input:checkbox[value='" + jiraVerArr[i] + "']").prop("checked", true);
+						}
+					}
+				})
+				.fail(function (e) {})
+				.always(function () {});
+		}
+	});
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 - 지라 연결 변경 버튼 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
-$("#req_jiraver_connect_change").click(function () {
-	console.log("req_jiraver_connect_change");
+function click_btn_for_connect_req_jira(){
+	$("#req_jiraver_connect_change").click(function () {
+		console.log("req_jiraver_connect_change");
 
-	//JiraVersion 정보 셋팅
-	var chk_Val = [];
-	$("input:checkbox[name=jiraVerList]:checked").each(function (i, iVal) {
-		chk_Val.push(iVal.value);
-	});
-	console.log(JSON.stringify(chk_Val));
+		//JiraVersion 정보 셋팅
+		var chk_Val = [];
+		$("input:checkbox[name=jiraVerList]:checked").each(function (i, iVal) {
+			chk_Val.push(iVal.value);
+		});
+		console.log(JSON.stringify(chk_Val));
 
-	//반영할 테이블 네임 값 셋팅
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		//반영할 테이블 네임 값 셋팅
+		var tableName = "T_ARMS_REQADD_" + $("#country").val();
 
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
-		data: {
-			c_id: selectedJsTreeId,
-			c_version_link: "[]",
-			c_jira_link: "independent",
-			c_jira_ver_link: JSON.stringify(chk_Val)
-		},
-		type: "POST",
-		progress: true
-	})
-		.done(function (data) {
-			for (var key in data) {
-				var value = data[key];
-				console.log(key + "=" + value);
-			}
-
-			var loopCount = 3;
-			for (var i = 0; i < loopCount; i++) {
-				console.log("loop check i = " + i);
-			}
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
+			data: {
+				c_id: selectedJsTreeId,
+				c_version_link: "[]",
+				c_jira_link: "independent",
+				c_jira_ver_link: JSON.stringify(chk_Val)
+			},
+			type: "POST",
+			progress: true
 		})
-		.fail(function (e) {})
-		.always(function () {});
-});
+			.done(function (data) {
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+
+				var loopCount = 3;
+				for (var i = 0; i < loopCount; i++) {
+					console.log("loop check i = " + i);
+				}
+			})
+			.fail(function (e) {})
+			.always(function () {});
+	});
+}

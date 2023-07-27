@@ -14,7 +14,8 @@ function execDocReady() {
 		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/lightblue4/docs/lib/d3/d3.min.js",
 			"../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js",
-			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js"],
+			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -51,6 +52,8 @@ function execDocReady() {
 			}, 3000); // 2초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
+			//사이드 메뉴 처리
+			$('.widget').widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
 
 			// 데이터 테이블 로드 함수
@@ -67,6 +70,7 @@ function execDocReady() {
 
 			setdata_for_multiSelect();
 			connect_pdservice_jira();
+			init_versionList();
 
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
@@ -79,8 +83,9 @@ function execDocReady() {
 		});
 
 }
-
+////////////////////////////////////////////////////////////////////////////////////////
 // --- 데이터 테이블 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
 function dataTableLoad() {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
@@ -152,7 +157,12 @@ function dataTableDrawCallback(tableInfo) {
 		.responsive.recalc();
 }
 
+//데이터 테이블 ajax load 이후 콜백.
+function dataTableCallBack(settings, json) {}
+
+////////////////////////////////////////////////////////////////////////////////////////
 // 버전 리스트를 재로드하는 함수 ( 버전 추가, 갱신, 삭제 시 호출 )
+////////////////////////////////////////////////////////////////////////////////////////
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
@@ -185,8 +195,10 @@ function dataLoad(getSelectedText, selectedText) {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // versionlist 이니셜라이즈
-(function ($) {
+////////////////////////////////////////////////////////////////////////////////////////
+function init_versionList() {
 	let menu;
 	$.fn.jsonMenu = function (action, items, options) {
 		$(this).addClass("json-menu");
@@ -199,9 +211,11 @@ function dataLoad(getSelectedText, selectedText) {
 		}
 		return this;
 	};
-})(jQuery);
+}
 
+////////////////////////////////////////////////////////////////////////////////////////
 // version list html 삽입
+////////////////////////////////////////////////////////////////////////////////////////
 function draw(main, menu) {
 	main.html("");
 
@@ -244,7 +258,9 @@ function draw(main, menu) {
 	main.html(data);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 //버전 클릭할 때 동작하는 함수
+////////////////////////////////////////////////////////////////////////////////////////
 function versionClick(element, c_id) {
 	$("a[name='versionLink_List']").each(function () {
 		this.style.background = "";
@@ -308,7 +324,9 @@ function versionClick(element, c_id) {
 		});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 제품(서비스)-버전-지라 저장
+////////////////////////////////////////////////////////////////////////////////////////
 function connect_pdservice_jira(){
 	$("#pdservice_connect").click(function () {
 		if ($("#pdservice_connect").hasClass("btn-primary") == true) {
@@ -402,7 +420,9 @@ function setdata_for_multiSelect() {
 	$(".ms-list").slimscroll();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 멀티 셀렉트 초기화 함수
+////////////////////////////////////////////////////////////////////////////////////////
 function buildMultiSelect() {
 	//multiselect
 	$(".searchable").multiSelect({
@@ -441,7 +461,3 @@ function buildMultiSelect() {
 		}
 	});
 }
-
-
-//데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(settings, json) {}

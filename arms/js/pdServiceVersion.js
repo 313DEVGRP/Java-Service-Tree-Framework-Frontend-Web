@@ -16,7 +16,8 @@ function execDocReady() {
 	var pluginGroups = [
 		[	"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
-			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"],
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -54,6 +55,7 @@ function execDocReady() {
 			console.log('모든 플러그인 로드 완료');
 
 			//사이드 메뉴 처리
+			$('.widget').widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
 
 			// DatePicker 처리 부분 ( 팝업 레이어 )
@@ -104,6 +106,10 @@ function execDocReady() {
 				}
 			}, 313 /*milli*/);
 			// 스크립트 실행 로직을 이곳에 추가합니다.
+
+			click_btn_for_delete_version();
+			click_btn_for_update_version();
+			init_versionList();
 
 		})
 		.catch(function() {
@@ -183,8 +189,10 @@ function dataTableDrawCallback(tableInfo) {
 		.responsive.recalc();
 }
 
-// --- 팝업 띄울때 사이즈 조정 -- //
 
+////////////////////////////////////////////////////////////////////////////////////////
+// --- 팝업 띄울때 사이즈 조정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
 function modalPopup(popupName) {
 	if (popupName === "modal_popup_id") {
 		// modalPopupId = 신규버전 등록하기
@@ -218,58 +226,68 @@ function modalPopup(popupName) {
 		.css("height", height + "px");
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 버전 삭제 버튼
-$("#del_version").click(function () {
-	console.log("delete btn");
-	$.ajax({
-		url: "/auth-user/api/arms/pdService/removeVersion.do",
-		type: "DELETE",
-		data: {
-			pdservice_c_id: selectId,
-			version_c_id: selectVersion
-		},
-		statusCode: {
-			200: function () {
-				console.log("성공!");
-				//모달 팝업 끝내고
-				$("#close_version").trigger("click");
-				//버전 데이터 재 로드
-				dataLoad(selectId, selectName);
+////////////////////////////////////////////////////////////////////////////////////////
+function click_btn_for_delete_version() {
+	$("#del_version").click(function () {
+		console.log("delete btn");
+		$.ajax({
+			url: "/auth-user/api/arms/pdService/removeVersion.do",
+			type: "DELETE",
+			data: {
+				pdservice_c_id: selectId,
+				version_c_id: selectVersion
+			},
+			statusCode: {
+				200: function () {
+					console.log("성공!");
+					//모달 팝업 끝내고
+					$("#close_version").trigger("click");
+					//버전 데이터 재 로드
+					dataLoad(selectId, selectName);
+				}
 			}
-		}
+		});
 	});
-});
+}
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 버전 업데이트 저장 버튼
-$("#version_update").click(function () {
-	console.log("update btn");
+////////////////////////////////////////////////////////////////////////////////////////
+function click_btn_for_update_version() {
+	$("#version_update").click(function () {
+		console.log("update btn");
 
-	var send_data = {
-		c_id: selectVersion,
-		c_title: $("#input_pdservice_version").val(),
-		c_pds_version_contents: CKEDITOR.instances.input_pdservice_editor.getData(),
-		c_pds_version_start_date: $("#input_pdservice_start_date").val(),
-		c_pds_version_end_date: $("#input_pdservice_end_date").val()
-	};
-	$.ajax({
-		url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link="+selectId,
-		type: "put",
-		contentType : 'application/json; charset=utf-8',
-		data: JSON.stringify(send_data),
-		statusCode: {
-			200: function () {
-				console.log("성공!");
-				jSuccess("데이터가 변경되었습니다.");
-				//모달 팝업 끝내고
-				$("#close_version").trigger("click");
-				//버전 데이터 재 로드
-				dataLoad(selectId, selectName);
+		var send_data = {
+			c_id: selectVersion,
+			c_title: $("#input_pdservice_version").val(),
+			c_pds_version_contents: CKEDITOR.instances.input_pdservice_editor.getData(),
+			c_pds_version_start_date: $("#input_pdservice_start_date").val(),
+			c_pds_version_end_date: $("#input_pdservice_end_date").val()
+		};
+		$.ajax({
+			url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link=" + selectId,
+			type: "put",
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(send_data),
+			statusCode: {
+				200: function () {
+					console.log("성공!");
+					jSuccess("데이터가 변경되었습니다.");
+					//모달 팝업 끝내고
+					$("#close_version").trigger("click");
+					//버전 데이터 재 로드
+					dataLoad(selectId, selectName);
+				}
 			}
-		}
+		});
 	});
-});
+}
 
+////////////////////////////////////////////////////////////////////////////////////////
 //버전 팝업 신규 업데이트
+////////////////////////////////////////////////////////////////////////////////////////
 function modalPopupNewUpdate() {
 	console.log("save btn");
 
@@ -304,7 +322,9 @@ function modalPopupNewUpdate() {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // 버전 팝업 수정 업데이트
+////////////////////////////////////////////////////////////////////////////////////////
 function modalPopupUpdate() {
 	$.ajax({
 		url: "/auth-user/api/arms/pdServiceVersion/updateNode.do",
@@ -329,7 +349,9 @@ function modalPopupUpdate() {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 //버전 리스트를 재로드하는 함수 ( 버전 추가, 갱신, 삭제 시 호출 )
+////////////////////////////////////////////////////////////////////////////////////////
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
@@ -384,8 +406,10 @@ function dataLoad(getSelectedText, selectedText) {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 // versionlist 이니셜라이즈
-(function ($) {
+////////////////////////////////////////////////////////////////////////////////////////
+function init_versionList() {
 	var menu;
 	$.fn.jsonMenu = function (action, items, options) {
 		$(this).addClass("json-menu");
@@ -398,9 +422,11 @@ function dataLoad(getSelectedText, selectedText) {
 		}
 		return this;
 	};
-})(jQuery);
+}
 
+////////////////////////////////////////////////////////////////////////////////////////
 //version list html 삽입
+////////////////////////////////////////////////////////////////////////////////////////
 function draw(main, menu) {
 	main.html("");
 
@@ -454,9 +480,11 @@ function draw(main, menu) {
 	main.html(data);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 //버전 클릭할 때 동작하는 함수
 //1. 상세보기 데이터 바인딩
 //2. 편집하기 데이터 바인딩
+////////////////////////////////////////////////////////////////////////////////////////
 function versionClick(element, c_id) {
 	$("a[name='versionLink_List']").each(function () {
 		this.style.background = "";

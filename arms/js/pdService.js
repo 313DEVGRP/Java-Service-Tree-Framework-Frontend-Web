@@ -15,13 +15,13 @@ function execDocReady() {
 
 	var pluginGroups = [
 		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/light-blue/lib/jquery.fileupload.js",
-			"../reference/light-blue/lib/jquery.fileupload-fp.js",
-			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
-			"../reference/light-blue/lib/jquery.iframe-transport.js"],
+			"../reference/light-blue/lib/jquery.iframe-transport.js",
+			"../reference/light-blue/lib/jquery.fileupload.js",
+			"../reference/light-blue/lib/jquery.fileupload-fp.js",
+			"../reference/light-blue/lib/jquery.fileupload-ui.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -33,7 +33,8 @@ function execDocReady() {
 
 		[	"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
-			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"],
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
 		[	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -63,6 +64,7 @@ function execDocReady() {
 			console.log('모든 플러그인 로드 완료');
 
 			// 사이드 메뉴 색상 설정
+			$('.widget').widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
 
 			// 파일 업로드 관련 레이어 숨김 처리
@@ -123,7 +125,7 @@ function execDocReady() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//탭 클릭 이벤트 처리
+// 탭 클릭 이벤트 처리
 ////////////////////////////////////////////////////////////////////////////////////////
 function tab_click_event() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
@@ -439,7 +441,6 @@ function dataTableClick(tempDataTable, selectedData) {
 	$("table tbody.files").empty();
 	// Load existing files:
 	var $fileupload = $("#fileupload");
-	// Load existing files:
 
 	$.ajax({
 		// Uncomment the following to send cross-domain cookies:

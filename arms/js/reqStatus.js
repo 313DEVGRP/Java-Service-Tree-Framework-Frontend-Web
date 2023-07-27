@@ -10,19 +10,20 @@ function execDocReady() {
 
 	var pluginGroups = [
 		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/light-blue/lib/jquery.fileupload.js",
-			"../reference/light-blue/lib/jquery.fileupload-fp.js",
-			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
-			"../reference/light-blue/lib/jquery.iframe-transport.js"],
+			"../reference/light-blue/lib/jquery.iframe-transport.js",
+			"../reference/light-blue/lib/jquery.fileupload.js",
+			"../reference/light-blue/lib/jquery.fileupload-fp.js",
+			"../reference/light-blue/lib/jquery.fileupload-ui.js"],
 
 		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
-			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"],
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -62,10 +63,9 @@ function execDocReady() {
 			}, 3000); // 2초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
-			//좌측 메뉴
+			//사이드 메뉴 처리
+			$('.widget').widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
-
-			$(".ms-select-all")
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
