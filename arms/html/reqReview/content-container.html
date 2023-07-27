@@ -1,9 +1,112 @@
 <div class="col-md-12">
 	<section class="widget">
 		<header>
-			<h4>Inbox App</h4>
+            <h4>
+				<span   class="font13"
+                        style="font-weight: bold">
+					    <i  class="fa fa-edit"
+                            style="vertical-align: middle;font-size: 14px;"></i>
+					    Inbox App
+				</span>
+            </h4>
+            <div class="widget-controls">
+                <a  data-widgster="toleft"
+                    title="change width to left"
+                    href="#">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </a>
+                <a  data-widgster="expand"
+                    title="Expand"
+                    href="#">
+                    <i class="glyphicon glyphicon-chevron-up"></i>
+                </a>
+                <a  data-widgster="collapse"
+                    title="Collapse"
+                    href="#">
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+                <a  data-widgster="toright"
+                    title="change width to right"
+                    href="#">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+                <a  data-widgster="restore"
+                    title="Restore"
+                    href="#">
+                    <span class="glyphicon glyphicon-repeat"></span>
+                </a>
+                <a  data-widgster="fullscreen"
+                    title="Fullscreen"
+                    href="#">
+                    <i class="glyphicon glyphicon-fullscreen"
+                       style="font-size: 11px"></i>
+                </a>
+            </div>
 		</header>
 		<div class="body">
+            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+            <blockquote class="font13"
+                        style="margin-top: 5px;">
+                1. 제품(서비스) 선택
+                <div style="float: right;">
+                    <button class="btn btn-transparent btn-xs"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
+                            onclick="return true;">
+                        Help
+                        <i  class="fa fa-question"
+                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                    </button>
+                </div>
+            </blockquote>
+            <div class="clearfix"
+                 style="margin-bottom: 10px; margin-top: 10px;">
+                <div style="float: left">
+                    <button type="button"
+                            id="copychecker"
+                            class="btn btn-default btn-sm">
+                        Copy
+                    </button>
+                    <button type="button"
+                            id="csvchecker"
+                            class="btn btn-default btn-sm">
+                        CSV
+                    </button>
+                    <button type="button"
+                            id="excelchecker"
+                            class="btn btn-default btn-sm">
+                        Excel
+                    </button>
+                    <button type="button"
+                            id="printchecker"
+                            class="btn btn-default btn-sm hidden">
+                        Print
+                    </button>
+                    <button type="button"
+                            id="pdfchecker"
+                            class="btn btn-default btn-sm hidden">
+                        PDF
+                    </button>
+                </div>
+
+                <div style="float: right">
+                    <button class="btn btn-primary btn-block btn-sm"
+                            data-target="#my_modal2"
+                            data-toggle="modal"
+                            id="modal_popup_id"
+                            type="button">
+                        제품(서비스) 추가
+                    </button>
+                </div>
+            </div>
+            <div    class="box box-primary"
+                    style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+                <div    class="box-body">
+                    <table  class="display"
+                            style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"
+                            id="pdservice_table">
+                    </table>
+                </div>
+            </div>
 			<div
 				id="review_box_app"
 				class="review-box">
