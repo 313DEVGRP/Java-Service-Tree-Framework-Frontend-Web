@@ -10,10 +10,10 @@
 				</span>
 			</h4>
             <div class="widget-controls">
-                <a  data-widgster="fullscreen"
-                    title="Fullscreen"
+                <a  data-widgster="close"
+                    title="Close"
                     href="#">
-                    <span class="glyphicon glyphicon-fullscreen"></span>
+                    <i class="glyphicon glyphicon-remove"></i>
                 </a>
                 <a  data-widgster="restore"
                     title="Restore"
@@ -23,7 +23,7 @@
                 <a  data-widgster="toleft"
                     title="change width to left"
                     href="#">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <i class="glyphicon glyphicon-chevron-left"></i>
                 </a>
                 <a  data-widgster="expand"
                     title="Expand"
@@ -38,12 +38,13 @@
                 <a  data-widgster="toright"
                     title="change width to right"
                     href="#">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
-                <a  data-widgster="close"
-                    title="Close"
+                <a  data-widgster="fullscreen"
+                    title="Fullscreen"
                     href="#">
-                    <i class="glyphicon glyphicon-remove"></i>
+                    <i class="glyphicon glyphicon-fullscreen"
+                          style="font-size: 11px"></i>
                 </a>
             </div>
 		</header>
@@ -54,11 +55,11 @@
                 1. 제품(서비스) 선택
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
-                            style="margin-top: -2px;"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
                             onclick="return true;">
-                        HELP
+                        Help
                         <i  class="fa fa-question"
-                            style="font-size: 14px;vertical-align: text-top;"></i>
+                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
                     </button>
                 </div>
             </blockquote>
@@ -126,10 +127,10 @@
 				</span>
 			</h4>
             <div class="widget-controls">
-                <a  data-widgster="fullscreen"
-                    title="Fullscreen"
+                <a  data-widgster="close"
+                    title="Close"
                     href="#">
-                    <span class="glyphicon glyphicon-fullscreen"></span>
+                    <i class="glyphicon glyphicon-remove"></i>
                 </a>
                 <a  data-widgster="restore"
                     title="Restore"
@@ -139,7 +140,7 @@
                 <a  data-widgster="toleft"
                     title="change width to left"
                     href="#">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <i class="glyphicon glyphicon-chevron-left"></i>
                 </a>
                 <a  data-widgster="expand"
                     title="Expand"
@@ -154,22 +155,31 @@
                 <a  data-widgster="toright"
                     title="change width to right"
                     href="#">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
-                <div style="float: right; " class="icon-container">
-                    <i class="fa fa-question-circle"
-                       aria-hidden="true"
-                       style="color: rgba(255,255,255,.45); font-size: 14px !important;"></i>
-                    <span   class="tooltip-text"
-                            id="tooltip-text-wave"
-                            style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
-                        메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
-                    </span>
-                </div>
+                <a  data-widgster="fullscreen"
+                    title="Fullscreen"
+                    href="#">
+                    <i class="glyphicon glyphicon-fullscreen"
+                       style="font-size: 11px"></i>
+                </a>
             </div>
 		</header>
 		<div class="body">
             <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+            <blockquote class="font13"
+                        style="margin-top: 5px;">
+                2. 제품(서비스)의 내용을 확인하고 편집/삭제
+                <div style="float: right;">
+                    <button class="btn btn-transparent btn-xs"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
+                            onclick="return true;">
+                        Help
+                        <i  class="fa fa-question"
+                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                    </button>
+                </div>
+            </blockquote>
             <div class="clearfix"
                  style="margin-bottom: 10px; margin-top: 10px;">
                 <!-- 컴포넌트 대상 -->
@@ -184,7 +194,7 @@
                                 <div    class="chat-message-body"
                                         style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important;">
                                     <span   class="arrow"
-                                            style="top: 10px !important;"></span>
+                                            style="top: 10px !important; left: -5px;"></span>
                                     <div    class="sender"
                                             style="padding-bottom: 5px; padding-top: 5px">
                                         선택된 제품(서비스) :
