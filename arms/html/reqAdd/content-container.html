@@ -132,9 +132,20 @@
 			</h4>
 			<div class="widget-controls">
 				<a  title="Options"
-					href="#">
+					href="#"
+                    class="hidden">
 					<i class="glyphicon glyphicon-cog"></i>
 				</a>
+                <a  data-widgster="fullscreen"
+                    title="Fullscreen"
+                    href="#">
+                    <span class="glyphicon glyphicon-fullscreen"></span>
+                </a>
+                <a  data-widgster="restore"
+                    title="Restore"
+                    href="#">
+                    <span class="glyphicon glyphicon-repeat"></span>
+                </a>
 				<a  data-widgster="expand"
 					title="Expand"
 					href="#">
@@ -145,11 +156,25 @@
 					href="#">
 					<i class="glyphicon glyphicon-chevron-down"></i>
 				</a>
-				<a  data-widgster="close"
-					title="Close"
-					href="#">
-					<i class="glyphicon glyphicon-remove"></i>
-				</a>
+                <a  data-widgster="close"
+                    title="Close"
+                    href="#">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </a>
+                <a  title="Refresh"
+                    href="#">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
+                <div style="float: right; " class="icon-container">
+                    <i class="fa fa-question-circle"
+                       aria-hidden="true"
+                       style="color: rgba(255,255,255,.45); font-size: 14px !important;"></i>
+                    <span   class="tooltip-text"
+                            id="tooltip-text-wave"
+                            style="max-width: 300px !important; min-width: 300px !important; width: 300px !important;">
+                        메뉴얼을 대체할 수준으로 작성해 주세요<br>사용자의 질문은 여기서 끝나야 합니다.
+                    </span>
+                </div>
 			</div>
 		</header>
 		<div class="body">
