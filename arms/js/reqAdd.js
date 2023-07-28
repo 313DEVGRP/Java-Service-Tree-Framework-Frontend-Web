@@ -212,27 +212,16 @@ function bind_VersionData_By_PdService() {
 						value: obj.c_id,
 						text: obj.c_title
 					});
-
-					//$('#multiversion').append($opt);
-					//$('#edit_multi_version').append($opt);
 					$(".multiple-select").append($opt);
 				}
 
 				if (data.length > 0) {
-					console.log("display 재설정.");
+					console.log("[ reqAdd :: bind_VersionData_By_PdService ] :: result = display 재설정.");
 				}
-				//$('#multiversion').multipleSelect('refresh');
-				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
 				//////////////////////////////////////////////////////////
 				jSuccess("버전 조회가 완료 되었습니다.");
 			}
-		},
-		beforeSend: function () {
-			//$("#regist_pdservice").hide(); 버튼 감추기
-		},
-		complete: function () {
-			//$("#regist_pdservice").show(); 버튼 보이기
 		},
 		error: function (e) {
 			jError("버전 조회 중 에러가 발생했습니다.");
@@ -245,13 +234,20 @@ function bind_VersionData_By_PdService() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function changeMultipleSelected() {
 	var result = [];
+	var result_cids = [];
 	$("#multiversion option:selected").map(function(a, item) {
 		result.push(item.innerText);
+		result_cids.push(item.value);
 	});
 	$("#select_Service").text(result);
 
+	console.log("[ reqAdd :: changeMultipleSelected ] :: version result = " + result_cids);
+	// 필터할 대상을 아이디로 잡아서 처리해야 하는데,
+	// $("#country").val() 로 선택한 제품(서비스)를 구분하고
+	// version 정보를 매치 해서 대상 요구사항 이슈 c_id 를 받아오는 로직이 필요.
 	var appIds = [""];
 	$("#multiversion option:selected").map(function(a, item) {
+		console.log("[ reqAdd :: changeMultipleSelected ] :: version item value = " + item.value);
 		if (item.value !== "") {
 			item.value
 				.match(/\d+/g)
@@ -270,6 +266,8 @@ function changeMultipleSelected() {
 				.each(function() {
 					$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
 				});
+			console.log("[ reqAdd :: changeMultipleSelected ] :: version c_req_pdservice_versionset_link value = " + item.c_req_pdservice_versionset_link);
+			console.log("[ reqAdd :: changeMultipleSelected ] :: version appId value = " + appId);
 			if (item.id.substring(item.id.indexOf("_") + 1) === appId) {
 				mappedApps.push($(this));
 				return false;
