@@ -911,7 +911,7 @@ function dataTable_build(
 	$("body")
 		.find("[aria-controls='" + jQueryElementStr + "']")
 		.css("width", "50px");
-	$("input[type=search]").css("width", "100px");
+	$(".dataTables_filter input[type=search]").css("width", "100px");
 	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
 
 	$.fn.dataTable.ext.errMode = function (settings, helpPage, message) {

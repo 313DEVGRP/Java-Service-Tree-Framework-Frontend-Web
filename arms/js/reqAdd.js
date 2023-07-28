@@ -2,6 +2,7 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedJsTreeId; // 요구사항 아이디
+var selectedJsTreeName; // 요구사항 이름
 var defaultTypeDataTable;
 var tempDataTable;
 
@@ -177,6 +178,8 @@ function makePdServiceSelectBox() {
 		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 
+		// 선택된 제품(서비스) 데이터 바인딩
+		$("#select_PdService").text($("#country").select2("data")[0].text);
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
 		//서비스(어플리케이션) 트리 로드
 		build_ReqData_By_PdService();
@@ -239,7 +242,7 @@ function changeMultipleSelected() {
 		result.push(item.innerText);
 		result_cids.push(item.value);
 	});
-	$("#select_Service").text(result);
+	$("#select_Version").text(result);
 
 	console.log("[ reqAdd :: changeMultipleSelected ] :: version result = " + result_cids);
 	// 필터할 대상을 아이디로 잡아서 처리해야 하는데,
@@ -260,7 +263,7 @@ function changeMultipleSelected() {
 
 	var mappedApps = [];
 	for (var appId of appIds) {
-		$("#product_tree #node_2 ul li").each(function(a, item) {
+		$("#req_tree #node_2 ul li").each(function(a, item) {
 			$(this)
 				.find("a i")
 				.each(function() {
@@ -286,16 +289,24 @@ function changeMultipleSelected() {
 //요구사항 :: jsTree
 ////////////////////////////////////////////////////////////////////////////////////////
 function build_ReqData_By_PdService() {
-	var jQueryElementID = "#product_tree";
+	var jQueryElementID = "#req_tree";
 	var serviceNameForURL = "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + $("#country").val();
 
 	jsTreeBuild(jQueryElementID, serviceNameForURL);
 }
 
 // --- 요구사항 (jstree) 선택 이벤트 --- //
-function jsTreeClick(selectedNodeID) {
-	selectedJsTreeId = selectedNodeID.attr("id").replace("node_", "").replace("copy_", "");
-	var selectRel = selectedNodeID.attr("rel");
+function jsTreeClick(selectedNode) {
+
+	console.log("[ reqAdd :: build_ReqData_By_PdService ] :: selectedNode ");
+	console.log(selectedNode);
+
+
+	selectedJsTreeName = $('#req_tree').jstree("get_selected").text();
+	$('#select_Req').text( selectedJsTreeName );
+	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
+	var selectRel = selectedNode.attr("rel");
+
 
 	//요구사항 타입에 따라서 탭의 설정을 변경
 	if (selectRel == "default") {
@@ -326,7 +337,7 @@ function jsTreeClick(selectedNodeID) {
 	}
 
 	//파일 데이터셋팅
-	get_FileList_By_Req();
+	//get_FileList_By_Req();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1145,7 +1156,7 @@ function save_req() {
 			},
 			statusCode: {
 				200: function () {
-					$("#product_tree").jstree("refresh");
+					$("#req_tree").jstree("refresh");
 					$("#close_req").trigger("click");
 					jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
 				}
@@ -1207,7 +1218,7 @@ function click_btn_for_req_update(){
 			},
 			statusCode: {
 				200: function () {
-					$("#product_tree").jstree("refresh");
+					$("#req_tree").jstree("refresh");
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
 				}
 			}
