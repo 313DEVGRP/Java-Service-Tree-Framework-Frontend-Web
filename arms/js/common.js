@@ -939,10 +939,56 @@ function ajax_setup() {
 		.ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
 			$(".loader").addClass("hide");
 			if (jqXHR.status == 401) {
-				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.");
+				jError("클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족하여 요청이 거부되었습니다.", {
+					/**
+					 * [options]
+					 * autoHide / Boolean            Default : true - jNotify closed after TimeShown ms or by clicking on it
+					 * clickOverlay / Boolean         Default : false - If false, disables closing jNotify by clicking on the background overlay.
+					 * MinWidth / Integer             Default : 200 - In pixel, the min-width css property of the boxes.
+					 * TimeShown / Integer             Default : 1500 - In ms, time of the boxes appearances.
+					 * ShowTimeEffect / Integer     Default : 200 - In ms, duration of the Show effect
+					 * HideTimeEffect / Integer     Default : 200 - In ms, duration of the Hide effect
+					 * LongTrip / Integer            Default : 15 - Length of the move effect ('top' and 'bottom' verticals positions only)
+					 * HorizontalPosition / String    Default : right - Horizontal position. Can be set to 'left', 'center', 'right'
+					 * VerticalPosition / String    Default : top - Vertical position. Can be set to 'top', 'center', 'bottom'.
+					 * ShowOverlay / Boolean        Default : true - If true, a background overlay appears behind the jNotify boxes
+					 * ColorOverlay / String        Default : #000 - Color of the overlay background (only Hex. color code)
+					 * OpacityOverlay / Integer        Default : 0.3 - Opacity CSS property of the overlay background. From 0 to 1 max.
+					 */
+					autoHide : true, // added in v2.0
+					TimeShown : 3000,
+					HorizontalPosition : 'center',
+					VerticalPosition : 'top'
+					//    onCompleted : function(){ // added in v2.0
+					//    alert('jNofity is completed !');
+					// }
+				});
 				location.href = "/oauth2/authorization/middle-proxy";
 			} else if (jqXHR.status == 403) {
-				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.");
+				jError("서버가 해당 요청을 이해했지만, 권한이 없어 요청이 거부되었습니다.", {
+					/**
+					 * [options]
+					 * autoHide / Boolean            Default : true - jNotify closed after TimeShown ms or by clicking on it
+					 * clickOverlay / Boolean         Default : false - If false, disables closing jNotify by clicking on the background overlay.
+					 * MinWidth / Integer             Default : 200 - In pixel, the min-width css property of the boxes.
+					 * TimeShown / Integer             Default : 1500 - In ms, time of the boxes appearances.
+					 * ShowTimeEffect / Integer     Default : 200 - In ms, duration of the Show effect
+					 * HideTimeEffect / Integer     Default : 200 - In ms, duration of the Hide effect
+					 * LongTrip / Integer            Default : 15 - Length of the move effect ('top' and 'bottom' verticals positions only)
+					 * HorizontalPosition / String    Default : right - Horizontal position. Can be set to 'left', 'center', 'right'
+					 * VerticalPosition / String    Default : top - Vertical position. Can be set to 'top', 'center', 'bottom'.
+					 * ShowOverlay / Boolean        Default : true - If true, a background overlay appears behind the jNotify boxes
+					 * ColorOverlay / String        Default : #000 - Color of the overlay background (only Hex. color code)
+					 * OpacityOverlay / Integer        Default : 0.3 - Opacity CSS property of the overlay background. From 0 to 1 max.
+					 */
+					autoHide : true, // added in v2.0
+					TimeShown : 3000,
+					HorizontalPosition : 'center',
+					VerticalPosition : 'top'
+					//    onCompleted : function(){ // added in v2.0
+					//    alert('jNofity is completed !');
+					// }
+				});
 				location.href = "/oauth2/authorization/middle-proxy";
 			} else if (jqXHR.status == 500) {
 				jError("서버가 해당 요청을 이해했지만, 실행 할 수 없습니다.");

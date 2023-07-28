@@ -46,7 +46,7 @@
             <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
             <blockquote class="font13"
                         style="margin-top: 5px;">
-                1. 제품(서비스) : 버전 : 요구사항 선택
+                1. 제품<sup>서비스</sup> 선택 → 버전 선택 → 요구사항 선택
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
                             style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
@@ -59,42 +59,44 @@
             </blockquote>
             <div class="clearfix"
                  style="margin-bottom: 10px; margin-top: 10px;">
-                <div style="float: left">
-                    <button type="button"
-                            id="copychecker"
-                            class="btn btn-default btn-sm">
-                        Copy
-                    </button>
-                    <button type="button"
-                            id="csvchecker"
-                            class="btn btn-default btn-sm">
-                        CSV
-                    </button>
-                    <button type="button"
-                            id="excelchecker"
-                            class="btn btn-default btn-sm">
-                        Excel
-                    </button>
-                    <button type="button"
-                            id="printchecker"
-                            class="btn btn-default btn-sm hidden">
-                        Print
-                    </button>
-                    <button type="button"
-                            id="pdfchecker"
-                            class="btn btn-default btn-sm hidden">
-                        PDF
-                    </button>
-                </div>
-
-                <div style="float: right">
-                    <button class="btn btn-primary btn-block btn-sm"
-                            data-target="#my_modal2"
-                            data-toggle="modal"
-                            id="modal_popup_id"
-                            type="button">
-                        제품(서비스) 추가
-                    </button>
+                <!-- 컴포넌트 대상 -->
+                <div id="selected_info">
+                    <div    class="panel-group json-menu"
+                            id="versionAccordion"
+                            style="margin-bottom: 0px !important">
+                        <li     class="list-group-item json-menu-header"
+                                style="padding: 0px">
+                            <div class="chat-message">
+                                <div    class="chat-message-body"
+                                        style="margin-left: 0px !important; border-right: 2px solid #e5603b; border-left: 0px">
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 3px">
+                                        <i class="fa fa-check"></i> 선택된 제품<sup>서비스</sup> :
+                                        <span   id="select_Service"
+                                                style="color: #a4c6ff">
+                                                선택되지 않음
+                                        </span>
+                                    </div>
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 3px">
+                                        <i class="fa fa-check"></i> 선택된 어플리케이션 :
+                                        <span   id="select_Application"
+                                                style="color: #a4c6ff">
+                                                    선택되지 않음
+                                            </span>
+                                    </div>
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 3px">
+                                        <i class="fa fa-check"></i> 선택된 요구사항 :
+                                        <span   id="select_Application"
+                                                style="color: #a4c6ff">
+                                                    선택되지 않음
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
                 </div>
             </div>
 			<div class="wrapper">
@@ -122,47 +124,6 @@
                         </select>
 					</div>
 				</div>
-				<div class="gradient_bottom_border" style="width: 100%; height: 2px"></div>
-                <!-- 컴포넌트 대상 -->
-                <div id="selected_info">
-                    <div    class="panel-group json-menu"
-                            id="versionAccordion"
-                            style="margin-bottom: 0px !important">
-                        <li     class="list-group-item json-menu-header"
-                                style="padding: 0px">
-                            <div class="chat-message">
-                                <div    class="chat-message-body"
-                                        style="margin-left: 0px !important">
-                                    <span class="arrow"></span>
-                                    <div    class="sender"
-                                            style="padding-bottom: 5px; padding-top: 3px">
-                                            선택된 서비스 :
-                                        <span   id="select_Service"
-                                                style="color: #a4c6ff">
-                                                선택되지 않음
-                                        </span>
-                                    </div>
-                                    <div    class="sender"
-                                            style="padding-bottom: 5px; padding-top: 3px">
-                                            선택된 어플리케이션 :
-                                            <span   id="select_Application"
-                                                    style="color: #a4c6ff">
-                                                    선택되지 않음
-                                            </span>
-                                    </div>
-                                    <div    class="sender"
-                                            style="padding-bottom: 5px; padding-top: 3px">
-                                            선택된 요구사항 :
-                                            <span   id="select_Application"
-                                                    style="color: #a4c6ff">
-                                                    선택되지 않음
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                </div>
                 <div class="gradient_bottom_border" style="width: 100%; height: 2px"></div>
 				<div    id="mmenu"
 					    style="padding-bottom: 5px; padding-top: 15px">

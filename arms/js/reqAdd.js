@@ -25,11 +25,11 @@ function execDocReady() {
 			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
 			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
 		[	"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
