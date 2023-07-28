@@ -143,6 +143,9 @@ function dataTableClick(tempDataTable, selectedData) {
 	$("#pdservice_connect").addClass("btn-primary");
 	$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
 
+	//초기 태그 삭제
+	$("#initDefaultVersion").remove();
+
 	//버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
 
@@ -166,6 +169,7 @@ function dataTableCallBack(settings, json) {}
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
+
 	$.ajax("/auth-user/api/arms/pdService/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
 		versionList = json.response;
@@ -174,14 +178,20 @@ function dataLoad(getSelectedText, selectedText) {
 		//version text setting
 		var selectedHtml =
 			`<div class="chat-message">
-			<div class="chat-message-body" style="margin-left: 0px !important;">
-				<span class="arrow"></span>
-				<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : </div>
-			<div class="text" style="color: #a4c6ff;">
-			` +  selectedText +
-			`
-			</div>
-			</div>
+				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
+					<span 	class="arrow"
+							style="top: 17px !important; border-right: 5px solid #a4c6ff;"></span>
+					<span   id="toRight"
+							class="arrow"
+							style=" top: 17px !important; right: -7px; border-top: 5px solid transparent;
+									border-bottom: 5px solid transparent;
+									border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
+					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : 
+						<span style="color: #a4c6ff;">
+						` +  selectedText + `
+						</span>
+					</div>
+				</div>
 			</div>
 			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
 		$(".list-group-item").html(selectedHtml);

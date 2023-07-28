@@ -320,6 +320,23 @@
                         </button>
                     </div>
                 </div>
+                <div id="initDefaultVersion"
+                     class="chat-message">
+                    <div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
+					<span 	class="arrow"
+                             style="top: 17px !important; border-right: 5px solid #a4c6ff;"></span>
+                        <span   id="toRight"
+                                class="arrow"
+                                style=" top: 17px !important; right: -7px; border-top: 5px solid transparent;
+									border-bottom: 5px solid transparent;
+									border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
+                        <div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :
+                            <span style="color: #a4c6ff;">
+						        선택되지 않음
+						    </span>
+                        </div>
+                    </div>
+                </div>
 				<div    class="panel-group"
 					    id="version_accordion">
                 </div>
@@ -426,6 +443,43 @@
                             type="button">
                         제품(서비스) 추가
                     </button>
+                </div>
+            </div>
+            <div class="clearfix"
+                 style="margin-bottom: 10px; margin-top: 10px;">
+                <!-- 컴포넌트 대상 -->
+                <div id="selected_info">
+                    <div    class="panel-group json-menu"
+                            id="versionAccordion"
+                            style="margin-bottom: 0px !important">
+                        <li     class="list-group-item json-menu-header"
+                                style="padding: 0px">
+                            <div class="chat-message">
+                                <div    class="chat-message-body"
+                                        style="margin-left: 0px !important;">
+                                    <span   id="toRight"
+                                            class="arrow"
+                                            style=" top: 17px !important;"></span>
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 3px">
+                                        <i class="fa fa-check"></i> 선택된 제품<sup>서비스</sup> :
+                                        <span   id="select_PdService"
+                                                style="color: #a4c6ff">
+                                                선택되지 않음
+                                        </span>
+                                    </div>
+                                    <div    class="sender"
+                                            style="padding-bottom: 5px; padding-top: 3px">
+                                        <i class="fa fa-check"></i> 선택된 버전 :
+                                        <span   id="select_Version"
+                                                style="color: #a4c6ff">
+                                                    선택되지 않음
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
                 </div>
             </div>
 			<div    class="box box-primary"
