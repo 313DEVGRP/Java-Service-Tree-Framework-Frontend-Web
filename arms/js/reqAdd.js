@@ -151,7 +151,7 @@ function makePdServiceSelectBox() {
 				for (var k in data.response) {
 					var obj = data.response[k];
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
-					$("#country").append(newOption).trigger("change");
+					$("#selected_pdService").append(newOption).trigger("change");
 				}
 				//////////////////////////////////////////////////////////
 				jSuccess("제품(서비스) 조회가 완료 되었습니다.");
@@ -169,17 +169,17 @@ function makePdServiceSelectBox() {
 	});
 
 
-	$("#country").on("select2:open", function () {
+	$("#selected_pdService").on("select2:open", function () {
 		makeSlimScroll(".select2-results__options");
 	});
 
 	// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
-	$("#country").on("select2:select", function (e) {
+	$("#selected_pdService").on("select2:select", function (e) {
 		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 
 		// 선택된 제품(서비스) 데이터 바인딩
-		$("#select_PdService").text($("#country").select2("data")[0].text);
+		$("#select_PdService").text($("#selected_pdService").select2("data")[0].text);
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
 		//서비스(어플리케이션) 트리 로드
 		build_ReqData_By_PdService();
@@ -202,7 +202,7 @@ function makeVersionMultiSelectBox() {
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#country").val(),
+		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
 		dataType: "json",
 		progress: true,
@@ -236,53 +236,71 @@ function bind_VersionData_By_PdService() {
 //제품(서비스) 선택 후, 버전을 선택하면 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function changeMultipleSelected() {
+
+	//초기화
+	$("#req_tree #node_2 ul li").each(function(a, item) {
+		$(this)
+			.find("a i")
+			.each(function() {
+				$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
+			});
+	});
+
 	var result = [];
 	var result_cids = [];
 	$("#multiversion option:selected").map(function(a, item) {
 		result.push(item.innerText);
-		result_cids.push(item.value);
 	});
 	$("#select_Version").text(result);
 
 	console.log("[ reqAdd :: changeMultipleSelected ] :: version result = " + result_cids);
 	// 필터할 대상을 아이디로 잡아서 처리해야 하는데,
-	// $("#country").val() 로 선택한 제품(서비스)를 구분하고
+	// $("#selected_pdService").val() 로 선택한 제품(서비스)를 구분하고
 	// version 정보를 매치 해서 대상 요구사항 이슈 c_id 를 받아오는 로직이 필요.
-	var appIds = [""];
-	$("#multiversion option:selected").map(function(a, item) {
-		console.log("[ reqAdd :: changeMultipleSelected ] :: version item value = " + item.value);
-		if (item.value !== "") {
-			item.value
-				.match(/\d+/g)
-				.map(String)
-				.map(function(a, item) {
-					appIds.push(a);
-				});
+
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" + result_cids,
+		type: "GET",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				var appIds = [];
+				var loopCount = data.length;
+				for (var i = 0; i < loopCount; i++) {
+					appIds.push(data[i].c_id);
+				}
+				console.log(appIds);
+				var mappedApps = [];
+				for (var appId of appIds) {
+					$("#req_tree #node_2 ul li").each(function(a, item) {
+						$(this)
+							.find("a i")
+							.each(function() {
+								$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
+							});
+						console.log("[ reqAdd :: changeMultipleSelected ] :: version node value = " + item.id.substring(item.id.indexOf("_") + 1));
+						console.log("[ reqAdd :: changeMultipleSelected ] :: version filterNode value = " + appId);
+						if (item.id.substring(item.id.indexOf("_") + 1) == appId) {
+							mappedApps.push($(this));
+							return false;
+						}
+					});
+				}
+
+				console.log(mappedApps);
+				for (var mappedApp of mappedApps) {
+					mappedApp.find("a ins").each(function() {
+						$(this).replaceWith("<i class='fa fa-check' style='color: #1ea726'>&nbsp;&nbsp;</i>");
+					});
+				}
+			}
+		},
+		error: function (e) {
+			jError("버전 조회 중 에러가 발생했습니다.");
 		}
 	});
 
-	var mappedApps = [];
-	for (var appId of appIds) {
-		$("#req_tree #node_2 ul li").each(function(a, item) {
-			$(this)
-				.find("a i")
-				.each(function() {
-					$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
-				});
-			console.log("[ reqAdd :: changeMultipleSelected ] :: version c_req_pdservice_versionset_link value = " + item.c_req_pdservice_versionset_link);
-			console.log("[ reqAdd :: changeMultipleSelected ] :: version appId value = " + appId);
-			if (item.id.substring(item.id.indexOf("_") + 1) === appId) {
-				mappedApps.push($(this));
-				return false;
-			}
-		});
-	}
-
-	for (var mappedApp of mappedApps) {
-		mappedApp.find("a ins").each(function() {
-			$(this).replaceWith("<i class='fa fa-check' style='color: #1ea726'>&nbsp;&nbsp;</i>");
-		});
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -290,7 +308,7 @@ function changeMultipleSelected() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function build_ReqData_By_PdService() {
 	var jQueryElementID = "#req_tree";
-	var serviceNameForURL = "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + $("#country").val();
+	var serviceNameForURL = "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + $("#selected_pdService").val();
 
 	jsTreeBuild(jQueryElementID, serviceNameForURL);
 }
@@ -302,9 +320,13 @@ function jsTreeClick(selectedNode) {
 	console.log(selectedNode);
 
 
-	selectedJsTreeName = $('#req_tree').jstree("get_selected").text();
-	$('#select_Req').text( selectedJsTreeName );
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
+	selectedJsTreeName = $('#req_tree').jstree("get_selected").text();
+	if( selectedJsTreeId == 2 ){
+		$('#select_Req').text( "루트 요구사항이 선택되었습니다." );
+	}else{
+		$('#select_Req').text( $('#req_tree').jstree("get_selected").text() );
+	}
 	var selectRel = selectedNode.attr("rel");
 
 
@@ -346,7 +368,7 @@ function jsTreeClick(selectedNode) {
 // --- Root, Drive, Folder 데이터 테이블 설정 --- //
 function dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
+	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
 	var dataTableRef;
 	if (selectId == 2) {
@@ -549,25 +571,23 @@ function init_fileupload() {
 		dropZone: $("#dropzone")
 	});
 
-	// Enable iframe cross-domain access via redirect option:
-	$fileupload.fileupload("option", "redirect", window.location.href.replace(/\/[^\/]*$/, "/cors/result.html?%s"));
-
 	// Load existing files:
 	$.ajax({
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
-		url: $fileupload.fileupload("option", "url"),
+		url: "/auth-user/api/arms/reqAdd/getFilesByNode.do",
+		// data: { fileIdlink: selectId },
 		dataType: "json",
 		context: $fileupload[0]
 	}).done(function (result) {
-		$(this).fileupload("option", "done").call(this, null, {result: result});
+		$(this).fileupload("option", "done").call(this, null, { result: result });
 	});
 
 
 	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
 		// The example input, doesn't have to be part of the upload form:
 		var input = $("#fileIdlink");
-		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 		data.formData = {fileIdlink: input.val(), c_title: tableName};
 		if (!data.formData.fileIdlink) {
 			data.context.find("button").prop("disabled", false);
@@ -589,7 +609,7 @@ function get_FileList_By_Req() {
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},
 		url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-		data: { fileIdlink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $("#country").val() },
+		data: { fileIdlink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $("#selected_pdService").val() },
 		dataType: "json",
 		context: $fileupload[0]
 	}).done(function (result) {
@@ -601,7 +621,7 @@ function get_FileList_By_Req() {
 //상세 보기 탭 & 편집 탭
 ////////////////////////////////////////////////////////////////////////////////////////
 function setDetailAndEditViewTab() {
-	var tableName = "T_ARMS_REQADD_" + $("#country").val();
+	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
 		type: "GET",
@@ -622,7 +642,7 @@ function setDetailAndEditViewTab() {
 // ------------------ 편집하기 ------------------ //
 function bindDataEditlTab(ajaxData) {
 	//제품(서비스) 데이터 바인딩
-	var selectedPdServiceText = $("#country").select2("data")[0].text;
+	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
 	if (isEmpty(selectedPdServiceText)) {
 		$("#editview_req_pdservice_name").val("");
 	} else {
@@ -732,7 +752,7 @@ function bindDataEditlTab(ajaxData) {
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
 	//제품(서비스) 데이터 바인딩
-	var selectedPdServiceText = $("#country").select2("data")[0].text;
+	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
 	if (isEmpty(selectedPdServiceText)) {
 		$("#detailview_req_pdservice_name").val("");
 	} else {
@@ -985,7 +1005,7 @@ function registNewPopup() {
 		.css("height", height + "px");
 
 	//제품(서비스) 셋팅
-	var selectPdService = $("#country").select2("data")[0].text;
+	var selectPdService = $("#selected_pdService").select2("data")[0].text;
 	$("#disabled_input_pdservice").val(selectPdService);
 
 	//version 셋팅
@@ -994,7 +1014,7 @@ function registNewPopup() {
 
 	//리뷰어 셋팅
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/getNode.do?c_id=" + $("#country").val(),
+		url: "/auth-user/api/arms/pdService/getNode.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
@@ -1125,7 +1145,7 @@ function save_req() {
 			reviewers05 = $("#popup_pdservice_reviewers").select2("data")[4].text;
 		}
 
-		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
@@ -1134,7 +1154,7 @@ function save_req() {
 				ref: selectedJsTreeId,
 				c_title: $("#req_title").val(),
 				c_type: $("input[name=reqType]:checked").val(),
-				c_req_pdservice_link: $("#country").val(),
+				c_req_pdservice_link: $("#selected_pdService").val(),
 				c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
 				c_req_writer: "[" + userName + "]" + " - " + userID,
 				c_req_create_date: new Date(),
@@ -1170,7 +1190,7 @@ function save_req() {
 ///////////////////////////////////////////////////////////////////////////////
 function click_btn_for_req_update(){
 	$("#edit_tab_req_update").click(function () {
-		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 		var reqName = $("#editview_req_name").val();
 
 		var reviewers01 = "none";
@@ -1251,7 +1271,7 @@ function makeDatePicker(calender) {
 function click_btn_for_search_history(){
 	$("#logsearch").click(function () {
 		$(".timeline-item-body").remove();
-		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getHistory.do",
@@ -1449,13 +1469,13 @@ function change_tab_action(){
 
 		if (target == "#jira") {
 			console.log("jira tab click event");
-			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#country').val()
+			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#selected_pdService').val()
 			//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
 			//2. 요구사항 테이블 ( REQADD ) 을 검색하여
 			//3. JIRA_VER 정보에 체크해 주기.
 			//제품 서비스 셀렉트 박스 데이터 바인딩
 			//요구사항 클릭하면 자세히보기 탭으로 가니까 이 로직은 유효하다.
-			var tableName = "T_ARMS_REQADD_" + $("#country").val();
+			var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 			$.ajax({
 				url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do",
 				data: {
@@ -1513,7 +1533,7 @@ function click_btn_for_connect_req_jira(){
 		console.log(JSON.stringify(chk_Val));
 
 		//반영할 테이블 네임 값 셋팅
-		var tableName = "T_ARMS_REQADD_" + $("#country").val();
+		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",

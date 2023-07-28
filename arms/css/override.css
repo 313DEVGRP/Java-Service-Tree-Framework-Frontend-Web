@@ -755,7 +755,13 @@ select option {
 
 /* 그라디언트 보더 */
 .gradient_left_border {
-	border-left: 1px solid transparent;
+	border-left: 1px dashed transparent;
+	border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+	border-image-slice: 1;
+}
+
+.gradient_right_border {
+	border-right: 1px dashed transparent;
 	border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
 	border-image-slice: 1;
 }

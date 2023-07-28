@@ -518,7 +518,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					// (may be -1, 0, or undefined when loading the root nodes)
 					data: function (n) {
 						// the result is fed to the AJAX request `data` option
-						console.log("jsTreeBuild :: json data load :: data = " + JSON.stringify(n));
+						console.log("[ common :: jsTreeBuild ] :: json data load = " + JSON.stringify(n));
 						return {
 							c_id: n.attr ? n.attr("id").replace("node_", "").replace("copy_", "") : 1
 						};
