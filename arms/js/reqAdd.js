@@ -106,6 +106,7 @@ function execDocReady() {
 			makeDatePicker($("#btn_start_calendar_popup"));
 			makeDatePicker($("#btn_end_calendar_popup"));
 
+			datatables_jira_project();
 			autoCompleteForUser();
 			selected_after_action_for_select2();
 			click_btn_for_new_req();
@@ -250,6 +251,7 @@ function changeMultipleSelected() {
 	var result_cids = [];
 	$("#multiversion option:selected").map(function(a, item) {
 		result.push(item.innerText);
+		result_cids.push(item.value);
 	});
 	$("#select_Version").text(result);
 
@@ -319,7 +321,6 @@ function jsTreeClick(selectedNode) {
 	console.log("[ reqAdd :: build_ReqData_By_PdService ] :: selectedNode ");
 	console.log(selectedNode);
 
-
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
 	selectedJsTreeName = $('#req_tree').jstree("get_selected").text();
 	if( selectedJsTreeId == 2 ){
@@ -343,7 +344,8 @@ function jsTreeClick(selectedNode) {
 		//상세보기 탭 셋팅
 		setDetailAndEditViewTab();
 
-		defaultTypeDataTable = defaultType_dataTableLoad(selectedJsTreeId);
+		//defaultTypeDataTable = defaultType_dataTableLoad(selectedJsTreeId);
+
 	} else {
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
@@ -441,10 +443,8 @@ function dataTableLoad(selectId) {
 	}
 }
 
-// --- default 데이터 테이블 설정 --- //
-// -------------------- checkbox 가 들어가야 하는 데이터테이블 이므로 row code를 사용함 ------------------ //
-// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function defaultType_dataTableLoad(selectId) {
+// --- 데이터 테이블 설정 --- //
+function datatables_jira_project() {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
 		{
@@ -459,9 +459,9 @@ function defaultType_dataTableLoad(selectId) {
 			title: '<input type="checkbox" name="checkall" id="checkall">'
 		},
 		{
-			name: "c_pdservice_name",
-			title: "제품(서비스)",
-			data: "c_pdservice_name",
+			name: "c_jira_key",
+			title: "c_jira_key",
+			data: "c_jira_key",
 			className: "dt-body-left",
 			visible: true
 		},
@@ -495,9 +495,85 @@ function defaultType_dataTableLoad(selectId) {
 	var orderList = [[1, "asc"]];
 	var buttonList = [];
 
+	var jquerySelector = "#jira_project_table";
+	var ajaxUrl = "/auth-user/api/arms/jiraProject/getNodesWithoutRoot.do";
+	var jsonRoot = "result";
+	var isServerSide = false;
+
+	dataTableRef = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide
+	);
+
+	return dataTableRef;
+}
+// -------------------- checkbox 가 들어가야 하는 데이터테이블 이므로 row code를 사용함 ------------------ //
+// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
+function defaultType_dataTableLoad(selectId) {
+	// 데이터 테이블 컬럼 및 열그룹 구성
+	
+	//여기는 데이터 가져와서 체크박스 처리 해야 하는 로직
+	
+	var columnList = [
+		{
+			data: "c_id",
+			render: function (data, type, row) {
+				if (type === "display") {
+					return '<input type="checkbox" class="editor-active" name="jiraVerList" value="' + data + '">';
+				}
+				return data;
+			},
+			className: "dt-body-center",
+			title: '<input type="checkbox" name="checkall" id="checkall">'
+		},
+		{
+			name: "c_jira_key",
+			title: "c_jira_key",
+			data: "c_jira_key",
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "c_jira_name",
+			title: "버전 이름",
+			data: "c_jira_name",
+			className: "dt-body-center",
+			visible: true
+		},
+		{
+			name: "c_pdservice_jira_name",
+			title: "JIRA Project",
+			data: "c_pdservice_jira_name",
+			className: "dt-body-left",
+			visible: true
+		}
+	];
+	var rowsGroupList = null;
+	var columnDefList = [
+		{
+			orderable: false,
+			className: "select-checkbox",
+			targets: 0
+		}
+	];
+	var selectList = {
+		style: "os",
+		selector: "td:first-child"
+	};
+	var orderList = [[1, "asc"]];
+	var buttonList = [];
+
 	var jquerySelector = "#jira_ver_table";
-	var ajaxUrl = "/auth-user/api/arms/pdServiceJiraVer/getMonitor_Without_Root.do";
-	var jsonRoot = "";
+	var ajaxUrl = "/auth-user/api/arms/jiraProject/getNodesWithoutRoot.do";
+	var jsonRoot = "result";
 	var isServerSide = false;
 
 	dataTableRef = dataTable_build(
@@ -526,14 +602,14 @@ function dataTableClick(tempDataTable, selectedData) {
 function dataTableCallBack(settings, json) {
 	setDocViewTab();
 	//상세보기 탭 셋팅
-	setDetailAndEditViewTab();
+	//setDetailAndEditViewTab();
 
-	$('input[name="jiraVerList"]').click(function () {
-		var allPages = tempDataTable.cells().nodes();
-		if ($("#checkall").val() == "on") {
-			$("#checkall").prop("checked", false);
-		}
-	});
+	// $('input[name="jiraVerList"]').click(function () {
+	// 	var allPages = tempDataTable.cells().nodes();
+	// 	if ($("#checkall").val() == "on") {
+	// 		$("#checkall").prop("checked", false);
+	// 	}
+	// });
 
 	$("#checkall").click(function () {
 		var allPages = tempDataTable.cells().nodes();
