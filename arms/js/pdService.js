@@ -133,6 +133,11 @@ function tab_click_event() {
 		console.log(target);
 
 		if (target == "#dropdown1") {
+
+			$("#pdservice_details_popup_div").addClass("hidden");
+			$("#pdservice_update_div").addClass("hidden");
+			$("#pdservice_delete_div").removeClass("hidden");
+
 			$(".body-middle").hide();
 
 			if (isEmpty(selectId)) {
@@ -140,7 +145,16 @@ function tab_click_event() {
 			} else {
 				$("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
 			}
+		} else if (target == "#report") {
+			$("#pdservice_details_popup_div").addClass("hidden");
+			$("#pdservice_delete_div").addClass("hidden");
+			$("#pdservice_update_div").removeClass("hidden");
+
 		} else {
+			$("#pdservice_details_popup_div").removeClass("hidden");
+			$("#pdservice_update_div").addClass("hidden");
+			$("#pdservice_delete_div").addClass("hidden");
+
 			if (selectId == undefined) {
 				$(".body-middle").hide();
 			} else {
