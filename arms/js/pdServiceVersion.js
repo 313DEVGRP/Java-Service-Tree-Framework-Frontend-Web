@@ -111,6 +111,7 @@ function execDocReady() {
 			click_btn_for_update_version();
 			init_versionList();
 
+			tab_click_event();
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
@@ -531,4 +532,19 @@ function versionClick(element, c_id) {
 			$("#text").html("요청이 완료되었습니다!");
 			console.log(xhr + status);
 		});
+}
+
+function tab_click_event() {
+	$('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+		var target = $(e.target).attr("href"); // activated tab
+		//console.log(target);
+
+		if (target == "#report") {
+			//$("#version_update").toggleClass("hidden");
+			$("#version_update").removeClass("hidden");
+		} else {
+			$("#version_update").addClass("hidden");
+
+		}
+	});
 }

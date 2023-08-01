@@ -501,6 +501,21 @@ function pdServiceDataTableClick(c_id) {
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
 			//$("#detailview_pdservice_name").val(json.c_title);
+			var selectedHtml =
+				`<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
+				<span class="text" style="color: #a4c6ff;">
+				` + json.c_title +
+				`
+				</span>
+				</div>
+				</div>
+				<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+
+			$(".list-group-item").html(selectedHtml);
+
 			$("#detailview_pdservice_name").val(json.c_title);
 			if (isEmpty(json.c_pdservice_owner) || json.c_pdservice_owner == "none") {
 				$("#detailview_pdservice_owner").val("책임자가 존재하지 않습니다.");
