@@ -202,7 +202,11 @@
                 <div style="float: right"
                      id="pdservice_details_popup_div">
                     <button type="button"
-                            class="btn btn-warning btn-sm">
+                            data-target="#my_modal1"
+                            data-toggle="modal"
+                            id="extend_modal_readOnly"
+                            class="btn btn-warning btn-sm"
+                            onClick="modalPopup('modal_popup_readonly')">
                         새 창으로 제품(서비스) 내용 보기
                     </button>
                 </div>
@@ -213,7 +217,8 @@
                             data-target="#my_modal1"
                             data-toggle="modal"
                             id="extend_modal_popup_id"
-                            type="button">
+                            type="button"
+                            onClick="modalPopup('modal_popup_update')">
                         팝업 창으로 편집 하기
                     </button>
                     <button type="button"
@@ -603,14 +608,16 @@
 				<h4 class="modal-title font14"
 					id="my_modal_label1"
 					style="color: #f8f8f8; text-align: left; padding: 5px">
+                    <i class="fa fa-edit"></i>
 					<span   class="font13"
+                            id="my_modal1_title"
                             style="font-weight: bold">
-                            <i class="fa fa-edit"></i>
                             신규 제품(서비스) 수정 팝업
 					</span>
 					<section    class="search-result"
 						    style="border-left: 5px solid #e5603b">
-                            <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+                            <p  id="my_modal1_sub"
+                                style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
                                 a-RMS에 신규 제품(서비스)의 정보를 수정합니다.
                             </p>
 					</section>
@@ -732,6 +739,13 @@
                         class="btn btn-default"
                         data-dismiss="modal">
                         Close
+                    </button>
+                    <button
+                        type="button"
+                        id="extend_change_to_update_pdservice"
+                        class="btn btn-success hidden"
+                        onclick="modalPopup('modal_popup_update')">
+                        편집 하기
                     </button>
                     <button
                         type="button"

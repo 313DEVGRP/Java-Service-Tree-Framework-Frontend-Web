@@ -142,7 +142,8 @@
             bottom: 0,
             left: 0,
             margin: 0,
-            'z-index': 10000
+            'z-index': 10000,
+            background: 'rgb(83,92,115)' //변경
         });
         $('body').css('overflow', 'hidden');
 
@@ -175,7 +176,8 @@
             bottom: '',
             left: '',
             margin: '',
-            'z-index': ''
+            'z-index': '',
+            background: 'rgba(51,51,51,.425)' //변경
         });
         $('body').css('overflow', '');
 

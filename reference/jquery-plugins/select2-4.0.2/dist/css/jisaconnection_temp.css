@@ -1,0 +1,153 @@
+
+/***********************************/
+/**             Inbox             **/
+/***********************************/
+.glyphicon-inbox:before {
+    content: "\e028";
+}
+.fa-inbox:before {
+    content: "\f01c";
+}
+
+.mailbox-folders {
+    margin-top: 20px;
+}
+.mailbox-folders li a {
+    display: block;
+    padding: 6px 15px;
+    color: #d2d2d2;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    transition: color 0.2s;
+}
+.mailbox-folders li a:hover {
+    color: #f8f8f8;
+}
+.mailbox-folders .active a {
+    border-left: 5px solid #e5603b;
+    padding-left: 10px;
+    color: #f8f8f8;
+}
+
+.mailbox .folder-title {
+    margin: 0;
+    line-height: 30px;
+    float: left;
+}
+.mailbox .input-search {
+    width: 140px;
+    -webkit-transition: width 0.2s;
+    -moz-transition: width 0.2s;
+    -o-transition: width 0.2s;
+    transition: width 0.2s;
+}
+.mailbox .input-search:focus {
+    width: 200px;
+}
+
+.mailbox-content {
+    margin-top: 20px;
+}
+.mailbox-content .folder-view tbody {
+    color: #d2d2d2;
+}
+.mailbox-content .folder-view .icheckbox_square-grey {
+    -webkit-transform: scale(0.72);
+    -moz-transform: scale(0.72);
+    -ms-transform: scale(0.72);
+    -o-transform: scale(0.72);
+    transform: scale(0.72);
+}
+.mailbox-content .folder-view .total-pages {
+    text-align: right;
+}
+.mailbox-content .folder-view .tiny-column {
+    width: 18px;
+}
+.mailbox-content .folder-view .name {
+    width: 140px;
+}
+.mailbox-content .folder-view .name, .mailbox-content .folder-view .subject {
+    cursor: pointer;
+}
+.mailbox-content .folder-view .date {
+    text-align: right;
+    width: 60px;
+}
+.mailbox-content .folder-view .unread {
+    font-weight: 600;
+    color: #f8f8f8;
+}
+.mailbox-content .folder-view .starred {
+    color: #d2d2d2;
+    cursor: pointer;
+    -webkit-transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    transition: color 0.2s;
+}
+.mailbox-content .folder-view .starred:hover {
+    color: #f8f8f8;
+}
+.mailbox-content .email-view hr {
+    margin: 5px 0;
+}
+.mailbox-content .email-view .print {
+    margin-right: 6px;
+    color: #d2d2d2;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    transition: color 0.2s;
+}
+.mailbox-content .email-view .print:hover {
+    color: #f8f8f8;
+}
+.mailbox-content .email-view .email-body {
+    margin-top: 20px;
+}
+.mailbox-content .email-details img {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+.mailbox-content .email-details-content {
+    margin-left: 30px;
+    padding: 0 5px;
+}
+.mailbox-content .email-details-content .email {
+    color: #d2d2d2;
+    font-size: 11.05px;
+}
+.mailbox-content .email-details-content .receiver {
+    display: block;
+    color: #d2d2d2;
+    margin-top: -6px;
+}
+.mailbox-content .email-details-content .email-date {
+    margin-right: 10px;
+    line-height: 24px;
+    vertical-align: middle;
+}
+.mailbox-content .email-attachments .attachment img {
+    display: block;
+}
+.mailbox-content .email-attachments .attachment .title {
+    margin: 0;
+    font-weight: bold;
+}
+.mailbox-content .form-email-compose .control-label {
+    width: 46px;
+}
+.mailbox-content .form-email-compose .controls {
+    margin-left: 51px;
+}
+.mailbox-content .form-email-compose .wysihtml5-sandbox {
+    width: 100% !important;
+}
+.mailbox-content .form-email-compose .control-group {
+    margin-bottom: 10px;
+}
