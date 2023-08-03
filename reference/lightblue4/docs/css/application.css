@@ -20786,7 +20786,7 @@ a.text-gray-lighter:focus {
   float: left;
   line-height: 20px;
   font-size: 14px;
-  opacity: .4;
+  opacity: .7; /*.4*/
   text-align: right;
 }
 

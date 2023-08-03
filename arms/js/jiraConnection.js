@@ -59,7 +59,7 @@ function execDocReady() {
 
             //사이드 메뉴 처리
             $('.widget').widgster();
-            setSideMenu("sidebar_menu_product", "sidebar_menu_product_jira_connect");
+            setSideMenu("sidebar_menu_jira", "sidebar_menu_jira_manage");
 
             // 데이터 테이블 로드 함수
             var waitDataTable = setInterval(function () {

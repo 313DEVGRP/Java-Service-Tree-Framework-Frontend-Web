@@ -363,7 +363,17 @@ function minValue(arr) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function setSideMenu(categoryName, listName, collapse) {
 	console.log("[ common :: setSideMenu ] :: categoryName → " + categoryName + ", listName → " + listName);
+
 	setTimeout(function () {
+		//jira_icon
+		if ( categoryName === "sidebar_menu_jira" ) {
+			$("#side_jira_neutral_icon").removeClass("hidden");
+			$("#side_jira_white_icon").addClass("hidden");
+		} else {
+			$("#side_jira_neutral_icon").addClass("hidden");
+			$("#side_jira_white_icon").removeClass("hidden");
+		} //.jira_icon
+
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });
 		$(`#${categoryName}`).css({ "font-weight": "900" });
 
