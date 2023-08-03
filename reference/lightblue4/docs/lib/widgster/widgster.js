@@ -142,8 +142,7 @@
             bottom: 0,
             left: 0,
             margin: 0,
-            'z-index': 10000,
-            background: 'rgb(83,92,115)' //변경
+            'z-index': 10000
         });
         $('body').css('overflow', 'hidden');
 
@@ -156,6 +155,8 @@
         this.$collapse.hide(); this.$expand.hide();
 
         this.$element.addClass('fullscreened');
+
+        this.$element.addClass('modalDarkBack');
 
         this.$element.trigger($.Event('fullscreened.widgster'));
 
