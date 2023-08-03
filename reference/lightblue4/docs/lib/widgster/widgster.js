@@ -177,8 +177,7 @@
             bottom: '',
             left: '',
             margin: '',
-            'z-index': '',
-            background: 'rgba(51,51,51,.425)' //변경
+            'z-index': ''
         });
         $('body').css('overflow', '');
 
@@ -194,6 +193,8 @@
         this.wasCollapsed && this.collapse(false);
 
         this.$element.removeClass('fullscreened');
+
+        this.$element.removeClass('modalDarkBack');
 
         this.$element.trigger($.Event('restored.widgster'));
 
