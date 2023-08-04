@@ -202,12 +202,9 @@
                 </div>
 
                 <div style="float: right">
-                    <button class="btn btn-primary btn-block btn-sm"
-                            data-target="#my_modal2"
-                            data-toggle="modal"
-                            id="modal_popup_id"
-                            type="button">
-                        제품(서비스) 추가
+                    <button class="btn btn-warning btn-sm"
+                            type="button"
+                            onclick="goToTemplatePage('pdService')">제품(서비스) 관리
                     </button>
                 </div>
             </div>
@@ -316,12 +313,9 @@
                     </div>
 
                     <div style="float: right">
-                        <button class="btn btn-primary btn-block btn-sm"
-                                data-target="#my_modal2"
-                                data-toggle="modal"
-                                id="modal_popup_id"
-                                type="button">
-                            제품(서비스) 추가
+                        <button class="btn btn-warning btn-sm"
+                                type="button"
+                                onclick="goToTemplatePage('pdServiceVersion')">제품(서비스) 관리
                         </button>
                     </div>
                 </div>
@@ -442,12 +436,10 @@
 
                 <div style="float: right">
                     <button type="button"
-                            data-target="#my_modal1"
-                            data-toggle="modal"
-                            id="extend_modal_readOnly"
-                            class="btn btn-warning btn-sm"
-                            onClick="modalPopup('modal_popup_readonly')">
-                        새 창으로 제품(서비스) 내용 보기
+                            id="pdservice_connect"
+                            class="btn btn-primary"
+                            style="width: 100% !important">
+                        제품(서비스) Jira 연결 등록
                     </button>
                 </div>
             </div>
@@ -490,17 +482,6 @@
             </div>
             <div    class="box box-primary"
                     style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
-                <div class="span12">
-                    <div    class="alert info"
-                            style="padding: 5px !important; margin-bottom: 5px !important">
-                        <button type="button"
-                                id="pdservice_connect"
-                                class="btn btn-primary"
-                                style="width: 100% !important">
-                            제품(서비스) Jira 연결 등록
-                        </button>
-                    </div>
-                </div>
                 <div class="span12">
                     <select multiple
                             class="searchable"
