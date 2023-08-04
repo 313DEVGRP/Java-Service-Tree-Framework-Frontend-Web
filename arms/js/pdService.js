@@ -285,7 +285,7 @@ function popup_size_setting(){
 			$("#extend_editview_pdservice_reviewer").css("height", resultValue + "px");
 		}, 250);
 	});
-
+	// 팝업 - readOnly
 	$("#extend_modal_readOnly").click(function () {
 		var height = $(document).height() - 1000;
 		$(".modal-body")
@@ -1001,7 +1001,6 @@ function modalPopup(popupName) {
 	console.log("popupName= " + popupName);
 	if (popupName === "modal_popup_readonly") {
 		//modal_popup_readOnly = 새 창으로 제품(서비스 보기)
-		console.log("True then why aren't they change?");
 		$("#my_modal1_title").text("제품(서비스) 내용 보기 팝업");
 		$("#my_modal1_sub").text("새 창으로 제품(서비스)의 정보를 확인합니다.")
 		$("#extend_change_to_update_pdservice").removeClass("hidden");

@@ -40,9 +40,6 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-        ,[
-
-        ]
     ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -73,6 +70,25 @@ function execDocReady() {
                 }
             }, 313 /*milli*/);
 
+            // --- 에디터 설정 --- //
+/*
+            var waitCKEditor = setInterval( function () {
+                try {
+                    if (window.CKEDITOR) {
+                        if(window.CKEDITOR.status == "loaded"){
+                            //CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" });
+                            //CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" });
+                            CKEDITOR.replace("modal_editor",{ skin: "prestige" });
+                            clearInterval(waitCKEDITOR);
+                        }
+                    }
+                } catch (err) {
+                    console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+                }
+             }, 313);
+*/
+
+
             //setdata_for_multiSelect();
             //connect_pdservice_jira();
             //init_versionList();
@@ -83,8 +99,9 @@ function execDocReady() {
             // });
             // 스크립트 실행 로직을 이곳에 추가합니다.
 
-            inBox_click_event();
-            jira_nav_btn_click();
+            inBox_click_event();  // 지라 환경 nav
+            jira_nav_btn_click(); // 지라 환경 nav
+            select2_setting();    // 검색 자동완성
 
         })
         .catch(function() {
@@ -101,7 +118,7 @@ function dataTableLoad() {
         { name: "c_id", title: "제품(서비스) 아이디", data: "c_id", visible: false },
         {
             name: "c_title",
-            title: "제품(서비스) 이름",
+            title: "지라(서버) 목록",
             data: "c_title",
             render: function (data, type, row, meta) {
                 if (type === "display") {
@@ -120,7 +137,7 @@ function dataTableLoad() {
     var orderList = [[1, "asc"]];
     var buttonList = [];
 
-    var jquerySelector = "#jira_connection_table";
+    var jquerySelector = "#jira_connection_table"; //
     var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
     var jsonRoot = "response";
     var isServerSide = false;
@@ -139,8 +156,196 @@ function dataTableLoad() {
     );
 }
 
+function jiraConnectionDataTableClick(c_id) {
+
+    $.ajax({
+        // 수정 필요 ( 작성 후 해당 line 삭제)
+        url: "/auth-user/api/arms/pdService/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+        data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
+        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+        dataType: "json", // 서버에서 보내줄 데이터의 타입
+        beforeSend: function () {
+            $(".loader").removeClass("hide");
+        }
+    })
+        // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+        .done(function (json) {
+            //$("#detailview_pdservice_name").val(json.c_title);
+            var selectedHtml =
+                `<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
+				<span class="text" style="color: #a4c6ff;">
+				` + json.c_title +
+                `
+				</span>
+				</div>
+				</div>
+				<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+
+            $(".list-group-item").html(selectedHtml);
+
+            $("#detailview_pdservice_name").val(json.c_title);
+            if (isEmpty(json.c_pdservice_owner) || json.c_pdservice_owner == "none") {
+                $("#detailview_pdservice_owner").val("책임자가 존재하지 않습니다.");
+            } else {
+                $("#detailview_pdservice_owner").val(json.c_pdservice_owner);
+            }
+
+            if (isEmpty(json.c_pdservice_reviewer01) || json.c_pdservice_reviewer01 == "none") {
+                $("#detailview_pdservice_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
+            } else {
+                $("#detailview_pdservice_reviewer01").val(json.c_pdservice_reviewer01);
+            }
+
+            if (isEmpty(json.c_pdservice_reviewer02) || json.c_pdservice_reviewer02 == "none") {
+                $("#detailview_pdservice_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
+            } else {
+                $("#detailview_pdservice_reviewer02").val(json.c_pdservice_reviewer02);
+            }
+
+            if (isEmpty(json.c_pdservice_reviewer03) || json.c_pdservice_reviewer03 == "none") {
+                $("#detailview_pdservice_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
+            } else {
+                $("#detailview_pdservice_reviewer03").val(json.c_pdservice_reviewer03);
+            }
+
+            if (isEmpty(json.c_pdservice_reviewer04) || json.c_pdservice_reviewer04 == "none") {
+                $("#detailview_pdservice_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
+            } else {
+                $("#detailview_pdservice_reviewer04").val(json.c_pdservice_reviewer04);
+            }
+
+            if (isEmpty(json.c_pdservice_reviewer05) || json.c_pdservice_reviewer05 == "none") {
+                $("#detailview_pdservice_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
+            } else {
+                $("#detailview_pdservice_reviewer05").val(json.c_pdservice_reviewer05);
+            }
+            $("#detailview_pdservice_contents").html(json.c_pdservice_contents);
+
+            $("#editview_pdservice_name").val(json.c_title);
+
+            //clear
+            $("#editview_pdservice_owner").val(null).trigger("change");
+
+            if (json.c_pdservice_owner == null || json.c_pdservice_owner == "none") {
+                console.log("pdServiceDataTableClick :: json.c_pdservice_owner empty");
+            } else {
+                var newOption = new Option(json.c_pdservice_owner, json.c_pdservice_owner, true, true);
+                $("#editview_pdservice_owner").append(newOption).trigger("change");
+            }
+            // -------------------- reviewer setting -------------------- //
+            //reviewer clear
+            $("#editview_pdservice_reviewers").val(null).trigger("change");
+
+            var selectedReviewerArr = [];
+            if (json.c_pdservice_reviewer01 == null || json.c_pdservice_reviewer01 == "none") {
+                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer01 empty");
+            } else {
+                selectedReviewerArr.push(json.c_pdservice_reviewer01);
+                // Set the value, creating a new option if necessary
+                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer01 + "']").length) {
+                    console.log('option[value=\'" + json.c_pdservice_reviewer01 + "\']"' + "already exist");
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption01 = new Option(json.c_pdservice_reviewer01, json.c_pdservice_reviewer01, true, true);
+                    // Append it to the select
+                    $("#editview_pdservice_reviewers").append(newOption01).trigger("change");
+                }
+            }
+            if (json.c_pdservice_reviewer02 == null || json.c_pdservice_reviewer02 == "none") {
+                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer02 empty");
+            } else {
+                selectedReviewerArr.push(json.c_pdservice_reviewer02);
+                // Set the value, creating a new option if necessary
+                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer02 + "']").length) {
+                    console.log('option[value=\'" + json.c_pdservice_reviewer02 + "\']"' + "already exist");
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption02 = new Option(json.c_pdservice_reviewer02, json.c_pdservice_reviewer02, true, true);
+                    // Append it to the select
+                    $("#editview_pdservice_reviewers").append(newOption02).trigger("change");
+                }
+            }
+            if (json.c_pdservice_reviewer03 == null || json.c_pdservice_reviewer03 == "none") {
+                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer03 empty");
+            } else {
+                selectedReviewerArr.push(json.c_pdservice_reviewer03);
+                // Set the value, creating a new option if necessary
+                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer03 + "']").length) {
+                    console.log('option[value=\'" + json.c_pdservice_reviewer03 + "\']"' + "already exist");
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption03 = new Option(json.c_pdservice_reviewer03, json.c_pdservice_reviewer03, true, true);
+                    // Append it to the select
+                    $("#editview_pdservice_reviewers").append(newOption03).trigger("change");
+                }
+            }
+            if (json.c_pdservice_reviewer04 == null || json.c_pdservice_reviewer04 == "none") {
+                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer04 empty");
+            } else {
+                selectedReviewerArr.push(json.c_pdservice_reviewer04);
+                // Set the value, creating a new option if necessary
+                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer04 + "']").length) {
+                    console.log('option[value=\'" + json.c_pdservice_reviewer04 + "\']"' + "already exist");
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption04 = new Option(json.c_pdservice_reviewer04, json.c_pdservice_reviewer04, true, true);
+                    // Append it to the select
+                    $("#editview_pdservice_reviewers").append(newOption04).trigger("change");
+                }
+            }
+            if (json.c_pdservice_reviewer05 == null || json.c_pdservice_reviewer05 == "none") {
+                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer05 empty");
+            } else {
+                selectedReviewerArr.push(json.c_pdservice_reviewer05);
+                // Set the value, creating a new option if necessary
+                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer05 + "']").length) {
+                    console.log('option[value=\'" + json.c_pdservice_reviewer05 + "\']"' + "already exist");
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption05 = new Option(json.c_pdservice_reviewer05, json.c_pdservice_reviewer05, true, true);
+                    // Append it to the select
+                    $("#editview_pdservice_reviewers").append(newOption05).trigger("change");
+                }
+            }
+            $("#editview_pdservice_reviewers").val(selectedReviewerArr).trigger("change");
+
+            // ------------------------- reviewer end --------------------------------//
+
+            CKEDITOR.instances.input_pdservice_editor.setData(json.c_pdservice_contents);
+        })
+        // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
+        .fail(function (xhr, status, errorThrown) {
+            console.log(xhr + status + errorThrown);
+        })
+        // 항상 실행
+        .always(function (xhr, status) {
+            console.log(xhr + status);
+            $(".loader").addClass("hide");
+        });
+    
+    //삭제 하기 부분. (#pdService_table 에서 jiraConnection 관련 테이블로 변경 수정해야)
+    $("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+}
+
+
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
+    $("#version_contents").html("");
+
+    selectId = selectedData.c_id;
+    selectName = selectedData.c_title;
+    console.log("selectedData.c_id : ", selectedData.c_id);
+
+    $("#default_non_version").empty();
+    $("#default_non_version").css("margin-bottom", "0px");
+
+    dataLoad(selectedData.c_id, selectedData.c_title);
+    
+    /*
+    pdServiceJira 내용
     selectedIndex = selectedData.selectedIndex;
     selectedPage = selectedData.selectedPage;
     selectId = selectedData.c_id;
@@ -151,15 +356,18 @@ function dataTableClick(tempDataTable, selectedData) {
     $("#pdservice_connect").removeClass("btn-success");
     $("#pdservice_connect").addClass("btn-primary");
     $("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
+    
 
     //초기 태그 삭제
-    $("#initDefaultVersion").remove();
+    //$("#initDefaultVersion").remove();
 
     //버전 리스트 로드
-    dataLoad(selectedData.c_id, selectedData.c_title);
+    //dataLoad(selectedData.c_id, selectedData.c_title);
 
     // D3 업데이트
     //updateD3ByDataTable();
+    */
+     
 }
 
 function dataTableDrawCallback(tableInfo) {
@@ -195,7 +403,7 @@ function dataLoad(getSelectedText, selectedText) {
 							style=" top: 17px !important; right: -7px; border-top: 5px solid transparent;
 									border-bottom: 5px solid transparent;
 									border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
-					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : 
+					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 지라 : 
 						<span style="color: #a4c6ff;">
 						` +  selectedText + `
 						</span>
@@ -481,17 +689,37 @@ function buildMultiSelect() {
     });
 }
 
-
-///////////////
 // list 클릭 이벤트 처리
 function inBox_click_event () {
     $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
        let target = $(e.target).attr("href"); // activated tab
         console.log(target);
+        // 고려해야 하는 tab - onpremise, cloud, stats, report, drowdown1
+        if (target === "#stats") {
+            $("#jira_connection_details_popup_div").removeClass("hidden");
+            $("#jira_connection_update_div").addClass("hidden");
+            $("#jira_connection_delete_div").addClass("hidden");
+        } else if ( target === "#report") {
+            $("#jira_connection_details_popup_div").addClass("hidden");
+            $("#jira_connection_update_div").removeClass("hidden");
+            $("#jira_connection_delete_div").addClass("hidden");
+        } else if ( target === "#dropdown1") {
+            $("#jira_connection_details_popup_div").addClass("hidden");
+            $("#jira_connection_update_div").addClass("hidden");
+            $("#jira_connection_delete_div").removeClass("hidden");
 
+            if (isEmpty(selectId)) {
+                jError("선택된 제품(서비스)가 없습니다. 오류는 무시됩니다.");
+            } else {
+                $("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+            }
+        } else {
+            //
+        }
     });
 }
 
+//지라서버 - 목록에서 nav버튼(=) 클릭 액션
 function jira_nav_btn_click() {
     $("#jira_connection_list__nav_btn").click( function () {
         $("#jira_connection_classify").toggleClass("collapse");
@@ -510,5 +738,73 @@ function jira_nav_btn_click() {
         // $("#jira_connection_classify").toggleClass("collapse");
         //버튼 누를 때, collapse 하고, 크기 조정
         //$("#jira_connection_classify").addClass("collapse");
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
+function popup_size_setting() {
+    // 팝업  사이즈 조절 및 팝업 내용 데이터 바인딩
+}
+
+///////////////////////////////
+// 팝업 띄울 때, UI 일부 수정되도록
+////////////////////////////////
+function modalPopup(popupName) {
+    console.log("popupName = " + popupName);
+    if (popupName === "modal_popup_readonly") {
+        //modal_popup_readOnly = 새 창으로 지라(서버) 보기
+        $("#my_modal2_title").text("지라(서버) 내용 보기 팝업");
+        $("#my_modal2_sub").text("새 창으로 등록된 지라 정보를 확인합니다.")
+        $("#extend_change_to_update_jira_connection").removeClass("hidden");
+        $("#extendupdate_jira_connection").addClass("hidden");
+    } else { //팝업 창으로 편집하기
+        $("#my_modal2_title").text("지라(서버) 수정 팝업");
+        $("#my_modal2_sub").text("a-rms에 등록된 지라(서버)의 정보를 수정합니다.")
+        $("#extend_change_to_update_jira_connection").addClass("hidden");
+        $("#extendupdate_jira_connection").removeClass("hidden");
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// --- select2 (사용자 자동완성 검색 ) 설정 --- //
+////////////////////////////////////////////////////////////////////////////////////////
+function select2_setting() {
+    $(".js-data-example-ajax").select2({
+        maximumSelectionLength: 5,
+        width: "resolve",
+        ajax: {
+            url: function (params) {
+                return "/auth-check/getUsers/" + params.term;
+            },
+            dataType: "json",
+            delay: 250,
+            //data: function (params) {
+            //    return {
+            //        q: params.term, // search term
+            //        page: params.page,
+            //    };
+            //},
+            processResults: function (data, params) {
+                // parse the results into the format expected by Select2
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data, except to indicate that infinite
+                // scrolling can be used
+                params.page = params.page || 1;
+
+                return {
+                    results: data,
+                    pagination: {
+                        more: params.page * 30 < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        placeholder: "소유자(등록자) 설정을 위한 계정명을 입력해 주세요",
+        minimumInputLength: 1,
+        templateResult: formatUser,
+        templateSelection: formatUserSelection
     });
 }
