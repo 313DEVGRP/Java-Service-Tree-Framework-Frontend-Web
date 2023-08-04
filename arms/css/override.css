@@ -2163,16 +2163,10 @@ p[data-v-35dc3539] {
 	margin-right: 10px;
 }
 
-.notifications .alert {
-	background-color: #e5603b;
-	border: none;
-	font-size: 12px;
-	line-height: 22px !important;
-	margin-bottom: 0;
-	padding: 3px 9px;
-	color: #f8f8f8 !important;
-	text-shadow: none;
-	border-radius: 3px;
+.notifications .alert a {
+	color: #f8f8f8;
+	font-weight: 700;
+	margin-left: 5px;
 }
 
 .icon-container {
@@ -2220,4 +2214,23 @@ blockquote {
 	right: 0;
 	font-size: 12px;
 	word-spacing: 1px;
+}
+
+.alert-created {
+	width: max-content;
+	background: linear-gradient(90deg, #E49400 50%, transparent 50%), linear-gradient(90deg, #E49400 50%, transparent 50%), linear-gradient(0deg, #E49400 50%, transparent 50%), linear-gradient(0deg, #E49400 50%, transparent 50%);
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
+	padding: 1px;
+	animation: border-dance 7s infinite linear;
+	border-radius: 10px;
+}
+
+@keyframes border-dance {
+	0% {
+		background-position: 0 0, 100% 100%, 0 100%, 100% 0;
+	}
+	100% {
+		background-position: 100% 0, 0 100%, 0 0, 100% 100%;
+	}
 }
