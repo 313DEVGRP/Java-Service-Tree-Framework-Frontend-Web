@@ -1067,3 +1067,8 @@ function hideDetail_Datagrid() {
 			}
 		});
 }
+
+// 페이지 이동 처리
+function goToTemplatePage(pageName) {
+	window.location.href = "template.html?page=" + pageName;
+}
