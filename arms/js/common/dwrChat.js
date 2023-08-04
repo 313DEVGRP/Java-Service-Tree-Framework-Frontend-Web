@@ -30,7 +30,7 @@ function dwr_callback(userId, username, message, time) {
         $(".notifications.pull-right").addClass("alert-created");
         const alertDiv = $('<div/>').addClass('alert pull-right');
         const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
-        const infoIcon = $('<i/>').addClass('fa fa-info-circle').css('margin-right', '5px');
+        const infoIcon = $('<i/>').addClass('fa fa-info-circle').css('margin-right', '5px').css('vertical-align','middle');
         alertDiv.append(closeButton, infoIcon, lastMessage.message);
         $(".notifications.pull-right .alert").remove();
         $(".notifications.pull-right").append(alertDiv);
