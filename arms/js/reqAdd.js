@@ -3,7 +3,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedJsTreeId; // 요구사항 아이디
 var selectedJsTreeName; // 요구사항 이름
-var defaultTypeDataTable;
 var tempDataTable;
 
 function execDocReady() {
@@ -63,7 +62,7 @@ function execDocReady() {
 			}, 3000); // 2초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
-			//사이드 메뉴 처리
+			//위젯 헤더 처리 및 사이드 메뉴 처리
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
 
@@ -106,8 +105,11 @@ function execDocReady() {
 			makeDatePicker($("#btn_start_calendar_popup"));
 			makeDatePicker($("#btn_end_calendar_popup"));
 
+			// jira 서버 정보 데이터 테이블 셋팅
 			datatables_jira_project();
+
 			autoCompleteForUser();
+
 			selected_after_action_for_select2();
 			click_btn_for_new_req();
 			switch_action_for_mode();
@@ -318,7 +320,7 @@ function build_ReqData_By_PdService() {
 // --- 요구사항 (jstree) 선택 이벤트 --- //
 function jsTreeClick(selectedNode) {
 
-	console.log("[ reqAdd :: build_ReqData_By_PdService ] :: selectedNode ");
+	console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
 	console.log(selectedNode);
 
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
@@ -332,21 +334,8 @@ function jsTreeClick(selectedNode) {
 
 
 	//요구사항 타입에 따라서 탭의 설정을 변경
-	if (selectRel == "default") {
-		$("#default_tab").get(0).click();
-		$(".newReqDiv").hide();
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
+	if (selectRel == "folder" || selectRel == "drive") {
 
-		//상세보기 탭 셋팅
-		setDetailAndEditViewTab();
-
-		//defaultTypeDataTable = defaultType_dataTableLoad(selectedJsTreeId);
-
-	} else {
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
@@ -358,6 +347,21 @@ function jsTreeClick(selectedNode) {
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
 		dataTableLoad(selectedJsTreeId);
+
+	} else {
+
+		$("#default_tab").get(0).click();
+		$(".newReqDiv").hide();
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
+
+		//상세보기 탭 셋팅
+		setDetailAndEditViewTab();
+
+		//defaultType_dataTableLoad(selectedJsTreeId);
 	}
 
 	//파일 데이터셋팅
@@ -371,6 +375,8 @@ function jsTreeClick(selectedNode) {
 function dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
+
+	var c_type = $('#req_tree').jstree("get_selected").attr("rel");
 
 	var dataTableRef;
 	if (selectId == 2) {
@@ -500,7 +506,7 @@ function datatables_jira_project() {
 	var jsonRoot = "result";
 	var isServerSide = false;
 
-	dataTableRef = dataTable_build(
+	dataTable_build(
 		jquerySelector,
 		ajaxUrl,
 		jsonRoot,
@@ -512,8 +518,6 @@ function datatables_jira_project() {
 		buttonList,
 		isServerSide
 	);
-
-	return dataTableRef;
 }
 // -------------------- checkbox 가 들어가야 하는 데이터테이블 이므로 row code를 사용함 ------------------ //
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
@@ -989,17 +993,7 @@ function autoCompleteForUser(){
 			},
 			dataType: "json",
 			delay: 250,
-			//data: function (params) {
-			//    return {
-			//        q: params.term, // search term
-			//        page: params.page,
-			//    };
-			//},
 			processResults: function (data, params) {
-				// parse the results into the format expected by Select2
-				// since we are using custom formatting functions we do not need to
-				// alter the remote JSON data, except to indicate that infinite
-				// scrolling can be used
 				params.page = params.page || 1;
 
 				return {
@@ -1055,7 +1049,7 @@ function formatUserSelection(jsonData) {
 ///////////////////////////////////////////////////////////////////////////////
 function selected_after_action_for_select2() {
 	$("#editview_req_reviewers").on("select2:select", function (e) {
-		console.log("select2:select");
+		console.log("[ reqAdd :: selected_after_action_for_select2 ]");
 	});
 }
 
@@ -1178,7 +1172,7 @@ function registNewPopup() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// 팝업에서 등록 모드에 따라서, 정보를 보여주거나 감추는 역할
+// 팝업에서 요구사항 등록 모드에 따라서, 정보를 보여주거나 감추는 역할
 ///////////////////////////////////////////////////////////////////////////////
 function switch_action_for_mode() {
 	$(".form-horizontal input[name=reqType]").on("change", function () {
@@ -1543,7 +1537,21 @@ function change_tab_action(){
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 
-		if (target == "#jira") {
+		if( target == "#stats" ){
+			$(".view_btn_group").removeClass("hidden");
+			$(".edit_btn_group").addClass("hidden");
+			$(".jira_btn_group").addClass("hidden");
+		}
+		else if( target == "#edit" ){
+			$(".view_btn_group").addClass("hidden");
+			$(".edit_btn_group").removeClass("hidden");
+			$(".jira_btn_group").addClass("hidden");
+		}
+		else if (target == "#jira") {
+			$(".view_btn_group").addClass("hidden");
+			$(".edit_btn_group").addClass("hidden");
+			$(".jira_btn_group").removeClass("hidden");
+
 			console.log("jira tab click event");
 			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#selected_pdService').val()
 			//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
@@ -1590,6 +1598,10 @@ function change_tab_action(){
 				})
 				.fail(function (e) {})
 				.always(function () {});
+		} else if( target == "#history" ){
+			$(".view_btn_group").addClass("hidden");
+			$(".edit_btn_group").addClass("hidden");
+			$(".jira_btn_group").addClass("hidden");
 		}
 	});
 }

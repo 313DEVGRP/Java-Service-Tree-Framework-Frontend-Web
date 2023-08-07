@@ -254,33 +254,40 @@
                     </div>
                 </div>
 
-
-                <div style="float: right">
+                <div style="float: right"
+                     class="view_btn_group">
                     <button type="button"
                             class="btn btn-warning btn-sm">
-                        새 창으로 제품(서비스) 내용 보기
+                        팝업 창으로 요구사항 내용 보기
                     </button>
                 </div>
                 <div style="float: right"
-                     class="hidden">
+                     class="edit_btn_group hidden">
                     <button class="btn btn-warning btn-sm"
-                            data-target="#my_modal1"
+                            data-target="#editModal"
                             data-toggle="modal"
-                            id="extend_modal_popup_id"
+                            id="edit_modal_btn"
                             type="button">
                         팝업 창으로 편집 하기
                     </button>
                     <button type="button"
-                            id="pdservice_update"
+                            id="edit_tab_req_update"
                             class="btn btn-success btn-sm">
-                        제품(서비스) 변경 사항 저장
+                        요구사항 변경 저장
                     </button>
                 </div>
                 <div style="float: right"
-                     class="hidden">
+                     class="jira_btn_group hidden">
+                    <button id="req_jiraver_connect_change"
+                            class="btn btn-success btn-sm">
+                        요구사항 - JIRA 연결 변경하기
+                    </button>
+                </div>
+                <div style="float: right"
+                     class="delete_btn_group hidden">
                     <button id="delete_pdservice"
                             class="btn btn-danger btn-sm">
-                        제품(서비스) 삭제
+                        요구사항 삭제
                     </button>
                 </div>
             </div>
@@ -337,16 +344,6 @@
 							<div    id="stats"
 								    class="tab-pane active clearfix"
 								    style="padding-top: 10px !important">
-								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"
-									    class="newReqDiv darkBack">
-									<label  id="new_reqregist01"
-                                            class="btn btn-primary btn-transparent btn-sm active"
-                                            data-target="#my_modal1"
-                                            data-toggle="modal"
-                                            style="width: 100%; background-color: #2477ff !important">
-										    a-RMS의 신규 요구사항 등록하기
-									</label>
-								</div>
 								<form   class="form-horizontal"
 									    method="post">
 									<fieldset>
@@ -615,12 +612,8 @@
 												    요구사항 내용 :
 											</label>
 											<div    class="col-sm-8"
-											       	style="margin-top: 10px; margin-bottom: 10px">
-											    	문서로 보기 :
-												<button type="button"
-													    class="btn btn-warning">
-													    새 창으로 제품(서비스) 내용 보기
-												</button>
+											       	style="margin-top: 16px; margin-bottom: 10px">
+                                                <i class="fa fa-level-down"></i> 하단 영역 참조
 											</div>
 											<br />
 											<br />
@@ -888,23 +881,6 @@
 											</div>
 										</div>
 									</div>
-									<div    class="form-actions"
-										    style="float: right; margin-top: 0px !important">
-										<div>
-											<button class="btn btn-warning"
-                                                    data-target="#editModal"
-                                                    data-toggle="modal"
-                                                    id="edit_modal_btn"
-                                                    type="button">
-                                                    팝업 창으로 편집 하기
-											</button>
-											<button type="button"
-                                                    id="edit_tab_req_update"
-                                                    class="btn btn-success">
-                                                    제품(서비스) 변경 사항 저장
-											</button>
-										</div>
-									</div>
 								</div>
 							</div>
 							<div    id="report"
@@ -955,14 +931,6 @@
 							<div    id="jira"
 								    class="tab-pane"
 								    style="padding-top: 10px !important">
-								<div    style="margin-top: 10px; margin-bottom: 10px"
-									    class="darkBack">
-									<label  id="req_jiraver_connect_change"
-										    class="btn btn-success btn-sm"
-										    style="width: 100%">
-										    요구사항 - JIRA 연결 정보 변경하기 ( 선택한 요구사항 한정 )
-									</label>
-								</div>
 								<table  class="display"
 									    id="jira_project_table"
 									    style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
