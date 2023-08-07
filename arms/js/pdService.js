@@ -87,9 +87,9 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded"){
-							CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" });
-							CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" });
-							CKEDITOR.replace("modal_editor",{ skin: "prestige" });
+							CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" }); //편집하기
+							CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" }); //팝업편집
+							CKEDITOR.replace("modal_editor",{ skin: "prestige" }); //서비스추가
 							clearInterval(waitCKEDITOR);
 						}
 					}
@@ -97,7 +97,6 @@ function execDocReady() {
 					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
 				}
 			}, 313 /*milli*/);
-
 			$("#popup_editview_pdservice_name").tooltip();
 
 			tab_click_event();
@@ -116,7 +115,7 @@ function execDocReady() {
 
 			popup_update_btn_click();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
-
+			//editorReadOnly();
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
@@ -171,6 +170,7 @@ function tab_click_event() {
 function popup_size_setting(){
 	console.log("popup_size_setting() is activated");
 	$("#modal_popup_id").click(function () {
+		console.log("modal_popup_id clicked");
 		var height = $(document).height() - 600;
 		$(".modal-body")
 			.find(".cke_contents:eq(0)")
@@ -187,6 +187,7 @@ function popup_size_setting(){
 		// 데이터 셋팅
 		var editorData = CKEDITOR.instances.input_pdservice_editor.getData();
 		CKEDITOR.instances.extend_modal_editor.setData(editorData);
+		CKEDITOR.instances.extend_modal_editor.setReadOnly(false);
 
 		var selectedId = $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id;
 		console.log("selectedId →" + selectedId);
@@ -285,7 +286,7 @@ function popup_size_setting(){
 			$("#extend_editview_pdservice_reviewer").css("height", resultValue + "px");
 		}, 250);
 	});
-
+	// 팝업 - readOnly
 	$("#extend_modal_readOnly").click(function () {
 		var height = $(document).height() - 1000;
 		$(".modal-body")
@@ -295,6 +296,7 @@ function popup_size_setting(){
 		// 데이터 셋팅
 		var editorData = CKEDITOR.instances.input_pdservice_editor.getData();
 		CKEDITOR.instances.extend_modal_editor.setData(editorData);
+		CKEDITOR.instances.extend_modal_editor.setReadOnly(true); // 읽기전용
 
 		var selectedId = $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id;
 		console.log("selectedId →" + selectedId);
@@ -1001,20 +1003,21 @@ function modalPopup(popupName) {
 	console.log("popupName= " + popupName);
 	if (popupName === "modal_popup_readonly") {
 		//modal_popup_readOnly = 새 창으로 제품(서비스 보기)
-		console.log("True then why aren't they change?");
 		$("#my_modal1_title").text("제품(서비스) 내용 보기 팝업");
 		$("#my_modal1_sub").text("새 창으로 제품(서비스)의 정보를 확인합니다.")
-		$("#extend_change_to_update_pdservice").removeClass("hidden");
+		//$("#extend_change_to_update_pdservice").removeClass("hidden");
 		$("#extendupdate_pdservice").addClass("hidden");
+
 
 	} else { //팝업 창으로 편집하기
 
 		$("#my_modal1_title").text("신규 제품(서비스) 수정 팝업");
 		$("#my_modal1_sub").text("a-RMS에 신규 제품(서비스)의 정보를 수정합니다.")
-		$("#extend_change_to_update_pdservice").addClass("hidden");
+		//$("#extend_change_to_update_pdservice").addClass("hidden");
 		$("#extendupdate_pdservice").removeClass("hidden");
 		// $("#extendupdate_pdservice")
 		// 	.attr("onclick","modalPopup('modal_popup_update')");
 		// $("#extendupdate_pdservice").text("제품(서비스) 변경 저장");
+
 	}
 }
