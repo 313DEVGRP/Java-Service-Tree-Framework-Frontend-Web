@@ -72,38 +72,13 @@ function execDocReady() {
 			setdata_for_multiSelect();
 			connect_pdservice_jira();
 			init_versionList();
-			popup_size_setting();
 
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 			});
 
-			// --- 에디터 설정 --- //
-			var waitCKEDITOR = setInterval(function () {
-				try {
-					if (window.CKEDITOR) {
-						if(window.CKEDITOR.status == "loaded"){
-							CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" });
-							CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" });
-							CKEDITOR.replace("modal_editor",{ skin: "prestige" });
-							clearInterval(waitCKEDITOR);
-						}
-					}
-				} catch (err) {
-					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
-				}
-			}, 313 /*milli*/);
+			//스크립트 실행 로직을 이곳에 추가합니다.
 
-			// 스크립트 실행 로직을 이곳에 추가합니다.
-			$("#popup_editview_pdservice_name").tooltip();
-
-			select2_setting();
-
-			save_btn_click();
-
-			update_btn_click();
-
-			popup_update_btn_click();
 
 
 		})
@@ -206,19 +181,27 @@ function dataLoad(getSelectedText, selectedText) {
 	$.ajax("/auth-user/api/arms/pdService/getVersionList.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
 		versionList = json.response;
+		console.log("dataLoad :: versionList → ", versionList);
 		$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
-
 		//version text setting
+		// 컬러 변경
+		// changeBorderColor(color);
 		var selectedHtml =
 			`<div class="chat-message">
-				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
-					<span 	class="arrow"
-							style="top: 17px !important; border-right: 5px solid #a4c6ff;"></span>
+				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #e5603b;  ">
+					<span 	class="arrow" 
+							style="top: 17px !important; border-right: 5px solid #e5603b;">
+					</span>
 					<span   id="toRight"
 							class="arrow"
-							style=" top: 17px !important; right: -7px; border-top: 5px solid transparent;
+							style=" top: 17px !important; 
+									right: -7px; 
+									border-top: 5px solid transparent;
 									border-bottom: 5px solid transparent;
-									border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
+									border-left: 5px solid none;
+									border-right: 0px; 
+									left:unset;">
+					</span>
 					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : 
 						<span style="color: #a4c6ff;">
 						` +  selectedText + `
@@ -227,10 +210,13 @@ function dataLoad(getSelectedText, selectedText) {
 				</div>
 			</div>
 			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+		console.log("dataLoad :: selectedText - >", selectedText);
+
 		$(".list-group-item").html(selectedHtml);
-		$("#tooltip_enabled_service_name").val(selectedText);
+  		$("#tooltip_enabled_service_name").val(selectedText);
 
 		//updateD3ByVersionList();
+		console.log("===========================================");
 
 		setTimeout(function () {
 			$("#pdService_Version_First_Child").trigger("click");
@@ -261,14 +247,10 @@ function init_versionList() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function draw(main, menu) {
 	main.html("");
-
-	var data = `
-			   <li class='list-group-item json-menu-header' style="padding: 0px; margin-bottom: 10px;">
-				   <strong>product service name</strong>
-			   </li>`;
+	var data ="";
 
 	for (let i = 0; i < menu.length; i++) {
-		if (i == 0) {
+		if (i == 0) {  // select version\
 			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
@@ -276,21 +258,21 @@ function draw(main, menu) {
 					   			data-toggle="collapse"
 					   			id="pdService_Version_First_Child"
 					   			name="versionLink_List"
-					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);"
-					   			onclick="versionClick(this, ${menu[i].c_id});">
-						   ${menu[i].c_title}
-					   </a>
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;  "
+           						onclick="versionClicks(this, ${menu[i].c_id}, '${menu[i].c_title}')">
+						    ${menu[i].c_title}
+ 					   </a>
 				   </div>
 			   </div>`;
-		} else {
+		} else {  // basic version
 			data += `
 			   <div class="panel">
 				   <div class="panel-heading">
 					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
-					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
-					   			onclick="versionClick(this, ${menu[i].c_id});">
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; "
+           						onclick="versionClicks(this, ${menu[i].c_id}, '${menu[i].c_title}')">
 						   ${menu[i].c_title}
 					   </a>
 				   </div>
@@ -304,10 +286,48 @@ function draw(main, menu) {
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 클릭할 때 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
-function versionClick(element, c_id) {
+function versionClicks(element, c_id, c_title) {
+	console.log("versionClick:: element  -> ", element);
+	console.log("versionClick:: c_id  -> ", c_id);
+	console.log("versionClick:: c_title  -> ", c_title);
+
+	var coloredTitleHtml =
+		`<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #e5603b;  ">
+					<span 	class="arrow" 
+							style="top: 17px !important; border-right: 5px solid #e5603b;">
+					</span>
+					<span   id="toRight"
+							class="arrow"
+							style=" top: 17px !important; 
+									right: -7px; 
+									border-top: 5px solid transparent;
+									border-bottom: 5px solid transparent;
+									border-left: 5px solid none;
+									border-right: 0px; 
+									left:unset;">
+					</span>
+					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : 
+					<span style="color: #a4c6ff;">
+					` +  c_title + `
+					</span>
+					</div>
+				</div>
+			</div>
+			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+	console.log("dataLoad :: coloredTitleHtml - >", coloredTitleHtml);
+
+	$(".list-item").html(coloredTitleHtml);
+
+
+	// 원하는 색상으로 c_title을 감싸는 span 태그를 생성하여 coloredTitleHtml로  넣어줍니다.
+	// var coloredTitleHtml = '<span style="color: #a4c6ff;">' + c_title + '</span>';
+	// $(".list-item").html("제품(버전) : " + coloredTitleHtml);
+
 	$("a[name='versionLink_List']").each(function () {
 		this.style.background = "";
 	});
+
 
 	if (element == null) {
 		console.log("element is empty");
@@ -315,11 +335,10 @@ function versionClick(element, c_id) {
 		element.style.background = "rgba(229, 96, 59, 0.20)";
 		console.log("element is = " + element);
 	}
+	console.log("click :: C_ID ->  " + c_id);
 
-	selectVersion = c_id;
-	console.log("selectVersion" + selectVersion);
-	$(".searchable").multiSelect("deselect_all");
-
+	$(".searchable").multiSelect("deselect_all");  //선택된 항목들을 모두 선택 해제(해당 요소들에서 선택을 없애는)하는 코드
+	console.log("DataTable -> " +   $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id);
 	// 이미 등록된 제품(서비스)-버전-지라 연결 정보가 있는지 확인
 	$.ajax({
 		url: "/auth-user/api/arms/globaltreemap/getConnectInfo/pdService/pdServiceVersion/jiraProject.do",
@@ -334,12 +353,22 @@ function versionClick(element, c_id) {
 	})
 		.done(function (data) {
 			var versionClickData = [];
+			console.log("response data check::  " + data.response);
+			console.log("==========================================");
+			console.log("response data check:: data.response ->   " + JSON.stringify(data.response));
+			console.log("==========================================");
+
+
 
 			var multiSelectData = [];
 			for (var k in data.response) {
 				var obj = data.response[k];
+				console.log("response data check:: obj ->   " + JSON.stringify(obj));
+				console.table(obj);
+
 				//var jira_name = obj.c_title;
 				selectConnectID = obj.c_id;
+				console.log("selectConnectID: " + selectConnectID);
 				multiSelectData.push(obj.jiraproject_link);
 				versionClickData.push(obj);
 			}
@@ -348,14 +377,17 @@ function versionClick(element, c_id) {
 				$("#pdservice_connect").removeClass("btn-success");
 				$("#pdservice_connect").addClass("btn-primary");
 				$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
-				//updateD3ByMultiSelect();
+				console.log("versionClickData length 0 ==");
+				// updateD3ByMultiSelect(obj);
 			} else {
 				$("#pdservice_connect").removeClass("btn-primary");
 				$("#pdservice_connect").addClass("btn-success");
 				$("#pdservice_connect").text("제품(서비스) Jira 연결 변경");
 
 				console.log("multiSelectData - " + multiSelectData.toString());
+				console.log("multiSelectData - " + multiSelectData);
 				$("#multiselect").multiSelect("select", multiSelectData.toString().split(","));
+				console.log("versionClickData length 1==");
 				//updateD3ByMultiSelect();
 			}
 		})
@@ -393,8 +425,12 @@ function connect_pdservice_jira(){
 				})
 				.always(function () {
 					console.log("always call");
+					console.log("데이터 연결 등록  완료!");
+					setTimeout(function() {
+						location.reload();
+					}, 2000);
 				});
-		} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
+ 		} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
 			// data가 이미 있음
 			$.ajax({
 				url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
@@ -415,7 +451,13 @@ function connect_pdservice_jira(){
 				})
 				.always(function () {
 					console.log("always call");
+					console.log("이미 있는데이터 변경 완료 !");
+
+					setTimeout(function() {
+						location.reload();
+					}, 2000);
 				});
+
 		} else {
 			jError("who are you?");
 		}
@@ -505,85 +547,6 @@ function buildMultiSelect() {
 	});
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// --- select2 (사용자 자동완성 검색 ) 설정 --- //
-////////////////////////////////////////////////////////////////////////////////////////
-function select2_setting() {
-	$(".js-data-example-ajax").select2({
-		maximumSelectionLength: 5,
-		width: "resolve",
-		ajax: {
-			url: function (params) {
-				return "/auth-check/getUsers/" + params.term;
-			},
-			dataType: "json",
-			delay: 250,
-			//data: function (params) {
-			//    return {
-			//        q: params.term, // search term
-			//        page: params.page,
-			//    };
-			//},
-			processResults: function (data, params) {
-				// parse the results into the format expected by Select2
-				// since we are using custom formatting functions we do not need to
-				// alter the remote JSON data, except to indicate that infinite
-				// scrolling can be used
-				params.page = params.page || 1;
-
-				return {
-					results: data,
-					pagination: {
-						more: params.page * 30 < data.total_count
-					}
-				};
-			},
-			cache: true
-		},
-		placeholder: "리뷰어 설정을 위한 계정명을 입력해 주세요",
-		minimumInputLength: 1,
-		templateResult: formatUser,
-		templateSelection: formatUserSelection
-	});
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-// --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
-////////////////////////////////////////////////////////////////////////////////////////
-function formatUser(jsonData) {
-	var $container = $(
-		"<div class='select2-result-jsonData clearfix'>" +
-		"<div class='select2-result-jsonData__meta'>" +
-		"<div class='select2-result-jsonData__username'><i class='fa fa-flash'></i></div>" +
-		"<div class='select2-result-jsonData__id'><i class='fa fa-star'></i></div>" +
-		"</div>" +
-		"</div>"
-	);
-
-	$container.find(".select2-result-jsonData__username").text(jsonData.username);
-	$container.find(".select2-result-jsonData__id").text(jsonData.id);
-
-	return $container;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// --- select2 (사용자 자동완성 검색 ) templateSelection 설정 --- //
-////////////////////////////////////////////////////////////////////////////////////////
-function formatUserSelection(jsonData) {
-	if (jsonData.id == "") {
-		jsonData.text = "placeholder";
-	} else {
-		if (jsonData.username == undefined) {
-			jsonData.text = jsonData.id;
-		} else {
-			jsonData.text = "[" + jsonData.username + "] - " + jsonData.id;
-		}
-	}
-	return jsonData.text;
-}
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //제품(서비스) 클릭할 때 동작하는 함수
@@ -604,7 +567,7 @@ function pdServiceDataTableClick(c_id) {
 	})
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
-			//$("#detailview_pdservice_name").val(json.c_title);
+			$("#detailview_pdservice_name").val(json.c_title);
 			var selectedHtml =
 				`<div class="chat-message">
 				<div class="chat-message-body" style="margin-left: 0px !important;">
@@ -748,7 +711,7 @@ function pdServiceDataTableClick(c_id) {
 
 			// ------------------------- reviewer end --------------------------------//
 
-			CKEDITOR.instances.input_pdservice_editor.setData(json.c_pdservice_contents);
+			// CKEDITOR.instances.input_pdservice_editor.setData(json.c_pdservice_contents);
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
 		.fail(function (xhr, status, errorThrown) {
@@ -762,457 +725,4 @@ function pdServiceDataTableClick(c_id) {
 
 	$("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
 }
-////////////////////////////////////////////////////////////////////////////////////////
-// 신규 제품(서비스) 등록 버튼
-////////////////////////////////////////////////////////////////////////////////////////
-function save_btn_click() {
-	$("#regist_pdservice").click(function () {
-		var reviewers01 = "none";
-		var reviewers02 = "none";
-		var reviewers03 = "none";
-		var reviewers04 = "none";
-		var reviewers05 = "none";
-		if ($("#popup_editview_pdservice_reviewers").select2("data")[0] != undefined) {
-			reviewers01 = $("#popup_editview_pdservice_reviewers").select2("data")[0].text;
-		}
-		if ($("#popup_editview_pdservice_reviewers").select2("data")[1] != undefined) {
-			reviewers02 = $("#popup_editview_pdservice_reviewers").select2("data")[1].text;
-		}
-		if ($("#popup_editview_pdservice_reviewers").select2("data")[2] != undefined) {
-			reviewers03 = $("#popup_editview_pdservice_reviewers").select2("data")[2].text;
-		}
-		if ($("#popup_editview_pdservice_reviewers").select2("data")[3] != undefined) {
-			reviewers04 = $("#popup_editview_pdservice_reviewers").select2("data")[3].text;
-		}
-		if ($("#popup_editview_pdservice_reviewers").select2("data")[4] != undefined) {
-			reviewers05 = $("#popup_editview_pdservice_reviewers").select2("data")[4].text;
-		}
 
-		$.ajax({
-			url: "/auth-user/api/arms/pdService/addPdServiceNode.do",
-			type: "POST",
-			data: {
-				ref: 2,
-				c_title: $("#popup_editview_pdservice_name").val(),
-				c_type: "default",
-				c_pdservice_owner: $("#popup_editview_pdservice_owner").select2("data")[0].text,
-				c_pdservice_reviewer01: reviewers01,
-				c_pdservice_reviewer02: reviewers02,
-				c_pdservice_reviewer03: reviewers03,
-				c_pdservice_reviewer04: reviewers04,
-				c_pdservice_reviewer05: reviewers05,
-				c_pdservice_contents: CKEDITOR.instances.modal_editor.getData()
-			},
-			statusCode: {
-				200: function () {
-					//모달 팝업 끝내고
-					$("#close_pdservice").trigger("click");
-					//데이터 테이블 데이터 재 로드
-					dataTableRef.ajax.reload();
-					jSuccess("신규 제품 등록이 완료 되었습니다.");
-
-					pdServiceDataTableClick(selectId);
-				}
-			},
-			beforeSend: function () {
-				$("#regist_pdservice").hide();
-			},
-			complete: function () {
-				$("#regist_pdservice").show();
-			},
-			error: function (e) {
-				jError("신규 제품 등록 중 에러가 발생했습니다.");
-			}
-		});
-	});
-}
-////////////////////////////////////////////////////////////////////////////////////////
-// --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
-////////////////////////////////////////////////////////////////////////////////////////
-function popup_size_setting(){
-	console.log("popup_size_setting() is activated");
-	$("#modal_popup_id").click(function () {
-		var height = $(document).height() - 600;
-		$(".modal-body")
-			.find(".cke_contents:eq(0)")
-			.css("height", height + "px");
-	});
-
-	// 팝업하여 편집
-	$("#extend_modal_popup_id").click(function () {
-		var height = $(document).height() - 1000;
-		$(".modal-body")
-			.find(".cke_contents:eq(0)")
-			.css("height", height + "px");
-
-		// 데이터 셋팅
-		var editorData = CKEDITOR.instances.input_pdservice_editor.getData();
-		CKEDITOR.instances.extend_modal_editor.setData(editorData);
-
-		var selectedId = $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id;
-		console.log("selectedId →" + selectedId);
-
-		// 제품(서비스) 이름
-		$("#extend_editview_pdservice_name").val($("#editview_pdservice_name").val());
-
-		// 오너
-		// clear
-		$("#extend_editview_pdservice_owner").val(null).trigger("change");
-
-		// 부모 페이지에서 데이터 로드
-		var owner = "none";
-		if ($("#editview_pdservice_owner").select2("data")[0] != undefined) {
-			owner = $("#editview_pdservice_owner").select2("data")[0].text;
-		}
-
-		// Modal 창에 데이터 셋팅
-		if (owner == null || owner == "none") {
-			console.log("pdServiceDataTableClick :: json.c_pdservice_owner empty");
-		} else {
-			var newOption = new Option(owner, owner, true, true);
-			$("#extend_editview_pdservice_owner").append(newOption).trigger("change");
-		}
-
-		// 리뷰어
-		//clear
-		$("#extend_editview_pdservice_reviewers").val(null).trigger("change");
-
-		var reviewer01 = "none";
-		var reviewer02 = "none";
-		var reviewer03 = "none";
-		var reviewer04 = "none";
-		var reviewer05 = "none";
-
-		if ($("#editview_pdservice_reviewers").select2("data")[0] != undefined) {
-			reviewer01 = $("#editview_pdservice_reviewers").select2("data")[0].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[1] != undefined) {
-			reviewer02 = $("#editview_pdservice_reviewers").select2("data")[1].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[2] != undefined) {
-			reviewer03 = $("#editview_pdservice_reviewers").select2("data")[2].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[3] != undefined) {
-			reviewer04 = $("#editview_pdservice_reviewers").select2("data")[3].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[4] != undefined) {
-			reviewer05 = $("#editview_pdservice_reviewers").select2("data")[4].text;
-		}
-
-		var reviewer01Option = new Option(reviewer01, reviewer01, true, true);
-		var reviewer02Option = new Option(reviewer02, reviewer02, true, true);
-		var reviewer03Option = new Option(reviewer03, reviewer03, true, true);
-		var reviewer04Option = new Option(reviewer04, reviewer04, true, true);
-		var reviewer05Option = new Option(reviewer05, reviewer05, true, true);
-
-		var multifyValue = 1;
-		if (reviewer01 == null || reviewer01 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer01 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer01Option);
-		}
-		if (reviewer02 == null || reviewer02 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer02 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer02Option);
-		}
-		if (reviewer03 == null || reviewer03 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer03 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer03Option);
-		}
-		if (reviewer04 == null || reviewer04 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer04 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer04Option);
-		}
-		if (reviewer05 == null || reviewer05 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer05 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer05Option);
-		}
-
-		$("#extend_editview_pdservice_reviewers").trigger("change");
-
-		$("#extend_editview_pdservice_reviewer").css("height", "20px");
-		setTimeout(function () {
-			var heightValue = $("#extend_editview_pdservice_reviewer").height();
-			var resultValue = heightValue + 20 * multifyValue;
-			$("#extend_editview_pdservice_reviewer").css("height", resultValue + "px");
-		}, 250);
-	});
-
-	$("#extend_modal_readOnly").click(function () {
-		var height = $(document).height() - 1000;
-		$(".modal-body")
-			.find(".cke_contents:eq(0)")
-			.css("height", height + "px");
-
-		// 데이터 셋팅
-		var editorData = CKEDITOR.instances.input_pdservice_editor.getData();
-		CKEDITOR.instances.extend_modal_editor.setData(editorData);
-
-		var selectedId = $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id;
-		console.log("selectedId →" + selectedId);
-
-		// 제품(서비스) 이름
-		$("#extend_editview_pdservice_name").val($("#editview_pdservice_name").val());
-
-		// 오너
-		// clear
-		$("#extend_editview_pdservice_owner").val(null).trigger("change");
-
-		// 부모 페이지에서 데이터 로드
-		var owner = "none";
-		if ($("#editview_pdservice_owner").select2("data")[0] != undefined) {
-			owner = $("#editview_pdservice_owner").select2("data")[0].text;
-		}
-
-		// Modal 창에 데이터 셋팅
-		if (owner == null || owner == "none") {
-			console.log("pdServiceDataTableClick :: json.c_pdservice_owner empty");
-		} else {
-			var newOption = new Option(owner, owner, true, true);
-			$("#extend_editview_pdservice_owner").append(newOption).trigger("change");
-		}
-
-		// 리뷰어
-		//clear
-		$("#extend_editview_pdservice_reviewers").val(null).trigger("change");
-
-		var reviewer01 = "none";
-		var reviewer02 = "none";
-		var reviewer03 = "none";
-		var reviewer04 = "none";
-		var reviewer05 = "none";
-
-		if ($("#editview_pdservice_reviewers").select2("data")[0] != undefined) {
-			reviewer01 = $("#editview_pdservice_reviewers").select2("data")[0].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[1] != undefined) {
-			reviewer02 = $("#editview_pdservice_reviewers").select2("data")[1].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[2] != undefined) {
-			reviewer03 = $("#editview_pdservice_reviewers").select2("data")[2].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[3] != undefined) {
-			reviewer04 = $("#editview_pdservice_reviewers").select2("data")[3].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[4] != undefined) {
-			reviewer05 = $("#editview_pdservice_reviewers").select2("data")[4].text;
-		}
-
-		var reviewer01Option = new Option(reviewer01, reviewer01, true, true);
-		var reviewer02Option = new Option(reviewer02, reviewer02, true, true);
-		var reviewer03Option = new Option(reviewer03, reviewer03, true, true);
-		var reviewer04Option = new Option(reviewer04, reviewer04, true, true);
-		var reviewer05Option = new Option(reviewer05, reviewer05, true, true);
-
-		var multifyValue = 1;
-		if (reviewer01 == null || reviewer01 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer01 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer01Option);
-		}
-		if (reviewer02 == null || reviewer02 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer02 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer02Option);
-		}
-		if (reviewer03 == null || reviewer03 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer03 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer03Option);
-		}
-		if (reviewer04 == null || reviewer04 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer04 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer04Option);
-		}
-		if (reviewer05 == null || reviewer05 == "none") {
-			console.log("extend_modal_popup_id Click :: reviewer05 empty");
-		} else {
-			multifyValue = multifyValue + 1;
-			$("#extend_editview_pdservice_reviewers").append(reviewer05Option);
-		}
-
-		$("#extend_editview_pdservice_reviewers").trigger("change");
-
-		$("#extend_editview_pdservice_reviewer").css("height", "20px");
-		setTimeout(function () {
-			var heightValue = $("#extend_editview_pdservice_reviewer").height();
-			var resultValue = heightValue + 20 * multifyValue;
-			$("#extend_editview_pdservice_reviewer").css("height", resultValue + "px");
-		}, 250);
-	});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 제품(서비스) 변경 저장 버튼
-////////////////////////////////////////////////////////////////////////////////////////
-function update_btn_click() {
-	$("#pdservice_update").click(function () {
-		var owner = "none";
-		if ($("#editview_pdservice_owner").select2("data")[0] != undefined) {
-			owner = $("#editview_pdservice_owner").select2("data")[0].text;
-		}
-
-		var reviewers01 = "none";
-		var reviewers02 = "none";
-		var reviewers03 = "none";
-		var reviewers04 = "none";
-		var reviewers05 = "none";
-		if ($("#editview_pdservice_reviewers").select2("data")[0] != undefined) {
-			reviewers01 = $("#editview_pdservice_reviewers").select2("data")[0].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[1] != undefined) {
-			reviewers02 = $("#editview_pdservice_reviewers").select2("data")[1].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[2] != undefined) {
-			reviewers03 = $("#editview_pdservice_reviewers").select2("data")[2].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[3] != undefined) {
-			reviewers04 = $("#editview_pdservice_reviewers").select2("data")[3].text;
-		}
-		if ($("#editview_pdservice_reviewers").select2("data")[4] != undefined) {
-			reviewers05 = $("#editview_pdservice_reviewers").select2("data")[4].text;
-		}
-
-		$.ajax({
-			url: "/auth-user/api/arms/pdService/updateNode.do",
-			type: "put",
-			data: {
-				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				c_title: $("#editview_pdservice_name").val(),
-				c_pdservice_owner: owner,
-				c_pdservice_reviewer01: reviewers01,
-				c_pdservice_reviewer02: reviewers02,
-				c_pdservice_reviewer03: reviewers03,
-				c_pdservice_reviewer04: reviewers04,
-				c_pdservice_reviewer05: reviewers05,
-				c_pdservice_contents: CKEDITOR.instances.input_pdservice_editor.getData()
-			},
-			statusCode: {
-				200: function () {
-					jSuccess($("#editview_pdservice_name").val() + "의 데이터가 변경되었습니다.");
-
-					//데이터 테이블 데이터 재 로드
-					dataTableRef.ajax.reload(function (json) {
-						$("#pdservice_table tbody tr:eq(0)").click();
-					});
-				}
-			}
-		});
-	});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 팝업에서 제품(서비스) 변경 저장 버튼
-////////////////////////////////////////////////////////////////////////////////////////
-function popup_update_btn_click() {
-	$("#extendupdate_pdservice").click(function () {
-		var owner = "none";
-		if ($("#extend_editview_pdservice_owner").select2("data")[0] != undefined) {
-			owner = $("#extend_editview_pdservice_owner").select2("data")[0].text;
-		}
-
-		var reviewers01 = "none";
-		var reviewers02 = "none";
-		var reviewers03 = "none";
-		var reviewers04 = "none";
-		var reviewers05 = "none";
-		if ($("#extend_editview_pdservice_reviewers").select2("data")[0] != undefined) {
-			reviewers01 = $("#extend_editview_pdservice_reviewers").select2("data")[0].text;
-		}
-		if ($("#extend_editview_pdservice_reviewers").select2("data")[1] != undefined) {
-			reviewers02 = $("#extend_editview_pdservice_reviewers").select2("data")[1].text;
-		}
-		if ($("#extend_editview_pdservice_reviewers").select2("data")[2] != undefined) {
-			reviewers03 = $("#extend_editview_pdservice_reviewers").select2("data")[2].text;
-		}
-		if ($("#extend_editview_pdservice_reviewers").select2("data")[3] != undefined) {
-			reviewers04 = $("#extend_editview_pdservice_reviewers").select2("data")[3].text;
-		}
-		if ($("#extend_editview_pdservice_reviewers").select2("data")[4] != undefined) {
-			reviewers05 = $("#extend_editview_pdservice_reviewers").select2("data")[4].text;
-		}
-
-		$.ajax({
-			url: "/auth-user/api/arms/pdService/updateNode.do",
-			type: "put",
-			data: {
-				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				c_title: $("#extend_editview_pdservice_name").val(),
-				c_pdservice_owner: owner,
-				c_pdservice_reviewer01: reviewers01,
-				c_pdservice_reviewer02: reviewers02,
-				c_pdservice_reviewer03: reviewers03,
-				c_pdservice_reviewer04: reviewers04,
-				c_pdservice_reviewer05: reviewers05,
-				c_pdservice_contents: CKEDITOR.instances.extend_modal_editor.getData()
-			},
-			statusCode: {
-				200: function () {
-					//모달 팝업 끝내고
-					$("#extendclose_pdservice").trigger("click");
-
-					jSuccess($("#extend_editview_pdservice_name").val() + "의 데이터가 변경되었습니다.");
-
-					$("#fileIdlink").val(selectId);
-					pdServiceDataTableClick(selectId);
-
-					//파일 업로드 관련 레이어 보이기 처리
-					$(".body-middle").show();
-
-					//파일 리스트 초기화
-					$("table tbody.files").empty();
-					// Load existing files:
-					var $fileupload = $("#fileupload");
-					// Load existing files:
-					$.ajax({
-						// Uncomment the following to send cross-domain cookies:
-						//xhrFields: {withCredentials: true},
-						url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-						data: { fileIdlink: selectId },
-						dataType: "json",
-						context: $fileupload[0]
-					}).done(function (result) {
-						$(this).fileupload("option", "done").call(this, null, { result: result });
-					});
-				}
-			}
-		});
-	});
-}
-// ///////////////////////////////
-// // 팝업 띄울 때, UI 일부 수정
-// ////////////////////////////////
-// function modalPopup(popupName) {
-// 	console.log("popupName= " + popupName);
-// 	if (popupName === "modal_popup_readonly") {
-// 		//modal_popup_readOnly = 새 창으로 제품(서비스 보기)
-// 		$("#my_modal1_title").text("제품(서비스) 내용 보기 팝업");
-// 		$("#my_modal1_sub").text("새 창으로 제품(서비스)의 정보를 확인합니다.")
-// 		$("#extend_change_to_update_pdservice").removeClass("hidden");
-// 		$("#extendupdate_pdservice").addClass("hidden");
-//
-// 	} else { //팝업 창으로 편집하기
-//
-// 		$("#my_modal1_title").text("신규 제품(서비스) 수정 팝업");
-// 		$("#my_modal1_sub").text("a-RMS에 신규 제품(서비스)의 정보를 수정합니다.")
-// 		$("#extend_change_to_update_pdservice").addClass("hidden");
-// 		$("#extendupdate_pdservice").removeClass("hidden");
-// 		// $("#extendupdate_pdservice")
-// 		// 	.attr("onclick","modalPopup('modal_popup_update')");
-// 		// $("#extendupdate_pdservice").text("제품(서비스) 변경 저장");
-// 	}
-// }
