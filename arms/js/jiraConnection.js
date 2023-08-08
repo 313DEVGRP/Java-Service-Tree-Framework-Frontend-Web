@@ -2,8 +2,9 @@ var selectId; // 제품 아이디
 var selectName; // 제품 이름
 var selectedIndex; // 데이터테이블 선택한 인덱스
 var selectedPage; // 데이터테이블 선택한 인덱스
-var selectVersion; // 선택한 버전 아이디
-var selectVersionName; // 선택한 버전 이름
+var selectType;
+var selectVersion; // 선택한 버전 아이디 - 사용x
+var selectVersionName; // 선택한 버전 이름 - 사용x
 var dataTableRef; // 데이터테이블 참조 변수
 var selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이디
 var versionList;
@@ -18,7 +19,8 @@ function execDocReady() {
             "../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
             "../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
-        [	"../reference/jquery-plugins/select2-4.0.2/dist/css/jisaconnection_temp.css",
+        [	/*"../reference/jquery-plugins/dataTables-1.10.16/extensions/Editor-1.6.5/css/editor.bootstrap4.min.css",*/
+            "../reference/jquery-plugins/select2-4.0.2/dist/css/jisaconnection_temp.css",
             "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
             "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
@@ -38,7 +40,8 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"],
+
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
 
@@ -61,7 +64,7 @@ function execDocReady() {
             // 데이터 테이블 로드 함수
             var waitDataTable = setInterval(function () {
                 try {
-                    if (!$.fn.DataTable.isDataTable("#pdservice_table")) {
+                    if (!$.fn.DataTable.isDataTable("#jira_connection_table")) {
                         dataTableLoad();
                         clearInterval(waitDataTable);
                     }
@@ -88,17 +91,6 @@ function execDocReady() {
              }, 313);
 */
 
-
-            //setdata_for_multiSelect();
-            //connect_pdservice_jira();
-            //init_versionList();
-
-            //
-            // $.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
-            //     initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
-            // });
-            // 스크립트 실행 로직을 이곳에 추가합니다.
-
             inBox_click_event();  // 지라 환경 nav
             jira_nav_btn_click(); // 지라 환경 nav
             select2_setting();    // 검색 자동완성
@@ -115,21 +107,36 @@ function execDocReady() {
 function dataTableLoad() {
     // 데이터 테이블 컬럼 및 열그룹 구성
     var columnList = [
-        { name: "c_id", title: "제품(서비스) 아이디", data: "c_id", visible: false },
+        { name: "c_id", title: "지라(서버) 아이디", data: "c_id", visible: false },
         {
-            name: "c_title",
-            title: "지라(서버) 목록",
-            data: "c_title",
+            name: "c_jira_server_name",
+            title: "지라(서버) 이름",
+            data: "c_title", //"c_jira_server_name"
             render: function (data, type, row, meta) {
                 if (type === "display") {
                     return '<label style="color: #a4c6ff">' + data + "</label>";
                 }
-
-                return data;
+                return data+1;
             },
             className: "dt-body-left",
+
             visible: true
-        }
+        },
+        { name: "c_pdservice_contents", title: "서버 타입", data: "c_pdservice_etc", visible: true,
+            render: function (data, type, row, meta) {
+                if (type ==="display") {
+                    console.log("data =" + data);
+                    if ( data == "T_ARMS_REQADD_11") {
+                        return '<label style="color: #FFFFFF; margin-right: 5%;">' + '클라우드' + "</label>"+'<i class="fa fa-cloud">'+"</i>";
+                        //return '<label style="color: #a4c6ff">' + "클라우드" + "</label>";
+                    } else {
+                        return '<label style="color: #FFFFFF; margin-right: 5%;">' + '온프레미스' + "</label>"+'<i class="fa fa-home">'+"</i>";
+                    }
+                }
+            },
+            className: "dt-body-center",
+            width: "100px"
+        },
     ];
     var rowsGroupList = [];
     var columnDefList = [];
@@ -139,6 +146,7 @@ function dataTableLoad() {
 
     var jquerySelector = "#jira_connection_table"; //
     var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
+    //var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do"; // 사용 예정
     var jsonRoot = "response";
     var isServerSide = false;
 
@@ -156,12 +164,30 @@ function dataTableLoad() {
     );
 }
 
-function jiraConnectionDataTableClick(c_id) {
+
+
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(tempDataTable, selectedData) {
+
+    //selectId = selectedData.c_id;
+    //selectName = selectedData.c_title;
+    //selectType = selectedData.c_jira_server_type;
+    console.log("selectedData.c_id : ", selectedData.c_id);
+    // c_id와 c_jira_server_type로 getNode 실행
+    jiraConnectionDataTableClick(selectedData.c_id, selectedData.c_jira_server_type);
+
+
+     
+}
+
+function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 넣기.
 
     $.ajax({
         // 수정 필요 ( 작성 후 해당 line 삭제)
-        url: "/auth-user/api/arms/pdService/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
-        data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
+        url: "/auth-user/api/arms/jiraServer/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+        data: { c_id: c_id,
+                c_jira_server_type: c_jira_server_type}, // HTTP 요청과 함께 서버로 보낼 데이터
         method: "GET", // HTTP 요청 메소드(GET, POST 등)
         dataType: "json", // 서버에서 보내줄 데이터의 타입
         beforeSend: function () {
@@ -175,9 +201,9 @@ function jiraConnectionDataTableClick(c_id) {
                 `<div class="chat-message">
 				<div class="chat-message-body" style="margin-left: 0px !important;">
 					<span class="arrow" style="top: 35% !important;"></span>
-					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
 				<span class="text" style="color: #a4c6ff;">
-				` + json.c_title +
+				` + json.c_jira_server_name +
                 `
 				</span>
 				</div>
@@ -325,49 +351,9 @@ function jiraConnectionDataTableClick(c_id) {
             console.log(xhr + status);
             $(".loader").addClass("hide");
         });
-    
+
     //삭제 하기 부분. (#pdService_table 에서 jiraConnection 관련 테이블로 변경 수정해야)
     $("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
-}
-
-
-// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(tempDataTable, selectedData) {
-    $("#version_contents").html("");
-
-    selectId = selectedData.c_id;
-    selectName = selectedData.c_title;
-    console.log("selectedData.c_id : ", selectedData.c_id);
-
-    $("#default_non_version").empty();
-    $("#default_non_version").css("margin-bottom", "0px");
-
-    dataLoad(selectedData.c_id, selectedData.c_title);
-    
-    /*
-    pdServiceJira 내용
-    selectedIndex = selectedData.selectedIndex;
-    selectedPage = selectedData.selectedPage;
-    selectId = selectedData.c_id;
-    selectName = selectedData.c_title;
-    $("#version_contents").html("");
-
-    $(".searchable").multiSelect("deselect_all");
-    $("#pdservice_connect").removeClass("btn-success");
-    $("#pdservice_connect").addClass("btn-primary");
-    $("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
-    
-
-    //초기 태그 삭제
-    //$("#initDefaultVersion").remove();
-
-    //버전 리스트 로드
-    //dataLoad(selectedData.c_id, selectedData.c_title);
-
-    // D3 업데이트
-    //updateD3ByDataTable();
-    */
-     
 }
 
 function dataTableDrawCallback(tableInfo) {
@@ -524,7 +510,7 @@ function versionClick(element, c_id) {
                 var obj = data.response[k];
                 //var jira_name = obj.c_title;
                 selectConnectID = obj.c_id;
-                multiSelectData.push(obj.jiraproject_link);
+                //multiSelectData.push(obj.jiraproject_link);
                 versionClickData.push(obj);
             }
 
@@ -725,14 +711,15 @@ function jira_nav_btn_click() {
         $("#jira_connection_classify").toggleClass("collapse");
         //collapse
         if ($("#jira_connection_classify").hasClass("collapse") === true) {
-            $("#jira_con_nav").removeClass("col-sm-4");
+            $("#jira_con_nav").removeClass("col-sm-3");
             $("#jira_con_nav").addClass("col-sm-1");
-            $("#jira_con_list").removeClass("col-sm-8");
+            $("#jira_con_list").removeClass("col-sm-9");
             $("#jira_con_list").addClass("col-sm-11");
+            $("jira_connection_classify").html();
         } else { // expand
-            $("#jira_con_nav").addClass("col-sm-4");
+            $("#jira_con_nav").addClass("col-sm-3");
             $("#jira_con_nav").removeClass("col-sm-1");
-            $("#jira_con_list").addClass("col-sm-8");
+            $("#jira_con_list").addClass("col-sm-9");
             $("#jira_con_list").removeClass("col-sm-11");
         }
         // $("#jira_connection_classify").toggleClass("collapse");
