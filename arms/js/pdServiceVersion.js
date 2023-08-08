@@ -168,7 +168,7 @@ function dataTableLoad() {
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
-	$("#version_contents").html("");
+	$("#version_contents").html(""); // 버전 상세 명세 초기화
 
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
@@ -373,9 +373,21 @@ function dataLoad(getSelectedText, selectedText) {
 				</div>
 			</div>
 			</div>
-			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+<!--			<button type="button"
+					class="btn btn-primary btn-block btn-sm"
+					id="modal_popup_id"
+					data-toggle="modal"
+					data-target="#my_modal2"
+					style="margin-bottom: 10px !important; margin-top: 10px;"
+					onClick="modalPopup('modal_popup_id')">
+					신규 버전 등록하기
+			</button>-->
+			`;
+		//<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>
 
 		$(".list-group-item").html(selectedHtml);
+		$("#select_PdService").text(selectedText); // sender 이름 바인딩
+
 		$("#tooltip_enabled_service_name").val(selectedText);
 
 		if( !isEmpty(json.pdServiceVersionEntities) ){
@@ -432,7 +444,7 @@ function draw(main, menu) {
 	main.html("");
 
 	var data = `
-			   <li class='list-group-item json-menu-header' style="padding: 0px;">
+			   <li class='list-group-item json-menu-header ch123' style="padding: 0px;">
 				   <strong>product service name</strong>
 			   </li>
 			   <button type="button"
@@ -504,6 +516,7 @@ function versionClick(element, c_id) {
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
 			console.log(" → " + json.c_contents);
+			console.log(json);
 
 			$("#pdservice_name").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
 
@@ -522,6 +535,12 @@ function versionClick(element, c_id) {
 			$("#input_pdservice_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 });
 			$("#btn_enabled_date").datetimepicker({ value: json.c_pds_version_start_date + " 09:00", step: 10 });
 			$("#btn_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 });
+
+			// sender 데이터 바인딩 및 선택 색상 표기
+			$("#select_Version").text(json.c_title);
+			$(".list-item1 .chat-message-body").css({"border-left":""});
+			$(".list-item1 .arrow").css({"border-right":""});
+
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
 		.fail(function (xhr, status, errorThrown) {
