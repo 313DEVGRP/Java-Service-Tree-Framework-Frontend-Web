@@ -73,6 +73,7 @@ function execDocReady() {
 			setdata_for_multiSelect();
 			connect_pdservice_jira();
 			init_versionList();
+			downloadChartImage();
 
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
@@ -730,34 +731,21 @@ function pdServiceDataTableClick(c_id) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 이미지 다운로드
 ////////////////////////////////////////////////////////////////////////////////////////
-function downloadImageWithWindowSize() {
-	var originalWidth = window.innerWidth; // 현재 창의 가로 크기 저장
-	var originalHeight = window.innerHeight; // 현재 창의 세로 크기 저장
+function downloadChartImage() {
+	$("#imageDownload").click( function () {
+		// html2canvas 라이브러리를 사용하여 이미지로 렌더링
+		html2canvas($(".darkBack")[0], {
+			backgroundColor: null, // 기본 백그라운드 색상을 유지하기 위해 null로 설정
+		}).then(function (canvas) {
+			// 이미지 다운로드 링크 생성
+			var downloadLink = document.createElement("a");
+			downloadLink.download = "darkBack_image.png";
+			downloadLink.href = canvas.toDataURL("image/png");
 
-	// 화면 크기를 임시로 1000x1000으로 조정 (원하는 크기로 변경 가능)
-	window.resizeTo(3000, 3000);
-
-	// html2canvas 라이브러리를 사용하여 이미지로 렌더링
-	html2canvas($(".darkBack")[0], {
-		backgroundColor: null, // 기본 백그라운드 색상을 유지하기 위해 null로 설정
-	}).then(function (canvas) {
-		// 이미지 다운로드 링크 생성
-		var downloadLink = document.createElement("a");
-		downloadLink.download = "darkBack_image.png";
-		downloadLink.href = canvas.toDataURL("image/png");
-
-		// 이미지 다운로드
-		downloadLink.click();
-
-		// 다운로드가 완료된 후 원래 화면 크기로 복원
-		window.resizeTo(originalWidth, originalHeight);
+			// 이미지 다운로드
+			downloadLink.click();
+		});
 	});
 }
-
-$(document).ready(function() {
-	$("#imageDownload").on("click", function () {
-		downloadImageWithWindowSize();
-	});
-});
 
 
