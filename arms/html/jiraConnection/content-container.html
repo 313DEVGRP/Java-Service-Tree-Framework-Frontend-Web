@@ -1,4 +1,4 @@
-<div class="col-lg-6">
+<div class="col-lg-5">
     <section class="widget">
         <header>
             <h4>
@@ -99,50 +99,85 @@
                 </div>
             </div>
 
-            <div
-                    id="review_box_app"
-                    class="review-box">
-                <div class="row">
-                    <div id= "jira_con_nav" class="col-sm-4">
-                        <span
-                                id="jira_connection_list__nav_btn"
-                                class="btn"
-                                style="background: rgba(51,51,51,.3);">
-                            <i class="fa fa-bars"></i>
-                        </span>
-<!--                        <button
-                                id="compose_btn"
-                                class="btn btn-default btn-block">
-                            Btn
-                        </button>-->
-                        <ul
-                                id="jira_connection_classify"
-                                class="jira_connection_classify mailbox-folders nav-collapse">
-                            <li class="active"><a href="#all"
-                                                  data-toggle="tab">전체</a></li>
-                            <li><a href="#onpremise"
-                                   data-toggle="tab">온프레미스 <i class="fa fa-laptop"></i></a></li>
-                            <li><a href="#cloud"
-                                   data-toggle="tab">클라우드 <i class="fa fa-cloud"></i></a></li>
-                        </ul>
+            <div   id="jira_server_app"
+                   class="">
+                <div class="" style="min-height: 100px; width: 100%">
+                    <div class="card-body mb-2 ta-center"><h4>지라 서버 목록</h4></div>
+                    <div class="card mb-2 ribbon-box ribbon-fill right">
+                        <!-- 리본표시 -->
+                        <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
+                        <div class="card-body">
+                            <div class="" style="display: flex; align-items: baseline;">
+                                <div class="flex-shrink-0 card-icon-wrap">
+                                    <div class="card-icon bg-light rounded">
+                                        <img src="./img/jira/mark-gradient-neutral-jira.svg" id="side_jira_neutral_icon" class="" width="30px" style=""></img>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ml-4 mb-2">
+                                    <h5 class="fs-15 mb-1 font16">JIRA SERVER NAME</h5>
+                                    <p class="font13 text-muted">www.313.co.kr/jira</p>
+                                </div>
+                            </div>
+                            <p class="font13 mt-1" style="margin-bottom: 0px;">ISSUE(배포/수집): 13 / 20 <span class="badge bg-success-subtle text-success">65.00%</span></p>
+                        </div>
+                        <div class="card-body top-border border-top">
+                            <div class="d-flex-sb-11">
+                                <div class="flex-grow-1">
+                                    <h6 class="font13">status: <i class="fa fa-circle-o"> 200</i></h6>
+                                </div>
+                                <h6 class="font13">Last Update - <i class="fa fa-clock-o mr-2"></i>08 Aug, 2023</h6>
+                            </div>
+                        </div>
                     </div>
-                    <div id= "jira_con_list" class="col-sm-8">
-                        <h5
-                                id="folder_title"
-                                class="folder-title">
-                            Jira Server 목록
-<!--                            <small>(2 unread messages)</small>-->
-                        </h5>
-                        <div
-                                id="review_content"
-                                class="review-content">
-                            <div class="box-body">
-                                <!-- Jira 데이터 테이블 html 삽입 공간 -->
-                                <table
-                                        id="jira_connection_table"
-                                        class="display responsive no-wrap"
-                                        style="width: 100% !important;"
-                                        cellspacing="0"></table>
+                    <div class="card mb-2 ribbon-box ribbon-fill right">
+                        <!-- 리본표시 -->
+                        <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
+                        <div class="card-body">
+                            <div class="" style="display: flex; align-items: baseline;">
+                                <div class="flex-shrink-0 card-icon-wrap">
+                                    <div class="card-icon bg-light rounded">
+                                        <img src="./img/jira/mark-gradient-blue-jira.svg" id="side_jira_neutral_icon" class="" width="30px" style=""></img>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ml-4 mb-2">
+                                    <h5 class="fs-15 mb-1 font16"><i class="fa fa-cloud mr-1"></i>JIRA SERVER NAME</h5>
+                                    <p class="font13 text-muted">www.313.co.kr/jira</p>
+                                </div>
+                            </div>
+                            <p class="font13 mt-1" style="margin-bottom: 0px;">ISSUE(배포/수집): 13 / 20 <span class="badge bg-success-subtle text-success">65.00%</span></p>
+                        </div>
+                        <div class="card-body top-border border-top">
+                            <div class="d-flex-sb-11">
+                                <div class="flex-grow-1">
+                                    <h6 class="font13">status: <i class="fa fa-circle-o"> 200</i></h6>
+                                </div>
+                                <h6 class="font13">Last Update - <i class="fa fa-clock-o mr-2"></i>08 Aug, 2023</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-2 ribbon-box ribbon-fill right">
+                        <!-- 리본표시 -->
+                        <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
+                        <div class="card-body">
+                            <div class="" style="display: flex; align-items: baseline;">
+                                <div class="flex-shrink-0 card-icon-wrap">
+                                    <div class="card-icon bg-light rounded">
+                                        <img src="./img/jira/mark-gradient-white-jira.svg" id="side_jira_neutral_icon" class="" width="30px" style=""></img>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ml-4 mb-2">
+                                    <h5 class="fs-15 mb-1 font16"><i class="fa fa-home mr-1"></i>JIRA SERVER NAME</h5>
+                                    <p class="font13 text-muted">www.313.co.kr/jira</p>
+                                </div>
+                            </div>
+                            <p class="font13 mt-1" style="margin-bottom: 0px;">ISSUE(배포/수집): 13 / 20 <span class="badge bg-success-subtle text-success">65.00%</span></p>
+                        </div>
+                        <div class="card-body top-border border-top">
+                            <div class="d-flex-sb-11">
+                                <div class="flex-grow-1">
+                                    <h6 class="font13">status: <i class="fa fa-circle-o"> 200</i></h6>
+                                </div>
+                                <h6 class="font13">Last Update - <i class="fa fa-clock-o mr-2"></i>08 Aug, 2023</h6>
                             </div>
                         </div>
                     </div>
@@ -152,7 +187,7 @@
     </section>
 </div>
 
-<div class="col-lg-6">
+<div class="col-lg-7">
     <section class="widget">
         <header>
             <h4>
@@ -339,11 +374,35 @@
                                 <form   class="form-horizontal"
                                         method="post">
                                     <fieldset>
+                                        <div class="control-group">
+                                            <label  for="detailview_jira_server_name"
+                                                    class="control-label"
+                                                    style="width: 130px !important">
+                                                지라(서버) 이름 :
+                                            </label>
+                                            <div    class="controls form-group input-group"
+                                                    style="margin-left: 100px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+                                                <input  type="text"
+                                                        id="detailview_jira_server_name"
+                                                        name="detailview_jira_server_name"
+                                                        class="form-control parsley-validated font13 darkBack"
+                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                        placeholder="JIRA SERVER NAME"
+                                                        required="required" />
+                                                <span class="input-group-addon font11">
+                                                INFO: 서버 이름은 중복될 수 없습니다.
+                                                </span>
+                                            </div>
+                                        </div>
                                         <div    class="control-group"
                                                 for="detailview_jira_connection_env">
-                                            <label class="control-label font13">지라 환경 :</label>
+                                            <label class="control-label font13"
+                                                   style="width: 130px !important">지라 환경 :</label>
                                             <div    class="controls form-group input-group"
-                                                    style="margin-left: 160px">
+                                                    style="margin-left: 130px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
@@ -370,7 +429,7 @@
                                         <div class="control-group">
                                             <label  for="detailview_jira_url"
                                                     class="control-label"
-                                                    style="width: 160px !important">
+                                                    style="width: 130px !important">
                                                 지라 URL :
                                             </label>
                                             <div    class="controls form-group input-group"
@@ -383,7 +442,7 @@
                                                         name="detailview_jira_url"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="JIRA URL"
+                                                        placeholder="JIRA BASE URL"
                                                         required="required" />
 <!--                                                <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
@@ -394,7 +453,7 @@
                                         <div class="control-group">
                                             <label  for="detailview_jira_id"
                                                     class="control-label"
-                                                    style="width: 160px !important">
+                                                    style="width: 130px !important">
                                                 JIRA ID :
                                             </label>
                                             <div    class="controls form-group input-group"
@@ -407,7 +466,7 @@
                                                         name="detailview_jira_id"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="JIRA ID"
+                                                        placeholder="JIRA SERVER CONNECT ID"
                                                         required="required" />
                                                 <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
@@ -418,7 +477,7 @@
                                         <div class="control-group">
                                             <label  for="detailview_jira_pass_token"
                                                     class="control-label"
-                                                    style="width: 160px !important">
+                                                    style="width: 130px !important">
                                                 JIRA PASS or TOKEN :
                                             </label>
                                             <div    class="controls form-group input-group"
@@ -493,7 +552,7 @@
                                                             name="editview_jira_url"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="JIRA URL"
+                                                            placeholder="JIRA BASE URL"
                                                             required="required" />
 <!--                                                    <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
@@ -517,7 +576,7 @@
                                                             name="editview_jira_id"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="JIRA ID"
+                                                            placeholder="JIRA SERVER CONNECT ID"
                                                             required="required" />
                                                     <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
@@ -717,12 +776,12 @@
                             <i class="fa fa-edit"></i>
                             신규 지라 서버 등록 팝업
 					</span>
-                    <section    class="search-result"
+                    <blockquote    class="search-result"
                                 style="border-left: 5px solid #e5603b">
                         <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
                             a-RMS에 지라 서버를 등록합니다.
                         </p>
-                    </section>
+                    </blockquote>
                 </h4>
                 <div    class="widget-controls"
                         style="padding-top: 10px">
@@ -817,7 +876,7 @@
                                         data-placement="top"
                                         data-original-title="jira_connection_url"
                                         required="required"
-                                        placeholder="JIRA URL" />
+                                        placeholder="JIRA BASE URL" />
                                 <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
                             </div>
                         </div>
@@ -836,7 +895,7 @@
                                         data-placement="top"
                                         data-original-title="JIRA ID"
                                         required="required"
-                                        placeholder="JIRA ID" />
+                                        placeholder="JIRA SERVER CONNECT ID" />
                                 <span class="input-group-addon font11">INFO : 등록할 지라 아이디를 입력</span>
                             </div>
                         </div>
@@ -1039,7 +1098,7 @@
                                         data-placement="top"
                                         data-original-title="jira_connection_url"
                                         required="required"
-                                        placeholder="JIRA URL" />
+                                        placeholder="JIRA BASE URL" />
                                 <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
                             </div>
                         </div>
@@ -1058,7 +1117,7 @@
                                         data-placement="top"
                                         data-original-title="JIRA ID"
                                         required="required"
-                                        placeholder="JIRA ID" />
+                                        placeholder="JIRA SERVER CONNECT ID" />
                                 <span class="input-group-addon font11">INFO : 등록할 지라 아이디를 입력</span>
                             </div>
                         </div>
