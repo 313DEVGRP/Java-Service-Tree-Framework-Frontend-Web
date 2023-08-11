@@ -94,15 +94,15 @@
                             data-toggle="modal"
                             id="modal_popup_id"
                             type="button">
-                        지라(서버) 추가
+                        지라(서버) 등록
                     </button>
                 </div>
             </div>
-
             <div   id="jira_server_app"
                    class="">
-                <div class="" style="min-height: 100px; width: 100%">
                     <div class="card-body mb-2 ta-center"><h4>지라 서버 목록</h4></div>
+                <div id="jira_server_card_deck" class="jira_server_card" style="min-height: 100px; width: 100%">
+
                     <div class="card mb-2 ribbon-box ribbon-fill right">
                         <!-- 리본표시 -->
                         <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
@@ -129,7 +129,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-2 ribbon-box ribbon-fill right">
+
+                    <div class="card mb-2 ribbon-box ribbon-fill right hidden">
                         <!-- 리본표시 -->
                         <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
                         <div class="card-body">
@@ -155,7 +156,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-2 ribbon-box ribbon-fill right">
+                    <div class="card mb-2 ribbon-box ribbon-fill right hidden">
                         <!-- 리본표시 -->
                         <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
                         <div class="card-body">
@@ -179,6 +180,15 @@
                                 </div>
                                 <h6 class="font13">Last Update - <i class="fa fa-clock-o mr-2"></i>08 Aug, 2023</h6>
                             </div>
+                        </div>
+                    </div>
+                    <div    class="box box-primary"
+                            style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+                        <div    class="box-body">
+                            <table  class="display"
+                                    style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"
+                                    id="jira_connection_table">
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -306,7 +316,7 @@
                 </div>
                 -->
                 <div style="float: right"
-                     id="jira_connection_details_popup_div">
+                     id="jira_server_details_popup_div">
                     <button type="button"
                             data-target="#my_modal2"
                             data-toggle="modal"
@@ -318,7 +328,7 @@
                 </div>
                 <div style="float: right"
                      class="hidden"
-                     id="jira_connection_update_div">
+                     id="jira_server_update_div">
                     <button type="button"
                             id="version_popup"
                             class="btn btn-warning btn-sm"
@@ -328,15 +338,15 @@
                         팝업 창으로 편집하기
                     </button>
                     <button type="button"
-                            id="jira_connection_update"
+                            id="jira_server_update"
                             class="btn btn-success btn-sm">
                         변경 사항 저장
                     </button>
                 </div>
                 <div style="float: right"
                      class="hidden"
-                     id="jira_connection_delete_div">
-                    <button id="delete_jira_connection"
+                     id="jira_server_delete_div">
+                    <button id="delete_jira_server"
                             class="btn btn-danger btn-sm">
                         지라(서버) 삭제
                     </button>
@@ -398,7 +408,7 @@
                                             </div>
                                         </div>
                                         <div    class="control-group"
-                                                for="detailview_jira_connection_env">
+                                                for="detailview_jira_server_type">
                                             <label class="control-label font13"
                                                    style="width: 130px !important">지라 환경 :</label>
                                             <div    class="controls form-group input-group"
@@ -407,19 +417,19 @@
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
                                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                                    <div    id="detailview_jira_connection_env"
+                                                    <div    id="detailview_jira_server_type"
                                                             class="btn-group"
                                                             data-toggle="buttons">
                                                         <label class="btn btn-warning">
                                                             <input  type="radio"
                                                                     name="options"
-                                                                    id="detailview_jira_connection_env_option1" />
+                                                                    id="detailview_jira_server_type_option1" />
                                                             클라우드
                                                         </label>
                                                         <label class="btn btn-warning">
                                                             <input  type="radio"
                                                                     name="options"
-                                                                    id="detailview_jira_connection_env_option2" />
+                                                                    id="detailview_jira_server_type_option2" />
                                                             온프레미스
                                                         </label>
                                                     </div>
@@ -427,7 +437,7 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label  for="detailview_jira_url"
+                                            <label  for="detailview_jira_server_base_url"
                                                     class="control-label"
                                                     style="width: 130px !important">
                                                 지라 URL :
@@ -438,8 +448,8 @@
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
                                                 <input  type="text"
-                                                        id="detailview_jira_url"
-                                                        name="detailview_jira_url"
+                                                        id="detailview_jira_server_base_url"
+                                                        name="detailview_jira_server_base_url"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA BASE URL"
@@ -451,7 +461,7 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label  for="detailview_jira_id"
+                                            <label  for="detailview_jira_server_connect_id"
                                                     class="control-label"
                                                     style="width: 130px !important">
                                                 JIRA ID :
@@ -462,8 +472,8 @@
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
                                                 <input  type="text"
-                                                        id="detailview_jira_id"
-                                                        name="detailview_jira_id"
+                                                        id="detailview_jira_server_connect_id"
+                                                        name="detailview_jira_server_connect_id"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA SERVER CONNECT ID"
@@ -496,10 +506,22 @@
 													<i class="fa fa-question-circle"></i>
 													암호 또는 토큰
 												</span>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </form>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label  class="control-label"
+                                                    style="margin-top: 10px">
+                                                제품(서비스) 컨텐츠 :
+                                            </label>
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <div    class="col-sm-12 darkBack"
+                                                    id="detailview_jira_server_contents"
+                                                    style="padding-top: 10px; padding-bottom: 10px"></div>
+                                        </div>
+                                    </fieldset>
+                                </form>
                             </div>
                             <div    id="report"
                                     class="tab-pane"
@@ -508,28 +530,52 @@
                                     <form   class="form-horizontal"
                                             method="post">
                                         <fieldset>
-                                            <div    class="control-group"
-                                                    for="editview_jira_connection_env">
-                                                <label class="control-label font13">지라 환경 :</label>
+                                            <div class="control-group">
+                                                <label  for="editview_jira_server_name"
+                                                        class="control-label"
+                                                        style="width: 130px !important">
+                                                    지라(서버) 이름 :
+                                                </label>
                                                 <div    class="controls form-group input-group"
-                                                        style="margin-left: 160px">
+                                                        style="margin-left: 100px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+                                                    <input  type="text"
+                                                            id="editview_jira_server_name"
+                                                            name="editview_jira_server_name"
+                                                            class="form-control parsley-validated font13 darkBack"
+                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                            placeholder="JIRA SERVER NAME"
+                                                            required="required" />
+                                                    <span class="input-group-addon font11">
+                                                INFO: 서버 이름은 중복될 수 없습니다.
+                                                </span>
+                                                </div>
+                                            </div>
+                                            <div    class="control-group"
+                                                    for="editview_jira_server_type">
+                                                <label class="control-label font13"
+                                                       style="width: 130px !important">지라 환경 :</label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 130px">
 												    <span class="input-group-addon">
 													    <i class="glyphicon glyphicon-gift"></i>
 												    </span>
                                                     <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                                        <div    id="editview_jira_connection_env"
+                                                        <div    id="editview_jira_server_type"
                                                                 class="btn-group"
                                                                 data-toggle="buttons">
                                                             <label class="btn btn-warning">
                                                                 <input  type="radio"
                                                                         name="options"
-                                                                        id="editview_jira_connection_env_option1" />
+                                                                        id="editview_jira_server_type_option1" />
                                                                 클라우드
                                                             </label>
                                                             <label class="btn btn-warning">
                                                                 <input  type="radio"
                                                                         name="options"
-                                                                        id="editview_jira_connection_env_option2" />
+                                                                        id="editview_jira_server_type_option2" />
                                                                 온프레미스
                                                             </label>
                                                         </div>
@@ -537,9 +583,9 @@
                                                 </div>
                                             </div>
                                             <div class="control-group">
-                                                <label  for="editview_jira_url"
+                                                <label  for="editview_jira_server_base_url"
                                                         class="control-label"
-                                                        style="width: 160px !important">
+                                                        style="width: 130px !important">
                                                     지라 URL :
                                                 </label>
                                                 <div    class="controls form-group input-group"
@@ -548,8 +594,8 @@
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
                                                     <input  type="text"
-                                                            id="editview_jira_url"
-                                                            name="editview_jira_url"
+                                                            id="editview_jira_server_base_url"
+                                                            name="editview_jira_server_base_url"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                             placeholder="JIRA BASE URL"
@@ -563,7 +609,7 @@
                                             <div class="control-group">
                                                 <label  for="version_start_date"
                                                         class="control-label"
-                                                        style="width: 160px !important">
+                                                        style="width: 130px !important">
                                                     JIRA ID :
                                                 </label>
                                                 <div    class="controls form-group input-group"
@@ -572,8 +618,8 @@
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
                                                     <input  type="text"
-                                                            id="editview_jira_id"
-                                                            name="editview_jira_id"
+                                                            id="editview_jira_server_connect_id"
+                                                            name="editview_jira_server_connect_id"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                             placeholder="JIRA SERVER CONNECT ID"
@@ -587,7 +633,7 @@
                                             <div class="control-group">
                                                 <label  for="version_end_date"
                                                         class="control-label"
-                                                        style="width: 160px !important">
+                                                        style="width: 130px !important">
                                                     JIRA PASS or TOKEN :
                                                 </label>
                                                 <div    class="controls form-group input-group"
@@ -608,116 +654,20 @@
 												</span>
                                                 </div>
                                             </div>
-<!--                                            <div    class="control-group"
-                                                    for="popup_editview_pdservice_name">
-                                                <label  class="control-label font13"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                    제품
-                                                    <sup>서비스</sup>
-                                                    :
-                                                </label>
-                                                <div class="controls form-group input-group">
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-gift"></i>
-													</span>
-                                                    <input  type="text"
-                                                            id="input_pdservice_name"
-                                                            name="input_pdservice_name"
-                                                            class="form-control parsley-validated font13 darkBack"
-                                                            data-placement="top"
-                                                            data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-                                                            required="required"
-                                                            style="color: #a4c6ff"
-                                                            placeholder="service name" />
-                                                </div>
-                                            </div>
-                                            <div    class="control-group"
-                                                    for="popup_editview_pdservice_name">
-                                                <label  class="control-label font13"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                    버전 :
-                                                </label>
-                                                <div class="controls form-group input-group">
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-gift"></i>
-													</span>
-                                                    <input  type="text"
-                                                            id="input_pdservice_version"
-                                                            name="input_pdservice_version"
-                                                            class="form-control parsley-validated font13 darkBack"
-                                                            data-placement="top"
-                                                            data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-                                                            required="required"
-                                                            style="color: #a4c6ff"
-                                                            placeholder="version text" />
-                                                </div>
-                                            </div>
-                                            <div    class="control-group"
-                                                    for="popup_editview_pdservice_name">
-                                                <label  class="control-label font13"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                    시작 날짜 :
-                                                </label>
-                                                <div class="controls form-group input-group">
-													<span class="input-group-btn">
-														<a  href="#"
-                                                            id="btn_select_calendar"
-                                                            class="btn btn-danger"
-                                                            style="background-color: #e5603b !important; border: 1px solid transparent !important"
-                                                            data-date-format="yyyy/mm/dd">
-															<i class="fa fa-calendar"></i>
-														</a>
-													</span>
-                                                    <input  id="input_pdservice_start_date"
-                                                            class="form-control darkBack"
-                                                            type="text"
-                                                            name="btn_enabled_date"
-                                                            value=""
-                                                            style="color: #a4c6ff"
-                                                            pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
-                                                </div>
-                                            </div>
-                                            <div    class="control-group"
-                                                    for="popup_editview_pdservice_name">
-                                                <label  class="control-label font13"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                    종료 날짜 :
-                                                </label>
-                                                <div class="controls form-group input-group">
-													<span class="input-group-btn">
-														<a  href="#"
-                                                            id="btn_end_calendar"
-                                                            class="btn btn-danger"
-                                                            style="background-color: #e5603b !important; border: 1px solid transparent !important"
-                                                            data-date-format="yyyy/mm/dd">
-															<i class="fa fa-calendar"></i>
-														</a>
-													</span>
-                                                    <input  id="input_pdservice_end_date"
-                                                            class="form-control darkBack"
-                                                            type="text"
-                                                            name="btn_enabled_date"
-                                                            value=""
-                                                            style="color: #a4c6ff"
-                                                            pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
-                                                </div>
-                                            </div>
                                             <div class="control-group">
                                                 <label  class="control-label"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                    버전 내용
+                                                        style="color: #f8f8f8">
+                                                    제품(서비스) 컨텐츠 :
                                                 </label>
-                                                <br />
-                                                <br />
                                                 <div class="controls form-group">
-                                                    <div class="col-sm-12">
-                                                        <div    id="input_pdservice_editor"
-                                                                class="darkBack">
-                                                            <p>버전에 포함될 기능을 요약합니다.</p>
+                                                    <div    class="col-sm-12"
+                                                            style="padding-top: 10px">
+                                                        <div id="input_jira_server_editor">
+                                                            <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>-->
+                                            </div>
                                         </fieldset>
                                     </form>
                                 </div>
@@ -785,16 +735,16 @@
                 </h4>
                 <div    class="widget-controls"
                         style="padding-top: 10px">
-                    <a  title="Options"
+                    <a  title="Options" class="hidden"
                         href="#">
                         <i class="glyphicon glyphicon-cog"></i>
                     </a>
-                    <a  data-widgster="expand"
+                    <a  data-widgster="expand" class="hidden"
                         title="Expand"
                         href="#">
                         <i class="glyphicon glyphicon-chevron-up"></i>
                     </a>
-                    <a  data-widgster="collapse"
+                    <a  data-widgster="collapse" class="hidden"
                         title="Collapse"
                         href="#">
                         <i class="glyphicon glyphicon-chevron-down"></i>
@@ -814,7 +764,7 @@
                         method="post">
                     <fieldset>
                         <div    class="control-group"
-                                for="popup_editview_jira_connection_name">
+                                for="popup_editview_jira_server_name">
                             <label class="control-label font13">지라(서버) 이름 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -822,8 +772,8 @@
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
                                 <input  type="text"
-                                        id="popup_editview_jira_connection_name"
-                                        name="popup_editview_jira_connection_name"
+                                        id="popup_editview_jira_server_name"
+                                        name="popup_editview_jira_server_name"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
                                         data-original-title="지라(서버) 이름은 중복될 수 없습니다."
@@ -833,7 +783,7 @@
                             </div>
                         </div>
                         <div    class="control-group"
-                                for="popup_editview_jira_connection_env">
+                                for="popup_editview_jira_server_type">
                             <label class="control-label font13">지라 환경 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -841,28 +791,29 @@
                                     <i class="glyphicon glyphicon-gift"></i>
                                 </span>
                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                    <div    id="popup_editview_jira_connection_env"
+                                    <div    id="popup_editview_jira_server_type"
                                             class="btn-group"
                                             data-toggle="buttons">
                                         <label class="btn btn-warning">
                                             <input  type="radio"
                                                     name="options"
-                                                    id="popup_editview_jira_connection_env_option1" />
+                                                    id="popup_editview_jira_server_type_option1"
+                                                    value="cloud"/>
                                             클라우드
                                         </label>
                                         <label class="btn btn-warning">
                                             <input  type="radio"
                                                     name="options"
-                                                    id="popup_editview_jira_connection_env_option2" />
+                                                    id="popup_editview_jira_server_type_option2"
+                                                    value="on-premise"/>
                                             온프레미스
                                         </label>
-<!--                                        <span class="input-group-addon font11">INFO : 제품(서비스) 오너(책임자)는 1명입니다.</span>-->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div    class="control-group"
-                                for="popup_editview_jira_url">
+                                for="popup_editview_jira_server_base_url">
                             <label class="control-label font13">지라 URL :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -870,18 +821,18 @@
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
                                 <input  type="text"
-                                        id="popup_editview_jira_url"
-                                        name="popup_editview_jira_url"
+                                        id="popup_editview_jira_server_base_url"
+                                        name="popup_editview_jira_server_base_url"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
-                                        data-original-title="jira_connection_url"
+                                        data-original-title="jira_server_url"
                                         required="required"
                                         placeholder="JIRA BASE URL" />
                                 <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
                             </div>
                         </div>
                         <div    class="control-group"
-                                for="popup_editview_jira_id">
+                                for="popup_editview_jira_server_connect_id">
                             <label class="control-label font13">지라 아이디 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -889,8 +840,8 @@
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
                                 <input  type="text"
-                                        id="popup_editview_jira_id"
-                                        name="popup_editview_jira_id"
+                                        id="popup_editview_jira_server_connect_id"
+                                        name="popup_editview_jira_server_connect_id"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
                                         data-original-title="JIRA ID"
@@ -918,8 +869,9 @@
                                 <span class="input-group-addon font11">INFO : 지라 암호 또는 토큰 입력</span>
                             </div>
                         </div>
+<!--
                         <div    class="control-group"
-                                for="popup_editview_jira_connection_owner">
+                                for="popup_editview_jira_server_owner">
                             <label class="control-label font13">지라 오너 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -927,8 +879,8 @@
 									<i class="fa fa-users"></i>
 								</span>
                                 <select type="text"
-                                        id="popup_editview_jira_connection_owner"
-                                        name="popup_editview_jira_connection_owner"
+                                        id="popup_editview_jira_server_owner"
+                                        name="popup_editview_jira_server_owner"
                                         class="js-data-example-ajax form-control parsley-validated font13 darkBack"
                                         data-placement="top"
                                         data-original-title="지라(서버) 오너(책임자)는 1명입니다."
@@ -938,11 +890,12 @@
                                 <span class="input-group-addon font11">INFO : 지라(서버) 오너(책임자)는 1명입니다.</span>
                             </div>
                         </div>
-<!--                         향후 연결 관련 세부 정보를 위해 유지
+                        -->
+
                         <div class="control-group">
                             <label  class="control-label"
                                     style="color: #f8f8f8">
-                                지라(서버) 컨텐츠(내용) :
+                                지라 컨텐츠 :
                             </label>
                             <div class="controls form-group">
                                 <div    class="col-sm-12"
@@ -953,20 +906,20 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                     </fieldset>
                 </form>
             </div>
             <div    class="modal-footer"
                     style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
                 <button type="button"
-                        id="regist_jira_connection"
+                        id="close_regist_jira_server"
                         class="btn btn-default"
                         data-dismiss="modal">
                     Close
                 </button>
                 <button type="button"
-                        id="regist_jira_connection"
+                        id="regist_jira_server"
                         class="btn btn-primary">
                     신규 서버 저장
                 </button>
@@ -1036,7 +989,7 @@
                         method="post">
                     <fieldset>
                         <div    class="control-group"
-                                for="extend_editview_jira_connection_name">
+                                for="extend_editview_jira_server_name">
                             <label class="control-label font13">지라(서버) 이름 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -1044,8 +997,8 @@
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
                                 <input  type="text"
-                                        id="extend_editview_jira_connection_name"
-                                        name="extend_editview_jira_connection_name"
+                                        id="extend_editview_jira_server_name"
+                                        name="extend_editview_jira_server_name"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
                                         data-original-title="지라(서버) 이름은 중복될 수 없습니다."
@@ -1055,7 +1008,7 @@
                             </div>
                         </div>
                         <div    class="control-group"
-                                for="extend_editview_jira_connection_env">
+                                for="extend_editview_jira_server_type">
                             <label class="control-label font13">지라 환경 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -1063,28 +1016,27 @@
                                     <i class="glyphicon glyphicon-gift"></i>
                                 </span>
                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                    <div    id="extend_editview_jira_connection_env"
+                                    <div    id="extend_editview_jira_server_type"
                                             class="btn-group"
                                             data-toggle="buttons">
                                         <label class="btn btn-warning">
                                             <input  type="radio"
                                                     name="options"
-                                                    id="extend_editview_jira_connection_env_option1" />
+                                                    id="extend_editview_jira_server_type_option1" />
                                             클라우드
                                         </label>
                                         <label class="btn btn-warning">
                                             <input  type="radio"
                                                     name="options"
-                                                    id="extend_editview_jira_connection_env_option2" />
+                                                    id="extend_editview_jira_server_type_option2" />
                                             온프레미스
                                         </label>
-                                        <!--                                        <span class="input-group-addon font11">INFO : 제품(서비스) 오너(책임자)는 1명입니다.</span>-->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div    class="control-group"
-                                for="extend_editview_jira_url">
+                                for="extend_editview_jira_server_base_url">
                             <label class="control-label font13">지라 URL :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -1092,18 +1044,18 @@
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
                                 <input  type="text"
-                                        id="extend_editview_jira_url"
-                                        name="extend_editview_jira_url"
+                                        id="extend_editview_jira_server_base_url"
+                                        name="extend_editview_jira_server_base_url"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
-                                        data-original-title="jira_connection_url"
+                                        data-original-title="jira_server_url"
                                         required="required"
                                         placeholder="JIRA BASE URL" />
                                 <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
                             </div>
                         </div>
                         <div    class="control-group"
-                                for="extend_editview_jira_id">
+                                for="extend_editview_jira_server_connect_id">
                             <label class="control-label font13">지라 아이디 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -1111,8 +1063,8 @@
 									<i class="glyphicon glyphicon-gift"></i>
 								</span>
                                 <input  type="text"
-                                        id="extend_editview_jira_id"
-                                        name="extend_editview_jira_id"
+                                        id="extend_editview_jira_server_connect_id"
+                                        name="extend_editview_jira_server_connect_id"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
                                         data-original-title="JIRA ID"
@@ -1140,8 +1092,9 @@
                                 <span class="input-group-addon font11">INFO : 지라 암호 또는 토큰 입력</span>
                             </div>
                         </div>
+<!--
                         <div    class="control-group"
-                                for="extend_editview_jira_connection_owner">
+                                for="extend_editview_jira_server_owner">
                             <label class="control-label font13">지라 오너 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
@@ -1160,22 +1113,22 @@
                                 <span class="input-group-addon font11">INFO : 지라(서버) 오너(책임자)는 1명입니다.</span>
                             </div>
                         </div>
-                        <!--                         향후 연결 관련 세부 정보를 위해 유지
-                                                <div class="control-group">
-                                                    <label  class="control-label"
-                                                            style="color: #f8f8f8">
-                                                        지라(서버) 컨텐츠(내용) :
-                                                    </label>
-                                                    <div class="controls form-group">
-                                                        <div    class="col-sm-12"
-                                                                style="padding-top: 10px">
-                                                            <div    id="modal_editor"
-                                                                    class="darkBack">
-                                                                <p>등록한 지라(서버) 관련 특이사항 등을 기록합니다.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
+                        -->
+                        <div class="control-group">
+                            <label  class="control-label"
+                                    style="color: #f8f8f8">
+                                    지라(서버) 컨텐츠(내용) :
+                            </label>
+                            <div class="controls form-group">
+                                <div    class="col-sm-12"
+                                        style="padding-top: 10px">
+                                    <div    id="extend_modal_editor"
+                                            class="darkBack">
+                                        <p>등록한 지라(서버) 관련 특이사항 등을 기록합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
                 </form>
             </div>
@@ -1183,21 +1136,21 @@
                     style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
                 <button
                         type="button"
-                        id="extendclose_jira_connection"
+                        id="extendclose_jira_server"
                         class="btn btn-default"
                         data-dismiss="modal">
                     Close
                 </button>
                 <button
                         type="button"
-                        id="extend_change_to_update_jira_connection"
+                        id="extend_change_to_update_jira_server"
                         class="btn btn-success hidden"
                         onclick="modalPopup('modal_popup_update')">
                     편집 하기
                 </button>
                 <button
                         type="button"
-                        id="extendupdate_jira_connection"
+                        id="extendupdate_jira_server"
                         class="btn btn-success">
                     제품(서비스) 변경 사항 저장
                 </button>

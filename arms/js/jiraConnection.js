@@ -1,14 +1,26 @@
-var selectId; // 제품 아이디
-var selectName; // 제품 이름
+//////////////////////////////////
+// Page 전역 변수
+//////////////////////////////////
+var selectId;   // 선택한 서버 아이디
+var selectName; // 선택한 서버 이름 (c_title)
+var selectServerName; // 선택한 서버 이름 (c_jira_server_name )
+var selectServerType; // 선택한 서버 타입 (c_jira_server_type, cloud or on-premise)
+
 var selectedIndex; // 데이터테이블 선택한 인덱스
 var selectedPage; // 데이터테이블 선택한 인덱스
-var selectType;
+
 var selectVersion; // 선택한 버전 아이디 - 사용x
 var selectVersionName; // 선택한 버전 이름 - 사용x
-var dataTableRef; // 데이터테이블 참조 변수
-var selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이디
-var versionList;
 
+var dataTableRef; // 데이터테이블 참조 변수
+var selectConnectID; // 제품(서비스) - 버전 - 지라 연결 정보 아이디 (보류)
+
+var versionList;
+var serverList; // 필요할지는 잘 모르겠음.
+
+////////////////
+//Document Ready
+////////////////
 function execDocReady() {
 
     var pluginGroups = [
@@ -62,47 +74,155 @@ function execDocReady() {
             setSideMenu("sidebar_menu_jira", "sidebar_menu_jira_manage");
 
             // 데이터 테이블 로드 함수
+            /*
             var waitDataTable = setInterval(function () {
-                try {
-                    if (!$.fn.DataTable.isDataTable("#jira_connection_table")) {
+                try { // 데이터 테이블 말고 이 형식으로, card를 표현하고 싶다!!!!!
+                    if (!$.fn.DataTable.isDataTable("#jira_server_card_deck")) {
                         dataTableLoad();
                         clearInterval(waitDataTable);
                     }
                 } catch (err) {
                     console.log("서비스 데이터 테이블 로드가 완료되지 않아서 초기화 재시도 중...");
                 }
-            }, 313 /*milli*/);
+            }, 313 ); // milli
+            */
+
+            var waitCardDeck = setInterval( function () {
+                try {
+                    // 카드 덱(서버 목록) 이니시에이터
+                    makeJiraServerCardDeck();
+
+                    clearInterval(waitCardDeck);
+
+                } catch (err) {
+                    console.log("지라 서버 데이터 로드가 완료되지 않아서 초기화 재시도 중...");
+                }
+            }, 1000);
 
             // --- 에디터 설정 --- //
-/*
-            var waitCKEditor = setInterval( function () {
+            var waitCKEDITOR = setInterval( function () {
                 try {
                     if (window.CKEDITOR) {
                         if(window.CKEDITOR.status == "loaded"){
-                            //CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" });
-                            //CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" });
+                            CKEDITOR.replace("input_jira_server_editor",{ skin: "prestige" });
+                            CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" }); //팝업편집
                             CKEDITOR.replace("modal_editor",{ skin: "prestige" });
                             clearInterval(waitCKEDITOR);
                         }
                     }
                 } catch (err) {
+                    //console.log(err);
                     console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
                 }
-             }, 313);
-*/
+             }, 2000); //313ms
 
-            inBox_click_event();  // 지라 환경 nav
-            jira_nav_btn_click(); // 지라 환경 nav
-            select2_setting();    // 검색 자동완성
+            //inBox_click_event();  // 지라 환경 nav (폐기)
+            //jira_nav_btn_click(); // 지라 환경 nav (폐기)
 
+
+
+            //tab_click_event();
+            //select2_setting();    // 검색 자동완성 (보류)
+            save_btn_click();
+            //delete_btn_click();
+            //update_btn_click();
+            //popup_update_btn_click();
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
         });
 
 }
+
+function makeJiraServerCardDeck() {
+    console.log("지라 서버 카드 목록 생성");
+    // 지라 서버 목록 데이터 가져오기 및 element 삽입
+    $.ajax({
+        url: "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do",
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                /////////////////// insert Card ///////////////////////
+                var obj = data.response;
+                draw_card_deck(obj);
+            }
+        },
+        beforeSend: function () {
+            //$("#regist_pdservice").hide(); 버튼 감추기
+        },
+        complete: function () {
+            //$("#regist_pdservice").show(); 버튼 보이기
+        },
+        error: function (e) {
+            jError("지라(서버) 목록 조회 중 에러가 발생했습니다.");
+        }
+    });
+}
+
+function draw_card_deck(cardInfo) {
+    $("#jira_server_card_deck").html(""); // 카드 덱 초기화
+    var cardList = [];
+    cardList = cardInfo;
+    console.log(cardList.length); // 목록 크기
+
+    var data=``;
+
+    if (cardList.length == 0) { // 카드 없음 (등록된 서버 없음)
+
+    } else { // 카드 있음 (등록된 서버 있음)
+        for (let i = 0; i < cardList.length; i++) {
+            let insertImage = '';
+            if (cardList[i].c_jira_server_type == 'cloud') {
+                insertImage = `<img src="./img/jira/mark-gradient-white-jira.svg" width="30px" style=""></img>`;
+            } else {
+                insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
+            }
+
+            data +=
+            `
+            <div class="card mb-2 ribbon-box ribbon-fill right">
+                <!-- 리본표시 -->
+                <div class="ribbon ribbon-info"><i class="fa fa-bolt mr-2"></i>2</div>
+                <!--카드내용1-->
+                <div class="card-body">
+                    <div class="" style="display: flex; align-items: baseline;">
+                        <div class="flex-shrink-0 card-icon-wrap">
+                            <div class="card-icon bg-light rounded">
+                                ${insertImage}
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ml-4 mb-2">
+                            <h5 class="fs-15 mb-1 font16">${cardList[i].title}</h5>
+                            <p class="font13 text-muted">${cardList[i].c_jira_server_base_url}</p>
+                        </div>
+                    </div>
+                    <!-- 값 가져와서 넣어줄 예정 -->
+                    <p class="font13 mt-1" style="margin-bottom: 0px;">ISSUE(배포/수집): 1(임시) / ${cardList[i].jiraIssueStatusEntities.length} <span class="badge bg-success-subtle text-success">65.00%(임시)</span></p>
+                </div>
+                <!--카드내용2-->
+                <div class="card-body top-border border-top">
+                    <div class="d-flex-sb-11">
+                        <div class="flex-grow-1">
+                            <h6 class="font13">status: <i class="fa fa-circle-o">200</i></h6>
+                        </div>
+                        <h6 class="font13">Last Update - <i class="fa fa-clock-o mr-2"></i>08 Aug, 2023</h6>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+    }
+    $("#jira_server_card_deck").html(data);
+}
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
-// --- 데이터 테이블 설정 --- //
+// --- 데이터 테이블 설정 --- // (사용 보류)
 ////////////////////////////////////////////////////////////////////////////////////////
 function dataTableLoad() {
     // 데이터 테이블 컬럼 및 열그룹 구성
@@ -122,11 +242,11 @@ function dataTableLoad() {
 
             visible: true
         },
-        { name: "c_pdservice_contents", title: "서버 타입", data: "c_pdservice_etc", visible: true,
+        { name: "c_jira_server_type", title: "서버 타입", data: "c_jira_server_type", visible: true,
             render: function (data, type, row, meta) {
                 if (type ==="display") {
                     console.log("data =" + data);
-                    if ( data == "T_ARMS_REQADD_11") {
+                    if ( data == "cloud") {
                         return '<label style="color: #FFFFFF; margin-right: 5%;">' + '클라우드' + "</label>"+'<i class="fa fa-cloud">'+"</i>";
                         //return '<label style="color: #a4c6ff">' + "클라우드" + "</label>";
                     } else {
@@ -145,8 +265,8 @@ function dataTableLoad() {
     var buttonList = [];
 
     var jquerySelector = "#jira_connection_table"; //
-    var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
-    //var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do"; // 사용 예정
+    //var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
+    var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do"; // 사용 예정
     var jsonRoot = "response";
     var isServerSide = false;
 
@@ -165,30 +285,28 @@ function dataTableLoad() {
 }
 
 
-
-
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
-
-    //selectId = selectedData.c_id;
-    //selectName = selectedData.c_title;
-    //selectType = selectedData.c_jira_server_type;
+    // => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
+    console.log("====== selectedData =====");
+    console.log(selectedData);
     console.log("selectedData.c_id : ", selectedData.c_id);
-    // c_id와 c_jira_server_type로 getNode 실행
-    jiraConnectionDataTableClick(selectedData.c_id, selectedData.c_jira_server_type);
+    selectId = selectedData.c_id;
+    // c_id로 getNode 실행
+    jiraServerCardClick(selectId);
 
+    // 버전은 dataLoad를 사용했음.
+    // dataLoad(selectedData.c_id);
 
-     
 }
 
-function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 넣기.
+function jiraServerCardClick(c_id) {
 
     $.ajax({
-        // 수정 필요 ( 작성 후 해당 line 삭제)
         url: "/auth-user/api/arms/jiraServer/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
-        data: { c_id: c_id,
-                c_jira_server_type: c_jira_server_type}, // HTTP 요청과 함께 서버로 보낼 데이터
-        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+        data: { c_id: c_id },
+           //     c_jira_server_type: c_jira_server_type}, // HTTP 요청과 함께 서버로 보낼 데이터
+        method: "GET",
         dataType: "json", // 서버에서 보내줄 데이터의 타입
         beforeSend: function () {
             $(".loader").removeClass("hide");
@@ -197,13 +315,14 @@ function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 �
         // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
         .done(function (json) {
             //$("#detailview_pdservice_name").val(json.c_title);
+            // Sender 설정
             var selectedHtml =
                 `<div class="chat-message">
 				<div class="chat-message-body" style="margin-left: 0px !important;">
 					<span class="arrow" style="top: 35% !important;"></span>
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
 				<span class="text" style="color: #a4c6ff;">
-				` + json.c_jira_server_name +
+				` + json.c_title +
                 `
 				</span>
 				</div>
@@ -212,6 +331,7 @@ function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 �
 
             $(".list-group-item").html(selectedHtml);
 
+            // => 데이터 바인딩 설정해야함.
             $("#detailview_pdservice_name").val(json.c_title);
             if (isEmpty(json.c_pdservice_owner) || json.c_pdservice_owner == "none") {
                 $("#detailview_pdservice_owner").val("책임자가 존재하지 않습니다.");
@@ -219,35 +339,7 @@ function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 �
                 $("#detailview_pdservice_owner").val(json.c_pdservice_owner);
             }
 
-            if (isEmpty(json.c_pdservice_reviewer01) || json.c_pdservice_reviewer01 == "none") {
-                $("#detailview_pdservice_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
-            } else {
-                $("#detailview_pdservice_reviewer01").val(json.c_pdservice_reviewer01);
-            }
 
-            if (isEmpty(json.c_pdservice_reviewer02) || json.c_pdservice_reviewer02 == "none") {
-                $("#detailview_pdservice_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
-            } else {
-                $("#detailview_pdservice_reviewer02").val(json.c_pdservice_reviewer02);
-            }
-
-            if (isEmpty(json.c_pdservice_reviewer03) || json.c_pdservice_reviewer03 == "none") {
-                $("#detailview_pdservice_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
-            } else {
-                $("#detailview_pdservice_reviewer03").val(json.c_pdservice_reviewer03);
-            }
-
-            if (isEmpty(json.c_pdservice_reviewer04) || json.c_pdservice_reviewer04 == "none") {
-                $("#detailview_pdservice_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
-            } else {
-                $("#detailview_pdservice_reviewer04").val(json.c_pdservice_reviewer04);
-            }
-
-            if (isEmpty(json.c_pdservice_reviewer05) || json.c_pdservice_reviewer05 == "none") {
-                $("#detailview_pdservice_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
-            } else {
-                $("#detailview_pdservice_reviewer05").val(json.c_pdservice_reviewer05);
-            }
             $("#detailview_pdservice_contents").html(json.c_pdservice_contents);
 
             $("#editview_pdservice_name").val(json.c_title);
@@ -280,67 +372,13 @@ function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 �
                     $("#editview_pdservice_reviewers").append(newOption01).trigger("change");
                 }
             }
-            if (json.c_pdservice_reviewer02 == null || json.c_pdservice_reviewer02 == "none") {
-                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer02 empty");
-            } else {
-                selectedReviewerArr.push(json.c_pdservice_reviewer02);
-                // Set the value, creating a new option if necessary
-                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer02 + "']").length) {
-                    console.log('option[value=\'" + json.c_pdservice_reviewer02 + "\']"' + "already exist");
-                } else {
-                    // Create a DOM Option and pre-select by default
-                    var newOption02 = new Option(json.c_pdservice_reviewer02, json.c_pdservice_reviewer02, true, true);
-                    // Append it to the select
-                    $("#editview_pdservice_reviewers").append(newOption02).trigger("change");
-                }
-            }
-            if (json.c_pdservice_reviewer03 == null || json.c_pdservice_reviewer03 == "none") {
-                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer03 empty");
-            } else {
-                selectedReviewerArr.push(json.c_pdservice_reviewer03);
-                // Set the value, creating a new option if necessary
-                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer03 + "']").length) {
-                    console.log('option[value=\'" + json.c_pdservice_reviewer03 + "\']"' + "already exist");
-                } else {
-                    // Create a DOM Option and pre-select by default
-                    var newOption03 = new Option(json.c_pdservice_reviewer03, json.c_pdservice_reviewer03, true, true);
-                    // Append it to the select
-                    $("#editview_pdservice_reviewers").append(newOption03).trigger("change");
-                }
-            }
-            if (json.c_pdservice_reviewer04 == null || json.c_pdservice_reviewer04 == "none") {
-                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer04 empty");
-            } else {
-                selectedReviewerArr.push(json.c_pdservice_reviewer04);
-                // Set the value, creating a new option if necessary
-                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer04 + "']").length) {
-                    console.log('option[value=\'" + json.c_pdservice_reviewer04 + "\']"' + "already exist");
-                } else {
-                    // Create a DOM Option and pre-select by default
-                    var newOption04 = new Option(json.c_pdservice_reviewer04, json.c_pdservice_reviewer04, true, true);
-                    // Append it to the select
-                    $("#editview_pdservice_reviewers").append(newOption04).trigger("change");
-                }
-            }
-            if (json.c_pdservice_reviewer05 == null || json.c_pdservice_reviewer05 == "none") {
-                console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer05 empty");
-            } else {
-                selectedReviewerArr.push(json.c_pdservice_reviewer05);
-                // Set the value, creating a new option if necessary
-                if ($("#editview_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer05 + "']").length) {
-                    console.log('option[value=\'" + json.c_pdservice_reviewer05 + "\']"' + "already exist");
-                } else {
-                    // Create a DOM Option and pre-select by default
-                    var newOption05 = new Option(json.c_pdservice_reviewer05, json.c_pdservice_reviewer05, true, true);
-                    // Append it to the select
-                    $("#editview_pdservice_reviewers").append(newOption05).trigger("change");
-                }
-            }
+
             $("#editview_pdservice_reviewers").val(selectedReviewerArr).trigger("change");
 
             // ------------------------- reviewer end --------------------------------//
+            // => 데이터 바인딩 설정해야함.
 
-            CKEDITOR.instances.input_pdservice_editor.setData(json.c_pdservice_contents);
+            CKEDITOR.instances.input_jira_server_editor.setData(json.c_jira_server_contents);
         })
         // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
         .fail(function (xhr, status, errorThrown) {
@@ -353,6 +391,7 @@ function jiraConnectionDataTableClick(c_id, c_jira_server_type) { // 필요시 �
         });
 
     //삭제 하기 부분. (#pdService_table 에서 jiraConnection 관련 테이블로 변경 수정해야)
+    // => 지라(서버) 카드 덱의 선택된 서버의 c_title을 가져올 수 있게 바꿔야함.
     $("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
 }
 
@@ -367,7 +406,7 @@ function dataTableDrawCallback(tableInfo) {
 function dataTableCallBack(settings, json) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// 버전 리스트를 재로드하는 함수 ( 버전 추가, 갱신, 삭제 시 호출 )
+// 버전 리스트를 재로드하는 함수 ( 버전 추가, 갱신, 삭제 시 호출 ) => 버전리스트 말고 서버리스트로 사용 가능성 모색.
 ////////////////////////////////////////////////////////////////////////////////////////
 function dataLoad(getSelectedText, selectedText) {
     // ajax 처리 후 에디터 바인딩.
@@ -407,9 +446,11 @@ function dataLoad(getSelectedText, selectedText) {
         }, 500);
     });
 }
+// dataLoad 후에,
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// versionlist 이니셜라이즈
+// versionlist 이니셜라이즈 (참고용)
 ////////////////////////////////////////////////////////////////////////////////////////
 function init_versionList() {
     let menu;
@@ -427,7 +468,7 @@ function init_versionList() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// version list html 삽입
+// version list html 삽입 (참고용)
 ////////////////////////////////////////////////////////////////////////////////////////
 function draw(main, menu) {
     main.html("");
@@ -472,7 +513,7 @@ function draw(main, menu) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//버전 클릭할 때 동작하는 함수
+//버전 클릭할 때 동작하는 함수 (참고용) -> 향후 serverClick 으로 변경 예정
 ////////////////////////////////////////////////////////////////////////////////////////
 function versionClick(element, c_id) {
     $("a[name='versionLink_List']").each(function () {
@@ -675,24 +716,24 @@ function buildMultiSelect() {
     });
 }
 
-// list 클릭 이벤트 처리
+// list 클릭 이벤트 처리 - inBox 폐기..
 function inBox_click_event () {
     $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
        let target = $(e.target).attr("href"); // activated tab
         console.log(target);
         // 고려해야 하는 tab - onpremise, cloud, stats, report, drowdown1
         if (target === "#stats") {
-            $("#jira_connection_details_popup_div").removeClass("hidden");
-            $("#jira_connection_update_div").addClass("hidden");
-            $("#jira_connection_delete_div").addClass("hidden");
+            $("#jira_server_details_popup_div").removeClass("hidden");
+            $("#jira_server_update_div").addClass("hidden");
+            $("#jira_server_delete_div").addClass("hidden");
         } else if ( target === "#report") {
-            $("#jira_connection_details_popup_div").addClass("hidden");
-            $("#jira_connection_update_div").removeClass("hidden");
-            $("#jira_connection_delete_div").addClass("hidden");
+            $("#jira_server_details_popup_div").addClass("hidden");
+            $("#jira_server_update_div").removeClass("hidden");
+            $("#jira_server_delete_div").addClass("hidden");
         } else if ( target === "#dropdown1") {
-            $("#jira_connection_details_popup_div").addClass("hidden");
-            $("#jira_connection_update_div").addClass("hidden");
-            $("#jira_connection_delete_div").removeClass("hidden");
+            $("#jira_server_details_popup_div").addClass("hidden");
+            $("#jira_server_update_div").addClass("hidden");
+            $("#jira_server_delete_div").removeClass("hidden");
 
             if (isEmpty(selectId)) {
                 jError("선택된 제품(서비스)가 없습니다. 오류는 무시됩니다.");
@@ -707,24 +748,24 @@ function inBox_click_event () {
 
 //지라서버 - 목록에서 nav버튼(=) 클릭 액션
 function jira_nav_btn_click() {
-    $("#jira_connection_list__nav_btn").click( function () {
-        $("#jira_connection_classify").toggleClass("collapse");
+    $("#jira_server_list__nav_btn").click( function () {
+        $("#jira_server_classify").toggleClass("collapse");
         //collapse
-        if ($("#jira_connection_classify").hasClass("collapse") === true) {
+        if ($("#jira_server_classify").hasClass("collapse") === true) {
             $("#jira_con_nav").removeClass("col-sm-3");
             $("#jira_con_nav").addClass("col-sm-1");
             $("#jira_con_list").removeClass("col-sm-9");
             $("#jira_con_list").addClass("col-sm-11");
-            $("jira_connection_classify").html();
+            $("jira_server_classify").html();
         } else { // expand
             $("#jira_con_nav").addClass("col-sm-3");
             $("#jira_con_nav").removeClass("col-sm-1");
             $("#jira_con_list").addClass("col-sm-9");
             $("#jira_con_list").removeClass("col-sm-11");
         }
-        // $("#jira_connection_classify").toggleClass("collapse");
+        // $("#jira_server_classify").toggleClass("collapse");
         //버튼 누를 때, collapse 하고, 크기 조정
-        //$("#jira_connection_classify").addClass("collapse");
+        //$("#jira_server_classify").addClass("collapse");
     });
 }
 
@@ -744,13 +785,13 @@ function modalPopup(popupName) {
         //modal_popup_readOnly = 새 창으로 지라(서버) 보기
         $("#my_modal2_title").text("지라(서버) 내용 보기 팝업");
         $("#my_modal2_sub").text("새 창으로 등록된 지라 정보를 확인합니다.")
-        $("#extend_change_to_update_jira_connection").removeClass("hidden");
-        $("#extendupdate_jira_connection").addClass("hidden");
+        $("#extend_change_to_update_jira_server").removeClass("hidden");
+        $("#extendupdate_jira_server").addClass("hidden");
     } else { //팝업 창으로 편집하기
         $("#my_modal2_title").text("지라(서버) 수정 팝업");
         $("#my_modal2_sub").text("a-rms에 등록된 지라(서버)의 정보를 수정합니다.")
-        $("#extend_change_to_update_jira_connection").addClass("hidden");
-        $("#extendupdate_jira_connection").removeClass("hidden");
+        $("#extend_change_to_update_jira_server").addClass("hidden");
+        $("#extendupdate_jira_server").removeClass("hidden");
     }
 }
 
@@ -794,4 +835,118 @@ function select2_setting() {
         templateResult: formatUser,
         templateSelection: formatUserSelection
     });
+}
+
+////////////////////////////////
+// 지라 서버 등록
+////////////////////////////////
+function save_btn_click() {
+    $("#regist_jira_server").click(function () {
+        $.ajax({
+            url: "/auth-user/api/arms/jiraServer/addJiraServerNode.do",
+            type: "POST",
+            data: {
+                ref: 2,
+                c_title: $("#popup_editview_jira_server_name").val(),
+                c_type: "default",
+                c_jira_server_name: $("#popup_editview_jira_server_name").val(),
+                c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
+                c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+                c_jira_server_connect_id: $("#popup_editview_jira_server_connect_id").val(),
+                c_jira_server_connect_pw: $("#popup_editview_jira_pass_token").val(),
+                c_jira_server_contents: CKEDITOR.instances.modal_editor.getData()
+                /*c_pdservice_owner: $("#popup_editview_pdservice_owner").select2("data")[0].text,*/
+            },
+            statusCode: {
+                200: function () {
+                    //모달 팝업 끝내고
+                    $("#close_regist_jira_server").trigger("click");
+                    //데이터 테이블 데이터 재 로드
+                    dataTableRef.ajax.reload();
+                    jSuccess("신규 제품 등록이 완료 되었습니다.");
+                }
+            },
+            beforeSend: function () {
+                $("#regist_jira_server").hide();
+            },
+            complete: function () {
+                $("#regist_jira_server").show();
+            },
+            error: function (e) {
+                jError("지라 서버 등록 중 에러가 발생했습니다.");
+            }
+        });
+    });
+}
+////////////////////////////////
+// 지라 서버 삭제 버튼
+////////////////////////////////
+function delete_btn_click() { // TreeAbstractController 에 이미 있음.
+    $("#delete_jira_server").click(function () {
+        $.ajax({
+            url: "/auth-user/api/arms/jiraServer/removeNode.do",
+            type: "delete",
+            data: { //테이블 형식으로 Card를 나열할 수 있을 것인가.
+              c_id: $("#jira_connection_table").DataTable().rows(".selected").data()[0].c_id
+            },
+
+        });
+    })
+}
+
+/////////////////////////////////////
+// 지라 서버 클릭할 때 동작하는 함수
+// 1. 상세보기 데이터 바인딩
+// 2. 편집하기 데이터 바인딩
+/////////////////////////////
+function jiraServerCardClick(c_id) {
+    selectId = c_id; // T_jira_server 의 c_id
+
+    $.ajax({
+        url: "/auth-user/api/arms/jiraServer/getNode.do",
+        data: { c_id : c_id },
+        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+        dataType: "json", // 서버에서 보내줄 데이터의 타입
+        beforeSend: function () {
+            $(".loader").removeClass("hide");
+        }
+    })
+        .done( function (json) {
+            // c_jira_server_name 또는 c_title
+            var selectedHtml =
+                `<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 지라 서버 :  </span>
+				<span class="text" style="color: #a4c6ff;">
+				` + json.c_jira_server_name +
+                `
+				</span>
+				</div>
+				</div>
+				<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+
+            $(".list-group-item").html(selectedHtml);
+
+    })
+        .fail( function (xhr, status, errorThrown) {
+        console.log(xhr + status + errorThrown);
+    })
+        .always( function (xhr, status) {
+            console.log(xhr + status);
+            $(".loader").addClass("hide"); // progress?
+        });
+
+    // 사용처 미정.
+    //$("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+}
+
+//////////////////////////////
+// card_deck 이니셜라이즈
+//////////////////////////////
+function init_card_deck() {
+    var menu;
+/*    $.fn.jsonMenu = function (action, items, options) {
+
+    }*/
 }
