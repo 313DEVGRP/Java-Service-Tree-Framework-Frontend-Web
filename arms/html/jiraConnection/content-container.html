@@ -330,11 +330,11 @@
                      class="hidden"
                      id="jira_server_update_div">
                     <button type="button"
-                            id="version_popup"
+                            id="extend_modal_popup_id"
                             class="btn btn-warning btn-sm"
                             data-toggle="modal"
                             data-target="#my_modal2"
-                            onClick="modalPopup('versionPopup')">
+                            onClick="modalPopup('jiraServerPopup')">
                         팝업 창으로 편집하기
                     </button>
                     <button type="button"
@@ -423,13 +423,15 @@
                                                         <label class="btn btn-warning">
                                                             <input  type="radio"
                                                                     name="options"
-                                                                    id="detailview_jira_server_type_option1" />
+                                                                    id="detailview_jira_server_type_option1"
+                                                                    value="cloud"/>
                                                             클라우드
                                                         </label>
                                                         <label class="btn btn-warning">
                                                             <input  type="radio"
                                                                     name="options"
-                                                                    id="detailview_jira_server_type_option2" />
+                                                                    id="detailview_jira_server_type_option2"
+                                                                    value="on-premise"/>
                                                             온프레미스
                                                         </label>
                                                     </div>
@@ -569,13 +571,15 @@
                                                             <label class="btn btn-warning">
                                                                 <input  type="radio"
                                                                         name="options"
-                                                                        id="editview_jira_server_type_option1" />
+                                                                        id="editview_jira_server_type_option1"
+                                                                        value="cloud"/>
                                                                 클라우드
                                                             </label>
                                                             <label class="btn btn-warning">
                                                                 <input  type="radio"
                                                                         name="options"
-                                                                        id="editview_jira_server_type_option2" />
+                                                                        id="editview_jira_server_type_option2"
+                                                                        value="on-premise"/>
                                                                 온프레미스
                                                             </label>
                                                         </div>
@@ -869,28 +873,6 @@
                                 <span class="input-group-addon font11">INFO : 지라 암호 또는 토큰 입력</span>
                             </div>
                         </div>
-<!--
-                        <div    class="control-group"
-                                for="popup_editview_jira_server_owner">
-                            <label class="control-label font13">지라 오너 :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="fa fa-users"></i>
-								</span>
-                                <select type="text"
-                                        id="popup_editview_jira_server_owner"
-                                        name="popup_editview_jira_server_owner"
-                                        class="js-data-example-ajax form-control parsley-validated font13 darkBack"
-                                        data-placement="top"
-                                        data-original-title="지라(서버) 오너(책임자)는 1명입니다."
-                                        required="required"
-                                        placeholder="JIRA owner name">
-                                </select>
-                                <span class="input-group-addon font11">INFO : 지라(서버) 오너(책임자)는 1명입니다.</span>
-                            </div>
-                        </div>
-                        -->
 
                         <div class="control-group">
                             <label  class="control-label"
@@ -951,12 +933,12 @@
                             <i class="fa fa-edit"></i>
                             지라(서버) 수정 팝업
 					</span>
-                    <section    class="search-result"
+                    <blockquote    class="search-result"
                                 style="border-left: 5px solid #e5603b">
                         <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
                             a-RMS에 등록된 지라 서버를 수정합니다.
                         </p>
-                    </section>
+                    </blockquote>
                 </h4>
                 <div    class="widget-controls"
                         style="padding-top: 10px">
@@ -1022,13 +1004,15 @@
                                         <label class="btn btn-warning">
                                             <input  type="radio"
                                                     name="options"
-                                                    id="extend_editview_jira_server_type_option1" />
+                                                    id="extend_editview_jira_server_type_option1"
+                                                    value="cloud"/>
                                             클라우드
                                         </label>
                                         <label class="btn btn-warning">
                                             <input  type="radio"
                                                     name="options"
-                                                    id="extend_editview_jira_server_type_option2" />
+                                                    id="extend_editview_jira_server_type_option2"
+                                                    value="on-premise"/>
                                             온프레미스
                                         </label>
                                     </div>
@@ -1092,28 +1076,6 @@
                                 <span class="input-group-addon font11">INFO : 지라 암호 또는 토큰 입력</span>
                             </div>
                         </div>
-<!--
-                        <div    class="control-group"
-                                for="extend_editview_jira_server_owner">
-                            <label class="control-label font13">지라 오너 :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="fa fa-users"></i>
-								</span>
-                                <select type="text"
-                                        id="extend_editview_pdservice_owner"
-                                        name="extend_editview_pdservice_owner"
-                                        class="js-data-example-ajax form-control parsley-validated font13 darkBack"
-                                        data-placement="top"
-                                        data-original-title="지라(서버) 오너(책임자)는 1명입니다."
-                                        required="required"
-                                        placeholder="JIRA owner name">
-                                </select>
-                                <span class="input-group-addon font11">INFO : 지라(서버) 오너(책임자)는 1명입니다.</span>
-                            </div>
-                        </div>
-                        -->
                         <div class="control-group">
                             <label  class="control-label"
                                     style="color: #f8f8f8">
@@ -1152,7 +1114,7 @@
                         type="button"
                         id="extendupdate_jira_server"
                         class="btn btn-success">
-                    제품(서비스) 변경 사항 저장
+                    지라(서버) 변경내용 저장
                 </button>
             </div>
         </div>
