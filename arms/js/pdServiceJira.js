@@ -137,26 +137,31 @@ function dataTableLoad() {
 	);
 }
 
+
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
+
 	selectedIndex = selectedData.selectedIndex;
 	selectedPage = selectedData.selectedPage;
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
 	pdServiceDataTableClick(selectedData.c_id);
+	console.log("selectedIndex:::::" + selectedIndex);
 
 	$("#version_contents").html("");
 
-	$(".searchable").multiSelect("deselect_all");
+	$(".searchable").multiSelect("deselect_all");  // // 멀티셀렉트에서 모든 선택 해제
 	$("#pdservice_connect").removeClass("btn-success");
-	$("#pdservice_connect").addClass("btn-primary");
+ 	$("#pdservice_connect").addClass("btn-primary");
 	$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
 
 	//초기 태그 삭제
 	$("#initDefaultVersion").remove();
 
-	//버전 리스트 로드
+	// //버전 리스트 로드
 	dataLoad(selectedData.c_id, selectedData.c_title);
+
+
 
 	// D3 업데이트
 	// updateD3ByDataTable();
@@ -185,9 +190,7 @@ function dataLoad(getSelectedText, selectedText) {
 		versionList = json.response;
 		console.log("dataLoad :: versionList → ", versionList);
 		$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
-		//version text setting
-		// 컬러 변경
-		// changeBorderColor(color);
+
 		var selectedHtml =
 			`<div class="chat-message">
 				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #e5603b;  ">
@@ -215,7 +218,13 @@ function dataLoad(getSelectedText, selectedText) {
 		console.log("dataLoad :: selectedText - >", selectedText);
 
 		$(".list-group-item").html(selectedHtml);
+
+		//test // 	$("#pdservice_connect").removeClass("btn-success");
+
+
+
   		$("#tooltip_enabled_service_name").val(selectedText);
+
 
 		//updateD3ByVersionList();
 		console.log("===========================================");
@@ -248,10 +257,16 @@ function init_versionList() {
 // version list html 삽입
 ////////////////////////////////////////////////////////////////////////////////////////
 function draw(main, menu) {
+	console.log("menu :: " + JSON.stringify(menu));
+	console.table(menu);
+	console.log("test data:: " + selectName);
+
+
 	main.html("");
 	var data ="";
 
 	for (let i = 0; i < menu.length; i++) {
+
 		if (i == 0) {  // select version\
 			data += `
 			   <div class="panel">
@@ -296,23 +311,26 @@ function versionClicks(element, c_id, c_title) {
 	var coloredTitleHtml =
 		`<div class="chat-message">
 				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #e5603b;  ">
-					<span 	class="arrow" 
+					<span 	class="arrow"
 							style="top: 17px !important; border-right: 5px solid #e5603b;">
 					</span>
-					<span   id="toRight"
-							class="arrow"
-							style=" top: 17px !important; 
-									right: -7px; 
-									border-top: 5px solid transparent;
-									border-bottom: 5px solid transparent;
-									border-left: 5px solid none;
-									border-right: 0px; 
-									left:unset;">
-					</span>
-					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : 
-					<span style="color: #a4c6ff;">
-					` +  c_title + `
-					</span>
+					 <div    class="sender"
+							style="padding-bottom: 5px; padding-top: 3px">
+						<i class="fa fa-check"></i>
+						선택된 제품
+						<sup>서비스</sup> :
+						<span   id="select_PdService"
+								style="color: #a4c6ff">
+								 ` +  selectName + `
+						</span>
+					</div>
+					<div    class="sender"
+							style="padding-bottom: 5px; padding-top: 3px">
+						<i class="fa fa-check"></i> 선택된 버전 :
+						<span   id="select_Version"
+								style="color: #a4c6ff">
+							   ` +  c_title + `
+						</span>
 					</div>
 				</div>
 			</div>
@@ -320,11 +338,6 @@ function versionClicks(element, c_id, c_title) {
 	console.log("dataLoad :: coloredTitleHtml - >", coloredTitleHtml);
 
 	$(".list-item").html(coloredTitleHtml);
-
-
-	// 원하는 색상으로 c_title을 감싸는 span 태그를 생성하여 coloredTitleHtml로  넣어줍니다.
-	// var coloredTitleHtml = '<span style="color: #a4c6ff;">' + c_title + '</span>';
-	// $(".list-item").html("제품(버전) : " + coloredTitleHtml);
 
 	$("a[name='versionLink_List']").each(function () {
 		this.style.background = "";
@@ -356,7 +369,9 @@ function versionClicks(element, c_id, c_title) {
 		.done(function (data) {
 			var versionClickData = [];
 			console.log("response data check::  " + data.response);
-			console.log("==========================================");
+			console.log("===============================111111===========");
+			console.table( $("#pdservice_table").DataTable().rows(".selected").data()[0]);
+
 			console.log("response data check:: data.response ->   " + JSON.stringify(data.response));
 			console.log("==========================================");
 
@@ -364,14 +379,18 @@ function versionClicks(element, c_id, c_title) {
 
 			var multiSelectData = [];
 			for (var k in data.response) {
+
 				var obj = data.response[k];
 				console.log("response data check:: obj ->   " + JSON.stringify(obj));
 				console.table(obj);
+				console.log("push obj.jiraproject_link :: => " + obj.jiraproject_link);
 
 				//var jira_name = obj.c_title;
-				selectConnectID = obj.c_id;
-				console.log("selectConnectID: " + selectConnectID);
+				// selectConnectID = obj.c_id;
+				// console.log("selectConnectID: " + selectConnectID);
 				multiSelectData.push(obj.jiraproject_link);
+				console.log("push jiraproject :: => " + multiSelectData.push(obj.jiraproject_link));
+
 				versionClickData.push(obj);
 			}
 
@@ -389,7 +408,8 @@ function versionClicks(element, c_id, c_title) {
 				console.log("multiSelectData - " + multiSelectData.toString());
 				console.log("multiSelectData - " + multiSelectData);
 				$("#multiselect").multiSelect("select", multiSelectData.toString().split(","));
-				console.log("versionClickData length 1==");
+
+
 				//updateD3ByMultiSelect();
 			}
 		})
@@ -425,12 +445,11 @@ function connect_pdservice_jira(){
 				.fail(function (e) {
 					console.log("fail call");
 				})
-				.always(function () {
+				.always(function (data) {
 					console.log("always call");
 					console.log("데이터 연결 등록  완료!");
-					setTimeout(function() {
-						location.reload();
-					}, 2000);
+					console.log('multiselect data -> ' + JSON.stringify($("#multiselect").val()));
+
 				});
  		} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
 			// data가 이미 있음
@@ -447,17 +466,16 @@ function connect_pdservice_jira(){
 				.done(function (data) {
 					//versionClick(null, selectVersion);
 					jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
+					console.log('connect data -> ' + data);
 				})
 				.fail(function (e) {
 					console.log("fail call");
 				})
-				.always(function () {
+				.always(function (data) {
 					console.log("always call");
 					console.log("이미 있는데이터 변경 완료 !");
+					console.table( data);
 
-					setTimeout(function() {
-						location.reload();
-					}, 2000);
 				});
 
 		} else {
@@ -480,12 +498,17 @@ function setdata_for_multiSelect() {
 		progress: true
 	})
 		.done(function (data) {
+			// console.log("multiSelect :: " + JSON.stringify(data));
+			console.log("=========================000");
+			console.table(data);
 			var optionData = [];
 			for (var k in data) {
 				var obj = data[k];
 				var jira_name = obj.c_title;
 				var jira_idx = obj.c_id;
-
+				console.log("jira_name::: " + jira_name);
+				console.log("jira_idx::: " + jira_idx);
+				console.log("optionData::" + optionData);
 				optionData.push("<option value='" + jira_idx + "'>" + jira_name + "</option>");
 			}
 
@@ -747,5 +770,6 @@ function downloadChartImage() {
 		});
 	});
 }
+
 
 
