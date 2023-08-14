@@ -60,31 +60,20 @@
             <div class="clearfix"
                  style="margin-bottom: 10px; margin-top: 10px;">
                 <div style="float: left">
-                    <button type="button"
-                            id="copychecker"
-                            class="btn btn-default btn-sm">
-                        Copy
-                    </button>
-                    <button type="button"
-                            id="csvchecker"
-                            class="btn btn-default btn-sm">
-                        CSV
-                    </button>
-                    <button type="button"
-                            id="excelchecker"
-                            class="btn btn-default btn-sm">
-                        Excel
-                    </button>
-                    <button type="button"
-                            id="printchecker"
-                            class="btn btn-default btn-sm hidden">
-                        Print
-                    </button>
-                    <button type="button"
-                            id="pdfchecker"
-                            class="btn btn-default btn-sm hidden">
-                        PDF
-                    </button>
+                    <div  style="float: left;"  class="btn-group">
+                        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            &nbsp; Export &nbsp;
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <ul class="dropdown-menu"
+                            style="background: rgb(51, 51, 51) !important;">
+                            <li><a id="copychecker" style="color: white;">Copy</a></li>
+                            <li><a id="csvchecker" style="color: white;">CSV</a></li>
+                            <li><a id="excelchecker" style="color: white;">Excel</a></li>
+                            <li><a id="printchecker" style="color: white;">Print</a></li>
+                            <li><a id="pdfchecker" style="color: white;">PDF</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div style="float: right">
@@ -126,12 +115,12 @@
 										<div    class="controls form-group"
 											    class="darkBack"
 											    style="margin-bottom: 5px !important">
-											<select id="country"
+											<select id="selected_pdService"
                                                     required="required"
                                                     data-placeholder="Select Product(Service)"
                                                     class="select-block-level chzn-select darkBack"
                                                     tabindex="-1"
-                                                    name="country"
+                                                    name="selected_pdService"
                                                     style="width: 100% !important">
 												<option value=""></option>
 											</select>
@@ -312,31 +301,20 @@
 							<div class="gradient_bottom_border"></div>
 							<div style="width: 100%; height: 10px"></div>
 							<div style="float: left">
-								<button class="btn btn-default btn-sm"
-                                        id="copychecker"
-                                        type="button">
-                                        Copy
-								</button>
-								<button type="button"
-                                        id="csvchecker"
-                                        class="btn btn-default btn-sm">
-                                        CSV
-								</button>
-								<button type="button"
-                                        id="excelchecker"
-                                        class="btn btn-default btn-sm">
-                                        Excel
-								</button>
-								<button type="button"
-									    id="printchecker"
-									    class="btn btn-default btn-sm">
-									    Print
-								</button>
-								<button type="button"
-								    	id="pdfchecker"
-                                        class="btn btn-default btn-sm">
-									    PDF
-								</button>
+                                <div  style="float: left;"  class="btn-group">
+                                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        &nbsp; Export &nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu"
+                                        style="background: rgb(51, 51, 51) !important;">
+                                        <li><a id="copychecker" style="color: white;">Copy</a></li>
+                                        <li><a id="csvchecker" style="color: white;">CSV</a></li>
+                                        <li><a id="excelchecker" style="color: white;">Excel</a></li>
+                                        <li><a id="printchecker" style="color: white;">Print</a></li>
+                                        <li><a id="pdfchecker" style="color: white;">PDF</a></li>
+                                    </ul>
+                                </div>
 							</div>
 							<div style="float: right">
 								<button class="btn btn-primary btn-sm"

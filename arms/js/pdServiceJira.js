@@ -146,7 +146,9 @@ function dataTableClick(tempDataTable, selectedData) {
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
 	pdServiceDataTableClick(selectedData.c_id);
-	console.log("selectedIndex:::::" + selectedIndex);
+
+	// console.log("selectedIndex:::::" + selectedIndex);
+	// console.log("dataTableClick:: dataTableClick -> " + selectedData.c_id);
 
 	$("#version_contents").html("");
 
@@ -215,7 +217,7 @@ function dataLoad(getSelectedText, selectedText) {
 				</div>
 			</div>
 			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
-		console.log("dataLoad :: selectedText - >", selectedText);
+		// console.log("dataLoad :: selectedText - >", selectedText);
 
 		$(".list-group-item").html(selectedHtml);
 
@@ -304,9 +306,10 @@ function draw(main, menu) {
 //버전 클릭할 때 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function versionClicks(element, c_id, c_title) {
-	console.log("versionClick:: element  -> ", element);
-	console.log("versionClick:: c_id  -> ", c_id);
-	console.log("versionClick:: c_title  -> ", c_title);
+	selectVersion = c_id;  // version c_id
+	// console.log("versionClick:: c_id  -> ", c_id);
+	// console.log("versionClick:: c_title  -> ", c_title);
+	// console.log("versionClick:: element  -> ", element);
 
 	var coloredTitleHtml =
 		`<div class="chat-message">
@@ -353,7 +356,9 @@ function versionClicks(element, c_id, c_title) {
 	console.log("click :: C_ID ->  " + c_id);
 
 	$(".searchable").multiSelect("deselect_all");  //선택된 항목들을 모두 선택 해제(해당 요소들에서 선택을 없애는)하는 코드
-	console.log("DataTable -> " +   $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id);
+	// console.log("pdservice_link -> " +   $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id);
+	// console.log("pdserviceversion_link -> " +  c_id );
+
 	// 이미 등록된 제품(서비스)-버전-지라 연결 정보가 있는지 확인
 	$.ajax({
 		url: "/auth-user/api/arms/globaltreemap/getConnectInfo/pdService/pdServiceVersion/jiraProject.do",
@@ -368,12 +373,13 @@ function versionClicks(element, c_id, c_title) {
 	})
 		.done(function (data) {
 			var versionClickData = [];
-			console.log("response data check::  " + data.response);
-			console.log("===============================111111===========");
-			console.table( $("#pdservice_table").DataTable().rows(".selected").data()[0]);
+			// console.log("response data check::  " + data.response);
+			// console.log("===============================111111===========");
+			// console.table( $("#pdservice_table").DataTable().rows(".selected").data()[0]);
 
-			console.log("response data check:: data.response ->   " + JSON.stringify(data.response));
-			console.log("==========================================");
+			// console.log("response data check:: data.response ->   " + JSON.stringify(data.response));
+			// console.log("response data check:: data.response.pdServiceVersionEntities ->   " + JSON.stringify(data.response.pdServiceVersionEntities));
+			// console.log("==========================================");
 
 
 
@@ -425,6 +431,7 @@ function versionClicks(element, c_id, c_title) {
 // 제품(서비스)-버전-지라 저장
 ////////////////////////////////////////////////////////////////////////////////////////
 function connect_pdservice_jira(){
+	// console.log("pdservice_jira::: pdservice_version_id -> " + selectVersion);
 	$("#pdservice_connect").click(function () {
 		if ($("#pdservice_connect").hasClass("btn-primary") == true) {
 			// data가 존재하지 않음.
@@ -579,7 +586,9 @@ function buildMultiSelect() {
 //2. 편집하기 데이터 바인딩
 ////////////////////////////////////////////////////////////////////////////////////////
 function pdServiceDataTableClick(c_id) {
-	selectVersion = c_id;
+	// selectVersion = c_id;
+	// console.log("pdSerivceDataTableClick:: selectVersion -> " + selectVersion);
+	// console.log("pdSerivceDataTableClick:: c_id -> " + c_id);
 
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소

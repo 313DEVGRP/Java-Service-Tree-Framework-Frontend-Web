@@ -358,6 +358,11 @@ function jsTreeClick(selectedNode) {
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
 
+		//이전에 화면에 렌더링된 데이터 초기화
+		// ------------------ 편집하기 ------------------ //
+		// bindDataEditlTab(data);
+		// // ------------------ 상세보기 ------------------ //
+		// bindDataDetailTab(data);
 		//상세보기 탭 셋팅
 		setDetailAndEditViewTab();
 
@@ -381,7 +386,7 @@ function dataTableLoad(selectId) {
 	var dataTableRef;
 	if (selectId == 2) {
 		// 데이터 테이블 컬럼 및 열그룹 구성
-		var columnList = [{ data: "c_id" }, { data: "c_left" }, { data: "c_title" }];
+		var columnList = [{ data: "c_id", defaultContent: "-" }, { data: "c_left", defaultContent: "-" }, { data: "c_title", defaultContent: "-" }];
 		var rowsGroupList = [];
 		var columnDefList = [];
 		var selectList = {};
@@ -415,7 +420,7 @@ function dataTableLoad(selectId) {
 			progress: true,
 			success: function (data) {
 				// 데이터 테이블 컬럼 및 열그룹 구성
-				var columnList = [{ data: "c_id" }, { data: "c_left" }, { data: "c_title" }];
+				var columnList = [{ data: "c_id", defaultContent: "-" }, { data: "c_left", defaultContent: "-" }, { data: "c_title", defaultContent: "-" }];
 				var rowsGroupList = [];
 				var columnDefList = [];
 				var selectList = {};
@@ -469,21 +474,24 @@ function datatables_jira_project() {
 			title: "c_jira_key",
 			data: "c_jira_key",
 			className: "dt-body-left",
-			visible: true
+			visible: true,
+			defaultContent: "-"
 		},
 		{
 			name: "c_pdservice_version_name",
 			title: "버전 이름",
 			data: "c_pdservice_version_name",
 			className: "dt-body-center",
-			visible: true
+			visible: true,
+			defaultContent: "-"
 		},
 		{
 			name: "c_pdservice_jira_name",
 			title: "JIRA Project",
 			data: "c_pdservice_jira_name",
 			className: "dt-body-left",
-			visible: true
+			visible: true,
+			defaultContent: "-"
 		}
 	];
 	var rowsGroupList = null;
@@ -543,21 +551,24 @@ function defaultType_dataTableLoad(selectId) {
 			title: "c_jira_key",
 			data: "c_jira_key",
 			className: "dt-body-left",
-			visible: true
+			visible: true,
+			defaultContent: "-"
 		},
 		{
 			name: "c_jira_name",
 			title: "버전 이름",
 			data: "c_jira_name",
 			className: "dt-body-center",
-			visible: true
+			visible: true,
+			defaultContent: "-"
 		},
 		{
 			name: "c_pdservice_jira_name",
 			title: "JIRA Project",
 			data: "c_pdservice_jira_name",
 			className: "dt-body-left",
-			visible: true
+			visible: true,
+			defaultContent: "-"
 		}
 	];
 	var rowsGroupList = null;
@@ -1284,10 +1295,6 @@ function click_btn_for_req_update(){
 			reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
 		}
 
-		//우선 순위 값 셋팅
-		var priorityValue = $("#editview_req_priority").children(".btn.active").children("input").attr("id");
-		priorityValue = priorityValue.replace("editview_req_priority-option", "");
-
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
 			type: "POST",
@@ -1297,7 +1304,7 @@ function click_btn_for_req_update(){
 				c_version_link: JSON.stringify($("#edit_multi_version").val()),
 				c_writer: "admin",
 				c_writer_date: new Date(),
-				c_priority: priorityValue,
+				c_priority: $("#editview_req_priority").children(".btn.active").children("input").val(),
 				c_reviewer01: reviewers01,
 				c_reviewer02: reviewers02,
 				c_reviewer03: reviewers03,
