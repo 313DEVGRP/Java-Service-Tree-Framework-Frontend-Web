@@ -97,45 +97,53 @@ function makePdServiceSelectBox() {
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
-		progress: true
-	})
-		.done(function (data) {
-			for (var k in data) {
-				var obj = data[k];
-				if ( isEmpty(obj)){
-					console.log("obj is null");
-				}else{
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//////////////////////////////////////////////////////////
+				for (var k in data.response) {
+					var obj = data.response[k];
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
-					$("#country").append(newOption).trigger("change");
+					$("#selected_pdService").append(newOption).trigger("change");
 				}
+				//////////////////////////////////////////////////////////
 			}
-		})
-		.fail(function (e) {})
-		.always(function () {});
+		},
+		beforeSend: function () {
+			//$("#regist_pdservice").hide(); 버튼 감추기
+		},
+		complete: function () {
+			//$("#regist_pdservice").show(); 버튼 보이기
+		},
+		error: function (e) {
+			jError("제품(서비스) 조회 중 에러가 발생했습니다.");
+		}
+	});
+
+
+	$("#selected_pdService").on("select2:open", function () {
+		//슬림스크롤
+		makeSlimScroll(".select2-results__options");
+	});
+
+	// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
+	$("#selected_pdService").on("select2:select", function (e) {
+		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
+		// 디폴트는 base version 을 선택하게 하고 ( select all )
+		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
+		bind_VersionData_By_PdService();
+
+		var checked = $("#checkbox1").is(":checked");
+		var endPointUrl = "";
+
+		// if (checked) {
+		// 	endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
+		// } else {
+		// 	endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
+		// }
+		// common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+	});
 } // end makePdServiceSelectBox()
-
-$("#country").on("select2:open", function () {
-	//슬림스크롤
-	makeSlimScroll(".select2-results__options");
-});
-
-// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
-$("#country").on("select2:select", function (e) {
-	// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
-	// 디폴트는 base version 을 선택하게 하고 ( select all )
-	//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
-	bind_VersionData_By_PdService();
-
-	var checked = $("#checkbox1").is(":checked");
-	var endPointUrl = "";
-
-	if (checked) {
-		endPointUrl = "/T_ARMS_REQSTATUS_" + $("#country").val() + "/getStatusMonitor.do?disable=true";
-	} else {
-		endPointUrl = "/T_ARMS_REQSTATUS_" + $("#country").val() + "/getStatusMonitor.do?disable=false";
-	}
-	common_dataTableLoad($("#country").val(), endPointUrl);
-});
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
@@ -151,15 +159,15 @@ function makeVersionMultiSelectBox() {
 			var endPointUrl = "";
 			var versionTag = $(".multiple-select").val();
 
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#country").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-				common_dataTableLoad($("#country").val(), endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#country").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-				common_dataTableLoad($("#country").val(), endPointUrl);
-			}
+			// if (checked) {
+			// 	endPointUrl =
+			// 		"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
+			// 	common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			// } else {
+			// 	endPointUrl =
+			// 		"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
+			// 	common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			// }
 		}
 	});
 }
@@ -167,23 +175,19 @@ function makeVersionMultiSelectBox() {
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceVersion/getVersionList.do?c_id=" + $("#country").val(),
+		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
-		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
-				for (var k in data) {
-					var obj = data[k];
+				for (var k in data.response) {
+					var obj = data.response[k];
 					var $opt = $("<option />", {
 						value: obj.c_id,
-						text: " " + obj.c_title
+						text: obj.c_title
 					});
-
-					//$('#multiversion').append($opt);
-					//$('#edit_multi_version').append($opt);
 					$(".multiple-select").append($opt);
 				}
 
@@ -194,7 +198,6 @@ function bind_VersionData_By_PdService() {
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
 				//////////////////////////////////////////////////////////
-				jSuccess("버전 조회가 완료 되었습니다.");
 			}
 		},
 		beforeSend: function () {
@@ -397,12 +400,12 @@ $("#checkbox1").click(function () {
 
 	if (checked) {
 		endPointUrl =
-			"/T_ARMS_REQSTATUS_" + $("#country").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-		common_dataTableLoad($("#country").val(), endPointUrl);
+			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
+		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	} else {
 		endPointUrl =
-			"/T_ARMS_REQSTATUS_" + $("#country").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-		common_dataTableLoad($("#country").val(), endPointUrl);
+			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
+		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	}
 });
 
