@@ -255,7 +255,7 @@ function changeMultipleSelected() {
 		result.push(item.innerText);
 		result_cids.push(item.value);
 	});
-	$("#select_Version").text(result);
+	$("#select_Version").text(isEmpty(result) ? "선택되지 않음" : result);
 
 	console.log("[ reqAdd :: changeMultipleSelected ] :: version result = " + result_cids);
 	// 필터할 대상을 아이디로 잡아서 처리해야 하는데,
