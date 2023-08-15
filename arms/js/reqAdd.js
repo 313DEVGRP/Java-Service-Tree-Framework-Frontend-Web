@@ -6,33 +6,39 @@ var selectedJsTreeName; // 요구사항 이름
 var tempDataTable;
 
 function execDocReady() {
-
 	var pluginGroups = [
-		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+		[
+			"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
 			"../reference/light-blue/lib/jquery.iframe-transport.js",
 			"../reference/light-blue/lib/jquery.fileupload.js",
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
-			"../reference/light-blue/lib/jquery.fileupload-ui.js"],
+			"../reference/light-blue/lib/jquery.fileupload-ui.js"
+		],
 
-		[	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+		[
+			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"
+		],
 
-		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+		[
+			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"
+		],
 
-		[	"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
+		[
+			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
 			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
 			"../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -46,24 +52,24 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
+		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
-		.then(function() {
-
+		.then(function () {
 			//vfs_fonts 파일이 커서 defer 처리 함.
-			setTimeout(function() {
+			setTimeout(function () {
 				var script = document.createElement("script");
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
 			}, 3000); // 2초 후에 실행됩니다.
-			console.log('모든 플러그인 로드 완료');
+			console.log("모든 플러그인 로드 완료");
 
 			//위젯 헤더 처리 및 사이드 메뉴 처리
-			$('.widget').widgster();
+			$(".widget").widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
 
 			//신규 요구사항 등록 버튼 숨김
@@ -73,7 +79,6 @@ function execDocReady() {
 			var waitSelect2 = setInterval(function () {
 				try {
 					if ($(".ms-select-all") !== 3) {
-
 						//제품(서비스) 셀렉트 박스 이니시에이터
 						makePdServiceSelectBox();
 						//버전 멀티 셀렉트 박스 이니시에이터
@@ -86,14 +91,13 @@ function execDocReady() {
 				}
 			}, 313 /*milli*/);
 
-
 			// --- 에디터 설정 --- //
 			var waitCKEDITOR = setInterval(function () {
 				try {
 					if (window.CKEDITOR) {
-						if(window.CKEDITOR.status == "loaded") {
-							CKEDITOR.replace("modal_editor", {skin: "prestige"});
-							CKEDITOR.replace("edit_tabmodal_editor", {skin: "prestige"});
+						if (window.CKEDITOR.status == "loaded") {
+							CKEDITOR.replace("modal_editor", { skin: "prestige" });
+							CKEDITOR.replace("edit_tabmodal_editor", { skin: "prestige" });
 							clearInterval(waitCKEDITOR);
 						}
 					}
@@ -123,13 +127,10 @@ function execDocReady() {
 
 			save_req();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
-
 		})
-		.catch(function() {
-			console.error('플러그인 로드 중 오류 발생');
+		.catch(function () {
+			console.error("플러그인 로드 중 오류 발생");
 		});
-
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +172,6 @@ function makePdServiceSelectBox() {
 		}
 	});
 
-
 	$("#selected_pdService").on("select2:open", function () {
 		makeSlimScroll(".select2-results__options");
 	});
@@ -182,7 +182,10 @@ function makePdServiceSelectBox() {
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 
 		// 선택된 제품(서비스) 데이터 바인딩
-		$("#select_PdService").text($("#selected_pdService").select2("data")[0].text);
+		var selectedService = $("#selected_pdService").select2("data")[0].text;
+
+		$("#select_PdService").text(selectedService);
+		$("#select_Service").text(selectedService);
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
 		//서비스(어플리케이션) 트리 로드
 		build_ReqData_By_PdService();
@@ -190,9 +193,7 @@ function makePdServiceSelectBox() {
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
 	});
-
 } // end makePdServiceSelectBox()
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
@@ -239,19 +240,18 @@ function bind_VersionData_By_PdService() {
 //제품(서비스) 선택 후, 버전을 선택하면 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function changeMultipleSelected() {
-
 	//초기화
-	$("#req_tree #node_2 ul li").each(function(a, item) {
+	$("#req_tree #node_2 ul li").each(function (a, item) {
 		$(this)
 			.find("a i")
-			.each(function() {
+			.each(function () {
 				$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
 			});
 	});
 
 	var result = [];
 	var result_cids = [];
-	$("#multiversion option:selected").map(function(a, item) {
+	$("#multiversion option:selected").map(function (a, item) {
 		result.push(item.innerText);
 		result_cids.push(item.value);
 	});
@@ -263,7 +263,11 @@ function changeMultipleSelected() {
 	// version 정보를 매치 해서 대상 요구사항 이슈 c_id 를 받아오는 로직이 필요.
 
 	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" + result_cids,
+		url:
+			"/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
+			$("#selected_pdService").val() +
+			"/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
+			result_cids,
 		type: "GET",
 		dataType: "json",
 		progress: true,
@@ -277,13 +281,16 @@ function changeMultipleSelected() {
 				console.log(appIds);
 				var mappedApps = [];
 				for (var appId of appIds) {
-					$("#req_tree #node_2 ul li").each(function(a, item) {
+					$("#req_tree #node_2 ul li").each(function (a, item) {
 						$(this)
 							.find("a i")
-							.each(function() {
+							.each(function () {
 								$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
 							});
-						console.log("[ reqAdd :: changeMultipleSelected ] :: version node value = " + item.id.substring(item.id.indexOf("_") + 1));
+						console.log(
+							"[ reqAdd :: changeMultipleSelected ] :: version node value = " +
+								item.id.substring(item.id.indexOf("_") + 1)
+						);
 						console.log("[ reqAdd :: changeMultipleSelected ] :: version filterNode value = " + appId);
 						if (item.id.substring(item.id.indexOf("_") + 1) == appId) {
 							mappedApps.push($(this));
@@ -294,7 +301,7 @@ function changeMultipleSelected() {
 
 				console.log(mappedApps);
 				for (var mappedApp of mappedApps) {
-					mappedApp.find("a ins").each(function() {
+					mappedApp.find("a ins").each(function () {
 						$(this).replaceWith("<i class='fa fa-check' style='color: #1ea726'>&nbsp;&nbsp;</i>");
 					});
 				}
@@ -304,7 +311,6 @@ function changeMultipleSelected() {
 			jError("버전 조회 중 에러가 발생했습니다.");
 		}
 	});
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -319,23 +325,20 @@ function build_ReqData_By_PdService() {
 
 // --- 요구사항 (jstree) 선택 이벤트 --- //
 function jsTreeClick(selectedNode) {
-
 	console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
 	console.log(selectedNode);
 
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
-	selectedJsTreeName = $('#req_tree').jstree("get_selected").text();
-	if( selectedJsTreeId == 2 ){
-		$('#select_Req').text( "루트 요구사항이 선택되었습니다." );
-	}else{
-		$('#select_Req').text( $('#req_tree').jstree("get_selected").text() );
+	selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
+	if (selectedJsTreeId == 2) {
+		$("#select_Req").text("루트 요구사항이 선택되었습니다.");
+	} else {
+		$("#select_Req").text($("#req_tree").jstree("get_selected").text());
 	}
 	var selectRel = selectedNode.attr("rel");
 
-
 	//요구사항 타입에 따라서 탭의 설정을 변경
 	if (selectRel == "folder" || selectRel == "drive") {
-
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
@@ -347,9 +350,7 @@ function jsTreeClick(selectedNode) {
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
 		dataTableLoad(selectedJsTreeId);
-
 	} else {
-
 		$("#default_tab").get(0).click();
 		$(".newReqDiv").hide();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
@@ -381,12 +382,16 @@ function dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
-	var c_type = $('#req_tree').jstree("get_selected").attr("rel");
+	var c_type = $("#req_tree").jstree("get_selected").attr("rel");
 
 	var dataTableRef;
 	if (selectId == 2) {
 		// 데이터 테이블 컬럼 및 열그룹 구성
-		var columnList = [{ data: "c_id", defaultContent: "-" }, { data: "c_left", defaultContent: "-" }, { data: "c_title", defaultContent: "-" }];
+		var columnList = [
+			{ data: "c_id", defaultContent: "-" },
+			{ data: "c_left", defaultContent: "-" },
+			{ data: "c_title", defaultContent: "-" }
+		];
 		var rowsGroupList = [];
 		var columnDefList = [];
 		var selectList = {};
@@ -420,7 +425,11 @@ function dataTableLoad(selectId) {
 			progress: true,
 			success: function (data) {
 				// 데이터 테이블 컬럼 및 열그룹 구성
-				var columnList = [{ data: "c_id", defaultContent: "-" }, { data: "c_left", defaultContent: "-" }, { data: "c_title", defaultContent: "-" }];
+				var columnList = [
+					{ data: "c_id", defaultContent: "-" },
+					{ data: "c_left", defaultContent: "-" },
+					{ data: "c_title", defaultContent: "-" }
+				];
 				var rowsGroupList = [];
 				var columnDefList = [];
 				var selectList = {};
@@ -531,9 +540,9 @@ function datatables_jira_project() {
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function defaultType_dataTableLoad(selectId) {
 	// 데이터 테이블 컬럼 및 열그룹 구성
-	
+
 	//여기는 데이터 가져와서 체크박스 처리 해야 하는 로직
-	
+
 	var columnList = [
 		{
 			data: "c_id",
@@ -646,12 +655,10 @@ function dataTableDrawCallback(tableInfo) {
 		.responsive.recalc();
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
 /** file upload 이니시에이터 **/
 ////////////////////////////////////////////////////////////////////////////////////////
 function init_fileupload() {
-
 	// Initialize the jQuery File Upload widget:
 	var $fileupload = $("#fileupload");
 	$fileupload.fileupload({
@@ -674,12 +681,11 @@ function init_fileupload() {
 		$(this).fileupload("option", "done").call(this, null, { result: result });
 	});
 
-
 	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
 		// The example input, doesn't have to be part of the upload form:
 		var input = $("#fileIdlink");
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-		data.formData = {fileIdlink: input.val(), c_title: tableName};
+		data.formData = { fileIdlink: input.val(), c_title: tableName };
 		if (!data.formData.fileIdlink) {
 			data.context.find("button").prop("disabled", false);
 			input.focus();
@@ -741,8 +747,8 @@ function bindDataEditlTab(ajaxData) {
 	}
 
 	// 버전 데이터 바인딩
-	if (!isEmpty(ajaxData.c_version_link)) {
-		$("#edit_multi_version").multipleSelect("setSelects", ajaxData.c_version_link.split(","));
+	if (!isEmpty(ajaxData.c_req_pdservice_versionset_link)) {
+		$("#edit_multi_version").multipleSelect("setSelects", JSON.parse(ajaxData.c_req_pdservice_versionset_link));
 	} else {
 		$("#edit_multi_version").multipleSelect("uncheckAll");
 	}
@@ -761,72 +767,72 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_reviewers").val(null).trigger("change");
 
 	var selectedReviewerArr = [];
-	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_reviewer01 empty");
+	if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer01 empty");
 	} else {
-		selectedReviewerArr.push(ajaxData.c_reviewer01);
+		selectedReviewerArr.push(ajaxData.c_req_reviewer01);
 		// Set the value, creating a new option if necessary
-		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_reviewer01 + "']").length) {
-			console.log('option[value=\'" + ajaxData.c_reviewer01 + "\']"' + "already exist");
+		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_req_reviewer01 + "']").length) {
+			console.log('option[value=\'" + ajaxData.c_req_reviewer01 + "\']"' + "already exist");
 		} else {
 			// Create a DOM Option and pre-select by default
-			var newOption01 = new Option(ajaxData.c_reviewer01, ajaxData.c_reviewer01, true, true);
+			var newOption01 = new Option(ajaxData.c_req_reviewer01, ajaxData.c_req_reviewer01, true, true);
 			// Append it to the select
 			$("#editview_req_reviewers").append(newOption01).trigger("change");
 		}
 	}
-	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_reviewer02 empty");
+	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer02 empty");
 	} else {
-		selectedReviewerArr.push(ajaxData.c_reviewer02);
+		selectedReviewerArr.push(ajaxData.c_req_reviewer02);
 		// Set the value, creating a new option if necessary
-		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_reviewer02 + "']").length) {
-			console.log('option[value=\'" + ajaxData.c_reviewer02 + "\']"' + "already exist");
+		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_req_reviewer02 + "']").length) {
+			console.log('option[value=\'" + ajaxData.c_req_reviewer02 + "\']"' + "already exist");
 		} else {
 			// Create a DOM Option and pre-select by default
-			var newOption02 = new Option(ajaxData.c_reviewer02, ajaxData.c_reviewer02, true, true);
+			var newOption02 = new Option(ajaxData.c_req_reviewer02, ajaxData.c_req_reviewer02, true, true);
 			// Append it to the select
 			$("#editview_req_reviewers").append(newOption02).trigger("change");
 		}
 	}
-	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_reviewer03 empty");
+	if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer03 empty");
 	} else {
-		selectedReviewerArr.push(ajaxData.c_reviewer03);
+		selectedReviewerArr.push(ajaxData.c_req_reviewer03);
 		// Set the value, creating a new option if necessary
-		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_reviewer03 + "']").length) {
-			console.log('option[value=\'" + ajaxData.c_reviewer03 + "\']"' + "already exist");
+		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_req_reviewer03 + "']").length) {
+			console.log('option[value=\'" + ajaxData.c_req_reviewer03 + "\']"' + "already exist");
 		} else {
 			// Create a DOM Option and pre-select by default
-			var newOption03 = new Option(ajaxData.c_reviewer03, ajaxData.c_reviewer03, true, true);
+			var newOption03 = new Option(ajaxData.c_req_reviewer03, ajaxData.c_req_reviewer03, true, true);
 			// Append it to the select
 			$("#editview_req_reviewers").append(newOption03).trigger("change");
 		}
 	}
-	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_reviewer04 empty");
+	if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer04 empty");
 	} else {
-		selectedReviewerArr.push(ajaxData.c_reviewer04);
+		selectedReviewerArr.push(ajaxData.c_req_reviewer04);
 		// Set the value, creating a new option if necessary
-		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_reviewer04 + "']").length) {
-			console.log('option[value=\'" + ajaxData.c_reviewer04 + "\']"' + "already exist");
+		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_req_reviewer04 + "']").length) {
+			console.log('option[value=\'" + ajaxData.c_req_reviewer04 + "\']"' + "already exist");
 		} else {
 			// Create a DOM Option and pre-select by default
-			var newOption04 = new Option(ajaxData.c_reviewer04, ajaxData.c_reviewer04, true, true);
+			var newOption04 = new Option(ajaxData.c_req_reviewer04, ajaxData.c_req_reviewer04, true, true);
 			// Append it to the select
 			$("#editview_req_reviewers").append(newOption04).trigger("change");
 		}
 	}
-	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_reviewer05 empty");
+	if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
+		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer05 empty");
 	} else {
-		selectedReviewerArr.push(ajaxData.c_reviewer05);
+		selectedReviewerArr.push(ajaxData.c_req_reviewer05);
 		// Set the value, creating a new option if necessary
-		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_reviewer05 + "']").length) {
-			console.log('option[value=\'" + ajaxData.c_reviewer05 + "\']"' + "already exist");
+		if ($("#editview_req_reviewers").find("option[value='" + ajaxData.c_req_reviewer05 + "']").length) {
+			console.log('option[value=\'" + ajaxData.c_req_reviewer05 + "\']"' + "already exist");
 		} else {
 			// Create a DOM Option and pre-select by default
-			var newOption05 = new Option(ajaxData.c_reviewer05, ajaxData.c_reviewer05, true, true);
+			var newOption05 = new Option(ajaxData.c_req_reviewer05, ajaxData.c_req_reviewer05, true, true);
 			// Append it to the select
 			$("#editview_req_reviewers").append(newOption05).trigger("change");
 		}
@@ -835,13 +841,16 @@ function bindDataEditlTab(ajaxData) {
 
 	// ------------------------- reviewer end --------------------------------//
 	$("#editview_req_status").val(ajaxData.c_req_status);
-	$("#editview_req_writer").val(ajaxData.c_writer);
-	$("#editview_req_write_date").val(ajaxData.c_writer_date);
-	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_contents);
+	$("#editview_req_writer").val(ajaxData.c_req_writer);
+	$("#editview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
+	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_req_contents);
 }
 
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
+	console.log("========홍성훈========");
+	console.log(ajaxData);
+
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
 	if (isEmpty(selectedPdServiceText)) {
@@ -868,35 +877,35 @@ function bindDataDetailTab(ajaxData) {
 		.addClass("active");
 
 	$("#detailview_req_status").val(ajaxData.c_req_status);
-	$("#detailview_req_writer").val(ajaxData.c_writer);
-	$("#detailview_req_write_date").val(ajaxData.c_writer_date);
+	$("#detailview_req_writer").val(ajaxData.c_req_writer);
+	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
 
-	if (ajaxData.c_reviewer01 == null || ajaxData.c_reviewer01 == "none") {
+	if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
 		$("#detailview_req_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
 	} else {
-		$("#detailview_req_reviewer01").val(ajaxData.c_reviewer01);
+		$("#detailview_req_reviewer01").val(ajaxData.c_req_reviewer01);
 	}
-	if (ajaxData.c_reviewer02 == null || ajaxData.c_reviewer02 == "none") {
+	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
 		$("#detailview_req_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailview_req_reviewer02").val(ajaxData.c_reviewer02);
+		$("#detailview_req_reviewer02").val(ajaxData.c_req_reviewer02);
 	}
-	if (ajaxData.c_reviewer03 == null || ajaxData.c_reviewer03 == "none") {
+	if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
 		$("#detailview_req_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailview_req_reviewer03").val(ajaxData.c_reviewer03);
+		$("#detailview_req_reviewer03").val(ajaxData.c_req_reviewer03);
 	}
-	if (ajaxData.c_reviewer04 == null || ajaxData.c_reviewer04 == "none") {
+	if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
 		$("#detailview_req_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailview_req_reviewer04").val(ajaxData.c_reviewer04);
+		$("#detailview_req_reviewer04").val(ajaxData.c_req_reviewer04);
 	}
-	if (ajaxData.c_reviewer05 == null || ajaxData.c_reviewer05 == "none") {
+	if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
 		$("#detailview_req_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
 	} else {
-		$("#detailview_req_reviewer05").val(ajaxData.c_reviewer05);
+		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
 	}
-	$("#detailview_req_contents").html(ajaxData.c_contents);
+	$("#detailview_req_contents").html(ajaxData.c_req_contents);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -994,7 +1003,7 @@ function setDocViewTab() {
 ///////////////////////////////////////////////////////////////////////////////
 // --- select2 (사용자 자동완성 검색 ) 설정 --- //
 ///////////////////////////////////////////////////////////////////////////////
-function autoCompleteForUser(){
+function autoCompleteForUser() {
 	$(".js-data-example-ajax").select2({
 		maximumSelectionLength: 5,
 		width: "resolve",
@@ -1022,7 +1031,6 @@ function autoCompleteForUser(){
 		templateSelection: formatUserSelection
 	});
 }
-
 
 // --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
 function formatUser(jsonData) {
@@ -1106,72 +1114,72 @@ function registNewPopup() {
 		$("#popup_pdservice_reviewers").val(null).trigger("change");
 
 		var selectedReviewerArr = [];
-		if (data.c_reviewer01 == null || data.c_reviewer01 == "none") {
-			console.log("registNewPopup :: data.c_reviewer01 empty");
+		if (data.c_req_reviewer01 == null || data.c_req_reviewer01 == "none") {
+			console.log("registNewPopup :: data.c_req_reviewer01 empty");
 		} else {
-			selectedReviewerArr.push(data.c_reviewer01);
+			selectedReviewerArr.push(data.c_req_reviewer01);
 			// Set the value, creating a new option if necessary
-			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_reviewer01 + "']").length) {
-				console.log('option[value=\'" + data.c_reviewer01 + "\']"' + "already exist");
+			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_req_reviewer01 + "']").length) {
+				console.log('option[value=\'" + data.c_req_reviewer01 + "\']"' + "already exist");
 			} else {
 				// Create a DOM Option and pre-select by default
-				var newOption01 = new Option(data.c_reviewer01, data.c_reviewer01, true, true);
+				var newOption01 = new Option(data.c_req_reviewer01, data.c_req_reviewer01, true, true);
 				// Append it to the select
 				$("#popup_pdservice_reviewers").append(newOption01).trigger("change");
 			}
 		}
-		if (data.c_reviewer02 == null || data.c_reviewer02 == "none") {
-			console.log("registNewPopup :: data.c_reviewer02 empty");
+		if (data.c_req_reviewer02 == null || data.c_req_reviewer02 == "none") {
+			console.log("registNewPopup :: data.c_req_reviewer02 empty");
 		} else {
-			selectedReviewerArr.push(data.c_reviewer02);
+			selectedReviewerArr.push(data.c_req_reviewer02);
 			// Set the value, creating a new option if necessary
-			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_reviewer02 + "']").length) {
-				console.log('option[value=\'" + data.c_reviewer02 + "\']"' + "already exist");
+			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_req_reviewer02 + "']").length) {
+				console.log('option[value=\'" + data.c_req_reviewer02 + "\']"' + "already exist");
 			} else {
 				// Create a DOM Option and pre-select by default
-				var newOption02 = new Option(data.c_reviewer02, data.c_reviewer02, true, true);
+				var newOption02 = new Option(data.c_req_reviewer02, data.c_req_reviewer02, true, true);
 				// Append it to the select
 				$("#popup_pdservice_reviewers").append(newOption02).trigger("change");
 			}
 		}
-		if (data.c_reviewer03 == null || data.c_reviewer03 == "none") {
-			console.log("registNewPopup :: data.c_reviewer03 empty");
+		if (data.c_req_reviewer03 == null || data.c_req_reviewer03 == "none") {
+			console.log("registNewPopup :: data.c_req_reviewer03 empty");
 		} else {
-			selectedReviewerArr.push(data.c_reviewer03);
+			selectedReviewerArr.push(data.c_req_reviewer03);
 			// Set the value, creating a new option if necessary
-			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_reviewer03 + "']").length) {
-				console.log('option[value=\'" + data.c_reviewer03 + "\']"' + "already exist");
+			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_req_reviewer03 + "']").length) {
+				console.log('option[value=\'" + data.c_req_reviewer03 + "\']"' + "already exist");
 			} else {
 				// Create a DOM Option and pre-select by default
-				var newOption03 = new Option(data.c_reviewer03, data.c_reviewer03, true, true);
+				var newOption03 = new Option(data.c_req_reviewer03, data.c_req_reviewer03, true, true);
 				// Append it to the select
 				$("#popup_pdservice_reviewers").append(newOption03).trigger("change");
 			}
 		}
-		if (data.c_reviewer04 == null || data.c_reviewer04 == "none") {
-			console.log("registNewPopup :: data.c_reviewer04 empty");
+		if (data.c_req_reviewer04 == null || data.c_req_reviewer04 == "none") {
+			console.log("registNewPopup :: data.c_req_reviewer04 empty");
 		} else {
-			selectedReviewerArr.push(data.c_reviewer04);
+			selectedReviewerArr.push(data.c_req_reviewer04);
 			// Set the value, creating a new option if necessary
-			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_reviewer04 + "']").length) {
-				console.log('option[value=\'" + data.c_reviewer04 + "\']"' + "already exist");
+			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_req_reviewer04 + "']").length) {
+				console.log('option[value=\'" + data.c_req_reviewer04 + "\']"' + "already exist");
 			} else {
 				// Create a DOM Option and pre-select by default
-				var newOption04 = new Option(data.c_reviewer04, data.c_reviewer04, true, true);
+				var newOption04 = new Option(data.c_req_reviewer04, data.c_req_reviewer04, true, true);
 				// Append it to the select
 				$("#popup_pdservice_reviewers").append(newOption04).trigger("change");
 			}
 		}
-		if (data.c_reviewer05 == null || data.c_reviewer05 == "none") {
-			console.log("registNewPopup :: data.c_reviewer05 empty");
+		if (data.c_req_reviewer05 == null || data.c_req_reviewer05 == "none") {
+			console.log("registNewPopup :: data.c_req_reviewer05 empty");
 		} else {
-			selectedReviewerArr.push(data.c_reviewer05);
+			selectedReviewerArr.push(data.c_req_reviewer05);
 			// Set the value, creating a new option if necessary
-			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_reviewer05 + "']").length) {
-				console.log('option[value=\'" + data.c_reviewer05 + "\']"' + "already exist");
+			if ($("#popup_pdservice_reviewers").find("option[value='" + data.c_req_reviewer05 + "']").length) {
+				console.log('option[value=\'" + data.c_req_reviewer05 + "\']"' + "already exist");
 			} else {
 				// Create a DOM Option and pre-select by default
-				var newOption05 = new Option(data.c_reviewer05, data.c_reviewer05, true, true);
+				var newOption05 = new Option(data.c_req_reviewer05, data.c_req_reviewer05, true, true);
 				// Append it to the select
 				$("#popup_pdservice_reviewers").append(newOption05).trigger("change");
 			}
@@ -1203,7 +1211,6 @@ function switch_action_for_mode() {
 // 팝업에서 신규 요구사항 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
 function save_req() {
-
 	$("#save_req").click(function () {
 		var reviewers01 = "none";
 		var reviewers02 = "none";
@@ -1269,7 +1276,7 @@ function save_req() {
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 편집 탭 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
-function click_btn_for_req_update(){
+function click_btn_for_req_update() {
 	$("#edit_tab_req_update").click(function () {
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 		var reqName = $("#editview_req_name").val();
@@ -1301,17 +1308,17 @@ function click_btn_for_req_update(){
 			data: {
 				c_id: $("#editview_req_id").val(),
 				c_title: $("#editview_req_name").val(),
-				c_version_link: JSON.stringify($("#edit_multi_version").val()),
-				c_writer: "admin",
-				c_writer_date: new Date(),
+				c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
+				c_req_writer: "admin",
+				c_req_update_date: new Date(),
 				c_priority: $("#editview_req_priority").children(".btn.active").children("input").val(),
-				c_reviewer01: reviewers01,
-				c_reviewer02: reviewers02,
-				c_reviewer03: reviewers03,
-				c_reviewer04: reviewers04,
-				c_reviewer05: reviewers05,
+				c_req_reviewer01: reviewers01,
+				c_req_reviewer02: reviewers02,
+				c_req_reviewer03: reviewers03,
+				c_req_reviewer04: reviewers04,
+				c_req_reviewer05: reviewers05,
 				c_req_status: "ChangeReq",
-				c_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
+				c_req_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
 			},
 			statusCode: {
 				200: function () {
@@ -1345,7 +1352,7 @@ function makeDatePicker(calender) {
 ///////////////////////////////////////////////////////////////////////////////
 // History TAB 검색 버튼
 ///////////////////////////////////////////////////////////////////////////////
-function click_btn_for_search_history(){
+function click_btn_for_search_history() {
 	$("#logsearch").click(function () {
 		$(".timeline-item-body").remove();
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
@@ -1540,21 +1547,19 @@ function click_btn_for_search_history(){
 ///////////////////////////////////////////////////////////////////////////////
 // 탭 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
-function change_tab_action(){
+function change_tab_action() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 
-		if( target == "#stats" ){
+		if (target == "#stats") {
 			$(".view_btn_group").removeClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
-		}
-		else if( target == "#edit" ){
+		} else if (target == "#edit") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").removeClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
-		}
-		else if (target == "#jira") {
+		} else if (target == "#jira") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
@@ -1605,7 +1610,7 @@ function change_tab_action(){
 				})
 				.fail(function (e) {})
 				.always(function () {});
-		} else if( target == "#history" ){
+		} else if (target == "#history") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
@@ -1616,7 +1621,7 @@ function change_tab_action(){
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 - 지라 연결 변경 버튼 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
-function click_btn_for_connect_req_jira(){
+function click_btn_for_connect_req_jira() {
 	$("#req_jiraver_connect_change").click(function () {
 		console.log("req_jiraver_connect_change");
 
