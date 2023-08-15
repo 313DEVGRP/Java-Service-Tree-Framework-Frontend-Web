@@ -495,9 +495,9 @@ function datatables_jira_project() {
 			defaultContent: "-"
 		},
 		{
-			name: "c_pdservice_jira_name",
+			name: "c_jira_name",
 			title: "JIRA Project",
-			data: "c_pdservice_jira_name",
+			data: "c_jira_name",
 			className: "dt-body-left",
 			visible: true,
 			defaultContent: "-"
