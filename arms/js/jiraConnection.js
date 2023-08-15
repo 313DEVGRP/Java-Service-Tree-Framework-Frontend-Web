@@ -460,41 +460,48 @@ function modalPopup(popupName) {
 ////////////////////////////////
 function save_btn_click() {
     $("#regist_jira_server").click(function () {
-        if($("#popup_editview_jira_server_name").val() !== "") { // 서버 이름 적게끔.
-            $.ajax({
-                url: "/auth-user/api/arms/jiraServer/addJiraServerNode.do",
-                type: "POST",
-                data: {
-                    ref: 2,
-                    c_title: $("#popup_editview_jira_server_name").val(),
-                    c_type: "default",
-                    c_jira_server_name: $("#popup_editview_jira_server_name").val(),
-                    c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
-                    c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
-                    c_jira_server_connect_id: $("#popup_editview_jira_server_connect_id").val(),
-                    c_jira_server_connect_pw: $("#popup_editview_jira_pass_token").val(),
-                    c_jira_server_contents: CKEDITOR.instances.modal_editor.getData()
-                },
-                statusCode: {
-                    200: function () {
-                        //모달 팝업 끝내고
-                        $("#close_regist_jira_server").trigger("click");
-                        //지라 서버 목록 재 로드
-                        makeJiraServerCardDeck();
-                        //dataTableRef.ajax.reload();
-                        jSuccess("신규 제품 등록이 완료 되었습니다.");
+        if($("#popup_editview_jira_server_name").val() !== "") { // 서버 이름
+            if($("#popup_editview_jira_server_type input[name='options']:checked").val() !== undefined) { // 지라환경 선택여부
+
+                $.ajax({
+                    url: "/auth-user/api/arms/jiraServer/addJiraServerNode.do",
+                    type: "POST",
+                    data: {
+                        ref: 2,
+                        c_title: $("#popup_editview_jira_server_name").val(),
+                        c_type: "default",
+                        c_jira_server_name: $("#popup_editview_jira_server_name").val(),
+                        c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
+                        c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+                        c_jira_server_connect_id: $("#popup_editview_jira_server_connect_id").val(),
+                        c_jira_server_connect_pw: $("#popup_editview_jira_pass_token").val(),
+                        c_jira_server_contents: CKEDITOR.instances.modal_editor.getData()
+                    },
+                    statusCode: {
+                        200: function () {
+                            //모달 팝업 끝내고
+                            $("#close_regist_jira_server").trigger("click");
+                            //지라 서버 목록 재 로드
+                            makeJiraServerCardDeck();
+                            //dataTableRef.ajax.reload();
+                            jSuccess("신규 제품 등록이 완료 되었습니다.");
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#regist_jira_server").hide();
+                    },
+                    complete: function () {
+                        $("#regist_jira_server").show();
+                    },
+                    error: function (e) {
+                        jError("지라 서버 등록 중 에러가 발생했습니다.");
                     }
-                },
-                beforeSend: function () {
-                    $("#regist_jira_server").hide();
-                },
-                complete: function () {
-                    $("#regist_jira_server").show();
-                },
-                error: function (e) {
-                    jError("지라 서버 등록 중 에러가 발생했습니다.");
-                }
-            });
+                });
+
+            } else {
+                alert("지라 서버 환경을 선택해주세요.");
+                return false;
+            }
         } else {
             alert("지라 서버의 이름이 없습니다.");
             return false;
