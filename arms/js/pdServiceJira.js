@@ -565,7 +565,22 @@ function buildMultiSelect() {
 			});
 
 			//slim scroll
-			$(".ms-list").slimscroll();
+			$(".ms-list").slimscroll({
+				//size: '8px',
+				//width: '100%',
+				//height: 'fit-content',
+				height: "490px"
+				//color: '#ff4800',
+				//allowPageScroll: true,
+				//alwaysVisible: false,
+				//railVisible: true,
+				// scroll amount applied to each mouse wheel step
+				//wheelStep: 20,
+				// scroll amount applied when user is using gestures
+				//touchScrollStep: 200,
+				// distance in pixels between the side edge and the scrollbar
+				//distance: '10px',
+			});
 		},
 		afterSelect: function (value, text) {
 			this.qs1.cache();
