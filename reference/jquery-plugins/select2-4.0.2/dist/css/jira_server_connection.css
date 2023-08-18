@@ -169,6 +169,11 @@
 .mb-3 { margin-bottom: 0.75rem !important;}
 .mb-4 { margin-bottom: 1rem !important;}
 
+.btn-disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
 /* text */
 .text-muted {
     color: #878a99 !important;;
@@ -264,6 +269,10 @@
     color: #0AB39C;
     border-radius: 1rem;
     background-color: rgba(10, 179, 156, 0.15);
+    cursor: pointer;
+}
+.card-body .text-success:hover {
+    background-color: rgba(10, 179, 156, 0.5);
 }
 .d-flex-sb-11 {
     display: flex;

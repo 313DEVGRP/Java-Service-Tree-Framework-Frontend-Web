@@ -340,6 +340,16 @@
                         지라(서버) 삭제
                     </button>
                 </div>
+                <div style="float: right"
+                     class="hidden"
+                     id="jira_project_renew_div">
+                    <button type="button"
+                            id="jira_project_renew_btn"
+                            onClick="jira_renew('project')"
+                            class="btn btn-success btn-sm">
+                        프로젝트 갱신
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -356,6 +366,12 @@
                                     <a  href="#report"
                                         data-toggle="tab">
                                         <strong>편집 하기</strong>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  href="#related_project"
+                                        data-toggle="tab">
+                                        <strong>지라 프로젝트</strong>
                                     </a>
                                 </li>
                                 <li>
@@ -390,7 +406,7 @@
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA SERVER NAME"
-                                                        required="required" />
+                                                        required="required" readonly/>
                                                 <span class="input-group-addon font11">
                                                 INFO: 서버 이름은 중복될 수 없습니다.
                                                 </span>
@@ -409,14 +425,14 @@
                                                     <div    id="detailview_jira_server_type"
                                                             class="btn-group"
                                                             data-toggle="buttons">
-                                                        <label class="btn btn-warning">
+                                                        <label class="btn btn-warning btn-disabled">
                                                             <input  type="radio"
                                                                     name="options"
                                                                     id="detailview_jira_server_type_option1"
                                                                     value="cloud"/>
                                                             클라우드
                                                         </label>
-                                                        <label class="btn btn-warning">
+                                                        <label class="btn btn-warning btn-disabled">
                                                             <input  type="radio"
                                                                     name="options"
                                                                     id="detailview_jira_server_type_option2"
@@ -444,7 +460,7 @@
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA BASE URL"
-                                                        required="required" />
+                                                        required="required" readonly/>
 <!--                                                <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													ex: X.X.X
@@ -468,7 +484,7 @@
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA SERVER CONNECT ID"
-                                                        required="required" />
+                                                        required="required" readonly/>
                                                 <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													지라 아이디
@@ -492,7 +508,7 @@
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA Pass or Token"
-                                                        required="required" />
+                                                        required="required" readonly/>
                                                 <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													암호 또는 토큰
@@ -557,22 +573,25 @@
                                                         <div    id="editview_jira_server_type"
                                                                 class="btn-group"
                                                                 data-toggle="buttons">
-                                                            <label class="btn btn-warning">
+                                                            <label class="btn btn-warning btn-disabled">
                                                                 <input  type="radio"
                                                                         name="options"
                                                                         id="editview_jira_server_type_option1"
                                                                         value="cloud"/>
                                                                 클라우드
                                                             </label>
-                                                            <label class="btn btn-warning">
+                                                            <label class="btn btn-warning btn-disabled">
                                                                 <input  type="radio"
                                                                         name="options"
                                                                         id="editview_jira_server_type_option2"
                                                                         value="on-premise"/>
                                                                 온프레미스
                                                             </label>
-                                                        </div>
+<!--                                                            <span class="input-group-addon font11">
+                                                    INFO: 서버 환경은 수정할 수 없습니다.
+                                                </span>-->
                                                     </div>
+
                                                 </div>
                                             </div>
                                             <div class="control-group">
@@ -592,8 +611,8 @@
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                             placeholder="JIRA BASE URL"
-                                                            required="required" />
-<!--                                                    <span class="input-group-addon font11">
+                                                            required="required" readonly/>
+<!--
 													<i class="fa fa-question-circle"></i>
 													ex: X.X.X
 												</span>-->
@@ -664,6 +683,21 @@
                                         </fieldset>
                                     </form>
                                 </div>
+                            </div>
+                            <div    id="related_project"
+                                    class="tab-pane"
+                                    style="padding-top: 30px !important">
+                                <table class="display"
+                                       id="jira_project_tabble"
+                                       style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
+                                    <thead>
+                                        <tr>
+                                            <th>c_jira_name</th>
+                                            <th>c_desc</th>
+                                            <th>c_jira_key</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                             <div    id="dropdown1"
                                     class="tab-pane">
@@ -992,14 +1026,14 @@
                                     <div    id="extend_editview_jira_server_type"
                                             class="btn-group"
                                             data-toggle="buttons">
-                                        <label class="btn btn-warning">
+                                        <label class="btn btn-warning btn-disabled">
                                             <input  type="radio"
                                                     name="options"
                                                     id="extend_editview_jira_server_type_option1"
                                                     value="cloud"/>
                                             클라우드
                                         </label>
-                                        <label class="btn btn-warning">
+                                        <label class="btn btn-warning btn-disabled">
                                             <input  type="radio"
                                                     name="options"
                                                     id="extend_editview_jira_server_type_option2"
@@ -1007,6 +1041,7 @@
                                             온프레미스
                                         </label>
                                     </div>
+<!--                                    <span class="input-group-addon font11">INFO : 지라(서버) 환경은 수정할 수 없습니다.</span>-->
                                 </div>
                             </div>
                         </div>
@@ -1025,7 +1060,7 @@
                                         data-placement="top"
                                         data-original-title="jira_server_url"
                                         required="required"
-                                        placeholder="JIRA BASE URL" />
+                                        placeholder="JIRA BASE URL" readonly/>
                                 <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
                             </div>
                         </div>

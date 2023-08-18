@@ -71,11 +71,13 @@ function execDocReady() {
                 try {
                     // 카드 덱(서버 목록) 이니시에이터
                     makeJiraServerCardDeck();
+                    projectDataTable("");
                     clearInterval(waitCardDeck);
                 } catch (err) {
                     console.log("지라 서버 데이터 로드가 완료되지 않아서 초기화 재시도 중...");
                 }
             }, 313 /* milli */);
+
 
             // --- 에디터 설정 --- //
             var waitCKEDITOR = setInterval( function () {
@@ -102,6 +104,7 @@ function execDocReady() {
             popup_size_setting();
 
             popup_update_btn_click();
+
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -123,7 +126,7 @@ function makeJiraServerCardDeck() {
                 /////////////////// insert Card ///////////////////////
 
                 var obj = data.response;
-                console.log(obj);
+                //console.log(obj); console.log(typeof data.response);
                 draw_card_deck(obj);
             }
         },
@@ -177,7 +180,8 @@ function draw_card_deck(cardInfo) {
                         </div>
                     </div>
                     <!-- 값 가져와서 넣어줄 예정 -->
-                    <p class="font13 mt-1" style="margin-bottom: 0px;">ISSUE(배포/수집): 1(임시) / ${cardList[i].jiraIssueStatusEntities.length} <span class="badge bg-success-subtle text-success">65.00%(임시)</span></p>
+                    <p class="font13 mt-1" style="margin-bottom: 0px;">불러온 프로젝트 수: ${cardList[i].jiraProjectEntities.length}
+                    <span class="badge bg-success-subtle text-success" onclick="jira_renew('project',${cardList[i].c_id})">갱신하기</span></p>
                 </div>
                 <!--카드내용2-->
                 <div class="card-body top-border border-top">
@@ -206,9 +210,9 @@ function dataTableLoad() {
     var columnList = [
         { name: "c_id", title: "지라(서버) 아이디", data: "c_id", visible: false },
         {
-            name: "c_jira_server_name",
-            title: "지라(서버) 이름",
-            data: "c_title", //"c_jira_server_name"
+            name: "c_jira_name",
+            title: "프로젝트 이름",
+            data: "jiraProjectEntities",
             render: function (data, type, row, meta) {
                 if (type === "display") {
                     return '<label style="color: #a4c6ff">' + data + "</label>";
@@ -242,7 +246,6 @@ function dataTableLoad() {
     var buttonList = [];
 
     var jquerySelector = "#jira_connection_table"; //
-    //var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
     var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do"; // 사용 예정
     var jsonRoot = "response";
     var isServerSide = false;
@@ -290,8 +293,23 @@ function jiraServerCardClick(c_id) {
     })
         // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
         .done(function (json) {
+            //console.log(json); console.log(json.jiraProjectEntities);
 
-
+            //지라 프로젝트 데이터테이블
+            projectDataTable(json.jiraProjectEntities);
+            
+            //지라 프로젝트 갱신버튼 c_id 설정
+            $("#jira_project_renew_div").html("");
+            var renewProjectBtnHtml = `
+                <button type="button"
+                            id="jira_project_renew_btn"
+                            onClick="jira_renew('project', ${json.c_id})"
+                            class="btn btn-success btn-sm">
+                        프로젝트 갱신
+                </button>
+            `;
+            $("#jira_project_renew_div").html(renewProjectBtnHtml);
+            
             // Sender 설정
             var selectedHtml =
                 `<div class="chat-message">
@@ -462,7 +480,10 @@ function save_btn_click() {
     $("#regist_jira_server").click(function () {
         if($("#popup_editview_jira_server_name").val() !== "") { // 서버 이름
             if($("#popup_editview_jira_server_type input[name='options']:checked").val() !== undefined) { // 지라환경 선택여부
-
+                console.log("Base URL==> " + $("#popup_editview_jira_server_base_url").val());
+                console.log("c_jira_server_type==> " + $("#popup_editview_jira_server_type input[name='options']:checked").val());
+                console.log("c_jira_server_connect_id==> " + $("#popup_editview_jira_server_connect_id").val());
+                console.log("c_jira_server_connect_pw==> " + $("#popup_editview_jira_pass_token").val());
                 $.ajax({
                     url: "/auth-user/api/arms/jiraServer/addJiraServerNode.do",
                     type: "POST",
@@ -520,8 +541,8 @@ function update_btn_click(){
                 c_id: selectId,
                 c_title: $("#editview_jira_server_name").val(),
                 c_jira_server_name: $("#editview_jira_server_name").val(),
-                c_jira_server_base_url: $("#editview_jira_server_base_url").val(),
-                c_jira_server_type: $("#editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+//                c_jira_server_base_url: $("#editview_jira_server_base_url").val(),
+//                c_jira_server_type: $("#editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
                 c_jira_server_connect_id: $("#editview_jira_server_connect_id").val(),
                 c_jira_server_connect_pw: $("#editview_jira_pass_token").val(),
                 c_jira_server_contents: CKEDITOR.instances.input_jira_server_editor.getData()
@@ -550,8 +571,8 @@ function popup_update_btn_click() {
                 c_id: selectId,
                 c_title: $("#extend_editview_jira_server_name").val(),
                 c_jira_server_name: $("#extend_editview_jira_server_name").val(),
-                c_jira_server_base_url: $("#extend_editview_jira_server_base_url").val(),
-                c_jira_server_type: $("#extend_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+//                c_jira_server_base_url: $("#extend_editview_jira_server_base_url").val(),
+//                c_jira_server_type: $("#extend_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
                 c_jira_server_connect_id: $("#extend_editview_jira_server_connect_id").val(),
                 c_jira_server_connect_pw: $("#editview_jira_pass_token").val(),
                 c_jira_server_contents: CKEDITOR.instances.extend_modal_editor.getData()
@@ -612,6 +633,7 @@ function tab_click_event() {
             $("#jira_server_details_popup_div").addClass("hidden");
             $("#jira_server_update_div").addClass("hidden");
             $("#jira_server_delete_div").removeClass("hidden");
+            $("#jira_project_renew_div").addClass("hidden");
 
             $(".body-middle").hide();
 
@@ -622,17 +644,41 @@ function tab_click_event() {
             $("#jira_server_details_popup_div").addClass("hidden");
             $("#jira_server_update_div").removeClass("hidden");
             $("#jira_server_delete_div").addClass("hidden");
-
-        } else {
+            $("#jira_project_renew_div").addClass("hidden");
+        } else if (target == "#related_project") {
+            $("#jira_server_details_popup_div").addClass("hidden");
+            $("#jira_server_update_div").addClass("hidden");
+            $("#jira_server_delete_div").addClass("hidden");
+            $("#jira_project_renew_div").removeClass("hidden");
+        } else { // 상세보기, 처음화면
             $("#jira_server_details_popup_div").removeClass("hidden");
             $("#jira_server_update_div").addClass("hidden");
             $("#jira_server_delete_div").addClass("hidden");
-
+            $("#jira_project_renew_div").addClass("hidden");
             if (selectId == undefined) {
                 $(".body-middle").hide();
             } else {
                 $(".body-middle").show();
             }
         }
+    });
+}
+
+// 갱신 버튼 (예상: all, project, issueType, issuePriority, issueResolution, issueStatus 등..)
+function jira_renew(renewJiraType, serverId) { // 서버 c_id
+    if (serverId == undefined) { serverId = "서버 아이디 정보 없음"; }
+    if (renewJiraType === undefined) { renewJiraType = "갱신할 지라 타입 없음"; }
+   console.log("갱신버튼을 눌렀습니다. 갱신할 종류(서버아이디) : " + renewJiraType+"("+serverId+")");
+}
+
+function projectDataTable(data) {
+    $("#jira_project_tabble").DataTable({
+        data: data,
+        columns: [
+            { data: "c_jira_name", title:"프로젝트 이름"},
+            { data: "c_jira_key", title:"프로젝트 키"},
+            { data: "c_desc", title:"프로젝트 아이디"}
+        ],
+        destroy: true, // 다시 불러올때 초기화
     });
 }
