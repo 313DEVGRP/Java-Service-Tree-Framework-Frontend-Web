@@ -759,7 +759,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			}, 1500);
 
 			$(jQueryElementID).slimscroll({
-				height: "335px"
+				height: "270px"
 			});
 		});
 
