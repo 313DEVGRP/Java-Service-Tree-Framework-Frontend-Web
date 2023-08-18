@@ -757,6 +757,10 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			setTimeout(function () {
 				$(jQueryElementID).jstree("open_all");
 			}, 1500);
+
+			$(jQueryElementID).slimscroll({
+				height: "335px"
+			});
 		});
 
 	$("#mmenu input, #mmenu button").click(function () {
