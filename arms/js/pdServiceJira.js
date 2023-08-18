@@ -533,8 +533,6 @@ function setdata_for_multiSelect() {
 			console.log("always call");
 		});
 
-	//slim scroll
-	$(".ms-list").slimscroll();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -565,6 +563,9 @@ function buildMultiSelect() {
 					return false;
 				}
 			});
+
+			//slim scroll
+			$(".ms-list").slimscroll();
 		},
 		afterSelect: function (value, text) {
 			this.qs1.cache();
