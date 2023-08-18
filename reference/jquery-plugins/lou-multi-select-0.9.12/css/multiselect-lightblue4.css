@@ -71,7 +71,7 @@
 
 .ms-container .ms-selectable li.ms-elem-selectable,
 .ms-container .ms-selection li.ms-elem-selection{
-    padding: 5px 2px 5px 2px;
+    padding: 10px 2px 10px 2px;
     color: #f8f8f8;
     font-size: 12px;
     text-align: left;

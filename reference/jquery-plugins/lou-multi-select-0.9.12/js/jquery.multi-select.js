@@ -108,7 +108,7 @@
           attributes += attr.name+'="'+attr.value+'" ';
         }
       }
-      var selectableLi = $('<li '+attributes+'><span>'+that.escapeHTML($option.text())+'</span></li>'),
+      var selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-check\" style=\"color: #e49400;\"></span> '+that.escapeHTML($option.text())+'</span></li>'),
           selectedLi = selectableLi.clone(),
           value = $option.val(),
           elementId = that.sanitize(value);
