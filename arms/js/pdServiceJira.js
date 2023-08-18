@@ -569,7 +569,7 @@ function buildMultiSelect() {
 				//size: '8px',
 				//width: '100%',
 				//height: 'fit-content',
-				height: "490px"
+				height: "450px"
 				//color: '#ff4800',
 				//allowPageScroll: true,
 				//alwaysVisible: false,
