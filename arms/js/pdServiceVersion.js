@@ -396,7 +396,6 @@ function dataLoad(getSelectedText, selectedText) {
 			// 상세보기
 			selectVersion = json.pdServiceVersionEntities[0].c_id;
 			$("#pdservice_name").val(selectedText);
-			$("#pdservice_version").val(json.pdServiceVersionEntities[0].c_title);
 
 			$("#version_start_date").val(json.pdServiceVersionEntities[0].c_start_date);
 			$("#version_end_date").val(json.pdServiceVersionEntities[0].c_end_date);
