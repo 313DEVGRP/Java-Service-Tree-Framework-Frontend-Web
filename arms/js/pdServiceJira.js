@@ -336,8 +336,7 @@ function versionClicks(element, c_id, c_title) {
 						</span>
 					</div>
 				</div>
-			</div>
-			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+			</div>`;
 	console.log("dataLoad :: coloredTitleHtml - >", coloredTitleHtml);
 
 	$(".list-item").html(coloredTitleHtml);
@@ -623,8 +622,7 @@ function pdServiceDataTableClick(c_id) {
 				`
 				</span>
 				</div>
-				</div>
-				<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+				</div>`;
 
 			$(".list-group-item").html(selectedHtml);
 
