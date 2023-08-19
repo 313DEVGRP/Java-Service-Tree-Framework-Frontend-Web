@@ -194,14 +194,15 @@ function dataLoad(getSelectedText, selectedText) {
 		$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
 
 		var selectedHtml =
-			` <div class="chat-message">
+			` 
+ 			<div class="chat-message">
 				<div    class="chat-message-body"
-						style="margin-left: 0px !important;   border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
+						style="margin-left: 0px !important; padding:!important;  border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
 					 <span  id="toRight"
 							class="arrow"
 							style="top: 10px !important; right: -7px; border-top: 5px solid transparent;
 							border-bottom: 5px solid transparent;
-							border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
+							border-left: 5px solid #e5603b; border-right: 0px; left:unset;"></span>
 					<span   class="arrow"
 							style="top: 10px !important; border-right: 5px solid #a4c6ff;"></span>
 					<div    class="sender"
@@ -212,11 +213,12 @@ function dataLoad(getSelectedText, selectedText) {
 						</span>
 					</div>
 				</div>
-			</div>`;
+			</div>
+			`;
 
 		$(".list-group-item").html(selectedHtml);
 
-  		$("#tooltip_enabled_service_name").val(selectedText);
+		$("#tooltip_enabled_service_name").val(selectedText);
 
 
 		//updateD3ByVersionList();
@@ -448,7 +450,7 @@ function connect_pdservice_jira(){
 					console.log('multiselect data -> ' + JSON.stringify($("#multiselect").val()));
 
 				});
- 		} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
+		} else if ($("#pdservice_connect").hasClass("btn-success") == true) {
 			// data가 이미 있음
 			$.ajax({
 				url: "/auth-user/api/arms/globaltreemap/setConnectInfo/pdService/pdServiceVersion/jiraProject.do",
@@ -603,16 +605,26 @@ function pdServiceDataTableClick(c_id) {
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
 			$("#detailview_pdservice_name").val(json.c_title);
+
 			var selectedHtml =
-				`<div class="chat-message">
-				<div class="chat-message-body" style="margin-left: 0px !important; ">
-					<span class="arrow" style="top: 35% !important;"></span>
-					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
-				<span class="text" style="color: #a4c6ff;">
-				` + json.c_title +
-				`
-				</span>
-				</div>
+				` <div class="chat-message">
+					<div    class="chat-message-body"
+							style="margin-left: 0px !important; padding:!important;  border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
+						 <span  id="toRight"
+								class="arrow"
+								style="top: 10px !important; right: -7px; border-top: 5px solid transparent;
+								border-bottom: 5px solid transparent;
+								border-left: 5px solid #e5603b; border-right: 0px; left:unset;"></span>
+						<span   class="arrow"
+								style="top: 10px !important; border-right: 5px solid #a4c6ff;"></span>
+						<div    class="sender"
+								style="padding-bottom: 5px; padding-top: 5px">
+							선택된 제품(서비스) :
+							<span style="color: #a4c6ff;">
+								` + json.c_title + `
+							</span>
+						</div>
+					</div>
 				</div>`;
 
 			$(".list-group-item").html(selectedHtml);
