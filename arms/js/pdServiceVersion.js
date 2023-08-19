@@ -362,26 +362,28 @@ function dataLoad(getSelectedText, selectedText) {
 		//version text setting
 
 		var selectedHtml =
-			`<div class="chat-message">
-				<div class="chat-message-body" style="margin-left: 0px !important;">
-					<span class="arrow"></span>
-					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </div>
-				<div class="text" style="color: #a4c6ff;">
-			` +
-			selectedText +
-			`
+			` 
+			<div class="chat-message">
+				<div    class="chat-message-body"
+						style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important; border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
+					 <span  id="toRight"
+							class="arrow"
+							style=" top: 10px !important; right: -7px; border-top: 5px solid transparent;
+							border-bottom: 5px solid transparent;
+							border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
+					<span   class="arrow"
+							style="top: 10px !important; border-right: 5px solid #a4c6ff;"></span>
+					<div    class="sender"
+							style="padding-bottom: 5px; padding-top: 5px">
+						선택된 제품(서비스) :
+						<span   id="select_Service"
+								style="color: #a4c6ff">
+								선택되지 않음
+						</span>
+					</div>
 				</div>
 			</div>
-			</div>
-<!--			<button type="button"
-					class="btn btn-primary btn-block btn-sm"
-					id="modal_popup_id"
-					data-toggle="modal"
-					data-target="#my_modal2"
-					style="margin-bottom: 10px !important; margin-top: 10px;"
-					onClick="modalPopup('modal_popup_id')">
-					신규 버전 등록하기
-			</button>-->
+ 
 			`;
 		//<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>
 
@@ -499,6 +501,7 @@ function draw(main, menu) {
 //2. 편집하기 데이터 바인딩
 ////////////////////////////////////////////////////////////////////////////////////////
 function versionClick(element, c_id) {
+	console.log("versionClick:: c_id  -> ", c_id);
 	$("a[name='versionLink_List']").each(function () {
 		this.style.background = "";
 	});
