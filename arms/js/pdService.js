@@ -624,7 +624,7 @@ function pdServiceDataTableClick(c_id) {
 				</span>
 				</div>
 				</div>
-				<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+				 `;
 
 			$(".list-group-item").html(selectedHtml);
 
