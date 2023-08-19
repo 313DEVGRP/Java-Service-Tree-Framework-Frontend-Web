@@ -368,7 +368,7 @@ function dataLoad(getSelectedText, selectedText) {
 						style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important; border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
 					 <span  id="toRight"
 							class="arrow"
-							style=" top: 10px !important; right: -7px; border-top: 5px solid transparent;
+							style="top: 10px !important; right: -7px; border-top: 5px solid transparent;
 							border-bottom: 5px solid transparent;
 							border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
 					<span   class="arrow"
@@ -378,13 +378,11 @@ function dataLoad(getSelectedText, selectedText) {
 						선택된 제품(서비스) :
 						<span   id="select_Service"
 								style="color: #a4c6ff">
-								선택되지 않음
+								 ` + selectedText + `
 						</span>
 					</div>
 				</div>
-			</div>
- 
-			`;
+			</div>`;
 		//<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>
 
 		$(".list-group-item").html(selectedHtml);
