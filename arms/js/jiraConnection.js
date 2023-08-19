@@ -297,7 +297,7 @@ function jiraServerCardClick(c_id) {
 
             //지라 프로젝트 데이터테이블
             projectDataTable(json.jiraProjectEntities);
-            
+
             //지라 프로젝트 갱신버튼 c_id 설정
             $("#jira_project_renew_div").html("");
             var renewProjectBtnHtml = `
@@ -309,7 +309,7 @@ function jiraServerCardClick(c_id) {
                 </button>
             `;
             $("#jira_project_renew_div").html(renewProjectBtnHtml);
-            
+
             // Sender 설정
             var selectedHtml =
                 `<div class="chat-message">
@@ -322,7 +322,7 @@ function jiraServerCardClick(c_id) {
 				</span>
 				</div>
 				</div>
-				<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
+				`;
 
             $(".list-group-item").html(selectedHtml);
 
