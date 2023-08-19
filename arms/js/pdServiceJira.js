@@ -513,20 +513,20 @@ function setdata_for_multiSelect() {
 				var obj = data[k];
 				var jira_name = obj.c_title;
 				var jira_idx = obj.c_id;
-				var jira_type = obj.c_type;
 				console.log("jira_name::: " + jira_name);
 				console.log("jira_idx::: " + jira_idx);
 				console.log("optionData::" + optionData);
 				//optionData.push("<option value='" + jira_idx + "'>" + jira_name + "</option>");
-				if (jira_type === 'default') {  // 현재 클라우드 온프라미스 둘다  default type 으로 되어있음, 변경예정
-					console.log("default log ");
-					// cloud
-					optionData.push(`<option class="glyphicon glyphicon-cloud" style="font-size: 18px;" value="${jira_idx}"> ${jira_name}</option>`);
-				}else{
-					// onprimise
-					optionData.push(`<option class="glyphicon glyphicon-asterisk" style="font-size: 18px;" value="${jira_idx}"> ${jira_name}</option>`);
-				}
+				// if (jira_type === 'default') {  // 현재 클라우드 온프라미스 둘다  default type 으로 되어있음, 변경예정
+				// 	console.log("default log ");
+				// 	// cloud
+				// 	optionData.push(`<option class="glyphicon glyphicon-cloud" style="font-size: 18px;" value="${jira_idx}"> ${jira_name}</option>`);
+				// }else{
+				// 	// onprimise드
+				// 	optionData.push(`<option class="glyphicon glyphicon-asterisk" style="font-size: 18px;" value="${jira_idx}"> ${jira_name}</option>`);
+				// }
 			}
+
 			$(".searchable").html(optionData.join(""));
 
 			////////////////////////////////////////////////
