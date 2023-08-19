@@ -194,36 +194,27 @@ function dataLoad(getSelectedText, selectedText) {
 		$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
 
 		var selectedHtml =
-			`<div class="chat-message">
-				<div class="chat-message-body" style="margin-left: 0px !important; border-left: 2px solid #e5603b;  ">
-					<span 	class="arrow" 
-							style="top: 17px !important; border-right: 5px solid #e5603b;">
-					</span>
-					<span   id="toRight"
+			` <div class="chat-message">
+				<div    class="chat-message-body"
+						style="margin-left: 0px !important;   border-left: 2px solid #a4c6ff; border-right: 2px solid #e5603b;">
+					 <span  id="toRight"
 							class="arrow"
-							style=" top: 17px !important; 
-									right: -7px; 
-									border-top: 5px solid transparent;
-									border-bottom: 5px solid transparent;
-									border-left: 5px solid none;
-									border-right: 0px; 
-									left:unset;">
-					</span>
-					<div class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 제품(서비스) : 
+							style="top: 10px !important; right: -7px; border-top: 5px solid transparent;
+							border-bottom: 5px solid transparent;
+							border-left: 5px solid #e5603b;border-right: 0px; left:unset;"></span>
+					<span   class="arrow"
+							style="top: 10px !important; border-right: 5px solid #a4c6ff;"></span>
+					<div    class="sender"
+							style="padding-bottom: 5px; padding-top: 5px">
+						선택된 제품(서비스) :
 						<span style="color: #a4c6ff;">
-						` +  selectedText + `
+							` +  selectedText + `
 						</span>
 					</div>
 				</div>
-			</div>
-			<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>`;
-		// console.log("dataLoad :: selectedText - >", selectedText);
+			</div>`;
 
 		$(".list-group-item").html(selectedHtml);
-
-		//test // 	$("#pdservice_connect").removeClass("btn-success");
-
-
 
   		$("#tooltip_enabled_service_name").val(selectedText);
 
@@ -614,7 +605,7 @@ function pdServiceDataTableClick(c_id) {
 			$("#detailview_pdservice_name").val(json.c_title);
 			var selectedHtml =
 				`<div class="chat-message">
-				<div class="chat-message-body" style="margin-left: 0px !important;">
+				<div class="chat-message-body" style="margin-left: 0px !important; ">
 					<span class="arrow" style="top: 35% !important;"></span>
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
 				<span class="text" style="color: #a4c6ff;">
