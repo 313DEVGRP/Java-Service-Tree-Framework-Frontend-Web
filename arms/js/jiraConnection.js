@@ -155,9 +155,10 @@ function draw_card_deck(cardInfo) {
     } else { // 카드 있음 (등록된 서버 있음)
         for (let i = 0; i < cardList.length; i++) {
             let insertImage = '';
-            if (cardList[i].c_jira_server_type == 'cloud') {
+            if (cardList[i].c_jira_server_type == '클라우드') {
                 insertImage = `<img src="./img/jira/mark-gradient-white-jira.svg" width="30px" style=""></img>`;
-            } else {
+            }
+            if (cardList[i].c_jira_server_type == '온프라미스') {
                 insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
             }
 
@@ -180,8 +181,14 @@ function draw_card_deck(cardInfo) {
                         </div>
                     </div>
                     <!-- 값 가져와서 넣어줄 예정 -->
-                    <p class="font13 mt-1" style="margin-bottom: 0px;">불러온 프로젝트 수: ${cardList[i].jiraProjectEntities.length}
-                    <span class="badge bg-success-subtle text-success" onclick="jira_renew('project',${cardList[i].c_id})">갱신하기</span></p>
+                    <p class="font13 mt-1" style="margin-bottom: 0px;">
+                        <span calss="card-detail1">불러온 프로젝트 수: ${cardList[i].jiraProjectEntities.length}</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('project',${cardList[i].c_id})">프로젝트</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('issueType',${cardList[i].c_id})">이슈타입</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('issuePriority',${cardList[i].c_id})">이슈우선순위</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('issueResolution',${cardList[i].c_id})">이슈해결책</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('issueStatus',${cardList[i].c_id})">이슈상태</span>
+                    </p>
                 </div>
                 <!--카드내용2-->
                 <div class="card-body top-border border-top">
@@ -293,7 +300,7 @@ function jiraServerCardClick(c_id) {
     })
         // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
         .done(function (json) {
-            //console.log(json); console.log(json.jiraProjectEntities);
+            console.log(json); //console.log(json.jiraProjectEntities);
 
             //지라 프로젝트 데이터테이블
             projectDataTable(json.jiraProjectEntities);
@@ -680,5 +687,6 @@ function projectDataTable(data) {
             { data: "c_desc", title:"프로젝트 아이디"}
         ],
         destroy: true, // 다시 불러올때 초기화
+        lengthChange:false
     });
 }
