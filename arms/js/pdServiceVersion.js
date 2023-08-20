@@ -383,10 +383,11 @@ function dataLoad(getSelectedText, selectedText) {
 					</div>
 				</div>
 			</div>`;
-		//<div class="gradient_bottom_border" style="width: 100%; height: 2px; padding-top: 10px;"></div>
 
 		$(".list-group-item").html(selectedHtml);
+
 		$("#select_PdService").text(selectedText); // sender 이름 바인딩
+
 
 		$("#tooltip_enabled_service_name").val(selectedText);
 
@@ -430,7 +431,8 @@ function init_versionList() {
 			draw($(this), menu);
 		} else if (action == "set") {
 			menu = items;
-			draw($(this), menu);
+			// $("#select_Version").text(items[0].c_title);  // 로드시 첫번째 버전
+ 			draw($(this), menu);
 		}
 		return this;
 	};
@@ -465,7 +467,7 @@ function draw(main, menu) {
 					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
 					   			name="versionLink_List"
-					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer; background: rgba(229, 96, 59, 0.20);"
+					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;  "
 					   			onclick="versionClick(this, ${menu[i].c_id});
 					   			return false;">
 						   ${menu[i].c_title}
@@ -502,7 +504,7 @@ function versionClick(element, c_id) {
 	$("a[name='versionLink_List']").each(function () {
 		this.style.background = "";
 	});
-	element.style.background = "rgba(229, 96, 59, 0.20)";
+	element.style.background = "rgba(229, 96, 59, 0.3)";
 	console.log(element);
 
 	selectVersion = c_id;
