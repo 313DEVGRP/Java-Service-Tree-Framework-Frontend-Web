@@ -1623,8 +1623,15 @@ function change_tab_action() {
 			$(".view_btn_group").addClass("hidden");
 			$(".newReqDiv").show();
 			$(".edit_btn_group").addClass("hidden");
+		}else if (target == "#doc") {
+			// $(".newReqDiv").hide();
+			// $(".view_btn_group").addClass("hidden");
+			$(".view_btn_group").removeClass("hidden");
+			$(".edit_btn_group").addClass("hidden");
+			$(".jira_btn_group").addClass("hidden");
+			$(".newReqDiv").hide();
 
-		}else if (target == "#history") {
+		} else if (target == "#history") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
