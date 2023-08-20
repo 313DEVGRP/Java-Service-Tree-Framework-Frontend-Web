@@ -185,7 +185,7 @@ function makePdServiceSelectBox() {
 		var selectedService = $("#selected_pdService").select2("data")[0].text;
 
 		$("#select_PdService").text(selectedService);
-		$("#select_Service").text(selectedService);
+		$("#select_Service").text(selectedService);   // 선택된 제품(서비스)
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
 		//서비스(어플리케이션) 트리 로드
 		build_ReqData_By_PdService();
@@ -1550,11 +1550,14 @@ function click_btn_for_search_history() {
 function change_tab_action() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
+// 		$("#req_content").removeClass("btn-success");
+// 			$("#req_content").addClass("btn-primary");
 
 		if (target == "#stats") {
 			$(".view_btn_group").removeClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
+
 		} else if (target == "#edit") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").removeClass("hidden");
@@ -1563,7 +1566,6 @@ function change_tab_action() {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
-
 			console.log("jira tab click event");
 			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#selected_pdService').val()
 			//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
@@ -1610,7 +1612,10 @@ function change_tab_action() {
 				})
 				.fail(function (e) {})
 				.always(function () {});
-		} else if (target == "#history") {
+		} else if (target == "#report") {
+			$(".view_btn_group").addClass("hidden");
+			$(".newReqDiv").show();
+		}else if (target == "#history") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
