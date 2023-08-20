@@ -1557,15 +1557,21 @@ function change_tab_action() {
 			$(".view_btn_group").removeClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
+			$(".newReqDiv").hide();
+
 
 		} else if (target == "#edit") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").removeClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
+			$(".newReqDiv").hide();
+
 		} else if (target == "#jira") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
+			$(".newReqDiv").hide();
+
 			console.log("jira tab click event");
 			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#selected_pdService').val()
 			//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
@@ -1615,10 +1621,14 @@ function change_tab_action() {
 		} else if (target == "#report") {
 			$(".view_btn_group").addClass("hidden");
 			$(".newReqDiv").show();
+			$(".edit_btn_group").addClass("hidden");
+
 		}else if (target == "#history") {
 			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
+			$(".newReqDiv").hide();
+
 		}
 	});
 }
