@@ -110,6 +110,7 @@
 					    style="padding-bottom: 10px; border: 0">
 					<div    class="controls form-group darkBack"
 						    style="margin-bottom: 15px !important">
+                        <!--  select proeduct list-->
 						<select id="selected_pdService"
                                 required="required"
                                 data-placeholder="Select Product(Service)"
@@ -261,6 +262,16 @@
                             class="btn btn-warning btn-sm">
                         팝업 창으로 요구사항 내용 보기
                     </button>
+                </div>
+                <div    style="float: right;   border: 1px solid #0b67ff !important"
+                        class="newReqDiv darkBack">
+                    <label  id="new_req_regist02"
+                            class="btn btn-primary btn-transparent btn-sm active"
+                            data-target="#my_modal1"
+                            data-toggle="modal"
+                            style="width: 100%; background-color: #2477ff !important">
+                        a-RMS의 신규 요구사항 등록하기
+                    </label>
                 </div>
                 <div style="float: right"
                      class="edit_btn_group hidden">
@@ -571,10 +582,9 @@
 												    style="padding-top: 7px">
                                             </div>
 										</div>
-									</fieldset>
+                                    </fieldset>
 								</form>
 							</div>
-
 							<div    id="edit"
 								    class="tab-pane"
 								    style="padding-top: 10px !important">
@@ -834,17 +844,7 @@
 							<div    id="report"
 								    class="tab-pane"
 								    style="padding-top: 10px !important">
-								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"
-									    class="newReqDiv darkBack">
-									<label  id="new_req_regist02"
-                                            class="btn btn-primary btn-transparent btn-sm active"
-                                            data-target="#my_modal1"
-                                            data-toggle="modal"
-                                            style="width: 100%; background-color: #2477ff !important">
-										    a-RMS의 신규 요구사항 등록하기
-									</label>
-								</div>
-								<table  class="display"
+                                <table  class="display"
                                         id="req_table"
                                         style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
 									<thead>
@@ -859,16 +859,16 @@
 							<div    id="doc"
                                     class="tab-pane"
                                     style="padding-top: 10px !important">
-								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"
-                                        class="newReqDiv darkBack">
-									<label  id="new_req_regist03"
-                                            class="btn btn-primary btn-transparent btn-sm active"
-                                            data-target="#my_modal1"
-                                            data-toggle="modal"
-                                            style="width: 100%; background-color: #2477ff !important">
-										    a-RMS의 신규 요구사항 등록하기
-									</label>
-								</div>
+<!--								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"-->
+<!--                                        class="newReqDiv darkBack">-->
+<!--									<label  id="new_req_regist03"-->
+<!--                                            class="btn btn-primary btn-transparent btn-sm active"-->
+<!--                                            data-target="#my_modal1"-->
+<!--                                            data-toggle="modal"-->
+<!--                                            style="width: 100%; background-color: #2477ff !important">-->
+<!--										    a-RMS의 신규 요구사항 등록하기-->
+<!--									</label>-->
+<!--								</div>-->
 								<div class="col-md-12">
 									<div    class="dd"
 										    id="nestable1">
