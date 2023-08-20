@@ -98,6 +98,7 @@ function execDocReady() {
 						if (window.CKEDITOR.status == "loaded") {
 							CKEDITOR.replace("modal_editor", { skin: "prestige" });
 							CKEDITOR.replace("edit_tabmodal_editor", { skin: "prestige" });
+							CKEDITOR.replace("detailview_req_contents", { skin: "prestige" });
 							clearInterval(waitCKEDITOR);
 						}
 					}
