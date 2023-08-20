@@ -140,6 +140,7 @@ function dataTableLoad() {
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
+	$("#version_contents").html("");  //// 버전 상세 명세 초기화
 
 	selectedIndex = selectedData.selectedIndex;
 	selectedPage = selectedData.selectedPage;
@@ -150,7 +151,6 @@ function dataTableClick(tempDataTable, selectedData) {
 	// console.log("selectedIndex:::::" + selectedIndex);
 	// console.log("dataTableClick:: dataTableClick -> " + selectedData.c_id);
 
-	$("#version_contents").html("");
 
 	$(".searchable").multiSelect("deselect_all");  // // 멀티셀렉트에서 모든 선택 해제
 	$("#pdservice_connect").removeClass("btn-success");
@@ -219,6 +219,7 @@ function dataLoad(getSelectedText, selectedText) {
 		$(".list-group-item").html(selectedHtml);
 
 		$("#tooltip_enabled_service_name").val(selectedText);
+		// $("#select_PdService").text(selectedText); // sender 이름 바인딩
 
 
 		//updateD3ByVersionList();
@@ -299,10 +300,17 @@ function draw(main, menu) {
 //버전 클릭할 때 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function versionClicks(element, c_id, c_title) {
+	$("a[name='versionLink_List']").each(function () {
+		this.style.background = "";
+	});
+	if (element == null) {
+		console.log("element is empty");
+	} else {
+		element.style.background = "rgba(229, 96, 59, 0.3)";
+		console.log("element is = " + element);
+	}
+
 	selectVersion = c_id;  // version c_id
-	// console.log("versionClick:: c_id  -> ", c_id);
-	// console.log("versionClick:: c_title  -> ", c_title);
-	// console.log("versionClick:: element  -> ", element);
 
 	var coloredTitleHtml =
 		`<div class="chat-message">
@@ -313,7 +321,7 @@ function versionClicks(element, c_id, c_title) {
 					 <div    class="sender"
 							style="padding-bottom: 5px; padding-top: 3px">
 						<i class="fa fa-check"></i>
-						선택된 제품
+							선택된 제품
 						<sup>서비스</sup> :
 						<span   id="select_PdService"
 								style="color: #a4c6ff">
@@ -334,20 +342,14 @@ function versionClicks(element, c_id, c_title) {
 
 	$(".list-item").html(coloredTitleHtml);
 
-	$("a[name='versionLink_List']").each(function () {
-		this.style.background = "";
-	});
+	// $("#select_Version").text(c_title);
 
 
-	if (element == null) {
-		console.log("element is empty");
-	} else {
-		element.style.background = "rgba(229, 96, 59, 0.20)";
-		console.log("element is = " + element);
-	}
+
+
+
 	console.log("click :: C_ID ->  " + c_id);
-
-	$(".searchable").multiSelect("deselect_all");  //선택된 항목들을 모두 선택 해제(해당 요소들에서 선택을 없애는)하는 코드
+ 	$(".searchable").multiSelect("deselect_all");  //선택된 항목들을 모두 선택 해제(해당 요소들에서 선택을 없애는)하는 코드
 	// console.log("pdservice_link -> " +   $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id);
 	// console.log("pdserviceversion_link -> " +  c_id );
 
@@ -383,9 +385,6 @@ function versionClicks(element, c_id, c_title) {
 				console.table(obj);
 				console.log("push obj.jiraproject_link :: => " + obj.jiraproject_link);
 
-				//var jira_name = obj.c_title;
-				// selectConnectID = obj.c_id;
-				// console.log("selectConnectID: " + selectConnectID);
 				multiSelectData.push(obj.jiraproject_link);
 				console.log("push jiraproject :: => " + multiSelectData.push(obj.jiraproject_link));
 
@@ -627,7 +626,9 @@ function pdServiceDataTableClick(c_id) {
 					</div>
 				</div>`;
 
-			$(".list-group-item").html(selectedHtml);
+ 			$(".list-group-item").html(selectedHtml);
+			// $("#select_Version").text(json.c_title);
+
 
 			$("#detailview_pdservice_name").val(json.c_title);
 			if (isEmpty(json.c_pdservice_owner) || json.c_pdservice_owner == "none") {
