@@ -89,7 +89,46 @@
             </div>
             <div   id="jira_server_app"
                    class="">
-                    <div class="card-body mb-2 ta-center"><h4>지라 서버 목록</h4></div>
+<!--                    <div class="card-body mb-2 ta-center"><h4>지라 서버 목록</h4></div>-->
+                <!-- -->
+                <div class="widget">
+                    <div id="carousel-example-generic" class="carousel slide" style="padding-bottom: 30px;">
+
+                        <ol class="carousel-indicators outer " style="background-color: #0b67ff" >
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                        </ol>
+
+                        <div class="carousel-inner text-align-center"  style=" margin-bottom: 10px; background-color: #0AB39C; display: flex; flex-direction: row;">
+
+                            <div style="flex:1" class="item active">
+                                <h4 class="no-margin" >지라 서버 목록</h4>
+                                <p><small></small></p>
+                            </div>
+                            <!--                            <div class="item">-->
+                            <!--                                <h4 class="no-margin"><em>Developer-friendly</em></h4>-->
+                            <!--                                <p><small>Simple & intuitive code</small></p>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="item">-->
+                            <!--                                <h4 class="no-margin"><em>Sass-powered</em></h4>-->
+                            <!--                                <p><small>Light Blue is really easy to customize</small></p>-->
+                            <!--                            </div>-->
+                            <div style="flex:1">
+                                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev" >
+                                    <i class="fa fa-angle-left" style="margin-top: 15px"></i>
+                                </a>
+                            </div>
+                            <div style="flex:1">
+                                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                    <i class="fa fa-angle-right" style="margin-top: 15px"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
                 <div id="jira_server_card_deck" class="jira_server_card" style="min-height: 100px; width: 100%">
 
                     <div class="card mb-2 ribbon-box ribbon-fill right hidden">
@@ -419,7 +458,7 @@
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 130px">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
+                                                    <i class="glyphicon glyphicon-globe"></i>
 												</span>
                                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
                                                     <div    id="detailview_jira_server_type"
@@ -452,7 +491,7 @@
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 100px">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
+													<i class="glyphicon glyphicon-share"></i>
 												</span>
                                                 <input  type="text"
                                                         id="detailview_jira_server_base_url"
@@ -500,7 +539,7 @@
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 100px">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
+													<i class="glyphicon glyphicon-indent-left"></i>
 												</span>
                                                 <input  type="text"
                                                         id="detailview_jira_pass_token"
@@ -516,16 +555,22 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label  class="control-label"
-                                                    style="margin-top: 10px">
+                                            <label  class="control-label">
                                                 제품(서비스) 컨텐츠 :
                                             </label>
-                                            <br />
-                                            <br />
-                                            <br />
-                                            <div    class="col-sm-12 darkBack"
-                                                    id="detailview_jira_server_contents"
-                                                    style="padding-top: 10px; padding-bottom: 10px"></div>
+<!--                                            <div    class="col-sm-12 darkBack"-->
+<!--                                                    id="detailview_jira_server_contents"-->
+<!--                                                    style="padding-top: 10px; padding-bottom: 10px">-->
+<!--                                                -->
+<!--                                            </div>-->
+                                            <div class="controls form-group">
+                                                <div    class="col-sm-12"
+                                                        style="padding-top: 10px">
+                                                    <div id="detailview_jira_server_contents" contenteditable="false">
+                                                        <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </fieldset>
                                 </form>
@@ -567,7 +612,7 @@
                                                 <div    class="controls form-group input-group"
                                                         style="margin-left: 130px">
 												    <span class="input-group-addon">
-													    <i class="glyphicon glyphicon-gift"></i>
+                                                        <i class="glyphicon glyphicon-globe"></i>
 												    </span>
                                                     <div style="display: flex; align-items: center; gap: 10px; padding: 0">
                                                         <div    id="editview_jira_server_type"
@@ -603,7 +648,7 @@
                                                 <div    class="controls form-group input-group"
                                                         style="margin-left: 100px">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
+													<i class="glyphicon glyphicon-share"></i>
 												</span>
                                                     <input  type="text"
                                                             id="editview_jira_server_base_url"
@@ -651,7 +696,7 @@
                                                 <div    class="controls form-group input-group"
                                                         style="margin-left: 100px">
 												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
+													<i class="glyphicon glyphicon-indent-left"></i>
 												</span>
                                                     <input  type="text"
                                                             id="editview_jira_pass_token"
@@ -815,7 +860,7 @@
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
                                 <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-gift"></i>
+                                    <i class="glyphicon glyphicon-globe"></i>
                                 </span>
                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
                                     <div    id="popup_editview_jira_server_type"
@@ -845,7 +890,7 @@
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
+									<i class="glyphicon glyphicon-share"></i>
 								</span>
                                 <input  type="text"
                                         id="popup_editview_jira_server_base_url"
@@ -883,7 +928,7 @@
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
+									<i class="glyphicon glyphicon-indent-left"></i>
 								</span>
                                 <input  type="text"
                                         id="popup_editview_jira_pass_token"
@@ -1020,7 +1065,7 @@
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
                                 <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-gift"></i>
+                                    <i class="glyphicon glyphicon-globe"></i>
                                 </span>
                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
                                     <div    id="extend_editview_jira_server_type"
@@ -1051,7 +1096,7 @@
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
+									<i class="glyphicon glyphicon-share"></i>
 								</span>
                                 <input  type="text"
                                         id="extend_editview_jira_server_base_url"
@@ -1089,7 +1134,7 @@
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
+									<i class="glyphicon glyphicon-indent-left"></i>
 								</span>
                                 <input  type="text"
                                         id="extend_editview_jira_pass_token"
