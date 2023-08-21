@@ -4,7 +4,7 @@
 var selectId;   // 선택한 서버 아이디
 var selectName; // 선택한 서버 이름 (c_title)
 var selectServerName; // 선택한 서버 이름 (c_jira_server_name )
-var selectServerType; // 선택한 서버 타입 (c_jira_server_type, cloud or on-premise)
+var selectServerType; // 선택한 서버 타입 (c_jira_server_type, 클라우드 or 온프레미스)
 
 var selectedIndex; // 데이터테이블 선택한 인덱스
 var selectedPage;  // 데이터테이블 선택한 인덱스
@@ -183,11 +183,11 @@ function draw_card_deck(cardInfo) {
                     <!-- 값 가져와서 넣어줄 예정 -->
                     <p class="font13 mt-1" style="margin-bottom: 0px;">
                         <span calss="card-detail1">불러온 프로젝트 수: ${cardList[i].jiraProjectEntities.length}</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('project',${cardList[i].c_id})">프로젝트</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('issueType',${cardList[i].c_id})">이슈타입</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('issuePriority',${cardList[i].c_id})">이슈우선순위</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('issueResolution',${cardList[i].c_id})">이슈해결책</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('issueStatus',${cardList[i].c_id})">이슈상태</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('프로젝트',${cardList[i].c_id})">프로젝트</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_타입',${cardList[i].c_id})">이슈타입</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_우선순위',${cardList[i].c_id})">이슈우선순위</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_해결책',${cardList[i].c_id})">이슈해결책</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_상태',${cardList[i].c_id})">이슈상태</span>
                     </p>
                 </div>
                 <!--카드내용2-->
@@ -337,7 +337,7 @@ function jiraServerCardClick(c_id) {
             $("#detailview_jira_server_name").val(json.c_title);
             $("#editview_jira_server_name").val(json.c_title);
 
-            if(json.c_jira_server_type === "cloud") {
+            if(json.c_jira_server_type === "클라우드") {
                 $("#detailview_jira_server_type_option1").parent().click();
                 $("#editview_jira_server_type_option1").parent().click();
             } else {
@@ -426,7 +426,7 @@ function popup_size_setting() {
         $("#extend_editview_jira_server_connect_id").val($("#editview_jira_server_connect_id").val());
         $("#extend_editview_jira_pass_token").val($("#editview_jira_pass_token").val());
 
-        if ( $("#editview_jira_server_type").find(".active input").val() === "cloud") {
+        if ( $("#editview_jira_server_type").find(".active input").val() === "클라우드") {
             $("#extend_editview_jira_server_type_option1").parent().click();
         } else {
             $("#extend_editview_jira_server_type_option2").parent().click();
@@ -451,7 +451,7 @@ function popup_size_setting() {
         $("#extend_editview_jira_server_connect_id").val($("#editview_jira_server_connect_id").val());
         $("#extend_editview_jira_pass_token").val($("#editview_jira_pass_token").val());
 
-        if ( $("#editview_jira_server_type").find(".active input").val() === "cloud") {
+        if ( $("#editview_jira_server_type").find(".active input").val() === "클라우드") {
             $("#extend_editview_jira_server_type_option1").parent().click();
         } else {
             $("#extend_editview_jira_server_type_option2").parent().click();
@@ -500,7 +500,7 @@ function save_btn_click() {
                         c_type: "default",
                         c_jira_server_name: $("#popup_editview_jira_server_name").val(),
                         c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
-                        c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+                        c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //클라우드, on-premise
                         c_jira_server_connect_id: $("#popup_editview_jira_server_connect_id").val(),
                         c_jira_server_connect_pw: $("#popup_editview_jira_pass_token").val(),
                         c_jira_server_contents: CKEDITOR.instances.modal_editor.getData()
@@ -549,7 +549,7 @@ function update_btn_click(){
                 c_title: $("#editview_jira_server_name").val(),
                 c_jira_server_name: $("#editview_jira_server_name").val(),
 //                c_jira_server_base_url: $("#editview_jira_server_base_url").val(),
-//                c_jira_server_type: $("#editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+//                c_jira_server_type: $("#editview_jira_server_type input[name='options']:checked").val(), //클라우드, on-premise
                 c_jira_server_connect_id: $("#editview_jira_server_connect_id").val(),
                 c_jira_server_connect_pw: $("#editview_jira_pass_token").val(),
                 c_jira_server_contents: CKEDITOR.instances.input_jira_server_editor.getData()
@@ -579,7 +579,7 @@ function popup_update_btn_click() {
                 c_title: $("#extend_editview_jira_server_name").val(),
                 c_jira_server_name: $("#extend_editview_jira_server_name").val(),
 //                c_jira_server_base_url: $("#extend_editview_jira_server_base_url").val(),
-//                c_jira_server_type: $("#extend_editview_jira_server_type input[name='options']:checked").val(), //cloud, on-premise
+//                c_jira_server_type: $("#extend_editview_jira_server_type input[name='options']:checked").val(), //클라우드, on-premise
                 c_jira_server_connect_id: $("#extend_editview_jira_server_connect_id").val(),
                 c_jira_server_connect_pw: $("#editview_jira_pass_token").val(),
                 c_jira_server_contents: CKEDITOR.instances.extend_modal_editor.getData()
@@ -676,6 +676,24 @@ function jira_renew(renewJiraType, serverId) { // 서버 c_id
     if (serverId == undefined) { serverId = "서버 아이디 정보 없음"; }
     if (renewJiraType === undefined) { renewJiraType = "갱신할 지라 타입 없음"; }
    console.log("갱신버튼을 눌렀습니다. 갱신할 종류(서버아이디) : " + renewJiraType+"("+serverId+")");
+
+    if(renewJiraType === '이슈상태') { //임시 ajax 여기 넣기
+        $.ajax({
+            url: "/auth-user/api/arms/jiraServer/renewIssueStatus.do",
+            type: "put",
+            data: { c_id: serverId},
+            statusCode: {
+                200: function () {
+                    jSuccess(selectServerName + "의 데이터가 변경되었습니다.");
+                    console.log("현재 선택된 항목(c_id, 서버명) :" + selectId +", " + selectServerName);
+                    //데이터 테이블 데이터 재 로드
+                    makeJiraServerCardDeck();
+                    jiraServerCardClick(selectId);
+                }
+            }
+        });
+    }
+
 }
 
 function projectDataTable(data) {
