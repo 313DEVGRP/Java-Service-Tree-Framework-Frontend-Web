@@ -242,9 +242,10 @@ function click_btn_for_delete_version() {
 			},
 			statusCode: {
 				200: function () {
-					console.log("성공!");
+					console.log("삭제 성공!");
 					//모달 팝업 끝내고
 					$("#close_version").trigger("click");
+					$("#select_Version").text("선택되지 않음");
 					//버전 데이터 재 로드
 					dataLoad(selectId, selectName);
 				}
