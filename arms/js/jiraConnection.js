@@ -158,7 +158,7 @@ function draw_card_deck(cardInfo) {
             if (cardList[i].c_jira_server_type == '클라우드') {
                 insertImage = `<img src="./img/jira/mark-gradient-white-jira.svg" width="30px" style=""></img>`;
             }
-            if (cardList[i].c_jira_server_type == '온프라미스') {
+            if (cardList[i].c_jira_server_type == '온프레미스') {
                 insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
             }
 
