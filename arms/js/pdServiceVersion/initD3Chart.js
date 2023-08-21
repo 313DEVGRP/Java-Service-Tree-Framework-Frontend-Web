@@ -21,12 +21,15 @@
 // };
 function initD3Chart(href) {
     d3.json(href, function(error, data) {
+        console.log("==================================================================");
+        console.log("check href :: " + href);
 
-        d3.selectAll("#tree_container svg").remove();
+        d3.selectAll("#tree_container svg").remove();  //  그려진 트리 차트가 모두 제거
 
         var treeData = data.response;
-        console.log("initD3Chart treeData");
-        console.log(treeData);
+        console.log(JSON.stringify(treeData));
+        console.table(treeData);
+
         // Calculate total nodes, max label length
         var totalNodes = 0;
         var maxLabelLength = 0;
@@ -46,14 +49,17 @@ function initD3Chart(href) {
         var viewerHeight = 295;
 
         var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
+        console.log("tree layout :: " + tree);
 
         // define a d3 diagonal projection for use by the node paths later on.
         var diagonal = d3.svg.diagonal().projection(function(d) {
             return [d.y, d.x];
         });
+        console.log("tree diagonal :: " + diagonal);
 
         // A recursive helper function for performing some setup by walking through all nodes
-        function visit(parent, visitFn, childrenFn) {
+
+         function visit(parent, visitFn, childrenFn) {  // parent: 현재 방문 중인 노드, visitFn: 노드 방문시 실행 , childrenFn: 현재 노드의 자식 반환
             if (!parent) return;
 
             visitFn(parent);
@@ -68,12 +74,14 @@ function initD3Chart(href) {
         }
 
         // Call visit function to establish maxLabelLength
+        //visit():  트리 데이터를 순회하면서 각 노드를 방문합니다. treeData를 시작으로 각 노드를 visitFn으로 전달하여 totalNodes 변수를 증가시키고, maxLabelLength 변수를 업데이트합니다. maxLabelLength는 노드 이름의 최대 길이를 나타냅니다.
         visit(
             treeData,
             function(d) {
                 totalNodes++;
                 console.log("initD3Chart visit check d");
-                console.log(d);
+                // console.log(d);
+                console.table(d);
                 maxLabelLength = Math.max(d.name.length, maxLabelLength);
             },
             function(d) {
@@ -411,7 +419,7 @@ function initD3Chart(href) {
 
             // Set widths between levels based on maxLabelLength.
             nodes.forEach(function(d) {
-                d.y = d.depth * (maxLabelLength * 25); //maxLabelLength * 10px
+                d.y = d.depth * (maxLabelLength * 15); //maxLabelLength * 10px
                 // alternatively to keep a fixed scale one can set a fixed depth per level
                 // Normalize for fixed-depth by commenting out below line
                 // d.y = (d.depth * 500); //500px per level.
@@ -598,4 +606,7 @@ function initD3Chart(href) {
         update(root);
         centerNode(root);
     });
+
 }
+
+
