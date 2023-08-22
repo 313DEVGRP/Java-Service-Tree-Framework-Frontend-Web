@@ -2244,3 +2244,29 @@ blockquote {
 }
 
 
+
+.widget > .carousel {
+	margin: 0 -12px 5px;
+}
+
+.carousel-control.left, .carousel-control.right {
+	background: none;
+}
+.carousel-control i {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 5;
+	display: inline-block;
+	width: 20px;
+	height: 45px;
+	margin-left: -10px;
+	margin-top: -10px;
+}
+
+.carousel-indicators.outer {
+	bottom: -20px;
+}
+.carousel-indicators li {
+	background-color: rgba(51, 51, 51, 0.4);
+}
