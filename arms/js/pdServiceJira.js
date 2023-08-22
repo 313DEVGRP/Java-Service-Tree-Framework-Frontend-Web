@@ -470,12 +470,10 @@ function connect_pdservice_jira(){
 					console.log("fail call");
 				})
 				.always(function (data) {
-					console.log("always call");
-					console.log("이미 있는데이터 변경 완료 !");
-					console.table( data);
-
+					// 변경이 되면 그래프에도 변화가 있어야한다.
+					console.log("이미 있는 데이터 변경 완료 !");
+					initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 				});
-
 		} else {
 			jError("who are you?");
 		}
