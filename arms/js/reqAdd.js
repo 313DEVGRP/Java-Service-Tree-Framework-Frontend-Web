@@ -1246,7 +1246,6 @@ function save_req() {
 				c_req_pdservice_link: $("#selected_pdService").val(),
 				c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
 				c_req_writer: "[" + userName + "]" + " - " + userID,
-				c_req_create_date: new Date(),
 				c_req_priority_link: $("input[name='req_priority']:checked").val(),
 				c_req_state_link: 3, //요구사항 생성.
 				c_req_reviewer01: reviewers01,
