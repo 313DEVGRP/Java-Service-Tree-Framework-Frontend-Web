@@ -350,7 +350,7 @@ function jsTreeClick(selectedNode) {
 
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
-		dataTableLoad(selectedJsTreeId);
+		dataTableLoad(selectedJsTreeId, selectRel);
 	} else {
 		$("#default_tab").get(0).click();
 		$(".newReqDiv").hide();
@@ -379,7 +379,9 @@ function jsTreeClick(selectedNode) {
 //리스트 :: DataTable
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- Root, Drive, Folder 데이터 테이블 설정 --- //
-function dataTableLoad(selectId) {
+function dataTableLoad(selectId, selectRel) {
+	console.log("dataTableLoad - selectRel:::" + selectRel);
+	console.log("dataTableLoad - selectId:::" + selectId);
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
@@ -416,7 +418,7 @@ function dataTableLoad(selectId) {
 			buttonList,
 			isServerSide
 		);
-	} else {
+	} else if(selectRel !== "folder") {
 		//select node 정보를 가져온다.
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
@@ -461,6 +463,8 @@ function dataTableLoad(selectId) {
 			.done(function (data) {})
 			.fail(function (e) {})
 			.always(function () {});
+	}else{
+		console.log("folder clicked");
 	}
 }
 
@@ -719,6 +723,7 @@ function get_FileList_By_Req() {
 //상세 보기 탭 & 편집 탭
 ////////////////////////////////////////////////////////////////////////////////////////
 function setDetailAndEditViewTab() {
+	console.log("Detail Tab ::::")
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
@@ -739,6 +744,9 @@ function setDetailAndEditViewTab() {
 
 // ------------------ 편집하기 ------------------ //
 function bindDataEditlTab(ajaxData) {
+	console.log("checl edit data" + ajaxData.c_req_reviewer01)
+	console.table(ajaxData);
+
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
 	if (isEmpty(selectedPdServiceText)) {
@@ -842,7 +850,7 @@ function bindDataEditlTab(ajaxData) {
 
 	// ------------------------- reviewer end --------------------------------//
 	$("#editview_req_status").val(ajaxData.c_req_status);
-	$("#editview_req_writer").val(ajaxData.c_req_writer);
+	$("#editview_req_writer").val(ajaxData.c_req_writer);  //ajaxData.c_req_reviewer01
 	$("#editview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
 	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_req_contents);
 }
