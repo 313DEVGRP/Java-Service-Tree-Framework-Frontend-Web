@@ -185,10 +185,10 @@ function draw_card_deck(cardInfo) {
                     <p class="font13 mt-1" style="margin-bottom: 0px;">
                         <span calss="card-detail1">불러온 프로젝트 수: ${cardList[i].jiraProjectEntities.length}</span>
                         <span class="badge card-detail1 text-success" onclick="jira_renew('프로젝트',${cardList[i].c_id})">프로젝트</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_타입',${cardList[i].c_id})">이슈타입</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_우선순위',${cardList[i].c_id})">이슈우선순위</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_해결책',${cardList[i].c_id})">이슈해결책</span>
-                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈_상태',${cardList[i].c_id})">이슈상태</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈유형',${cardList[i].c_id})">이슈타입</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈우선순위',${cardList[i].c_id})">이슈우선순위</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈해결책',${cardList[i].c_id})">이슈해결책</span>
+                        <span class="badge card-detail1 text-success" onclick="jira_renew('이슈상태',${cardList[i].c_id})">이슈상태</span>
                     </p>
                 </div>
                 <!--카드내용2-->
@@ -674,27 +674,25 @@ function tab_click_event() {
 
 // 갱신 버튼 (예상: all, project, issueType, issuePriority, issueResolution, issueStatus 등..)
 function jira_renew(renewJiraType, serverId) { // 서버 c_id
-    if (serverId == undefined) { serverId = "서버 아이디 정보 없음"; }
-    if (renewJiraType === undefined) { renewJiraType = "갱신할 지라 타입 없음"; }
-   console.log("갱신버튼을 눌렀습니다. 갱신할 종류(서버아이디) : " + renewJiraType+"("+serverId+")");
 
-    if(renewJiraType === '이슈상태') { //임시 ajax 여기 넣기
-        $.ajax({
-            url: "/auth-user/api/arms/jiraServer/renewIssueStatus.do",
-            type: "put",
-            data: { c_id: serverId},
-            statusCode: {
-                200: function () {
-                    jSuccess(selectServerName + "의 데이터가 변경되었습니다.");
-                    console.log("현재 선택된 항목(c_id, 서버명) :" + selectId +", " + selectServerName);
-                    //데이터 테이블 데이터 재 로드
-                    makeJiraServerCardDeck();
-                    jiraServerCardClick(selectId);
-                }
+    if (serverId === undefined) { serverId = "서버 아이디 정보 없음"; return false; }
+    if (renewJiraType === undefined) { renewJiraType = "갱신할 지라 타입 없음"; return false; }
+    console.log("갱신버튼을 눌렀습니다. 갱신할 종류(서버아이디) : " + renewJiraType+"("+serverId+")");
+
+    $.ajax({
+        url: "/auth-user/api/arms/jiraServer/"+ renewJiraType + "/renewNode.do",
+        type: "put",
+        data: { c_id: serverId},
+        statusCode: {
+            200: function () {
+                jSuccess(selectServerName + "의 데이터가 갱신되었습니다.");
+                console.log("현재 선택된 항목(c_id, 서버명) :" + selectId +", " + selectServerName);
+                //데이터 테이블 데이터 재 로드
+                makeJiraServerCardDeck();
+                jiraServerCardClick(selectId);
             }
-        });
-    }
-
+        }
+    });
 }
 
 function projectDataTable(data) {
