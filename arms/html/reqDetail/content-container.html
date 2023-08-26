@@ -1,0 +1,1154 @@
+<!-- ======= Mobile nav toggle button ======= -->
+<button
+	type="button"
+	class="mobile-nav-toggle d-xl-none">
+	<i class="bi bi-list mobile-nav-toggle"></i>
+</button>
+<i class="bi bi-list mobile-nav-toggle d-lg-none"></i>
+<!-- ======= Header ======= -->
+<header id="header">
+	<nav
+		id="navbar"
+		class="navbar nav-menu">
+		<ul>
+			<li>
+				<a
+					href="#req_detail"
+					class="nav-link scrollto active">
+					<i class="bx bx-search-alt"></i>
+					<span>요구사항 상세정보</span>
+				</a>
+			</li>
+
+			<li>
+				<a
+					href="#req_list"
+					class="nav-link scrollto">
+					<i class="bx bx-list-ul"></i>
+					<span>요구사항 목록</span>
+				</a>
+			</li>
+
+			<li>
+				<a
+					href="#proposal"
+					class="nav-link scrollto">
+					<i class="bx bxs-file"></i>
+					<span>제품 기획서</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+	<!-- .nav-menu -->
+</header>
+<!-- End Header -->
+
+<!-- ======= Req Detail Section ======= -->
+<main>
+	<section id="req_detail">
+		<div class="col-lg-12">
+			<section class="widget">
+				<header>
+					<h4>
+						<span
+							class="font13"
+							style="font-weight: bold">
+							<i class="fa fa-edit"></i>
+							요구사항 상세정보
+						</span>
+					</h4>
+
+					<div class="widget-controls">
+						<a
+							data-widgster="toleft"
+							title="change width to left"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-left"></i>
+						</a>
+						<a
+							data-widgster="expand"
+							title="Expand"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-up"></i>
+						</a>
+						<a
+							data-widgster="collapse"
+							title="Collapse"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-down"></i>
+						</a>
+						<a
+							data-widgster="toright"
+							title="change width to right"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-right"></i>
+						</a>
+						<a
+							data-widgster="restore"
+							title="Restore"
+							href="#">
+							<span class="glyphicon glyphicon-repeat"></span>
+						</a>
+						<a
+							data-widgster="fullscreen"
+							title="Fullscreen"
+							href="#">
+							<i
+								class="glyphicon glyphicon-fullscreen"
+								style="font-size: 11px"></i>
+						</a>
+					</div>
+				</header>
+
+				<div class="body">
+					<div
+						class="gradient_middle_border"
+						style="width: 100%; height: 2px"></div>
+					<blockquote
+						class="font13"
+						style="margin-top: 5px">
+						요구사항 세부 내용
+						<div style="float: right">
+							<button
+								class="btn btn-transparent btn-xs"
+								style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+								onclick="return true;">
+								Help
+								<i
+									class="fa fa-question"
+									style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+							</button>
+						</div>
+					</blockquote>
+
+					<div class="row">
+						<div class="col-md-12">
+							<section class="widget">
+								<div class="control-group">
+									<label class="control-label font13">
+										요구사항 제품
+										<sup>서비스</sup>
+										:
+									</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-th-list"></i>
+										</span>
+
+										<div
+											id="detailview_req_pdservice_name"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 연관 버전 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-gift"></i>
+										</span>
+
+										<div
+											id="detailview_req_pdservice_version"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 아이디 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-phone"></i>
+										</span>
+
+										<div
+											id="detailview_req_id"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 제목 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+
+										<div
+											id="detailview_req_name"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 작성자 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-user"></i>
+										</span>
+
+										<div
+											id="detailview_req_writer"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 최근 작성일 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-envelope"></i>
+										</span>
+
+										<div
+											id="detailview_req_write_date"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="detailview_req_reviewer01"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="detailview_req_reviewer02"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="detailview_req_reviewer03"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="detailview_req_reviewer04"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="detailview_req_reviewer05"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label
+										class="control-label"
+										style="margin-top: 10px">
+										요구사항 내용 :
+									</label>
+
+									<div
+										class="col-sm-8"
+										style="margin-top: 16px; margin-bottom: 10px">
+										<i class="fa fa-level-down"></i>
+										하단 영역 참조
+									</div>
+
+									<br />
+									<br />
+									<br />
+
+									<div
+										id="detailview_req_contents"
+										class="col-sm-12 form-control parsley-validated font13 darkBack"
+										style="padding-top: 7px"></div>
+								</div>
+							</section>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</section>
+	<!-- End Req Detail -->
+
+	<!-- ======= Req List Section ======= -->
+	<section id="req_list">
+		<div class="col-lg-4">
+			<section class="widget">
+				<header>
+					<h4>
+						<span
+							class="font13"
+							style="font-weight: bold">
+							<i class="fa fa-sort-amount-asc"></i>
+							요구사항 조회
+						</span>
+					</h4>
+
+					<div class="widget-controls">
+						<a
+							data-widgster="toleft"
+							title="change width to left"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-left"></i>
+						</a>
+						<a
+							data-widgster="expand"
+							title="Expand"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-up"></i>
+						</a>
+						<a
+							data-widgster="collapse"
+							title="Collapse"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-down"></i>
+						</a>
+						<a
+							data-widgster="toright"
+							title="change width to right"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-right"></i>
+						</a>
+						<a
+							data-widgster="restore"
+							title="Restore"
+							href="#">
+							<span class="glyphicon glyphicon-repeat"></span>
+						</a>
+						<a
+							data-widgster="fullscreen"
+							title="Fullscreen"
+							href="#">
+							<i
+								class="glyphicon glyphicon-fullscreen"
+								style="font-size: 11px"></i>
+						</a>
+					</div>
+				</header>
+
+				<div class="body">
+					<div
+						class="gradient_middle_border"
+						style="width: 100%; height: 2px"></div>
+					<blockquote
+						class="font13"
+						style="margin-top: 5px">
+						1. 제품
+						<sup>서비스</sup>
+						선택 → 버전 선택 → 요구사항 선택
+						<div style="float: right">
+							<button
+								class="btn btn-transparent btn-xs"
+								style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+								onclick="return true;">
+								Help
+								<i
+									class="fa fa-question"
+									style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+							</button>
+						</div>
+					</blockquote>
+					<div
+						class="clearfix"
+						style="margin-bottom: 10px; margin-top: 10px">
+						<!-- 컴포넌트 대상 -->
+						<div id="selected_info">
+							<div
+								class="panel-group json-menu"
+								id="versionAccordion"
+								style="margin-bottom: 0px !important">
+								<li
+									class="list-group-item json-menu-header"
+									style="padding: 0px">
+									<div class="chat-message">
+										<div
+											class="chat-message-body"
+											style="margin-left: 0px !important; border-right: 2px solid #e5603b; border-left: 0px">
+											<span
+												id="toRight"
+												class="arrow"
+												style="
+													top: 10px !important;
+													right: -7px;
+													border-top: 5px solid transparent;
+													border-bottom: 5px solid transparent;
+													border-left: 5px solid #e5603b;
+													border-right: 0px;
+													left: unset;
+												"></span>
+											<div
+												class="sender"
+												style="padding-bottom: 5px; padding-top: 3px">
+												<i class="fa fa-check"></i>
+												선택된 제품
+												<sup>서비스</sup>
+												:
+												<span
+													id="select_PdService"
+													style="color: #a4c6ff">
+													선택되지 않음
+												</span>
+											</div>
+											<div
+												class="sender"
+												style="padding-bottom: 5px; padding-top: 3px">
+												<i class="fa fa-check"></i>
+												선택된 버전 :
+												<span
+													id="select_Version"
+													style="color: #a4c6ff">
+													선택되지 않음
+												</span>
+											</div>
+											<div
+												class="sender"
+												style="padding-bottom: 5px; padding-top: 3px">
+												<i class="fa fa-check"></i>
+												선택된 요구사항 :
+												<span
+													id="select_Req"
+													style="color: #a4c6ff">
+													선택되지 않음
+												</span>
+											</div>
+										</div>
+									</div>
+								</li>
+							</div>
+						</div>
+					</div>
+					<div class="wrapper">
+						<div
+							class="control-group"
+							style="padding-bottom: 10px; border: 0">
+							<div
+								class="controls form-group darkBack"
+								style="margin-bottom: 15px !important">
+								<!--  select proeduct list-->
+								<select
+									id="selected_pdService"
+									required="required"
+									data-placeholder="Select Product(Service)"
+									class="select-block-level chzn-select darkBack"
+									tabindex="-1"
+									style="width: 100% !important"
+									name="selected_pdService">
+									<option value=""></option>
+								</select>
+							</div>
+							<div
+								class="controls form-group darkBack"
+								style="margin-bottom: 5px !important">
+								<select
+									multiple="multiple"
+									id="multiversion"
+									class="multiple-select btn-block darkBack"
+									onchange="changeMultipleSelected()"
+									placeholder="&nbsp;&nbsp;Select Version"></select>
+							</div>
+						</div>
+						<div
+							class="gradient_bottom_border"
+							style="width: 100%; height: 2px"></div>
+						<div
+							id="mmenu"
+							style="padding-bottom: 5px; padding-top: 15px">
+							<form
+								class="form-search no-margin"
+								role="form">
+								<div class="input-group">
+									<input
+										type="search"
+										id="text"
+										class="form-control searchDarkBack"
+										style="color: #f8f8f8"
+										placeholder="찾을 노드 이름 입력"
+										data-tooltip="Press Enter To Node To Search" />
+									<span class="input-group-btn">
+										<button
+											type="button"
+											id="tree_search"
+											title="Search"
+											class="btn btn-default btn-sm"
+											style="line-height: 1.63">
+											Search
+										</button>
+									</span>
+								</div>
+							</form>
+						</div>
+						<div
+							id="req_tree"
+							style="padding-top: 5px; overflow: hidden"
+							class="darkBack"></div>
+						<div
+							style="margin-top: 10px"
+							class="darkBack">
+							설명
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<div class="col-lg-8">
+			<section class="widget">
+				<header>
+					<h4>
+						<span
+							class="font13"
+							style="font-weight: bold">
+							<i class="fa fa-edit"></i>
+							요구사항 내용
+						</span>
+					</h4>
+					<div class="widget-controls">
+						<a
+							data-widgster="toleft"
+							title="change width to left"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-left"></i>
+						</a>
+						<a
+							data-widgster="expand"
+							title="Expand"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-up"></i>
+						</a>
+						<a
+							data-widgster="collapse"
+							title="Collapse"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-down"></i>
+						</a>
+						<a
+							data-widgster="toright"
+							title="change width to right"
+							href="#">
+							<i class="glyphicon glyphicon-chevron-right"></i>
+						</a>
+						<a
+							data-widgster="restore"
+							title="Restore"
+							href="#">
+							<span class="glyphicon glyphicon-repeat"></span>
+						</a>
+						<a
+							data-widgster="fullscreen"
+							title="Fullscreen"
+							href="#">
+							<i
+								class="glyphicon glyphicon-fullscreen"
+								style="font-size: 11px"></i>
+						</a>
+					</div>
+				</header>
+				<div class="body">
+					<div
+						class="gradient_middle_border"
+						style="width: 100%; height: 2px"></div>
+
+					<blockquote
+						class="font13"
+						style="margin-top: 5px">
+						2. 요구사항 세부 내용 조회
+						<div style="float: right">
+							<button
+								class="btn btn-transparent btn-xs"
+								style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+								onclick="return true;">
+								Help
+								<i
+									class="fa fa-question"
+									style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+							</button>
+						</div>
+					</blockquote>
+
+					<div
+						class="clearfix"
+						style="margin-bottom: 10px; margin-top: 10px">
+						<!-- 컴포넌트 대상 -->
+						<div
+							id="selected_info"
+							style="float: left">
+							<div
+								class="panel-group json-menu"
+								id="versionAccordion"
+								style="margin-bottom: 0px !important">
+								<li
+									class="list-group-item json-menu-header"
+									style="padding: 0px">
+									<div class="chat-message">
+										<div
+											class="chat-message-body"
+											style="
+												margin-left: 0px !important;
+												padding: 0px 10px 0px 10px !important;
+												border-left: 2px solid #a4c6ff;
+											">
+											<span
+												class="arrow"
+												style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
+											<div
+												class="sender"
+												style="padding-bottom: 5px; padding-top: 5px">
+												선택된 제품(서비스) :
+												<span
+													id="select_Service"
+													style="color: #a4c6ff">
+													선택되지 않음
+												</span>
+											</div>
+										</div>
+									</div>
+								</li>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<section class="widget">
+								<div class="control-group">
+									<label class="control-label font13">
+										요구사항 제품
+										<sup>서비스</sup>
+										:
+									</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-th-list"></i>
+										</span>
+
+										<div
+											id="stats_req_pdservice_name"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 연관 버전 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-gift"></i>
+										</span>
+
+										<div
+											id="stats_req_pdservice_version"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 아이디 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-phone"></i>
+										</span>
+
+										<div
+											id="stats_req_id"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 제목 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+
+										<div
+											id="stats_req_name"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 작성자 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-user"></i>
+										</span>
+
+										<div
+											id="stats_req_writer"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">요구사항 최근 작성일 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-envelope"></i>
+										</span>
+
+										<div
+											id="stats_req_write_date"
+											class="form-control parsley-validated font13 darkBack"></div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="stats_req_reviewer01"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="stats_req_reviewer02"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="stats_req_reviewer03"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="stats_req_reviewer04"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+
+									<div
+										class="controls form-group input-group"
+										style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+										<div
+											id="stats_req_reviewer05"
+											class="form-control parsley-validated font13 darkBack"></div>
+
+										<span class="input-group-addon font11">INFO : 공동 책임자</span>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label
+										class="control-label"
+										style="margin-top: 10px">
+										요구사항 내용 :
+									</label>
+
+									<div
+										class="col-sm-8"
+										style="margin-top: 16px; margin-bottom: 10px">
+										<i class="fa fa-level-down"></i>
+										하단 영역 참조
+									</div>
+
+									<br />
+									<br />
+									<br />
+
+									<div
+										id="stats_req_contents"
+										class="col-sm-12 form-control parsley-validated font13 darkBack"
+										style="padding-top: 7px"></div>
+								</div>
+							</section>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</section>
+	<!-- End Req List Section -->
+
+	<!-- ======= Proposal Section ======= -->
+	<section id="proposal">
+		<div class="row">
+			<div class="col-lg-12">
+				<section class="widget">
+					<header>
+						<h4>
+							<span
+								class="font13"
+								style="font-weight: bold">
+								<i
+									class="fa fa-edit"
+									style="vertical-align: middle; font-size: 14px"></i>
+								제품(서비스) 상세 보기
+							</span>
+						</h4>
+
+						<div class="widget-controls">
+							<a
+								data-widgster="toleft"
+								title="change width to left"
+								href="#">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</a>
+							<a
+								data-widgster="expand"
+								title="Expand"
+								href="#">
+								<i class="glyphicon glyphicon-chevron-up"></i>
+							</a>
+							<a
+								data-widgster="collapse"
+								title="Collapse"
+								href="#">
+								<i class="glyphicon glyphicon-chevron-down"></i>
+							</a>
+							<a
+								data-widgster="toright"
+								title="change width to right"
+								href="#">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</a>
+							<a
+								data-widgster="restore"
+								title="Restore"
+								href="#">
+								<span class="glyphicon glyphicon-repeat"></span>
+							</a>
+							<a
+								data-widgster="fullscreen"
+								title="Fullscreen"
+								href="#">
+								<i
+									class="glyphicon glyphicon-fullscreen"
+									style="font-size: 11px"></i>
+							</a>
+						</div>
+					</header>
+
+					<div class="body">
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+
+						<blockquote
+							class="font13"
+							style="margin-top: 5px">
+							제품(서비스)의 내용을 확인
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+
+						<div class="row">
+							<div class="col-md-12">
+								<section class="widget">
+									<form
+										class="form-horizontal"
+										method="post">
+										<fieldset>
+											<div
+												class="control-group"
+												for="detailview_pdservice_name">
+												<label class="control-label font13">제품(서비스) 이름 :</label>
+												<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-gift"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_name"
+														name="detailview_pdservice_name"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="수정은 편집 탭에서 해주세요"
+														required="required"
+														placeholder="service name"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 수정은 편집 탭에서 해주세요</span>
+												</div>
+											</div>
+											<div
+												class="control-group"
+												for="detailview_pdservice_owner">
+												<label class="control-label font13">제품(서비스) 오너 :</label>
+												<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-user"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_owner"
+														name="detailview_pdservice_owner"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="책임자 변경"
+														required="required"
+														placeholder="service owner"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 책임자 확인</span>
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+												<div
+													class="controls input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-inbox"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_reviewer01"
+														name="detailview_pdservice_reviewer01"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="service reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 공동 책임자</span>
+												</div>
+												<div
+													class="controls input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-inbox"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_reviewer02"
+														name="detailview_pdservice_reviewer02"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="service reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 공동 책임자</span>
+												</div>
+												<div
+													class="controls input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-inbox"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_reviewer03"
+														name="detailview_pdservice_reviewer03"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="service reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 공동 책임자</span>
+												</div>
+												<div
+													class="controls input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-inbox"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_reviewer04"
+														name="detailview_pdservice_reviewer04"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="service reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 공동 책임자</span>
+												</div>
+												<div
+													class="controls input-group"
+													style="margin-left: 180px">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-inbox"></i>
+													</span>
+													<input
+														type="text"
+														id="detailview_pdservice_reviewer05"
+														name="detailview_pdservice_reviewer05"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="service reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+													<span class="input-group-addon font11">INFO : 공동 책임자</span>
+												</div>
+											</div>
+											<div class="control-group">
+												<label
+													class="control-label"
+													style="margin-top: 10px">
+													제품(서비스) 컨텐츠 :
+												</label>
+												<br />
+												<br />
+												<br />
+												<div
+													class="col-sm-12 darkBack"
+													id="detailview_pdservice_contents"
+													style="padding-top: 10px; padding-bottom: 10px"></div>
+											</div>
+										</fieldset>
+									</form>
+								</section>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</section>
+	<!-- End Proposal Section -->
+</main>
+
+<style>
+	#header {
+		top: 0;
+		left: 200px;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		justify-content: center;
+	}
+
+	main {
+		margin-left: 100px;
+		width: calc(100% - 100px);
+	}
+</style>
