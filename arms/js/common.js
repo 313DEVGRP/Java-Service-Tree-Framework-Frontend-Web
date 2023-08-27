@@ -51,7 +51,7 @@ function loadPlugin(url) {
 	return new Promise(function(resolve, reject) {
 
 		if( isJavaScriptFile(url) ){
-			$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i>" + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
+			$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> " + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
 			$.ajax({
 				url: url,
 				dataType: "script",
@@ -69,7 +69,7 @@ function loadPlugin(url) {
 				}
 			});
 		} else {
-			$(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i>" + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
+			$(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> " + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
 			$("<link/>", {
 				rel: "stylesheet",
 				type: "text/css",
