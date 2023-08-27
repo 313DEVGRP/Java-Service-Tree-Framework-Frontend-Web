@@ -545,10 +545,8 @@ function datatables_jira_project() {
 	var buttonList = [];
 
 	var jquerySelector = "#jira_project_table";
-	var ajaxUrl = "/auth-user/api/arms/jiraProject/getNodesWithoutRoot.do";   // 작업 중
-	// var ajaxUrl = "/auth-user/api/arms/jiraProject/getJiraProjectMonitor.do";   // 작업 중
+	var ajaxUrl = "/auth-user/api/arms/jiraProject/getNodesWithoutRoot.do";
 	var jsonRoot = "result";
-	// console.log("jsonRoot::" + jsonRoot);
 	var isServerSide = false;
 
 	dataTable_build(
