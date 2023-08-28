@@ -4,12 +4,12 @@
     font-weight: normal;
     font-style: normal;
 
-    src: url('index/MyResume/assets/vendor/boxicons/fonts/boxicons.eot');
-    src: url('index/MyResume/assets/vendor/boxicons/fonts/boxicons.eot') format('embedded-opentype'),
+    src: url('arms/index/MyResume/assets/vendor/boxicons/fonts/boxicons.eot');
+    src: url('arms/index/MyResume/assets/vendor/boxicons/fonts/boxicons.eot') format('embedded-opentype'),
     url('../fonts/boxicons.woff2') format('woff2'), /* TODO:장지윤 GPL noti 필요*/
     url('../fonts/boxicons.woff') format('woff'), /* TODO:장지윤 GPL noti 필요*/
     url('../fonts/boxicons.ttf') format('truetype'), /* TODO:장지윤 GPL noti 필요*/
-    url('index/MyResume/assets/vendor/boxicons/fonts/boxicons.svg?#boxicons') format('svg');
+    url('arms/index/MyResume/assets/vendor/boxicons/fonts/boxicons.svg?#boxicons') format('svg');
 }
 .bx
 {
