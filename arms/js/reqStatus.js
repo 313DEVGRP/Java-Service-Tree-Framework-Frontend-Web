@@ -159,15 +159,15 @@ function makeVersionMultiSelectBox() {
 			var endPointUrl = "";
 			var versionTag = $(".multiple-select").val();
 
-			// if (checked) {
-			// 	endPointUrl =
-			// 		"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-			// 	common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			// } else {
-			// 	endPointUrl =
-			// 		"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-			// 	common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			// }
+			if (checked) {
+				endPointUrl =
+					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
+				common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			} else {
+				endPointUrl =
+					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
+				common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			}
 		}
 	});
 }
