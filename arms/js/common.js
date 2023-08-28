@@ -27,6 +27,9 @@ function runScript(){
 		$("header.page-header").hide();
 	}
 
+	$(document).on("shown.bs.tab", "a[data-toggle='tab']", function () {
+		window.dispatchEvent(new Event("resize"));
+	});
 
 	if (ajax_setup()) {
 		$(".loader").removeClass("hide");
@@ -869,7 +872,8 @@ function dataTable_build(
 		stateDuration: -1,
 		destroy: true,
 		processing: true,
-		responsive: responsiveRender,
+		scrollX: true,
+		responsive: false,
 		columns: columnList,
 		rowsGroup: rowsGroupList,
 		columnDefs: columnDefList,
