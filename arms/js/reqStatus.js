@@ -25,7 +25,11 @@ function execDocReady() {
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
 			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
-		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+		[
+			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
+			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
+			"../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js",
+			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
 			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
@@ -33,9 +37,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
-		[	"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
-			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
-			"../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js",
+		[
 			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
@@ -219,18 +221,47 @@ function bind_VersionData_By_PdService() {
 function common_dataTableLoad(selectId, endPointUrl) {
 	var columnList = [
 		{ name: "c_pdservice_link", title: "제품(서비스) 아이디", data: "c_pdservice_link", visible: false },
-		{ name: "c_pdservice_name", title: "제품(서비스)", data: "c_pdservice_name", visible: true },
-		{ name: "c_version_link", title: "제품(서비스) 버전 아이디", data: "c_version_link", visible: false },
-		{ name: "c_version_name", title: "Version", data: "c_version_name", visible: true },
+		{
+			name: "c_pdservice_name",
+			title: "제품(서비스)",
+			data: "c_pdservice_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{ name: "c_pds_version_link", title: "제품(서비스) 버전 아이디", data: "c_pds_version_link", visible: false },
+		{
+			name: "c_pds_version_name",
+			title: "제품(서비스) 버전",
+			data: "c_pds_version_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
 		{ name: "c_jira_project_link", title: "지라 프로젝트 아이디", data: "c_jira_project_link", visible: false },
 		{
 			name: "c_jira_project_name",
 			title: "JIRA Project",
 			data: "c_jira_project_name",
 			render: function (data, type, row, meta) {
-				if (type === "display") {
-					var link = "http://www.313.co.kr/jira/browse/";
-					return '<a href="' + link + row.c_jira_project_key + '" target="_blank">' + data + "</a>";
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
 				}
 				return data;
 			},
@@ -327,7 +358,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = ["c_pdservice_name:name", "c_version_name:name"];
+	var rowsGroupList = ["c_pdservice_link", "c_pdservice_name"];
 	var columnDefList = [
 		{
 			orderable: false,
