@@ -104,23 +104,23 @@
       ============================ -->
         <div class="idocs-navigation bg-light">
             <ul class="nav flex-column ">
-                <li class="nav-item"><a class="nav-link active" href="#">설치 가이드 문서 목차</a>
+                <li class="nav-item"><a class="nav-link active" href="#install_guide_document">설치 가이드 문서 목차</a>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="#">aRMS 란</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">설치 예상 시간</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">사전 준비</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"> NFS 설정</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"> 도커 설치</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">도커 스웜 적용</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">설치 과정</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">폴더 생성</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">aRMS 실행</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">aRMS 상세 정보</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">디렉토리 구조</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">포트 정보</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">시스템 사양</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">삭제 가이드</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">설치 시 오류 메시지</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms">aRMS 란</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#installation_time">설치 예상 시간</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#advance_preparation">사전 준비</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#nfs_setting"> NFS 설정</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#docker_install"> 도커 설치</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#docker_swarm_apply">도커 스웜 적용</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#install_process">설치 과정</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#create_folder">폴더 생성</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_practice">aRMS 실행</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_detail">aRMS 상세 정보</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_directory_structure">디렉토리 구조</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#port_info">포트 정보</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#system_specifications">시스템 사양</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#detail_guide">삭제 가이드</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#install_error_message">설치 시 오류 메시지</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="#project_charter">Project Charter</a>
@@ -169,11 +169,31 @@
             </ul>
         </div>
 
-        <!-- Docs Content
-      ============================ -->
+        <!--  ============================
+                index page
+              ============================ -->
         <div class="idocs-content">
             <div class="container">
 
+                <!-- arms -->
+                <section id="install_guide_document"></section>
+                <section id="arms"></section>
+                <section id="installation_time"></section>
+                <section id="advance_preparation"></section>
+                <section id="nfs_setting"></section>
+                <section id="docker_install"></section>
+                <section id="docker_swarm_apply"></section>
+                <section id="install_process"></section>
+                <section id="create_folder"></section>
+                <section id="arms_practice"></section>
+                <section id="arms_detail"></section>
+                <section id="arms_directory_structure"></section>
+                <section id="port_info"></section>
+                <section id="system_specifications"></section>
+                <section id="detail_guide"></section>
+                <section id="install_error_message"></section>
+
+                <!-- A-RMS Document  -->
                 <section id="project_charter"> <h1>A-RMS Document </h1></section>
 
                 <section id="project_background"></section>
@@ -182,7 +202,8 @@
 
                 <section id="utilization_plan"></section>
 
-                <section id="srs"><h1>SRS Document </h1></section>
+                <!-- SRS Document -->
+                <section id="srs"><h1>SRS Document</h1></section>
 
                 <section id="srs_overview"></section>
 
@@ -196,7 +217,7 @@
                 <!-- 5. 비-기능 요구사항 -->
                 <section id="non_functional_requirements"></section>
 
-
+                <!-- SDS Document -->
                 <section id="sds"><h1>SDS Document </h1></section>
                 <!-- 1. 프로젝트 개요 -->
                 <section id="sds_overview"></section>
@@ -207,7 +228,11 @@
 
 
             </div>
-            <!-- Document Wrapper end -->
+            <!--  ============================
+                   index page end
+                 ============================ -->
+
+
 
             <!-- Back To Top -->
             <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i
