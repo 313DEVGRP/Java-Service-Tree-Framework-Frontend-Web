@@ -1,0 +1,121 @@
+<h2>1. 프로젝트 개요</h2>
+<h3>1. 개요</h3>
+<h3>1.1 목적</h3>
+<p>이슈 기반 요구사항 관리 시스템을 개발하여, 제품별 요구사항의 생명주기(추가-채택-변경-삭제 ) 및 이력을 관리하고, 이와 함께 Atlassian ALM Tool Chain과 통합하여 Business Intelligence와 Atlassian 제품군에 없는 Requirement Management System 을 제공하는 RMS (for atlassian)시스템을 개발하는 것을 목표로 aRMS를 설계합니다.</p>
+<h3>1.2 범위</h3>
+<p>본 설계의 범위는 아래 시스템의 기능에 대한 설계입니다.</p>
+
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>구분</th>
+            <th>기능</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Auth System</td>
+            <td>인증 시스템으로써, 권한 관리와 계정 관리 및 사용자 맞춤형 서비스를 제공합니다.</td>
+
+        </tr>
+        <tr>
+            <td>Product(Service) System</td>
+            <td>제품(서비스)를 관리하며, 연관하는 ALM Toolchain 과 Mapping 하여 데이터 싱크를 제공한다.</td>
+
+        </tr>
+        <tr>
+            <td>Requirement System</td>
+            <td>요구사항을 관리하며, 연관하는 제품(서비스)와 Mapping 하여, 제품 (서비스) - 요구사항 - ALM 을 연결한다.</td>
+        </tr>
+        <tr>
+            <td>Monitoring System</td>
+            <td>다양한 어플리케이션의 조합으로 인하여, 각 시스템간의 성능 및 안정성을 보장하기 위하여 JAVA 기반 모니터링 을 지원한다.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br/>
+<h3>1.3 관련 문서</h3>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>구분</th>
+            <th>기능</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Project Charter</td>
+            <td>Project Charter</td>
+        </tr>
+        <tr>
+            <td>SRS</td>
+            <td>SRS</td>
+        </tr>
+        <tr>
+            <td>SDS</td>
+            <td>SDS</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<h3>1.4 개발자 스펙</h3>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>구분</th>
+            <th>필요 Skill</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>View Part</td>
+            <td>html+css, Bootstrap, RequireJS, Bower, Grunt, AngularJS, jQuery, Qunit, Flex, Json, xml, BlazeDS</td>
+        </tr>
+        <tr>
+            <td>Server Part</td>
+            <td>Apache(modjk), Nginx, Tomcat, Resin, Jetty, SiteMash, Tiles, FreeMarker, Velocity</td>
+        </tr>
+        <tr>
+            <td>Framework Part</td>
+            <td>Struts, Spring, iBatis, Hibernate, Spring-integration, Spring-security, Spring-Boot, Spring-DW, Spring-WebFlow, Spring-Data(JPA), Spring-Batch, Spring-WebServices, Spring-Mobile, Spring-MVC</td>
+        </tr>
+        <tr>
+            <td>Tool Part</td>
+            <td>Quartz, Ehcache, MemCache, Redis, Apache-Commons, EgovFramework(Component)</td>
+        </tr>
+        <tr>
+            <td>CI Part</td>
+            <td>	Junit, Maven, Hudson, Jenkins, Bamboo, Nexus, Jira, Fisheye, Crucible, Confluence, Sonar</td>
+        </tr>
+        <tr>
+            <td>Database Part</td>
+            <td>MySql, Oracle, MS-sql, postgres, Hadoop, Storm, Spark, Cassandra, MongoDB</td>
+        </tr>
+        <tr>
+            <td>Search Engine Part</td>
+            <td>Elastic Search, Kibana, Logstash, Beats, Grafana</td>
+        </tr>
+        <tr>
+            <td>Management Part</td>
+            <td>PMBOK, MicroService, CBD, PLE, Prototype, PMS, ALM</td>
+        </tr>
+        <tr>
+            <td>Virtual Image Part</td>
+            <td>Docker, Kubernetes(K8s), Docker Swarm</td>
+        </tr>
+        <tr>
+            <td>Microservice Part</td>
+            <td>Netty - Zookeeper - Finagle - Kafka</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br/>
+

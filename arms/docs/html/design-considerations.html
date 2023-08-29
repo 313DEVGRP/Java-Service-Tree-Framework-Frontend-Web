@@ -1,0 +1,57 @@
+<h3>2.설계고려사항</h3>
+<h3>2.1 소프트웨어 설계 목표</h3>
+<p>jsTree Service Framework를 활용하여 Tree 알고리즘 기준의 Requirement Management System 을 설계합니다.</p>
+
+<p>aRMS는 프로젝트 요구사항을 효과적으로 관리하기 위한 시스템으로, 다양한 기능과 모듈을 포함합니다. - 설계 목표</p>
+
+<p>Frontend 및 Backend 분리: aRMS의 주요 설계 목표 중 하나는 Frontend 개발과 Backend 개발을 명확하게 분리하는 것입니다.
+    이를 통해 각 영역의 독립성을 확보하고 개발 프로세스를 효율적으로 관리할 수 있습니다.<br/>
+    비지니스 로직과 설정의 분리: 두 번째 목표는 비지니스 로직을 Backend에 집중시키고, Java 개발의 engine 및 framework 설정은 Core-Module로 분리하여 실제 비지니스 로직과 구성 요소를 분리합니다. 이를 통해 복잡성을 감소시키고 유지보수성을 향상시킵니다.<br/>
+    패키지 및 라이브러리 관리 툴 활용: aRMS의 세 번째 목표는 패키지 및 라이브러리 관리를 효율적으로 수행하는 것입니다. Maven과 같은 관리 툴을 활용하여 라이브러리의 업데이트와 관리를 용이하게 하고, 관련한 라이브러리를 Lib-Module로 분리하여 패키지 업데이트를 간편하게 지원합니다.
+</p>
+
+<p>aRMS와 관련한 설계목표는 개발 후 → 자동으로 빌드하며 → Core-Module은 Nexus에 Upload되고, Docker는 Docker Hub에 Upload되도록 Source Write after Deploy 까지 One Shot Flow CI/CD를 제공하고<br/>
+    Source 설계 목표는 비지니스 코드인 제품 코드는 Web-Module 에서만 사용하도록 구성했습니다.</p>
+<br/>
+<h3>2.2 제약사항</h3>
+<h3>2.2.1 H/W 제약사항</h3>
+<p>하드웨어는 Monitoring Server 시스템으로 인하여 많은 자원이 필요합니다. 따라서, 다음의 하드웨어 최소 스펙과 권장 스펙을 지정하도록 하겠습니다.</p>
+
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>spec</th>
+            <th>설명</th>
+            <th>cpu</th>
+            <th>mem</th>
+            <th>disk</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>최소 스펙</td>
+            <td>1 Server All in one</td>
+            <td>12 core</td>
+            <td>32 gb</td>
+            <td>500 gb</td>
+        </tr>
+        <tr>
+            <td>권장 스펙</td>
+            <td>4 + 1 Server Cluster</td>
+            <td>per 12 core</td>
+            <td>per 16 gb</td>
+            <td>NFS Server 2TB~</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br/>
+<h3> 2.2.2 S/W 제약사항</h3>
+<p>aRMS는 S/W 제약사항이 존재하지 않고, 100% OpenSource를 활용하여 개발하도록 합니다.</p>
+<h3> 2.2.3 N/W 제약사항</h3>
+<p>aRMS는 Atlassian ALM 제품군과 통신이 필요합니다.</p>
+<h3>2.3 기타</h3>
+<p>PLE ( Product Line Engineering ) 기법을 활용하여, 재사용을 극대화한 프로젝트 구조를 적용합니다.
+    - aRMS는 자체적인 Static Code Analysis ( SonarQube )를 적용하여 코드 품질을 유지하도록 합니다. - aRMS는 BitBucket (혹은 Github)을 활용하여 Git으로 형상관리를 적용하도록 합니다.</p>

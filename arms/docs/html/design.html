@@ -1,0 +1,507 @@
+<div class="tt_article_useless_p_margin contents_style"><h2 data-ke-size="size26">3. 설계</h2>
+    <h2 data-ke-size="size26">&nbsp; 3.1 구성</h2>
+    <h3 data-ke-size="size23">  3.1.1 소프투웨어 배치</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">소프트웨어 배치는 </span><span style="font-family: NanumGothic; color: #172b4d;">SRS ( Software Requirement Specification ) 에서 산출된 비지니스 아키텍쳐 </span><span style="font-family: NanumGothic;">→ 시스템 구성도 → </span><span style="font-family: NanumGothic; color: #ff0000;">시스템 아키텍쳐</span><span style="font-family: NanumGothic;">로 점차 구체화 되기때문에, 시스템 아키텍쳐로 소프트웨어 배치도를 갈음하도록 합니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1482" data-origin-height="596" style="margin-left: calc(50% - 550px); width: 1100px;"><span data-url="https://blog.kakaocdn.net/dn/bgt7Rq/btsrh3PX4hu/UIkOUSPmyAr5jvkhwY0mMk/img.png" data-lightbox="lightbox" style="padding-bottom: 40.2159%;"><img onerror="this.onerror=null; this.src='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png'; this.srcset='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png';" data-origin-width="1482" data-origin-height="596" class="lazyautosizes lazyloaded" data-src="https://blog.kakaocdn.net/dn/bgt7Rq/btsrh3PX4hu/UIkOUSPmyAr5jvkhwY0mMk/img.png" data-srcset="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbgt7Rq%2Fbtsrh3PX4hu%2FUIkOUSPmyAr5jvkhwY0mMk%2Fimg.png" data-sizes="auto" sizes="1100px" srcset="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbgt7Rq%2Fbtsrh3PX4hu%2FUIkOUSPmyAr5jvkhwY0mMk%2Fimg.png" src="https://blog.kakaocdn.net/dn/bgt7Rq/btsrh3PX4hu/UIkOUSPmyAr5jvkhwY0mMk/img.png"></span></figure>
+    <p></p>
+    <h3 data-ke-size="size23">3.1.2 소프트웨어 아키텍쳐</a></h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">소프트웨어 아키텍쳐는 다음과 같이 구성합니다. </span></p>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #ff0000;">시스템 아키텍쳐를 기반</span><span style="font-family: NanumGothic;">으로 구체화된 </span><span style="font-family: NanumGothic; color: #ff0000;">어플리케이션 아키텍쳐</span><span style="font-family: NanumGothic;">로 본 장을 갈음하도록 합니다.<br>어플리케이션 아키텍쳐로 각 시스템의 세부 컴포넌트와 모듈을 표시하고 상호 작용하는 목적이 기술되어 있기 때문입니다.<br></span></p>
+                <p data-ke-size="size16">&nbsp;</p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23">3.1.3 Component Design</a></h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">소프트웨어 구성요소인 각 Component와 그 하위 module을 정의하고, 각각의 기능 및 의존관계 등을 기술합니다. ( </span><span style="font-family: NanumGothic; color: #ff0000;">input 값인 소프트웨어 아키텍쳐를 기반</span><span style="font-family: NanumGothic;">으로 컴포넌트의 역할과 주요 호출 등을 서술합니다. ) </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.1 통합 계정 관리 Manager(Component)</a></h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">로컬 + 연동 계정의 풀에서 사용자 계정을 관리 할 수 있도록 지원하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23">3.1.3.2 통합 권한 관리 Manager(Component)</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">로컬 + 연동 계정의 풀에서 사용자 계정에 대한 권한을 관리 할 수 있도록 지원하는 메니저 또한 전체 계정을 대상으로 권한을 정의하고 할당 할 수 있도록 지원하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.3 로컬 계정 관리 Manager(Component)</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">로컬 내부에서 계정을 관리 할 수 있도록 하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23">3.1.3.4 연동 계정 관리 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">연동하는 계정 툴. 예를 들어 LDAP, CROWD 등의 계정을 로드하도록 지원하는 메니저 연동하는 계정을 연결 할 수 있도록 설정을 지원하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.5 사용자별 맞춤 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">전체 사용자를 일정한 권한을 기준으로 맞춤형 서비스를 제공하고, 제품(서비스) 별 대시보드를 제공하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.6 수집 호스트 분류 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">모니터링 시스템에 적재되는, 데이터를 기준으로 호스트를 분류하여 리스트를 제공하도록 하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.7 자동 설정 등록 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">모니터링 시스템의 데이터 통합 컨트롤러를 InfluxDB로 수집하기 때문에,<br>InfluxDB에 자동으로 등록할 수 있는 DataSource와 DashBoard를, 미리 등록된 template 를 import 할 수 있도록 지원하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23">3.1.3.8 요구사항 등록 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항을 등록 할 수 있도록 제품(서비스) 를 표시하고 사용자로 하여금 요구사항을 등록 할 수 있도록 지원하는 메니저 </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.9 요구사항 리뷰 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">등록된 요구사항은 제품(서비스)에 의해 구조화 되고, 해당 제품(서비스)의 요구사항은 관리되어야 할 대상으로 각 요구사항은, 미리 정의된 프로세스인 ( 등록-&gt;리뷰→승인 ) 일련의 과정을 거칩니다.<br>또한, 제픔(서비스)의 일련의 과정을 관리 및 권한을 권한자로 하여금 처리할 수 있도록 한정합니다.</span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.10 요구사항 권한 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항 권한 메니저는 요구사항 리뷰 메니저에 제공할, 제품(서비스)의 일련의 과정 프로세스를 관리하고, 각 프로세스를 처리할 수 있는 권한자를 관리하는 메니저</span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.11 요구사항 버전 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항 버전 관리 메니저는 제품(서비스)의 출시와 관련되며, 이슈 트래커에 등록할 버전을 지정하여 관리되고, 연동할 수 있는 컴포넌트입니다.</span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.12 요구사항 승인, 연동 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항은 최종 과정인 승인과, 더불어서 제품(서비스)에 연동된 Issue tracker 및 wiki 등에 후속 조치를 담당하는 메니저 입니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.13 요구사항 이력 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항의 모든 기록을 담당하는 이력 메니저이며, 변동사항 발생시 등록된 일련의 프로세스를 재시작하는 메니저입니다. 또한 변경 또는 프로세스가 진행된 내역을 조회할 수 있으며, 연동된 시스템 역시 확인 할 수 있도록 기능을 제공합니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.14 요구사항 진척 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항 진척 메니저는 제품(서비스)에 등록된 요구사항의 연결된 이슈와 버전정보를 바탕으로 진척도를 관리하는 메니저 입니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.15 요구사항 알람 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">요구사항 일련의 프로세스에 따라서, 제품(서비스) 의 이해관계자 * 연동된 시스템의 사용자까지 * 에게 알람을 발송합니다. 알람 발송 시, mail 을 default로 하고 추가 알람 방식은 추후 제공하도록 합니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.16 제품(서비스) 등록 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">aRMS의 기준 데이터 중에 하나인 제품(서비스)를 등록하고 관리하도록 합니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23" >3.1.3.17 제품(서비스) ALM Mapping Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">제품(서비스)에서 연동할 툴의 게이트를 제공하는 메니저입니다.<br>실제 연동 설정 데이터를 관리하지 않습니다. ( 이유는 1:N 의 관계를 가질 수도 있기 떄문입니다 ) </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23">3.1.3.18 제품(서비스) - 요구사항 - Issue Tracker Mapping Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">제품(서비스)의 Issue Tracker 연동 설정을 제공하는 맵핑 메니저 입니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23"   >3.1.3.19 제품(서비스) - 요구사항 - WIKI Mapping Manager ( Component ) </h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">제품(서비스)의 Wiki 연동 설정을 제공하는 맵핑 메니저입니다.<br>위키를 등록하는 이유는 향 후 요구사항을 자동으로 위키에 문서로 저장 관리 해 주기 때문입니다. ( not write , only read ) </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23"  >3.1.3.20 제품(서비스) - 요구사항 - VCS Mapping Manager ( Component ) </h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">제품(서비스)의 VCS 연동 설정을 제공하는 맵핑 메니저입니다.<br>VCS를 통해 관련 요구사항의 하위 이슈와 연관된 브랜치와 소스의 상태를 추적하여 수치화 하는데 집중되 있습니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23"  >3.1.3.21 제품(서비스) - 요구사항 - Code Quality Mapping Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">제품(서비스)의 CodeQuality 툴 연동 설정을 제공하는 맵핑 메니저 입니다.<br>이 경우, Issue tracker 나 VCS에서 제공되는 api 가 있다면 자동 수집하도록 하며,<br>연관 이슈에서 파생된 코드의 변경은 추적하여 수집하고, 이외에도 추가적으로 마스터 브랜치에 대한 코드 퀄리티를 추적합니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23"  >3.1.3.22 제품(서비스) - 요구사항 - CICD Mapping Manager ( Component )</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">제품(서비스)의 연관된 이슈에서 커밋, 푸쉬된 VCS정보로 부터 확인 할 수 있는 CICD 빌드 결과나, 배포 현황을 볼 수 있도록 비주얼한 서비스를 제공합니다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23"   >3.1.4 Data Design</h3>
+    <div><span style="font-family: NanumGothic; letter-spacing: 0px;">데이터 디자인은 다음과 같이 구성합니다.</span></div>
+    <div>
+        <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #ff0000;">어플리케이션 아키텍쳐를 기반</span><span style="font-family: NanumGothic;">으로 구체화된 컴포넌트와 모듈이 사용하는 데이터를 설계하는 </span><span style="font-family: NanumGothic; color: #ff0000;">데이터 아키텍쳐</span><span style="font-family: NanumGothic;">로 갈음합니다. ( 소프트웨어 Component 간에 전달되는 자료구조를 설명합니다. )<br></span></p>
+        <figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1557" data-origin-height="970" style="margin-left: calc(50% - 550px); width: 1100px;"><span data-url="https://blog.kakaocdn.net/dn/qNU2e/btsrau2qyZU/8wIWs7KvpZExsUousz2wW0/img.png" data-lightbox="lightbox" style="padding-bottom: 62.2993%;"><img onerror="this.onerror=null; this.src='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png'; this.srcset='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png';" data-origin-width="1557" data-origin-height="970" class="lazyautosizes lazyloaded" data-src="https://blog.kakaocdn.net/dn/qNU2e/btsrau2qyZU/8wIWs7KvpZExsUousz2wW0/img.png" data-srcset="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FqNU2e%2Fbtsrau2qyZU%2F8wIWs7KvpZExsUousz2wW0%2Fimg.png" data-sizes="auto" sizes="1100px" srcset="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FqNU2e%2Fbtsrau2qyZU%2F8wIWs7KvpZExsUousz2wW0%2Fimg.png" src="https://blog.kakaocdn.net/dn/qNU2e/btsrau2qyZU/8wIWs7KvpZExsUousz2wW0/img.png"></span></figure>
+    </div>
+    <h3 data-ke-size="size23" >3.1.5 Interface Design</h3>
+    <div>
+        <div>
+            <div>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">인터페이스 디자인의 전제는 시스템 정의에서 상세화된 컴포넌트의 </span><span style="font-family: NanumGothic; color: #ff0000;">데이터 아키텍쳐가 Input 값</span><span style="font-family: NanumGothic;">이며, ( 어떤 데이터를 input하고 어떤 데이터를 return 할 것인지 정의되어야 한다 ) </span></p>
+                <p data-ke-size="size16"><span style="font-family: NanumGothic;">컴포넌트 기준으로 사용되는 인터페이스가 상세화되는것이 </span><span style="font-family: NanumGothic; color: #ff0000;">인터페이스 디자인 Output</span><span style="font-family: NanumGothic;">이다. </span></p>
+            </div>
+        </div>
+    </div>
+    <h3 data-ke-size="size23"  >3.1.5.1 Module Interface&nbsp</h3>
+    <p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1280" data-origin-height="1156" style="margin-left: calc(50% - 550px); width: 1100px;"><span data-url="https://blog.kakaocdn.net/dn/dlWd6D/btsro7fdc2m/mRXCzIn3nFoDNQne4kXsNK/img.png" data-lightbox="lightbox" style="padding-bottom: 90.3125%;"><img onerror="this.onerror=null; this.src='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png'; this.srcset='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png';" data-origin-width="1280" data-origin-height="1156" class="lazyautosizes lazyloaded" data-src="https://blog.kakaocdn.net/dn/dlWd6D/btsro7fdc2m/mRXCzIn3nFoDNQne4kXsNK/img.png" data-srcset="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdlWd6D%2Fbtsro7fdc2m%2FmRXCzIn3nFoDNQne4kXsNK%2Fimg.png" data-sizes="auto" sizes="1100px" srcset="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdlWd6D%2Fbtsro7fdc2m%2FmRXCzIn3nFoDNQne4kXsNK%2Fimg.png" src="https://blog.kakaocdn.net/dn/dlWd6D/btsro7fdc2m/mRXCzIn3nFoDNQne4kXsNK/img.png"></span></figure>
+    <p></p>
+    <table style="background-color: #ffffff; border-collapse: collapse; width: 100%; height: 144px;" border="1" data-ke-align="alignLeft">
+        <tbody>
+        <tr style="height: 72px;">
+            <td style="background-color: #f4f5f7; height: 72px;">
+                <div>
+                    <div><span><span style="font-family: NanumGothic;">모듈은 가장 상위에 위치하는 구현의 단위, 컴포넌트는 런타임 엔티티를 참조하는 단위라고 생각하면 됩니다. 따라서, 모듈과 컴포넌트는 상위와 하위관계를 명확히 구분짓기 어렵고 서로 다른 개념으로 바라보아야 합니다. 쉽게 설명해서, 모듈이란 실질적으로 구현이 된 단위를 의미한다.<br>반면, 컴포넌트는 실제적으로 동작하고있는 엔티티로써 활동중인 독립적인 단위를 중점적으로 보고 있다.</span></span></div>
+                </div>
+            </td>
+        </tr>
+        <tr style="height: 72px;">
+            <td style="background-color: #ffffff; height: 72px;">
+                <div>
+                    <div><span><span style="font-family: NanumGothic;">객체지향 프로그래밍 언어를 사용하는 프로젝트에서는, 컴포넌트란, 잘 동작하는 기능 단위를 말하는 것이며, 컴포넌트에서 사용하는 데이터의 단위는 VO ( Value Object ) 또는 DTO ( Data Transfer Object ) 를 의미하게 됩니다. 이 데이터 단위 표시는 데이터베이스 ERD 와 연관관계를 가지게 되며,<br>ERD 와 Mapping 관계를 가지지 않는 VO 혹은 DTO 는 Class 명세에 표시됩니다.</span></span></div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table style="border-collapse: collapse; width: 100%;" border="1" data-ke-align="alignLeft">
+        <tbody>
+        <tr>
+            <td style="width: 33.6047%;">
+                <div>
+                    <div>
+                        <div><span><span style="font-family: NanumGothic;">core - module source code<br></span></span></div>
+                    </div>
+                </div>
+            </td>
+            <td style="width: 66.3953%;">
+                <div>
+                    <div>
+                        <div><span><span style="font-family: NanumGothic; color: #0052cc;"><a href="https://github.com/jstree/JavaServiceTree-CoreModule/blob/master/pom.xml">https://github.com/jstree/JavaServiceTree-CoreModule/blob/master/pom.xml</a><br></span></span></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 33.6047%;">
+                <div>
+                    <div>
+                        <div><span><span style="font-family: NanumGothic;">backend - module source code</span></span></div>
+                    </div>
+                </div>
+            </td>
+            <td style="width: 66.3953%;">
+                <div>
+                    <div>
+                        <div><span><span style="font-family: NanumGothic; color: #0052cc;"><a href="https://github.com/jstree/JavaServiceTree-Backend-ServerProject/blob/master/pom.xml">https://github.com/jstree/JavaServiceTree-Backend-ServerProject/blob/master/pom.xml</a></span></span></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 33.6047%;">
+                <div>
+                    <div>
+                        <div><span><span style="font-family: NanumGothic;">frontend - module sorce code</span></span></div>
+                    </div>
+                </div>
+            </td>
+            <td style="width: 66.3953%;">
+                <div>
+                    <div>
+                        <div><span><span style="font-family: NanumGothic; color: #0052cc;"><a href="https://github.com/jstree/JavaServiceTree-Frontend-WebProject/blob/master/bower.json">https://github.com/jstree/JavaServiceTree-Frontend-WebProject/blob/master/bo<br>wer.json</a><br></span></span></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p style="color: #333333;" data-ke-size="size16">A-RMS 시스템은 총 4개의 모듈로 이루어져 있습니다&nbsp; (Frontend, Middle-Proxy, Core,&nbsp; &nbsp;)</p>
+    <p style="color: #333333;" data-ke-size="size16">이 시스템은 전통적인 방식으로 구성되어 있으며, 각 모듈은 아래와 같은 역할을 수행합니다.</p>
+    <p style="color: #333333;" data-ke-size="size16"><br><b>Core&nbsp;모듈</b>:&nbsp;Core&nbsp;모듈은&nbsp;의존성&nbsp;라이브러리&nbsp;관리와&nbsp;함께&nbsp;Struts부터&nbsp;Spring까지&nbsp;다양한&nbsp;설정을&nbsp;제공합니다.&nbsp;또한&nbsp;iBatis에서&nbsp;Hibernate까지&nbsp;다양한&nbsp;설정을&nbsp;포함하고&nbsp;있습니다.&nbsp;이&nbsp;모듈은&nbsp;다른&nbsp;모듈&nbsp;간의&nbsp;관계를&nbsp;설명하는데&nbsp;중점을&nbsp;두며,&nbsp;시스템의&nbsp;핵심&nbsp;설정과&nbsp;의존성&nbsp;관리를&nbsp;수행합니다.<br><br></p>
+    <ul style="list-style-type: circle;" data-ke-list-type="circle">
+        <li>Spring Security 와 Keycloak 을 연동한 인증 인가 시스템 적용 ( Spring security 설정과 동작을 분리 )</li>
+        <li>Spring OAuth2RestTemplate 을 활용한 연관 시스템간의 통신 적용 완료 ( 사용자 베이스 통신 동작을 분리 )</li>
+        <li>Docker file 을 자동으로 구성하도록 설정</li>
+        <li>Artifact Version 을 자동으로 구성하도록 설정</li>
+        <li>ZuulProxy 를 활용한 MSA Gateway 구성</li>
+        <li>Zipkin 을 활용한 Request Flow 추적</li>
+    </ul>
+    <p style="color: #333333;" data-ke-size="size16"><b>Backend&nbsp;모듈</b>: Backend 모듈은 비즈니스 로직에서 사용되는 최소한의 속성, 설정 및 코드를 포함하고 있는 구조입니다. 이 모듈은 핵심 비즈니스 로직을 처리합니다. Java Service Tree Framework를 기반으로 동작하고 있습니다. Java Service Tree Framework 는&nbsp; MVC패턴을 구현한 다양한 프레임워크를 대상으로 ( EgovFramework 기반한 ) 서비스레이어의 도메인 객체를 Tree Base Object로 간주하여 서비스 - DAO - DTO - DB를 정형화한 기반 구현체를 제공하는 프레임워크 입니다.</p>
+    <p style="color: #333333;" data-ke-size="size16"><br><b>Frontend&nbsp;모듈:</b>&nbsp;Frontend&nbsp;모듈은&nbsp;웹&nbsp;서버에서&nbsp;정적&nbsp;파일을&nbsp;전송하는&nbsp;역할을&nbsp;담당합니다.&nbsp;주로&nbsp;사용자&nbsp;인터페이스와&nbsp;관련된&nbsp;기능을&nbsp;처리하며,&nbsp;사용자가&nbsp;시스템과&nbsp;상호작용할&nbsp;수&nbsp;있도록&nbsp;합니다.<br><br><br></p>
+    <h3 data-ke-size="size23" >3.1.5.2 Component Interface Design</h3>
+    <h3 style="color: #000000; text-align: start;" data-ke-size="size23">3.1.5.2.1 통합 계정 관리 Manager ( Component )</h3>
+    <div>
+        <div>
+            <div><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.1.1 getUserFromAllDirectory</span></div>
+        </div>
+    </div>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.1.2 getUsersFromAllDirectory</span></p>
+    <h3 data-ke-size="size23" >3.1.5.2.2 통합 권한 관리 Manager ( Component )</h3>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.2.1 getPermissionFromUser </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.2.2 getPermission </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.2.3 putPermission </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.2.4 updatePermission </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.2.5 deletePermission </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; color: #333333; text-align: start;">&nbsp; &nbsp; 3.1.5.2.2.6 getAllPermissionList</span></p>
+    <h3 data-ke-size="size23" >3.1.5.2.3 로컬 계정 관리 Manager ( Component )</h3>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.3.1 getLocalUser </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.3.1 putLocalUser </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.3.1 updateLocalUser </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.3.1 deleteLocalUser </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.3.1 getAllLocalUser</span></p>
+    <h3 data-ke-size="size23">3.1.5.2.4 연동 계정 관리 Manager ( Component )</h3>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.4.1 getRelatedAccoutTool </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.4.2 putRelatedAccoutTool</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.4.3 updateRelatedAccoutTool </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.4.4 deleteRelatedAccoutTool </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.4.5 getAllRelatedAccoutTool </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.4.6 connectRelatedAccoutTool</span></p>
+    <h3 data-ke-size="size23" >3.1.5.2.5 사용자별 맞춤 Manager ( Component )</h3>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.5.1 getDeveloperViewTemplate </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.5.2 setPerDeveloperView </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.5.3 getPerDeveloperView </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.5.4 updatePerDeveloperView </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.5.5 deletePerDeveloperView</span></p>
+    <h3 data-ke-size="size23" >3.1.5.2.6 수집 호스트 분류 Manager ( Component )</h3>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.1 Anonymous - getDeviceList</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.2 Anonymous - searchNode</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.3 Anonymous - getPaginatedChildNode </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.4 Anonymous - getNode</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.5 Anonymous - getChildNode</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.6 Anonymous - getMonitor</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.6.7 Anonymous - updateList</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.6.8 Admin - addNode </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.6.9 Admin - removeNode</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.6.10 Admin - alterNode </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.6.11 Admin - alterNodeType </span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.6.12 Admin - moveNode</span></p>
+    <p data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.6.13 Admin - getChildNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.7 자동 설정 등록 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.7.1 updateDashBoard </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.7.2 updateDataSource </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.7.3 updateDeviceHost</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23">3.1.5.2.8 요구사항 등록 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.8.1 Admin - Requirement addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.8.2 Admin - Requirement alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.8.3 Admin - Requirement alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.8.4 Admin - Requirement removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.8.5 Admin - Requirement moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.8.6 Admin - Requirement getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.9 요구사항 리뷰 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.9.1 Admin - Requirement Review addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.9.2 Admin - Requirement Review alterNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.9.3 Admin - Requirement Review alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.9.4 Admin - Requirement Review removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.9.5 Admin - Requirement Review moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.9.6 Admin - Requirement Review getNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">3.1.5.2.10 요구사항 권한 Manager ( Component )</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23">3.1.5.2.10.1 Admin - Requirement Permission addNode </h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.10.2 Admin - Requirement Permission alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.10.3 Admin - Requirement Permission alter type Node</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.10.4 Admin - Requirement Permission removeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.10.5 Admin - Requirement Permission moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic;">&nbsp; &nbsp; 3.1.5.2.10.6 Admin - Requirement Permission getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.11 요구사항 버전 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.11.1 Admin - Requirement Version addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.11.2 Admin - Requirement Version alterNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.11.3 Admin - Requirement Version alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.11.4 Admin - Requirement Version removeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.11.5 Admin - Requirement Version moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.11.6 Admin - Requirement Version getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.12 요구사항 승인, 연동 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.12.1 Admin - Requirement Transaction addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.12.2 Admin - Requirement Transaction alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.12.3 Admin - Requirement Transaction alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.12.4 Admin - Requirement Transaction removeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.12.5 Admin - Requirement Transaction moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.12.6 Admin - Requirement Transaction getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.13 요구사항 이력 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.13.1 Admin - Requirement History addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.13.2 Admin - Requirement History alterNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.13.3 Admin - Requirement History alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.13.4 Admin - Requirement History removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.13.5 Admin - Requirement History moveNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.13.6 Admin - Requirement History getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.14 요구사항 진척 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.14.1 Admin - Requirement Info 프로덕트(서비스)</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.14.2 Admin - Requirement Info 프로덕트(서비스)</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.14.3 Admin - Requirement Info 프로덕트(서비스)</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.14.4 Admin - Requirement Info 프로덕트(서비스)</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.14.5 Admin - Requirement Info 프로덕트(서비스)</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.14.6 Admin - Requirement Info 프로덕트(서비스)</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.15 요구사항 알람 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.15.1 Admin - Requirement Alarm - configuration</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.16 제품(서비스) 등록 Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.16.1 Product(Service) Manager - addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.16.2 Product(Service) Manager - alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.16.3 Product(Service) Manager - alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.16.4 Product(Service) Manager - removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.16.5 Product(Service) Manager - moveNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.16.6 Product(Service) Manager - getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.17 제품(서비스) ALM Mapping Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.17.1 Product(Service) - ALM Mapping Manager - addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.17.2 Product(Service) - ALM Mapping Manager - alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.17.3 Product(Service) - ALM Mapping Manager - alterTypeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.17.4 Product(Service) - ALM Mapping Manager - removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.17.5 Product(Service) - ALM Mapping Manager - moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.17.6 Product(Service) - ALM Mapping Manager - getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.18 제품(서비스) - 요구사항 - Issue Tracker Mapping Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; &nbsp;3.1.5.2.18.1 Product(Service) - Issue Tracker Mapping Manager - addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; &nbsp;3.1.5.2.18.2 Product(Service) - Issue Tracker Mapping Manager - alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.18.3 Product(Service) - Issue Tracker Mapping Manager - alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.18.4 Product(Service) - Issue Tracker Mapping Manager - removeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.18.5 Product(Service) - Issue Tracker Mapping Manager - moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.18.6 Product(Service) - Issue Tracker Mapping Manager - getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.19 제품(서비스) - 요구사항 - WIKI Mapping Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.19.1 Product(Service) - Issue Wiki Mapping Manager - addNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.19.2 Product(Service) - Issue Wiki Mapping Manager - alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.19.3 Product(Service) - Issue Wiki Mapping Manager - alterTypeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.19.4 Product(Service) - Issue Wiki Mapping Manager - removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.19.5 Product(Service) - Issue Wiki Mapping Manager - moveNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.19.6 Product(Service) - Issue Wiki Mapping Manager - getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23">3.1.5.2.20 제품(서비스) - 요구사항 - VCS Mapping Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.20.1 Product(Service) - Issue VCS Mapping Manager - addNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.20.2 Product(Service) - Issue VCS Mapping Manager - alterNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.20.3 Product(Service) - Issue VCS Mapping Manager - alterTypeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.20.4 Product(Service) - Issue VCS Mapping Manager - removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.20.5 Product(Service) - Issue VCS Mapping Manager - moveNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.20.6 Product(Service) - Issue VCS Mapping Manager - getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23" >3.1.5.2.21 제품(서비스) - 요구사항 - Code Qaulity Mapping Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.21.1 Product(Service) - Issue CodeQulity Mapping Manager - addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.21.2 Product(Service) - Issue CodeQulity Mapping Manager - alterNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.21.3 Product(Service) - Issue CodeQulity Mapping Manager - alterTypeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.21.4 Product(Service) - Issue CodeQulity Mapping Manager - removeNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.21.5 Product(Service) - Issue CodeQulity Mapping Manager - moveNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.21.6 Product(Service) - Issue CodeQulity Mapping Manager - getNode</span></p>
+    <h3 style="color: #333333; text-align: start;" data-ke-size="size23">3.1.5.2.22 제품(서비스) - 요구사항 - CICD Mapping Manager ( Component )</h3>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.22.1 Product(Service) - Issue CICD Mapping Manager - addNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.22.2 Product(Service) - Issue CICD Mapping Manager - alterNode</span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.22.3 Product(Service) - Issue CICD Mapping Manager - alterTypeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.22.4 Product(Service) - Issue CICD Mapping Manager - removeNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.22.5 Product(Service) - Issue CICD Mapping Manager - moveNode </span></p>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16"><span style="font-family: NanumGothic; letter-spacing: 0px;">&nbsp; &nbsp; 3.1.5.2.22.6 Product(Service) - Issue CICD Mapping Manager - getNode</span></p>
+    <div style="color: #333333; text-align: start;">
+        <h2 data-ke-size="size26"><span style="font-family: NanumGothic;">3.1.6 Database Description</span></h2>
+        <div>
+            <div>
+                <div>
+                    <p data-ke-size="size16"><span style="font-family: NanumGothic;">영구적으로 사용되는 데이터는 데이터를 관리하는 시스템인 Database System에 해당합니다. </span></p>
+                    <p data-ke-size="size16"><span style="font-family: NanumGothic;">또한 데이터베이스 스키마의 데이터를 Mapping 하는 VO, DTO로 보통 표기되기에 ERD와 VO관계를 파악하는 것으로 갈읍합니다.</span></p>
+                    <p data-ke-size="size16"><span style="font-family: NanumGothic;">따라서, ERD - 데이터딕셔너리와 Class 다이어그램으로 갈음합니다.</span></p>
+                    <p data-ke-size="size16">&nbsp;</p>
+                    <div>
+                        <div>
+                            <div>
+                                <h3 data-ke-size="size23"><span style="font-family: NanumGothic;">3.1.6.1 ERD (Entity Relationship Diagram)</span></h3>
+                                <div>
+                                    <div style="background-color: #f4f5f7;">
+                                        <div>
+                                            <div>
+                                                <p data-ke-size="size16"><span style="font-family: NanumGothic;">ERD는 클래스 상세화를 통하여 어떤 데이터를 데이터베이스에 적제해야 할지 결정 한 후 작성될 수 있습니다. </span></p>
+                                                <p data-ke-size="size16"><span style="font-family: NanumGothic;">데이터 설계단계는 각 컴포넌트의 메소드 인터페이스에서 활용할 데이터객체 ( VO, DTO )가 정의된 후 상세화 및 명세가 가능합니다. </span></p>
+                                                <p data-ke-size="size16"><span style="font-family: NanumGothic;">따라서, 클래스 다이어그램이 작성된 후 프로젝트 종료시점에 적시하도록 합니다. ( DDL, DML : script ) </span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+    <div>
+        <div>
+            <div>
+                <h3 data-ke-size="size23"><span style="font-family: NanumGothic;">3.1.6.2 Class Diagram</span></h3>
+                <div>
+                    <div>
+                        <div>
+                            <p data-ke-size="size16"><span style="font-family: NanumGothic;">프로젝트 진행 중 빌드 시 자동으로 클래스 다이어그램을 export 하여 제공할 수 있도록 합니다. 관련 링크는 다음과 같습니다 → </span><span style="font-family: NanumGothic; color: #0052cc;"><a href="http://www.313.co.kr/DeveloperPortal/analysis/">http://www.313.co.kr/DeveloperPortal/analysis/</a> </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p data-ke-size="size16">&nbsp;</p>
+    <p data-ke-size="size16">&nbsp;</p></div>
