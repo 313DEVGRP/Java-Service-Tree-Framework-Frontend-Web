@@ -7,7 +7,10 @@ module.exports = function (grunt) { // jshint ignore:line
     connect: {
       server: {
         options: {
+          //외부에서 개발
           port: 80,
+          //내부에서 개발
+          //port: 9999,
           hostname: '0.0.0.0',
           middleware: function (connect, options, defaultMiddleware) {
 
@@ -26,8 +29,8 @@ module.exports = function (grunt) { // jshint ignore:line
             ].concat(defaultMiddleware);
           }
         },
-        //proxies: [
-         // 로컬 개발 및 테스트용
+        //로컬 개발 및 테스트용
+        // proxies: [
         //   {
         //     context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
         //               '/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2'],
@@ -37,9 +40,8 @@ module.exports = function (grunt) { // jshint ignore:line
         //     changeOrigin: true
         //   }
         // ]
-
+        // 외부에서 개발
         proxies: [
-          // 외부에서 개발
           {
             context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
                       '/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2'],
