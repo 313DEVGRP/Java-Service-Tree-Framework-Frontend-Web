@@ -15,7 +15,8 @@ function execDocReady() {
 			"../reference/lightblue4/docs/lib/d3/d3.min.js",
 			"../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
+			"../reference/lightblue4/docs/lib/widgster/widgster.js",
+			"../reference/jquery-plugins/html2canvas-1.4.1/html2canvas.js"],
 
 		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -36,8 +37,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
-			"../reference/jquery-plugins/html2canvas-1.4.1/html2canvas.js"
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		]
 	];
 
@@ -78,10 +78,7 @@ function execDocReady() {
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 			});
-
 			//스크립트 실행 로직을 이곳에 추가합니다.
-
-
 
 		})
 		.catch(function() {
@@ -342,12 +339,6 @@ function versionClicks(element, c_id, c_title) {
 
 	$(".list-item").html(coloredTitleHtml);
 
-	// $("#select_Version").text(c_title);
-
-
-
-
-
 	console.log("click :: C_ID ->  " + c_id);
  	$(".searchable").multiSelect("deselect_all");  //선택된 항목들을 모두 선택 해제(해당 요소들에서 선택을 없애는)하는 코드
 	// console.log("pdservice_link -> " +   $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id);
@@ -367,15 +358,6 @@ function versionClicks(element, c_id, c_title) {
 	})
 		.done(function (data) {
 			var versionClickData = [];
-			// console.log("response data check::  " + data.response);
-			// console.log("===============================111111===========");
-			// console.table( $("#pdservice_table").DataTable().rows(".selected").data()[0]);
-
-			// console.log("response data check:: data.response ->   " + JSON.stringify(data.response));
-			// console.log("response data check:: data.response.pdServiceVersionEntities ->   " + JSON.stringify(data.response.pdServiceVersionEntities));
-			// console.log("==========================================");
-
-
 
 			var multiSelectData = [];
 			for (var k in data.response) {
