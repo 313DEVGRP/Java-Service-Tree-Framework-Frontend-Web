@@ -424,7 +424,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = ["1","2","3","4","5","6","7"];
+	var rowsGroupList = [1,2,3,4,5,6,7];
 	var columnDefList = [
 		{
 			orderable: false,

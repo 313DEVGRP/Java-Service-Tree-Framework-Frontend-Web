@@ -360,9 +360,14 @@ function initD3Chart(href) {
             translateX = translateCoords.translate[0] + speed;
             console.log("translateX = " + translateX);
 
-            x = x * scale + viewerWidth / 3 - translateX;
+            if( translateX < 250 ){
+                x = x * scale + viewerWidth / 2 - translateX;
+            }else{
+                x = x * scale + viewerWidth / 3 - translateX;
+            }
 
             console.log("x => " + x);
+
             y = y * scale + viewerHeight / 2;
 
             d3.select("g")
@@ -419,7 +424,12 @@ function initD3Chart(href) {
 
             // Set widths between levels based on maxLabelLength.
             nodes.forEach(function(d) {
-                d.y = d.depth * (maxLabelLength * 4); //maxLabelLength * 10px
+                console.log("[common.js] update :: maxLabelLength = " + maxLabelLength);
+                if( maxLabelLength < 20 ) {
+                    d.y = d.depth * (maxLabelLength * 10); //maxLabelLength * 10px
+                }else{
+                    d.y = d.depth * (maxLabelLength * 5); //maxLabelLength * 10px
+                }
                 // alternatively to keep a fixed scale one can set a fixed depth per level
                 // Normalize for fixed-depth by commenting out below line
                 // d.y = (d.depth * 500); //500px per level.
