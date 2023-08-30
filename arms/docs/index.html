@@ -1,114 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
-<link href="images/favicon.png" rel="icon" />
-<title>iDocs - One Page Documentation HTML Template</title>
-<meta name="description" content="iDocs - One Page Documentation HTML Template">
-<meta name="author" content="harnishdesign.net">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+    <link href="assets/images/favicon.png" rel="icon"/>
+    <title>Documentation | Your ThemeForest item Name</title>
+    <meta name="description" content="Your ThemeForest item Name and description">
+    <meta name="author" content="harnishdesign.net">
 
-<!-- Stylesheet
-============================================= -->
-<!-- Bootstrap -->
-<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap/css/bootstrap.min.css" />
-<!-- Font Awesome Icon -->
-<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css" />
-<!-- Custom Stylesheet -->
-<link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css" />
+    <!-- Stylesheet
+    ============================== -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap/css/bootstrap.min.css"/>
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css"/>
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css"/>
+    <!-- Highlight Syntax -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/highlight.js/styles/github.css"/>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css"/>
 </head>
 
-<body>
+<body data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
 
 <!-- Preloader -->
 <div class="preloader">
-  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-</div>
-<!-- Preloader End --> 
-
-<!-- Document Wrapper   
-=============================== -->
-<div id="main-wrapper"> 
-  
-  <!-- Content
-  ============================================= -->
-  <div id="content" role="main"> 
-    
-    <!-- Intro
-    ============================================= -->
-    <section id="home" class="pt-5">
-          <div class="container">
-            <div class="row">
-              <div class="col-xl-9 mx-auto text-center">
-                <h1 class="text-13 font-weight-700 mb-2">iDocs</h1>
-				<h2 class="text-5 text-muted mb-3">여기는 문서 카테고리 형태로 쓸 예정임. 설치부터 ~ 도움말까지 전반적으로 demo.html 을 기준으로 작성하시면 됩니다.</h2>
-				<p class="text-4 font-weight-600 mb-0"><a href="http://demo.harnishdesign.net/html/idocs/help/">Documentation</a> | <a href="https://github.com/harnishdesign/iDocs">GitHub</a> | <a href="http://www.harnishdesign.net/idocs-one-page-documentation-html-template/">Template Overview</a></p>
-              </div>
-            </div>
-          </div>
-    </section>
-    <!-- Intro end --> 
-
-    <!-- Layout
-    ============================================= -->
-<section id="home">    
-	<div class="container text-center py-5">
-	  
-	  <div class="row justify-content-center mx-lg-5">
-		<div class="col-md-6 my-4">
-			<a target="_blank" href="../../index.html"><img src="assets/images/demos/demo-1.jpg" class="img-fluid img-thumbnail shadow-lg p-0" alt="image">
-				<span class="text-dark text-6 font-weight-600 mt-3 d-block">Demo 1 <small class="d-block text-4 mt-1 text-muted">Light Header & Light Sidebar</small></span>
-			</a>
-		</div>
-		<div class="col-md-6 my-4">
-			<a target="_blank" href="index-2.html"><img src="assets/images/demos/demo-2.jpg" class="img-fluid img-thumbnail shadow-lg p-0" alt="image">
-				<span class="text-dark text-6 font-weight-600 mt-3 d-block">Demo 2 <small class="d-block text-4 mt-1 text-muted">Light Header & Dark Sidebar</small></span>
-			</a>
-		</div>
-		<div class="col-md-6 my-4">
-			<a target="_blank" href="index-3.html"><img src="assets/images/demos/demo-3.jpg" class="img-fluid img-thumbnail shadow-lg p-0" alt="image">
-				<span class="text-dark text-6 font-weight-600 mt-3 d-block">Demo 3 <small class="d-block text-4 mt-1 text-muted">Dark Header & Light Sidebar</small></span>
-			</a>
-		</div>
-		<div class="col-md-6 my-4">
-			<a target="_blank" href="index-4.html"><img src="assets/images/demos/demo-4.jpg" class="img-fluid img-thumbnail shadow-lg p-0" alt="image">
-				<span class="text-dark text-6 font-weight-600 mt-3 d-block">Demo 4 <small class="d-block text-4 mt-1 text-muted">Box Layout</small></span>
-			</a>
-		</div>
-	  </div>
-	  
-      </div>
-	  </section>
-    <!-- Layout end --> 
-    
-    
-  </div>
-  <!-- Content end --> 
-  
-  <!-- Footer
-  ============================================= -->
-  <footer id="footer" class="bg-dark footer-text-light ml-0 py-5">
-    <div class="container text-center">
-      <p>Copyright &copy; 2020 <a href="http://www.harnishdesign.net/idocs-one-page-documentation-html-template/">iDocs</a>. All Rights Reserved.</p>
-	  <p class="text-2 text-center mb-0">Design &amp; Develop by <a class="btn-link" target="_blank" href="http://www.harnishdesign.net/">HarnishDesign</a>.</p>
+    <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
-  </footer>
-  <!-- Footer end --> 
-  
 </div>
-<!-- Document Wrapper end --> 
+<!-- Preloader End -->
 
-<!-- Back to Top
-============================================= --> 
-<a id="back-to-top" class="rounded" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a> 
+<!-- Document Wrapper
+=============================== -->
+<div id="main-wrapper">
 
-<!-- JavaScript --> 
-<script src="assets/vendor/jquery/jquery.min.js"></script> 
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> 
-<!-- Easing --> 
-<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script> 
-<!-- Custom Script --> 
+    <!-- Header
+    ============================ -->
+    <header id="header" class="sticky-top">
+        <!-- Navbar -->
+        <nav class="primary-menu navbar navbar-expand-lg navbar-dropdown-dark">
+            <div class="container-fluid">
+                <!-- Sidebar Toggler -->
+                <button id="sidebarCollapse" class="navbar-toggler d-block d-md-none" type="button"><span></span><span
+                        class="w-75"></span><span class="w-50"></span></button>
+                <!--                        src="./img/313.png"-->
+
+                <!-- Logo -->
+                <a class="logo ml-md-3" href="" title="iDocs Template"> <img
+                        src="../img/313.png" width="100px;" height="90px;" alt="iDocs Template"/> </a>
+                <!-- Logo End -->
+
+                <!-- Navbar Toggler -->
+                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#header-nav">
+                    <span></span><span></span><span></span></button>
+
+                <div id="header-nav" class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="dropdown"><a class="dropdown-toggle" href="#">Dropdown</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#">Dropdown
+                                    Action</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="../../index.html">Action</a></li>
+                                        <li><a class="dropdown-item" href="feature-header-dark.html">Another Action</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="feature-header-primary.html">Something Else
+                                            Here</a></li>
+                                        <li><a class="dropdown-item" href="index-2.html">Another Link</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Another Action</a>
+                                <li><a class="dropdown-item" href="#">Something Else Here</a></li>
+                            </ul>
+                        </li>
+                        <li><a target="_blank"
+                               href="http://www.a-rms.net/313devgrp/arms/">Support</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--                <ul class="social-icons social-icons-sm ml-lg-2 mr-2">-->
+                <!--                    <li class="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/harnishdesign/" target="_blank" title="" data-original-title="Twitter"><i class="fab fa-twitter"></i></a></li>-->
+                <!--                    <li class="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/harnishdesign/" target="_blank" title="" data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a></li>-->
+                <!--                    <li class="social-icons-dribbble"><a data-toggle="tooltip" href="http://www.dribbble.com/harnishdesign/" target="_blank" title="" data-original-title="Dribbble"><i class="fab fa-dribbble"></i></a></li>-->
+                <!--                </ul>-->
+            </div>
+        </nav>
+        <!-- Navbar End -->
+    </header>
+    <!-- Header End -->
+
+    <!-- Content
+    ============================ -->
+    <div id="content" role="main">
+
+        <!-- Sidebar Navigation
+      ============================ -->
+        <div class="idocs-navigation bg-light">
+            <ul class="nav flex-column ">
+                <li class="nav-item"><a class="nav-link active" href="#install_guide_document">설치 가이드 문서 목차</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#arms">aRMS 란</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#installation_time">설치 예상 시간</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#advance_preparation">사전 준비</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#nfs_setting"> NFS 설정</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#docker_install"> 도커 설치</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#docker_swarm_apply">도커 스웜 적용</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#install_process">설치 과정</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#create_folder">폴더 생성</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_practice">aRMS 실행</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_detail">aRMS 상세 정보</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_directory_structure">디렉토리 구조</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#port_info">포트 정보</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#system_specifications">시스템 사양</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#detail_guide">삭제 가이드</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#install_error_message">설치 시 오류 메시지</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#project_charter">Project Charter</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#project_background">1. 배경</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#project_content">2. 내용</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#utilization_plan">3. 활용 방안</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#srs">SRS</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#srs_overview"> 1. 프로젝트 개요 </a></li>
+                        <li class="nav-item"><a class="nav-link" href="#srs_serviceview"> 2. 제품(서비스) 조망</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#srs_interface_requirements">3.인터페이스 요구사항</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#srs_functional_requirements">4. 제품(서비스) 기능 요구사항
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link" href="#non_functional_requirements"> 5. 비-기능 요구사항</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#sds">SDS</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#sds_overview">1. 프로젝트 개요</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#design_considerations">2. 설계 고려사항</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#design">3. 설계</a></li>
+                        <!--                        <li class="nav-item"><a class="nav-link" href="#idocs_icons">Icons</a></li>-->
+                        <!--                        <li class="nav-item"><a class="nav-link" href="#idocs_image">Image</a></li>-->
+                        <!--                        <li class="nav-item"><a class="nav-link" href="#idocs_video">Video</a></li>-->
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#idocs_components">팝업1</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#idocs_accordion">Accordion</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#idocs_tabs">Tabs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#idocs_social_icon">Social Icon</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#idocs_helper_classes">Helper Classes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#idocs_faq">팝업2</a></li>
+                <!--                <li class="nav-item"><a class="nav-link" href="#idocs_source_credits">Source & Credits</a></li>-->
+                <!--                <li class="nav-item"><a class="nav-link" href="#idocs_support">Support</a></li>-->
+                <!--                <li class="nav-item"><a class="nav-link" href="#idocs_changelog">Changelog</a>-->
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="#v1-1">v1.1</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#v1-0">v1.0</a></li>
+                </ul>
+            </ul>
+        </div>
+
+        <!--  ============================
+                index page
+              ============================ -->
+        <div class="idocs-content">
+            <div class="container">
+
+                <!-- arms -->
+                <section id="install_guide_document"></section>
+                <section id="arms"></section>
+                <section id="installation_time"></section>
+                <section id="advance_preparation"></section>
+                <section id="nfs_setting"></section>
+                <section id="docker_install"></section>
+                <section id="docker_swarm_apply"></section>
+                <section id="install_process"></section>
+                <section id="create_folder"></section>
+                <section id="arms_practice"></section>
+                <section id="arms_detail"></section>
+                <section id="arms_directory_structure"></section>
+                <section id="port_info"></section>
+                <section id="system_specifications"></section>
+                <section id="detail_guide"></section>
+                <section id="install_error_message"></section>
+
+                <!-- A-RMS Document  -->
+                <section id="project_charter"> <h1>A-RMS Document </h1></section>
+
+                <section id="project_background"></section>
+
+                <section id="project_content"></section>
+
+                <section id="utilization_plan"></section>
+
+                <!-- SRS Document -->
+                <section id="srs"><h1>SRS Document</h1></section>
+
+                <section id="srs_overview"></section>
+
+                <!-- 2. 제품(서비스) 조망   -->
+                <section id="srs_serviceview"></section>
+
+                <!-- 3. 인터페이스 요구사항 -->
+                <section id="srs_interface_requirements"></section>
+                <!-- 4. 제품(서비스) 기능 요구사항 -->
+                <section id="srs_functional_requirements"></section>
+                <!-- 5. 비-기능 요구사항 -->
+                <section id="non_functional_requirements"></section>
+
+                <!-- SDS Document -->
+                <section id="sds"><h1>SDS Document </h1></section>
+                <!-- 1. 프로젝트 개요 -->
+                <section id="sds_overview"></section>
+                <!--  2. 설계 고려사항 -->
+                <section id="design_considerations"></section>
+                <!-- 3. 설계 -->
+                <section id="design"></section>
+
+
+            </div>
+            <!--  ============================
+                   index page end
+                 ============================ -->
+
+
+
+            <!-- Back To Top -->
+            <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i
+                    class="fa fa-chevron-up"></i></a>
+
+            <!-- JavaScript
+            ============================ -->
+            <script src="assets/vendor/jquery/jquery.min.js"></script>
+            <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Highlight JS -->
+            <script src="assets/vendor/highlight.js/highlight.min.js"></script>
+            <!-- Easing -->
+            <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+            <!-- Magnific Popup -->
+            <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+            <!-- Custom Script -->
+            <script src="assets/js/theme.js"></script>
+            <script>
+                $(document).ready( function() {
+
+                    $("#footer").load("./html/footer.html");
+                    $("#project_background").load("./html/project-background.html");
+                    $("#project_content").load("./html/project-content.html");
+                    $("#utilization_plan").load("./html/utilization-plan.html");
+                    $("#srs_overview").load("./html/srs-overview.html");
+                    $("#srs_serviceview").load("./html/srs-serviceview.html");
+                    $("#srs_interface_requirements").load("./html/interface-requirements.html");
+                    $("#srs_functional_requirements").load("./html/srs-functional-requirements.html");
+                    $("#non_functional_requirements").load("./html/non-functional-requirements.html");
+                    $("#sds_overview").load("./html/sds-overview.html");
+                    $("#design_considerations").load("./html/design-considerations.html");
+                    $("#design").load("./html/design.html");
+
+                });
+            </script>
+        </div>
+    </div>
+</div>
+<!-- Document Wrapper end -->
+<!-- Footer
+============================ -->
+<footer id="footer"  include-html="content1.html" class="section bg-dark footer-text-light" ></footer>
+<!-- Footer end -->
+<!-- Back To Top -->
+<a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a>
+
+<!-- JavaScript
+============================ -->
+<script src="assets/vendor/jquery/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Highlight JS -->
+<script src="assets/vendor/highlight.js/highlight.min.js"></script>
+<!-- Easing -->
+<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+<!-- Magnific Popup -->
+<script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+<!-- Custom Script -->
 <script src="assets/js/theme.js"></script>
+
+<!-- use index page -->
+<script src="assets/js/includeHTML.js"></script>
 </body>
 </html>
