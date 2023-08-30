@@ -360,7 +360,7 @@ function initD3Chart(href) {
             translateX = translateCoords.translate[0] + speed;
             console.log("translateX = " + translateX);
 
-            x = x * scale + viewerWidth / 2 - translateX;
+            x = x * scale + viewerWidth / 3 - translateX;
 
             console.log("x => " + x);
             y = y * scale + viewerHeight / 2;
