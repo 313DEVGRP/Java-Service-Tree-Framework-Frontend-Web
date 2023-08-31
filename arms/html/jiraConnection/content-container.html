@@ -306,35 +306,6 @@
                         </li>
                     </div>
                 </div>
-<!--
-                <div style="float: left">
-                    <button type="button"
-                            id="copychecker"
-                            class="btn btn-default btn-sm">
-                        Copy
-                    </button>
-                    <button type="button"
-                            id="csvchecker"
-                            class="btn btn-default btn-sm hidden">
-                        CSV
-                    </button>
-                    <button type="button"
-                            id="excelchecker"
-                            class="btn btn-default btn-sm hidden">
-                        Excel
-                    </button>
-                    <button type="button"
-                            id="printchecker"
-                            class="btn btn-default btn-sm hidden">
-                        Print
-                    </button>
-                    <button type="button"
-                            id="pdfchecker"
-                            class="btn btn-default btn-sm hidden">
-                        PDF
-                    </button>
-                </div>
-                -->
                 <div style="float: right"
                      id="jira_server_details_popup_div">
                     <button type="button"
@@ -345,7 +316,6 @@
                             onClick="modalPopup('modal_popup_readonly')">
                         새 창으로 지라 정보 보기
                     </button>
-
                 </div>
                 <div style="float: right"
                      class="hidden"
@@ -600,7 +570,7 @@
                                         </div>
                                         <div class="control-group">
                                             <label  class="control-label">
-                                                제품(서비스) 컨텐츠 :
+                                                지라 서버 내용 :
                                             </label>
 <!--                                            <div    class="col-sm-12 darkBack"-->
 <!--                                                    id="detailview_jira_server_contents"-->
@@ -611,7 +581,7 @@
                                                 <div    class="col-sm-12"
                                                         style="padding-top: 10px">
                                                     <div id="detailview_jira_server_contents" contenteditable="false">
-                                                        <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
+                                                        <p>지라 서버의 내용을 기록합니다.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -950,12 +920,11 @@
                  style="margin-bottom: 10px; margin-top: 10px;">
                 <!-- 컴포넌트 대상 -->
                 <div id="selected_info"
-                     class="hidden"
                      style="float: left">
                     <div    class="panel-group json-menu"
                             id="versionAccordion"
                             style="margin-bottom: 0px !important">
-                        <li     class="list-group-item json-menu-header"
+                        <li     class="list-group-item json-menu-header grid3rd"
                                 style="padding: 0px">
                             <div class="chat-message">
                                 <div    class="chat-message-body"
@@ -964,7 +933,7 @@
                                             style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff;"></span>
                                     <div    class="sender"
                                             style="padding-bottom: 5px; padding-top: 5px">
-                                        선택된 지라 서버 :
+                                        선택된 지라 프로젝트 :
                                         <span   id="select_Service"
                                                 style="color: #a4c6ff">
                                                 선택되지 않음
@@ -990,11 +959,10 @@
                     <section class="widget widget-tabs">
                         <header>
                             <ul class="nav nav-tabs">
-                                <li class="active">
+                                <li id="nav_issue_type" class="active">
                                     <a  href="#issue_type"
                                         data-toggle="tab">
                                         <strong>이슈 유형</strong>
-
                                     </a>
                                 </li>
                                 <li>

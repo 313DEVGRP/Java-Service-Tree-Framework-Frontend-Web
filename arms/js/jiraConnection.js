@@ -297,7 +297,7 @@ function dataTableClick(tempDataTable, selectedData) {
 /////////////////////////////
 function jiraServerCardClick(c_id) {
     jiraServerCardClick_old(c_id);
-    project_dataTableLoad(c_id);
+    //project_dataTableLoad(c_id);
 }
 
 function jiraServerCardClick_old(c_id) {
@@ -431,7 +431,7 @@ function project_dataTableLoad(c_id) {
             orderable: false,
             render: function(data, type, full, meta){
                 if(type === 'display'){
-                    data = '<label><a href="javascript:void(0)" onclick="click_projectList_table()">' + data + "</a></label>";
+                    data = '<label><a href="javascript:void(0)" onclick="click_projectList_table(\''+data+'\')">' + data + "</a></label>";
                 }
                 return data;
             }
@@ -474,10 +474,47 @@ function dataTableDrawCallback(tableInfo) {
         .DataTable()
         .columns.adjust()
         .responsive.recalc();*/
+    var className = "";
+    if(selectedTab !== undefined) {
+        if (selectedTab === "이슈해결책")  { className = "issueResolution"; }
+        if (selectedTab ==="이슈우선순위") { className = "issuePriority";   }
+        if (selectedTab === "이슈상태") {
+            if (selectServerType === "클라우드") { className = "project-issueStatus"; }
+            else { className = "issueStatus"; }
+        }
+        if (selectedTab === "이슈유형") {
+            if (selectServerType === "클라우드") { className = "project-issueType"; }
+            else { className = "issueType"; }
+        }
+    }
+    var tableData = tableInfo.aoData;
+    if(!isEmpty(tableData)) {
+        tableData.forEach(function (rowInfo, index) {
+            var tableRowData = rowInfo._aData;
+            console.log("index ===> " + index);
+            console.log(tableRowData);
+            var rowCid = tableRowData.c_id;
+            var rowIsDefault = tableRowData.c_check;
+            var rowNameClass = "." + className + "-data" + index;
+
+            var appendHtml = rowNameClass+">input";
+            if (rowIsDefault ==="true") {
+                console.log("rowIsDefault is true");
+                $(appendHtml).prop("checked", "true");
+            } else {
+                console.log("rowIsDefault is not true");
+            }
+        });
+
+    }
+
 }
 
 //데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(settings, json) {}
+function dataTableCallBack(settings, json) {
+    //console.log(settings);
+    //console.log(json);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
@@ -889,16 +926,7 @@ function projectDataTable(data) {
         destroy: true, // 다시 불러올때 초기화
         lengthChange:false
     });
-/*
-    $("#jira_project_table tbody").on("click", "tr", function () {
-        console.log($(this));
-        var trNum = $(this).closest('tr').prevAll().length;
-        console.log('trNum : ' + trNum);
-        selectProjectIndex = trNum;
-        //projectIssueStatusDataTable(trNum);
-        projectIssueTypeDataTable(trNum);
-        projectIssueTypeDataTable_old(trNum);
-    });*/
+
 }
 function projectIssueStatusDataTable() {
     console.log("issueStatus DataTable");
@@ -906,7 +934,20 @@ function projectIssueStatusDataTable() {
         { title:"설정",
             data: "c_id",
             className: "dt-body-left texe-align-center",
-            defaultContent: "<div style='color: #808080'>N/A</div>"
+            render: function (data, type, row,meta) {
+                if (type === "display") {
+                    if(isEmpty(data)) {
+                        return `<div class="no-project-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                    <input type="radio" name="c_id" value="' + ${data} + '"> </div>`;
+                    }
+                    else {
+                        return `<div class="project-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                    <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})"> 
+                                </div>`;
+                    }
+                }
+                return data;
+            },
         },
         { title:"이슈 상태 아이디",
             data: "c_issue_status_id",
@@ -931,6 +972,7 @@ function projectIssueStatusDataTable() {
     ];
     var rowsGroupList = null; //그룹을 안쓰려면 null 처리
     var columnDefList = [
+        /*
         {
             targets: 0,
             searchable: false,
@@ -942,6 +984,7 @@ function projectIssueStatusDataTable() {
                 return data;
             }
         }
+        */
     ];
     var selectList = {};
     var orderList = [[1, "asc"]];
@@ -964,21 +1007,6 @@ function projectIssueStatusDataTable() {
         buttonList,
         isServerSide
     );
-
-    /*
-        $("#issue_status_table").DataTable({
-            data: issue_status,
-            stateSave: true,
-            destroy: true,
-            processing: true,
-            responsive: true,
-            columns: columnList_status,
-            rowsGroup: rowsGroupList,
-            columnDefs: columnDefList
-        });
-        */
-
-
     // ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
     //datatable 좌상단 datarow combobox style
     $(".dataTables_length").find("select:eq(0)").addClass("darkBack");
@@ -990,26 +1018,22 @@ function projectIssueTypeDataTable() {
         {
             title:"설정",
             data: "c_id",
-            className: "dt-body-left"
-            /* ,
+            className: "dt-body-left",
             render: function (data, type, row,meta) {
                     if (type === "display") {
-                        if(isEmpty(data) || data ==="false" ) {
-                            return `<div class="no-project-data${meta.row}" style="white-space: nowrap;">
-                                        <input type="radio" name="c_check" value="' + ${data} + '">
-                                    </div>
-							    <div style="white-space: nowrap; color: #808080; display: none">N/A</div>`;
+                        if(isEmpty(data)) {
+                            return `<div class="no-project-issueType-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '">
+                                    </div>`;
                         }
-                        if(data ==="true") {
-                            return `<div class="project-data${meta.row}" style="white-space: nowrap;">
-                                        <input type="radio" name="c_check" value="' + ${data} + '" checked>
-                                    </div>
-							        <div style="white-space: nowrap; color: #a4c6ff;">${data}</div>`;
+                        else {
+                            return `<div class="project-issueType-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
+                                    </div>`;
                         }
                     }
                     return data;
             },
-            */
         },
         { title:"이슈 타입 아이디",
           data: "c_issue_type_id",
@@ -1030,23 +1054,11 @@ function projectIssueTypeDataTable() {
           },
           className: "dt-body-left",
           visible: true
-        },
-        { name: "c_check", title: "c_check", data: "c_check", visible: false },
+        }/*,
+        { name: "c_check", title: "c_check", data: "c_check", visible: false },*/
     ];
     var rowsGroupList = []; //그룹을 안쓰려면 null 처리
-    var columnDefList = [
-        {
-            targets: 0,
-            searchable: false,
-            orderable: false,
-            render: function(data, type, full, meta){
-                if(type === 'display'){
-                    data = '<input type="radio" name="c_id" value="' + data + '" onclick="javascript:fn_urlHandler(\'' + data + '\')">';
-                }
-                return data;
-            }
-        }
-    ];
+    var columnDefList = [];
     var selectList = {};
     var orderList = [[1, "asc"]];
     var buttonList = [];
@@ -1086,7 +1098,22 @@ function jiraServerDataTable(target) {
         {
             title:"설정",
             data: "c_id",
-            className: "dt-body-left"
+            className: "dt-body-left",
+            render: function (data, type, row,meta) {
+                if (type === "display") {
+                    if(isEmpty(data)) {
+                        return `<div class="no-issueType-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '">
+                                    </div>`;
+                    }
+                    else {
+                        return `<div class="issueType-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
+                                    </div>`;
+                    }
+                }
+                return data;
+            },
         },
         { title:"이슈 유형 아이디",
             data: "c_issue_type_id",
@@ -1107,14 +1134,28 @@ function jiraServerDataTable(target) {
             },
             className: "dt-body-left",
             visible: true
-        },
-        { name: "c_check", title: "c_check", data: "c_check", visible: false },
+        }
     ];
     var columnList_status= [
         {
             title:"설정",
             data: "c_id",
-            className: "dt-body-left"
+            className: "dt-body-left",
+            render: function (data, type, row,meta) {
+                if (type === "display") {
+                    if(isEmpty(data)) {
+                        return `<div class="no-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '">
+                                </div>`;
+                    }
+                    else {
+                        return `<div class="issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
+                                </div>`;
+                    }
+                }
+                return data;
+            },
         },
         { title:"이슈 상태 아이디",
             data: "c_issue_status_id",
@@ -1135,14 +1176,28 @@ function jiraServerDataTable(target) {
             },
             className: "dt-body-left",
             visible: true
-        },
-        { name: "c_check", title: "c_check", data: "c_check", visible: false },
+        }
     ];
     var columnList_priority= [
         {
             title:"설정",
             data: "c_id",
-            className: "dt-body-left"
+            className: "dt-body-left",
+            render: function (data, type, row,meta) {
+                if (type === "display") {
+                    if(isEmpty(data)) {
+                        return `<div class="no-issuePriority-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '">
+                                </div>`;
+                    }
+                    else {
+                        return `<div class="issuePriority-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
+                                </div>`;
+                    }
+                }
+                return data;
+            },
         },
         { title:"이슈 우선순위 아이디",
             data: "c_issue_priority_id",
@@ -1163,14 +1218,28 @@ function jiraServerDataTable(target) {
             },
             className: "dt-body-left",
             visible: true
-        },
-        { name: "c_check", title: "c_check", data: "c_check", visible: false },
+        }
     ];
     var columnList_Resolution= [
         {
             title:"설정",
             data: "c_id",
-            className: "dt-body-left"
+            className: "dt-body-left",
+            render: function (data, type, row,meta) {
+                if (type === "display") {
+                    if(isEmpty(data)) {
+                        return `<div class="no-issueResolution-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '">
+                                </div>`;
+                    }
+                    else {
+                        return `<div class="issueResolution-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                        <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
+                                </div>`;
+                    }
+                }
+                return data;
+            },
         },
         { title:"이슈 해결책 아이디",
             data: "c_issue_resolution_id",
@@ -1191,8 +1260,7 @@ function jiraServerDataTable(target) {
             },
             className: "dt-body-left",
             visible: true
-        },
-        { name: "c_check", title: "c_check", data: "c_check", visible: false },
+        }
     ];
 
     if(target === "이슈유형")  {
@@ -1217,19 +1285,7 @@ function jiraServerDataTable(target) {
     }
 
     var rowsGroupList = []; //그룹을 안쓰려면 null 처리
-    var columnDefList = [
-        {
-            targets: 0,
-            searchable: false,
-            orderable: false,
-            render: function(data, type, full, meta){
-                if(type === 'display'){
-                    data = '<input type="radio" name="c_id" value="' + data + '" onclick="javascript:fn_urlHandler(\'' + data + '\')">';
-                }
-                return data;
-            }
-        }
-    ];
+    var columnDefList = [];
     var selectList = {};
     var orderList = [[1, "asc"]];
     var buttonList = [];
@@ -1262,7 +1318,6 @@ function jiraServerDataTable(target) {
 }
 function fn_urlHandler(data) {
     console.log("fn_handler & c_id = " + data);
-    var listVar = $("input:radio[name='c_id']:checked").val();
     selectRadioId = data;
     console.log("selectRadioId in urlHandler : " + selectRadioId);
 }
@@ -1305,8 +1360,7 @@ function projectIssueTypeDataTable_old(idx) {
             },
             className: "dt-body-left",
             visible: true
-        },
-        { name: "c_check", title:"설정", data: "c_check", visible: false}
+        }
     ];
     var rowsGroupList = null; //그룹을 안쓰려면 null 처리
     var columnDefList = [
@@ -1342,9 +1396,7 @@ function projectIssueTypeDataTable_old(idx) {
 function default_setting_event() {
     var ajax_url ="";
     var sourceCid = "";
-    // 클라우드의 유형들
     $("button[name='default_update']").click( function (){
-    //$("#default_update").click( function (){
         console.log("selectServerType in default_setting_event ===> " + selectServerType);
 
         if (selectedTab === "이슈유형" && selectServerType === "클라우드") {
@@ -1380,8 +1432,23 @@ function default_setting_event() {
 
 }
 
-function click_projectList_table() {
-    console.log("click_projectList_table");
+//지라 프로젝트 - 데이터테이블 프로젝트 명 클릭시
+function click_projectList_table(projectName) {
+    console.log("click_projectList_table :: projectName =>> " + projectName);
+
+    // Sender 설정
+    var selectedHtml =
+        `<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 프로젝트 :  </span>
+                    <span class="text" style="color: #a4c6ff;">
+                    ` + projectName +`
+                    </span>
+				</div>
+		 </div>`;
+    $(".grid3rd").html(selectedHtml);
+
     //풀사이즈 그리드이면 줄이고, 호스트 정보를 보여준다
     console.log($("#serverInfo_Wrapper")[0].className);
     console.log("issue_type selectProjectId => " + selectProjectId);
@@ -1391,23 +1458,22 @@ function click_projectList_table() {
 
         $("#serverConfig_Wrapper").show();
 
-
         $("#returnList_Layer").show();
 
         $("#serverInfo_Wrapper").removeClass("fade-out-box");
         $("#serverInfo_Wrapper").addClass("fade-in-box");
-
-
-
 
         var box = document.querySelector("#serverInfo_Wrapper");
         box.ontransitionend = () => {
             $("#serverInfo_Wrapper").show();
             $("#jira_project_table").DataTable().columns.adjust().responsive.recalc();
         };
-
     }
-    
+
+    setTimeout(function () {
+        $("#nav_issue_type>a").click();
+        projectIssueTypeDataTable();
+    }, 313);
 }
 
 //프로젝트 목록 다시 넓게 쓰기
