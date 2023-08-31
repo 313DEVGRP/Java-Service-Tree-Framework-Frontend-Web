@@ -110,6 +110,8 @@ function execDocReady() {
 
             popup_update_btn_click();
 
+            autoSlide();
+
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -511,10 +513,7 @@ function dataTableDrawCallback(tableInfo) {
 }
 
 //데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(settings, json) {
-    //console.log(settings);
-    //console.log(json);
-}
+function dataTableCallBack(settings, json) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
@@ -1497,3 +1496,10 @@ function display_set_wide_projectTable() {
     $("#serverInfo_Wrapper").removeClass("col-lg-4").addClass("col-lg-7");
 
 }
+// 자동 슬라이드
+function autoSlide(){
+    $('#carousel-example-generic').carousel({
+        interval: 5000,
+    });
+}
+
