@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+    <link href="assets/images/favicon.png" rel="icon"/>
+    <title>Documentation | Your ThemeForest item Name</title>
+    <meta name="description" content="Your ThemeForest item Name and description">
+    <meta name="author" content="harnishdesign.net">
+
+    <!-- Stylesheet
+    ============================== -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap/css/bootstrap.min.css"/>
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css"/>
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css"/>
+    <!-- Highlight Syntax -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/highlight.js/styles/github.css"/>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css"/>
+</head>
+
+<body data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- Preloader End -->
+
+<!-- Document Wrapper
+=============================== -->
+<div id="main-wrapper">
+
+    <!-- Header
+    ============================ -->
+    <header id="header" class="sticky-top">
+        <!-- Navbar -->
+        <nav class="primary-menu navbar navbar-expand-lg navbar-dropdown-dark">
+            <div class="container-fluid">
+                <!-- Sidebar Toggler -->
+                <button id="sidebarCollapse" class="navbar-toggler d-block d-md-none" type="button"><span></span><span
+                        class="w-75"></span><span class="w-50"></span></button>
+
+                <!-- Logo -->
+                <a class="logo ml-md-3"  title="iDocs Template"> <img
+                        src="../img/313.png" width="100px;" height="90px;" alt="iDocs Template"/> </a>
+                <!-- Logo End -->
+
+                <!-- Navbar Toggler -->
+                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#header-nav">
+                    <span></span><span></span><span></span></button>
+
+
+                <!-- 개별 문서 관리 ( projectCharter, SDS , SRS , 팝업-->
+                <div id="header-nav" class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+                        <li><a target="_blank"
+                               href="index.html">통합 문서 보기</a>
+                        </li>
+                        <li><a target="_blank"
+                               href="http://www.a-rms.net/313devgrp/arms/">Support</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+    </header>
+    <!-- Header End -->
+
+    <!-- Content
+    ============================ -->
+    <div id="content" role="main">
+
+        <!-- Sidebar Navigation
+      ============================ -->
+        <div class="idocs-navigation bg-light">
+            <ul class="nav flex-column ">
+                <li class="nav-item"><a class="nav-link" href="#product">product</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#product_regist_manage">등록관리</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#product_version_manage">버전관리</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#jira">jira</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#jira_regist_manage">등록관리</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#connect_manage">연결관리</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#requirement">requirement</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#requirement_regist_manage">등록관리</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#requirement_version_manage">현황관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+        <!--  ============================
+                index page
+              ============================ -->
+        <div class="idocs-content">
+            <div class="container">
+
+                <!-- Guide Document -->
+                <section id="product"><h1>Guide Document</h1></section>
+                <!-- 1. 등록관리  -->
+                <br/>
+                <hr/>
+                <section id="product_regist_manage">
+                    <h2>등록관리</h2>
+                    <br/>
+                    <br/>
+                    <h3>제품(서비스) 조회 및 선택</h3>
+                    <div class="row">
+                        <div class="col-lg-12" style="">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_01.png" width="30%;" height="400px" alt="iDocs Template" style=""/>
+                             </div>
+                             <p>
+                                     1. 제품(서비스) 추가를 합니다.<br/>
+                                     2. a-RMS에 신규 제품(서비스)에 버전을 등록합니다. <br/>
+                                     - 제품(서비스)에 해당하는 이름, 오너, 리뷰어, 컨텐츠를 입력합니다.
+                                     3. 신규 제품(서비스) 저장을 합니다.
+                             </p>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <hr/>
+                    <br/>
+                    <h3>제품(서비스) 상세 보기 / 변경</h3>
+                    <br/>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_02.png" width="80%" height="500px" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
+                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
+                                3. 새 창으로 제품(서비스) 내용을 볼 수 있습니다.   <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_03.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 편집하기 탭에서 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 편집할 수 있습니다. <br/>
+                                2. 팝업 창으로 편집할 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_04.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품을 삭제 합니다.<br/>
+                            </p>
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                </section>
+
+
+                <!--  버전관리 -->
+                <section id="product_version_manage">
+                    <h2>버전관리</h2>
+                    <br/>
+                    <br/>
+                    <h3>제품(서비스) 조회 및 선택</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_01.png " width="30%;" height="400px" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
+                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
+                                3. 제품(서비스) 관리로 이동할 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+
+
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_05.png"  width="50%" height="300px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 선택된 제품(서비스)에 해당하는 버전을 알 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_07.png"  width="80%" height="700px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 등록한 제품(서비스)와 버전을 상세정보를 볼 수 있습니다. <br/>
+                                2. 등록한 제품(서비스)와 버전을 편집을 할 수 있습니다. <br/>
+                                3. 등록한 제품(서비스)와 버전을 삭제 할 수 있습니다. <br/>
+                                4. 팝업 창으로 선택한 제품(서비스)에 버전을 등록/변경할 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                    <h3>제품(서비스) Version 조회</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_02.png" width="80%" height="700px" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
+                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
+                                3. 새 창으로 제품(서비스) 내용을 볼 수 있습니다.   <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+
+
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_03.png"  width="80%" height="600px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 편집하기 탭에서 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 편집할 수 있습니다. <br/>
+                                2. 팝업 창으로 편집할 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_04.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품을 삭제합니다.<br/>
+                            </p>
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                    <h3>제품(서비스) 버전 등록 / 변경</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_02.png" width="80%" height="600px" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
+                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
+                                3. 새 창으로 제품(서비스) 내용을 볼 수 있습니다.   <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_03.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 편집하기 탭에서 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 편집할 수 있습니다. <br/>
+                                2. 팝업 창으로 편집할 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_04.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품을 삭제합니다.<br/>
+                            </p>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr/>
+                    <br/>
+                </section>
+
+
+                <!-- 지라 등록관리 및 연결관리-->
+                <section id="jira"><h1></h1></section>
+                <section id="jira_regist_manage">
+                    <h2>등록관리</h2>
+                    <br/>
+
+                    <h3>지라 서버</h3>
+<!--                    <div class="row">-->
+<!--                        <div class="col-lg-12">-->
+<!--                            <div class="accordion accordion-alterate arrow-right" id="popularTopics">-->
+<!--                                <div class="card">-->
+<!--                                    <div class="card-header" id="heading1">-->
+<!--                                        <h5 class="mb-0"><a href="#" class="collapsed" data-toggle="collapse"-->
+<!--                                                            data-target="#collapse1" aria-expanded="false"-->
+<!--                                                            aria-controls="collapse1">What does royalty free mean?</a>-->
+<!--                                        </h5>-->
+<!--                                    </div>-->
+<!--                                    <div id="collapse1" class="collapse" aria-labelledby="heading1"-->
+<!--                                         data-parent="#popularTopics">-->
+<!--                                        <div class="card-body"> Lorem Ipsum is simply dummy text of the printing and-->
+<!--                                            typesetting industry. Lorem Ipsum has been the industry's standard dummy-->
+<!--                                            text ever since the 1500s, when an unknown printer took a galley of type and-->
+<!--                                            scrambled it to make a type specimen book. It has survived not only five-->
+<!--                                            centuries, but also the leap into electronic typesetting, remaining-->
+<!--                                            essentially unchanged.-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <h3>지라 서버 상세보기/변경</h3>
+<!--                    <div class="row">-->
+<!--                        <div class="col-lg-12">-->
+<!--                            <div class="accordion accordion-alterate arrow-right" id="popularTopics">-->
+<!--                                <div class="card">-->
+<!--                                    <div class="card-header" id="heading1">-->
+<!--                                        <h5 class="mb-0"><a href="#" class="collapsed" data-toggle="collapse"-->
+<!--                                                            data-target="#collapse1" aria-expanded="false"-->
+<!--                                                            aria-controls="collapse1">What does royalty free mean?</a>-->
+<!--                                        </h5>-->
+<!--                                    </div>-->
+<!--                                    <div id="collapse1" class="collapse" aria-labelledby="heading1"-->
+<!--                                         data-parent="#popularTopics">-->
+<!--                                        <div class="card-body"> Lorem Ipsum is simply dummy text of the printing and-->
+<!--                                            typesetting industry. Lorem Ipsum has been the industry's standard dummy-->
+<!--                                            text ever since the 1500s, when an unknown printer took a galley of type and-->
+<!--                                            scrambled it to make a type specimen book. It has survived not only five-->
+<!--                                            centuries, but also the leap into electronic typesetting, remaining-->
+<!--                                            essentially unchanged.-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <hr/>
+                    <br/>
+                </section>
+                <!-- 연결관리 -->
+                <section id="connect_manage">
+                    <h2>연결관리</h2>
+                    <br/>
+                    <h3>제품(서비스) 조회 및 선택</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_08.png"  width="50%;" height="600px"  alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 추가한 제품(서비스)를 조회 및 선택합니다.<br/>
+                            </p>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_09.png"  width="60%" height="300px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 선택한 제품(서비스)의 버전 정보를 보여줍니다. <br/>
+                            </p>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_10.png"  width="60%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 선택한 제품(서비스), 버전에 관한 지라 서버를 등록합니다. <br/>
+                                2. 선택한 제품(서비스),버전에 관한 지라 서버를 변경합니다. <br/>
+                            </p>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr/>
+                    <br/>
+                    <h3>제품(서비스) Version 조회</h3>
+
+                    <h3> Jira 리스트</h3>
+
+                    <hr/>
+                    <br/>
+                </section>
+
+
+                <!-- 요구사항 등록관리 / 연결관리 -->
+                <section id="requirement"><h1></h1></section>
+
+                <section id="requirement_regist_manage">
+                    <h2>등록관리</h2>
+                    <br/>
+                    <h3> 요구사항 조회</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_11.png"  width="60%;" height="850px"  alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 제품서비스 선택 → 버전 선택 → 요구사항 선택<br/>
+                                 - 제품(서비스), 버전 에 관한 요구사항을 조회합니다. <br/>
+                            </p>
+                            <br/>
+                            <br/>
+
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_12.png"  width="100%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 요구사항 선택시에 세부 내용 조회합니다.<br/>
+                                2. 요구사항 제품서비스, 요구사항 연관버전, 요구사항 아이디. 요구사항 제목, 요구사항 작성자, 요구사항 최근 작성일, 제품(서비스) 리뷰어, 요구사항 내용을 상세하게 볼 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <br/>
+
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_13.png"  width="100%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 요구사항 선택시에 내용을 편집합니다..<br/>
+                                2. 요구사항 제품서비스, 요구사항 연관버전, 요구사항 아이디. 요구사항 제목, 요구사항 작성자, 요구사항 최근 작성일, 제품(서비스) 리뷰어, 요구사항 내용을 편집합니다.  <br/>
+                                3. 파일을 추가 및 변경할 수 있습니다.  <br/>
+                            </p>
+                            <br/>
+                            <br/>
+                            <div style="  display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_14.png"  width="100%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <p>
+                                1. 지라 프로젝트 연결을 변경합니다.<br/>
+                                1. 선택된 지라프로젝트를 해제할 수 있으며 다시 등록 할 수 있습니다.<br/>
+                            </p>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr/>
+                    <br/>
+                </section>
+                <section id="requirement_version_manage">
+                    <h2>현황관리</h2>
+                    <br/>
+                    <h3> 요구사항 내용</h3>
+
+                </section>
+            </div>
+
+            <!--  ============================
+                   index page end
+                 ============================ -->
+
+
+
+
+
+
+            <!-- Back To Top -->
+            <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i
+                    class="fa fa-chevron-up"></i></a>
+
+            <!-- JavaScript
+            ============================ -->
+            <script src="assets/vendor/jquery/jquery.min.js"></script>
+            <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Highlight JS -->
+            <script src="assets/vendor/highlight.js/highlight.min.js"></script>
+            <!-- Easing -->
+            <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+            <!-- Magnific Popup -->
+            <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+            <!-- Custom Script -->
+            <script src="assets/js/theme.js"></script>
+            <script>
+                $(document).ready( function() {
+
+                    $("#footer").load("./html/footer.html");
+                    // $("#project_background").load("./html/project-background.html");
+                    // $("#project_content").load("./html/project-content.html");
+                    // $("#utilization_plan").load("./html/utilization-plan.html");
+                    // $("#srs_overview").load("./html/srs-overview.html");
+                    // $("#srs_serviceview").load("./html/srs-serviceview.html");
+                    // $("#srs_interface_requirements").load("./html/interface-requirements.html");
+                    // $("#srs_functional_requirements").load("./html/srs-functional-requirements.html");
+                    // $("#non_functional_requirements").load("./html/non-functional-requirements.html");
+                    // $("#sds_overview").load("./html/sds-overview.html");
+                    // $("#design_considerations").load("./html/design-considerations.html");
+                    // $("#design").load("./html/design.html");
+
+                });
+            </script>
+        </div>
+    </div>
+</div>
+<!-- Document Wrapper end -->
+<!-- Footer
+============================ -->
+<footer id="footer"  include-html="content1.html" class="section bg-dark footer-text-light" ></footer>
+<!-- Footer end -->
+<!-- Back To Top -->
+<a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a>
+
+<!-- JavaScript
+============================ -->
+<script src="assets/vendor/jquery/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Highlight JS -->
+<script src="assets/vendor/highlight.js/highlight.min.js"></script>
+<!-- Easing -->
+<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+<!-- Magnific Popup -->
+<script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+<!-- Custom Script -->
+<script src="assets/js/theme.js"></script>
+
+</body>
+</html>
