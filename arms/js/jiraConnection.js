@@ -110,6 +110,8 @@ function execDocReady() {
 
             popup_update_btn_click();
 
+            autoSlide();
+
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -1407,7 +1409,7 @@ function click_projectList_table() {
         };
 
     }
-    
+
 }
 
 //프로젝트 목록 다시 넓게 쓰기
@@ -1431,3 +1433,10 @@ function display_set_wide_projectTable() {
     $("#serverInfo_Wrapper").removeClass("col-lg-4").addClass("col-lg-7");
 
 }
+// 자동 슬라이드
+function autoSlide(){
+    $('#carousel-example-generic').carousel({
+        interval: 5000,
+    });
+}
+
