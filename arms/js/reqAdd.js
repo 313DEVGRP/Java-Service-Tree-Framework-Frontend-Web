@@ -669,7 +669,6 @@ function jiraProjectConnectionInfo() {
 
 				console.table(obj);
 				console.log(obj.c_id);
-				console.log("123123123123");
 				console.log(jiraCheckId);
   			}
 		},
