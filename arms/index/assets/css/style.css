@@ -432,21 +432,24 @@ section {
 }
 
 .about .content {
-	margin: 100px auto;
-	width: 600px;
+	margin: 6vw auto;
+	padding: 0;
+	width: 33vw;
 }
 
 .about .flow-wrap {
 	list-style: none;
 	position: relative;
-	height: 600px;
+	padding: 0;
+	margin: 0;
+	height: 33vw;
 	border-radius: 50%;
 }
 
 .about .flow-item {
 	position: absolute;
-	width: 240px;
-	height: 240px;
+	width: 12vw;
+	height: 12vw;
 	border-radius: 50%;
 	overflow: hidden;
 	background-color: #fff;
@@ -459,39 +462,39 @@ section {
 }
 
 .about .flow-item img {
-	width: 240px;
-	height: 240px;
+	width: 100%;
+	height: 100%;
 	object-fit: fill;
 }
 
 .about .flow-item:nth-child(1) {
-	left: calc(50% - 120px);
-	top: -120px;
+	left: calc(50% - 6vw);
+	top: -6vw;
 }
 
 .about .flow-item:nth-child(2) {
-	right: -100px;
-	top: 45px;
+	right: -5vw;
+	top: 3vw;
 }
 
 .about .flow-item:nth-child(3) {
-	right: -100px;
-	top: calc(50% + 45px);
+	right: -5vw;
+	top: calc(50% + 3vw);
 }
 
 .about .flow-item:nth-child(4) {
-	left: calc(50% - 120px);
-	top: calc(100% - 120px);
+	left: calc(50% - 6vw);
+	top: calc(100% - 6vw);
 }
 
 .about .flow-item:nth-child(5) {
-	left: -100px;
-	top: calc(50% + 45px);
+	left: -5vw;
+	top: calc(50% + 3vw);
 }
 
 .about .flow-item:nth-child(6) {
-	left: -100px;
-	top: 45px;
+	left: -5vw;
+	top: 3vw;
 }
 
 .about .circle-wrap {
@@ -501,7 +504,7 @@ section {
 }
 
 .about .circle-chart {
-	height: 600px;
+	height: 33vw;
 }
 
 .circle-chart__circle {
@@ -526,7 +529,6 @@ section {
 # Facts
 --------------------------------------------------------------*/
 .facts .count-box {
-	padding: 30px 30px 25px 30px;
 	margin-top: 30px;
 	width: 100%;
 	position: relative;
@@ -534,20 +536,9 @@ section {
 	background: #fff;
 }
 
-.facts .count-box i {
-	position: absolute;
-	top: -25px;
-	left: 50%;
-	transform: translateX(-50%);
-	font-size: 24px;
-	background: #0563bb;
-	color: #fff;
-	border-radius: 50px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 48px;
-	height: 48px;
+.facts .count-box img {
+	width: 100%;
+	object-fit: contain;
 }
 
 .facts .count-box span {
