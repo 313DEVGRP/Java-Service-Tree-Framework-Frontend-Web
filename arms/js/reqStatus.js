@@ -244,6 +244,24 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			className: "dt-body-left",
 			visible: true
 		},
+		{ name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
+		{ name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
+		{
+			name: "c_req_name",
+			title: "요구사항",
+			data: "c_req_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+
 		{ name: "c_jira_server_link", title: "지라 서버 아이디", data: "c_jira_server_link", visible: false },
 		{ name: "c_jira_server_url", title: "지라 서버 주소", data: "c_jira_server_url", visible: false },
 		{
@@ -282,23 +300,6 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			name: "c_jira_project_key",
 			title: "JIRA 프로젝트키",
 			data: "c_jira_project_key",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
-		{ name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
-		{
-			name: "c_req_name",
-			title: "요구사항",
-			data: "c_req_name",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -434,7 +435,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = [1,2,3,4,5,6,7,8,9,10,12,13,14];
+	var rowsGroupList = [1,3,6];
 	var columnDefList = [
 		{
 			orderable: false,
