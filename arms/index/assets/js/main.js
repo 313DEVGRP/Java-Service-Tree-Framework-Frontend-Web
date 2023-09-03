@@ -158,18 +158,6 @@
 	}
 
 	/**
-	 * about
-	 * */
-	const flowItems = document.querySelectorAll(".flow-item");
-	if (flowItems) {
-		for (let i = 0; i < flowItems.length; i++) {
-			setTimeout(() => {
-				flowItems[i].classList.add("on");
-			}, i * 300);
-		}
-	}
-
-	/**
 	 * Skills animation
 	 */
 	let skilsContent = select(".skills-content");
@@ -270,6 +258,24 @@
 			clickable: true
 		}
 	});
+
+	const el = document.querySelectorAll(".section-container");
+
+	function scrollChecker(s) {
+		let index = 0;
+		for (let i = 0; i < el.length; i++) {
+			if (s < el[i].offsetTop) {
+				break;
+			}
+
+			index = i;
+		}
+
+		console.log("##############", s, index);
+		el[index].classList.add("on");
+	}
+
+	window.addEventListener("scroll", () => scrollChecker(window.scrollY));
 
 	/**
 	 * Animation on scroll

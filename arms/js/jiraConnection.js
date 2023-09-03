@@ -499,10 +499,7 @@ function dataTableDrawCallback(tableInfo) {
 
             var appendHtml = rowNameClass+">input";
             if (rowIsDefault ==="true") {
-                //console.log("rowIsDefault is true");
                 $(appendHtml).prop("checked", "true");
-            } else {
-                //console.log("rowIsDefault is not true");
             }
         });
 
@@ -725,7 +722,7 @@ function popup_update_btn_click() {
 // 지라 서버 삭제 버튼
 ////////////////////////////////
 function delete_btn_click() { // TreeAbstractController 에 이미 있음.
-    console.log("삭제 버튼 활성화 또는 삭제 대상 없음");
+    console.log("삭제 버튼 활성화");
 
         $("#delete_jira_server").click(function () {
             console.log("selectId = " + selectId);
@@ -765,8 +762,8 @@ function tab_click_event() {
 
             $(".body-middle").hide();
 
-            if (isEmpty(selectId)) {
-                jError("선택된 제품(서비스)가 없습니다. 오류는 무시됩니다.");
+            if (isEmpty(selectServerId)) {
+                jError("선택된 지라 서버가 없습니다. 오류는 무시됩니다.");
             }
         } else if (target === "#report") { // 편집하기
             $("#jira_default_update_div").addClass("hidden");
@@ -782,7 +779,11 @@ function tab_click_event() {
             $("#jira_server_delete_div").addClass("hidden");
             $("#jira_project_renew_div").removeClass("hidden");
 
+            if (isEmpty(selectServerId)) {
+                jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+            }
             project_dataTableLoad(selectServerId);
+
         } else if(target ==="#stats") { // 상세보기, 처음화면
             $("#jira_default_update_div").addClass("hidden");
             $("#jira_server_details_popup_div").removeClass("hidden");
