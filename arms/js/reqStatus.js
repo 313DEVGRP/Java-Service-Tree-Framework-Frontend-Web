@@ -75,6 +75,16 @@ function execDocReady() {
 			makeVersionMultiSelectBox();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
+			$("#progress_status").slimScroll({
+				height: "130px",
+				railVisible: true,
+				railColor: "#222",
+				railOpacity: 0.3,
+				wheelStep: 10,
+				allowPageScroll: false,
+				disableFadeOut: false
+			});
+
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
