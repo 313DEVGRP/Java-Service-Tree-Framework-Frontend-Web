@@ -144,9 +144,34 @@ function makePdServiceSelectBox() {
 		} else {
 			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		}
-		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
+
+		statisticsLoad($("#selected_pdService").val(), null)
 	});
 } // end makePdServiceSelectBox()
+
+function statisticsLoad(pdservice_id, pdservice_version_id){
+
+	//제품 서비스 셀렉트 박스 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?pdservice_version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//////////////////////////////////////////////////////////
+				for (var k in data.response) {
+					var obj = data.response[k];
+					console.log(obj);
+				}
+				//////////////////////////////////////////////////////////
+			}
+		}
+	});
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
@@ -165,11 +190,11 @@ function makeVersionMultiSelectBox() {
 			if (checked) {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-				common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				dataTableLoad($("#selected_pdService").val(), endPointUrl);
 			} else {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-				common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				dataTableLoad($("#selected_pdService").val(), endPointUrl);
 			}
 		}
 	});
@@ -210,7 +235,7 @@ function bind_VersionData_By_PdService() {
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function common_dataTableLoad(selectId, endPointUrl) {
+function dataTableLoad(selectId, endPointUrl) {
 	var columnList = [
 		{ name: "c_pdservice_link", title: "제품(서비스) 아이디", data: "c_pdservice_link", visible: false },
 		{
@@ -509,11 +534,11 @@ $("#checkbox1").click(function () {
 	if (checked) {
 		endPointUrl =
 			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	} else {
 		endPointUrl =
 			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	}
 });
 
