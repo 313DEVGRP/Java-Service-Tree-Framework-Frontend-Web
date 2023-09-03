@@ -65,10 +65,15 @@
                     <ul class="navbar-nav">
                         <li class="dropdown"><a class="dropdown-toggle" href="#">move page</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="projectCharter.html">product charter</a></li>
+                                <li><a class="dropdown-item" href="project-charter.html">Product charter</a></li>
                                 <li><a class="dropdown-item" href="srs.html">SRS</a></li>
                                 <li><a class="dropdown-item" href="sds.html">SDS</a></li>
                                 <li><a class="dropdown-item" href="guide.html">Guide</a></li>
+                                <li><a class="dropdown-item" href="engine-api-docs.html">Engine</a></li>
+                                <li><a class="dropdown-item" href="cloud-api-token.html">클라우드 API 토큰 발급</a></li>
+                                <li><a class="dropdown-item" href="create-cloud-issue-type.html">클라우드 이슈 유형 생성</a></li>
+                                <li><a class="dropdown-item" href="create-onpremise-issue-type.html">온프레미스 이슈 유형 생성</a></li>
+                                <li><a class="dropdown-item" href="import-github-project-intelli.html">inteliJ github project 가져오기</a></li>
                             </ul>
                         </li>
                         <li><a target="_blank"
@@ -133,6 +138,8 @@
                         <li class="nav-item"><a class="nav-link" href="#design">3. 설계</a></li>
                     </ul>
                 </li>
+                <li class="nav-item"><a class="nav-link" href="#engine-api-docs">a-RMS Engine 통합 API Docs</a>
+                </li>
             </ul>
         </div>
 
@@ -195,6 +202,15 @@
                 <section id="design"></section>
 
 
+
+
+
+
+
+                <!-- 엔진 문서 -->
+                <section id="engine-api-docs"></section>
+
+
             </div>
 
 <!--  ============================
@@ -237,6 +253,7 @@
                     $("#sds_overview").load("./html/sds-overview.html");
                     $("#design_considerations").load("./html/design-considerations.html");
                     $("#design").load("./html/design.html");
+                    $("#engine_api_docs").load("./html/engine-api-docs.html");
 
                 });
             </script>
