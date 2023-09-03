@@ -61,9 +61,14 @@
 
                 <div id="header-nav" class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav">
-<!--                        <li><a target="_blank"-->
-<!--                               href="index.html">통합 문서 보기</a>-->
-<!--                        </li>-->
+                        <li class="dropdown"><a class="dropdown-toggle" href="#">move page</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="project-charter.html">product charter</a></li>
+                                <li><a class="dropdown-item" href="srs.html">SRS</a></li>
+                                <li><a class="dropdown-item" href="sds.html">SDS</a></li>
+                                <li><a class="dropdown-item" href="/">팝업1</a></li>
+                            </ul>
+                        </li>
                         <li><a target="_blank"
                                href="http://www.a-rms.net/313devgrp/arms/">Support</a>
                         </li>
@@ -84,14 +89,11 @@
         <div class="idocs-navigation bg-light">
             <ul class="nav flex-column ">
 
-                <li class="nav-item"><a class="nav-link" href="#srs">SRS</a>
+                <li class="nav-item"><a class="nav-link" href="#project_charter">Project Charter</a>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="#srs_overview"> 1. 프로젝트 개요 </a></li>
-                        <li class="nav-item"><a class="nav-link" href="#srs_serviceview"> 2. 제품(서비스) 조망</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#srs_interface_requirements">3.인터페이스 요구사항</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#srs_functional_requirements">4. 제품(서비스) 기능 요구사항
-                        </a></li>
-                        <li class="nav-item"><a class="nav-link" href="#non_functional_requirements"> 5. 비-기능 요구사항</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#project_background">1. 배경</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#project_content">2. 내용</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#utilization_plan">3. 활용 방안</a></li>
                     </ul>
                 </li>
             </ul>
@@ -105,22 +107,14 @@
             <div class="container">
 
 
+                <!-- A-RMS Document  -->
+                <section id="project_charter"> <h1>Project Charter</h1> </section>
 
+                <section id="project_background"></section>
 
-                <!-- SRS Document -->
-                <section id="srs"><h1>SRS Document</h1></section>
+                <section id="project_content"></section>
 
-                <section id="srs_overview"></section>
-
-                <!-- 2. 제품(서비스) 조망   -->
-                <section id="srs_serviceview"></section>
-
-                <!-- 3. 인터페이스 요구사항 -->
-                <section id="srs_interface_requirements"></section>
-                <!-- 4. 제품(서비스) 기능 요구사항 -->
-                <section id="srs_functional_requirements"></section>
-                <!-- 5. 비-기능 요구사항 -->
-                <section id="non_functional_requirements"></section>
+                <section id="utilization_plan"></section>
 
             </div>
 
@@ -151,11 +145,9 @@
             <script src="assets/js/theme.js"></script>
             <script>
                 $(document).ready( function() {
-                    $("#srs_overview").load("./html/srs-overview.html");
-                    $("#srs_serviceview").load("./html/srs-serviceview.html");
-                    $("#srs_interface_requirements").load("./html/interface-requirements.html");
-                    $("#srs_functional_requirements").load("./html/srs-functional-requirements.html");
-                    $("#non_functional_requirements").load("./html/non-functional-requirements.html");
+                    $("#project_background").load("./html/project-background.html");
+                    $("#project_content").load("./html/project-content.html");
+                    $("#utilization_plan").load("./html/utilization-plan.html");
                 });
             </script>
         </div>

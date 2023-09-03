@@ -51,7 +51,7 @@
                         class="w-75"></span><span class="w-50"></span></button>
 
                 <!-- Logo -->
-                <a class="logo ml-md-3"  title="iDocs Template"> <img
+                <a class="logo ml-md-3" title="iDocs Template"> <img
                         src="../img/313.png" width="100px;" height="90px;" alt="iDocs Template"/> </a>
                 <!-- Logo End -->
 
@@ -61,14 +61,9 @@
 
                 <div id="header-nav" class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav">
-                        <li class="dropdown"><a class="dropdown-toggle" href="#">move page</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="projectCharter.html">product charter</a></li>
-                                <li><a class="dropdown-item" href="srs.html">SRS</a></li>
-                                <li><a class="dropdown-item" href="sds.html">SDS</a></li>
-                                <li><a class="dropdown-item" href="/">팝업1</a></li>
-                            </ul>
-                        </li>
+<!--                        <li><a target="_blank"-->
+<!--                               href="../index.html">통합 문서 보기</a>-->
+<!--                        </li>-->
                         <li><a target="_blank"
                                href="http://www.a-rms.net/313devgrp/arms/">Support</a>
                         </li>
@@ -87,77 +82,60 @@
         <!-- Sidebar Navigation
       ============================ -->
         <div class="idocs-navigation bg-light">
-            <ul class="nav flex-column ">
-
-                <li class="nav-item"><a class="nav-link" href="#project_charter">Project Charter</a>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="#engine">Engine</a>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="#project_background">1. 배경</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#project_content">2. 내용</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#utilization_plan">3. 활용 방안</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_cloud_api_token">클라우드 API 토큰 발급</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
 
-
-        <!--  ============================
-                index page
-              ============================ -->
+        <!-- Docs Content
+      ============================ -->
         <div class="idocs-content">
             <div class="container">
 
-
-                <!-- A-RMS Document  -->
-                <section id="project_charter"> <h1>Project Charter</h1> </section>
-
-                <section id="project_background"></section>
-
-                <section id="project_content"></section>
-
-                <section id="utilization_plan"></section>
-
-            </div>
-
-            <!--  ============================
-                   index page end
-                 ============================ -->
-
-
-
-
-
-
-            <!-- Back To Top -->
-            <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i
-                    class="fa fa-chevron-up"></i></a>
-
-            <!-- JavaScript
+                <!-- Getting Started
             ============================ -->
-            <script src="assets/vendor/jquery/jquery.min.js"></script>
-            <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <!-- Highlight JS -->
-            <script src="assets/vendor/highlight.js/highlight.min.js"></script>
-            <!-- Easing -->
-            <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-            <!-- Magnific Popup -->
-            <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-            <!-- Custom Script -->
-            <script src="assets/js/theme.js"></script>
-            <script>
-                $(document).ready( function() {
-                    $("#project_background").load("./html/project-background.html");
-                    $("#project_content").load("./html/project-content.html");
-                    $("#utilization_plan").load("./html/utilization-plan.html");
-                });
-            </script>
+                <section id="arms_cloud_api_token">
+                    <h2> Jira Info API (연결정보)</h2>
+
+                </section>
+                <hr class="divider">
+            </div>
         </div>
+
     </div>
+    <!-- Content end -->
+
+    <!-- Footer
+    ============================ -->
+    <footer id="footer" class="section bg-dark footer-text-light">
+        <div class="container">
+            <ul class="social-icons social-icons-lg social-icons-muted justify-content-center mb-3">
+                <li><a data-toggle="tooltip" href="https://twitter.com/harnishdesign/" target="_blank" title=""
+                       data-original-title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                <li><a data-toggle="tooltip" href="http://www.facebook.com/harnishdesign/" target="_blank" title=""
+                       data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a data-toggle="tooltip" href="http://www.dribbble.com/harnishdesign/" target="_blank" title=""
+                       data-original-title="Dribbble"><i class="fab fa-dribbble"></i></a></li>
+                <li><a data-toggle="tooltip" href="http://www.github.com/" target="_blank" title=""
+                       data-original-title="GitHub"><i class="fab fa-github"></i></a></li>
+            </ul>
+            <p class="text-center">Copyright &copy; 2020 <a
+                    href="http://www.harnishdesign.net/idocs-one-page-documentation-html-template/">iDocs</a>. All
+                Rights Reserved.</p>
+            <p class="text-2 text-center mb-0">Design &amp; Develop by <a class="btn-link" target="_blank"
+                                                                          href="http://www.harnishdesign.net/">HarnishDesign</a>.
+            </p>
+        </div>
+    </footer>
+    <!-- Footer end -->
+
 </div>
 <!-- Document Wrapper end -->
-<!-- Footer
-============================ -->
-<footer id="footer"  include-html="content1.html" class="section bg-dark footer-text-light" ></footer>
-<!-- Footer end -->
+
 <!-- Back To Top -->
 <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a>
 
@@ -174,7 +152,13 @@
 <!-- Custom Script -->
 <script src="assets/js/theme.js"></script>
 
-<!-- use index page -->
-<script src="assets/js/includeHTML.js"></script>
+<script>
+    $(document).ready( function() {
+
+        $("#arms_cloud_api_token").load("./html/cloud-api-token.html");
+
+
+    });
+</script>
 </body>
 </html>

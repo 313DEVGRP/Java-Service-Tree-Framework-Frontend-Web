@@ -602,7 +602,7 @@ function pdServiceDataTableClick(c_id) {
 	selectVersion = c_id;
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		url: "/auth-user/api/arms/pdServicePure/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
 		method: "GET", // HTTP 요청 메소드(GET, POST 등)
 		dataType: "json", // 서버에서 보내줄 데이터의 타입
@@ -1005,7 +1005,6 @@ function modalPopup(popupName) {
 		//modal_popup_readOnly = 새 창으로 제품(서비스 보기)
 		$("#my_modal1_title").text("제품(서비스) 내용 보기 팝업");
 		$("#my_modal1_sub").text("새 창으로 제품(서비스)의 정보를 확인합니다.")
-		//$("#extend_change_to_update_pdservice").removeClass("hidden");
 		$("#extendupdate_pdservice").addClass("hidden");
 
 
@@ -1013,11 +1012,8 @@ function modalPopup(popupName) {
 
 		$("#my_modal1_title").text("신규 제품(서비스) 수정 팝업");
 		$("#my_modal1_sub").text("a-RMS에 신규 제품(서비스)의 정보를 수정합니다.")
-		//$("#extend_change_to_update_pdservice").addClass("hidden");
 		$("#extendupdate_pdservice").removeClass("hidden");
-		// $("#extendupdate_pdservice")
-		// 	.attr("onclick","modalPopup('modal_popup_update')");
-		// $("#extendupdate_pdservice").text("제품(서비스) 변경 저장");
+
 
 	}
 }

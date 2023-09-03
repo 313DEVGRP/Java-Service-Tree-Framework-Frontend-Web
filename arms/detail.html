@@ -173,342 +173,313 @@
         <script src="../reference/light-blue/js/landing.js"></script>
 
 	</head>
-	<body class="background landing">
-		<div class="container">
-			<header class="page-header">
-				<div class="navbar">
-					<div class="logo pull-left">
+	<!-- ======= Req Detail Section ======= -->
+	<main>
+		<section id="req_detail">
+			<div class="col-lg-12">
+				<section class="widget">
+					<header>
 						<h4>
-							<a href="index.html">
-								<img
-									src="./img/313_logo.png"
-									width="170px" />
-							</a>
+						<span
+								class="font13"
+								style="font-weight: bold">
+							<i class="fa fa-edit"></i>
+							요구사항 상세정보
+						</span>
 						</h4>
-					</div>
-				</div>
-			</header>
-			<div class="content">
-				<div
-					id="carousel-landing"
-					class="carousel slide carousel-landing carousel-fade">
-					<ol class="carousel-indicators">
-						<li
-							data-target="#carousel-landing"
-							data-slide-to="0"
-							class="active"></li>
-						<li
-							data-target="#carousel-landing"
-							data-slide-to="1"
-							class=""></li>
-						<li
-							data-target="#carousel-landing"
-							data-slide-to="2"
-							class=""></li>
-					</ol>
-					<div class="carousel-inner">
-						<div class="item active">
-							<div class="row">
-								<div class="col-xs-6">
-									<div class="animated fadeInLeftBig">
-										<h1
-											class="slide-one-header"
-											style="font-size: 17px !important">
-											<strong>aRMS</strong>
-											<span>는</span>
-										</h1>
-										<p class="hidden-xs">
-											<strong>제품(서비스)</strong>
-											관점의 JIRA 전용 RMS 입니다.
-										</p>
-										<p class="hidden-xs">
-											제품(서비스) 중심으로 Jira Project를 분석하고,
-											<br />
-											제품(서비스) 중심으로 요구사항을 Jira Project 에 전파합니다.
-										</p>
+
+						<div class="widget-controls">
+							<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</a>
+							<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+								<i class="glyphicon glyphicon-chevron-up"></i>
+							</a>
+							<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+								<i class="glyphicon glyphicon-chevron-down"></i>
+							</a>
+							<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</a>
+							<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+								<span class="glyphicon glyphicon-repeat"></span>
+							</a>
+							<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+								<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+							</a>
+						</div>
+					</header>
+
+					<div class="body">
+						<div
+								class="gradient_middle_border"
+								style="width: 100%; height: 2px"></div>
+						<blockquote
+								class="font13"
+								style="margin-top: 5px">
+							요구사항 세부 내용
+							<div style="float: right">
+								<button
+										class="btn btn-transparent btn-xs"
+										style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+										onclick="return true;">
+									Help
+									<i
+											class="fa fa-question"
+											style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+
+						<div class="row">
+							<div class="col-md-12">
+								<section class="widget">
+									<div class="control-group">
+										<label class="control-label font13">
+											요구사항 제품
+											<sup>서비스</sup>
+											:
+										</label>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-th-list"></i>
+										</span>
+
+											<div
+													id="detailview_req_pdservice_name"
+													class="form-control parsley-validated font13 darkBack"></div>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label font13">요구사항 연관 버전 :</label>
+
+										<div
+											class="controls form-group input-group"
+											style="margin-left: 180px">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-gift"></i>
+											</span>
+
+											<div
+												id="detailview_req_pdservice_version"
+												class="form-control parsley-validated font13 darkBack"></div>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label font13">요구사항 아이디 :</label>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-phone"></i>
+										</span>
+
+											<div
+													id="detailview_req_id"
+													class="form-control parsley-validated font13 darkBack"></div>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label font13">요구사항 제목 :</label>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+
+											<div
+													id="detailview_req_name"
+													class="form-control parsley-validated font13 darkBack"></div>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label font13">요구사항 작성자 :</label>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-user"></i>
+										</span>
+
+											<div
+													id="detailview_req_writer"
+													class="form-control parsley-validated font13 darkBack"></div>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label font13">요구사항 최근 작성일 :</label>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-envelope"></i>
+										</span>
+
+											<div
+													id="detailview_req_write_date"
+													class="form-control parsley-validated font13 darkBack"></div>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+											<div
+													id="detailview_req_reviewer01"
+													class="form-control parsley-validated font13 darkBack"></div>
+
+											<span class="input-group-addon font11">INFO : 공동 책임자</span>
+										</div>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+											<div
+													id="detailview_req_reviewer02"
+													class="form-control parsley-validated font13 darkBack"></div>
+
+											<span class="input-group-addon font11">INFO : 공동 책임자</span>
+										</div>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+											<div
+													id="detailview_req_reviewer03"
+													class="form-control parsley-validated font13 darkBack"></div>
+
+											<span class="input-group-addon font11">INFO : 공동 책임자</span>
+										</div>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+											<div
+													id="detailview_req_reviewer04"
+													class="form-control parsley-validated font13 darkBack"></div>
+
+											<span class="input-group-addon font11">INFO : 공동 책임자</span>
+										</div>
+
+										<div
+												class="controls form-group input-group"
+												style="margin-left: 180px">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-inbox"></i>
+										</span>
+
+											<div
+													id="detailview_req_reviewer05"
+													class="form-control parsley-validated font13 darkBack"></div>
+
+											<span class="input-group-addon font11">INFO : 공동 책임자</span>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label
+												class="control-label"
+												style="margin-top: 10px">
+											요구사항 내용 :
+										</label>
+
+										<div
+												class="col-sm-8"
+												style="margin-top: 16px; margin-bottom: 10px">
+											<i class="fa fa-level-down"></i>
+											하단 영역 참조
+										</div>
+
 										<br />
-										<p>
-											<a
-												href="template.html?page=pdService"
-												class="btn btn-lg btn-white">
-												Preview &nbsp;
-												<i class="fa fa-angle-right"></i>
-											</a>
-											<a
-												href="http://www.313.co.kr"
-												class="btn btn-lg btn-transparent">
-												Contact us &nbsp;
-												<i class="fa eicon-qq"></i>
-											</a>
-										</p>
-									</div>
-								</div>
-								<div class="col-xs-6">
-									<div class="text-align-center animated fadeInRightBig">
-										<img
-											src="../reference/light-blue/img/jpeg/light-blue-preview-1.png"
-											alt="Second slide" />
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="item">
-							<h1
-								class="slide-two-header text-align-center animated fadeInDown"
-								style="font-size: 24px !important">
-								<strong>aRMS</strong>
-								<span class="font16">는</span>
-								제품(서비스) 관점
-								<span class="font16">으로</span>
-								<strong>다양한 분석 지표</strong>
-								<span class="font16">를 지속적으로 업데이트 및 제공합니다.</span>
-							</h1>
-							<div class="row">
-								<div class="col-xs-6">
-									<div class="animated fadeInLeftBig">
-										<p>
-											<a href="template.html?page=pdService">
-												<img
-													src="../reference/light-blue/img/jpeg/light-blue-laptop-transparent.png"
-													alt="" />
-											</a>
-										</p>
-										<p class="text-align-center">
-											<a
-												href="template.html?page=pdService"
-												class="btn btn-transparent btn-lg btn-version-preview">
-												Preview &nbsp;
-												<i class="fa fa-angle-right"></i>
-											</a>
-										</p>
-									</div>
-								</div>
-								<div class="col-xs-6">
-									<div class="animated fadeInRightBig">
-										<p>
-											<a href="http://www.313.co.kr">
-												<img
-													src="../reference/light-blue/img/jpeg/light-blue-laptop-white.png"
-													alt="" />
-											</a>
-										</p>
-										<p class="text-align-center">
-											<a
-												href="http://www.313.co.kr"
-												class="btn btn-white btn-lg btn-version-preview">
-												Contact us &nbsp;
-												<i class="fa eicon-qq"></i>
-											</a>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="item">
-							<div class="row">
-								<div class="col-xs-6">
-									<div class="animated fadeInLeft">
-										<h1
-											class="slide-three-header"
-											style="font-size: 17px !important">
-											Jira를 쓰고 계십니까?
-											<br />
-											<br />
-											제품(서비스)를 만들고 계십니까?
-											<br />
-											<br />
-											<strong>aRMS가 필요합니다.!</strong>
-											<br />
-											<br />
-											제품(서비스)의 요구사항을 관리 하고,
-											<br />
-											<br />
-											제품(서비스)의 진척도를 확인 하고,
-											<br />
-											<br />
-											제품(서비스)의 출시를 결정 할 수 있습니다.
-										</h1>
-										<p>
-											<a
-												href="template.html?page=pdService"
-												class="btn btn-white btn-lg"
-												target="_blank">
-												Test It
-											</a>
-										</p>
-									</div>
-								</div>
-								<div class="col-xs-6">
-									<p
-										class="animated fadeInUp"
-										style="margin-top: 20px">
-										<img
-											src="../reference/light-blue/img/jpeg/light-blue-phone.png"
-											alt="" />
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<a
-						class="left carousel-control carousel-control-landing"
-						href="#carousel-landing"
-						data-slide="prev">
-						<span class="icon-prev"></span>
-					</a>
-					<a
-						class="right carousel-control carousel-control-landing"
-						href="#carousel-landing"
-						data-slide="next">
-						<span class="icon-next"></span>
-					</a>
-				</div>
-			</div>
-		</div>
-		<div
-			id="about"
-			class="widget widget-white widget-about">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-offset-1 col-sm-10">
-						<h2>
-							atlassian
-							<strong>RMS</strong>
-						</h2>
-						<p>
-							atlassian
-							<strong>Requirements Managment System</strong>
-							은 전세계에서 유일한 Jira 를 기반한 요구사항 관리 시스템입니다.
-						</p>
-						<div class="row features">
-							<div class="col-sm-4">
-								<section class="feature">
-									<div class="row">
-										<div class="col-xs-4">
-											<p>
-												<span class="icon background-danger">
-													<i class="fa fa-bold"></i>
-												</span>
-											</p>
-										</div>
-										<div class="col-xs-8">
-											<h4>Scope</h4>
-											<p>제품(서비스)의 요구사항이 Jira의 END USER 까지 공유</p>
-										</div>
-									</div>
-								</section>
-							</div>
-							<div class="col-sm-4">
-								<section class="feature">
-									<div class="row">
-										<div class="col-xs-4">
-											<p>
-												<span class="icon background-warning">
-													<i class="fa fa-magic"></i>
-												</span>
-											</p>
-										</div>
-										<div class="col-xs-8">
-											<h4>Cost</h4>
-											<p>
-												제품(서비스)의 Jira 분석
-												<br />
-												&#10132; 정확한 Resource 통계
-											</p>
-										</div>
-									</div>
-								</section>
-							</div>
-							<div class="col-sm-4">
-								<section class="feature">
-									<div class="row">
-										<div class="col-xs-4">
-											<p>
-												<span class="icon background-success">
-													<i class="fa fa-wrench"></i>
-												</span>
-											</p>
-										</div>
-										<div class="col-xs-8">
-											<h4>Time</h4>
-											<p>
-												제품(서비스) Jira Project 맵핑
-												<br />
-												&#10132; 실질적인 진척도 측정
-											</p>
-										</div>
-									</div>
-								</section>
-							</div>
-						</div>
-						<div class="row features">
-							<div class="col-sm-4">
-								<section class="feature">
-									<div class="row">
-										<div class="col-xs-4">
-											<p>
-												<span class="icon background-primary">
-													<i class="fa fa-superscript"></i>
-												</span>
-											</p>
-										</div>
-										<div class="col-xs-8">
-											<h4>제품(서비스)</h4>
-											<p>
-												aRMS는 제품과 서비스를 기준
-												<br />
-												&#10132; 데이터를 구조화 합니다.
-											</p>
-										</div>
-									</div>
-								</section>
-							</div>
-							<div class="col-sm-4">
-								<section class="feature">
-									<div class="row">
-										<div class="col-xs-4">
-											<p>
-												<span class="icon background-lime">
-													<i class="fa fa-check"></i>
-												</span>
-											</p>
-										</div>
-										<div class="col-xs-8">
-											<h4>요구사항</h4>
-											<p>
-												ARMS는 제품과 서비스를 기준
-												<br />
-												&#10132; 요구사항을 관리합니다.
-											</p>
-										</div>
-									</div>
-								</section>
-							</div>
-							<div class="col-sm-4">
-								<section class="feature">
-									<div class="row">
-										<div class="col-xs-4">
-											<p>
-												<span class="icon background-info">
-													<i class="fa fa-css3"></i>
-												</span>
-											</p>
-										</div>
-										<div class="col-xs-8">
-											<h4>Test(QA)</h4>
-											<p>
-												ARMS는 제품과 서비스를 기준
-												<br />
-												&#10132; 요구사항의 테스트를 관리
-											</p>
-										</div>
+										<br />
+										<br />
+
+										<div
+												id="detailview_req_contents"
+												class="col-sm-12 form-control parsley-validated font13 darkBack"
+												style="padding-top: 7px"></div>
 									</div>
 								</section>
 							</div>
 						</div>
 					</div>
-				</div>
+				</section>
 			</div>
-		</div>
-	</body>
+		</section>
+		<!-- End Req Detail -->
+	</main>
 </html>
+
+<style>
+	#header {
+		top: 0;
+		left: 200px;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		justify-content: center;
+	}
+
+	main {
+		margin-left: 100px;
+		width: calc(100% - 100px);
+	}
+
+	.form-control {
+		color: #a4c6ff;
+	}
+</style>
+
+<script src="./js/detail.js"></script>
