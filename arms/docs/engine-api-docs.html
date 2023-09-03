@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+    <link href="assets/images/favicon.png" rel="icon"/>
+    <title>Documentation | Your ThemeForest item Name</title>
+    <meta name="description" content="Your ThemeForest item Name and description">
+    <meta name="author" content="harnishdesign.net">
+
+    <!-- Stylesheet
+    ============================== -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap/css/bootstrap.min.css"/>
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css"/>
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css"/>
+    <!-- Highlight Syntax -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/highlight.js/styles/github.css"/>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css"/>
+</head>
+
+<body data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- Preloader End -->
+
+<!-- Document Wrapper
+=============================== -->
+<div id="main-wrapper">
+
+    <!-- Header
+    ============================ -->
+    <header id="header" class="sticky-top">
+        <!-- Navbar -->
+        <nav class="primary-menu navbar navbar-expand-lg navbar-dropdown-dark">
+            <div class="container-fluid">
+                <!-- Sidebar Toggler -->
+                <button id="sidebarCollapse" class="navbar-toggler d-block d-md-none" type="button"><span></span><span
+                        class="w-75"></span><span class="w-50"></span></button>
+
+                <!-- Logo -->
+                <a class="logo ml-md-3" title="iDocs Template"> <img
+                        src="../img/313.png" width="100px;" height="90px;" alt="iDocs Template"/> </a>
+                <!-- Logo End -->
+
+                <!-- Navbar Toggler -->
+                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#header-nav">
+                    <span></span><span></span><span></span></button>
+
+                <div id="header-nav" class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+<!--                        <li><a target="_blank"-->
+<!--                               href="index.html">통합 문서 보기</a>-->
+<!--                        </li>-->
+                        <li><a target="_blank"
+                               href="http://www.a-rms.net/313devgrp/arms/">Support</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+    </header>
+    <!-- Header End -->
+
+    <!-- Content
+    ============================ -->
+    <div id="content" role="main">
+
+        <!-- Sidebar Navigation
+      ============================ -->
+        <div class="idocs-navigation bg-light">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="#engine">Engine</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#arms_engine_total_api_docs">1. a-RMS Engine 통합
+                            API Docs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_engine_on_premise_api_docs">2. a-RMS Engine
+                            On-Premise API Docs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_cloud_api_token">3. 클라우드 API 토큰 발급</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#arms_cloud_creat_issue_type">3. 클라우드 이슈 유형
+                            생성</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Docs Content
+      ============================ -->
+        <div class="idocs-content">
+            <div class="container">
+
+                <!-- Getting Started
+            ============================ -->
+                <section id="arms_engine_total_api_docs">
+                    <h2> Jira Info API (연결정보)</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>URL</th>
+                                <th>Mehtod</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>/jira/connect/info</td>
+                                <td>POST</td>
+                                <td>지라 연결 정보 저장</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+                    <h4>API Parameters & Request Body & Response Body</h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+x
+                        </code>
+                    </pre>
+                    <p>Request Body</p>
+                    <pre>
+                        <code class="html">
+{
+  "connectId": 1,
+  "passwordOrToken": "string",
+  "uri": "string",
+  "userId": "string"
+}
+                        </code>
+                    </pre>
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+{
+  "connectId": 1,
+  "issueId": "string",
+  "issueName": "string",
+  "passwordOrToken": "string",
+  "self": "string",
+  "uri": "string",
+  "userId": "string"
+}
+                        </code>
+                    </pre>
+
+
+                    <h3> Jira Project API (프로젝트)</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>URL</th>
+                                <th>Mehtod</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>/{connectId}/jira/project/list</td>
+                                <td>GET</td>
+                                <td>프로젝트 리스트 조회</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>/{connectId}/jira/project/{projectKeyOrId}</td>
+                                <td>GET</td>
+                                <td>프로젝트 상세 정보 조회</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>API Parameters & Request Body & Response Body & Error Code</h4>
+                    </br>
+                    </br>
+                    <h4>프로젝트 리스트 조회</h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+                        </code>
+                    </pre>
+                    <p>Request Body</p>
+                    <pre>
+                        <code class="html">
+x
+                        </code>
+                    </pre>
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+[
+  {
+    "id": "string",
+    "key": "string",
+    "name": "string",
+    "self": "string"
+  }
+					.
+					.
+					.
+  {
+    "id": "string",
+    "key": "string",
+    "name": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+                    <h4>프로젝트 상세 정보 조회</h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectKerOrId : string - requir
+                        </code>
+                    </pre>
+                    <p>Request Body</p>
+                    <pre>
+                        <code class="html">
+x
+                        </code>
+                    </pre>
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+{
+    "self": "https://{자라도메인}.atlassian.net/rest/api/3/project/프로젝트 아이디",
+    "id": "프로젝트 아이디",
+    "key": "프로젝트 키",
+    "name": "프로젝트 이름"
+}
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+                    <h4>Jira Issue API (이슈)</h4>
+                    <h3>이슈 생성</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>URL</th>
+                                <th>Mehtod</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>/{connectId}/jira/issue</td>
+                                <td>POST</td>
+                                <td>이슈 생성</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>/{connectId}/jira/issue/{issueKeyOrId}</td>
+                                <td>PUT</td>
+                                <td>이슈 업데이트</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>/{connectId}/jira/issue/{issueKeyOrId}</td>
+                                <td>DELETE</td>
+                                <td>이슈 삭제 라벨 처리</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>/{connectId}/jira/issue/list/{projectKeyOrId}</td>
+                                <td>GET</td>
+                                <td>이슈 전체 목록 조회</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>/{connectId}/jira/issue/{issueKeyOrId}</td>
+                                <td>GET</td>
+                                <td>이슈 상세 정보 조회</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>/{connectId}/jira/issue/link/{issueKeyOrId}</td>
+                                <td>GET</td>
+                                <td>이슈 키의 연결된 이슈 목록 조회</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>/{connectId}/jira/issue/subtask/{issueKeyOrId}</td>
+                                <td>GET</td>
+                                <td>이슈 키의 서브테스크 목록 조회</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+x{
+  "fields": {
+    "assignee": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "description": {},
+    "issuelinks": [
+      {
+        "id": "string",
+        "self": "string",
+        "type": {
+          "id": "string",
+          "inward": "string",
+          "name": "string",
+          "outward": "string",
+          "self": "string"
+        }
+      }
+    ],
+    "issuetype": {
+      "description": "string",
+      "hierarchyLevel": 0,
+      "id": "string",
+      "name": "string",
+      "self": "string",
+      "subtask": true,
+      "untranslatedName": "string"
+    },
+    "labels": [
+      "string"
+    ],
+    "priority": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "project": {
+      "id": "string",
+      "key": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "reporter": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "resolution": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "status": {
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "subtasks": [
+      {
+        "fields": {
+          "assignee": {
+            "emailAddress": "string",
+            "name": "string"
+          },
+          "description": {},
+          "issuelinks": [
+            {
+              "id": "string",
+              "self": "string",
+              "type": {
+                "id": "string",
+                "inward": "string",
+                "name": "string",
+                "outward": "string",
+                "self": "string"
+              }
+            }
+          ],
+          "issuetype": {
+            "description": "string",
+            "hierarchyLevel": 0,
+            "id": "string",
+            "name": "string",
+            "self": "string",
+            "subtask": true,
+            "untranslatedName": "string"
+          },
+          "labels": [
+            "string"
+          ],
+          "priority": {
+            "default": true,
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "project": {
+            "id": "string",
+            "key": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "reporter": {
+            "emailAddress": "string",
+            "name": "string"
+          },
+          "resolution": {
+            "default": true,
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "status": {
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "subtasks": [
+            {
+              "id": "string",
+              "issues": [
+                null
+              ],
+              "key": "string",
+              "self": "string"
+            }
+          ],
+          "summary": "string"
+        },
+        "id": "string",
+        "issues": [
+          null
+        ],
+        "key": "string",
+        "self": "string"
+      }
+    ],
+    "summary": "string"
+  }
+}
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "id": "이슈 아이디",
+    "key": "이슈 아이디",
+    "self": "https://{지라도메인}.atlassian.net/rest/api/3/issue/이슈 아이디"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+                        <h4>프로젝트 상세 정보 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectKerOrId : string - requir
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+x
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "self": "https://{자라도메인}.atlassian.net/rest/api/3/project/프로젝트 아이디",
+    "id": "프로젝트 아이디",
+    "key": "프로젝트 키",
+    "name": "프로젝트 이름"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+                    </div>
+
+                    <h3>2. 이슈 상세 정보 조회 </h3>
+                    <div class="table-responsive">
+
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - requiredz
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+x{
+  "fields": {
+    "assignee": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "description": {},
+    "issuelinks": [
+      {
+        "id": "string",
+        "self": "string",
+        "type": {
+          "id": "string",
+          "inward": "string",
+          "name": "string",
+          "outward": "string",
+          "self": "string"
+        }
+      }
+    ],
+    "issuetype": {
+      "description": "string",
+      "hierarchyLevel": 0,
+      "id": "string",
+      "name": "string",
+      "self": "string",
+      "subtask": true,
+      "untranslatedName": "string"
+    },
+    "labels": [
+      "string"
+    ],
+    "priority": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "project": {
+      "id": "string",
+      "key": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "reporter": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "resolution": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "status": {
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "subtasks": [
+      {
+        "fields": {
+          "assignee": {
+            "emailAddress": "string",
+            "name": "string"
+          },
+          "description": {},
+          "issuelinks": [
+            {
+              "id": "string",
+              "self": "string",
+              "type": {
+                "id": "string",
+                "inward": "string",
+                "name": "string",
+                "outward": "string",
+                "self": "string"
+              }
+            }
+          ],
+          "issuetype": {
+            "description": "string",
+            "hierarchyLevel": 0,
+            "id": "string",
+            "name": "string",
+            "self": "string",
+            "subtask": true,
+            "untranslatedName": "string"
+          },
+          "labels": [
+            "string"
+          ],
+          "priority": {
+            "default": true,
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "project": {
+            "id": "string",
+            "key": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "reporter": {
+            "emailAddress": "string",
+            "name": "string"
+          },
+          "resolution": {
+            "default": true,
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "status": {
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "self": "string"
+          },
+          "subtasks": [
+            {
+              "id": "string",
+              "issues": [
+                null
+              ],
+              "key": "string",
+              "self": "string"
+            }
+          ],
+          "summary": "string"
+        },
+        "id": "string",
+        "issues": [
+          null
+        ],
+        "key": "string",
+        "self": "string"
+      }
+    ],
+    "summary": "string"
+  }
+}
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "id": "이슈 아이디",
+    "key": "이슈 아이디",
+    "self": "https://{지라도메인}.atlassian.net/rest/api/3/issue/이슈 아이디"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+                        <h4>이슈 상세 정보 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+x
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+  "fields": {
+    "assignee": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "description": {},
+    "issuelinks": [
+      {
+        "id": "string",
+        "self": "string",
+        "type": {
+          "id": "string",
+          "inward": "string",
+          "name": "string",
+          "outward": "string",
+          "self": "string"
+        }
+      }
+    ],
+    "issuetype": {
+      "description": "string",
+      "hierarchyLevel": 0,
+      "id": "string",
+      "name": "string",
+      "self": "string",
+      "subtask": true,
+      "untranslatedName": "string"
+    },
+    "labels": [
+      "string"
+    ],
+    "priority": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "project": {
+      "id": "string",
+      "key": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "reporter": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "resolution": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "status": {
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "subtasks": [
+      {
+        "id": "string",
+        "issues": [
+          null
+        ],
+        "key": "string",
+        "self": "string"
+      }
+    ],
+    "summary": "string"
+  },
+  "id": "string",
+  "issues": [
+    null
+  ],
+  "key": "string",
+  "self": "string"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+                    </div>
+
+                    <div class="table-responsive">
+                        <P>이슈 상세 정보 조회 </P>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - requiredz
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+ x
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+  "fields": {
+    "assignee": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "description": {},
+    "issuelinks": [
+      {
+        "id": "string",
+        "self": "string",
+        "type": {
+          "id": "string",
+          "inward": "string",
+          "name": "string",
+          "outward": "string",
+          "self": "string"
+        }
+      }
+    ],
+    "issuetype": {
+      "description": "string",
+      "hierarchyLevel": 0,
+      "id": "string",
+      "name": "string",
+      "self": "string",
+      "subtask": true,
+      "untranslatedName": "string"
+    },
+    "labels": [
+      "string"
+    ],
+    "priority": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "project": {
+      "id": "string",
+      "key": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "reporter": {
+      "emailAddress": "string",
+      "name": "string"
+    },
+    "resolution": {
+      "default": true,
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "status": {
+      "description": "string",
+      "id": "string",
+      "name": "string",
+      "self": "string"
+    },
+    "subtasks": [
+      {
+        "id": "string",
+        "issues": [
+          null
+        ],
+        "key": "string",
+        "self": "string"
+      }
+    ],
+    "summary": "string"
+  },
+  "id": "string",
+  "issues": [
+    null
+  ],
+  "key": "string",
+  "self": "string"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+                        <h4>이슈 수정</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+{
+  "fields": {
+    "description": {},
+    "labels": [
+      "string"
+    ],
+    "summary": "string"
+  }
+}
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "success": true,
+    "message": "이슈 수정 성공"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+{
+    "success": false,
+    "message": "이슈 수정 실패"
+}
+                        </code>
+                    </pre>
+                    </div>
+
+
+                    <h4>이슈 수정</h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+                        </code>
+                    </pre>
+                    <p>Request Body</p>
+                    <pre>
+                        <code class="html">
+{
+  "fields": {
+    "description": {},
+    "labels": [
+      "string"
+    ],
+    "summary": "string"
+  }
+}
+                        </code>
+                    </pre>
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+{
+    "success": true,
+    "message": "이슈 수정 성공"
+}
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+{
+    "success": false,
+    "message": "이슈 수정 실패"
+}
+                        </code>
+                    </pre>
+
+
+
+                    <h4>이슈 삭제 라벨 처리 </h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+
+                        </code>
+                    </pre>
+
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+{
+    "success": true,
+    "message": "이슈 라벨 닫기 처리 성공"
+}
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+
+                    <h4>이슈 전체 목록 조회 </h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectKerOrId : string - required
+
+                        </code>
+                    </pre>
+
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+[
+  {
+    "fields": {
+      "assignee": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "description": {},
+      "issuelinks": [
+        {
+          "id": "string",
+          "self": "string",
+          "type": {
+            "id": "string",
+            "inward": "string",
+            "name": "string",
+            "outward": "string",
+            "self": "string"
+          }
+        }
+      ],
+      "issuetype": {
+        "description": "string",
+        "hierarchyLevel": 0,
+        "id": "string",
+        "name": "string",
+        "self": "string",
+        "subtask": true,
+        "untranslatedName": "string"
+      },
+      "labels": [
+        "string"
+      ],
+      "priority": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "project": {
+        "id": "string",
+        "key": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "reporter": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "resolution": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "status": {
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "subtasks": [
+        {
+          "id": "string",
+          "issues": [
+            null
+          ],
+          "key": "string",
+          "self": "string"
+        }
+      ],
+      "summary": "string"
+    },
+    "id": "string",
+    "issues": [
+      null
+    ],
+    "key": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+
+
+
+
+                    <h4>이슈 키의 연결된 이슈 목록 조회</h4>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+                        </code>
+                    </pre>
+                    <p>Request Body</p>
+                    <pre>
+                        <code class="html">
+{
+  "fields": {
+    "description": {},
+    "labels": [
+      "string"
+    ],
+    "summary": "string"
+  }
+}
+                        </code>
+                    </pre>
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+[
+  {
+    "fields": {
+      "assignee": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "description": {},
+      "issuelinks": [
+        {
+          "id": "string",
+          "self": "string",
+          "type": {
+            "id": "string",
+            "inward": "string",
+            "name": "string",
+            "outward": "string",
+            "self": "string"
+          }
+        }
+      ],
+      "issuetype": {
+        "description": "string",
+        "hierarchyLevel": 0,
+        "id": "string",
+        "name": "string",
+        "self": "string",
+        "subtask": true,
+        "untranslatedName": "string"
+      },
+      "labels": [
+        "string"
+      ],
+      "priority": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "project": {
+        "id": "string",
+        "key": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "reporter": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "resolution": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "status": {
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "subtasks": [
+        {
+          "id": "string",
+          "issues": [
+            null
+          ],
+          "key": "string",
+          "self": "string"
+        }
+      ],
+      "summary": "string"
+    },
+    "id": "string",
+    "issues": [
+      null
+    ],
+    "key": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+{
+    "success": false,
+    "message": "이슈 수정 실패"
+}
+                        </code>
+                    </pre>
+</br>
+</br>
+                    <h4>이슈 키의 서브테스크 목록 조회</h4>
+                    </br>
+                    <p>Parameters</p>
+                    <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required (path)
+
+issueKerOrId : string - required (path)
+                        </code>
+                    </pre>
+
+                    <p>Response Body</p>
+                    <pre>
+                        <code class="html">
+[
+  {
+    "fields": {
+      "assignee": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "description": {},
+      "issuelinks": [
+        {
+          "id": "string",
+          "self": "string",
+          "type": {
+            "id": "string",
+            "inward": "string",
+            "name": "string",
+            "outward": "string",
+            "self": "string"
+          }
+        }
+      ],
+      "issuetype": {
+        "description": "string",
+        "hierarchyLevel": 0,
+        "id": "string",
+        "name": "string",
+        "self": "string",
+        "subtask": true,
+        "untranslatedName": "string"
+      },
+      "labels": [
+        "string"
+      ],
+      "priority": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "project": {
+        "id": "string",
+        "key": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "reporter": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "resolution": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "status": {
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "subtasks": [
+        {
+          "id": "string",
+          "issues": [
+            null
+          ],
+          "key": "string",
+          "self": "string"
+        }
+      ],
+      "summary": "string"
+    },
+    "id": "string",
+    "issues": [
+      null
+    ],
+    "key": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                    <p>Error Code</p>
+                    <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+
+                    <h3>Jira Issue Type API (이슈 타입)</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>URL</th>
+                                <th>Mehtod</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>/{connectId}/jira/issuetype/list</td>
+                                <td>GET</td>
+                                <td>온 프레미스 이슈 타입 리스트 조회</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>/{connectId}/jira/issuetype/{projectId}</td>
+                                <td>GET</td>
+                                <td>클라우드 프로젝트 이슈 타입 리스트 조회</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </br>
+                        </br>
+                        <h4> API Parameters & Request Body & Response Body </h4>
+                        <p> 이슈 타입 리스트 조회 </p>
+                        </br>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectOrId : string - required
+
+                        </code>
+                    </pre>
+
+                        <p>Cloud Response</p>
+                        <pre>
+                        <code class="html">
+[{
+    "success": false,
+    "response": null,
+    "error": {
+        "message": "클라우드 타입은 이슈 유형 목록 가져오기를 사용할 수 없습니다.",
+        "errorCode": null,
+        "status": 500
+    }
+}
+                        </code>
+                    </pre>
+
+
+                        <h4>이슈 수정</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+                        </code>
+                    </pre>
+                        <p>Request Body</p>
+                        <pre>
+                        <code class="html">
+{
+  "fields": {
+    "description": {},
+    "labels": [
+      "string"
+    ],
+    "summary": "string"
+  }
+}
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "success": true,
+    "message": "이슈 수정 성공"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+{
+    "success": false,
+    "message": "이슈 수정 실패"
+}
+                        </code>
+                    </pre>
+
+
+
+
+                        <h4>이슈 삭제 라벨 처리 </h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+
+                        </code>
+                    </pre>
+
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "success": true,
+    "message": "이슈 라벨 닫기 처리 성공"
+}
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+                        <p>이슈 전체 목록 조회</p>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectKerOrId : string - required
+                        </code>
+                    </pre>
+
+
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+[
+  {
+    "fields": {
+      "assignee": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "description": {},
+      "issuelinks": [
+        {
+          "id": "string",
+          "self": "string",
+          "type": {
+            "id": "string",
+            "inward": "string",
+            "name": "string",
+            "outward": "string",
+            "self": "string"
+          }
+        }
+      ],
+      "issuetype": {
+        "description": "string",
+        "hierarchyLevel": 0,
+        "id": "string",
+        "name": "string",
+        "self": "string",
+        "subtask": true,
+        "untranslatedName": "string"
+      },
+      "labels": [
+        "string"
+      ],
+      "priority": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "project": {
+        "id": "string",
+        "key": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "reporter": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "resolution": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "status": {
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "subtasks": [
+        {
+          "id": "string",
+          "issues": [
+            null
+          ],
+          "key": "string",
+          "self": "string"
+        }
+      ],
+      "summary": "string"
+    },
+    "id": "string",
+    "issues": [
+      null
+    ],
+    "key": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+
+                        <h4>이슈 키의 연결된 이슈 목록 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+issueKerOrId : string - required
+                        </code>
+                    </pre>
+
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+[
+  {
+    "fields": {
+      "assignee": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "description": {},
+      "issuelinks": [
+        {
+          "id": "string",
+          "self": "string",
+          "type": {
+            "id": "string",
+            "inward": "string",
+            "name": "string",
+            "outward": "string",
+            "self": "string"
+          }
+        }
+      ],
+      "issuetype": {
+        "description": "string",
+        "hierarchyLevel": 0,
+        "id": "string",
+        "name": "string",
+        "self": "string",
+        "subtask": true,
+        "untranslatedName": "string"
+      },
+      "labels": [
+        "string"
+      ],
+      "priority": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "project": {
+        "id": "string",
+        "key": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "reporter": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "resolution": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "status": {
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "subtasks": [
+        {
+          "id": "string",
+          "issues": [
+            null
+          ],
+          "key": "string",
+          "self": "string"
+        }
+      ],
+      "summary": "string"
+    },
+    "id": "string",
+    "issues": [
+      null
+    ],
+    "key": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+
+
+
+                        <h4>이슈 키의 서브테스크 목록 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required (path)
+
+issueKerOrId : string - required (path)
+                        </code>
+                    </pre>
+
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+[
+  {
+    "fields": {
+      "assignee": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "description": {},
+      "issuelinks": [
+        {
+          "id": "string",
+          "self": "string",
+          "type": {
+            "id": "string",
+            "inward": "string",
+            "name": "string",
+            "outward": "string",
+            "self": "string"
+          }
+        }
+      ],
+      "issuetype": {
+        "description": "string",
+        "hierarchyLevel": 0,
+        "id": "string",
+        "name": "string",
+        "self": "string",
+        "subtask": true,
+        "untranslatedName": "string"
+      },
+      "labels": [
+        "string"
+      ],
+      "priority": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "project": {
+        "id": "string",
+        "key": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "reporter": {
+        "emailAddress": "string",
+        "name": "string"
+      },
+      "resolution": {
+        "default": true,
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "status": {
+        "description": "string",
+        "id": "string",
+        "name": "string",
+        "self": "string"
+      },
+      "subtasks": [
+        {
+          "id": "string",
+          "issues": [
+            null
+          ],
+          "key": "string",
+          "self": "string"
+        }
+      ],
+      "summary": "string"
+    },
+    "id": "string",
+    "issues": [
+      null
+    ],
+    "key": "string",
+    "self": "string"
+  }
+]
+                        </code>
+                    </pre>
+                        <p>Error Code</p>
+                        <pre>
+                        <code class="html">
+
+                        </code>
+                    </pre>
+
+                        <h3>Jira Issue Type API (이슈 타입)</h3>
+
+
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>URL</th>
+                                    <th>Mehtod</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>/{connectId}/jira/issuetype/list</td>
+                                    <td>GET</td>
+                                    <td>온 프레미스 이슈 타입 리스트 조회</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>/{connectId}/jira/issuetype/{projectId}</td>
+                                    <td>GET</td>
+                                    <td>클라우드 프로젝트 이슈 타입 리스트 조회</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </br>
+                        </br>
+                        <h4>API Parameters & Request Body & Response Body</h4>
+                        <h4>1 이슈 타입 리스트 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+(path)
+                        </code>
+                    </pre>
+
+                        <p>Cloud Response </p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+(path)
+                        </code>
+                    </pre>
+                        <p>On Premise Response </p>
+                        <pre>
+                        <code class="html">
+[
+    {
+        "self": "Requirement",
+        "id": "10",
+        "description": "a-RMS 요구사항 이슈 타입",
+        "name": "Requirement",
+        "subtask": false
+    },
+    {
+        "self": "Improvement",
+        "id": "4",
+        "description": "An improvement or enhancement to an existing feature or task.",
+        "name": "Improvement",
+        "subtask": false
+    },
+    {
+        "self": "표준 이슈 유형1",
+        "id": "11",
+        "description": "표준 이슈 유형12",
+        "name": "표준 이슈 유형1",
+        "subtask": false
+    },
+    {
+        "self": "Ticket Template(WBSGantt)",
+        "id": "9",
+        "description": "Ticket Template",
+        "name": "Ticket Template(WBSGantt)",
+        "subtask": false
+    },
+    {
+        "self": "Task",
+        "id": "3",
+        "description": "A task that needs to be done.",
+        "name": "Task",
+        "subtask": false
+    },
+    {
+        "self": "Sub-task",
+        "id": "5",
+        "description": "The sub-task of the issue",
+        "name": "Sub-task",
+        "subtask": true
+    },
+    {
+        "self": "Bug",
+        "id": "1",
+        "description": "A problem which impairs or prevents the functions of the product.",
+        "name": "Bug",
+        "subtask": false
+    },
+    {
+        "self": "온프라미스 이슈 타입",
+        "id": "12",
+        "description": "온프라미스 이슈 타입",
+        "name": "온프라미스 이슈 타입",
+        "subtask": false
+    },
+    {
+        "self": "Phase",
+        "id": "8",
+        "description": "Project Development Phase",
+        "name": "Phase",
+        "subtask": false
+    },
+    {
+        "self": "New Feature",
+        "id": "2",
+        "description": "A new feature of the product, which has yet to be developed.",
+        "name": "New Feature",
+        "subtask": false
+    }
+]
+
+
+
+                        </code>
+                    </pre>
+
+
+                        <h4>2 프로젝트 별 이슈 타입 리스트 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectOrId : string - required
+
+                        </code>
+                    </pre>
+
+                        <p>Response </p>
+                        <pre>
+                        <code class="html">
+[
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/issuetype/10019",
+        "id": "10019",
+        "description": "소규모 개별 업무입니다.",
+        "name": "작업",
+        "subtask": false,
+        "untranslatedName": "Task",
+        "hierarchyLevel": 0
+    },
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/issuetype/10020",
+        "id": "10020",
+        "description": "대량 작업 일부인 소규모 업무.",
+        "name": "하위 작업",
+        "subtask": true,
+        "untranslatedName": "Sub-task",
+        "hierarchyLevel": -1
+    },
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/issuetype/10064",
+        "id": "10064",
+        "description": "요구사항",
+        "name": "요구사항WM",
+        "subtask": false,
+        "untranslatedName": "요구사항WM",
+        "hierarchyLevel": 0
+    },
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/issuetype/10066",
+        "id": "10066",
+        "description": "요구사항2",
+        "name": "요구사항WM2",
+        "subtask": false,
+        "untranslatedName": "요구사항WM2",
+        "hierarchyLevel": 0
+    }
+]
+                        </code>
+                    </pre>
+
+                        <h4>Jira Issue Status API (이슈 상태)</h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>URL</th>
+                                    <th>Mehtod</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>/{connectId}/jira/issuestatus/list</td>
+                                    <td>GET</td>
+                                    <td>온 프레미스 이슈 상태 목록 조회</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>/{connectId}/jira/issuestatus/{projectId}</td>
+                                    <td>GET</td>
+                                    <td>클라우드 프로젝트 이슈 상태 목록 조회</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4>API Parameters & Request Body & Response Body</h4>
+                        </br>
+                        </br>
+                        <h4>1 온 프레미스 이슈 상태 목록 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+(path)
+                        </code>
+                    </pre>
+                        <p>Cloud Response Body</p>
+                        <pre>
+                        <code class="html">
+{
+    "success": false,
+    "response": null,
+    "error": {
+        "message": "클라우드 타입은 이슈 상태 목록 가져오기를 사용할 수 없습니다.",
+        "errorCode": null,
+        "status": 500
+    }
+}
+                        </code>
+                    </pre>
+                        <p>Response Body</p>
+                        <pre>
+                        <code class="html">
+[
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/latest/status/1",
+        "id": "1",
+        "name": "Open",
+        "description": "The issue is open and ready for the assignee to start work on it."
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/latest/status/3",
+        "id": "3",
+        "name": "In Progress",
+        "description": "This issue is being actively worked on at the moment by the assignee."
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/latest/status/4",
+        "id": "4",
+        "name": "Feedback",
+        "description": "This issue was once resolved, but the resolution was deemed incorrect. From here issues are either marked assigned or resolved."
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/latest/status/5",
+        "id": "5",
+        "name": "Resolved",
+        "description": "A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed."
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/latest/status/6",
+        "id": "6",
+        "name": "Closed",
+        "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened."
+    }
+]
+                        </code>
+                    </pre>
+                        <h4>2 클라우드 프로젝트 이슈 상태 목록 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+
+projectId : string - required
+                        </code>
+                    </pre>
+                        <p> Response </p>
+                        <pre>
+                        <code class="html">
+[
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/statuses?id=10024",
+        "id": "10024",
+        "name": "Done",
+        "description": ""
+    },
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/statuses?id=10023",
+        "id": "10023",
+        "name": "In Progress",
+        "description": ""
+    },
+    {
+        "self": "https://advanc2d.atlassian.net/rest/api/3/statuses?id=10022",
+        "id": "10022",
+        "name": "To Do",
+        "description": ""
+    }
+]
+                        </code>
+                    </pre>
+
+
+                        <h4>Jira Issue Priority API (이슈 우선순위)</h4>
+
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>URL</th>
+                                    <th>Mehtod</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>/{connectId}/jira/issuepriority/list</td>
+                                    <td>GET</td>
+                                    <td>이슈 우선순위 목록 조회</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3>API Parameters & Request Body & Response Body</h3>
+                        <p>이슈 우선순위 목록 조회  </p>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+                        </code>
+                    </pre>
+                        <p> Response </p>
+                        <pre>
+                        <code class="html">
+[
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/priority/6",
+        "id": "6",
+        "name": "High",
+        "description": "High",
+        "default": false
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/priority/7",
+        "id": "7",
+        "name": "Medium",
+        "description": "Medium",
+        "default": false
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/priority/8",
+        "id": "8",
+        "name": "Low",
+        "description": "Low",
+        "default": false
+    }
+]
+                        </code>
+                    </pre>
+
+                        <p>Jira Issue Resolution Scheme API (이슈 해결책)  </p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>URL</th>
+                                    <th>Mehtod</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>/{connectId}/jira/issueresolution/list</td>
+                                    <td>GET</td>
+                                    <td>이슈 해결책 목록 조회</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4>API Parameters & Request Body & Response Body</h4>
+                        </br>
+                        <h4>1 이슈 해결책 목록 조회</h4>
+                        <p>Parameters</p>
+                        <pre>
+                        <code class="html">
+Name
+
+connectId : integer - required
+                        </code>
+                    </pre>
+                        <p> Response </p>
+                        <pre>
+                        <code class="html">
+[
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/resolution/1",
+        "id": "1",
+        "name": "Fixed",
+        "description": "A fix for this issue is checked into the tree and tested.",
+        "default": false
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/resolution/2",
+        "id": "2",
+        "name": "Won't Fix",
+        "description": "The problem described is an issue which will never be fixed.",
+        "default": false
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/resolution/3",
+        "id": "3",
+        "name": "Duplicate",
+        "description": "The problem is a duplicate of an existing issue.",
+        "default": false
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/resolution/4",
+        "id": "4",
+        "name": "Incomplete",
+        "description": "The problem is not completely described.",
+        "default": false
+    },
+    {
+        "self": "http://www.313.co.kr/jira/rest/api/2/resolution/5",
+        "id": "5",
+        "name": "Cannot Reproduce",
+        "description": "All attempts at reproducing this issue failed, or not enough information was available to reproduce the issue. Reading the code produces no clues as to why this behavior would occur. If more information appears later, please reopen the issue.",
+        "default": false
+    }
+]
+                        </code>
+                    </pre>
+                    </div>
+                </section>
+                <hr class="divider">
+            </div>
+        </div>
+
+    </div>
+    <!-- Content end -->
+
+    <!-- Footer
+    ============================ -->
+    <footer id="footer" class="section bg-dark footer-text-light">
+        <div class="container">
+            <ul class="social-icons social-icons-lg social-icons-muted justify-content-center mb-3">
+                <li><a data-toggle="tooltip" href="https://twitter.com/harnishdesign/" target="_blank" title=""
+                       data-original-title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                <li><a data-toggle="tooltip" href="http://www.facebook.com/harnishdesign/" target="_blank" title=""
+                       data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a data-toggle="tooltip" href="http://www.dribbble.com/harnishdesign/" target="_blank" title=""
+                       data-original-title="Dribbble"><i class="fab fa-dribbble"></i></a></li>
+                <li><a data-toggle="tooltip" href="http://www.github.com/" target="_blank" title=""
+                       data-original-title="GitHub"><i class="fab fa-github"></i></a></li>
+            </ul>
+            <p class="text-center">Copyright &copy; 2020 <a
+                    href="http://www.harnishdesign.net/idocs-one-page-documentation-html-template/">iDocs</a>. All
+                Rights Reserved.</p>
+            <p class="text-2 text-center mb-0">Design &amp; Develop by <a class="btn-link" target="_blank"
+                                                                          href="http://www.harnishdesign.net/">HarnishDesign</a>.
+            </p>
+        </div>
+    </footer>
+    <!-- Footer end -->
+
+</div>
+<!-- Document Wrapper end -->
+
+<!-- Back To Top -->
+<a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a>
+
+<!-- JavaScript
+============================ -->
+<script src="assets/vendor/jquery/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Highlight JS -->
+<script src="assets/vendor/highlight.js/highlight.min.js"></script>
+<!-- Easing -->
+<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+<!-- Magnific Popup -->
+<script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+<!-- Custom Script -->
+<script src="assets/js/theme.js"></script>
+</body>
+</html>
