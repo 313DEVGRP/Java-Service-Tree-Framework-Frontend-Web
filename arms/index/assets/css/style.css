@@ -404,6 +404,15 @@ lading common
 	animation: fadeIn 3s forwards 3s;
 }
 
+.resume.on .connect {
+	animation: fadeOut 3s forwards 3s;
+}
+
+.resume.on .combination {
+	opacity: 0;
+	animation: fadeIn 3s forwards 3s;
+}
+
 .resume.on .developer {
 	animation: fadeOut 3s forwards 3s;
 }
