@@ -131,9 +131,6 @@ function setDetailAndEditViewTab() {
 	var selectedJsTreeId = urlParams.get('reqAdd');
 	var selectedPdService = urlParams.get('pdService');
 	console.log("Detail Tab ::::")
-	console.log("==== 장지윤 selectedJsTreeId")
-	console.log(selectedJsTreeId)
-	console.log(selectedPdService)
 	var tableName = "T_ARMS_REQADD_" + selectedPdService;
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
@@ -143,8 +140,6 @@ function setDetailAndEditViewTab() {
 		progress: true
 	})
 		.done(function (data) {
-			// ------------------ 편집하기 ------------------ //
-			// bindDataEditlTab(data);
 			// ------------------ 상세보기 ------------------ //
 			bindDataDetailTab(data);
 		})
@@ -154,26 +149,16 @@ function setDetailAndEditViewTab() {
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
 
-	console.log("==== 장지윤 ajaxData")
 	console.log(ajaxData)
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = ajaxData.pdServiceEntity.c_title;
 
-	console.log("==== 장지윤 selectedPdServiceText")
-	console.log(selectedPdServiceText)
 	if (isEmpty(selectedPdServiceText)) {
 		$("#detailview_req_pdservice_name").text("");
 	} else {
 		$("#detailview_req_pdservice_name").text(selectedPdServiceText);
 	}
 
-	//Version 데이터 바인딩
-	// var selectedVersionText = $("#edit_multi_version").multipleSelect("getSelects", "text");
-	// if (isEmpty(selectedVersionText)) {
-	// 	$("#detailview_req_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
-	// } else {
-	// 	$("#detailview_req_pdservice_version").val(selectedVersionText);
-	// }
 	$("#detailview_req_id").text(ajaxData.c_id);
 	$("#detailview_req_name").text(ajaxData.c_title);
 
@@ -214,4 +199,44 @@ function bindDataDetailTab(ajaxData) {
 		$("#detailview_req_reviewer05").text(ajaxData.c_req_reviewer05);
 	}
 	$("#detailview_req_contents").text(ajaxData.c_req_contents);
+
+	$("#detailview_pdservice_name").val(ajaxData.pdServiceEntity.c_title);
+	if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_owner) || ajaxData.pdServiceEntity.c_pdservice_owner == "none") {
+		$("#detailview_pdservice_owner").val("책임자가 존재하지 않습니다.");
+	} else {
+		$("#detailview_pdservice_owner").val(ajaxData.pdServiceEntity.c_pdservice_owner);
+	}
+
+	if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer01) || ajaxData.pdServiceEntity.c_pdservice_reviewer01 == "none") {
+		$("#detailview_pdservice_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
+	} else {
+		$("#detailview_pdservice_reviewer01").val(ajaxData.pdServiceEntity.c_pdservice_reviewer01);
+	}
+
+	if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer02) || ajaxData.pdServiceEntity.c_pdservice_reviewer02 == "none") {
+		$("#detailview_pdservice_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_pdservice_reviewer02").val(ajaxData.pdServiceEntity.c_pdservice_reviewer02);
+	}
+
+	if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer03) || ajaxData.pdServiceEntity.c_pdservice_reviewer03 == "none") {
+		$("#detailview_pdservice_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_pdservice_reviewer03").val(ajaxData.pdServiceEntity.c_pdservice_reviewer03);
+	}
+
+	if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer04) || ajaxData.pdServiceEntity.c_pdservice_reviewer04 == "none") {
+		$("#detailview_pdservice_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_pdservice_reviewer04").val(ajaxData.pdServiceEntity.c_pdservice_reviewer04);
+	}
+
+	if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer05) || ajaxData.pdServiceEntity.c_pdservice_reviewer05 == "none") {
+		$("#detailview_pdservice_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_pdservice_reviewer05").val(ajaxData.pdServiceEntity.c_pdservice_reviewer05);
+	}
+	$("#detailview_pdservice_contents").html(ajaxData.pdServiceEntity.c_pdservice_contents);
+
+	$("#editview_pdservice_name").val(ajaxData.pdServiceEntity.c_title);
 }
