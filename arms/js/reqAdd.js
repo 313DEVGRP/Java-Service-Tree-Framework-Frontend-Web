@@ -113,7 +113,7 @@ function execDocReady() {
 			makeDatePicker($("#btn_end_calendar_popup"));
 
 			// jira 서버 정보 데이터 테이블 셋팅
-			datatables_jira_project();
+			//datatables_jira_project();
 
 			autoCompleteForUser();
 
@@ -669,7 +669,6 @@ function jiraProjectConnectionInfo() {
 
 				console.table(obj);
 				console.log(obj.c_id);
-				console.log("123123123123");
 				console.log(jiraCheckId);
   			}
 		},
@@ -1685,7 +1684,7 @@ function change_tab_action() {
 			var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 			console.log("jira selectedJsTreeId" + selectedJsTreeId);
 			console.log("jira tableName" + tableName);
-			datatables_jira_project();
+			//datatables_jira_project();
 			console.log("jira datatables_jira_project 완료 " );
 
 			// $.ajax({
