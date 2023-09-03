@@ -76,7 +76,7 @@ function execDocReady() {
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
-				height: "130px",
+				height: "195px",
 				railVisible: true,
 				railColor: "#222",
 				railOpacity: 0.3,
@@ -154,19 +154,24 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 
 	//제품 서비스 셀렉트 박스 데이터 바인딩
 	$.ajax({
-		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?pdservice_version=" + pdservice_version_id,
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				//////////////////////////////////////////////////////////
-				for (var k in data.response) {
-					var obj = data.response[k];
-					console.log(obj);
+
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
 				}
-				//////////////////////////////////////////////////////////
+
+				$('#version_count').text(data["version"]);
+				$('#req_count').text(data["req"]);
+				$('#alm_server_count').text(data["jiraServer"]);
+				$('#alm_project_count').text(data["jiraProject"]);
+				$('#alm_issue_count').text(data["issue"]);
 			}
 		}
 	});
