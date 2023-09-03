@@ -399,6 +399,10 @@ lading common
 	animation: fadeOut 3s forwards 3s;
 }
 
+.resume .okay {
+	opacity: 0;
+}
+
 .resume.on .okay {
 	opacity: 0;
 	animation: fadeIn 3s forwards 3s;
@@ -408,6 +412,10 @@ lading common
 	animation: fadeOut 3s forwards 3s;
 }
 
+.resume .combination {
+	opacity: 0;
+}
+
 .resume.on .combination {
 	opacity: 0;
 	animation: fadeIn 3s forwards 3s;
@@ -415,6 +423,10 @@ lading common
 
 .resume.on .developer {
 	animation: fadeOut 3s forwards 3s;
+}
+
+.resume .assembly {
+	opacity: 0;
 }
 
 .resume.on .assembly {
@@ -428,6 +440,10 @@ lading common
 	animation: fadeOut 3s forwards 3s;
 }
 
+.portfolio .progress {
+	opacity: 0;
+}
+
 .portfolio.on .progress {
 	opacity: 0;
 	animation: fadeIn 3s forwards 3s;
@@ -435,6 +451,10 @@ lading common
 
 .portfolio.on .assembly {
 	animation: fadeOut 3s forwards 3s;
+}
+
+.portfolio .checklist {
+	opacity: 0;
 }
 
 .portfolio.on .checklist {
