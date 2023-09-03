@@ -69,7 +69,7 @@
 						<div class="body">
 							<div class="column">
 									<blockquote class="font12">
-										<strong>1. Service 를 선택해 주세요</strong>
+										<strong>1. Product<sup>service</sup> 를 선택해 주세요</strong>
 									</blockquote>
 									<div    class="control-group"
 										    class="darkBack"
@@ -89,7 +89,7 @@
 										</div>
 									</div>
 									<blockquote class="font12">
-										<strong>2. Version 을 선택해 주세요</strong>
+										<strong>2. Product<sup>service</sup>의 버전을 선택해 주세요</strong>
 									</blockquote>
 									<div    class="control-group"
 										    style="padding-bottom: 10px; border: 0">
@@ -124,7 +124,12 @@
                                     <div    class="controls form-group"
                                             class="darkBack"
                                             style="margin-bottom: 5px !important; padding-top: 5px !important;">
-                                        <span>✔ 총 요구사항 이슈 개수 : <a style="font-weight: bold;">100</a> 개</span>
+                                        <span>✔ 총 제품(서비스) 버전 개수 : <a id="version_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                    </div>
+                                    <div    class="controls form-group"
+                                            class="darkBack"
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 총 요구사항 이슈 개수 : <a id="req_count" style="font-weight: bold;">n/a</a> 개</span>
                                     </div>
                                 </div>
                                 <blockquote class="font12">
@@ -134,13 +139,18 @@
                                         style="border: 0">
                                     <div    class="controls form-group"
                                             class="darkBack"
-                                            style="margin-bottom: 5px !important;">
-                                        <span>✔ 연결된 ALM 프로젝트 개수 : <a style="font-weight: bold;">10</a> 개</span>
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 연결된 ALM 서버 개수 : <a id="alm_server_count" style="font-weight: bold;">n/a</a> 개</span>
                                     </div>
                                     <div    class="controls form-group"
                                             class="darkBack"
-                                            style="margin-bottom: 5px !important;">
-                                        <span>✔ 연결된 ALM 이슈 개수 : <a style="font-weight: bold;">1000</a> 개</span>
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 연결된 ALM 프로젝트 개수 : <a id="alm_project_count" style="font-weight: bold;">n/a</a> 개</span>
+                                    </div>
+                                    <div    class="controls form-group"
+                                            class="darkBack"
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 연결된 ALM 이슈 개수 : <a id="alm_issue_count" style="font-weight: bold;">n/a</a> 개</span>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +167,7 @@
                         <div class="body">
                             <div class="column">
                                 <blockquote class="font12">
-                                    <strong>5. 요구사항 이슈에 연결된 이슈 현황</strong>
+                                    <strong>5. 연결된 ALM 이슈의 진척도</strong>
                                 </blockquote>
                                 <div    class="control-group"
                                         class="darkBack"
@@ -165,15 +175,6 @@
                                     <div    class="controls form-group darkBack"
                                             id="progress_status"
                                             style="margin-bottom: 5px !important;">
-                                        <span>✡ 해야 할 일 : <a style="font-weight: bold;">68</a> 개</span><br>
-                                        <span>✡ Open : <a style="font-weight: bold;">27</a> 개</span><br>
-                                        <span>✡ 열기 : <a style="font-weight: bold;">20</a> 개</span><br>
-                                        <span>✡ Backlog : <a style="font-weight: bold;">4</a> 개</span><br>
-                                        <span>✡ Resolved : <a style="font-weight: bold;">2</a> 개</span><br>
-                                        <span>✡ 완료됨 : <a style="font-weight: bold;">2</a> 개</span><br>
-                                        <span>✡ Closed : <a style="font-weight: bold;">1</a> 개</span><br>
-                                        <span>✡ 닫힘 : <a style="font-weight: bold;">1</a> 개</span><br>
-                                        <span>✡ 진행 중 : <a style="font-weight: bold;">1</a> 개</span>
                                     </div>
                                 </div>
                             </div>

@@ -76,7 +76,7 @@ function execDocReady() {
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
-				height: "130px",
+				height: "195px",
 				railVisible: true,
 				railColor: "#222",
 				railOpacity: 0.3,
@@ -144,9 +144,71 @@ function makePdServiceSelectBox() {
 		} else {
 			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		}
-		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
+
+		statisticsLoad($("#selected_pdService").val(), null);
+
+		progressLoad($("#selected_pdService").val(), null);
 	});
 } // end makePdServiceSelectBox()
+
+function progressLoad(pdservice_id, pdservice_version_id){
+
+	$('#progress_status').empty(); // 모든 자식 요소 삭제
+
+	//제품 서비스 셀렉트 박스 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getProgress.do?version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+
+					var html_piece = 	"<div	class=\"controls form-group darkBack\"\n" +
+										"		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
+										"<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
+										"</div>";
+					$('#progress_status').append(html_piece);
+				}
+
+			}
+		}
+	});
+}
+
+function statisticsLoad(pdservice_id, pdservice_version_id){
+
+	//제품 서비스 셀렉트 박스 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+
+				$('#version_count').text(data["version"]);
+				$('#req_count').text(data["req"]);
+				$('#alm_server_count').text(data["jiraServer"]);
+				$('#alm_project_count').text(data["jiraProject"]);
+				$('#alm_issue_count').text(data["issue"]);
+			}
+		}
+	});
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
@@ -165,11 +227,11 @@ function makeVersionMultiSelectBox() {
 			if (checked) {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-				common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				dataTableLoad($("#selected_pdService").val(), endPointUrl);
 			} else {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-				common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				dataTableLoad($("#selected_pdService").val(), endPointUrl);
 			}
 		}
 	});
@@ -210,7 +272,7 @@ function bind_VersionData_By_PdService() {
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function common_dataTableLoad(selectId, endPointUrl) {
+function dataTableLoad(selectId, endPointUrl) {
 	var columnList = [
 		{ name: "c_pdservice_link", title: "제품(서비스) 아이디", data: "c_pdservice_link", visible: false },
 		{
@@ -244,6 +306,24 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			className: "dt-body-left",
 			visible: true
 		},
+		{ name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
+		{ name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
+		{
+			name: "c_req_name",
+			title: "요구사항",
+			data: "c_req_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+
 		{ name: "c_jira_server_link", title: "지라 서버 아이디", data: "c_jira_server_link", visible: false },
 		{ name: "c_jira_server_url", title: "지라 서버 주소", data: "c_jira_server_url", visible: false },
 		{
@@ -282,23 +362,6 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			name: "c_jira_project_key",
 			title: "JIRA 프로젝트키",
 			data: "c_jira_project_key",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
-		{ name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
-		{
-			name: "c_req_name",
-			title: "요구사항",
-			data: "c_req_name",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -434,7 +497,7 @@ function common_dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = [1,2,3,4,5,6,7,8,9,10,12,13,14];
+	var rowsGroupList = [1,3,6];
 	var columnDefList = [
 		{
 			orderable: false,
@@ -508,11 +571,11 @@ $("#checkbox1").click(function () {
 	if (checked) {
 		endPointUrl =
 			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	} else {
 		endPointUrl =
 			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-		common_dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	}
 });
 
