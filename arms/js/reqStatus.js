@@ -146,9 +146,41 @@ function makePdServiceSelectBox() {
 		}
 		dataTableLoad($("#selected_pdService").val(), endPointUrl);
 
-		statisticsLoad($("#selected_pdService").val(), null)
+		statisticsLoad($("#selected_pdService").val(), null);
+
+		progressLoad($("#selected_pdService").val(), null);
 	});
 } // end makePdServiceSelectBox()
+
+function progressLoad(pdservice_id, pdservice_version_id){
+
+	$('#progress_status').empty(); // 모든 자식 요소 삭제
+
+	//제품 서비스 셀렉트 박스 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getProgress.do?version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+
+					var html_piece = 	"<div	class=\"controls form-group darkBack\"\n" +
+										"		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
+										"<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
+										"</div>";
+					$('#progress_status').append(html_piece);
+				}
+
+			}
+		}
+	});
+}
 
 function statisticsLoad(pdservice_id, pdservice_version_id){
 
