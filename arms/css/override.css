@@ -2303,3 +2303,31 @@ table tbody tr td {
 .dataTables_scrollBody::-webkit-scrollbar-thumb {
 	border-radius: 5px;
 }
+
+.ribbon {
+	/* adjust the below to control the shape */
+	--d: 5px;
+	--w: 100px;
+	--c: #333;
+	/**/
+
+	position: absolute;
+	top: 0;
+	right: 0;
+	transform: translate(29.29%, -100%) rotate(45deg); /* 29.29% = 100%*(1 - cos(45deg)) */
+	color: #fff;
+	text-align: center;
+	width: var(--w);
+	transform-origin: bottom left;
+	padding: 5px 0 calc(var(--d) + 5px);
+	background: linear-gradient(rgba(0, 0, 0, 0.6) 0 0) bottom/100% var(--d) no-repeat var(--c);
+	clip-path: polygon(
+			0 100%,
+			0 calc(100% - var(--d)),
+			50% calc(100% - var(--d) - var(--w) / 2),
+			100% calc(100% - var(--d)),
+			100% 100%,
+			calc(100% - var(--d)) calc(100% - var(--d)),
+			var(--d) calc(100% - var(--d))
+	);
+}
