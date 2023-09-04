@@ -56,23 +56,30 @@
                 <!-- Logo End -->
 
                 <!-- Navbar Toggler -->
-                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#header-nav">
-                    <span></span><span></span><span></span></button>
+                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#header-nav"><span></span><span></span><span></span></button>
 
 
                 <!-- 개별 문서 관리 ( projectCharter, SDS , SRS , 팝업-->
                 <div id="header-nav" class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav">
-                        <li class="dropdown"><a class="dropdown-toggle" href="#">move page</a>
+
+
+                        <li class="dropdown"><a class="dropdown-toggle" href="#">total docs</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="projectCharter.html">product charter</a></li>
+
+                                <li><a class="dropdown-item" href="project-charter.html">Product charter</a></li>
                                 <li><a class="dropdown-item" href="srs.html">SRS</a></li>
                                 <li><a class="dropdown-item" href="sds.html">SDS</a></li>
                                 <li><a class="dropdown-item" href="guide.html">Guide</a></li>
+                                <li><a class="dropdown-item" href="engine-api-docs.html">Engine</a></li>
+                                <li><a class="dropdown-item" href="cloud-api-token.html">클라우드 API 토큰 발급</a></li>
+                                <li><a class="dropdown-item" href="create-cloud-issue-type.html">클라우드 이슈 유형 생성</a></li>
+                                <li><a class="dropdown-item" href="create-onpremise-issue-type.html">온프레미스 이슈 유형 생성</a></li>
+                                <li><a class="dropdown-item" href="import-github-project-intelli.html">inteliJ github project import</a></li>
                             </ul>
                         </li>
                         <li><a target="_blank"
-                               href="http://www.a-rms.net/313devgrp/arms/">Support</a>
+                               href="http://www.313.co.kr/">Support</a>
                         </li>
                     </ul>
                 </div>
@@ -133,6 +140,8 @@
                         <li class="nav-item"><a class="nav-link" href="#design">3. 설계</a></li>
                     </ul>
                 </li>
+                <li class="nav-item"><a class="nav-link" href="#engine-api-docs">a-RMS Engine 통합 API Docs</a>
+                </li>
             </ul>
         </div>
 
@@ -162,7 +171,7 @@
                 <section id="install_error_message"></section>
 
                 <!-- A-RMS Document  -->
-                <section id="project_charter"> <h1>A-RMS Document</h1> </section>
+                <section id="project_charter"> <h1>A-RMS Docs</h1> </section>
 
                 <section id="project_background"></section>
 
@@ -171,7 +180,7 @@
                 <section id="utilization_plan"></section>
 
                 <!-- SRS Document -->
-                <section id="srs"><h1>SRS Document</h1></section>
+                <section id="srs"><h1>SRS Docs</h1></section>
 
                 <section id="srs_overview"></section>
 
@@ -186,7 +195,7 @@
                 <section id="non_functional_requirements"></section>
 
                 <!-- SDS Document -->
-                <section id="sds"><h1>SDS Document </h1></section>
+                <section id="sds"><h1>SDS Docs </h1></section>
                 <!-- 1. 프로젝트 개요 -->
                 <section id="sds_overview"></section>
                 <!--  2. 설계 고려사항 -->
@@ -195,51 +204,24 @@
                 <section id="design"></section>
 
 
+
+
+
+
+
+                <!-- 엔진 문서 -->
+                <section id="engine-api-docs"></section>
+
+
             </div>
 
 <!--  ============================
        index page end
      ============================ -->
 
-
-
-
-
-
             <!-- Back To Top -->
             <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i
                     class="fa fa-chevron-up"></i></a>
-
-            <!-- JavaScript
-            ============================ -->
-            <script src="assets/vendor/jquery/jquery.min.js"></script>
-            <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <!-- Highlight JS -->
-            <script src="assets/vendor/highlight.js/highlight.min.js"></script>
-            <!-- Easing -->
-            <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-            <!-- Magnific Popup -->
-            <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-            <!-- Custom Script -->
-            <script src="assets/js/theme.js"></script>
-            <script>
-                $(document).ready( function() {
-
-                    $("#footer").load("./html/footer.html");
-                    $("#project_background").load("./html/project-background.html");
-                    $("#project_content").load("./html/project-content.html");
-                    $("#utilization_plan").load("./html/utilization-plan.html");
-                    $("#srs_overview").load("./html/srs-overview.html");
-                    $("#srs_serviceview").load("./html/srs-serviceview.html");
-                    $("#srs_interface_requirements").load("./html/interface-requirements.html");
-                    $("#srs_functional_requirements").load("./html/srs-functional-requirements.html");
-                    $("#non_functional_requirements").load("./html/non-functional-requirements.html");
-                    $("#sds_overview").load("./html/sds-overview.html");
-                    $("#design_considerations").load("./html/design-considerations.html");
-                    $("#design").load("./html/design.html");
-
-                });
-            </script>
         </div>
     </div>
 </div>
@@ -263,6 +245,26 @@
 <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 <!-- Custom Script -->
 <script src="assets/js/theme.js"></script>
+
+<script>
+    $(document).ready( function() {
+
+        $("#footer").load("./html/footer.html");
+        $("#project_background").load("./html/project-background.html");
+        $("#project_content").load("./html/project-content.html");
+        $("#utilization_plan").load("./html/utilization-plan.html");
+        $("#srs_overview").load("./html/srs-overview.html");
+        $("#srs_serviceview").load("./html/srs-serviceview.html");
+        $("#srs_interface_requirements").load("./html/interface-requirements.html");
+        $("#srs_functional_requirements").load("./html/srs-functional-requirements.html");
+        $("#non_functional_requirements").load("./html/non-functional-requirements.html");
+        $("#sds_overview").load("./html/sds-overview.html");
+        $("#design_considerations").load("./html/design-considerations.html");
+        $("#design").load("./html/design.html");
+        $("#engine_api_docs").load("./html/engine-api-docs.html");
+
+    });
+</script>
 
 </body>
 </html>

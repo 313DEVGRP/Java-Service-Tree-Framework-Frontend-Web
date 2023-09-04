@@ -51,7 +51,7 @@
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
                             style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                            onclick="return true;">
+                            onclick="window.location.href='docs/guide.html#jira_regist_manage'">
                         Help
                         <i  class="fa fa-question"
                             style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
@@ -101,15 +101,18 @@
                         <div class="carousel-inner text-align-center">
                             <div class="item active">
                                 <h4 class="no-margin">지라 서버 목록</h4>
-                                <!--                                <p><small>Built-in Twitter Bootstrap 3 support</small></p>-->
                             </div>
                             <div class="item">
-                                <h4 class="no-margin">임시 목록1</h4>
-                                <!--                                <p><small>Simple & intuitive code</small></p>-->
-                            </div>
+                                <a href="docs/create-cloud-issue-type.html" style="  text-decoration: none; color: white;">
+                                    <h4 class="no-margin">클라우드 이슈 유형 생성 API
+                                    </h4>
+                                </a>
+
+                             </div>
                             <div class="item">
-                                <h4 class="no-margin">임시 목록2</h4>
-                                <!--                                <p><small>Light Blue is really easy to customize</small></p>-->
+                                <a href="docs/create-onpremise-issue-type.html" style="  text-decoration: none;  color: white;">
+                                    <h4 class="no-margin">온프레미스 이슈 유형 생성 API</h4>
+                                </a>
                             </div>
                         </div>
                         <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -271,7 +274,7 @@
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
                             style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                            onclick="return true;">
+                            onclick="window.location.href='docs/guide.html#jira_regist_manage'">
                         Help
                         <i  class="fa fa-question"
                             style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
@@ -514,10 +517,10 @@
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="JIRA BASE URL"
                                                         required="required" readonly/>
-                                                <!--                                                <span class="input-group-addon font11">
-                                                                          <i class="fa fa-question-circle"></i>
-                                                                          ex: X.X.X
-                                                                        </span>-->
+<!--                                                <span class="input-group-addon font11">
+													<i class="fa fa-question-circle"></i>
+													ex: X.X.X
+												</span>-->
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -570,18 +573,18 @@
                                         </div>
                                         <div class="control-group">
                                             <label  class="control-label">
-                                                지라 서버 내용 :
+                                                제품(서비스) 컨텐츠 :
                                             </label>
-                                            <!--                                            <div    class="col-sm-12 darkBack"-->
-                                            <!--                                                    id="detailview_jira_server_contents"-->
-                                            <!--                                                    style="padding-top: 10px; padding-bottom: 10px">-->
-                                            <!--                                                -->
-                                            <!--                                            </div>-->
+<!--                                            <div    class="col-sm-12 darkBack"-->
+<!--                                                    id="detailview_jira_server_contents"-->
+<!--                                                    style="padding-top: 10px; padding-bottom: 10px">-->
+<!--                                                -->
+<!--                                            </div>-->
                                             <div class="controls form-group">
                                                 <div    class="col-sm-12"
                                                         style="padding-top: 10px">
                                                     <div id="detailview_jira_server_contents" contenteditable="false">
-                                                        <p>지라 서버의 내용을 기록합니다.</p>
+                                                        <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -646,99 +649,99 @@
                                                                         value="온프레미스"/>
                                                                 온프레미스
                                                             </label>
-                                                            <!--                                                            <span class="input-group-addon font11">
-                                                                                                                INFO: 서버 환경은 수정할 수 없습니다.
-                                                                                                            </span>-->
-                                                        </div>
-
+<!--                                                            <span class="input-group-addon font11">
+                                                    INFO: 서버 환경은 수정할 수 없습니다.
+                                                </span>-->
                                                     </div>
+
                                                 </div>
-                                                <div class="control-group">
-                                                    <label  for="editview_jira_server_base_url"
-                                                            class="control-label"
-                                                            style="width: 130px !important">
-                                                        지라 URL :
-                                                    </label>
-                                                    <div    class="controls form-group input-group"
-                                                            style="margin-left: 100px">
+                                            </div>
+                                            <div class="control-group">
+                                                <label  for="editview_jira_server_base_url"
+                                                        class="control-label"
+                                                        style="width: 130px !important">
+                                                    지라 URL :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-share"></i>
 												</span>
-                                                        <input  type="text"
-                                                                id="editview_jira_server_base_url"
-                                                                name="editview_jira_server_base_url"
-                                                                class="form-control parsley-validated font13 darkBack"
-                                                                style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                                placeholder="JIRA BASE URL"
-                                                                required="required" readonly/>
-                                                        <!--
-                                                                                  <i class="fa fa-question-circle"></i>
-                                                                                  ex: X.X.X
-                                                                                </span>-->
-                                                    </div>
+                                                    <input  type="text"
+                                                            id="editview_jira_server_base_url"
+                                                            name="editview_jira_server_base_url"
+                                                            class="form-control parsley-validated font13 darkBack"
+                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                            placeholder="JIRA BASE URL"
+                                                            required="required" readonly/>
+<!--
+													<i class="fa fa-question-circle"></i>
+													ex: X.X.X
+												</span>-->
                                                 </div>
-                                                <div class="control-group">
-                                                    <label  for="version_start_date"
-                                                            class="control-label"
-                                                            style="width: 130px !important">
-                                                        JIRA ID :
-                                                    </label>
-                                                    <div    class="controls form-group input-group"
-                                                            style="margin-left: 100px">
+                                            </div>
+                                            <div class="control-group">
+                                                <label  for="version_start_date"
+                                                        class="control-label"
+                                                        style="width: 130px !important">
+                                                    JIRA ID :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-                                                        <input  type="text"
-                                                                id="editview_jira_server_connect_id"
-                                                                name="editview_jira_server_connect_id"
-                                                                class="form-control parsley-validated font13 darkBack"
-                                                                style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                                placeholder="JIRA SERVER CONNECT ID"
-                                                                required="required" />
-                                                        <span class="input-group-addon font11">
+                                                    <input  type="text"
+                                                            id="editview_jira_server_connect_id"
+                                                            name="editview_jira_server_connect_id"
+                                                            class="form-control parsley-validated font13 darkBack"
+                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                            placeholder="JIRA SERVER CONNECT ID"
+                                                            required="required" />
+                                                    <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													지라 아이디
 												</span>
-                                                    </div>
                                                 </div>
-                                                <div class="control-group">
-                                                    <label  for="version_end_date"
-                                                            class="control-label"
-                                                            style="width: 130px !important">
-                                                        JIRA PASS or TOKEN :
-                                                    </label>
-                                                    <div    class="controls form-group input-group"
-                                                            style="margin-left: 100px">
+                                            </div>
+                                            <div class="control-group">
+                                                <label  for="version_end_date"
+                                                        class="control-label"
+                                                        style="width: 130px !important">
+                                                    JIRA PASS or TOKEN :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-indent-left"></i>
 												</span>
-                                                        <input  type="text"
-                                                                id="editview_jira_pass_token"
-                                                                name="editview_jira_pass_token"
-                                                                class="form-control parsley-validated font13 darkBack"
-                                                                style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                                placeholder="JIRA Pass or Token"
-                                                                required="required" />
-                                                        <span class="input-group-addon font11">
+                                                    <input  type="text"
+                                                            id="editview_jira_pass_token"
+                                                            name="editview_jira_pass_token"
+                                                            class="form-control parsley-validated font13 darkBack"
+                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                            placeholder="JIRA Pass or Token"
+                                                            required="required" />
+                                                    <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													암호 또는 토큰
 												</span>
-                                                    </div>
                                                 </div>
-                                                <div class="control-group">
-                                                    <label  class="control-label"
-                                                            style="color: #f8f8f8">
-                                                        제품(서비스) 컨텐츠 :
-                                                    </label>
-                                                    <div class="controls form-group">
-                                                        <div    class="col-sm-12"
-                                                                style="padding-top: 10px">
-                                                            <div id="input_jira_server_editor">
-                                                                <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
-                                                            </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label  class="control-label"
+                                                        style="color: #f8f8f8">
+                                                    제품(서비스) 컨텐츠 :
+                                                </label>
+                                                <div class="controls form-group">
+                                                    <div    class="col-sm-12"
+                                                            style="padding-top: 10px">
+                                                        <div id="input_jira_server_editor">
+                                                            <p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                         </fieldset>
                                     </form>
                                 </div>
@@ -750,12 +753,12 @@
                                        id="jira_project_table"
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
-                                    <tr>
-                                        <th>c_jira_name</th>
-                                        <th>c_desc</th>
-                                        <th>c_jira_key</th>
-                                        <th>c_id</th>
-                                    </tr>
+                                        <tr>
+                                            <th>c_jira_name</th>
+                                            <th>c_desc</th>
+                                            <th>c_jira_key</th>
+                                            <th>c_id</th>
+                                        </tr>
                                     </thead>
                                 </table>
                             </div>
@@ -828,15 +831,8 @@
                                     </label>
                                     "을(를) 삭제 하시겠습니까?
                                 </p>
-                                <p><strong>Jira 프로젝트에서 버전은 삭제되지 않습니다.</strong></p>
                                 <p>
-                                    <strong>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong>
-                                </p>
-                                <p>
-                                    <strong>( 주의하세요 ) 삭제된 요구사항과 연결되 Jira 이슈는 유지됩니다.</strong>
-                                </p>
-                                <p>
-                                    <strong>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong>
+                                    <strong>( 주의하세요 ) A-RMS 의 지라 서버와 관련 항목들도(지라 프로젝트, 이슈유형,이슈상태,이슈우선순위,이슈해결책) 삭제됩니다.</strong>
                                 </p>
                                 <div>
                                     <button id="del_version"
@@ -909,7 +905,7 @@
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
                             style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                            onclick="return true;">
+                            onclick="window.location.href='docs/guide.html#jira_regist_manage'">
                         Help
                         <i  class="fa fa-question"
                             style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
@@ -920,11 +916,12 @@
                  style="margin-bottom: 10px; margin-top: 10px;">
                 <!-- 컴포넌트 대상 -->
                 <div id="selected_info"
+                     class="hidden"
                      style="float: left">
                     <div    class="panel-group json-menu"
                             id="versionAccordion"
                             style="margin-bottom: 0px !important">
-                        <li     class="list-group-item json-menu-header grid3rd"
+                        <li     class="list-group-item json-menu-header"
                                 style="padding: 0px">
                             <div class="chat-message">
                                 <div    class="chat-message-body"
@@ -933,7 +930,7 @@
                                             style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff;"></span>
                                     <div    class="sender"
                                             style="padding-bottom: 5px; padding-top: 5px">
-                                        선택된 지라 프로젝트 :
+                                        선택된 지라 서버 :
                                         <span   id="select_Service"
                                                 style="color: #a4c6ff">
                                                 선택되지 않음
@@ -959,10 +956,11 @@
                     <section class="widget widget-tabs">
                         <header>
                             <ul class="nav nav-tabs">
-                                <li id="nav_issue_type" class="active">
+                                <li class="active">
                                     <a  href="#issue_type"
                                         data-toggle="tab">
                                         <strong>이슈 유형</strong>
+
                                     </a>
                                 </li>
                                 <li>
@@ -982,11 +980,11 @@
                                        class="display"
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
-                                    <tr>
-                                        <th>c_id</th>
-                                        <th>c_issue_type_id</th>
-                                        <th>c_issue_type_name</th>
-                                    </tr>
+                                        <tr>
+                                            <th>c_id</th>
+                                            <th>c_issue_type_id</th>
+                                            <th>c_issue_type_name</th>
+                                        </tr>
                                     </thead>
                                 </table>
                             </div>
@@ -1322,7 +1320,7 @@
                                             온프레미스
                                         </label>
                                     </div>
-                                    <!--                                    <span class="input-group-addon font11">INFO : 지라(서버) 환경은 수정할 수 없습니다.</span>-->
+<!--                                    <span class="input-group-addon font11">INFO : 지라(서버) 환경은 수정할 수 없습니다.</span>-->
                                 </div>
                             </div>
                         </div>
@@ -1386,7 +1384,7 @@
                         <div class="control-group">
                             <label  class="control-label"
                                     style="color: #f8f8f8">
-                                지라(서버) 컨텐츠(내용) :
+                                    지라(서버) 컨텐츠(내용) :
                             </label>
                             <div class="controls form-group">
                                 <div    class="col-sm-12"
