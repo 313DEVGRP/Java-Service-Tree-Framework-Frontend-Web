@@ -532,7 +532,7 @@ function dataTableLoad() {
 	var buttonList = [];
 
 	var jquerySelector = "#pdservice_table";
-	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
+	var ajaxUrl = "/auth-user/api/arms/pdServicePure/getPdServiceMonitor.do";
 	var jsonRoot = "response";
 	var isServerSide = false;
 

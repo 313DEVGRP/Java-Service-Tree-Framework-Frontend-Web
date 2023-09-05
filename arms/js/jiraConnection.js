@@ -801,11 +801,17 @@ function tab_click_event() {
             if (target === "#server_issue_resolution") {
                 $("#server_issue_resolution").removeClass("hidden");
                 selectedTab = "이슈해결책";
+                if (isEmpty(selectServerId)) {
+                    jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+                }
                 display_set_wide_projectTable();
                 jiraServerDataTable(selectedTab);
             }
             if (target ==="#server_issue_priority") {
                 $("#server_issue_priority").removeClass("hidden");
+                if (isEmpty(selectServerId)) {
+                    jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+                }
                 selectedTab = "이슈우선순위";
                 display_set_wide_projectTable();
                 jiraServerDataTable(selectedTab);
@@ -816,6 +822,10 @@ function tab_click_event() {
 
                 $("#issue_type_table").removeClass("hidden");
                 $("#issue_status_table").addClass("hidden");
+
+                if (isEmpty(selectServerId)) {
+                    jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+                }
 
                 if (selectServerType === "클라우드")  {
                     $("#jira_default_update_div").addClass("hidden");
@@ -831,6 +841,10 @@ function tab_click_event() {
 
                 $("#issue_type_table").addClass("hidden");
                 $("#issue_status_table").removeClass("hidden");
+
+                if (isEmpty(selectServerId)) {
+                    jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+                }
 
                 if (selectServerType === "클라우드")  {
                     $("#jira_default_update_div").addClass("hidden");
