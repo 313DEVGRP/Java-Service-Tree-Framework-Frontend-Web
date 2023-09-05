@@ -191,12 +191,12 @@
 }
 .ribbon {
     transform: rotate(45deg);
-    right: -38px;
+    right: -33px; /*38 > 33*/
     left: auto;
 
     width: 93px;
-    height: 52px;
-    top: -16px;
+    height: 40px; /* 52 > 40*/
+    top: -43px; /* 16 > 43 */
 
     color: #fff;
     font-size: .8125rem;
@@ -207,7 +207,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    background: #a4c6ff;/*#5ABAB5;*/
+    background: #a4c6ff;
 }
 
 .ribon-info {
