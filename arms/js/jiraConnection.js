@@ -445,7 +445,7 @@ function project_dataTableLoad(c_id) {
     var columnDefList_onpremise = [];
     var rowsGroupList = null; //그룹을 안쓰려면 null 처리
     var jquerySelector = "#jira_project_table"; // 장소
-    var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraprojectOnly.do?c_id=" + c_id;
+    var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraprojectPure.do?c_id=" + c_id;
     var jsonRoot = "response";
     if (selectServerType === "클라우드") {
         columnDefList = columnDefList_cloud;
@@ -1476,7 +1476,7 @@ function draw_ribbon_result_of_issueType_check(list) {
         }
         if (이슈타입_없는_프로젝트명 !== "") { // 이슈타입으로 arms-requirement가 없는 프로젝트 존재
             console.log(이슈타입_없는_프로젝트명);
-            return `<div class="ribbon ribbon-info" style="background: #DB2A34;">Help <i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></div>`;
+            return `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
         } else {
             return `<div class="ribbon ribbon-info">Ready</div>`;
         }
@@ -1487,10 +1487,10 @@ function draw_ribbon_result_of_issueType_check(list) {
         if (chk_result === "true") {
             return `<div class="ribbon ribbon-info">Ready</div>`;
         } else if (chk_result == "false") { // 이슈타입은 있지만, arms-requirement가 없음
-            var htmlData = `<div class="ribbon ribbon-info" style="background: #DB2A34;">Help <i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></div>`
+            var htmlData = `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
             return htmlData;
         } else { // undefined - 이슈 타입 자체가 없음
-            return `<div class="ribbon ribbon-info" style="background: #DB2A34;">Nothing<i class="fa fa-exclamation ml-1"></i></div>`;
+            return `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Nothing<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
         }
     }
 }
