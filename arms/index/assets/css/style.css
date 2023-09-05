@@ -396,7 +396,7 @@ lading common
 # Resume
 --------------------------------------------------------------*/
 .resume.on .idea {
-	animation: fadeOut 3s forwards 3s;
+	animation: fadeOut 3s forwards 2s;
 }
 
 .resume .okay {
@@ -405,11 +405,11 @@ lading common
 
 .resume.on .okay {
 	opacity: 0;
-	animation: fadeIn 3s forwards 3s;
+	animation: fadeIn 3s forwards 2s;
 }
 
 .resume.on .connect {
-	animation: fadeOut 3s forwards 3s;
+	animation: fadeOut 3s forwards 2s;
 }
 
 .resume .combination {
@@ -418,11 +418,11 @@ lading common
 
 .resume.on .combination {
 	opacity: 0;
-	animation: fadeIn 3s forwards 3s;
+	animation: fadeIn 3s forwards 2s;
 }
 
 .resume.on .developer {
-	animation: fadeOut 3s forwards 3s;
+	animation: fadeOut 3s forwards 2s;
 }
 
 .resume .assembly {
@@ -431,13 +431,13 @@ lading common
 
 .resume.on .assembly {
 	opacity: 0;
-	animation: fadeIn 3s forwards 3s;
+	animation: fadeIn 3s forwards 2s;
 }
 /*--------------------------------------------------------------
 # Portfolio
 --------------------------------------------------------------*/
 .portfolio.on .okay {
-	animation: fadeOut 3s forwards 3s;
+	animation: fadeOut 3s forwards 2s;
 }
 
 .portfolio .progress {
@@ -446,11 +446,11 @@ lading common
 
 .portfolio.on .progress {
 	opacity: 0;
-	animation: fadeIn 3s forwards 3s;
+	animation: fadeIn 3s forwards 2s;
 }
 
 .portfolio.on .assembly {
-	animation: fadeOut 3s forwards 3s;
+	animation: fadeOut 3s forwards 2s;
 }
 
 .portfolio .checklist {
@@ -459,7 +459,7 @@ lading common
 
 .portfolio.on .checklist {
 	opacity: 0;
-	animation: fadeIn 3s forwards 3s;
+	animation: fadeIn 3s forwards 2s;
 }
 
 @keyframes fadeIn {
