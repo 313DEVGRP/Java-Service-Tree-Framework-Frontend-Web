@@ -77,8 +77,8 @@ function setDetailAndEditViewTab() {
         progress: true
     })
         .done(function (data) {
-            console.log("=== 장지윤 data")
-            console.log(data)
+            console.log("=== 장지윤 data");
+            console.log(data);
             // ------------------ 상세보기 ------------------ //
             bindDataDetailTab(data);
         })
