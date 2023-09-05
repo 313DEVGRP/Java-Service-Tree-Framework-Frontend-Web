@@ -70,13 +70,15 @@ function setDetailAndEditViewTab() {
     console.log("Detail Tab ::::")
     var tableName = "T_ARMS_REQADD_" + selectedPdService;
     $.ajax({
-        url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
+        url: "/auth-user/api/arms/reqAdd/" + tableName + "/getDetail.do?pdService=" + selectedPdService,
         type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true
     })
         .done(function (data) {
+            console.log("=== 장지윤 data")
+            console.log(data)
             // ------------------ 상세보기 ------------------ //
             bindDataDetailTab(data);
         })
@@ -86,7 +88,7 @@ function setDetailAndEditViewTab() {
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
 
-    console.log(ajaxData)
+    console.log(ajaxData);
     //제품(서비스) 데이터 바인딩
     var selectedPdServiceText = ajaxData.pdServiceEntity.c_title;
 
