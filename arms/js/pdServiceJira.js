@@ -421,6 +421,7 @@ function connect_pdservice_jira(){
 				.done(function (data) {
 					//versionClick(null, selectVersion);
 					jSuccess("제품(서비스) - 버전 - JiraProject 가 연결되었습니다.");
+					initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 				})
 				.fail(function (e) {
 					console.log("fail call");
@@ -469,7 +470,7 @@ function connect_pdservice_jira(){
 /* --------------------------- multi select & slim scroll ---------------------------------- */
 function setdata_for_multiSelect() {
 	$.ajax({
-		url: "/auth-user/api/arms/jiraProject/getChildNode.do?c_id=2",
+		url: "/auth-user/api/arms/jiraProjectPure/getChildNode.do?c_id=2",
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
