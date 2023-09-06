@@ -183,8 +183,9 @@
 				<i class="fa fa-bars"></i>
 			</a>
 		</li>
-		<li class="hidden-xs">
-			<a href="login.html"><i class="glyphicon glyphicon-off"></i></a>
+		<li class="hidden-xs logout">
+			<a href="#"
+					class="link logout"><i class="glyphicon glyphicon-off"></i></a>
 		</li>
 	</ul>
 	<form   id="search_form"
@@ -196,3 +197,34 @@
 	</form>
     <div class="notifications pull-right" style="line-height: 21px !important;"></div>
 </div>
+
+<script>
+
+	(function ($) {
+		$(".logout").click(function (event) {
+
+			event.preventDefault();
+			event.stopPropagation();
+
+			$.ajax({
+				url: "/logout",
+				type: "post",
+				contentType: "application/json;charset=UTF-8",
+				statusCode: {
+					200: function (data) {
+						location.href = "/";
+					},
+
+				},
+				beforeSend: function () {
+				},
+				complete: function () {
+				}
+			});
+
+
+		});
+	})(jQuery);
+
+</script>
+
