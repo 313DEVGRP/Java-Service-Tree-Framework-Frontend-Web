@@ -51,7 +51,6 @@ function execDocReady() {
             // //위젯 헤더 처리 및 사이드 메뉴 처리
             // $(".widget").widgster();
             // setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
-            console.log("장지윤 ::::");
             setDetailAndEditViewTab();
         })
         .catch(function (errorMessage) {
@@ -97,29 +96,6 @@ function loadPlugin(url) {
     });
 }
 
-function getFileNameFromURL(url) {
-    var parts = url.split('/');
-    return parts[parts.length - 1];
-}
-
-function isJavaScriptFile(filename) {
-    return filename.endsWith('.js');
-}
-
-function loadPluginGroupSequentially(group) {
-    return group.reduce(function(promise, url) {
-        return promise.then(function() {
-            return loadPlugin(url);
-        });
-    }, Promise.resolve());
-}
-
-function loadPluginGroupsParallelAndSequential(groups) {
-    var promises = groups.map(function(group) {
-        return loadPluginGroupSequentially(group);
-    });
-    return Promise.all(promises);
-}
 ////////////////////////////////////////////////////////////////////////////////////////
 //상세 보기 탭 & 편집 탭
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +108,6 @@ function setDetailAndEditViewTab() {
     var selectedJiraProject = urlParams.get('jiraProject');
     console.log("Detail Tab ::::");
     var tableName = "T_ARMS_REQADD_" + selectedPdService;
-    alert(tableName)
 
     $.ajax({
         url: "/auth-anon/api/arms/reqAdd/" + tableName +
