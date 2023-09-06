@@ -307,16 +307,23 @@ h6 {
 
 .preview-btn {
 	margin: 5px;
-	text-align: right;
 }
 
 .preview-btn a {
 	display: inline-block;
-	padding: 8px 18px;
+	margin: 30px 0 0 30px;
+	padding: 10px 35px;
+	color: #0563bb;
+	font-size: 16px;
+	background-color: rgb(239, 239, 239);
+	border-radius: 60px;
+	box-shadow: 0px 5px 90px 0px rgba(110, 123, 131, 0.05);
+	text-underline: none;
+}
+
+.preview-btn a:active {
 	color: #fff;
-	font-size: 16.25px;
-	line-height: 1.33;
-	border: 2px solid #fff;
+	background-color: #0563bb;
 }
 
 /*--------------------------------------------------------------
@@ -369,16 +376,16 @@ lading common
 	padding: 5px;
 }
 .content-section {
-	postion: relative;
+	padding: 20px;
+	max-width: 325px;
 }
 
 .content-section img {
 	width: 100%;
 }
-
-.content-section .comment {
-	position: absolute;
-}
+/*--------------------------------------------------------------
+# Home
+--------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
 # Resume
@@ -472,7 +479,8 @@ lading common
 # Services
 --------------------------------------------------------------*/
 .services .section-title p {
-	font-size: 16px;
+	font-size: 14px;
+	word-break: keep-all;
 }
 
 .services .features {
@@ -491,6 +499,10 @@ lading common
 
 .feature p {
 	font-size: 14px;
+}
+
+.feature .summary p {
+	text-align: left;
 }
 
 .feature .icon {
@@ -615,6 +627,13 @@ lading common
 	border-radius: 4px;
 	box-shadow: none;
 	font-size: 14px;
+	color: #fff;
+	background-color: transparent;
+}
+
+.contact .php-email-form input::placeholder,
+.contact .php-email-form textarea::placeholder {
+	color: #fff;
 }
 
 .contact .php-email-form input[type="text"],
@@ -709,7 +728,7 @@ lading common
 	font-size: 13px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 760px) {
 	.landing-container {
 		height: auto;
 	}
@@ -725,9 +744,15 @@ lading common
 		margin-top: 15px;
 	}
 
-	.services.section-container,
-	.landing-container .contact {
+	.landing-container > section {
+		padding: 0;
 		height: auto;
+	}
+
+	.home.section-container,
+	.services.section-container,
+	.contact {
+		padding: 60px 0;
 	}
 
 	.services .features:last-child {
@@ -739,5 +764,9 @@ lading common
 		margin-top: 20px;
 		padding: 0 3vw;
 		text-align: center;
+	}
+
+	.preview-btn a {
+		margin-left: 20px;
 	}
 }
