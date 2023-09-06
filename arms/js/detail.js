@@ -192,7 +192,7 @@ function bindDataDetailTab(ajaxData) {
     } else {
         $("#detailview_req_reviewer05").text(ajaxData.reqAdd_c_req_reviewer05);
     }
-    $("#detailview_req_contents").text(ajaxData.reqAdd_c_req_contents);
+    $("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
 }
 
 
