@@ -107,15 +107,15 @@ function setDetailAndEditViewTab() {
     var selectedJiraServer = urlParams.get('jiraServer');
     var selectedJiraProject = urlParams.get('jiraProject');
     console.log("Detail Tab ::::");
-    var tableName = "T_ARMS_REQADD_" + selectedPdService;
+    var tableName = "T_ARMS_REQADD_";
 
     $.ajax({
-        url: "/auth-anon/api/arms/reqAdd/" + tableName +
-            "/getDetail.do?pdService=" + selectedPdService +
-            "&pdServiceVersion=" + selectedPdServiceVersion +
-            "&reqAdd=" + selectedJsTreeId +
+        url: "/auth-user/api/arms/reqAdd/" + tableName + "/getDetail.do" +
+            "?jiraProject=" + selectedJiraProject +
             "&jiraServer=" + selectedJiraServer +
-            "&jiraProject=" + selectedJiraProject,
+            "&pdService=" + selectedPdService +
+            "&pdServiceVersion=" + selectedPdServiceVersion +
+            "&reqAdd=" + selectedJsTreeId,
         type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
@@ -132,10 +132,8 @@ function setDetailAndEditViewTab() {
             }
         },
         beforeSend: function () {
-            //$("#regist_pdservice").hide(); 버튼 감추기
         },
         complete: function () {
-            //$("#regist_pdservice").show(); 버튼 보이기
         },
         error: function (e) {
             jError("요구사항 조회 중 에러가 발생했습니다.");
@@ -147,7 +145,7 @@ function bindDataDetailTab(ajaxData) {
 
     console.log(ajaxData);
     //제품(서비스) 데이터 바인딩
-    var selectedPdServiceText = ajaxData.pdServiceEntity.c_title;
+    var selectedPdServiceText = ajaxData.pdService_c_title;
 
     if (isEmpty(selectedPdServiceText)) {
         $("#detailview_req_pdservice_name").text("");
@@ -155,44 +153,51 @@ function bindDataDetailTab(ajaxData) {
         $("#detailview_req_pdservice_name").text(selectedPdServiceText);
     }
 
-    $("#detailview_req_id").text(ajaxData.c_id);
-    $("#detailview_req_name").text(ajaxData.c_title);
+    // $("#detailview_req_id").text(ajaxData.c_id);
+    $("#detailview_req_name").text(ajaxData.reqAdd_c_title);
+
+    //Version 데이터 바인딩
+    if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
+        $("#detailview_req_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
+    } else {
+        getVersionInfo(ajaxData.pdServiceVersion_c_title);
+    }
 
     //우선순위 셋팅
-    $("#detailview_req_priority").children(".btn.active").removeClass("active");
-    var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
-    $("#" + select_Req_Priority_ID)
-        .parent()
-        .addClass("active");
+    // $("#detailview_req_priority").children(".btn.active").removeClass("active");
+    // var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
+    // $("#" + select_Req_Priority_ID)
+    //     .parent()
+    //     .addClass("active");
 
-    $("#detailview_req_status").text(ajaxData.c_req_status);
-    $("#detailview_req_writer").text(ajaxData.c_req_writer);
-    $("#detailview_req_write_date").text(new Date(ajaxData.c_req_create_date).toLocaleString());
+    // $("#detailview_req_status").text(ajaxData.c_req_status);
+    $("#detailview_req_writer").text(ajaxData.reqAdd_c_req_writer);
+    $("#detailview_req_write_date").text(new Date(ajaxData.reqAdd_c_req_create_date).toLocaleString());
 
-    if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
+    if (ajaxData.reqAdd_c_req_reviewer01 == null || ajaxData.reqAdd_c_req_reviewer01 == "none") {
         $("#detailview_req_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#detailview_req_reviewer01").text(ajaxData.c_req_reviewer01);
+        $("#detailview_req_reviewer01").text(ajaxData.reqAdd_c_req_reviewer01);
     }
-    if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
+    if (ajaxData.reqAdd_c_req_reviewer02 == null || ajaxData.reqAdd_c_req_reviewer02 == "none") {
         $("#detailview_req_reviewer02").text("2번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer02").text(ajaxData.c_req_reviewer02);
+        $("#detailview_req_reviewer02").text(ajaxData.reqAdd_c_req_reviewer02);
     }
-    if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
+    if (ajaxData.reqAdd_c_req_reviewer03 == null || ajaxData.reqAdd_c_req_reviewer03 == "none") {
         $("#detailview_req_reviewer03").text("3번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer03").text(ajaxData.c_req_reviewer03);
+        $("#detailview_req_reviewer03").text(ajaxData.reqAdd_c_req_reviewer03);
     }
-    if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
+    if (ajaxData.reqAdd_c_req_reviewer04 == null || ajaxData.reqAdd_c_req_reviewer04 == "none") {
         $("#detailview_req_reviewer04").text("4번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer04").text(ajaxData.c_req_reviewer04);
+        $("#detailview_req_reviewer04").text(ajaxData.reqAdd_c_req_reviewer04);
     }
-    if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
+    if (ajaxData.reqAdd_c_req_reviewer05 == null || ajaxData.reqAdd_c_req_reviewer05 == "none") {
         $("#detailview_req_reviewer05").text("5번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer05").text(ajaxData.c_req_reviewer05);
+        $("#detailview_req_reviewer05").text(ajaxData.reqAdd_c_req_reviewer05);
     }
     $("#detailview_req_contents").text(ajaxData.c_req_contents);
 
