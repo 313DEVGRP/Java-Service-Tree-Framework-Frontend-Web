@@ -4,6 +4,7 @@
 var selectedJsTreeId; // 요구사항 아이디
 var selectedJsTreeName; // 요구사항 이름
 var tempDataTable;
+var selectedJsTreeId;
 var isChecked = [];   // 지라 프로젝트 연결 목록 체크
 var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
 
@@ -103,7 +104,7 @@ function setDetailAndEditViewTab() {
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService');
     var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
-    var selectedJsTreeId = urlParams.get('reqAdd');
+    selectedJsTreeId = urlParams.get('reqAdd');
     var selectedJiraServer = urlParams.get('jiraServer');
     var selectedJiraProject = urlParams.get('jiraProject');
     console.log("Detail Tab ::::");
@@ -153,24 +154,16 @@ function bindDataDetailTab(ajaxData) {
         $("#detailview_req_pdservice_name").text(selectedPdServiceText);
     }
 
-    // $("#detailview_req_id").text(ajaxData.c_id);
+    $("#detailview_req_id").text(selectedJsTreeId);
     $("#detailview_req_name").text(ajaxData.reqAdd_c_title);
 
     //Version 데이터 바인딩
     if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
         $("#detailview_req_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
     } else {
-        getVersionInfo(ajaxData.pdServiceVersion_c_title);
+        $("#detailview_req_pdservice_version").text(ajaxData.pdServiceVersion_c_title);
     }
 
-    //우선순위 셋팅
-    // $("#detailview_req_priority").children(".btn.active").removeClass("active");
-    // var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
-    // $("#" + select_Req_Priority_ID)
-    //     .parent()
-    //     .addClass("active");
-
-    // $("#detailview_req_status").text(ajaxData.c_req_status);
     $("#detailview_req_writer").text(ajaxData.reqAdd_c_req_writer);
     $("#detailview_req_write_date").text(new Date(ajaxData.reqAdd_c_req_create_date).toLocaleString());
 
@@ -199,47 +192,7 @@ function bindDataDetailTab(ajaxData) {
     } else {
         $("#detailview_req_reviewer05").text(ajaxData.reqAdd_c_req_reviewer05);
     }
-    $("#detailview_req_contents").text(ajaxData.c_req_contents);
-
-    $("#detailview_pdservice_name").val(ajaxData.pdServiceEntity.c_title);
-    if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_owner) || ajaxData.pdServiceEntity.c_pdservice_owner == "none") {
-        $("#detailview_pdservice_owner").val("책임자가 존재하지 않습니다.");
-    } else {
-        $("#detailview_pdservice_owner").val(ajaxData.pdServiceEntity.c_pdservice_owner);
-    }
-
-    if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer01) || ajaxData.pdServiceEntity.c_pdservice_reviewer01 == "none") {
-        $("#detailview_pdservice_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
-    } else {
-        $("#detailview_pdservice_reviewer01").val(ajaxData.pdServiceEntity.c_pdservice_reviewer01);
-    }
-
-    if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer02) || ajaxData.pdServiceEntity.c_pdservice_reviewer02 == "none") {
-        $("#detailview_pdservice_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
-    } else {
-        $("#detailview_pdservice_reviewer02").val(ajaxData.pdServiceEntity.c_pdservice_reviewer02);
-    }
-
-    if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer03) || ajaxData.pdServiceEntity.c_pdservice_reviewer03 == "none") {
-        $("#detailview_pdservice_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
-    } else {
-        $("#detailview_pdservice_reviewer03").val(ajaxData.pdServiceEntity.c_pdservice_reviewer03);
-    }
-
-    if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer04) || ajaxData.pdServiceEntity.c_pdservice_reviewer04 == "none") {
-        $("#detailview_pdservice_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
-    } else {
-        $("#detailview_pdservice_reviewer04").val(ajaxData.pdServiceEntity.c_pdservice_reviewer04);
-    }
-
-    if (isEmpty(ajaxData.pdServiceEntity.c_pdservice_reviewer05) || ajaxData.pdServiceEntity.c_pdservice_reviewer05 == "none") {
-        $("#detailview_pdservice_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
-    } else {
-        $("#detailview_pdservice_reviewer05").val(ajaxData.pdServiceEntity.c_pdservice_reviewer05);
-    }
-    $("#detailview_pdservice_contents").html(ajaxData.pdServiceEntity.c_pdservice_contents);
-
-    $("#editview_pdservice_name").val(ajaxData.pdServiceEntity.c_title);
+    $("#detailview_req_contents").text(ajaxData.reqAdd_c_req_contents);
 }
 
 
