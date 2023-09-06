@@ -51,7 +51,7 @@ function execDocReady() {
             // //위젯 헤더 처리 및 사이드 메뉴 처리
             // $(".widget").widgster();
             // setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
-
+            console.log("장지윤 ::::");
             setDetailAndEditViewTab();
         })
         .catch(function (errorMessage) {
@@ -61,29 +61,111 @@ function execDocReady() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+// 플러그인 로드 모듈 ( 병렬 시퀀스 )
+////////////////////////////////////////////////////////////////////////////////////////
+function loadPlugin(url) {
+    return new Promise(function(resolve, reject) {
+
+        if( isJavaScriptFile(url) ){
+            $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> " + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
+            $.ajax({
+                url: url,
+                dataType: "script",
+                cache: true,
+                success: function() {
+                    // The request was successful
+
+                    console.log( "[ common :: loadPlugin ] :: url = " + url + ' 자바 스크립트 플러그인 로드 성공');
+                    resolve(); // Promise를 성공 상태로 변경
+                },
+                error: function() {
+                    // The request failed
+                    console.error( "[ common :: loadPlugin ] :: url = " + url + ' 플러그인 로드 실패');
+                    reject(); // Promise를 실패 상태로 변경
+                }
+            });
+        } else {
+            $(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> " + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
+            $("<link/>", {
+                rel: "stylesheet",
+                type: "text/css",
+                href: url
+            }).appendTo("head");
+            console.log( "[ common :: loadPlugin ] :: url = " + url + ' 스타일시트 플러그인 로드 성공');
+            resolve();
+        }
+    });
+}
+
+function getFileNameFromURL(url) {
+    var parts = url.split('/');
+    return parts[parts.length - 1];
+}
+
+function isJavaScriptFile(filename) {
+    return filename.endsWith('.js');
+}
+
+function loadPluginGroupSequentially(group) {
+    return group.reduce(function(promise, url) {
+        return promise.then(function() {
+            return loadPlugin(url);
+        });
+    }, Promise.resolve());
+}
+
+function loadPluginGroupsParallelAndSequential(groups) {
+    var promises = groups.map(function(group) {
+        return loadPluginGroupSequentially(group);
+    });
+    return Promise.all(promises);
+}
+////////////////////////////////////////////////////////////////////////////////////////
 //상세 보기 탭 & 편집 탭
 ////////////////////////////////////////////////////////////////////////////////////////
 function setDetailAndEditViewTab() {
     var urlParams = new URL(location.href).searchParams;
-    var selectedJsTreeId = urlParams.get('reqAdd');
     var selectedPdService = urlParams.get('pdService');
-    console.log("Detail Tab ::::")
+    var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
+    var selectedJsTreeId = urlParams.get('reqAdd');
+    var selectedJiraServer = urlParams.get('jiraServer');
+    var selectedJiraProject = urlParams.get('jiraProject');
+    console.log("Detail Tab ::::");
     var tableName = "T_ARMS_REQADD_" + selectedPdService;
+    alert(tableName)
+
     $.ajax({
-        url: "/auth-user/api/arms/reqAdd/" + tableName + "/getDetail.do?pdService=" + selectedPdService,
+        url: "/auth-anon/api/arms/reqAdd/" + tableName +
+            "/getDetail.do?pdService=" + selectedPdService +
+            "&pdServiceVersion=" + selectedPdServiceVersion +
+            "&reqAdd=" + selectedJsTreeId +
+            "&jiraServer=" + selectedJiraServer +
+            "&jiraProject=" + selectedJiraProject,
         type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
-        progress: true
-    })
-        .done(function (data) {
-            console.log("=== 장지윤 data");
-            console.log(data);
-            // ------------------ 상세보기 ------------------ //
-            bindDataDetailTab(data);
-        })
-        .fail(function (e) {})
-        .always(function () {});
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                //////////////////////////////////////////////////////////
+                console.log("=== 장지윤 data");
+                console.log(data);
+                // ------------------ 상세보기 ------------------ //
+                bindDataDetailTab(data);
+                //////////////////////////////////////////////////////////
+                jSuccess("요구사항 조회가 완료 되었습니다.");
+            }
+        },
+        beforeSend: function () {
+            //$("#regist_pdservice").hide(); 버튼 감추기
+        },
+        complete: function () {
+            //$("#regist_pdservice").show(); 버튼 보이기
+        },
+        error: function (e) {
+            jError("요구사항 조회 중 에러가 발생했습니다.");
+        }
+    });
 }
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
@@ -179,3 +261,5 @@ function bindDataDetailTab(ajaxData) {
 
     $("#editview_pdservice_name").val(ajaxData.pdServiceEntity.c_title);
 }
+
+
