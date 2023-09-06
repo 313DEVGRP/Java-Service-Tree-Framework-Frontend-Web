@@ -323,7 +323,7 @@
                      id="jira_default_update_div">
                     <button type="button"
                             name="default_update"
-                            class="btn btn-success btn-sm">
+                            class="btn btn-success btn-sm mr-1">
                         기본 설정 저장
                     </button>
                 </div>
@@ -371,16 +371,16 @@
                 </div>
                 <div style="float: right"
                      class="hidden"
-                     id="jira_project_renew_div">
+                     id="jira_renew_button_div">
                     <button type="button"
-                            id="jira_project_renew_btn"
+                            id="jira_renew_btn"
                             onClick="jira_renew('project')"
                             class="btn btn-success btn-sm">
                         프로젝트 갱신
                     </button>
                 </div>
                 <div id="returnList_Layer" style="float: right; display: none;">
-                    <button type="button" id="setWide_Btn" class="btn btn-default btn-sm">
+                    <button type="button" id="setWide_Btn" class="btn btn-default btn-sm mr-1">
                         <span class="glyphicon glyphicon-repeat"></span>
                         데이터 목록으로 보기
                     </button>
@@ -914,12 +914,11 @@
                  style="margin-bottom: 10px; margin-top: 10px;">
                 <!-- 컴포넌트 대상 -->
                 <div id="selected_info"
-                     class="hidden"
                      style="float: left">
                     <div    class="panel-group json-menu"
                             id="versionAccordion"
                             style="margin-bottom: 0px !important">
-                        <li     class="list-group-item json-menu-header"
+                        <li     class="grid3rd list-group-item json-menu-header"
                                 style="padding: 0px">
                             <div class="chat-message">
                                 <div    class="chat-message-body"
@@ -940,11 +939,21 @@
                     </div>
                 </div>
                 <div style="float: right"
+                     class="hidden"
+                     id="jira_renew_button_div_3rd_grid">
+                    <button type="button"
+                            id="jira_renew_btn"
+                            onClick="jira_renew('project')"
+                            class="btn btn-success btn-sm mr-1">
+                        항목 갱신
+                    </button>
+                </div>
+                <div style="float: right"
                      id="jira_server_details_popup_div">
                     <button type="button"
                             id="default_update"
                             name="default_update"
-                            class="btn btn-success btn-sm">
+                            class="btn btn-success btn-sm mr-1">
                         기본 설정 저장
                     </button>
                 </div>

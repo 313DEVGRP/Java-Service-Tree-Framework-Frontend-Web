@@ -124,7 +124,7 @@ function makeJiraServerCardDeck() {
     console.log("지라 서버 카드 목록 생성");
     // 지라 서버 목록 데이터 가져오기 및 element 삽입
     $.ajax({
-        url: "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do",
+        url: "/auth-user/api/arms/jiraServerPure/getJiraServerMonitor.do",
         type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
@@ -158,7 +158,6 @@ function draw_card_deck(cardInfo) {
     var data=``;
 
     if (cardList.length == 0) { // 카드 없음 (등록된 서버 없음)
-
     } else { // 카드 있음 (등록된 서버 있음)
         for (let i = 0; i < cardList.length; i++) {
             let insertImage = '';
@@ -172,8 +171,8 @@ function draw_card_deck(cardInfo) {
             data +=
             `
             <div class="card mb-2 ribbon-box ribbon-fill right" onclick="jiraServerCardClick(${cardList[i].c_id})">
-                <!-- 리본표시 -->
-                ${draw_ribbon_result_of_issueType_check(cardList[i])}
+                <!-- 리본표시 -->                  
+                ${draw_ribbon_result_of_issueType_check2(cardList[i].c_id,cardList[i].c_jira_server_type)}
                 <!--카드내용1-->
                 <div class="card-body">
                     <div class="" style="display: flex; align-items: baseline;">
@@ -187,22 +186,8 @@ function draw_card_deck(cardInfo) {
                             <p class="font13 text-muted">${cardList[i].c_jira_server_base_url}</p>
                         </div>
                     </div>
-                    <!-- 값 가져와서 넣어줄 예정 -->
+                    <!-- 값 넣을 수 있는 공간 -->
                     <p class="font13 mt-1" style="margin-bottom: 0px;">                        
-                        <span class="badge card-detai text-success" onclick="jira_renew('프로젝트',${cardList[i].c_id})">프로젝트</span>
-                        <span class="card-detail" style="color: #a4c6ff">${chk_default_settings_icon(cardList[i].jiraProjectEntities)}</span>
-                        
-                        <span class="badge card-detail text-success" onclick="jira_renew('이슈유형',${cardList[i].c_id})">이슈유형</span>
-                        <span class="card-detail" style="color: #a4c6ff">${num_of_issue_type_and_status(cardList[i], "이슈유형")}</span>
-                        
-                        <span class="badge card-detail text-success" onclick="jira_renew('이슈우선순위',${cardList[i].c_id})">이슈우선순위</span>
-                        <span class="card-detail" style="color: #a4c6ff">${chk_default_settings_icon(cardList[i].jiraIssuePriorityEntities)}</span>
-                        
-                        <span class="badge card-detail text-success" onclick="jira_renew('이슈해결책',${cardList[i].c_id})">이슈해결책</span>
-                        <span class="card-detail" style="color: #a4c6ff">${chk_default_settings_icon(cardList[i].jiraIssueResolutionEntities)}</span>
-                        
-                        <span class="badge card-detail text-success" onclick="jira_renew('이슈상태',${cardList[i].c_id})">이슈상태</span>
-                        <span class="card-detail" style="color: #a4c6ff">${num_of_issue_type_and_status(cardList[i], "이슈상태")}</span>
                     </p>                    
 
                 </div>
@@ -309,7 +294,6 @@ function jiraServerCardClick(c_id) {
     $.ajax({
         url: "/auth-user/api/arms/jiraServerPure/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
         data: { c_id: c_id },
-           //     c_jira_server_type: c_jira_server_type}, // HTTP 요청과 함께 서버로 보낼 데이터
         method: "GET",
         dataType: "json", // 서버에서 보내줄 데이터의 타입
         beforeSend: function () {
@@ -332,18 +316,6 @@ function jiraServerCardClick(c_id) {
                 $("#type_tab").show();
                 $("#status_tab").show();
             }
-
-            //지라 프로젝트 갱신버튼 c_id 설정
-            $("#jira_project_renew_div").html("");
-            var renewProjectBtnHtml = `
-                <button type="button"
-                            id="jira_project_renew_btn"
-                            onClick="jira_renew('project', ${json.c_id})"
-                            class="btn btn-success btn-sm">
-                        프로젝트 갱신
-                </button>
-            `;
-            $("#jira_project_renew_div").html(renewProjectBtnHtml);
 
             // Sender 설정
             var selectedHtml =
@@ -445,7 +417,7 @@ function project_dataTableLoad(c_id) {
     var columnDefList_onpremise = [];
     var rowsGroupList = null; //그룹을 안쓰려면 null 처리
     var jquerySelector = "#jira_project_table"; // 장소
-    var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraprojectPure.do?c_id=" + c_id;
+    var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProjectPure.do?c_id=" + c_id;
     var jsonRoot = "response";
     if (selectServerType === "클라우드") {
         columnDefList = columnDefList_cloud;
@@ -747,7 +719,72 @@ function delete_btn_click() { // TreeAbstractController 에 이미 있음.
             }
         });
 }
-
+function set_renew_btn(selectedTab, selectServerId) {
+    $("#jira_renew_button_div").html("");
+    var renewHtml = ``;
+    if(selectedTab == "프로젝트") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('project', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            프로젝트 갱신
+                     </button>`;
+    }
+    if(selectedTab == "이슈해결책") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('issueResolution', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            이슈해결책 갱신
+                     </button>`;
+    }
+    if(selectedTab == "이슈우선순위") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('issuePriority', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            이슈우선순위 갱신
+                     </button>`;
+    }
+    if(selectedTab == "이슈유형") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('issueType', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            이슈유형 갱신
+                     </button>`;
+    }
+    if(selectedTab == "이슈상태") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('issueStatus', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            이슈상태 갱신
+                     </button>`;
+    }
+    $("#jira_renew_button_div").html(renewHtml);
+}
+function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
+    $("#jira_renew_button_div_3rd_grid").html("");
+    var renewHtml = ``;
+    if(selectedTab == "이슈유형") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('issueType', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            이슈유형 갱신
+                     </button>`;
+    }
+    if(selectedTab == "이슈상태") {
+        renewHtml += `<button type="button"
+                             id="jira_renew_btn"
+                             onClick="jira_renew('issueStatus', ${selectServerId})"
+                             class="btn btn-success btn-sm mr-1">
+                            이슈상태 갱신
+                     </button>`;
+    }
+    $("#jira_renew_button_div_3rd_grid").html(renewHtml);
+}
 function tab_click_event() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
         var target = $(e.target).attr("href"); // activated tab
@@ -758,7 +795,7 @@ function tab_click_event() {
             $("#jira_server_details_popup_div").addClass("hidden");
             $("#jira_server_update_div").addClass("hidden");
             $("#jira_server_delete_div").removeClass("hidden");
-            $("#jira_project_renew_div").addClass("hidden");
+            $("#jira_renew_button_div").addClass("hidden");
 
             $(".body-middle").hide();
 
@@ -770,14 +807,15 @@ function tab_click_event() {
             $("#jira_server_details_popup_div").addClass("hidden");
             $("#jira_server_update_div").removeClass("hidden");
             $("#jira_server_delete_div").addClass("hidden");
-            $("#jira_project_renew_div").addClass("hidden");
+            $("#jira_renew_button_div").addClass("hidden");
         } else if (target === "#related_project") {
             selectedTab = "프로젝트";
+            set_renew_btn(selectedTab, selectServerId);
+            $("#jira_renew_button_div").removeClass("hidden");
             $("#jira_default_update_div").addClass("hidden");
             $("#jira_server_details_popup_div").addClass("hidden");
             $("#jira_server_update_div").addClass("hidden");
             $("#jira_server_delete_div").addClass("hidden");
-            $("#jira_project_renew_div").removeClass("hidden");
 
             if (isEmpty(selectServerId)) {
                 jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
@@ -789,7 +827,7 @@ function tab_click_event() {
             $("#jira_server_details_popup_div").removeClass("hidden");
             $("#jira_server_update_div").addClass("hidden");
             $("#jira_server_delete_div").addClass("hidden");
-            $("#jira_project_renew_div").addClass("hidden");
+            $("#jira_renew_button_div").addClass("hidden");
             if (selectId == undefined) {
                 $(".body-middle").hide();
             } else {
@@ -799,8 +837,12 @@ function tab_click_event() {
         else {
             $("#jira_default_update_div").removeClass("hidden");
             if (target === "#server_issue_resolution") {
-                $("#server_issue_resolution").removeClass("hidden");
                 selectedTab = "이슈해결책";
+
+                $("#server_issue_resolution").removeClass("hidden");
+                $("#jira_renew_button_div").removeClass("hidden");
+                set_renew_btn(selectedTab, selectServerId);
+
                 if (isEmpty(selectServerId)) {
                     jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
                 }
@@ -808,20 +850,24 @@ function tab_click_event() {
                 jiraServerDataTable(selectedTab);
             }
             if (target ==="#server_issue_priority") {
+                selectedTab = "이슈우선순위";
                 $("#server_issue_priority").removeClass("hidden");
+                set_renew_btn(selectedTab, selectServerId);
+                $("#jira_renew_button_div").removeClass("hidden");
+
                 if (isEmpty(selectServerId)) {
                     jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
                 }
-                selectedTab = "이슈우선순위";
+
                 display_set_wide_projectTable();
                 jiraServerDataTable(selectedTab);
             }
 
             if (target === "#issue_type" || target ==="#server_issue_type") {
                 selectedTab = "이슈유형";
-
                 $("#issue_type_table").removeClass("hidden");
                 $("#issue_status_table").addClass("hidden");
+
 
                 if (isEmpty(selectServerId)) {
                     jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
@@ -829,16 +875,19 @@ function tab_click_event() {
 
                 if (selectServerType === "클라우드")  {
                     $("#jira_default_update_div").addClass("hidden");
+                    $("#jira_renew_button_div_3rd_grid").removeClass("hidden");
+                    set_renew_btn_3rd_grid(selectedTab, selectServerId);
                     projectIssueTypeDataTable();
                 }
                 if (selectServerType === "온프레미스") {
                     $("#server_issue_type").removeClass("hidden");
+                    $("#jira_renew_button_div").removeClass("hidden");
+                    set_renew_btn(selectedTab, selectServerId);
                     jiraServerDataTable(selectedTab);
                 }
             }
             if (target === "#issue_status" || target ==="#server_issue_status") {
                 selectedTab = "이슈상태";
-
                 $("#issue_type_table").addClass("hidden");
                 $("#issue_status_table").removeClass("hidden");
 
@@ -848,10 +897,14 @@ function tab_click_event() {
 
                 if (selectServerType === "클라우드")  {
                     $("#jira_default_update_div").addClass("hidden");
+                    $("#jira_renew_button_div_3rd_grid").removeClass("hidden");
+                    set_renew_btn_3rd_grid(selectedTab, selectServerId);
                     projectIssueStatusDataTable();
                 }
                 if (selectServerType === "온프레미스") {
                     $("#server_issue_status").removeClass("hidden");
+                    $("#jira_renew_button_div").removeClass("hidden");
+                    set_renew_btn(selectedTab, selectServerId);
                     jiraServerDataTable(selectedTab);
                 }
             }
@@ -864,7 +917,7 @@ function tab_click_event() {
     });
 }
 
-// 갱신 버튼 (예상: all, project, issueType, issuePriority, issueResolution, issueStatus 등..)
+// 갱신 버튼 (project, issueType, issuePriority, issueResolution, issueStatus)
 function jira_renew(renewJiraType, serverId) { // 서버 c_id
 
     if (serverId === undefined) { serverId = "서버 아이디 정보 없음"; return false; }
@@ -878,10 +931,10 @@ function jira_renew(renewJiraType, serverId) { // 서버 c_id
         statusCode: {
             200: function () {
                 jSuccess(selectServerName + "의 데이터가 갱신되었습니다.");
-                console.log("현재 선택된 항목(c_id, 서버명) :" + selectId +", " + selectServerName);
+                console.log("현재 선택된 항목(c_id, 서버명) :" + serverId +", " + selectServerName);
                 //데이터 테이블 데이터 재 로드
                 makeJiraServerCardDeck();
-                jiraServerCardClick(selectId);
+                jiraServerCardClick(serverId);
             }
         }
     });
@@ -1263,9 +1316,7 @@ function jiraServerDataTable(target) {
     $(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
 }
 function fn_urlHandler(data) {
-    console.log("fn_handler & c_id = " + data);
     selectRadioId = data;
-    console.log("selectRadioId in urlHandler : " + selectRadioId);
 }
 
 function default_setting_event() {
@@ -1287,14 +1338,13 @@ function default_setting_event() {
         }
         console.log("ajax_url ====> " + ajax_url);
 
-        ///*
         $.ajax({
            url: "/auth-user/api/arms/" + ajax_url,
-           type: "put",
+           type: "PUT",
            data: { c_id: sourceCid }, // 지라프로젝트 또는 서버의 아이디
            statusCode: {
-               200: function () {
-                   //jSuccess(selectRadioId + "의 데이터가 변경되었습니다.");
+               200: function (data) {
+                   console.log(data);
                    jSuccess("기본 설정("+selectedTab+")이 변경되었습니다.");
                    //데이터 테이블 데이터 재 로드
                    display_set_wide_projectTable(); // 다시 wide 설정으로.
@@ -1302,7 +1352,7 @@ function default_setting_event() {
                }
            }
         });
-        //*/
+
     });
 
 }
@@ -1310,7 +1360,7 @@ function default_setting_event() {
 //지라 프로젝트 - 데이터테이블 프로젝트 명 클릭시
 function click_projectList_table(projectName) {
     console.log("click_projectList_table :: projectName = " + projectName);
-
+    $(".grid3rd").html("");
     // Sender 설정
     var selectedHtml =
         `<div class="chat-message">
@@ -1348,6 +1398,8 @@ function click_projectList_table(projectName) {
     setTimeout(function () {
         $("#nav_issue_type>a").click();
         selectedTab = "이슈유형"
+        $("#jira_renew_button_div_3rd_grid").removeClass("hidden");
+        set_renew_btn_3rd_grid(selectedTab, selectServerId);
         projectIssueTypeDataTable();
     }, 313);
 }
@@ -1474,10 +1526,13 @@ function num_of_issue_type_and_status(list, type) { // cardList, "이슈상태" 
 
 
 // arms-requirement 존재 확인해서 리본 그리기
-function draw_ribbon_result_of_issueType_check(list) {
-    var arr = []; var chk_result ="";
-    if (list.c_jira_server_type === "클라우드") {
-        arr = list.jiraProjectEntities; // 프로젝트 리스트
+function draw_ribbon_result_of_issueType_check2(jiraServerId, serverType){
+    var resultList = []; // 초기화
+    var chk_result = "";
+    resultList = getIssueTypeList(jiraServerId, serverType);
+    if (serverType === "클라우드") {
+        var arr = [];
+        arr = resultList;
         var issueTypeList = [];
         var 이슈타입_없는_프로젝트명 ="";
         for(var i = 0; i < arr.length ; i++) {
@@ -1489,14 +1544,14 @@ function draw_ribbon_result_of_issueType_check(list) {
             }
         }
         if (이슈타입_없는_프로젝트명 !== "") { // 이슈타입으로 arms-requirement가 없는 프로젝트 존재
-            console.log(이슈타입_없는_프로젝트명);
             return `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
         } else {
             return `<div class="ribbon ribbon-info">Ready</div>`;
         }
     }
-    if (list.c_jira_server_type =="온프레미스") {
-        arr = list.jiraIssueTypeEntities;
+    if (serverType =="온프레미스") {
+        var arr = [];
+        arr = resultList;
         chk_result = chk_issue_type_whether_have_arms_requirement(arr);
         if (chk_result === "true") {
             return `<div class="ribbon ribbon-info">Ready</div>`;
@@ -1523,4 +1578,66 @@ function chk_issue_type_whether_have_arms_requirement(list) {
         chk_result = "";
         return chk_result; // undefined
     }
+}
+
+function getIssueTypeList(jiraServerId, jiraServerType) {
+    var resultList = [];
+    if (jiraServerType === "온프레미스") {
+        $.ajax({
+            url: "/auth-user/api/arms/jiraServer/getJiraIssueType.do",
+            type: "GET",
+            data: {c_id: jiraServerId},
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            async: false,
+            statusCode: {
+                200: function (data) {
+                    console.log("온프레미스 지라이슈타입 목록");
+                    if (data) {
+                        resultList = data.response;
+                    } else {
+                        jError("데이터가 유효하지 않습니다.");
+                    }
+                }
+            },
+            error: function (e) {
+                if (jiraServerId === undefined || jiraServerId === "") {
+                    jError("지라 이슈유형 조회 중 에러가 발생했습니다. (지라(서버) 아이디 없음)");
+                } else {
+                    jError("지라 이슈유형 조회 중 에러가 발생했습니다.");
+                }
+            }
+        });
+    }
+    if (jiraServerType ==="클라우드") {
+        $.ajax({
+            url: "/auth-user/api/arms/jiraServer/getJiraProject.do",
+            type:"GET",
+            data: { c_id: jiraServerId },
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json", // 서버에서 보내줄 데이터의 타입
+            progress: true,
+            async: false,
+            statusCode: {
+                200: function (data) {
+                    resultList = data.response;
+                }
+            },
+            beforeSend: function () {
+                //$("#regist_pdservice").hide(); 버튼 감추기
+            },
+            complete: function () {
+                //$("#regist_pdservice").show(); 버튼 보이기
+            },
+            error: function (e) {
+                if(jiraServerId === undefined || jiraServerId === "") {
+                    jError("클라우드 지라 프로젝트 조회 중 에러가 발생했습니다. (지라(서버) 아이디 없음)");
+                } else {
+                    jError("클라우드 지라 프로젝트 조회 중 에러가 발생했습니다.");
+                }
+            }
+        });
+    }
+    return resultList;
 }
