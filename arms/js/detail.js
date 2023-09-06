@@ -124,7 +124,6 @@ function setDetailAndEditViewTab() {
         statusCode: {
             200: function (data) {
                 //////////////////////////////////////////////////////////
-                console.log("=== 장지윤 data");
                 console.log(data);
                 // ------------------ 상세보기 ------------------ //
                 bindDataDetailTab(data);
