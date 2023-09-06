@@ -293,7 +293,7 @@ h6 {
 	overflow: hidden;
 }
 
-.landing-container .home {
+.landing-container .section-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -317,14 +317,6 @@ h6 {
 	font-size: 16.25px;
 	line-height: 1.33;
 	border: 2px solid #fff;
-}
-
-.landing-container .row {
-	margin-top: 220px;
-}
-
-.home .row {
-	margin-top: 100px;
 }
 
 /*--------------------------------------------------------------
@@ -377,19 +369,15 @@ lading common
 	padding: 5px;
 }
 .content-section {
-	width: 100%;
-	max-width: 425px;
-	aspect-ratio: 4 / 3;
-	position: relative;
-	border-radius: 20px;
-	overflow: hidden;
+	postion: relative;
 }
 
 .content-section img {
-	position: absolute;
 	width: 100%;
-	height: 100%;
-	object-fit: fill;
+}
+
+.content-section .comment {
+	position: absolute;
 }
 
 /*--------------------------------------------------------------
@@ -727,14 +715,19 @@ lading common
 	}
 
 	.arms-logo {
+		position: absolute;
 		width: 100px;
-		margin: -55px 0 15px 5px;
+		margin: -10px 0 15px 5px;
 	}
 
-	.landing-container .row,
-	.home .row,
+	.services .features,
 	.contact .row {
 		margin-top: 15px;
+	}
+
+	.services.section-container,
+	.landing-container .contact {
+		height: auto;
 	}
 
 	.services .features:last-child {
