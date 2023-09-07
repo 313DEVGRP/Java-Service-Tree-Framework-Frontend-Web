@@ -271,7 +271,6 @@
 			index = i;
 		}
 
-		console.log("##############", s, index);
 		el[index].classList.add("on");
 	}
 
@@ -288,6 +287,10 @@
 			mirror: false
 		});
 	});
+
+	setTimeout(() => {
+		document.querySelector(".contact").style.display = "block";
+	}, 7000);
 
 	/**
 	 * Initiate Pure Counter
