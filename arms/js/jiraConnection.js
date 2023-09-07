@@ -15,8 +15,6 @@ var selectedPage;  // 데이터테이블 선택한 인덱스
 
 var dataTableRef; // 데이터테이블 참조 변수
 
-var monitor_card;
-
 ////////////////
 //Document Ready
 ////////////////
@@ -134,7 +132,6 @@ function makeJiraServerCardDeck() {
                 /////////////////// insert Card ///////////////////////
                 var obj = data.response;
                 draw_card_deck(obj);
-                monitor_card = obj;
             }
         },
         beforeSend: function () {
@@ -171,8 +168,8 @@ function draw_card_deck(cardInfo) {
             data +=
             `
             <div class="card mb-2 ribbon-box ribbon-fill right" onclick="jiraServerCardClick(${cardList[i].c_id})">
-                <!-- 리본표시 -->                  
-                ${draw_ribbon_result_of_issueType_check2(cardList[i].c_id,cardList[i].c_jira_server_type)}
+                <!-- 리본표시 -->                           
+                <div class="ribbon-${i}">${drawRibbon(cardList[i].c_id,cardList[i].c_jira_server_type, i)}</div>                                
                 <!--카드내용1-->
                 <div class="card-body">
                     <div class="" style="display: flex; align-items: baseline;">
@@ -187,9 +184,7 @@ function draw_card_deck(cardInfo) {
                         </div>
                     </div>
                     <!-- 값 넣을 수 있는 공간 -->
-                    <p class="font13 mt-1" style="margin-bottom: 0px;">                        
-                    </p>                    
-
+                    <p class="font13 mt-1" style="margin-bottom: 0px;"></p>
                 </div>
                 <!--카드내용2-->
                 <div class="card-body top-border border-top">
@@ -207,76 +202,12 @@ function draw_card_deck(cardInfo) {
     $("#jira_server_card_deck").html(data);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// --- 데이터 테이블 설정 --- // (사용 X)
-////////////////////////////////////////////////////////////////////////////////////////
-function dataTableLoad() {
-    // 데이터 테이블 컬럼 및 열그룹 구성
-    var columnList = [
-        { name: "c_id", title: "지라(서버) 아이디", data: "c_id", visible: false },
-        {
-            name: "c_jira_name",
-            title: "프로젝트 이름",
-            data: "jiraProjectEntities",
-            render: function (data, type, row, meta) {
-                if (type === "display") {
-                    return '<label style="color: #a4c6ff">' + data + "</label>";
-                }
-                return data+1;
-            },
-            className: "dt-body-left",
-
-            visible: true
-        },
-        { name: "c_jira_server_type", title: "서버 타입", data: "c_jira_server_type", visible: true,
-            render: function (data, type, row, meta) {
-                if (type ==="display") {
-                    console.log("data =" + data);
-                    if ( data == "cloud") {
-                        return '<label style="color: #FFFFFF; margin-right: 5%;">' + '클라우드' + "</label>"+'<i class="fa fa-cloud">'+"</i>";
-                        //return '<label style="color: #a4c6ff">' + "클라우드" + "</label>";
-                    } else {
-                        return '<label style="color: #FFFFFF; margin-right: 5%;">' + '온프레미스' + "</label>"+'<i class="fa fa-home">'+"</i>";
-                    }
-                }
-            },
-            className: "dt-body-center",
-            width: "100px"
-        },
-    ];
-    var rowsGroupList = [];
-    var columnDefList = [];
-    var selectList = {};
-    var orderList = [[1, "asc"]];
-    var buttonList = [];
-
-    var jquerySelector = "#jira_connection_table"; //
-    var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraServerMonitor.do"; // 사용 예정
-    var jsonRoot = "response";
-    var isServerSide = false;
-
-    dataTableRef = dataTable_build(
-        jquerySelector,
-        ajaxUrl,
-        jsonRoot,
-        columnList,
-        rowsGroupList,
-        columnDefList,
-        selectList,
-        orderList,
-        buttonList,
-        isServerSide
-    );
-}
-
-
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 // 데이터 테이블을 사용하지 않으므로, 쓰지 않아도 된다.
 function dataTableClick(tempDataTable, selectedData) {
     // => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
     console.log(selectedData);
     selectId = selectedData.c_id;
-
     // c_id로 getNode 실행
     //jiraServerCardClick(selectId);
     if(selectedData.c_jira_name !== undefined) {
@@ -337,7 +268,7 @@ function jiraServerCardClick(c_id) {
             $("#detailview_jira_server_name").val(json.c_title);
             $("#editview_jira_server_name").val(json.c_title);
 
-            if(json.c_jira_server_type === "클라우드") {
+            if(selectServerType === "클라우드") {
                 $("#detailview_jira_server_type_option1").parent().click();
                 $("#editview_jira_server_type_option1").parent().click();
             } else {
@@ -1288,14 +1219,11 @@ function jiraServerDataTable(target) {
     var selectList = {};
     var orderList = [[1, "asc"]];
     var buttonList = [];
-
-    console.log("issue_type selectProjectId => " + selectProjectId);
-
+    //console.log("issue_type selectProjectId => " + selectProjectId);
     var jquerySelector = targetSelector; //
     var ajaxUrl = "/auth-user/api/arms/jiraServer/" + targetAjaxUrl;
     var jsonRoot = "response";
     var isServerSide = false;
-
 
     dataTableRef = dataTable_build(
         jquerySelector,
@@ -1523,47 +1451,6 @@ function num_of_issue_type_and_status(list, type) { // cardList, "이슈상태" 
     }
 }
 
-
-
-// arms-requirement 존재 확인해서 리본 그리기
-function draw_ribbon_result_of_issueType_check2(jiraServerId, serverType){
-    var resultList = []; // 초기화
-    var chk_result = "";
-    resultList = getIssueTypeList(jiraServerId, serverType);
-    if (serverType === "클라우드") {
-        var arr = [];
-        arr = resultList;
-        var issueTypeList = [];
-        var 이슈타입_없는_프로젝트명 ="";
-        for(var i = 0; i < arr.length ; i++) {
-            issueTypeList = arr[i].jiraIssueTypeEntities; // 이슈타입들의 목록
-            chk_result = chk_issue_type_whether_have_arms_requirement(issueTypeList);
-            if (chk_result === "true") { console.log(arr[i].c_jira_name + "은 arms-requirement 있음"); }
-            else {
-                이슈타입_없는_프로젝트명 += arr[i].c_jira_name+ " ";
-            }
-        }
-        if (이슈타입_없는_프로젝트명 !== "") { // 이슈타입으로 arms-requirement가 없는 프로젝트 존재
-            return `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
-        } else {
-            return `<div class="ribbon ribbon-info">Ready</div>`;
-        }
-    }
-    if (serverType =="온프레미스") {
-        var arr = [];
-        arr = resultList;
-        chk_result = chk_issue_type_whether_have_arms_requirement(arr);
-        if (chk_result === "true") {
-            return `<div class="ribbon ribbon-info">Ready</div>`;
-        } else if (chk_result == "false") { // 이슈타입은 있지만, arms-requirement가 없음
-            var htmlData = `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
-            return htmlData;
-        } else { // undefined - 이슈 타입 자체가 없음
-            return `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Nothing<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`
-        }
-    }
-}
-
 //이슈유형(타입)에 arms-requirement 가 있는지 확인
 function chk_issue_type_whether_have_arms_requirement(list) {
     var arr = list; var chk_result = "false";
@@ -1580,8 +1467,11 @@ function chk_issue_type_whether_have_arms_requirement(list) {
     }
 }
 
-function getIssueTypeList(jiraServerId, jiraServerType) {
+// 서버가 가진 이슈유형 "arms-requirement" 확인해서 리본 그리기
+function drawRibbon(jiraServerId, jiraServerType, index) {
     var resultList = [];
+    var chk_result = "";
+    var cardIndex = "";
     if (jiraServerType === "온프레미스") {
         $.ajax({
             url: "/auth-user/api/arms/jiraServer/getJiraIssueType.do",
@@ -1590,12 +1480,30 @@ function getIssueTypeList(jiraServerId, jiraServerType) {
             contentType: "application/json;charset=UTF-8",
             dataType: "json",
             progress: true,
-            async: false,
             statusCode: {
                 200: function (data) {
                     console.log("온프레미스 지라이슈타입 목록");
                     if (data) {
                         resultList = data.response;
+                        cardIndex = index;
+                        chk_result = chk_issue_type_whether_have_arms_requirement(resultList);
+
+                        var ribbonSelector = ".ribbon-"+cardIndex;
+                        var ribbonHtmlData = ``;
+
+                        if (chk_result === "true") {
+                            ribbonHtmlData += `<div class="ribbon ribbon-info">Ready</div>`;
+                            $(ribbonSelector).append(ribbonHtmlData);
+                        } else if (chk_result == "false") { // 이슈타입은 있지만, arms-requirement가 없음
+                            ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;">
+                                                <button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button>
+                                               </div>`;
+                            $(ribbonSelector).append(ribbonHtmlData);
+                        } else { // undefined - 이슈 타입 자체가 없음
+                            ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Nothing<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`;
+                            $(ribbonSelector).append(ribbonHtmlData);
+
+                        }
                     } else {
                         jError("데이터가 유효하지 않습니다.");
                     }
@@ -1618,17 +1526,31 @@ function getIssueTypeList(jiraServerId, jiraServerType) {
             contentType: "application/json;charset=UTF-8",
             dataType: "json", // 서버에서 보내줄 데이터의 타입
             progress: true,
-            async: false,
             statusCode: {
                 200: function (data) {
-                    resultList = data.response;
+                    cardIndex = index;
+                    resultList = data.response; // 프로젝트 엔티티 목록(+이슈유형, 이슈상태 있음)
+                    var arr = [];
+                    arr = resultList;
+                    var issueTypeList = [];
+                    var 이슈타입_없는_프로젝트명 ="";
+                    var ribbonSelector = ".ribbon-"+cardIndex;
+                    var ribbonHtmlData = ``;
+
+                    for(var i = 0; i < arr.length ; i++) {
+                        issueTypeList = arr[i].jiraIssueTypeEntities; // 이슈타입들의 목록
+                        chk_result = chk_issue_type_whether_have_arms_requirement(issueTypeList);
+                        if (chk_result === "true") { /*console.log(arr[i].c_jira_name + "은 arms-requirement 있음");*/ }
+                        else { 이슈타입_없는_프로젝트명 += arr[i].c_jira_name+ " "; }
+                    }
+                    if (이슈타입_없는_프로젝트명 !== "") { // 이슈타입으로 arms-requirement가 없는 프로젝트 존재
+                        ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`;
+                        $(ribbonSelector).append(ribbonHtmlData);
+                    } else {
+                        ribbonHtmlData += `<div class="ribbon ribbon-info">Ready</div>`;
+                        $(ribbonSelector).append(ribbonHtmlData);
+                    }
                 }
-            },
-            beforeSend: function () {
-                //$("#regist_pdservice").hide(); 버튼 감추기
-            },
-            complete: function () {
-                //$("#regist_pdservice").show(); 버튼 보이기
             },
             error: function (e) {
                 if(jiraServerId === undefined || jiraServerId === "") {
