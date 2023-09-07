@@ -326,6 +326,22 @@ h6 {
 	background-color: #0563bb;
 }
 
+.section-container .col-lg-4 {
+	display: flex;
+	justify-content: center;
+	border: 2px solid #fff;
+}
+
+.endpoint .row {
+	display: flex;
+	justify-content: center;
+	padding: 0 20px;
+}
+
+.endpoint .col-lg-4 {
+	min-width: 380px;
+}
+
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
@@ -376,6 +392,7 @@ lading common
 	padding: 5px;
 }
 .content-section {
+	position: relative;
 	padding: 20px;
 	max-width: 325px;
 }
@@ -670,65 +687,87 @@ lading common
 }
 
 /*--------------------------------------------------------------
-# Footer
+# comment
 --------------------------------------------------------------*/
-#footer {
-	color: #fff;
-	font-size: 14px;
-	text-align: center;
-	padding: 30px 0;
+.content-section .comment {
+	display: flex;
+	align-items: center;
+	width: 29%;
+	aspect-ratio: 4 / 2.5;
+	position: absolute;
+	font-size: 12px;
+	word-break: break-all;
+	line-height: normal;
 }
 
-#footer h3 {
-	font-size: 36px;
-	font-weight: 700;
-	position: relative;
-	font-family: "Poppins", sans-serif;
-	padding: 0;
-	margin: 0 0 15px 0;
+.section1_1 .comment {
+	top: 13%;
+	left: 39%;
 }
 
-#footer p {
-	font-size: 15px;
-	font-style: italic;
-	padding: 0;
-	margin: 0 0 40px 0;
+.section1_2 .comment,
+.section2_1 .comment,
+.section3_1 .comment,
+.section4_1 .comment {
+	top: 13.5%;
+	left: 34%;
 }
 
-#footer .social-links {
-	margin: 0 0 40px 0;
+.section1_3 .comment,
+.section2_3 .comment,
+.section3_3 .comment {
+	width: 26%;
+	top: 39%;
+	left: 62%;
 }
 
-#footer .social-links a {
-	font-size: 18px;
-	display: inline-block;
-	background: #2477ff;
-	color: #fff;
-	line-height: 1;
-	padding: 8px 0;
-	margin-right: 4px;
-	border-radius: 50%;
-	text-align: center;
-	width: 36px;
-	height: 36px;
-	transition: 0.3s;
+.section2_2 .comment {
+	top: 13%;
+	left: 45%;
 }
 
-#footer .social-links a:hover {
-	background: #0678e3;
-	color: #fff;
-	text-decoration: none;
+.section3_2 .comment {
+	width: 28%;
+	top: 11.5%;
+	left: 49%;
 }
 
-#footer .copyright {
-	margin: 0 0 5px 0;
+.section4_2 .comment {
+	top: 12%;
+	left: 57.5%;
 }
 
-#footer .credits {
-	font-size: 13px;
+.section4_3 .comment {
+	top: 12%;
+	left: 49.5%;
 }
 
-@media (max-width: 760px) {
+.section5_1 .comment {
+	top: 13.5%;
+	left: 34%;
+}
+
+.section5_2 .comment {
+	top: 14%;
+	left: 34%;
+}
+
+.section5_3 .comment {
+	width: 33%;
+	top: 15%;
+	left: 52%;
+}
+
+.section5_4 .comment {
+	width: 45%;
+	top: 16%;
+	left: 35.5%;
+}
+
+/*--------------------------------------------------------------
+# responsive
+--------------------------------------------------------------*/
+@media (max-width: 992px) {
 	.landing-container {
 		height: auto;
 	}
@@ -745,11 +784,13 @@ lading common
 	}
 
 	.landing-container > section {
-		padding: 0;
+		padding: 0 25px;
 		height: auto;
 	}
 
-	.home.section-container,
+	.home.section-container {
+		padding: 100px 25px 60px;
+	}
 	.services.section-container,
 	.contact {
 		padding: 60px 0;
@@ -768,5 +809,13 @@ lading common
 
 	.preview-btn a {
 		margin-left: 20px;
+	}
+
+	.endpoint .row {
+		padding: 0;
+	}
+
+	.endpoint .col-lg-4 {
+		min-width: auto;
 	}
 }
