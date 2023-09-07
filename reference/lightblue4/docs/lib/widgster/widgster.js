@@ -59,6 +59,107 @@
         }
     };
 
+    Widgster.prototype.toleft = function(e){
+        e.preventDefault();
+        var e = $.Event('toleft.widgster');
+        this.$element.trigger(e);
+        if (e.isDefaultPrevented()) return;
+        const colDiv = this.$element.closest('.col-layer');
+        if(colDiv.length <= 0) return;
+        adjustSize(colDiv, false);
+        return false;
+    };
+
+    Widgster.prototype.toright = function(e){
+        e.preventDefault();
+        var e = $.Event('toright.widgster');
+        this.$element.trigger(e);
+        if (e.isDefaultPrevented()) return;
+        const colDiv = this.$element.closest('.col-layer');
+        if(colDiv.length <= 0) return;
+        adjustSize(colDiv, true);
+        return false;
+    };
+
+    function adjustSize(colDiv, increase) {
+        const proportions = Array.from($('.col-layer'));
+        let result = [];
+        let layer = 1;
+        let sum = 0;
+
+        proportions.forEach(current => {
+            const sizeRegex = /col-lg-(\d+)/;
+            const match = current.className.match(sizeRegex);
+            const sizeValue = match ? parseInt(match[1], 10) : 0;
+
+            sum += sizeValue;
+
+            result.push({
+                current,
+                layer
+            });
+
+            if (sum % 12 === 0) {
+                layer++;
+            }
+        });
+
+        const colDivItem = result.find(item => item.current === colDiv[0]);
+
+        if (!colDivItem) return;
+
+        const colDivLayer = colDivItem.layer;
+        const filteredResult = result.filter(item => item.layer === colDivLayer);
+        const filteredLength = filteredResult.length;
+        for (let i = 0; i < filteredLength; i++) {
+            const left = filteredResult[(i - 1 + filteredLength) % filteredLength];
+            const right = filteredResult[(i + 1) % filteredLength];
+            filteredResult[i].left = left.current;
+            filteredResult[i].right = right.current;
+        }
+
+        if (increase) {
+            if (canIncrease(colDivItem.current) && canDecrease(colDivItem.right)) {
+                adjustColSize(colDivItem.current, 1);
+                adjustColSize(colDivItem.right, -1);
+            }
+        } else {
+            if (canDecrease(colDivItem.current) && canIncrease(colDivItem.right)) {
+                adjustColSize(colDivItem.current, -1);
+                adjustColSize(colDivItem.right, 1);
+            }
+        }
+    }
+
+    function canDecrease(node) {
+        const sizeRegex = /col-lg-(\d+)/;
+        const match = node.className.match(sizeRegex);
+        if (!match) {
+            return false;
+        }
+        const size = parseInt(match[1], 10);
+        return size > 1;
+    }
+
+    function canIncrease(node) {
+        const sizeRegex = /col-lg-(\d+)/;
+        const match = node.className.match(sizeRegex);
+        if (!match) {
+            return false;
+        }
+        const size = parseInt(match[1], 10);
+        return size < 12;
+    }
+    function adjustColSize(node, change) {
+        const sizeRegex = /col-lg-(\d+)/;
+        const match = node.className.match(sizeRegex);
+        if (!match) {
+            return;
+        }
+        let newSize = parseInt(match[1], 10) + change;
+        node.className = node.className.replace(sizeRegex, `col-lg-${newSize}`);
+    }
+
     Widgster.prototype.collapse = function(animate){
         animate = typeof animate == "undefined" ? true : animate;
         var e = $.Event('collapse.widgster');
@@ -249,6 +350,8 @@
      * @private
      */
     Widgster.prototype._initHandlers = function(){
+        this.$element.on('click.toleft.widgster', '[data-widgster=toleft]', $.proxy(this.toleft, this));
+        this.$element.on('click.toright.widgster', '[data-widgster=toright]', $.proxy(this.toright, this));
         this.$element.on('click.collapse.widgster', '[data-widgster=collapse]', $.proxy(this.collapse, this));
         this.$element.on('click.expand.widgster', '[data-widgster=expand]', $.proxy(this.expand, this));
         this.$element.on('click.close.widgster', '[data-widgster=close]', $.proxy(this.close, this));
