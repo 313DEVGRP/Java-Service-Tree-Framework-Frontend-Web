@@ -6,14 +6,16 @@ var selectName; // 선택한 대상 이름 (c_title)
 var selectServerId;   // 선택한 서버 이름 (c_id)
 var selectServerName; // 선택한 서버 이름 (c_jira_server_name )
 var selectServerType; // 선택한 서버 타입 (c_jira_server_type, 클라우드 or 온프레미스)
-var selectedTab;
+var selectedTab;     // 선택한 탭
 var selectProjectId; // 선택한 지라프로젝트 아이디
-var selectRadioId; // 이슈 유형 or 이슈 상태 or 이슈 해결책 or
+var selectRadioId; // 이슈 유형 or 이슈 상태 or 이슈 해결책
 
 var selectedIndex; // 데이터테이블 선택한 인덱스
 var selectedPage;  // 데이터테이블 선택한 인덱스
 
 var dataTableRef; // 데이터테이블 참조 변수
+
+var 이슈유형_암스_요구사항_없는프로젝트 = [];
 
 ////////////////
 //Document Ready
@@ -135,9 +137,11 @@ function makeJiraServerCardDeck() {
             }
         },
         beforeSend: function () {
+            //$(".loader-ribbon").removeClass("hide");
             //$("#regist_pdservice").hide(); 버튼 감추기
         },
         complete: function () {
+            //$(".loader-ribbon").addClass("hide");
             //$("#regist_pdservice").show(); 버튼 보이기
         },
         error: function (e) {
@@ -381,6 +385,16 @@ function dataTableDrawCallback(tableInfo) {
     console.log(tableInfo);
 
     var className = "";
+    /*
+    if (selectedTab === "프로젝트") {
+        var projectTableData = tableInfo.aoData;
+        if(!isEmpty(projectTableData)) {
+            //console.log(이슈유형_암스_요구사항_없는프로젝트.find(arr => arr.serverId===selectServerId));
+            var no_issueType_arr =  이슈유형_암스_요구사항_없는프로젝트.find(arr => arr.serverId === selectServerId);
+            //여기서 상호 비교를 해야함
+        }
+    }
+    */
     if(selectedTab !== undefined) {
         if (selectedTab === "이슈해결책")  { className = "issueResolution"; }
         if (selectedTab ==="이슈우선순위") { className = "issuePriority";   }
@@ -392,6 +406,7 @@ function dataTableDrawCallback(tableInfo) {
             if (selectServerType === "클라우드") { className = "project-issueType"; }
             else { className = "issueType"; }
         }
+
     }
     var tableData = tableInfo.aoData;
     if(!isEmpty(tableData)) {
@@ -656,7 +671,7 @@ function set_renew_btn(selectedTab, selectServerId) {
     if(selectedTab == "프로젝트") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('project', ${selectServerId})"
+                             onClick="jira_renew('프로젝트', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             프로젝트 갱신
                      </button>`;
@@ -664,7 +679,7 @@ function set_renew_btn(selectedTab, selectServerId) {
     if(selectedTab == "이슈해결책") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('issueResolution', ${selectServerId})"
+                             onClick="jira_renew('이슈해결책', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             이슈해결책 갱신
                      </button>`;
@@ -672,7 +687,7 @@ function set_renew_btn(selectedTab, selectServerId) {
     if(selectedTab == "이슈우선순위") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('issuePriority', ${selectServerId})"
+                             onClick="jira_renew('이슈우선순위', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             이슈우선순위 갱신
                      </button>`;
@@ -680,7 +695,7 @@ function set_renew_btn(selectedTab, selectServerId) {
     if(selectedTab == "이슈유형") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('issueType', ${selectServerId})"
+                             onClick="jira_renew('이슈유형', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             이슈유형 갱신
                      </button>`;
@@ -688,7 +703,7 @@ function set_renew_btn(selectedTab, selectServerId) {
     if(selectedTab == "이슈상태") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('issueStatus', ${selectServerId})"
+                             onClick="jira_renew('이슈상태', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             이슈상태 갱신
                      </button>`;
@@ -701,7 +716,7 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
     if(selectedTab == "이슈유형") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('issueType', ${selectServerId})"
+                             onClick="jira_renew('이슈유형', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             이슈유형 갱신
                      </button>`;
@@ -709,7 +724,7 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
     if(selectedTab == "이슈상태") {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
-                             onClick="jira_renew('issueStatus', ${selectServerId})"
+                             onClick="jira_renew('이슈상태', ${selectServerId})"
                              class="btn btn-success btn-sm mr-1">
                             이슈상태 갱신
                      </button>`;
@@ -864,8 +879,8 @@ function jira_renew(renewJiraType, serverId) { // 서버 c_id
                 jSuccess(selectServerName + "의 데이터가 갱신되었습니다.");
                 console.log("현재 선택된 항목(c_id, 서버명) :" + serverId +", " + selectServerName);
                 //데이터 테이블 데이터 재 로드
-                makeJiraServerCardDeck();
-                jiraServerCardClick(serverId);
+                //makeJiraServerCardDeck();
+                //jiraServerCardClick(serverId);
             }
         }
     });
@@ -1287,7 +1302,7 @@ function default_setting_event() {
 
 //지라 프로젝트 - 데이터테이블 프로젝트 명 클릭시
 function click_projectList_table(projectName) {
-    console.log("click_projectList_table :: projectName = " + projectName);
+    console.log("click_projectList_table :: projectName ==============> " + projectName);
     $(".grid3rd").html("");
     // Sender 설정
     var selectedHtml =
@@ -1537,15 +1552,23 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
                     var ribbonSelector = ".ribbon-"+cardIndex;
                     var ribbonHtmlData = ``;
 
+                    var projectIdList = [];
+                    var dic = {serverId : "" , projectId : ""};
+                    dic.serverId = jiraServerId;
                     for(var i = 0; i < arr.length ; i++) {
                         issueTypeList = arr[i].jiraIssueTypeEntities; // 이슈타입들의 목록
                         chk_result = chk_issue_type_whether_have_arms_requirement(issueTypeList);
                         if (chk_result === "true") { /*console.log(arr[i].c_jira_name + "은 arms-requirement 있음");*/ }
-                        else { 이슈타입_없는_프로젝트명 += arr[i].c_jira_name+ " "; }
+                        else { //이슈타입_없는_프로젝트명 += arr[i].c_jira_name+ " ";
+                            projectIdList.push(arr[i].c_id);
+                        }
                     }
-                    if (이슈타입_없는_프로젝트명 !== "") { // 이슈타입으로 arms-requirement가 없는 프로젝트 존재
+                    dic.projectId = projectIdList;
+                    이슈유형_암스_요구사항_없는프로젝트.push(dic);
+                    if (dic.projectId.length !== 0) { // 이슈타입으로 arms-requirement가 없는 프로젝트 존재
                         ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`;
                         $(ribbonSelector).append(ribbonHtmlData);
+                        console.log(이슈유형_암스_요구사항_없는프로젝트);
                     } else {
                         ribbonHtmlData += `<div class="ribbon ribbon-info">Ready</div>`;
                         $(ribbonSelector).append(ribbonHtmlData);
