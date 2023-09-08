@@ -120,13 +120,15 @@
 
         if (increase) {
             if (canIncrease(colDivItem.current) && canDecrease(colDivItem.right)) {
-                adjustColSize(colDivItem.current, 1);
-                adjustColSize(colDivItem.right, -1);
+                adjustColSize(colDivItem.right, -1, function() {
+                    adjustColSize(colDivItem.current, 1);
+                });
             }
         } else {
             if (canDecrease(colDivItem.current) && canIncrease(colDivItem.right)) {
-                adjustColSize(colDivItem.current, -1);
-                adjustColSize(colDivItem.right, 1);
+                adjustColSize(colDivItem.current, -1, function() {
+                    adjustColSize(colDivItem.right, 1);
+                });
             }
         }
     }
@@ -150,14 +152,23 @@
         const size = parseInt(match[1], 10);
         return size < 12;
     }
-    function adjustColSize(node, change) {
+    function adjustColSize(node, change, callback) {
         const sizeRegex = /col-lg-(\d+)/;
         const match = node.className.match(sizeRegex);
         if (!match) {
+            callback && callback();
             return;
         }
         let newSize = parseInt(match[1], 10) + change;
-        node.className = node.className.replace(sizeRegex, `col-lg-${newSize}`);
+        const newWidthPercentage = ((parseInt(match[1], 10) + change) / 12) * 100;
+
+        $(node).animate({
+            width: newWidthPercentage + '%'
+        }, 200, function() {
+            node.className = node.className.replace(sizeRegex, `col-lg-${newSize}`);
+            $(node).css('width', '');
+            callback && callback();
+        });
     }
 
     Widgster.prototype.collapse = function(animate){
