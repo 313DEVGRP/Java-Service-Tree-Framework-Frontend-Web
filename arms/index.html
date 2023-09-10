@@ -156,6 +156,9 @@
 			href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
 			rel="stylesheet" />
 		<link
+			href="./html/armsDetailExceptTemplate/assets/vendor/bootstrap-icons/bootstrap-icons.css"
+			rel="stylesheet" />
+		<link
 			href="../reference/light-blue/css/application.min.css"
 			rel="stylesheet" />
 		<link
@@ -177,49 +180,48 @@
 			<div class="logo">
 				<h1>
 					<a href="index.html">
-						<img src="./img/313_logo.png"
-                             width="170px" />
+						<img
+							src="./img/313_logo.png"
+							width="170px" />
 					</a>
 				</h1>
 			</div>
-			<div class="navbar"
-                 style="width: 100%; margin-bottom: 15px">
-				<ul class="navbar-buttons pull-left"
-					style="margin-top: 15px">
-					<li>
-						<a  href="#about"
-							style="color: #a4c6ff; text-decoration: none">
-							<i class="fa fa-book"></i>
-							About
-						</a>
-					</li>
-					<li>
-						<a  href="#contact"
-							style="color: #a4c6ff; text-decoration: none">
-							<i class="fa fa-book"></i>
-							Contact
-						</a>
-					</li>
-				</ul>
-				<ul class="navbar-buttons pull-right">
-					<li>
-						<a  href="/313devgrp/arms/template.html?page=pdService"
-							class="btn btn-sm btn-transparent"
-							style="font-size: 12px; background-color: #e5603b; border-radius: 3px">
-							Demo&nbsp;
-							<i class="fa fa-arrow-right"></i>
-						</a>
-					</li>
-					<li>
-						<a
-							href="/313devgrp/arms/docs"
-							class="btn btn-sm btn-transparent"
-							style="font-size: 12px; background-color: #2477ff; border-radius: 3px">
-							Installation&nbsp;
-							<i class="fa fa-download"></i>
-						</a>
-					</li>
-				</ul>
+			<button class="navi-toggle">
+				<i class="bi mobile-nav-toggle d-xl-none bi-list"></i>
+			</button>
+			<div class="navi-wrap">
+				<nav>
+					<a
+						href="#about"
+						style="color: #a4c6ff; text-decoration: none">
+						<i class="fa fa-book"></i>
+						About
+					</a>
+
+					<a
+						href="#contact"
+						style="color: #a4c6ff; text-decoration: none">
+						<i class="fa fa-book"></i>
+						Contact
+					</a>
+				</nav>
+				<nav>
+					<a
+						href="/313devgrp/arms/template.html?page=pdService"
+						class="btn btn-sm btn-transparent"
+						style="font-size: 12px; background-color: #e5603b; border-radius: 3px">
+						Demo&nbsp;
+						<i class="fa fa-arrow-right"></i>
+					</a>
+
+					<a
+						href="/313devgrp/arms/docs"
+						class="btn btn-sm btn-transparent"
+						style="font-size: 12px; background-color: #2477ff; border-radius: 3px">
+						Installation&nbsp;
+						<i class="fa fa-download"></i>
+					</a>
+				</nav>
 			</div>
 		</header>
 		<div class="container visual-web">
@@ -241,10 +243,10 @@
 							data-target="#carousel-landing"
 							data-slide-to="2"
 							class=""></li>
-                        <li
-                            data-target="#carousel-landing"
-                            data-slide-to="2"
-                            class=""></li>
+						<li
+							data-target="#carousel-landing"
+							data-slide-to="2"
+							class=""></li>
 					</ol>
 					<div class="carousel-inner">
 						<div class="item active">
@@ -280,16 +282,17 @@
 								</div>
 							</div>
 						</div>
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="text-align-center animated fadeInRightBig">
-                                        <img src="./img/index/arms_project_endpoint.drawio.png"
-                                             alt="Second slide" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						<div class="item">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="text-align-center animated fadeInRightBig">
+										<img
+											src="./img/index/arms_project_endpoint.drawio.png"
+											alt="Second slide" />
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<a
 						class="left carousel-control carousel-control-landing"
@@ -583,5 +586,22 @@
 				</div>
 			</div>
 		</footer>
+
+		<script>
+			const navToggle = document.querySelector(".navi-toggle");
+			const navWrap = document.querySelector(".navi-wrap");
+			navToggle.onclick = function clicked(e) {
+				console.log("############ :::", e.target.classList.contains("bi-list"));
+				if (e.target.classList.contains("bi-list")) {
+					e.target.classList.remove("bi-list");
+					e.target.classList.add("bi-x");
+					navWrap.classList.add("on");
+				} else {
+					e.target.classList.remove("bi-x");
+					e.target.classList.add("bi-list");
+					navWrap.classList.remove("on");
+				}
+			};
+		</script>
 	</body>
 </html>

@@ -2469,11 +2469,21 @@ table tbody tr td {
 .gnb h1 {
 	margin: 0;
 }
-.gnb .lnb a {
+.gnb .navi-wrap {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: calc(100% - 170px);
+	padding: 0 0 20px 20px;
+}
+.navi-wrap a {
 	display: inline-block;
 	margin-left: 20px;
-	margin-bottom: 18px;
 	font-size: 13px;
+}
+
+.navi-toggle {
+	display: none;
 }
 
 /*--------------------------------------------------------------
@@ -2798,14 +2808,64 @@ table tbody tr td {
 	}
 	.gnb .logo,
 	.gnb h1,
-	.gnb a,
+	.gnb .logo a,
 	.gnb img {
 		width: auto;
 		height: 100%;
 	}
-	.gnb .lnb a {
-		margin-bottom: 15px;
+	.gnb .navi-wrap {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 10;
+		width: 100%;
+		flex-direction: column;
+		align-items: end;
+		justify-content: center;
+		transform: translateX(100%);
+		transition: all 0.3s;
 	}
+	.gnb .navi-wrap.on {
+		transform: translateX(0);
+	}
+
+	.gnb .navi-wrap:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: -1;
+		background-color: rgba(0, 0, 0, 0.7);
+	}
+
+	.navi-wrap nav {
+		width: 30%;
+		margin-right: 15px;
+	}
+
+	.navi-wrap a {
+		margin: 0 0 20px 0 !important;
+	}
+
+	.navi-toggle {
+		display: block;
+		position: absolute;
+		top: 25px;
+		right: 15px;
+		z-index: 9998;
+		border: 0;
+		background: none;
+		font-size: 32px;
+		outline: none !important;
+		line-height: 0;
+		cursor: pointer;
+		border-radius: 50px;
+		color: #fff;
+	}
+
 	.visual-web {
 		display: none;
 	}
