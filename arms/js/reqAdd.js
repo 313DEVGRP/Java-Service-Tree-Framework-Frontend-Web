@@ -953,7 +953,6 @@ function bindDataEditlTab(ajaxData) {
 
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
-	console.log("========홍성훈========");
 	console.log(ajaxData);
 
 	//제품(서비스) 데이터 바인딩
@@ -1010,7 +1009,9 @@ function bindDataDetailTab(ajaxData) {
 	} else {
 		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
 	}
-	$("#detailview_req_contents").html(ajaxData.c_req_contents);
+	//$("#detailview_req_contents").html(ajaxData.c_req_contents);
+
+	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
