@@ -53,8 +53,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -65,6 +64,14 @@ function execDocReady() {
 			setTimeout(function () {
 				var script = document.createElement("script");
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 3000); // 2초 후에 실행됩니다.
+
+			//vfs_fonts 파일이 커서 defer 처리 함.
+			setTimeout(function () {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
 			}, 3000); // 2초 후에 실행됩니다.
@@ -1647,24 +1654,19 @@ function click_btn_for_search_history() {
 function change_tab_action() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
-// 		$("#req_content").removeClass("btn-success");
-// 			$("#req_content").addClass("btn-primary");
 
 		if (target == "#stats") {
-			$(".view_btn_group").removeClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
 
 
 		} else if (target == "#edit") {
-			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").removeClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
 
 		} else if (target == "#jira") {
-			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
 			$(".newReqDiv").hide();
@@ -1684,63 +1686,17 @@ function change_tab_action() {
 			var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 			console.log("jira selectedJsTreeId" + selectedJsTreeId);
 			console.log("jira tableName" + tableName);
-			//datatables_jira_project();
 			console.log("jira datatables_jira_project 완료 " );
 
-			// $.ajax({
-			// 	url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do",
-			// 	// data: {
-			// 	// 	c_id: selectedJsTreeId
-			// 	// },
-			// 	type: "GET",
-			// 	contentType: "application/json;charset=UTF-8",
-			// 	dataType: "json",
-			// 	progress: true
-			// })
-			// 	.done(function (data) {
-			// 		console.log("data:::");
-			// 		console.table(data);
-				// 	console.log("data::c_jira_ver_link"+ data.c_jira_ver_link);
-				//
-				// 	for (var key in data) {
-				// 		var value = data[key];
-				// 		//console.log(key + "=" + value);
-				// 	}
-				//
-				// 	if (isEmpty(data.c_jira_ver_link)) {
-				// 		console.log("jiraVerArr is empty");
-				// 	} else {
-				// 		var jiraVerArrStr = data.c_jira_ver_link;
-				// 		//특수 문자 중에 콤마는 빼고 지움
-				// 		var reg = /[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-				// 		jiraVerArrStr = jiraVerArrStr.replace(reg, "");
-				// 		var jiraVerArr = jiraVerArrStr.split(",");
-				//
-				// 		var loopCount = jiraVerArr.length;
-				//
-				// 		for (var i = 0; i < loopCount; i++) {
-				// 			console.log("loop check i = " + i);
-				// 			console.log("loop check value = " + jiraVerArr[i]);
-				// 			$("input:checkbox[value='" + jiraVerArr[i] + "']").prop("checked", true);
-				// 		}
-				// 	}
-				// })
-				// .fail(function (e) {})
-				// .always(function () {});
 		} else if (target == "#report") {
-			$(".view_btn_group").addClass("hidden");
 			$(".newReqDiv").show();
 			$(".edit_btn_group").addClass("hidden");
 		}else if (target == "#doc") {
-			// $(".newReqDiv").hide();
-			// $(".view_btn_group").addClass("hidden");
-			$(".view_btn_group").removeClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
 
 		} else if (target == "#history") {
-			$(".view_btn_group").addClass("hidden");
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
