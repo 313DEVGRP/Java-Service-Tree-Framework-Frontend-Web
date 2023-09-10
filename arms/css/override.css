@@ -2740,6 +2740,7 @@ table tbody tr td {
 .visual-mobile {
 	display: none;
 	height: calc(100vh - 80px);
+	height: calc((var(--vh, 1vh) * 100) - 80px);
 	justify-content: center;
 	align-items: center;
 }
@@ -2749,6 +2750,7 @@ table tbody tr td {
 	width: 100%;
 	max-width: 650px;
 	aspect-ratio: 4 / 3;
+	margin-bottom: 80px;
 }
 
 .content-item {
@@ -2852,6 +2854,7 @@ table tbody tr td {
 
 	.navi-toggle {
 		display: block;
+		padding: 0;
 		position: absolute;
 		top: 25px;
 		right: 15px;
@@ -2864,6 +2867,11 @@ table tbody tr td {
 		cursor: pointer;
 		border-radius: 50px;
 		color: #fff;
+	}
+	.navi-toggle.active {
+		top: 20px;
+		right: 10px;
+		font-size: 40px;
 	}
 
 	.visual-web {
