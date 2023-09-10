@@ -87,10 +87,10 @@ function execDocReady() {
                 try {
                     if (window.CKEDITOR) {
                         if(window.CKEDITOR.status == "loaded"){
-                            CKEDITOR.replace("input_jira_server_editor",{ skin: "prestige" });
-                            CKEDITOR.replace("detailview_jira_server_contents",{ skin: "prestige" });
-                            CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" }); //팝업편집
-                            CKEDITOR.replace("modal_editor",{ skin: "prestige" });
+                            CKEDITOR.replace("input_jira_server_editor",{ skin: "office2013" });
+                            CKEDITOR.replace("detailview_jira_server_contents",{ skin: "office2013" });
+                            CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" }); //팝업편집
+                            CKEDITOR.replace("modal_editor",{ skin: "office2013" });
                             clearInterval(waitCKEDITOR);
                         }
                     }

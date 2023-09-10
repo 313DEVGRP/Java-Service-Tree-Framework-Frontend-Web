@@ -87,9 +87,9 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded"){
-							CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" }); //편집하기
-							CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" }); //팝업편집
-							CKEDITOR.replace("modal_editor",{ skin: "prestige" }); //서비스추가
+							CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" }); //편집하기
+							CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" }); //팝업편집
+							CKEDITOR.replace("modal_editor",{ skin: "office2013" }); //서비스추가
 							clearInterval(waitCKEDITOR);
 						}
 					}
