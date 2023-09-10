@@ -2668,6 +2668,10 @@ table tbody tr td {
 }
 .footer {
 	display: flex;
+	flex-wrap: wrap;
+}
+.menu-wrap {
+	width: 25%;
 }
 .menu-wrap h4 {
 	margin-bottom: 1em;
@@ -2765,6 +2769,13 @@ table tbody tr td {
 	}
 	.visual-mobile {
 		display: flex;
+	}
+	.contact .form-wrap {
+		margin-top: 40px;
+	}
+	.menu-wrap {
+		width: 50%;
+		margin-bottom: 20px;
 	}
 }
 
