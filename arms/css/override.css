@@ -2477,24 +2477,16 @@ table tbody tr td {
 }
 
 /*--------------------------------------------------------------
-# About
+# Section title
 --------------------------------------------------------------*/
-.landing .widget-about {
-	padding: 120px 20px;
-}
-
-/*--------------------------------------------------------------
-# Contact
---------------------------------------------------------------*/
-.contact {
-	margin: 100px auto;
+.section-title {
+	margin-bottom: 15%;
 }
 .section-title h2 {
 	text-align: center;
 	font-size: 32px;
 	font-weight: bold;
 	text-transform: uppercase;
-	margin-bottom: 15%;
 	padding-bottom: 20px;
 	position: relative;
 	color: #fff;
@@ -2525,6 +2517,56 @@ table tbody tr td {
 .section-title p {
 	text-align: center;
 	margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
+# About
+--------------------------------------------------------------*/
+.landing .widget-about {
+	padding: 120px 20px;
+}
+
+.about h2 {
+	color: #666;
+	margin-bottom: 7%;
+}
+.about .section-title {
+	margin-bottom: 8%;
+}
+.about .section-title p,
+.about .section-title label {
+	font-weight: bold;
+}
+.about .section-title .desc-name {
+	font-size: 1.25em;
+	margin-bottom: 10px !important;
+}
+.about .section-title label {
+	color: #e5603b;
+}
+
+.about .features {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+.about .feature {
+	display: flex;
+	justify-content: space-between;
+	width: 27%;
+	margin-bottom: 40px;
+}
+
+.about .description {
+	width: calc(100% - 60px);
+	padding-left: 25px;
+}
+
+/*--------------------------------------------------------------
+# Contact
+--------------------------------------------------------------*/
+.contact {
+	margin: 100px auto;
 }
 
 .contact .info {
@@ -2776,6 +2818,12 @@ table tbody tr td {
 	.menu-wrap {
 		width: 50%;
 		margin-bottom: 20px;
+	}
+	.landing .widget-about {
+		padding: 120px 10px;
+	}
+	.about .feature {
+		width: 100%;
 	}
 }
 
