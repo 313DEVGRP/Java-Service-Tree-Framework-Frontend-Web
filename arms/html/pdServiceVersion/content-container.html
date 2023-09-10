@@ -485,7 +485,7 @@
 							<div    id="report"
 								    class="tab-pane">
 								<div>
-									<form   class="form-horizontal"
+									<form   class="form-horizontal product-service-version-form"
 										    method="post">
 										<fieldset>
 											<div    class="control-group"
@@ -507,6 +507,7 @@
                                                             data-placement="top"
                                                             data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
                                                             required="required"
+                                                            readonly
                                                             style="color: #a4c6ff"
 													    	placeholder="service name" />
 												</div>
@@ -524,9 +525,9 @@
 													<input  type="text"
                                                             id="input_pdservice_version"
                                                             name="input_pdservice_version"
-                                                            class="form-control parsley-validated font13 darkBack"
+                                                            class="form-control parsley-validated font13 darkBack input_pdservice_version"
                                                             data-placement="top"
-                                                            data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+                                                            data-original-title="Version is required."
                                                             required="required"
                                                             style="color: #a4c6ff"
 														    placeholder="version text" />
@@ -549,12 +550,15 @@
 														</a>
 													</span>
 													<input  id="input_pdservice_start_date"
-                                                            class="form-control darkBack"
+                                                            class="form-control darkBack input_pdservice_start_date"
                                                             type="text"
                                                             name="btn_enabled_date"
                                                             value=""
                                                             style="color: #a4c6ff"
-														    pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+                                                            data-original-title="Start date is required."
+                                                            required
+														    pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+                                                    />
 												</div>
 											</div>
 											<div    class="control-group"
@@ -574,12 +578,15 @@
 														</a>
 													</span>
 													<input  id="input_pdservice_end_date"
-                                                            class="form-control darkBack"
+                                                            class="form-control darkBack input_pdservice_end_date"
                                                             type="text"
                                                             name="btn_enabled_date"
                                                             value=""
                                                             style="color: #a4c6ff"
-													    	pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+                                                            data-original-title="End date is required."
+                                                            required
+													    	pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+                                                    />
 												</div>
 											</div>
 											<div class="control-group">
@@ -671,7 +678,7 @@
 			</div>
 			<div    class="modal-body"
 				    style="padding: 5px">
-				<form   class="form-horizontal"
+				<form   class="form-horizontal product-service-version-modal-form"
 					    method="post">
 					<fieldset>
 						<div class="control-group">
@@ -687,9 +694,12 @@
                                             id="tooltip_enabled_service_name"
                                             class="form-control darkBack"
                                             data-placement="top"
-                                            data-original-title="Some explanation text here"
                                             style="color: #a4c6ff"
-                                            placeholder="Product(Service) name" />
+                                            placeholder="Product(Service) name"
+                                            readonly
+                                            required
+                                            data-original-title="Service name is required."
+                                    />
 								</div>
 							</div>
 						</div>
@@ -702,11 +712,13 @@
 								<div class="col-sm-8">
 									<input  type="text"
                                             id="tooltip_enabled_service_version"
-                                            class="form-control darkBack"
+                                            class="form-control darkBack input_pdservice_version"
                                             data-placement="top"
-                                            data-original-title="Some explanation text here"
                                             style="color: #a4c6ff"
-                                            placeholder="Product(Service) version" />
+                                            placeholder="Product(Service) version"
+                                            required
+                                            data-original-title="Version is required."
+                                    />
 								</div>
 							</div>
 						</div>
@@ -728,12 +740,15 @@
 											</a>
 										</span>
 										<input  id="btn_enabled_date"
-                                                class="form-control darkBack"
+                                                class="form-control darkBack input_pdservice_start_date"
                                                 type="text"
                                                 name="btn_enabled_date"
                                                 value=""
                                                 style="color: #a4c6ff"
-                                                pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+                                                pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+                                                required
+                                                data-original-title="Start date is required."
+                                        />
 									</div>
 								</div>
 							</div>
@@ -755,12 +770,15 @@
 											</a>
 										</span>
 										<input  id="btn_end_date"
-										    	class="form-control darkBack"
+										    	class="form-control darkBack input_pdservice_end_date"
                                                 type="text"
                                                 name="btn_enabled_date"
                                                 value=""
                                                 style="color: #a4c6ff"
-                                                pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+                                                pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+                                                required
+                                                data-original-title="End date is required."
+                                        />
 									</div>
 								</div>
 							</div>
