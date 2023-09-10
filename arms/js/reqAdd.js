@@ -1199,6 +1199,11 @@ function registNewPopup() {
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
 
+	//요구사항 이름 초기화
+	$("#my_modal1 #req_title").val(null);
+	//에디터 내용 초기화
+	CKEDITOR.instances.modal_editor.setData("요구사항 내용을 기록합니다.");
+
 	//제품(서비스) 셋팅
 	var selectPdService = $("#selected_pdService").select2("data")[0].text;
 	$("#disabled_input_pdservice").val(selectPdService);
