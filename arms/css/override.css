@@ -2737,6 +2737,9 @@ table tbody tr td {
 .menu-wrap h4 {
 	margin-bottom: 1em;
 }
+.menu-wrap nav {
+	padding-left: 10px;
+}
 .menu-wrap a {
 	display: block;
 	margin-bottom: 10px;
@@ -2883,6 +2886,13 @@ table tbody tr td {
 		font-size: 40px;
 	}
 
+	.landing .widget-about {
+		padding: 80px 10px;
+	}
+	.about .feature {
+		width: 100%;
+	}
+
 	.visual-web {
 		display: none;
 	}
@@ -2899,14 +2909,14 @@ table tbody tr td {
 	.contact .form-wrap {
 		margin-top: 40px;
 	}
+	#footer {
+		padding: 40px 20px;
+	}
 	.menu-wrap {
 		width: 50%;
 		margin-bottom: 20px;
 	}
-	.landing .widget-about {
-		padding: 120px 10px;
-	}
-	.about .feature {
+	.menu-wrap.footer-logo {
 		width: 100%;
 	}
 }
