@@ -174,6 +174,56 @@
 
 		<!-- page specific -->
 		<script src="../reference/light-blue/js/landing.js"></script>
+
+        <!-- page specific application css/js -->
+        <style type="text/css">
+            @media (max-width: 767px){
+                .carousel-landing {
+                    height: 300px !important;
+                    margin-bottom: -24px;
+                }
+            }
+        </style>
+        <script type="text/javascript" charset="utf-8">
+            //<![CDATA[
+
+            // 초기 개발 및 확인 용도
+            $(function () {
+                const navWrap = document.querySelector(".navi-wrap");
+                const navToggle = document.querySelector(".navi-toggle");
+                const toggleIcon = document.querySelector(".mobile-nav-toggle");
+
+                function isMobile() {
+                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                }
+
+                function btnNavToggle() {
+                    if (toggleIcon.classList.contains("bi-list")) {
+                        navToggle.classList.add("active");
+                        toggleIcon.classList.remove("bi-list");
+                        toggleIcon.classList.add("bi-x");
+                        navWrap.classList.add("on");
+                    } else {
+                        navToggle.classList.remove("active");
+                        toggleIcon.classList.remove("bi-x");
+                        toggleIcon.classList.add("bi-list");
+                        navWrap.classList.remove("on");
+                    }
+                }
+
+                navToggle.addEventListener("click", btnNavToggle);
+                navWrap.addEventListener("click", btnNavToggle);
+
+                if (!isMobile()) {
+                    navToggle.classList.remove("active");
+                    toggleIcon.classList.remove("bi-x");
+                    toggleIcon.classList.add("bi-list");
+                    navWrap.classList.remove("on");
+                }
+            });
+
+            //]]>
+        </script>
 	</head>
 	<body class="background landing">
 		<header class="page-header container gnb">
@@ -224,7 +274,7 @@
 				</nav>
 			</div>
 		</header>
-		<div class="container visual-web">
+		<div class="container">
 			<div class="content">
 				<div
 					id="carousel-landing"
@@ -258,22 +308,47 @@
                                             style="font-size: 17px !important">
                                             <strong>A-RMS</strong>
                                         </h1>
-                                        <p class="hidden-xs"
-                                           style="font-size: 15px !important">
+                                        <p style="font-size: 15px !important">
                                             제품(서비스)의 요구사항을
                                         </p>
-                                        <p class="hidden-xs"
-                                           style="font-size: 15px !important">
+                                        <p style="font-size: 15px !important">
                                             ALM Project 에 Issue 로 전달하고 수집합니다.
                                         </p>
                                         <br />
-                                        <p>
-                                            <a
-                                                href="template.html?page=pdService"
+                                        <div
+
+                                            class="btn btn-lg btn-white font13">
+                                            요구사항은 문서로 관리하고 개발자는 ALM 으로 일을합니다.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="animated fadeInLeftBig text-align-center">
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <h1
+                                                class="slide-one-header"
+                                                style="font-size: 17px !important">
+                                            <strong>A-RMS</strong>
+                                        </h1>
+                                        <p style="font-size: 15px !important">
+                                            제품(서비스)의 요구사항을
+                                        </p>
+                                        <p style="font-size: 15px !important">
+                                            ALM Project 에 Issue 로 전달하고 수집합니다.
+                                        </p>
+                                        <br />
+                                        <div
+
                                                 class="btn btn-lg btn-white font13">
-                                                요구사항은 문서로 관리하고 개발자는 ALM 으로 일을합니다.
-                                            </a>
-                                        </p>
+                                            요구사항은 문서로 관리하고 개발자는 ALM 으로 일을합니다.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -283,41 +358,26 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="animated fadeInLeftBig text-align-center">
+                                        <br />
+                                        <br />
+                                        <br />
                                         <h1
                                                 class="slide-one-header"
                                                 style="font-size: 17px !important">
                                             <strong>A-RMS</strong>
                                         </h1>
-                                        <p class="hidden-xs"
-                                           style="font-size: 15px !important">
+                                        <p style="font-size: 15px !important">
                                             제품(서비스)의 요구사항을
                                         </p>
-                                        <p class="hidden-xs"
-                                           style="font-size: 15px !important">
+                                        <p style="font-size: 15px !important">
                                             ALM Project 에 Issue 로 전달하고 수집합니다.
                                         </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        <br />
+                                        <div
 
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="animated fadeInLeftBig text-align-center">
-                                        <h1
-                                                class="slide-one-header"
-                                                style="font-size: 17px !important">
-                                            <strong>A-RMS</strong>
-                                        </h1>
-                                        <p class="hidden-xs"
-                                           style="font-size: 15px !important">
-                                            제품(서비스)의 요구사항을
-                                        </p>
-                                        <p class="hidden-xs"
-                                           style="font-size: 15px !important">
-                                            ALM Project 에 Issue 로 전달하고 수집합니다.
-                                        </p>
+                                                class="btn btn-lg btn-white font13">
+                                            요구사항은 문서로 관리하고 개발자는 ALM 으로 일을합니다.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -336,50 +396,6 @@
 						data-slide="next">
 						<span class="icon-next"></span>
 					</a>
-				</div>
-			</div>
-		</div>
-		<div class="container visual-mobile">
-			<div class="content-view">
-				<div class="content-item plan">
-					<img
-						src="./img/landing/plan.jpg"
-						alt="plan" />
-				</div>
-				<div class="content-item review">
-					<img
-						src="./img/landing/review.png"
-						alt="review" />
-				</div>
-
-				<div class="content-item develop">
-					<img
-						src="./img/landing/develop.png"
-						alt="develop" />
-				</div>
-				<div class="content-item what">
-					<img
-						src="./img/landing/what.jpg"
-						alt="what" />
-				</div>
-				<div class="content-item developer">
-					<img
-						src="./img/landing/developer.jpg"
-						alt="developer" />
-				</div>
-				<div class="content-item stop">
-					<img
-						src="./img/landing/stop.png"
-						alt="stop" />
-				</div>
-				<div class="content-item arms">
-					<p>
-						<strong>ARMS</strong>
-						는 Project 요구사항을 ALM에
-						<br />
-						<strong>연결하고 관리</strong>
-						합니다.
-					</p>
 				</div>
 			</div>
 		</div>
@@ -615,42 +631,5 @@
 				</div>
 			</div>
 		</footer>
-
-		<script>
-			let vh = window.innerHeight * 0.01;
-			const visualMobile = document.querySelector(".visual-mobile");
-			const navWrap = document.querySelector(".navi-wrap");
-			const navToggle = document.querySelector(".navi-toggle");
-			const toggleIcon = document.querySelector(".mobile-nav-toggle");
-
-			function isMobile() {
-				return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-			}
-
-			function btnNavToggle() {
-				if (toggleIcon.classList.contains("bi-list")) {
-					navToggle.classList.add("active");
-					toggleIcon.classList.remove("bi-list");
-					toggleIcon.classList.add("bi-x");
-					navWrap.classList.add("on");
-				} else {
-					navToggle.classList.remove("active");
-					toggleIcon.classList.remove("bi-x");
-					toggleIcon.classList.add("bi-list");
-					navWrap.classList.remove("on");
-				}
-			}
-
-			visualMobile.style.setProperty("--vh", `${vh}px`);
-			navToggle.addEventListener("click", btnNavToggle);
-			navWrap.addEventListener("click", btnNavToggle);
-
-			if (!isMobile()) {
-				navToggle.classList.remove("active");
-				toggleIcon.classList.remove("bi-x");
-				toggleIcon.classList.add("bi-list");
-				navWrap.classList.remove("on");
-			}
-		</script>
 	</body>
 </html>
