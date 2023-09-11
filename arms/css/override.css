@@ -2494,7 +2494,7 @@ table tbody tr td {
 }
 .section-title h2 {
 	text-align: center;
-	font-size: 32px;
+	font-size: 28px;
 	font-weight: bold;
 	text-transform: uppercase;
 	padding-bottom: 20px;
@@ -2519,7 +2519,7 @@ table tbody tr td {
 	display: block;
 	width: 40px;
 	height: 3px;
-	background: #2477ff;
+	background: #5B617B;
 	bottom: 0;
 	left: calc(50% - 20px);
 }
@@ -2537,8 +2537,9 @@ table tbody tr td {
 }
 
 .about h2 {
-	color: #666;
+	color: #5B617B;
 	margin-bottom: 7%;
+	padding-top: 20px;
 }
 .about .section-title {
 	margin-bottom: 8%;
