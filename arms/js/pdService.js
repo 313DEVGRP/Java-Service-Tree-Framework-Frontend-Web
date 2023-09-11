@@ -544,7 +544,7 @@ function dataTableLoad() {
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdServicePure/getPdServiceMonitor.do";
 	var jsonRoot = "response";
-	var isServerSide = false;
+	var isServerSide = true;
 
 	dataTableRef = dataTable_build(
 		jquerySelector,
