@@ -2907,6 +2907,8 @@ table tbody tr td {
 
 	.carousel-section .highlights {
 		display: block;
+		width: 70%;
+		margin: 0 auto;
 		word-break: keep-all;
 		text-wrap: balance;
 	}
