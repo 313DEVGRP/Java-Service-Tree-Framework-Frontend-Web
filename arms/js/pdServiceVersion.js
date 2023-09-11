@@ -144,7 +144,7 @@ function dataTableLoad() {
 	var rowsGroupList = [];
 	var columnDefList = [];
 	var selectList = {};
-	var orderList = [[1, "asc"]];
+	var orderList = [[0, "asc"]];
 	var buttonList = [];
 
 	var jquerySelector = "#pdservice_table";

@@ -538,13 +538,13 @@ function dataTableLoad() {
 	var rowsGroupList = [];
 	var columnDefList = [];
 	var selectList = {};
-	var orderList = [[0, "DESC"]];
+	var orderList = [[0, "asc"]];
 	var buttonList = [];
 
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdServicePure/getPdServiceMonitor.do";
 	var jsonRoot = "response";
-	var isServerSide = true;
+	var isServerSide = false;
 
 	dataTableRef = dataTable_build(
 		jquerySelector,

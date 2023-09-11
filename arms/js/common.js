@@ -868,7 +868,7 @@ function dataTable_build(
 			dataSrc: jsonRoot
 		},
 		serverSide: isServerSide,
-		stateSave: true,
+		stateSave: false,
 		stateDuration: -1,
 		destroy: true,
 		processing: true,
