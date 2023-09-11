@@ -2494,39 +2494,8 @@ table tbody tr td {
 /*--------------------------------------------------------------
 # Section title
 --------------------------------------------------------------*/
-.section-title {
-	margin-bottom: 15%;
-}
 .section-title h2 {
-	text-align: center;
-	font-size: 17px;
-	font-weight: bold;
-	text-transform: uppercase;
-	padding-bottom: 20px;
-	position: relative;
 	color: #fff;
-}
-
-.section-title h2::before {
-	content: "";
-	position: absolute;
-	display: block;
-	width: 120px;
-	height: 1px;
-	background: #ddd;
-	bottom: 1px;
-	left: calc(50% - 60px);
-}
-
-.section-title h2::after {
-	content: "";
-	position: absolute;
-	display: block;
-	width: 40px;
-	height: 3px;
-	background: #5b617b;
-	bottom: 0;
-	left: calc(50% - 20px);
 }
 
 .section-title p {
@@ -2539,16 +2508,13 @@ table tbody tr td {
 # About
 --------------------------------------------------------------*/
 .landing .widget-about {
-	padding: 120px 20px;
+	padding: 60px 20px;
 }
 
 .about h2 {
 	color: #666;
 	margin-bottom: 7%;
 	padding-top: 20px;
-}
-.about .section-title {
-	margin-bottom: 8%;
 }
 .about .section-title p,
 .about .section-title label {
@@ -2586,11 +2552,26 @@ table tbody tr td {
 # Contributors
 --------------------------------------------------------------*/
 #contributors {
-	margin: 100px auto;
+	margin: 60px auto;
 }
 #contributors .section-title {
 	margin-bottom: 5%;
 }
+
+/*--------------------------------------------------------------
+# Resume
+--------------------------------------------------------------*/
+#resume h2 {
+	color: #666;
+}
+
+/*--------------------------------------------------------------
+# Portfolio
+--------------------------------------------------------------*/
+#portfolio .section-title p {
+	color: #fff;
+}
+
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
@@ -2739,6 +2720,8 @@ table tbody tr td {
 --------------------------------------------------------------*/
 #footer {
 	padding: 80px 20px;
+	text-align: left;
+	background: none;
 }
 .footer {
 	display: flex;
