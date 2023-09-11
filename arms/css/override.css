@@ -2886,9 +2886,18 @@ table tbody tr td {
 		font-size: 40px;
 	}
 
+	.carousel-section,
+	#concept,
+	#features {
+		padding-bottom: 60px;
+	}
+	#concept {
+		padding-top: 60px;
+	}
 	.landing .widget-about {
 		padding: 80px 10px;
 	}
+
 	.about .feature {
 		width: 100%;
 	}
