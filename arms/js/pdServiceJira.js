@@ -345,11 +345,11 @@ function versionClicks(element, c_id, c_title) {
 	// console.log("pdserviceversion_link -> " +  c_id );
 
 	// 이미 등록된 제품(서비스)-버전-지라 연결 정보가 있는지 확인
+	console.log("선택한 버전의 제품서비스 아이디 : " + $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id);
 	$.ajax({
 		url: "/auth-user/api/arms/globaltreemap/getConnectInfo/pdService/pdServiceVersion/jiraProject.do",
 		type: "GET",
 		data: {
-			pdservice_link: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
 			pdserviceversion_link: c_id
 		},
 		contentType: "application/json;charset=UTF-8",
