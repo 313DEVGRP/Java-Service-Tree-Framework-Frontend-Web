@@ -1,22 +1,6 @@
 <ul
 	id="side-nav"
 	class="side-nav">
-<!--	<li-->
-<!--		style="padding-top: 40px;"-->
-<!--		id="sidebar_menu_dashboard">-->
-<!--		<a href="template.html?page=dashboard">-->
-<!--			<i class="fa fa-home"></i>-->
-<!--			<span class="name">Dashboard</span>-->
-<!--		</a>-->
-<!--	</li>-->
-<!--	<li-->
-<!--		class=""-->
-<!--		id="sidebar_menu_wizard">-->
-<!--		<a href="template.html?page=wizard">-->
-<!--			<i class="fa fa-magic"></i>-->
-<!--			<span class="name">Wizard</span>-->
-<!--		</a>-->
-<!--	</li>-->
 	<li class="category-wrap" style="padding-top: 40px;">
 		<span   class="category-label"
 			    id="sidebar_menu_product">
@@ -38,8 +22,15 @@
     <li class="category-wrap">
         <span class="category-label"
               id="sidebar_menu_jira">
-            <img src="./img/jira/mark-gradient-neutral-jira.svg" id="side_jira_neutral_icon" class="hidden" width="17px" style="margin-right: 3px"></img>
-            <img src="./img/jira/mark-gradient-white-jira.svg" id="side_jira_white_icon"  width="17px" style="margin-right: 3px"></img>
+            <img src="./img/jira/mark-gradient-neutral-jira.svg"
+                 id="side_jira_neutral_icon"
+                 class="hidden"
+                 width="17px"
+                 style="margin-right: 3px"></img>
+            <img src="./img/jira/mark-gradient-white-jira.svg"
+                 id="side_jira_white_icon"
+                 width="17px"
+                 style="margin-right: 3px"></img>
             JIRA
         </span>
         <ul id="jira_elements_collapse">
@@ -64,42 +55,34 @@
 				id="sidebar_menu_requirement_regist">
 				<a href="template.html?page=reqAdd">등록 관리</a>
 			</li>
-<!--			<li-->
-<!--				class=""-->
-<!--				id="sidebar_menu_requirement_review">-->
-<!--				<a href="template.html?page=reqReview">리뷰 관리</a>-->
-<!--			</li>-->
 			<li class=""
 				id="sidebar_menu_requirement_status">
 				<a href="template.html?page=reqStatus">현황 관리</a>
 			</li>
 		</ul>
 	</li>
-<!--	<li class="category-wrap">-->
-<!--		<span class="category-label">-->
-<!--			<i class="fa fa-magic"></i>-->
-<!--			<span class="name">Analisys</span>-->
-<!--		</span>-->
-<!--		<ul id="analisys_elements_collapse">-->
-<!--			<li class=""><a href="template.html?page=charts">Time 분석</a></li>-->
-<!--			<li class=""><a href="template.html?page=icons">Scope 분석</a></li>-->
-<!--			<li class="">-->
-<!--				<a-->
-<!--					href="template.html?page=maps"-->
-<!--					data-no-pjax>-->
-<!--					Resource 분석-->
-<!--				</a>-->
-<!--			</li>-->
-<!--			<li class=""><a href="template.html?page=icons">진척 상황 분석</a></li>-->
-<!--			<li class="">-->
-<!--				<a-->
-<!--					href="template.html?page=maps"-->
-<!--					data-no-pjax>-->
-<!--					제품(서비스) 출시-->
-<!--				</a>-->
-<!--			</li>-->
-<!--		</ul>-->
-<!--	</li>-->
+
+    <li class="category-wrap">
+		<span   class="category-label"
+                id="sidebar_menu_management">
+			<i class="fa fa-codepen"></i>
+			Management
+		</span>
+        <ul id="management_elements_collapse">
+            <li class=""
+                id="sidebar_menu_management_document">
+                <a href="./docs">문서 관리</a>
+            </li>
+            <li class=""
+                id="sidebar_menu_management_devtools">
+                <a href="template.html?page=devtools">개발 툴</a>
+            </li>
+            <li class=""
+                id="sidebar_menu_management_license">
+                <a href="template.html?page=license">라이 선스</a>
+            </li>
+        </ul>
+    </li>
 </ul>
 
 <h5 class="sidebar-nav-title">

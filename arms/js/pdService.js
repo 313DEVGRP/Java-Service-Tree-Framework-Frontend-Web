@@ -87,9 +87,9 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded"){
-							CKEDITOR.replace("input_pdservice_editor",{ skin: "prestige" }); //편집하기
-							CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" }); //팝업편집
-							CKEDITOR.replace("modal_editor",{ skin: "prestige" }); //서비스추가
+							CKEDITOR.replace("input_pdservice_editor",{ skin: "office2013" }); //편집하기
+							CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" }); //팝업편집
+							CKEDITOR.replace("modal_editor",{ skin: "office2013" }); //서비스추가
 							clearInterval(waitCKEDITOR);
 						}
 					}
@@ -172,6 +172,15 @@ function popup_size_setting(){
 	$("#modal_popup_id").click(function () {
 		console.log("modal_popup_id clicked");
 		var height = $(document).height() - 600;
+
+		//모달 초기화
+		$("#my_modal2").on("hidden.bs.modal", function (e) {
+			$(this).find('form')[0].reset();
+			$("#popup_editview_pdservice_owner").val(null).trigger("change");
+			$("#popup_editview_pdservice_reviewers").val(null).trigger("change");
+			CKEDITOR.instances.modal_editor.setData("<p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>"); //에디터 초기화
+		});
+
 		$(".modal-body")
 			.find(".cke_contents:eq(0)")
 			.css("height", height + "px");
@@ -186,6 +195,7 @@ function popup_size_setting(){
 
 		// 데이터 셋팅
 		var editorData = CKEDITOR.instances.input_pdservice_editor.getData();
+		console.log(editorData);
 		CKEDITOR.instances.extend_modal_editor.setData(editorData);
 		CKEDITOR.instances.extend_modal_editor.setReadOnly(false);
 

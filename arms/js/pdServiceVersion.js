@@ -68,8 +68,8 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded") {
-							CKEDITOR.replace("input_pdservice_editor", {skin: "prestige"});
-							CKEDITOR.replace("extend_modal_editor", {skin: "prestige"});
+							CKEDITOR.replace("input_pdservice_editor", {skin: "office2013"});
+							CKEDITOR.replace("extend_modal_editor", {skin: "office2013"});
 							clearInterval(waitCKEDITOR);
 						}
 					}
@@ -260,6 +260,9 @@ function click_btn_for_delete_version() {
 function click_btn_for_update_version() {
 	$("#version_update").click(function () {
 		console.log("update btn");
+		if (modalFormValidate() === false) {
+			return;
+		}
 
 		var send_data = {
 			c_id: selectVersion,
@@ -292,6 +295,9 @@ function click_btn_for_update_version() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function modalPopupNewUpdate() {
 	console.log("save btn");
+	if (modalFormValidate("") === false) {
+		return;
+	}
 
 	var send_data = {
 		c_id: selectId,
@@ -328,6 +334,11 @@ function modalPopupNewUpdate() {
 // 버전 팝업 수정 업데이트
 ////////////////////////////////////////////////////////////////////////////////////////
 function modalPopupUpdate() {
+	console.log("modalPopupUpdate");
+	if (modalFormValidate("") === false) {
+		return;
+	}
+
 	$.ajax({
 		url: "/auth-user/api/arms/pdServiceVersion/updateNode.do",
 		type: "put",
@@ -349,6 +360,65 @@ function modalPopupUpdate() {
 			}
 		}
 	});
+}
+////////////////////////////////////////////////////////////////////////////////////////
+//버전 등록,수정 관련 3가지 케이스에 대한 유효성 검증
+//모달 여부에 따라 form이 정해지고, 해당 form 하위의 required 속성을 가진 input 태그를 모두 체크합니다.
+////////////////////////////////////////////////////////////////////////////////////////
+function modalFormValidate(formId) {
+	console.log("modalFormValidate");
+	if(formId === "") {
+		// 모달 form
+		return formValidate($('.product-service-version-modal-form').find('input[required]'));
+	} else {
+		// 일반 form
+		return formValidate($('.product-service-version-form').find('input[required]'));
+	}
+
+}
+function formValidate(formInput) {
+	console.log("formValidate");
+	let startDateElement;
+	let endDateElement;
+
+	for (let i = 0; i < formInput.length; i++) {
+		let input = $(formInput[i]);
+
+		if (input.hasClass('input_pdservice_start_date')) {
+			startDateElement = input;
+		}
+
+		if (input.hasClass('input_pdservice_end_date')) {
+			endDateElement = input;
+		}
+
+		if (!input.val().trim()) {
+			let message = input.data('original-title') || "Some explanation text here";
+			alert(message);
+			input.focus();
+			return false;
+		}
+
+		if (input.hasClass('input_pdservice_version') && !isValidVersion(input.val())) {
+			alert("The version is invalid. Please use the 0.1 or 0.0.1 format");
+			input.focus();
+			return false;
+		}
+
+	}
+
+	const startDate = new Date(startDateElement.val());
+	const endDate = new Date(endDateElement.val());
+	if (startDate && endDate && startDate > endDate) {
+		alert("The end date must be the same or after the start date.");
+		endDateElement.focus();
+		return false;
+	}
+}
+
+function isValidVersion(version) {
+	const regex = /^(\d+\.\d+\.\d+)$/;
+	return regex.test(version);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

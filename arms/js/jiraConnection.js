@@ -87,10 +87,10 @@ function execDocReady() {
                 try {
                     if (window.CKEDITOR) {
                         if(window.CKEDITOR.status == "loaded"){
-                            CKEDITOR.replace("input_jira_server_editor",{ skin: "prestige" });
-                            CKEDITOR.replace("detailview_jira_server_contents",{ skin: "prestige" });
-                            CKEDITOR.replace("extend_modal_editor",{ skin: "prestige" }); //팝업편집
-                            CKEDITOR.replace("modal_editor",{ skin: "prestige" });
+                            CKEDITOR.replace("input_jira_server_editor",{ skin: "office2013" });
+                            CKEDITOR.replace("detailview_jira_server_contents",{ skin: "office2013" });
+                            CKEDITOR.replace("extend_modal_editor",{ skin: "office2013" }); //팝업편집
+                            CKEDITOR.replace("modal_editor",{ skin: "office2013" });
                             clearInterval(waitCKEDITOR);
                         }
                     }
@@ -1320,7 +1320,7 @@ function click_projectList_table(projectName) {
     //풀사이즈 그리드이면 줄이고, 호스트 정보를 보여준다
     console.log($("#serverInfo_Wrapper")[0].className);
     console.log("issue_type selectProjectId => " + selectProjectId);
-    if ($("#serverInfo_Wrapper")[0].className == "col-lg-7") {
+    if ($("#serverInfo_Wrapper").hasClass("col-lg-7")) {
         //서버 정보 줄이기
         $("#serverInfo_Wrapper").removeClass("col-lg-7").addClass("col-lg-4");
 

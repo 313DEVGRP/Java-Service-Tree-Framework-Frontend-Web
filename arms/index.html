@@ -1,514 +1,1745 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>a-RMS</title>
+	<head>
+		<title>A-RMS</title>
 
-    <meta charset="utf-8" />
-    <meta
-            http-equiv="X-UA-Compatible"
-            content="IE=edge" />
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<meta charset="utf-8" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="IE=edge" />
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-    <meta
-            http-equiv="Expire"
-            content="-1" />
-    <meta
-            http-equiv="Keywords"
-            content="a-RMS" />
-    <meta
-            http-equiv="Reply-to"
-            content="admin@a-rms.net" />
-    <meta
-            http-equiv="Content-Language"
-            content="Korean" />
-    <meta
-            http-equiv="Last-Modified"
-            content="Thu 01 Nov 2016 23:59:59" />
-    <meta
-            http-equiv="Organization"
-            content="www.a-rms.net" />
-    <meta
-            http-equiv="Content-Type"
-            content="text/html;charset=utf-8" />
-    <meta
-            http-equiv="Cache-Control"
-            content="no-cache" />
-    <meta
-            http-equiv="Pragma"
-            content="no-cache" />
-    <meta
-            http-equiv="imagetoolbar"
-            content="no" />
-    <meta
-            http-equiv="content-Script-type"
-            content="text/javascript" />
-    <meta
-            http-equiv="content-Style-type"
-            content="text/css" />
+		<meta
+			http-equiv="Expire"
+			content="-1" />
+		<meta
+			http-equiv="Keywords"
+			content="A-RMS" />
+		<meta
+			http-equiv="Reply-to"
+			content="admin@a-rms.net" />
+		<meta
+			http-equiv="Content-Language"
+			content="Korean" />
+		<meta
+			http-equiv="Last-Modified"
+			content="Thu 01 Nov 2016 23:59:59" />
+		<meta
+			http-equiv="Organization"
+			content="www.a-rms.net" />
+		<meta
+			http-equiv="Content-Type"
+			content="text/html;charset=utf-8" />
+		<meta
+			http-equiv="Cache-Control"
+			content="no-cache" />
+		<meta
+			http-equiv="Pragma"
+			content="no-cache" />
+		<meta
+			http-equiv="imagetoolbar"
+			content="no" />
+		<meta
+			http-equiv="content-Script-type"
+			content="text/javascript" />
+		<meta
+			http-equiv="content-Style-type"
+			content="text/css" />
 
-    <meta
-            name="robots"
-            content="ALL, INDEX, FOLLOW" />
-    <meta
-            name="Subject"
-            content="a-RMS" />
-    <meta
-            name="Filename"
-            content="ARMS.html" />
-    <meta
-            name="Author-Date"
-            content="31 Oct 16" />
-    <meta
-            name="Date"
-            content="31 Oct 16" />
-    <meta
-            name="Author"
-            content="LeeDongmin" />
-    <meta
-            name="Other Agent"
-            content="LeeDongMin" />
-    <meta
-            name="Email"
-            content="admin@a-rms.net" />
-    <meta
-            name="Reply-To"
-            content="admin@a-rms.net" />
-    <meta
-            name="Project"
-            content="a-RMS" />
-    <meta
-            name="Status"
-            content="Draft" />
-    <meta
-            name="Location"
-            content="South Korea" />
-    <meta
-            name="/distribution"
-            content="aRMS" />
-    <meta
-            name="Description"
-            content="Standard Web Project" />
-    <meta
-            name="verify-v1"
-            content="Eal6+fiCjgKAZb5A6pRvSLmsh9NLF2AsqxqJrLuFoAs=" />
-    <meta
-            name="Revision"
-            content="1.0" />
-    <meta
-            name="Generator"
-            content="eclipse 3.6.1" />
-    <meta
-            name="Classification"
-            content="Development,Deployment" />
-    <meta
-            name="Copyright"
-            content="CopyRight@aRMS. All Rights Reserved" />
-    <meta
-            name="title"
-            content="a-RMS" />
-    <meta
-            name="revisit-after"
-            content="7 days" />
-    <meta
-            name="siteinfo"
-            content="http://www.a-rms.net/robots.txt" />
-    <meta
-            name="HandheldFriendly"
-            content="True" />
-    <meta
-            name="MobileOptimized"
-            content="320" />
+		<meta
+			name="robots"
+			content="ALL, INDEX, FOLLOW" />
+		<meta
+			name="Subject"
+			content="A-RMS" />
+		<meta
+			name="Filename"
+			content="ARMS.html" />
+		<meta
+			name="Author-Date"
+			content="31 Oct 16" />
+		<meta
+			name="Date"
+			content="31 Oct 16" />
+		<meta
+			name="Author"
+			content="LeeDongmin" />
+		<meta
+			name="Other Agent"
+			content="LeeDongMin" />
+		<meta
+			name="Email"
+			content="admin@a-rms.net" />
+		<meta
+			name="Reply-To"
+			content="admin@a-rms.net" />
+		<meta
+			name="Project"
+			content="A-RMS" />
+		<meta
+			name="Status"
+			content="Draft" />
+		<meta
+			name="Location"
+			content="South Korea" />
+		<meta
+			name="/distribution"
+			content="aRMS" />
+		<meta
+			name="Description"
+			content="Standard Web Project" />
+		<meta
+			name="verify-v1"
+			content="Eal6+fiCjgKAZb5A6pRvSLmsh9NLF2AsqxqJrLuFoAs=" />
+		<meta
+			name="Revision"
+			content="1.0" />
+		<meta
+			name="Generator"
+			content="eclipse 3.6.1" />
+		<meta
+			name="Classification"
+			content="Development,Deployment" />
+		<meta
+			name="Copyright"
+			content="CopyRight@aRMS. All Rights Reserved" />
+		<meta
+			name="title"
+			content="A-RMS" />
+		<meta
+			name="revisit-after"
+			content="7 days" />
+		<meta
+			name="siteinfo"
+			content="http://www.a-rms.net/robots.txt" />
+		<meta
+			name="HandheldFriendly"
+			content="True" />
+		<meta
+			name="MobileOptimized"
+			content="320" />
 
-    <meta
-            property="og:type"
-            content="website" />
-    <meta
-            property="og:title"
-            content="a-RMS" />
-    <meta
-            property="og:url"
-            content="http://www.a-rms.net/" />
-    <meta
-            property="og:site_name"
-            content="a-RMS" />
+		<meta
+			property="og:type"
+			content="website" />
+		<meta
+			property="og:title"
+			content="A-RMS" />
+		<meta
+			property="og:url"
+			content="http://www.a-rms.net/" />
+		<meta
+			property="og:site_name"
+			content="A-RMS" />
 
-    <!-- favicon -->
-    <link
-            rel="icon"
-            href="./img/313_logo.ico"
-            type="image/x-icon" />
-    <link
-            rel="shortcut icon"
-            href="./img/313_logo.ico"
-            type="image/x-icon" />
+		<!-- favicon -->
+		<link
+			rel="icon"
+			href="./img/313_logo.ico"
+			type="image/x-icon" />
+		<link
+			rel="shortcut icon"
+			href="./img/313_logo.ico"
+			type="image/x-icon" />
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="../reference/jquery-plugins/html5shiv.js"></script>
-    <script src="../reference/jquery-plugins/respond.js"></script>
-    <![endif]-->
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="../reference/jquery-plugins/html5shiv.js"></script>
+			<script src="../reference/jquery-plugins/respond.js"></script>
+		<![endif]-->
 
-    <link
-            href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
-            rel="stylesheet" />
-    <link
-            href="../reference/light-blue/css/application.min.css"
-            rel="stylesheet" />
-    <link
-            href="css/override.css"
-            rel="stylesheet" />
+		<link
+			href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
+			rel="stylesheet" />
+		<link
+			href="./html/armsDetailExceptTemplate/assets/vendor/aos/aos.css"
+			rel="stylesheet" />
+		<link
+			href="./html/armsDetailExceptTemplate/assets/vendor/bootstrap/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<link
+			href="./html/armsDetailExceptTemplate/assets/vendor/bootstrap-icons/bootstrap-icons.css"
+			rel="stylesheet" />
+		<link
+			href="./html/armsDetailExceptTemplate/assets/vendor/glightbox/css/glightbox.min.css"
+			rel="stylesheet" />
+		<link
+			href="./html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.css"
+			rel="stylesheet" />
+		<link
+			href="../reference/light-blue/css/application.min.css"
+			rel="stylesheet" />
+		<link
+			href="./html/armsDetailExceptTemplate/assets/css/style.css"
+			rel="stylesheet" />
+		<link
+			href="css/override.css"
+			rel="stylesheet" />
 
-    <!-- jquery and friends -->
-    <script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
+		<!-- jquery and friends -->
+		<script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
 
-    <!-- bootstrap default plugins -->
-    <script src="../reference/light-blue/lib/bootstrap/transition.js"></script>
-    <script src="../reference/light-blue/lib/bootstrap/carousel.js"></script>
+		<!-- bootstrap default plugins -->
+		<script src="../reference/light-blue/lib/bootstrap/transition.js"></script>
+		<script src="../reference/light-blue/lib/bootstrap/carousel.js"></script>
 
-    <!-- page specific -->
-    <script src="../reference/light-blue/js/landing.js"></script>
+		<!-- page specific -->
+		<script src="../reference/light-blue/js/landing.js"></script>
 
-</head>
-<body class="background landing">
-<div class="container">
-    <header class="page-header">
-        <div class="navbar">
-            <div class="logo pull-left">
-                <h4>
-                    <a href="index.html">
-                        <img
-                                src="./img/313_logo.png"
-                                width="170px" />
-                    </a>
-                </h4>
-            </div>
-        </div>
-    </header>
-    <div class="content">
-        <div
-                id="carousel-landing"
-                class="carousel slide carousel-landing carousel-fade">
-            <ol class="carousel-indicators">
-                <li
-                        data-target="#carousel-landing"
-                        data-slide-to="0"
-                        class="active"></li>
-                <li
-                        data-target="#carousel-landing"
-                        data-slide-to="1"
-                        class=""></li>
-                <li
-                        data-target="#carousel-landing"
-                        data-slide-to="2"
-                        class=""></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="item active">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="animated fadeInLeftBig">
-                                <h1
-                                        class="slide-one-header"
-                                        style="font-size: 17px !important">
-                                    <strong>aRMS</strong>
-                                    <span>는</span>
-                                </h1>
-                                <p class="hidden-xs">
-                                    <strong>제품(서비스)</strong>
-                                    관점의 JIRA 전용 RMS 입니다.
-                                </p>
-                                <p class="hidden-xs">
-                                    제품(서비스) 중심으로 Jira Project를 분석하고,
-                                    <br />
-                                    제품(서비스) 중심으로 요구사항을 Jira Project 에 전파합니다.
-                                </p>
-                                <br />
-                                <p>
-                                    <a
-                                            href="template.html?page=pdService"
-                                            class="btn btn-lg btn-white">
-                                        Preview &nbsp;
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-<!--                                    <a-->
-<!--                                            href="http://www.313.co.kr"-->
-<!--                                            class="btn btn-lg btn-transparent">-->
-<!--                                        Contact us &nbsp;-->
-<!--                                        <i class="fa eicon-qq"></i>-->
-<!--                                    </a>-->
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="text-align-center animated fadeInRightBig">
-                                <img
-                                        src="../reference/light-blue/img/jpeg/light-blue-preview-1.png"
-                                        alt="Second slide" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <h1
-                            class="slide-two-header text-align-center animated fadeInDown"
-                            style="font-size: 24px !important">
-                        <strong>aRMS</strong>
-                        <span class="font16">는</span>
-                        제품(서비스) 관점
-                        <span class="font16">으로</span>
-                        <strong>다양한 분석 지표</strong>
-                        <span class="font16">를 지속적으로 업데이트 및 제공합니다.</span>
-                    </h1>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="animated fadeInLeftBig">
-                                <p>
-                                    <a href="template.html?page=pdService">
-                                        <img
-                                                src="../reference/light-blue/img/jpeg/light-blue-laptop-transparent.png"
-                                                alt="" />
-                                    </a>
-                                </p>
-                                <p class="text-align-center">
-                                    <a
-                                            href="template.html?page=pdService"
-                                            class="btn btn-transparent btn-lg btn-version-preview">
-                                        Preview &nbsp;
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="animated fadeInRightBig">
-                                <p>
-                                    <a href="http://www.313.co.kr">
-                                        <img
-                                                src="../reference/light-blue/img/jpeg/light-blue-laptop-white.png"
-                                                alt="" />
-                                    </a>
-                                </p>
-                                <p class="text-align-center">
-                                    <a
-                                            href="http://www.313.co.kr"
-                                            class="btn btn-white btn-lg btn-version-preview">
-                                        Contact us &nbsp;
-                                        <i class="fa eicon-qq"></i>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="animated fadeInLeft">
-                                <h1
-                                        class="slide-three-header"
-                                        style="font-size: 17px !important">
-                                    Jira를 쓰고 계십니까?
-                                    <br />
-                                    <br />
-                                    제품(서비스)를 만들고 계십니까?
-                                    <br />
-                                    <br />
-                                    <strong>aRMS가 필요합니다.!</strong>
-                                    <br />
-                                    <br />
-                                    제품(서비스)의 요구사항을 관리 하고,
-                                    <br />
-                                    <br />
-                                    제품(서비스)의 진척도를 확인 하고,
-                                    <br />
-                                    <br />
-                                    제품(서비스)의 출시를 결정 할 수 있습니다.
-                                </h1>
-                                <p>
-                                    <a
-                                            href="template.html?page=pdService"
-                                            class="btn btn-white btn-lg"
-                                            target="_blank">
-                                        Test It
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <p
-                                    class="animated fadeInUp"
-                                    style="margin-top: 20px">
-                                <img
-                                        src="../reference/light-blue/img/jpeg/light-blue-phone.png"
-                                        alt="" />
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a
-                    class="left carousel-control carousel-control-landing"
-                    href="#carousel-landing"
-                    data-slide="prev">
-                <span class="icon-prev"></span>
-            </a>
-            <a
-                    class="right carousel-control carousel-control-landing"
-                    href="#carousel-landing"
-                    data-slide="next">
-                <span class="icon-next"></span>
-            </a>
-        </div>
-    </div>
-</div>
-<div
-        id="about"
-        class="widget widget-white widget-about">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-offset-1 col-sm-10">
-                <h2>
-                    atlassian
-                    <strong>RMS</strong>
-                </h2>
-                <p>
-                    atlassian
-                    <strong>Requirements Managment System</strong>
-                    은 전세계에서 유일한 Jira 를 기반한 요구사항 관리 시스템입니다.
-                </p>
-                <div class="row features">
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-												<span class="icon background-danger">
-													<i class="fa fa-bold"></i>
-												</span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>Scope</h4>
-                                    <p>제품(서비스)의 요구사항이 Jira의 END USER 까지 공유</p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-												<span class="icon background-warning">
-													<i class="fa fa-magic"></i>
-												</span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>Cost</h4>
-                                    <p>
-                                        제품(서비스)의 Jira 분석
-                                        <br />
-                                        &#10132; 정확한 Resource 통계
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-												<span class="icon background-success">
-													<i class="fa fa-wrench"></i>
-												</span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>Time</h4>
-                                    <p>
-                                        제품(서비스) Jira Project 맵핑
-                                        <br />
-                                        &#10132; 실질적인 진척도 측정
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row features">
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-												<span class="icon background-primary">
-													<i class="fa fa-superscript"></i>
-												</span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>제품(서비스)</h4>
-                                    <p>
-                                        aRMS는 제품과 서비스를 기준
-                                        <br />
-                                        &#10132; 데이터를 구조화 합니다.
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-												<span class="icon background-lime">
-													<i class="fa fa-check"></i>
-												</span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>요구사항</h4>
-                                    <p>
-                                        ARMS는 제품과 서비스를 기준
-                                        <br />
-                                        &#10132; 요구사항을 관리합니다.
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-												<span class="icon background-info">
-													<i class="fa fa-css3"></i>
-												</span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>Test(QA)</h4>
-                                    <p>
-                                        ARMS는 제품과 서비스를 기준
-                                        <br />
-                                        &#10132; 요구사항의 테스트를 관리
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</body>
+		<!-- page specific application css/js -->
+		<style type="text/css">
+			@media (max-width: 767px) {
+				.carousel-landing {
+					height: 300px !important;
+					margin-bottom: -24px;
+				}
+			}
+			@media (max-width: 767px) {
+				.carousel-concept {
+					height: 250px !important;
+					margin-bottom: -24px;
+				}
+			}
+		</style>
+		<script
+			type="text/javascript"
+			charset="utf-8">
+			//<![CDATA[
+
+			// 초기 개발 및 확인 용도
+			$(function () {
+				const navWrap = document.querySelector(".navi-wrap");
+				const toggleIcon = document.querySelector(".mobile-nav-toggle");
+
+				function isMobile() {
+					return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+				}
+
+				function btnNavToggle() {
+					console.log("???");
+					if (toggleIcon.classList.contains("bi-list")) {
+						toggleIcon.classList.remove("bi-list");
+						toggleIcon.classList.add("bi-x");
+						navWrap.classList.add("on");
+					} else {
+						toggleIcon.classList.remove("bi-x");
+						toggleIcon.classList.add("bi-list");
+						navWrap.classList.remove("on");
+					}
+				}
+
+				toggleIcon.addEventListener("click", btnNavToggle);
+				navWrap.addEventListener("click", btnNavToggle);
+
+				if (!isMobile()) {
+					toggleIcon.classList.remove("bi-x");
+					toggleIcon.classList.add("bi-list");
+					navWrap.classList.remove("on");
+				}
+			});
+
+			//]]>
+		</script>
+	</head>
+	<body class="background landing">
+		<header class="page-header container gnb">
+			<div class="logo">
+				<h1>
+					<a href="index.html">
+						<img
+							src="./img/313_logo.png"
+							width="170px" />
+					</a>
+				</h1>
+			</div>
+			<button class="navi-toggle">
+				<i class="bi mobile-nav-toggle d-xl-none bi-list"></i>
+			</button>
+			<div class="navi-wrap">
+				<nav>
+					<a
+						href="#concept"
+						style="color: #a4c6ff; text-decoration: none">
+						<i class="fa fa-book"></i>
+						Concept
+					</a>
+					<a
+						href="#about"
+						style="color: #a4c6ff; text-decoration: none">
+						<i class="fa fa-book"></i>
+						About
+					</a>
+					<a
+						href="#contact"
+						style="color: #a4c6ff; text-decoration: none">
+						<i class="fa fa-book"></i>
+						Contact
+					</a>
+				</nav>
+				<nav>
+					<a
+						href="/313devgrp/arms/template.html?page=pdService"
+						class="btn btn-sm btn-transparent"
+						style="font-size: 12px; background-color: #e5603b; border-radius: 3px">
+						Demo&nbsp;
+						<i class="fa fa-arrow-right"></i>
+					</a>
+
+					<a
+						href="/313devgrp/arms/docs"
+						class="btn btn-sm btn-transparent"
+						style="font-size: 12px; background-color: #2477ff; border-radius: 3px">
+						Installation&nbsp;
+						<i class="fa fa-download"></i>
+					</a>
+				</nav>
+			</div>
+		</header>
+		<div class="container carousel-section">
+			<div class="content">
+				<div
+					id="carousel-landing"
+					class="carousel slide carousel-landing carousel-fade"
+					data-ride="carousel">
+					<ol class="carousel-indicators">
+						<li
+							data-target="#carousel-landing"
+							data-slide-to="0"
+							class="active"></li>
+						<li
+							data-target="#carousel-landing"
+							data-slide-to="1"
+							class=""></li>
+						<li
+							data-target="#carousel-landing"
+							data-slide-to="2"
+							class=""></li>
+						<li
+							data-target="#carousel-landing"
+							data-slide-to="3"
+							class=""></li>
+					</ol>
+					<div class="carousel-inner">
+						<div class="item active">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="animated fadeInLeftBig text-align-center">
+										<br />
+										<br />
+										<br />
+										<h1
+											class="slide-one-header"
+											style="font-size: 17px !important">
+											<span
+												class="glyphicon glyphicon-info-sign"
+												style="vertical-align: text-top"></span>
+											<strong>A-RMS</strong>
+										</h1>
+										<p style="font-size: 15px !important">
+											<label style="font-weight: bold">제품(서비스)</label>
+											의
+											<label style="color: #a4c6ff; font-weight: bold">요구사항</label>
+											을
+										</p>
+										<p style="font-size: 15px !important">
+											<label style="color: #e5603b; font-weight: bold">ALM Project 이슈</label>
+											로 전달하고 수집합니다.
+										</p>
+										<br />
+										<div class="btn btn-lg btn-white font13 highlights">
+											요구사항은
+											<label style="color: #e49400; font-weight: bold">문서로 관리</label>
+											하고 개발자는
+											<label style="color: #e49400; font-weight: bold">ALM 으로 일</label>
+											을합니다.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="item">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="animated fadeInLeftBig text-align-center">
+										<br />
+										<br />
+										<br />
+										<h1
+											class="slide-one-header"
+											style="font-size: 17px !important">
+											<span class="glyphicon glyphicon-remove-circle"></span>
+											<strong>A-RMS</strong>
+										</h1>
+										<p style="font-size: 15px !important">
+											관리자는
+											<label style="font-weight: bold">제품(서비스)</label>
+											의
+											<label style="color: #a4c6ff; font-weight: bold">요구사항을 관리</label>
+											합니다.
+										</p>
+										<p style="font-size: 15px !important">
+											개발자는
+											<label style="color: #e5603b; font-weight: bold">ALM의 이슈를 만들고 관리</label>
+											합니다.
+										</p>
+										<br />
+										<div class="btn btn-lg btn-white font13">
+											PM은 요구사항과, ISSUE 를
+											<label style="color: #e49400; font-weight: bold">따로따로 관리</label>
+											합니다.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="item">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="animated fadeInLeftBig text-align-center">
+										<br />
+										<br />
+										<br />
+										<h1
+											class="slide-one-header"
+											style="font-size: 17px !important">
+											<span class="glyphicon glyphicon-plus-sign"></span>
+											<strong>A-RMS</strong>
+										</h1>
+										<p style="font-size: 15px !important">
+											개발자는
+											<label style="font-weight: bold">제품(서비스)</label>
+											의
+											<label style="color: #a4c6ff; font-weight: bold">요구사항을 명확하게 알지 못합니다.</label>
+										</p>
+										<p style="font-size: 15px !important">
+											관리자는
+											<label style="color: #e5603b; font-weight: bold">ALM 의 이슈 를 알지 못합니다.</label>
+										</p>
+										<br />
+										<div class="btn btn-lg btn-white font13">
+											요구사항과 ISSUE 를
+											<label style="color: #e49400; font-weight: bold">연결할 방법이 필요</label>
+											합니다.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="item">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="animated fadeInLeftBig text-align-center">
+										<br />
+										<br />
+										<br />
+										<h1
+											class="slide-one-header"
+											style="font-size: 17px !important">
+											<span class="glyphicon glyphicon-ok-sign"></span>
+											<strong>A-RMS</strong>
+										</h1>
+										<p style="font-size: 15px !important">
+											<label style="font-weight: bold">제품(서비스)</label>
+											가
+											<label style="color: #e5603b; font-weight: bold">언제</label>
+											<label style="color: #a4c6ff; font-weight: bold">출시</label>
+											할 수 있는지
+										</p>
+										<p style="font-size: 15px !important">
+											<label style="font-weight: bold">제품(서비스)</label>
+											에
+											<label style="color: #e5603b; font-weight: bold">누가</label>
+											<label style="color: #a4c6ff; font-weight: bold">기여</label>
+											하고 있는지
+										</p>
+										<p style="font-size: 15px !important">
+											<label style="font-weight: bold">제품(서비스)</label>
+											에
+											<label style="color: #e5603b; font-weight: bold">어떤</label>
+											<label style="color: #a4c6ff; font-weight: bold">요구사항 - 이슈</label>
+											가 있는지
+										</p>
+										<br />
+										<div class="btn btn-lg btn-white font13">
+											<label style="color: #e49400; font-weight: bold">정량적으로 판단할 근거</label>
+											를 A-RMS 가 제공하겠습니다.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a
+						class="left carousel-control carousel-control-landing"
+						href="#carousel-landing"
+						data-slide="prev">
+						<span class="icon-prev"></span>
+					</a>
+					<a
+						class="right carousel-control carousel-control-landing"
+						href="#carousel-landing"
+						data-slide="next">
+						<span class="icon-next"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div
+			id="concept"
+			class="widget-white widget-concept about">
+			<div class="container">
+				<div class="section-title">
+					<h2>Concept</h2>
+
+					<div
+						id="carousel-concept"
+						class="carousel slide carousel-landing carousel-concept carousel-fade"
+						data-ride="carousel">
+						<ol class="carousel-indicators">
+							<li
+								data-target="#carousel-concept"
+								data-slide-to="0"
+								class="active"></li>
+							<li
+								data-target="#carousel-concept"
+								data-slide-to="1"
+								class=""></li>
+							<li
+								data-target="#carousel-concept"
+								data-slide-to="2"
+								class=""></li>
+							<li
+								data-target="#carousel-concept"
+								data-slide-to="2"
+								class=""></li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="item active">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="text-align-center animated fadeInRightBig">
+											<img
+												src="./img/index/arms_project_charter.drawio.png"
+												alt="Second slide" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="item">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="text-align-center animated fadeInRightBig">
+											<img
+												src="./img/index/arms_srs.drawio.png"
+												alt="Second slide" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="item">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="text-align-center animated fadeInRightBig">
+											<img
+												src="./img/index/arms_sds.drawio.png"
+												alt="Second slide" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="item">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="text-align-center animated fadeInRightBig">
+											<img
+												src="./img/index/arms_project_endpoint.drawio.png"
+												alt="Second slide" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<a
+							class="left carousel-control carousel-control-landing"
+							href="#carousel-concept"
+							data-slide="prev">
+							<span class="icon-prev"></span>
+						</a>
+						<a
+							class="right carousel-control carousel-control-landing"
+							href="#carousel-concept"
+							data-slide="next">
+							<span class="icon-next"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			id="features"
+			class="widget-features features container">
+			<div class="section-title">
+				<h2>Features</h2>
+			</div>
+
+			<div class="row">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-8">
+							<h3>Corporis temporibus maiores provident</h3>
+							<p>
+								Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+								voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+								proident.
+							</p>
+							<a
+								href="#"
+								class="btn btn-get-started">
+								Get Started
+							</a>
+						</div>
+						<div class="col-lg-4">
+							<div class="image-stack">
+								<img
+									src="./img/313arms_concept.png"
+									width="300px"
+									alt=""
+									class="stack-back" />
+							</div>
+						</div>
+					</div>
+					<!-- Features Item -->
+
+					<div class="row">
+						<div class="col-lg-4">
+							<img
+								src="./img/bestqulity.png"
+								width="250px"
+								alt="" />
+						</div>
+						<div
+							class="col-lg-8"
+							data-aos="fade-up">
+							<h3>Sunt consequatur ad ut est nulla</h3>
+							<p>
+								Cupiditate placeat cupiditate placeat est ipsam culpa. Delectus quia minima quod. Sunt saepe odit aut
+								quia voluptatem hic voluptas dolor doloremque.
+							</p>
+							<ul>
+								<li>
+									<i class="bi bi-check"></i>
+									<span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
+								</li>
+								<li>
+									<i class="bi bi-check"></i>
+									<span>Duis aute irure dolor in reprehenderit in voluptate velit.</span>
+								</li>
+								<li>
+									<i class="bi bi-check"></i>
+									<span>Facilis ut et voluptatem aperiam. Autem soluta ad fugiat</span>
+									.
+								</li>
+							</ul>
+							<a
+								href="#"
+								class="btn btn-get-started align-self-start">
+								Get Started
+							</a>
+						</div>
+					</div>
+					<!-- Features Item -->
+				</div>
+			</div>
+		</div>
+		<div
+			id="about"
+			class="widget widget-white widget-about about">
+			<div class="container">
+				<div class="section-title">
+					<h2>About</h2>
+					<p class="desc-name">
+						<label style="font-weight: bold; color: #e5603b">A</label>
+						pplication LifeCycle Management -
+						<label style="font-weight: bold; color: #e5603b">RMS</label>
+						( Requirement Management System )
+					</p>
+					<p>
+						<label style="font-weight: bold; color: #e5603b">A-RMS</label>
+						는
+						<label style="font-weight: bold; color: #2477ff">제품(서비스) 중심</label>
+						의 요구사항 관리 시스템입니다.
+					</p>
+					<p>
+						<label style="font-weight: bold; color: #e5603b">A-RMS</label>
+						는 제품(서비스) 의
+						<label style="font-weight: bold; color: #2477ff">요구사항을 ALM 이슈</label>
+						로 전환하는 시스템입니다.
+					</p>
+					<p>
+						<label style="font-weight: bold; color: #e5603b">A-RMS</label>
+						는
+						<label style="font-weight: bold; color: #2477ff">ALM( Jira, RedMine, GitLab ... etc )을 연결</label>
+						한 요구사항 관리 시스템입니다.
+					</p>
+					<p>
+						<label style="font-weight: bold; color: #e5603b">A-RMS</label>
+						는 ALM의 요구사항 이슈를 수집하여
+						<label style="font-weight: bold; color: #2477ff">BA 통계를 제공</label>
+						하는 시스템입니다.
+					</p>
+				</div>
+				<div class="features">
+					<div class="feature">
+						<span class="icon background-danger">
+							<i class="fa fa-bold"></i>
+						</span>
+
+						<div class="description">
+							<h4>Scope</h4>
+							<p>
+								제품(서비스)의 요구사항이
+								<br />
+								&#10132; ALM의 Developer 까지 공유
+							</p>
+						</div>
+					</div>
+
+					<div class="feature">
+						<span class="icon background-warning">
+							<i class="fa fa-magic"></i>
+						</span>
+
+						<div class="description">
+							<h4>Resource ( Cost )</h4>
+							<p>
+								제품(서비스)의 ALM 분석
+								<br />
+								&#10132; 정확한 Resource 통계
+							</p>
+						</div>
+					</div>
+
+					<div class="feature">
+						<span class="icon background-success">
+							<i class="fa fa-wrench"></i>
+						</span>
+
+						<div class="description">
+							<h4>Time</h4>
+							<p>
+								제품(서비스) - ALM Project 맵핑
+								<br />
+								&#10132; 실질적인 진척도 측정
+							</p>
+						</div>
+					</div>
+					<div class="feature">
+						<span class="icon background-primary">
+							<i class="fa fa-superscript"></i>
+						</span>
+						<div class="description">
+							<h4>제품(서비스)</h4>
+							<p>
+								aRMS는 제품과 서비스를 기준
+								<br />
+								&#10132; 데이터를 구조화 합니다.
+							</p>
+						</div>
+					</div>
+
+					<div class="feature">
+						<span class="icon background-lime">
+							<i class="fa fa-check"></i>
+						</span>
+
+						<div class="description">
+							<h4>요구사항</h4>
+							<p>
+								ARMS는 제품과 서비스를 기준
+								<br />
+								&#10132; 요구사항을 관리합니다.
+							</p>
+						</div>
+					</div>
+
+					<div class="feature">
+						<span class="icon background-info">
+							<i class="fa fa-css3"></i>
+						</span>
+
+						<div class="description">
+							<h4>Issue</h4>
+							<p>
+								요구사항은 제품(서비스) 중심
+								<br />
+								&#10132; 구현 단위는 ALM 의 이슈
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="contributors">
+			<div class="container">
+				<div class="section-title">
+					<h2>Contributors</h2>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<section class="widget">
+							<header>
+								<h4 style="font-size: 13px !important; font-weight: 300 !important">
+									<img
+										src="./img/leaf.gif"
+										style="width: 25px; vertical-align: unset" />
+									Java Service Tree Framework Contributors
+								</h4>
+							</header>
+							<div class="body">
+								<div class="row">
+									<div class="col-sm-3">
+										<section
+											class="widget"
+											style="margin-bottom: 10px !important">
+											<header>
+												<h4 style="font-size: 12px !important; font-weight: 300 !important">
+													Project
+													<small>owner</small>
+												</h4>
+											</header>
+											<div class="body">
+												<ul
+													class="contributorList"
+													data-v-35dc3539="">
+													<li data-v-35dc3539="">
+														<div
+															class="profile"
+															data-v-35dc3539="">
+															<div
+																class="profileImg"
+																data-v-35dc3539=""
+																style="width: 110px !important">
+																<img
+																	src="./img/contributors/ldm-large.jpg"
+																	alt="profileimg"
+																	data-v-35dc3539="" />
+															</div>
+															<h2 data-v-35dc3539="">Dongmin.Lee</h2>
+															<p data-v-35dc3539="">Project Manager</p>
+														</div>
+														<div
+															class="education"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-book margin-r-5"></i>
+																Education
+															</h2>
+															<p data-v-35dc3539="">M.S in Software .Korea University</p>
+														</div>
+														<div
+															class="skill"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-pencil margin-r-5"></i>
+																Skills
+															</h2>
+															<div
+																class="skill"
+																data-v-35dc3539="">
+																<span data-v-35dc3539="">Project Manage</span>
+																<span data-v-35dc3539="">Lead Architect</span>
+																<span data-v-35dc3539="">Lead DevOps</span>
+															</div>
+														</div>
+														<div class="note">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-map-marker margin-r-5"></i>
+																Career
+															</h2>
+															<p data-v-35dc3539="">Daum, AhnLab, NC</p>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</section>
+									</div>
+
+									<div class="col-sm-3">
+										<section
+											class="widget"
+											style="margin-bottom: 10px !important">
+											<header>
+												<h4 style="font-size: 12px !important; font-weight: 300 !important">
+													Project
+													<small>leader</small>
+												</h4>
+											</header>
+											<div class="body">
+												<ul
+													class="contributorList"
+													data-v-35dc3539="">
+													<li data-v-35dc3539="">
+														<div
+															class="profile"
+															data-v-35dc3539="">
+															<div
+																class="profileImg"
+																data-v-35dc3539=""
+																style="width: 110px !important">
+																<img
+																	src="./img/contributors/mklee.jpg"
+																	alt="profileimg"
+																	data-v-35dc3539="" />
+															</div>
+															<h2 data-v-35dc3539="">Minkyu.Lee</h2>
+															<p data-v-35dc3539="">Lead Developer</p>
+														</div>
+														<div
+															class="education"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-book margin-r-5"></i>
+																Education
+															</h2>
+															<p data-v-35dc3539="">Technical Migrating to Amazon</p>
+														</div>
+														<div
+															class="skill"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-pencil margin-r-5"></i>
+																Skills
+															</h2>
+															<div
+																class="skill"
+																data-v-35dc3539="">
+																<span data-v-35dc3539="">Tech Researcher</span>
+																<span data-v-35dc3539="">Lead Developer</span>
+																<span data-v-35dc3539="">Architect Grp</span>
+															</div>
+														</div>
+														<div class="note">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-map-marker margin-r-5"></i>
+																Career
+															</h2>
+															<p data-v-35dc3539="">MZ Cloud</p>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</section>
+									</div>
+
+									<div class="col-sm-3">
+										<section
+											class="widget"
+											style="margin-bottom: 10px !important">
+											<header>
+												<h4 style="font-size: 12px !important; font-weight: 300 !important">
+													Project
+													<small>committer</small>
+												</h4>
+											</header>
+											<div class="body">
+												<ul
+													class="contributorList"
+													data-v-35dc3539="">
+													<li data-v-35dc3539="">
+														<div
+															class="profile"
+															data-v-35dc3539="">
+															<div
+																class="profileImg"
+																data-v-35dc3539=""
+																style="width: 110px !important">
+																<img
+																	src="./img/contributors/hjh.jpg"
+																	alt="profileimg"
+																	data-v-35dc3539="" />
+															</div>
+															<h2 data-v-35dc3539="">Joonho.Hong</h2>
+															<p data-v-35dc3539="">Master Developer</p>
+														</div>
+														<div
+															class="education"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-book margin-r-5"></i>
+																Education
+															</h2>
+															<p data-v-35dc3539="">AWS Solutions DevOps - Profess</p>
+														</div>
+														<div
+															class="skill"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-pencil margin-r-5"></i>
+																Skills
+															</h2>
+															<div
+																class="skill"
+																data-v-35dc3539="">
+																<span data-v-35dc3539="">Mobile Dev Leader</span>
+																<span data-v-35dc3539="">Frontend Dev Grp</span>
+																<span data-v-35dc3539="">Backend Dev Grp</span>
+															</div>
+														</div>
+														<div class="note">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-map-marker margin-r-5"></i>
+																Career
+															</h2>
+															<p data-v-35dc3539="">지넥슨, MZ Cloud</p>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</section>
+									</div>
+
+									<div class="col-sm-3">
+										<section
+											class="widget"
+											style="margin-bottom: 10px !important">
+											<header>
+												<h4 style="font-size: 12px !important; font-weight: 300 !important">
+													Project
+													<small>committer</small>
+												</h4>
+											</header>
+											<div class="body">
+												<ul
+													class="contributorList"
+													data-v-35dc3539="">
+													<li data-v-35dc3539="">
+														<div
+															class="profile"
+															data-v-35dc3539="">
+															<div
+																class="profileImg"
+																data-v-35dc3539=""
+																style="width: 110px !important">
+																<img
+																	src="./img/contributors/jjy.jpg"
+																	alt="profileimg"
+																	data-v-35dc3539="" />
+															</div>
+															<h2 data-v-35dc3539="">Ji-yoon.Jang</h2>
+															<p data-v-35dc3539="">Master Developer</p>
+														</div>
+														<div
+															class="education"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-book margin-r-5"></i>
+																Education
+															</h2>
+															<p data-v-35dc3539="">AWS Solutions Architect - Profess</p>
+														</div>
+														<div
+															class="skill"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-pencil margin-r-5"></i>
+																Skills
+															</h2>
+															<div
+																class="skill"
+																data-v-35dc3539="">
+																<span data-v-35dc3539="">Chart Tech Leader</span>
+																<span data-v-35dc3539="">Frontend Dev Grp</span>
+																<span data-v-35dc3539="">Backend Dev Grp</span>
+															</div>
+														</div>
+														<div class="note">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-map-marker margin-r-5"></i>
+																Career
+															</h2>
+															<p data-v-35dc3539="">MZ Cloud</p>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</section>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-3">
+										<section
+											class="widget"
+											style="margin-bottom: 10px !important">
+											<header>
+												<h4 style="font-size: 12px !important; font-weight: 300 !important">
+													Project
+													<small>committer</small>
+												</h4>
+											</header>
+											<div class="body">
+												<ul
+													class="contributorList"
+													data-v-35dc3539="">
+													<li data-v-35dc3539="">
+														<div
+															class="profile"
+															data-v-35dc3539="">
+															<div
+																class="profileImg"
+																data-v-35dc3539=""
+																style="width: 110px !important">
+																<img
+																	src="./img/contributors/hsy.jpg"
+																	alt="profileimg"
+																	data-v-35dc3539="" />
+															</div>
+															<h2 data-v-35dc3539="">HyeongSeok.Yang</h2>
+															<p data-v-35dc3539="">Master Developer</p>
+														</div>
+														<div
+															class="education"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-book margin-r-5"></i>
+																Education
+															</h2>
+															<p data-v-35dc3539="">AWS Solutions DevOps - Profess</p>
+														</div>
+														<div
+															class="skill"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-pencil margin-r-5"></i>
+																Skills
+															</h2>
+															<div
+																class="skill"
+																data-v-35dc3539="">
+																<span data-v-35dc3539="">Cloud DevOps</span>
+																<span data-v-35dc3539="">Backend Dev Grp</span>
+																<span data-v-35dc3539="">Frontend Dev Grp</span>
+															</div>
+														</div>
+														<div class="note">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-map-marker margin-r-5"></i>
+																Career
+															</h2>
+															<p data-v-35dc3539="">MZ Cloud</p>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</section>
+									</div>
+
+									<div class="col-sm-3">
+										<section
+											class="widget"
+											style="margin-bottom: 10px !important">
+											<header>
+												<h4 style="font-size: 12px !important; font-weight: 300 !important">
+													Project
+													<small>committer</small>
+												</h4>
+											</header>
+											<div class="body">
+												<ul
+													class="contributorList"
+													data-v-35dc3539="">
+													<li data-v-35dc3539="">
+														<div
+															class="profile"
+															data-v-35dc3539="">
+															<div
+																class="profileImg"
+																data-v-35dc3539=""
+																style="width: 110px !important">
+																<img
+																	src="./img/contributors/hsh.jpg"
+																	alt="profileimg"
+																	data-v-35dc3539="" />
+															</div>
+															<h2 data-v-35dc3539="">Seonghun.Hong</h2>
+															<p data-v-35dc3539="">Master Developer</p>
+														</div>
+														<div
+															class="education"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-book margin-r-5"></i>
+																Education
+															</h2>
+															<p data-v-35dc3539="">Hanghae99 & AWS DevOps Profess</p>
+														</div>
+														<div
+															class="skill"
+															data-v-35dc3539="">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-pencil margin-r-5"></i>
+																Skills
+															</h2>
+															<div
+																class="skill"
+																data-v-35dc3539="">
+																<span data-v-35dc3539="">Front Tech Leader</span>
+																<span data-v-35dc3539="">Frontend Dev</span>
+																<span data-v-35dc3539="">Backend Dev</span>
+															</div>
+														</div>
+														<div class="note">
+															<h2 data-v-35dc3539="">
+																<i class="fa fa-map-marker margin-r-5"></i>
+																Career
+															</h2>
+															<p data-v-35dc3539="">MZ Cloud</p>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</section>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- ======= Resume Section ======= -->
+		<section
+			id="resume"
+			class="resume widget-white">
+			<div class="container">
+				<div class="section-title">
+					<h2>Release Note</h2>
+					<p>
+						Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+						consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+						in iste officiis commodi quidem hic quas.
+					</p>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-6">
+						<h3 class="resume-title">Sumary</h3>
+						<div class="resume-item pb-0">
+							<h4>Brandon Johnson</h4>
+							<p>
+								<em>
+									Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing
+									user-centered digital/print marketing material from initial concept to final, polished deliverable.
+								</em>
+							</p>
+							<ul>
+								<li>Portland par 127,Orlando, FL</li>
+								<li>(123) 456-7891</li>
+								<li>alice.barkley@example.com</li>
+							</ul>
+						</div>
+
+						<h3 class="resume-title">Education</h3>
+						<div class="resume-item">
+							<h4>Master of Fine Arts &amp; Graphic Design</h4>
+							<h5>2015 - 2016</h5>
+							<p><em>Rochester Institute of Technology, Rochester, NY</em></p>
+							<p>
+								Qui deserunt veniam. Et sed aliquam labore tempore sed quisquam iusto autem sit. Ea vero voluptatum qui
+								ut dignissimos deleniti nerada porti sand markend
+							</p>
+						</div>
+						<div class="resume-item">
+							<h4>Bachelor of Fine Arts &amp; Graphic Design</h4>
+							<h5>2010 - 2014</h5>
+							<p><em>Rochester Institute of Technology, Rochester, NY</em></p>
+							<p>
+								Quia nobis sequi est occaecati aut. Repudiandae et iusto quae reiciendis et quis Eius vel ratione eius
+								unde vitae rerum voluptates asperiores voluptatem Earum molestiae consequatur neque etlon sader mart
+								dila
+							</p>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<h3 class="resume-title">Professional Experience</h3>
+						<div class="resume-item">
+							<h4>Senior graphic design specialist</h4>
+							<h5>2019 - Present</h5>
+							<p><em>Experion, New York, NY</em></p>
+							<ul>
+								<li>
+									Lead in the design, development, and implementation of the graphic, layout, and production
+									communication materials
+								</li>
+								<li>
+									Delegate tasks to the 7 members of the design team and provide counsel on all aspects of the project.
+								</li>
+								<li>
+									Supervise the assessment of all graphic materials in order to ensure quality and accuracy of the
+									design
+								</li>
+								<li>Oversee the efficient use of production project budgets ranging from $2,000 - $25,000</li>
+							</ul>
+						</div>
+						<div class="resume-item">
+							<h4>Graphic design specialist</h4>
+							<h5>2017 - 2018</h5>
+							<p><em>Stepping Stone Advertising, New York, NY</em></p>
+							<ul>
+								<li>
+									Developed numerous marketing programs (logos, brochures,infographics, presentations, and
+									advertisements).
+								</li>
+								<li>Managed up to 5 projects or tasks at a given time while under pressure</li>
+								<li>Recommended and consulted with clients on the most appropriate graphic design</li>
+								<li>Created 4+ design presentations and proposals a month for clients and account managers</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Resume Section -->
+
+		<!-- ======= Portfolio Section ======= -->
+		<section
+			id="portfolio"
+			class="portfolio section-bg">
+			<div
+				class="container"
+				data-aos="fade-up">
+				<div class="section-title">
+					<h2>Portfolio</h2>
+					<p>
+						Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+						consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+						in iste officiis commodi quidem hic quas.
+					</p>
+				</div>
+
+				<div class="row">
+					<div
+						class="col-lg-12 d-flex justify-content-center"
+						data-aos="fade-up"
+						data-aos-delay="100">
+						<ul id="portfolio-flters">
+							<li
+								data-filter="*"
+								class="filter-active">
+								All
+							</li>
+							<li data-filter=".filter-app">App</li>
+							<li data-filter=".filter-card">Card</li>
+							<li data-filter=".filter-web">Web</li>
+						</ul>
+					</div>
+				</div>
+
+				<div
+					class="row portfolio-container"
+					data-aos="fade-up"
+					data-aos-delay="200">
+					<div class="col-lg-4 col-md-6 portfolio-item filter-app">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>App 1</h4>
+								<p>App</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="App 1">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-web">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>Web 3</h4>
+								<p>Web</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="Web 3">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-app">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>App 2</h4>
+								<p>App</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="App 2">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-card">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-4.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>Card 2</h4>
+								<p>Card</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-4.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="Card 2">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-web">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-5.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>Web 2</h4>
+								<p>Web</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-5.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="Web 2">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-app">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-6.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>App 3</h4>
+								<p>App</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-6.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="App 3">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-card">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-7.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>Card 1</h4>
+								<p>Card</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-7.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="Card 1">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-card">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-8.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>Card 3</h4>
+								<p>Card</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-8.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="Card 3">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6 portfolio-item filter-web">
+						<div class="portfolio-wrap">
+							<img
+								src="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-9.jpg"
+								class="img-fluid"
+								alt="" />
+							<div class="portfolio-info">
+								<h4>Web 3</h4>
+								<p>Web</p>
+								<div class="portfolio-links">
+									<a
+										href="./html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-9.jpg"
+										data-gallery="portfolioGallery"
+										class="portfolio-lightbox"
+										title="Web 3">
+										<i class="bx bx-plus"></i>
+									</a>
+									<a
+										href="portfolio-details.html"
+										class="portfolio-details-lightbox"
+										data-glightbox="type: external"
+										title="Portfolio Details">
+										<i class="bx bx-link"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Portfolio Section -->
+		<div
+			id="contact"
+			class="widget-contact widget-white">
+			<div class="contact container">
+				<div class="section-title">
+					<h2>Contact</h2>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="info">
+							<div class="address">
+								<i class="bi bi-geo-alt"></i>
+								<h4>Location:</h4>
+								<p>A108 Adam Street, New York, NY 535022</p>
+							</div>
+
+							<div class="email">
+								<i class="bi bi-envelope"></i>
+								<h4>Email:</h4>
+								<p>info@example.com</p>
+							</div>
+
+							<div class="phone">
+								<i class="bi bi-phone"></i>
+								<h4>Call:</h4>
+								<p>+1 5589 55488 55s</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-8 form-wrap">
+						<form
+							action="index/forms/contact.php"
+							method="post"
+							role="form"
+							class="php-email-form">
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<input
+										type="text"
+										name="name"
+										class="form-control"
+										id="name"
+										placeholder="Your Name"
+										required />
+								</div>
+								<div class="col-md-6 form-group mt-3 mt-md-0">
+									<input
+										type="email"
+										class="form-control"
+										name="email"
+										id="email"
+										placeholder="Your Email"
+										required />
+								</div>
+							</div>
+							<div class="form-group mt-3">
+								<input
+									type="text"
+									class="form-control"
+									name="subject"
+									id="subject"
+									placeholder="Subject"
+									required />
+							</div>
+							<div class="form-group mt-3">
+								<textarea
+									class="form-control"
+									name="message"
+									rows="5"
+									placeholder="Message"
+									required></textarea>
+							</div>
+							<div class="my-3">
+								<div class="loading">Loading</div>
+								<div class="error-message"></div>
+								<div class="sent-message">Your message has been sent. Thank you!</div>
+							</div>
+							<div class="text-center"><button type="submit">Send Message</button></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer id="footer">
+			<div class="container footer">
+				<div class="menu-wrap footer-logo">
+					<img
+						src="./img/313.png"
+						width="100px"
+						height="100px" />
+				</div>
+				<div class="menu-wrap">
+					<h4>메뉴 리스트</h4>
+					<nav>
+						<a href="">menu 1</a>
+						<a href="">menu 2</a>
+						<a href="">menu 3</a>
+						<a href="">menu 4</a>
+						<a href="">menu 5</a>
+					</nav>
+				</div>
+				<div class="menu-wrap">
+					<h4>메뉴 리스트</h4>
+					<nav>
+						<a href="">menu 1</a>
+						<a href="">menu 2</a>
+						<a href="">menu 3</a>
+						<a href="">menu 4</a>
+						<a href="">menu 5</a>
+					</nav>
+				</div>
+				<div class="menu-wrap">
+					<h4>메뉴 리스트</h4>
+					<nav>
+						<a href="">menu 1</a>
+						<a href="">menu 2</a>
+						<a href="">menu 3</a>
+						<a href="">menu 4</a>
+						<a href="">menu 5</a>
+					</nav>
+				</div>
+			</div>
+		</footer>
+
+		<script src="./html/armsDetailExceptTemplate/assets/vendor/aos/aos.js"></script>
+		<script src="./html/armsDetailExceptTemplate/assets/vendor/glightbox/js/glightbox.min.js"></script>
+		<script src="./html/armsDetailExceptTemplate/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+		<script src="./html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.js"></script>
+		<script src="js/main.js"></script>
+	</body>
 </html>
