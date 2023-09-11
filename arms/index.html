@@ -193,43 +193,43 @@
         <script type="text/javascript" charset="utf-8">
             //<![CDATA[
 
-            // 초기 개발 및 확인 용도
-            $(function () {
-                const navWrap = document.querySelector(".navi-wrap");
-                const navToggle = document.querySelector(".navi-toggle");
-                const toggleIcon = document.querySelector(".mobile-nav-toggle");
+			// 초기 개발 및 확인 용도
+			$(function () {
+				const navWrap = document.querySelector(".navi-wrap");
+				const navToggle = document.querySelector(".navi-toggle");
+				const toggleIcon = document.querySelector(".mobile-nav-toggle");
 
-                function isMobile() {
-                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                }
+				function isMobile() {
+					return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+				}
 
-                function btnNavToggle() {
-                    if (toggleIcon.classList.contains("bi-list")) {
-                        navToggle.classList.add("active");
-                        toggleIcon.classList.remove("bi-list");
-                        toggleIcon.classList.add("bi-x");
-                        navWrap.classList.add("on");
-                    } else {
-                        navToggle.classList.remove("active");
-                        toggleIcon.classList.remove("bi-x");
-                        toggleIcon.classList.add("bi-list");
-                        navWrap.classList.remove("on");
-                    }
-                }
+				function btnNavToggle() {
+					if (toggleIcon.classList.contains("bi-list")) {
+						navToggle.classList.add("active");
+						toggleIcon.classList.remove("bi-list");
+						toggleIcon.classList.add("bi-x");
+						navWrap.classList.add("on");
+					} else {
+						navToggle.classList.remove("active");
+						toggleIcon.classList.remove("bi-x");
+						toggleIcon.classList.add("bi-list");
+						navWrap.classList.remove("on");
+					}
+				}
 
-                navToggle.addEventListener("click", btnNavToggle);
-                navWrap.addEventListener("click", btnNavToggle);
+				navToggle.addEventListener("click", btnNavToggle);
+				navWrap.addEventListener("click", btnNavToggle);
 
-                if (!isMobile()) {
-                    navToggle.classList.remove("active");
-                    toggleIcon.classList.remove("bi-x");
-                    toggleIcon.classList.add("bi-list");
-                    navWrap.classList.remove("on");
-                }
-            });
+				if (!isMobile()) {
+					navToggle.classList.remove("active");
+					toggleIcon.classList.remove("bi-x");
+					toggleIcon.classList.add("bi-list");
+					navWrap.classList.remove("on");
+				}
+			});
 
-            //]]>
-        </script>
+			//]]>
+		</script>
 	</head>
 	<body class="background landing">
 		<header class="page-header container gnb">
@@ -285,7 +285,7 @@
 				</nav>
 			</div>
 		</header>
-		<div class="container">
+		<div class="container carousel-section">
 			<div class="content">
 				<div
 					id="carousel-landing"
@@ -304,10 +304,10 @@
 							data-target="#carousel-landing"
 							data-slide-to="2"
 							class=""></li>
-                        <li
-                            data-target="#carousel-landing"
-                            data-slide-to="3"
-                            class=""></li>
+						<li
+							data-target="#carousel-landing"
+							data-slide-to="3"
+							class=""></li>
 					</ol>
 					<div class="carousel-inner">
 
@@ -330,7 +330,7 @@
                                             <label style="color:#e5603b; font-weight: bold;">ALM Project 이슈</label> 로 전달하고 수집합니다.
                                         </p>
                                         <br />
-                                        <div class="btn btn-lg btn-white font14">
+                                        <div class="btn btn-lg btn-white font14 highlights">
                                             요구사항은 <label style="color:#e49400; font-weight: bold;">문서로 관리</label>하고 개발자는 <label style="color:#e49400; font-weight: bold;">ALM 으로 일</label>을합니다.
                                         </div>
                                     </div>
@@ -721,7 +721,10 @@
 			id="footer">
 			<div class="container footer">
 				<div class="col-md-2">
-					<img src="./img/313.png" width="100px" height="100px">
+					<img
+						src="./img/313.png"
+						width="100px"
+						height="100px" />
 				</div>
 				<div class="col-md-3">
 					<h4>메뉴 리스트</h4>

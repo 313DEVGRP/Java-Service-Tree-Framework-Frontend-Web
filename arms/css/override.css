@@ -2487,6 +2487,10 @@ table tbody tr td {
 }
 
 /*--------------------------------------------------------------
+# Carousel section
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
 # Section title
 --------------------------------------------------------------*/
 .section-title {
@@ -2519,14 +2523,15 @@ table tbody tr td {
 	display: block;
 	width: 40px;
 	height: 3px;
-	background: #5B617B;
+	background: #5b617b;
 	bottom: 0;
 	left: calc(50% - 20px);
 }
 
 .section-title p {
 	text-align: center;
-	margin-bottom: 0;
+	margin-bottom: 10px !important;
+	text-wrap: balance;
 }
 
 /*--------------------------------------------------------------
@@ -2537,7 +2542,7 @@ table tbody tr td {
 }
 
 .about h2 {
-	color: #5B617B;
+	color: #5b617b;
 	margin-bottom: 7%;
 	padding-top: 20px;
 }
@@ -2571,6 +2576,9 @@ table tbody tr td {
 .about .description {
 	width: calc(100% - 60px);
 	padding-left: 25px;
+}
+.about .description p {
+	text-wrap: balance;
 }
 
 /*--------------------------------------------------------------
@@ -2881,6 +2889,13 @@ table tbody tr td {
 	.visual-mobile {
 		display: flex;
 	}
+
+	.carousel-section .highlights {
+		display: block;
+		word-break: keep-all;
+		text-wrap: balance;
+	}
+
 	.contact .form-wrap {
 		margin-top: 40px;
 	}
