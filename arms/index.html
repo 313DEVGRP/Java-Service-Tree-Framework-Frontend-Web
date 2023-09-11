@@ -213,7 +213,6 @@
 			// 초기 개발 및 확인 용도
 			$(function () {
 				const navWrap = document.querySelector(".navi-wrap");
-				const navToggle = document.querySelector(".navi-toggle");
 				const toggleIcon = document.querySelector(".mobile-nav-toggle");
 
 				function isMobile() {
@@ -221,24 +220,22 @@
 				}
 
 				function btnNavToggle() {
+					console.log("???");
 					if (toggleIcon.classList.contains("bi-list")) {
-						navToggle.classList.add("active");
 						toggleIcon.classList.remove("bi-list");
 						toggleIcon.classList.add("bi-x");
 						navWrap.classList.add("on");
 					} else {
-						navToggle.classList.remove("active");
 						toggleIcon.classList.remove("bi-x");
 						toggleIcon.classList.add("bi-list");
 						navWrap.classList.remove("on");
 					}
 				}
 
-				navToggle.addEventListener("click", btnNavToggle);
+				toggleIcon.addEventListener("click", btnNavToggle);
 				navWrap.addEventListener("click", btnNavToggle);
 
 				if (!isMobile()) {
-					navToggle.classList.remove("active");
 					toggleIcon.classList.remove("bi-x");
 					toggleIcon.classList.add("bi-list");
 					navWrap.classList.remove("on");
@@ -1743,6 +1740,6 @@
 		<script src="./html/armsDetailExceptTemplate/assets/vendor/glightbox/js/glightbox.min.js"></script>
 		<script src="./html/armsDetailExceptTemplate/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 		<script src="./html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.js"></script>
-		<script src="./html/armsDetailExceptTemplate/assets/js/main.js"></script>
+		<script src="js/main.js"></script>
 	</body>
 </html>
