@@ -2813,7 +2813,7 @@ table tbody tr td {
 	.gnb .logo a,
 	.gnb img {
 		width: auto;
-		height: 100%;
+		height: 113%;
 	}
 	.gnb .navi-wrap {
 		position: fixed;
@@ -2856,8 +2856,8 @@ table tbody tr td {
 		display: block;
 		padding: 0;
 		position: absolute;
-		top: 25px;
-		right: 15px;
+		top: 45px;
+		right: 35px;
 		z-index: 9998;
 		border: 0;
 		background: none;
