@@ -2910,7 +2910,7 @@ table tbody tr td {
 		width: 70%;
 		margin: 0 auto;
 		word-break: keep-all;
-		text-wrap: balance;
+		white-space: normal;
 	}
 
 	.contact .form-wrap {
