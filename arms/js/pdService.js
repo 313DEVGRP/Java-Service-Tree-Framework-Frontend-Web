@@ -538,7 +538,7 @@ function dataTableLoad() {
 	var rowsGroupList = [];
 	var columnDefList = [];
 	var selectList = {};
-	var orderList = [[1, "asc"]];
+	var orderList = [[0, "DESC"]];
 	var buttonList = [];
 
 	var jquerySelector = "#pdservice_table";
@@ -807,12 +807,14 @@ function save_btn_click() {
 			reviewers05 = $("#popup_editview_pdservice_reviewers").select2("data")[4].text;
 		}
 
+		const cTitle = $("#popup_editview_pdservice_name").val();
+
 		$.ajax({
 			url: "/auth-user/api/arms/pdService/addPdServiceNode.do",
 			type: "POST",
 			data: {
 				ref: 2,
-				c_title: $("#popup_editview_pdservice_name").val(),
+				c_title: cTitle,
 				c_type: "default",
 				c_pdservice_owner: $("#popup_editview_pdservice_owner").select2("data")[0].text,
 				c_pdservice_reviewer01: reviewers01,
@@ -827,7 +829,7 @@ function save_btn_click() {
 					//모달 팝업 끝내고
 					$("#close_pdservice").trigger("click");
 					//데이터 테이블 데이터 재 로드
-					dataTableRef.ajax.reload();
+					reloadDataWithSameOrdering(cTitle);
 					jSuccess("신규 제품 등록이 완료 되었습니다.");
 				}
 			},
@@ -859,9 +861,7 @@ function delete_btn_click(){
 				200: function () {
 					jError($("#editview_pdservice_name").val() + "데이터가 삭제되었습니다.");
 					//데이터 테이블 데이터 재 로드
-					dataTableRef.ajax.reload(function (json) {
-						$("#pdservice_table tbody tr:eq(0)").click();
-					});
+					reloadDataWithSameOrdering("");
 				}
 			}
 		});
@@ -877,7 +877,8 @@ function update_btn_click() {
 		if ($("#editview_pdservice_owner").select2("data")[0] != undefined) {
 			owner = $("#editview_pdservice_owner").select2("data")[0].text;
 		}
-
+		const cId = $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id;
+		const cTitle = $("#pdservice_table").DataTable().rows(".selected").data()[0].c_title;
 		var reviewers01 = "none";
 		var reviewers02 = "none";
 		var reviewers03 = "none";
@@ -903,8 +904,8 @@ function update_btn_click() {
 			url: "/auth-user/api/arms/pdService/updateNode.do",
 			type: "put",
 			data: {
-				c_id: $("#pdservice_table").DataTable().rows(".selected").data()[0].c_id,
-				c_title: $("#editview_pdservice_name").val(),
+				c_id: cId,
+				c_title: cTitle,
 				c_pdservice_owner: owner,
 				c_pdservice_reviewer01: reviewers01,
 				c_pdservice_reviewer02: reviewers02,
@@ -918,9 +919,7 @@ function update_btn_click() {
 					jSuccess($("#editview_pdservice_name").val() + "의 데이터가 변경되었습니다.");
 
 					//데이터 테이블 데이터 재 로드
-					dataTableRef.ajax.reload(function (json) {
-						$("#pdservice_table tbody tr:eq(0)").click();
-					});
+					reloadDataWithSameOrdering(cTitle);
 				}
 			}
 		});
@@ -1026,4 +1025,23 @@ function modalPopup(popupName) {
 
 
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 최초 dataTable_build 시 정렬 기준을 dataTableRef.ajax.reload 때마다 가져와서 세팅한다.
+// 일관 된 정렬을 보장하기 위한 함수이다.
+////////////////////////////////////////////////////////////////////////////////////////
+function reloadDataWithSameOrdering(cTitle) {
+	const currentOrder = dataTableRef.order();
+	dataTableRef.ajax.reload(function() {
+		dataTableRef.order(currentOrder).draw();
+		if(cTitle === "") return false;
+		$("#pdservice_table tbody tr").each(function() {
+			const rowTitle = $(this).find("td label").text();
+			if (rowTitle === cTitle) {
+				$(this).click();
+				return false;
+			}
+		});
+	});
 }
