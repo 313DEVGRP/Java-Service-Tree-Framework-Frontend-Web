@@ -2208,6 +2208,7 @@ p[data-v-35dc3539] {
 .contributorList li .profile .profileImg img[data-v-35dc3539] {
 	width: 100%;
 	height: 100%;
+	object-fit: cover;
 }
 
 .contributorList li .profile h2[data-v-35dc3539] {
@@ -2542,7 +2543,7 @@ table tbody tr td {
 }
 
 .about h2 {
-	color: #5b617b;
+	color: #666;
 	margin-bottom: 7%;
 	padding-top: 20px;
 }
@@ -2584,14 +2585,21 @@ table tbody tr td {
 /*--------------------------------------------------------------
 # Contributors
 --------------------------------------------------------------*/
+#contributors {
+	margin: 100px auto;
+}
 #contributors .section-title {
 	margin-bottom: 5%;
 }
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
-.contact {
-	margin: 100px auto;
+#contact {
+	padding: 100px 0;
+}
+
+.contact h2 {
+	color: #666;
 }
 
 .contact .info {
@@ -2651,7 +2659,7 @@ table tbody tr td {
 
 .contact .php-email-form .error-message {
 	display: none;
-	color: #fff;
+	color: #666;
 	background: #ed3c0d;
 	text-align: left;
 	padding: 15px;
@@ -2695,13 +2703,12 @@ table tbody tr td {
 	border-radius: 4px;
 	box-shadow: none;
 	font-size: 14px;
-	color: #fff;
 	background-color: transparent;
 }
 
 .contact .php-email-form input::placeholder,
 .contact .php-email-form textarea::placeholder {
-	color: #fff;
+	color: #666;
 }
 
 .contact .php-email-form input[type="text"],
