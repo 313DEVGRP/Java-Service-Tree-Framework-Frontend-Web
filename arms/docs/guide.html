@@ -85,22 +85,31 @@
       ============================ -->
         <div class="idocs-navigation bg-light">
             <ul class="nav flex-column ">
-                <li class="nav-item"><a class="nav-link" href="#product">product</a>
+                <li class="nav-item"><a class="nav-link" href="#product">PRODUCT</a>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="#product_regist_manage">등록관리</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#product_version_manage">버전관리</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#product_inquiry_selection" style="font-size: 13px;">제품(서비스) 조회 및 추가 방법</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#product_detail_Change"  style="font-size: 13px;">제품(서비스) 상세 보기 / 편집하는 방법</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#version_inquiry_selection"  style="font-size: 13px;">제품(서비스) 조회 및 추가 방법</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#version_inquiry"  style="font-size: 13px;">제품(서비스) Version 조회</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#version_register_Change" style="font-size: 13px" >제품(서비스) 버전 등록 / 변경</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#jira">jira</a>
+                <li class="nav-item"><a class="nav-link" href="#jira">JIRA</a>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="#jira_regist_manage">등록관리</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#connect_manage">연결관리</a></li>
+<!--                        <li class="nav-item"><a class="nav-link" href="#jira_server_inquiry_add">등록관리-등록된 지라 서버 조회 및 추가</a></li>-->
+<!--                        <li class="nav-item"><a class="nav-link" href="#jira_regi">등록관리-지라 서버 등록 정보를 확인하고 편집/삭제</a></li>-->
+                        <li class="nav-item"><a class="nav-link" href="#jira_inquiry_connect">연결관리-연결된 Jira 조회</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#jira_service_version_inquiry_selection">연결관리-제품(서비스) 조회 및 선택</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#jira_version_inquiry_selection">연결관리-제품(서비스) Version 조회</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#jira_list">연결관리-Jira 리스트</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#requirement">requirement</a>
+                <li class="nav-item"><a class="nav-link" href="#requirement">REQUIREMENT</a>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="#requirement_regist_manage">등록관리</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#requirement_version_manage">현황관리</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#requirement_regist_inquiry">요구사항 조회 방법</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#requirement_regist_content">요구사항 내용 조회 방법</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#reqstatus_version_selection">통계 및 진척도 조회</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#reqstatus_issue_list">현황관리-issue List</a></li>
                     </ul>
                 </li>
             </ul>
@@ -114,227 +123,126 @@
             <div class="container">
 
                 <!-- Guide Document -->
-                <section id="product"><h1></h1></section>
+                <section id="product"></section>
                 <!-- 1. 등록관리  -->
-                <br/>
-                <section id="product_regist_manage">
+                <section id="product_inquiry_selection">
                 <h3>등록관리</h3>
                 <br/>
                 <br/>
-                <h4>제품(서비스) 조회 및 선택</h4>
+                <h4>1. 제품(서비스) 조회 및 추가 방법</h4>
                 <div class="row">
-                    <div class="col-lg-12" style="">
-                        <div style="  display: flex; justify-content: center;">
-                            <img    src="../docs/assets/images/help_01.png" width="30%;" height="400px" alt="iDocs Template" style=""/>
+                    <div class="col-lg-12">
+                        <div style="display: flex; justify-content: center;">
+                            <img    src="../docs/assets/images/help_total_01.png"   width="100%;" height="100%;" alt="iDocs Template" />
                         </div>
-                        <p>
-                            1. 제품(서비스) 추가를 합니다.<br/>
-                            2. a-RMS에 신규 제품(서비스)에 버전을 등록합니다. <br/>
-                            - 제품(서비스)에 해당하는 이름, 오너, 리뷰어, 컨텐츠를 입력합니다.
-                            3. 신규 제품(서비스) 저장을 합니다.
-                        </p>
-
+                        <div style="padding-top: 20px;">
+<!--                            <p>-->
+<!--                                1. 제품(서비스) 추가를 합니다.<br/>-->
+<!--                                2. a-RMS에 신규 제품(서비스)에 버전을 등록합니다. 제품(서비스)에 해당하는 이름, 오너, 리뷰어, 컨텐츠를 입력합니다. <br/>-->
+<!--                                3. 신규 제품(서비스) 저장을 합니다.-->
+<!--                            </p>-->
+                            <ul>
+                                <li>등록관리 페이지 접속 후 제품(서비스) 조회 > 제품(서비스) 추가 클릭 합니다.  </li>
+                                <li>제품(서비스) 이름, 제품(서비스) 오너, 제품(서비스) 리뷰어, 제품(서비스) 컨텐츠를 작성 > 신규 제품(서비스) 저장 클릭합니다.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <br/>
                 <br/>
-                <hr/>
-                    <h3>등록관리</h3>
-                    <br/>
-                    <br/>
-                    <h4>제품(서비스) 조회 및 선택</h4>
-                    <div class="row">
-                        <div class="col-lg-12" style="">
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_01.png" width="30%;" height="400px" alt="iDocs Template" style=""/>
-                             </div>
-                             <p>
-                                     1. 제품(서비스) 추가를 합니다.<br/>
-                                     2. a-RMS에 신규 제품(서비스)에 버전을 등록합니다. <br/>
-                                     - 제품(서비스)에 해당하는 이름, 오너, 리뷰어, 컨텐츠를 입력합니다.
-                                     3. 신규 제품(서비스) 저장을 합니다.
-                             </p>
-
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
+                </section>
+                <section id="product_detail_Change">
                     <hr/>
                     <br/>
-                    <h4>제품(서비스) 상세 보기 / 변경</h4>
+                    <h4>2. 제품(서비스) 상세 보기 / 편집하는 방법</h4>
                     <br/>
                     <div class="row">
                         <div class="col-lg-12">
                             <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_02.png" width="80%" height="500px" alt="iDocs Template" style="padding-right:10px;"/>
+                                <img    src="../docs/assets/images/help_total_02.png"  width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>상세보기 탭을 클릭 > 선택된 제품(서비스) 내용을 확인합니다.</li>
+                                    <li>편집하기 탭을 클릭 > 선택된 제품(서비스) 내용을 편집합니다.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr/>
+                </section>
+
+
+                <!--  버전관리 -->
+                <section id="version_inquiry_selection">
+                    <h3>버전관리</h3>
+                    <br/>
+                    <br/>
+                    <h4>1. 제품(서비스) 조회 및 추가 방법</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_03.png " width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>버전관리 페이지 접속 후 제품(서비스) 조회합니다. </li>
+                                    <li>제품(서비스) 등록을 하지 않았다면 제품(서비스)관리로 이동을 클릭합니다.</li>
+                                </ul>
                             </div>
                             <br/>
                             <br/>
-                            <p>
-                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
-                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
-                                3. 새 창으로 제품(서비스) 내용을 볼 수 있습니다.   <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_03.png"  width="80%" height="500px" alt="iDocs Template" style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 편집하기 탭에서 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 편집할 수 있습니다. <br/>
-                                2. 팝업 창으로 편집할 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_04.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 추가한 제품을 삭제 합니다.<br/>
-                            </p>
                         </div>
                     </div>
                     <hr/>
                     <br/>
                 </section>
-
-
-                <!--  버전관리 -->
-                <section id="product_version_manage">
-                    <h4>버전관리</h4>
-                    <br/>
-                    <br/>
-                    <h4>제품(서비스) 조회 및 선택</h4>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div style="display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_01.png " width="50%" height="600px" alt="iDocs Template" style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
-                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
-                                3. 제품(서비스) 관리로 이동할 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-
-
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_05.png"  width="50%" height="300px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 선택된 제품(서비스)에 해당하는 버전을 알 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_07.png"  width="80%" height="700px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 등록한 제품(서비스)와 버전을 상세정보를 볼 수 있습니다. <br/>
-                                2. 등록한 제품(서비스)와 버전을 편집을 할 수 있습니다. <br/>
-                                3. 등록한 제품(서비스)와 버전을 삭제 할 수 있습니다. <br/>
-                                4. 팝업 창으로 선택한 제품(서비스)에 버전을 등록/변경할 수 있습니다.
-                            </p>
-                        </div>
-                    </div>
-                    <hr/>
-                    <br/>
+                <section id="version_inquiry">
                     <h4>제품(서비스) Version 조회</h4>
+                    <br/>
+                    <br/>
                     <div class="row">
                         <div class="col-lg-12">
                             <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_02.png" width="50%" height="700px" alt="iDocs Template" style="padding-right:10px;"/>
+                                <img    src="../docs/assets/images/help_total_04.png"width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>제품(서비스) 선택시 조회된 제품(서비스)를 확인합니다. </li>
+                                    <li>버전을 등록하지 않았다면 신규 버전 등록하기를 클릭합니다.</li>
+                                    <li>등록 팝업에서의 버전, 시작날짜, 종료날짜, 버전 내용을 입력 후 저장합니다.</li>
+                                </ul>
                             </div>
                             <br/>
                             <br/>
-                            <p>
-                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
-                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
-                                3. 새 창으로 제품(서비스) 내용을 볼 수 있습니다.   <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-
-
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_03.png"  width="80%" height="600px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 편집하기 탭에서 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 편집할 수 있습니다. <br/>
-                                2. 팝업 창으로 편집할 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_04.png"  width="80%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 추가한 제품을 삭제합니다.<br/>
-                            </p>
                         </div>
                     </div>
                     <hr/>
                     <br/>
-                    <h3>제품(서비스) 버전 등록 / 변경</h3>
+                </section>
+                <section id="version_register_Change">
+                <h4>제품(서비스) 버전 등록 / 변경</h4>
+                    <br/>
+                    <br/>
                     <div class="row">
                         <div class="col-lg-12">
                             <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_02.png" width="80%" height="600px" alt="iDocs Template" style="padding-right:10px;"/>
+                                <img    src="../docs/assets/images/help_total_05.png" width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>상세보기 탭을 클릭 > 선택된 제품(서비스)와 버전에 대한 내용을 확인합니다.</li>
+                                    <li>편집하기 탭을 클릭 > 선택된 제품(서비스)와 버전에 대한 내용을 편집합니다.</li>
+                                </ul>
                             </div>
                             <br/>
                             <br/>
-                            <p>
-                                1. 추가한 제품 선택시 상세 보기탭에서 정보를 볼 수 있습니다.<br/>
-                                2. 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 알 수 있습니다. <br/>
-                                3. 새 창으로 제품(서비스) 내용을 볼 수 있습니다.   <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_03.png"  width="50%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 편집하기 탭에서 제품(서비스) 이름, 오너, 리뷰어, 컨텐츠 정보를 편집할 수 있습니다. <br/>
-                                2. 팝업 창으로 편집할 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_04.png"  width="60%" height="500px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 추가한 제품을 삭제합니다.<br/>
-                            </p>
                         </div>
                     </div>
-                    <br/>
                     <hr/>
                     <br/>
                 </section>
@@ -342,170 +250,239 @@
 
                 <!-- 지라 등록관리 및 연결관리-->
                 <section id="jira"><h1></h1></section>
-                <section id="jira_regist_manage">
-                    <h2>지라 등록관리</h2>
-                    <br/>
+<!--                <section id="jira_regist_manage">-->
+<!--                    <h3>지라 등록관리</h3>-->
+<!--                    <br/>-->
 
-                    <h3>지라 서버</h3>
-                    <div style="  display: flex; justify-content: center;">
-                        <img    src="../docs/assets/images/jira_server_01.png"  width="70%" height="100%" alt="iDocs Template"style="padding-right:10px;"/>
-                    </div>
-                    <br/>
-                    <h4>클라우드 : 요구사항 이슈 만드는 방법 클릭시 ->  클라우드 이슈 유형 생성 과정에 관한 문서 확인 </h4>
-                    <h4>온프레미스 : 요구사항 이슈 만드는 방법 클릭시  -> 온프레미스 이슈 유형 생성 과정에 관한 문서 확인</h4>
-                    <br/>
-                    <h4>지라서버 카드</h4>
-                    <h4>=> 전체 서버 목록 조회</h4>
-                    <h4>- 카드 클릭 시, 해당 서버 상세조회</h4>
-                    <h4>◇ 리본</h4>
-                    <h4>- 등록한 지라 서버가 이슈유형으로 "arms-requirement" 가 없을 경우, 빨간색 리본 + Help! 표시</h4>
-                    <h4>◇ 표시내용</h4>
-                     <h4>- 각 항목 별 갯수를 가져오고, 항목의 기본값 설정이 없을 경우, 갯수 앞에 ! 표시</h4>
-                    <h4>◇ 버튼 (초록색)</h4>
-                    <h4>- 항목(이슈 유형 등) 버튼 클릭 시, 엔진(지라서버)과 암스의 항목을 비교해서 갱신</h4>
+<!--                    <h3>지라 서버</h3>-->
+<!--                    <div style="  display: flex; justify-content: center;">-->
+<!--                        <img    src="../docs/assets/images/jira_server_01.png"  width="70%" height="100%" alt="iDocs Template"style="padding-right:10px;"/>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <h4>클라우드 : 요구사항 이슈 만드는 방법 클릭시 ->  클라우드 이슈 유형 생성 과정에 관한 문서 확인 </h4>-->
+<!--                    <h4>온프레미스 : 요구사항 이슈 만드는 방법 클릭시  -> 온프레미스 이슈 유형 생성 과정에 관한 문서 확인</h4>-->
+<!--                    <br/>-->
+<!--                    <h4>지라서버 카드</h4>-->
+<!--                    <h4>=> 전체 서버 목록 조회</h4>-->
+<!--                    <h4>- 카드 클릭 시, 해당 서버 상세조회</h4>-->
+<!--                    <h4>◇ 리본</h4>-->
+<!--                    <h4>- 등록한 지라 서버가 이슈유형으로 "arms-requirement" 가 없을 경우, 빨간색 리본 + Help! 표시</h4>-->
+<!--                    <h4>◇ 표시내용</h4>-->
+<!--                     <h4>- 각 항목 별 갯수를 가져오고, 항목의 기본값 설정이 없을 경우, 갯수 앞에 ! 표시</h4>-->
+<!--                    <h4>◇ 버튼 (초록색)</h4>-->
+<!--                    <h4>- 항목(이슈 유형 등) 버튼 클릭 시, 엔진(지라서버)과 암스의 항목을 비교해서 갱신</h4>-->
 
 
 
-                    <hr/>
-                    <div style="margin-top: 35px;">
-                        <h3>지라 서버 상세보기/변경</h3>
-                    </div>
-                    <div style="  display: flex; justify-content: center; margin-top: 55px; margin-bottom: 55px;">
-                        <img    src="../docs/assets/images/jira_server_02.png"  width="80%" height="100%" alt="iDocs Template"style="padding-right:10px;"/>
-                    </div>
-                    <P>- 온프레미스 :</P>
-                    <P>=> 상세보기 /편집하기 /지라 프로젝트 /이슈해결책 /이슈우선순위 /이슈 유형 /이슈상태/ 삭제하기 로 구성</P>
-                    <P>- 클라우드 :</P>
-                    <p>=> 상세보기 /편집하기 /지라 프로젝트 /이슈해결책/ 이슈우선순위 /삭제하기  (이슈 유형/ 이슈상태) 로 구성</p>
-                    <p>=> (이슈 유형/ 이슈상태)의 경우 - 클라우드 서버는 프로젝트 아래에 존재</p>
-                    <P>◇ 지라 프로젝트 탭</P>
-                    <P>=> 프로젝트 명을 클릭하면 - 해당 프로젝트의 이슈 유형 / 이슈 상태 그리드 표시</P>
-                    <p>◇ 이슈 관련 탭 (이슈 유형, 이슈 상태, 이슈 해결책, 이슈 우선순위)</p>
-                    <p>=> 기본설정이 있을 경우, 라디오 버튼이 선택되어 있음</p>
-                    <p>=> 다른 항목을 선택 후, 기본값 설정 버튼을 누르면 Updae 실행</p>
+<!--                    <hr/>-->
+<!--                    <div style="margin-top: 35px;">-->
+<!--                        <h3>지라 서버 상세보기/변경</h3>-->
+<!--                    </div>-->
+<!--                    <div style="  display: flex; justify-content: center; margin-top: 55px; margin-bottom: 55px;">-->
+<!--                        <img    src="../docs/assets/images/jira_server_02.png"  width="80%" height="100%" alt="iDocs Template"style="padding-right:10px;"/>-->
+<!--                    </div>-->
+<!--                    <P>- 온프레미스 :</P>-->
+<!--                    <P>=> 상세보기 /편집하기 /지라 프로젝트 /이슈해결책 /이슈우선순위 /이슈 유형 /이슈상태/ 삭제하기 로 구성</P>-->
+<!--                    <P>- 클라우드 :</P>-->
+<!--                    <p>=> 상세보기 /편집하기 /지라 프로젝트 /이슈해결책/ 이슈우선순위 /삭제하기  (이슈 유형/ 이슈상태) 로 구성</p>-->
+<!--                    <p>=> (이슈 유형/ 이슈상태)의 경우 - 클라우드 서버는 프로젝트 아래에 존재</p>-->
+<!--                    <P>◇ 지라 프로젝트 탭</P>-->
+<!--                    <P>=> 프로젝트 명을 클릭하면 - 해당 프로젝트의 이슈 유형 / 이슈 상태 그리드 표시</P>-->
+<!--                    <p>◇ 이슈 관련 탭 (이슈 유형, 이슈 상태, 이슈 해결책, 이슈 우선순위)</p>-->
+<!--                    <p>=> 기본설정이 있을 경우, 라디오 버튼이 선택되어 있음</p>-->
+<!--                    <p>=> 다른 항목을 선택 후, 기본값 설정 버튼을 누르면 Updae 실행</p>-->
 
-                    <h3 style="margin-top: 55px;">클라우드 서버 - 이슈 유형 / 이슈 상태 그리드 </h3>
-                    <p>=> 클라우드 서버 > 지라프로젝트 > 프로젝트 이름 선택시 조회</p>
-                     <hr/>
-                    <br/>
-                </section>
+<!--                    <h3 style="margin-top: 55px;">클라우드 서버 - 이슈 유형 / 이슈 상태 그리드 </h3>-->
+<!--                    <p>=> 클라우드 서버 > 지라프로젝트 > 프로젝트 이름 선택시 조회</p>-->
+<!--                     <hr/>-->
+<!--                    <br/>-->
+<!--                </section>-->
+
                 <!-- 연결관리 -->
-                <section id="connect_manage">
-                    <h2>연결관리</h2>
-                    <br/>
+                <section id="jira_inquiry_connect">
+                        <h3>연결관리</h3>
+                        <br/>
+                        <br/>
+                        <h4>1. 제품(서비스) 연결된 JIRA 조회</h4>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div style="display: flex; justify-content: center;">
+                                    <img    src="../docs/assets/images/help_total_09.png " width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                                </div>
+                                <br/>
+                                <div style="padding-top: 20px;">
+                                    <ul>
+                                        <li>제품(서비스), 버전에 연결한 JIRA를 볼 수 있습니다.  </li>
+                                        <li>다운로드 클릭시 > 차트에 해당하는 이미지를 다운로드 합니다.</li>
+                                    </ul>
+                                </div>
+                                <br/>
+                                <br/>
+                            </div>
+                        </div>
+                        <hr/>
+                        <br/>
+                </section>
+                <!-- 자러 -  제품(서비스) 조회 및 선택-->
+                <section id="jira_service_version_inquiry_selection">
                     <h3>제품(서비스) 조회 및 선택</h3>
+                    <br/>
+                    <br/>
+                    <h4>1. 제품(서비스) 선택</h4>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_08.png"  width="50%;" height="600px"  alt="iDocs Template" style="padding-right:10px;"/>
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_10.png " width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>조회할 제품(서비스) 클릭합니다.</li>
+                                    <li>등록된 제품(서비스)가 없다면 제품(서비스) 관리 버튼 클릭 > 제품(서비스) 등록관리로 이동합니다. </li>
+                                </ul>
                             </div>
                             <br/>
                             <br/>
-                            <p>
-                                1. 추가한 제품(서비스)를 조회 및 선택합니다.<br/>
-                            </p>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_09.png"  width="60%" height="300px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 선택한 제품(서비스)의 버전 정보를 보여줍니다. <br/>
-                            </p>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_10.png"  width="60%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 선택한 제품(서비스), 버전에 관한 지라 서버를 등록합니다. <br/>
-                                2. 선택한 제품(서비스),버전에 관한 지라 서버를 변경합니다. <br/>
-                            </p>
                         </div>
                     </div>
-                    <br/>
                     <hr/>
                     <br/>
+                </section>
+                <!-- 자러 -  제품(서비스) Version 조회 -->
+                <section id="jira_version_inquiry_selection">
                     <h3>제품(서비스) Version 조회</h3>
-
-                    <h3> Jira 리스트</h3>
-
+                    <br/>
+                    <br/>
+                    <h4>2. 버전 선택 및 등록</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_11.png " width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>조회할 버전을 클릭합니다.</li>
+                                    <li>BaseVersion 외의 등록된 버전이 없다면 버전 관리 버튼 클릭 > 제품(서비스) 버전 관리로 이동합니다. </li>
+                                </ul>
+                            </div>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
                     <hr/>
                     <br/>
                 </section>
 
+                <!-- 자러 -  제품(서비스) Version 조회 -->
+                <section id="jira_list">
+                    <h3> Jira 리스트</h3>
+                    <br/>
+                    <br/>
+                    <h4>3. 연결할 JIRA 프로젝트 선택</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_12.png " width="100%;" height="100%;" alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>제품(서비스), 버전 선택 후 > 연결할 JIRA 프로젝트를 선택</li>
+                                    <li>오른쪽으로 선택한 JIRA 프로젝트 확인 후 >  연결 등록 버튼 클릭</li>
+                                </ul>
+                            </div>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                </section>
 
                 <!-- 요구사항 등록관리 / 연결관리 -->
                 <section id="requirement"><h1></h1></section>
 
-                <section id="requirement_regist_manage">
-                    <h2>등록관리</h2>
-                    <br/>
+                <section id="requirement_regist_inquiry">
                     <h3> 요구사항 조회</h3>
+                    <br/>
+                    <br/>
+                    <h4>1. 요구사항 조회 방법</h4>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_11.png"  width="60%;" height="850px"  alt="iDocs Template" style="padding-right:10px;"/>
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_06.png" width="100%;" height="100%;"  alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>요구사항 등록관리 페이지 접속 후 제품(서비스), 버전을 클릭합니다.</li>
+                                    <li>해당 하는 요구사항을 조회하며 선택합니다.</li>
+                                </ul>
                             </div>
                             <br/>
                             <br/>
-                            <p>
-                                1. 제품서비스 선택 → 버전 선택 → 요구사항 선택<br/>
-                                 - 제품(서비스), 버전 에 관한 요구사항을 조회합니다. <br/>
-                            </p>
-                            <br/>
-                            <br/>
-
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_12.png"  width="100%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 요구사항 선택시에 세부 내용 조회합니다.<br/>
-                                2. 요구사항 제품서비스, 요구사항 연관버전, 요구사항 아이디. 요구사항 제목, 요구사항 작성자, 요구사항 최근 작성일, 제품(서비스) 리뷰어, 요구사항 내용을 상세하게 볼 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <br/>
-
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_13.png"  width="100%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 요구사항 선택시에 내용을 편집합니다..<br/>
-                                2. 요구사항 제품서비스, 요구사항 연관버전, 요구사항 아이디. 요구사항 제목, 요구사항 작성자, 요구사항 최근 작성일, 제품(서비스) 리뷰어, 요구사항 내용을 편집합니다.  <br/>
-                                3. 파일을 추가 및 변경할 수 있습니다.  <br/>
-                            </p>
-                            <br/>
-                            <br/>
-                            <div style="  display: flex; justify-content: center;">
-                                <img    src="../docs/assets/images/help_14.png"  width="100%" height="800px" alt="iDocs Template"style="padding-right:10px;"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <p>
-                                1. 지라 프로젝트 연결을 변경합니다.<br/>
-                                1. 선택된 지라프로젝트를 해제할 수 있으며 다시 등록 할 수 있습니다.<br/>
-                            </p>
                         </div>
                     </div>
                     <br/>
                     <hr/>
                     <br/>
                 </section>
-                <section id="requirement_version_manage">
-                    <h2>현황관리</h2>
-                    <br/>
+                <section id="requirement_regist_content">
                     <h3> 요구사항 내용</h3>
+                    <br/>
+                    <br/>
+                    <h4>1. 요구사항 내용 조회 방법</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_07.png" width="100%;" height="100%;"  alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>상세보기 탭 > 제품(서비스), 버전에 관한 요구사항의 내용을 상세하게 볼 수있습니다.</li>
+                                    <li>편집하기 탭 > 요구사항 연관버전, 요구사항 제목, 요구사항 리뷰어, 요구사항 내용, 파일을 변경 후 저장합니다.</li>
+                                </ul>
+                            </div>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                    <br/>
+                    <hr/>
+                    <br/>
+                </section>
 
+                <section id="reqstatus_version_selection">
+                    <h3>현황관리</h3>
+                    <br/>
+                    <h3> 통계 및 진척도 조회</h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="display: flex; justify-content: center;">
+                                <img    src="../docs/assets/images/help_total_08.png" width="100%;" height="100%;"  alt="iDocs Template" style="padding-right:10px;"/>
+                            </div>
+                            <br/>
+                            <div style="padding-top: 20px;">
+                                <ul>
+                                    <li>제품(서비스), 버전을 선택합니다. </li>
+                                    <li>제품(서비스) 요구사항 통계 > 총 제품(서비스) 버전 개수, 총 요구사항 이슈 개수를 표시합니다.</li>
+                                    <li>요구사항 이슈에 연결된 통계 > 연결된 ALM 서버 개수, 연결된 ALM 프로젝트 개수, 연결된 ALM 이슈 개수를 표시합니다.</li>
+                                    <li>연결된 ALM 이슈의 진척도 > 열기, 해야할 일, 오픈, 환료된 진척도를 표시합니다. </li>
+                                </ul>
+                            </div>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                    <br/>
+                    <hr/>
+                    <br/>
                 </section>
             </div>
 
