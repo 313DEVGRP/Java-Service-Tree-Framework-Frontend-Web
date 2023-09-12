@@ -1270,11 +1270,11 @@ function default_setting_event() {
 
         if (selectedTab === "이슈유형" && selectServerType === "클라우드") {
             sourceCid = selectProjectId;
-            ajax_url = "jiraProject/makeDefaultIssueType.do/" + selectRadioId;
+            ajax_url = "jiraProject/"+ selectedTab+"/makeDefault.do/"+selectRadioId;
         }
         else if (selectedTab === "이슈상태" && selectServerType === "클라우드") {
             sourceCid = selectProjectId;
-            ajax_url = "jiraProject/makeDefaultIssueStatus.do/" + selectRadioId;
+            ajax_url = "jiraProject/"+ selectedTab+"/makeDefault.do/"+selectRadioId;
         } else { // 온프레미스 4가지, 클라우드의 해결책,우선순위
             sourceCid = selectServerId;
             ajax_url = "jiraServer/"+ selectedTab+"/makeDefault.do/"+selectRadioId;
@@ -1466,12 +1466,15 @@ function num_of_issue_type_and_status(list, type) { // cardList, "이슈상태" 
     }
 }
 
-//이슈유형(타입)에 arms-requirement 가 있는지 확인
-function chk_issue_type_whether_have_arms_requirement(list) {
+//이슈 생성이 가능한지, 이슈 타입 확인
+//기본값 설정이 있거나, 이슈유형으로 arms-requirement 있어야 한다.
+function chk_issue_type_whether_issue_can_be_created(list) {
     var arr = list; var chk_result = "false";
     if (arr.length != 0) {
         arr.forEach( function (info, index) {
-            if (info.c_issue_type_name === "arms-requirement") {
+            if (info.c_check = "true") {
+                chk_result = "true";
+            } else if (info.c_issue_type_name === "arms-requirement") {
                 chk_result = "true";
             }
         });
@@ -1501,7 +1504,7 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
                     if (data) {
                         resultList = data.response;
                         cardIndex = index;
-                        chk_result = chk_issue_type_whether_have_arms_requirement(resultList);
+                        chk_result = chk_issue_type_whether_issue_can_be_created(resultList);
 
                         var ribbonSelector = ".ribbon-"+cardIndex;
                         var ribbonHtmlData = ``;
@@ -1509,12 +1512,12 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
                         if (chk_result === "true") {
                             ribbonHtmlData += `<div class="ribbon ribbon-info">Ready</div>`;
                             $(ribbonSelector).append(ribbonHtmlData);
-                        } else if (chk_result == "false") { // 이슈타입은 있지만, arms-requirement가 없음
+                        } else if (chk_result == "false") {
                             ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;">
                                                 <button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button>
                                                </div>`;
                             $(ribbonSelector).append(ribbonHtmlData);
-                        } else { // undefined - 이슈 타입 자체가 없음
+                        } else { // undefined - 이슈유형 자체가 없음
                             ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Nothing<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`;
                             $(ribbonSelector).append(ribbonHtmlData);
 
@@ -1557,7 +1560,7 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
                     dic.serverId = jiraServerId;
                     for(var i = 0; i < arr.length ; i++) {
                         issueTypeList = arr[i].jiraIssueTypeEntities; // 이슈타입들의 목록
-                        chk_result = chk_issue_type_whether_have_arms_requirement(issueTypeList);
+                        chk_result = chk_issue_type_whether_issue_can_be_created(issueTypeList);
                         if (chk_result === "true") { /*console.log(arr[i].c_jira_name + "은 arms-requirement 있음");*/ }
                         else { //이슈타입_없는_프로젝트명 += arr[i].c_jira_name+ " ";
                             projectIdList.push(arr[i].c_id);
