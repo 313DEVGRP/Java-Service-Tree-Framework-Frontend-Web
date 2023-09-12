@@ -2492,7 +2492,7 @@ table tbody tr td {
 # Carousel section
 --------------------------------------------------------------*/
 .carousel-section p {
-	color: #f8f8f8
+	color: #f8f8f8;
 }
 
 /*--------------------------------------------------------------
@@ -2736,6 +2736,7 @@ table tbody tr td {
 }
 .menu-wrap h4 {
 	margin-bottom: 1em;
+	font-weight: 600;
 }
 .menu-wrap nav {
 	padding-left: 10px;
@@ -2744,6 +2745,12 @@ table tbody tr td {
 	display: block;
 	margin-bottom: 10px;
 	line-height: 20px;
+	color: #f8f8f8;
+	transition: all 0.2s;
+}
+.menu-wrap a:hover,
+.menu-wrap a:active {
+	font-size: 15px;
 }
 
 /*--------------------------------------------------------------
