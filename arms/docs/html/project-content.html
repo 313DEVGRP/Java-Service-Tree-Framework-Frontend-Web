@@ -142,7 +142,7 @@
     시스템</p>
 <p>4. 진척상황(Dashboard)은 실시간 요소가 아니며, Jira 에 추가 부하가 없도록 함</p>
 <p>5. Jira 에 등록된 정보(API)를 배치처리하여 데이터를 누적하기 위한 정보 저장 및 검색을 지원하는 색인, 검색엔진 시스템 </p>
-<p>6. 각역할별권한처리시스템(Rolebase)-LDAP,AD,CROWD 인증 연동</p>
+<p>6. 각역할별권한처리시스템(Role-based)-LDAP,AD,CROWD 인증 연동</p>
 <p>7. 요구사항( Issue) 이력관리시스템(분류체계시스템의서브기능)</p>
 <p>8. JIRA 등록 처리 시스템 </p>
 <p>9. Private Cloud Service 를 위한 Docker 지원 서비스 솔루션 : Kubernetes</p>
@@ -156,9 +156,9 @@
 <p>3. Atlassian UI 구성인 Bootstrap + jQuery 및 CSS 를 채택하여 개발 진행 ( Design 요소가 필요 없습니다 )</p>
 <p>4. Frontend 어플리케이션과 Backend 어플리케이션을 분리 개발 및 통신 프로토콜을 JSON 표준으로 채택하여 Frontend 개발이 Backend 영향없이
     100% 분리하여 병렬 개발 가능합니다. </p>
-<p>5. SonarQube 를 활용한 ( CPD, PMD, Checkstyle 등의 코드 퀄리티 측정 ) Sacle A 등급 코드 유지합니다</p>
-<p>6. UnitTest Ccoverage 를 핵심인 분류체계 시스템에 한정하여 100%를 달성합니다.</p>
-<p>7. 최종 산출 아티팩트를 Docker 로 구성( build automatioin)하고, Kubernetes 를 활용하여 배포 및 서비스 운영을 목표로 합니다. </p>
+<p>5. SonarQube 를 활용한 ( CPD, PMD, Checkstyle 등의 코드 퀄리티 측정 ) Scale A 등급 코드 유지합니다</p>
+<p>6. UnitTest Coverage 를 핵심인 분류체계 시스템에 한정하여 100%를 달성합니다.</p>
+<p>7. 최종 산출 아티팩트를 Docker 로 구성( build automation)하고, Kubernetes 를 활용하여 배포 및 서비스 운영을 목표로 합니다. </p>
 <br/>
 <br/>
 <br/>
@@ -168,10 +168,10 @@
 
 <ul>
     <li>입력된 요구사항( Issue)이 어느 제품(Service)에 요구하는 것인지. 해당 요구사항( Issue)과 JIRA mapping 정보 분류</li>
-    <li>요구사항( Issue) 의시스템이력관리 (기능확장의유연성)</li>
+    <li>요구사항( Issue) 의 시스템 이력관리 (기능 확장의 유연성)</li>
     <li>요구사항( Issue) 자체의 구조관리 ( PM 과 기획자의 역할, 채택과 변경등 )</li>
 </ul>
-<p>A-RMS(atlassian Requirements Managment System) 는 제품(서비스)관점의 JIRA 전용 RMS입니다. 제품(서비스) 중심으로 Jira
+<p>A-RMS(atlassian Requirements Management System) 는 제품(서비스)관점의 JIRA 전용 RMS입니다. 제품(서비스) 중심으로 Jira
     Project를 분석하고, 제품(서비스)중심으로 요구사항을 Jira Project에 전파합니다.</p>
 <br/>
 <img src="./assets/images/document/requirementInfo.png" style="width:100%;" alt="요구사항 정보">
