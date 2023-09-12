@@ -213,6 +213,7 @@ function dataTableClick(tempDataTable, selectedData) {
     console.log(selectedData);
     selectId = selectedData.c_id;
     // c_id로 getNode 실행
+
     //jiraServerCardClick(selectId);
     if(selectedData.c_jira_name !== undefined) {
         selectProjectId = selectedData.c_id;
@@ -291,8 +292,9 @@ function jiraServerCardClick(c_id) {
             $("#detailview_jira_pass_token").val(json.c_jira_server_connect_pw);
             $("#editview_jira_pass_token").val(json.c_jira_server_connect_pw);
 
-            $("#detailview_jira_server_contents").html(json.c_jira_server_contents);
-            // 편집하기 에디터 부분
+            //상세보기 에디터 부분
+            CKEDITOR.instances.detailview_jira_server_contents.setData(json.c_jira_server_contents);
+            //편집하기 에디터 부분
             CKEDITOR.instances.input_jira_server_editor.setData(json.c_jira_server_contents);
 
             //삭제 부분
@@ -385,16 +387,7 @@ function dataTableDrawCallback(tableInfo) {
     console.log(tableInfo);
 
     var className = "";
-    /*
-    if (selectedTab === "프로젝트") {
-        var projectTableData = tableInfo.aoData;
-        if(!isEmpty(projectTableData)) {
-            //console.log(이슈유형_암스_요구사항_없는프로젝트.find(arr => arr.serverId===selectServerId));
-            var no_issueType_arr =  이슈유형_암스_요구사항_없는프로젝트.find(arr => arr.serverId === selectServerId);
-            //여기서 상호 비교를 해야함
-        }
-    }
-    */
+
     if(selectedTab !== undefined) {
         if (selectedTab === "이슈해결책")  { className = "issueResolution"; }
         if (selectedTab ==="이슈우선순위") { className = "issuePriority";   }
@@ -580,12 +573,12 @@ function save_btn_click() {
 function update_btn_click(){
     $("#jira_server_update").click( function () {
         console.log($("#editview_jira_server_type input[name='options']:checked").val());
-        ///*
+
         $.ajax({
             url: "/auth-user/api/arms/jiraServer/updateNode.do",
             type: "put",
             data: {
-                c_id: selectId,
+                c_id: selectServerId,
                 c_title: $("#editview_jira_server_name").val(),
                 c_jira_server_name: $("#editview_jira_server_name").val(),
                 c_jira_server_connect_id: $("#editview_jira_server_connect_id").val(),
@@ -595,14 +588,13 @@ function update_btn_click(){
             statusCode: {
                 200: function () {
                     jSuccess(selectServerName + "의 데이터가 변경되었습니다.");
-                    console.log("현재 선택된 항목(c_id, 서버명) :" + selectId +", " + selectServerName);
+                    console.log("현재 선택된 항목(c_id, 서버명) :" + selectServerId +", " + selectServerName);
                     //데이터 테이블 데이터 재 로드
                     makeJiraServerCardDeck();
-                    jiraServerCardClick(selectId);
+                    jiraServerCardClick(selectServerId);
                 }
             }
         });
-        //*/
     });
 }
 
@@ -613,7 +605,7 @@ function popup_update_btn_click() {
             url: "/auth-user/api/arms/jiraServer/updateNode.do",
             type: "put",
             data: {
-                c_id: selectId,
+                c_id: selectServerId,
                 c_title: $("#extend_editview_jira_server_name").val(),
                 c_jira_server_name: $("#extend_editview_jira_server_name").val(),
                 c_jira_server_connect_id: $("#extend_editview_jira_server_connect_id").val(),
@@ -625,10 +617,10 @@ function popup_update_btn_click() {
                     $("#extendclose_jira_server").trigger("click");
 
                     jSuccess(selectServerName + "의 데이터가 팝업으로 변경되었습니다.");
-                    console.log("현재 선택된 항목(c_id, 서버명) :" + selectId +", " + selectServerName);
+                    console.log("현재 선택된 항목(c_id, 서버명) :" + selectServerId +", " + selectServerName);
                     //데이터 테이블 데이터 재 로드
                     makeJiraServerCardDeck();
-                    jiraServerCardClick(selectId);
+                    jiraServerCardClick(selectServerId);
                 }
             }
         });
@@ -782,6 +774,7 @@ function tab_click_event() {
         }
         else {
             $("#jira_default_update_div").removeClass("hidden");
+            $("#jira_server_delete_div").addClass("hidden");
             if (target === "#server_issue_resolution") {
                 selectedTab = "이슈해결책";
 
