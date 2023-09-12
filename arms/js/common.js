@@ -387,7 +387,7 @@ function setSideMenu(categoryName, listName, collapse) {
 			$(`#${listName}`).css({ color: "#a4c6ff" });
 			$(`#${listName}`).css({ "font-weight": "900" });
 		}
-		$(".spinner").html("<i class=\"fa fa-empire fa-spin\"></i> 어플리케이션 API Data를 가져오는 중입니다...");
+		$(".spinner").html("<img src=\"./img/loading.gif\" width='25px' height='25px'/> 어플리케이션 API Data를 가져오는 중입니다...");
 	}, 1000);
 }
 
