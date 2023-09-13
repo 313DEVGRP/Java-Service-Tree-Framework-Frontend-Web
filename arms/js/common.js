@@ -737,7 +737,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						$(jQueryElementID).jstree("refresh");
 
 						if (typeof Chat != "undefined") {
-							Chat.sendMessage("노드가 이동되었습니다. 이동된 노드의 아이디는 " + r.c_id, function (data) {
+							Chat.sendMessage("노드가 이동되었습니다. 이동된 노드의 아이디는 " +  $(this).attr("id").replace("node_", "").replace("copy_", ""), function (data) {
 								console.log("jsTreeBuild :: move_node :: data = " + data);
 							});
 						}

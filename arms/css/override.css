@@ -2341,9 +2341,6 @@ blockquote {
 
 .alert-created {
 	width: max-content;
-	background: linear-gradient(90deg, #e49400 50%, transparent 50%), linear-gradient(90deg, #e49400 50%, transparent 50%),
-		linear-gradient(0deg, #e49400 50%, transparent 50%), linear-gradient(0deg, #e49400 50%, transparent 50%);
-	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
 	background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
 	padding: 1px;
 	animation: border-dance 7s infinite linear;
