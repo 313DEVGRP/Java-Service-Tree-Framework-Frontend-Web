@@ -2729,7 +2729,7 @@ table tbody tr td {
 	flex-wrap: wrap;
 }
 .menu-wrap {
-	width: 25%;
+	width: 20%;
 }
 .menu-wrap h4 {
 	margin-bottom: 1em;
@@ -2742,7 +2742,7 @@ table tbody tr td {
 	display: block;
 	margin-bottom: 10px;
 	line-height: 20px;
-	color: #f8f8f8;
+	color: #d2d2d2;
 	transition: all 0.2s;
 }
 .menu-wrap a:hover,
