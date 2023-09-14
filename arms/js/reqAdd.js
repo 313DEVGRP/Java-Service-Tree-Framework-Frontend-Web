@@ -479,6 +479,35 @@ function dataTableLoad(selectId, selectRel) {
 			.always(function () {});
 	}else{
 		console.log("folder clicked");
+		var columnList = [
+			{ data: "c_id", defaultContent: "-" },
+			{ data: "c_left", defaultContent: "-" },
+			{ data: "c_title", defaultContent: "-" }
+		];
+		var rowsGroupList = [];
+		var columnDefList = [];
+		var selectList = {};
+		var orderList = [];
+		var buttonList = [];
+
+		var jquerySelector = "#req_table";
+		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do?c_id="+selectId;
+		var jsonRoot = "";
+		var isServerSide = false;
+
+		dataTableRef = dataTable_build(
+			jquerySelector,
+			ajaxUrl,
+			jsonRoot,
+			columnList,
+			rowsGroupList,
+			columnDefList,
+			selectList,
+			orderList,
+			buttonList,
+			isServerSide
+		);
+
 	}
 }
 
@@ -717,6 +746,7 @@ function dataTableClick(tempDataTable, selectedData) {
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(settings, json) {
+	console.log("데이터테이블콜백")
 	setDocViewTab();
 	//상세보기 탭 셋팅
 	//setDetailAndEditViewTab();
