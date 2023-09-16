@@ -1376,40 +1376,50 @@ function save_req() {
 
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
-		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
-			type: "POST",
-			data: {
-				ref: selectedJsTreeId,
-				c_title: $("#req_title").val(),
-				c_type: $("input[name=reqType]:checked").val(),
-				c_req_pdservice_link: $("#selected_pdService").val(),
-				c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
-				c_req_writer: "[" + userName + "]" + " - " + userID,
-				c_req_priority_link: $("input[name='req_priority']:checked").val(),
-				c_req_state_link: 3, //요구사항 생성.
-				c_req_reviewer01: reviewers01,
-				c_req_reviewer02: reviewers02,
-				c_req_reviewer03: reviewers03,
-				c_req_reviewer04: reviewers04,
-				c_req_reviewer05: reviewers05,
-				c_req_reviewer01_status: "Draft",
-				c_req_reviewer02_status: "Draft",
-				c_req_reviewer03_status: "Draft",
-				c_req_reviewer04_status: "Draft",
-				c_req_reviewer05_status: "Draft",
-				c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
-				c_req_desc: "설명",
-				c_req_etc: "비고"
-			},
-			statusCode: {
-				200: function () {
-					$("#req_tree").jstree("refresh");
-					$("#close_req").trigger("click");
-					jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
-				}
+		if($("#popup_version").val().length >= 1) {
+			if($("#req_title").val().trim() !== "" ) {
+				$.ajax({
+					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
+					type: "POST",
+					data: {
+						ref: selectedJsTreeId,
+						c_title: $("#req_title").val(),
+						c_type: $("input[name=reqType]:checked").val(),
+						c_req_pdservice_link: $("#selected_pdService").val(),
+						c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
+						c_req_writer: "[" + userName + "]" + " - " + userID,
+						c_req_priority_link: $("input[name='req_priority']:checked").val(),
+						c_req_state_link: 3, //요구사항 생성.
+						c_req_reviewer01: reviewers01,
+						c_req_reviewer02: reviewers02,
+						c_req_reviewer03: reviewers03,
+						c_req_reviewer04: reviewers04,
+						c_req_reviewer05: reviewers05,
+						c_req_reviewer01_status: "Draft",
+						c_req_reviewer02_status: "Draft",
+						c_req_reviewer03_status: "Draft",
+						c_req_reviewer04_status: "Draft",
+						c_req_reviewer05_status: "Draft",
+						c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
+						c_req_desc: "설명",
+						c_req_etc: "비고"
+					},
+					statusCode: {
+						200: function () {
+							$("#req_tree").jstree("refresh");
+							$("#close_req").trigger("click");
+							jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
+						}
+					}
+				});
+			} else {
+				alert("요구사항 제목이 없습니다.");
+				return false;
 			}
-		});
+		} else {
+			alert("선택된 버전이 없습니다.");
+			return false;
+		}
 	});
 }
 
