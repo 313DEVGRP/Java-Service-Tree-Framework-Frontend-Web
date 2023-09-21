@@ -399,8 +399,8 @@ function formValidate(formInput) {
 			return false;
 		}
 
-		if (input.hasClass('input_pdservice_version') && !isValidVersion(input.val())) {
-			alert("The version is invalid. Please use the 0.0.1 format");
+		if (input.hasClass('input_pdservice_version') && !input.val()) {
+			alert("The version cannot be empty.");
 			input.focus();
 			return false;
 		}
@@ -417,8 +417,7 @@ function formValidate(formInput) {
 }
 
 function isValidVersion(version) {
-	const regex = /^(\d+\.\d+\.\d+|BaseVersion)$/;
-	return regex.test(version);
+	return !!version;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
