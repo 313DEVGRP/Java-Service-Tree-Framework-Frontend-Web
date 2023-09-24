@@ -43,7 +43,7 @@ function execDocReady() {
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function() {
-            alert("check");
+            // alert("check");
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
