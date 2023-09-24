@@ -138,13 +138,16 @@ function tab_click_event() {
 			$("#pdservice_delete_div").removeClass("hidden");
 
 			$(".body-middle").hide();
-
+			$(".pdservice-image-row").hide();
+			$(".file-delete-btn").hide();
 			if (isEmpty(selectId)) {
 				jError("선택된 제품(서비스)가 없습니다. 오류는 무시됩니다.");
 			} else {
 				$("#delete_text").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
 			}
 		} else if (target == "#report") {
+			$(".pdservice-image-row").show();
+			$(".file-delete-btn").show();
 			$("#pdservice_details_popup_div").addClass("hidden");
 			$("#pdservice_delete_div").addClass("hidden");
 			$("#pdservice_update_div").removeClass("hidden");
@@ -153,6 +156,8 @@ function tab_click_event() {
 			$("#pdservice_details_popup_div").removeClass("hidden");
 			$("#pdservice_update_div").addClass("hidden");
 			$("#pdservice_delete_div").addClass("hidden");
+			$(".pdservice-image-row").hide();
+			$(".file-delete-btn").hide();
 
 			if (selectId == undefined) {
 				$(".body-middle").hide();
@@ -570,8 +575,13 @@ function dataTableClick(tempDataTable, selectedData) {
 	selectName = selectedData.c_title;
 	pdServiceDataTableClick(selectedData.c_id);
 
+	//제품 클릭 시, 상세보기 tab을 기본값으로 세팅.
+	$('ul.nav-tabs li').removeClass('active');
+	$('.nav-tabs-details').addClass('active');
+
 	//파일 업로드 관련 레이어 보이기 처리
 	$(".body-middle").show();
+	$(".pdservice-image-row").hide(); // 드래그 앤 드롭(dropzone.js) display none 처리. 편집하기 tab 에서만 보여준다.
 
 	//파일 리스트 초기화
 	$("table tbody.files").empty();
@@ -587,6 +597,7 @@ function dataTableClick(tempDataTable, selectedData) {
 		context: $fileupload[0]
 	}).done(function (result) {
 		$(this).fileupload("option", "done").call(this, null, { result: result });
+		$(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리 -> 편집하기 tab 에서만 보여준다.
 	});
 }
 
