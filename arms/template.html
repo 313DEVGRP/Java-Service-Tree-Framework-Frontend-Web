@@ -225,17 +225,19 @@
 			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
 			    <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
 			    {% } else { %}
-			    <td class="preview">{% if (file.thumbnail_url) { %}
-			        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+			    <td class="preview">{% if (file.thumbnailUrl) { %}
+			        <a href="{%=file.url%}" title="{%=file.fileName%}" data-gallery="gallery" download="{%=file.fileName%}">
+			        <img src="https://via.placeholder.com/80x80">
+                    <!-- <img src="{%=file.thumbnailUrl%}" onerror="this.src='https://via.placeholder.com/80x80';"> -->
 			        {% } %}</td>
-			    <td class="name">
-			        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+			    <td class="name" style="vertical-align: middle;">
+			        <a href="{%=file.url%}" title="{%=file.fileName%}" data-gallery="{%=file.thumbnailUrl&&'gallery'%}" download="{%=file.fileName%}">{%=file.fileName%}</a>
 			    </td>
-			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+			    <td class="size" style="vertical-align: middle;"><span>{%=o.formatFileSize(file.size)%}</span></td>
 			    <td colspan="2"></td>
 			    {% } %}
-			    <td>
-			        <button class="btn btn-danger btn-sm delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+			    <td style="vertical-align: middle;">
+			        <button class="btn btn-danger btn-sm delete file-delete-btn" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 			        <i class="fa fa-trash"></i>
 			        <span>Delete</span>
 			        </button>
