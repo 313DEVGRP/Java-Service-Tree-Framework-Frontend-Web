@@ -43,7 +43,9 @@ function execDocReady() {
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function() {
-            // alert("check");
+            // 사이드 메뉴 색상 설정
+            $('.widget').widgster();
+            setSideMenu("sidebar_menu_dashboard", "sidebar_menu_dashboard_home");
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
