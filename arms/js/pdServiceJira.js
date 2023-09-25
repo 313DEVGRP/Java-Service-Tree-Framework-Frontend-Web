@@ -70,11 +70,12 @@ function execDocReady() {
 			}, 313 /*milli*/);
 
 
-			setdata_for_multiSelect();
-			connect_pdservice_jira();
-			init_versionList();
-			downloadChartImage();
-
+			setdata_for_multiSelect();//멀티셀렉트 세팅
+			connect_pdservice_jira(); //제품서비스와 지라프로젝트 연결 실행
+			init_versionList();   //버전 요소 생성
+			downloadChartImage(); //차트 이미지 다운로드
+			
+			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
 			});
@@ -335,7 +336,7 @@ function versionClicks(element, c_id, c_title) {
 					</div>
 				</div>
 			</div>`;
-	console.log("dataLoad :: coloredTitleHtml - >", coloredTitleHtml);
+	//console.log("dataLoad :: coloredTitleHtml - >", coloredTitleHtml);
 
 	$(".list-item").html(coloredTitleHtml);
 
@@ -470,7 +471,7 @@ function connect_pdservice_jira(){
 /* --------------------------- multi select & slim scroll ---------------------------------- */
 function setdata_for_multiSelect() {
 	$.ajax({
-		url: "/auth-user/api/arms/jiraProjectPure/getChildNode.do?c_id=2",
+		url: "/auth-user/api/arms/jiraServer/getChildNode.do?c_id=2",
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
@@ -480,12 +481,16 @@ function setdata_for_multiSelect() {
 			var optionData = [];
 			for (var k in data) {
 				var obj = data[k];
-				var jira_name = obj.c_title;
-				var jira_idx = obj.c_id;
-
-				optionData.push("<option value='" + jira_idx + "'>" + jira_name + "</option>");
+				var server_name = obj.c_jira_server_name;
+				for(var p in data[k].jiraProjectEntities) {
+					var obj2 = data[k].jiraProjectEntities[p];
+					var jira_name = obj2.c_jira_name;
+					var jira_idx = obj2.c_id;
+					optionData.push("<option value='" + jira_idx + "'>"+"["+server_name+"] "+jira_name + "</option>");
+				}
 			}
 
+			//프로젝트 목록 추가
 			$(".searchable").html(optionData.join(""));
 
 			////////////////////////////////////////////////
