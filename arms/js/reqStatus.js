@@ -5,10 +5,13 @@ var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 var dataTableRef;
 
+var selectedIssue; //선택한 이슈
+var selectedIssueName;   //선택한
+
 function execDocReady() {
 
 
-	var pluginGroups = [
+	var pluginGroups = [ 
 		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
 			"../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
@@ -73,6 +76,8 @@ function execDocReady() {
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			popup_size_setting();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
@@ -144,11 +149,13 @@ function makePdServiceSelectBox() {
 		} else {
 			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		}
+		//이슈리스트 데이터테이블
 		dataTableLoad($("#selected_pdService").val(), endPointUrl);
-
+		//통계로드
 		statisticsLoad($("#selected_pdService").val(), null);
-
+		//진행상태 가져오기
 		progressLoad($("#selected_pdService").val(), null);
+
 	});
 } // end makePdServiceSelectBox()
 
@@ -316,7 +323,11 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					var _render =
+						'<div style=\'white-space: nowrap; color: #a4c6ff\'>' +
+						'<a href="#" data-target="#my_modal2" data-toggle="modal" onclick="click_issue_name(\''+data+'\')">' + data + "</a>" +
+						"</div>";
+					return _render;
 				}
 				return data;
 			},
@@ -497,7 +508,7 @@ function dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = [1,3,6];
+	var rowsGroupList = [1,3];
 	var columnDefList = [
 		{
 			orderable: false,
@@ -549,6 +560,17 @@ function dataTableLoad(selectId, endPointUrl) {
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
 	console.log(selectedData);
+	selectedIssue = selectedData;
+
+	if(selectedIssueName !== "") {
+		var endPointUrl2 = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val()
+			+ "/getIssueAndSubLinks.do?serverId="+selectedIssue.c_jira_server_link
+			+ "&issueKey="+selectedIssue.c_issue_key
+		    + "&versionId="+selectedIssue.c_pds_version_link;
+		console.log("endPointUrl2 ====> " + endPointUrl2);
+		getLinkedIssueAndSubtask("not Use this parameter",endPointUrl2); // 데이터테이블 그리기
+
+	}
 }
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
@@ -594,3 +616,212 @@ $("#excelchecker").on("click", function () {
 $("#pdfchecker").on("click", function () {
 	reqStatusDataTable.button(".buttons-pdf").trigger();
 });
+
+function click_issue_name(name) {
+	selectedIssueName = "";
+	console.log("clicked_issue_name ==> " + name);
+	if (name !== "" || name !== undefined) {
+		selectedIssueName = name;
+	}
+}
+
+function getLinkedIssueAndSubtask(notUse, endPointUrl) {
+	var columnList = [
+		{
+			name: "issueID",
+			title: "이슈아이디",
+			data: "issueID",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: false
+		},
+		{
+			name: "key",
+			title: "요구사항 이슈 키",
+			data: "key",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "summary",
+			title: "요구사항",
+			data: "summary",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "parentReqKey",
+			title: "부모이슈 키",
+			data: "parentReqKey",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: false
+		},
+		{
+			name: "priority",
+			title: "이슈 우선순위",
+			data: "priority.priority_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "status.status_name",
+			title: "이슈 상태",
+			data: "status.status_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "reporter",
+			title: "이슈 보고자",
+			data: "reporter.reporter_accountId",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "assignee",
+			title: "이슈 할당자",
+			data: "assignee.assignee_accountId",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "created",
+			title: "이슈 생성일자",
+			data: "created",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "updated",
+			title: "이슈 최근 업데이트 일자",
+			data: "updated",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		}
+	];
+
+	var rowsGroupList = [];
+	var columnDefList = [
+		{
+			orderable: false,
+			className: "select-checkbox",
+			targets: 0
+		}
+	];
+	var orderList = [[1, "asc"]];
+	var jquerySelector = "#linkedIssueAndSubtaskTable";
+	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+	var jsonRoot = "";
+	var buttonList = [];
+	var selectList = {};
+	var isServerSide = false;
+
+	reqStatusDataTable = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide
+	);
+}
+
+function popup_size_setting() {
+	$("#modal_popup_id").click(function () {
+		console.log("modal_popup_id clicked");
+		var height = $(document).height() - 600;
+
+		$("#my_modal2").on("hidden.bs.modal", function (e) {
+			console.log("modal close");
+			console.log($(this).find('form')[0]);
+			$(this).find('form')[0].reset();
+		});
+
+		$(".modal-body")
+			.find(".cke_contents:eq(0)")
+			.css("height", height + "px");
+	});
+}
