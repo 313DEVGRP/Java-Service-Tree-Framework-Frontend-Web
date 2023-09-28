@@ -426,7 +426,7 @@ function isValidVersion(version) {
 function dataLoad(getSelectedText, selectedText) {
 	// ajax 처리 후 에디터 바인딩.
 	console.log("dataLoad :: getSelectedID → " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdService/getNode.do?c_id=" + getSelectedText).done(function (json) {
+	$.ajax("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + getSelectedText).done(function (json) {
 		console.log("dataLoad :: success → ", json);
 		$("#version_accordion").jsonMenu("set", json.pdServiceVersionEntities, { speed: 5000 });
 		//version text setting

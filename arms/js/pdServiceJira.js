@@ -579,7 +579,7 @@ function pdServiceDataTableClick(c_id) {
 	// console.log("pdSerivceDataTableClick:: c_id -> " + c_id);
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
 		method: "GET", // HTTP 요청 메소드(GET, POST 등)
 		dataType: "json", // 서버에서 보내줄 데이터의 타입

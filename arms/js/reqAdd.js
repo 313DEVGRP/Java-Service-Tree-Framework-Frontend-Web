@@ -1244,7 +1244,7 @@ function registNewPopup() {
 
 	//리뷰어 셋팅
 	$.ajax({
-		url: "/auth-user/api/arms/pdService/getNode.do?c_id=" + $("#selected_pdService").val(),
+		url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
