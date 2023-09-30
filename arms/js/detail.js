@@ -73,10 +73,6 @@ function execDocReady() {
 
             save_post_btn_click();
 
-            init_versionList();
-
-            bindDataVersionTab();
-
         })
         .catch(function (errorMessage) {
             console.error(errorMessage);
@@ -159,7 +155,9 @@ var scrollApiFunc = function () {
         if (!visibilityStatus[element] && checkVisible(element)) {
 
             if(element === "#version") {
-                getVersionDetailViewTab();
+                bindDataVersionTab();
+
+                init_versionList();
             }
             else if (element === "#allreq") {
                 build_ReqData_By_PdService();
@@ -168,7 +166,7 @@ var scrollApiFunc = function () {
                 fileLoadByPdService();
             }
             else if (element === "#question") {
-                getReqCommentList();
+                // getReqCommentList();
             }
 
             visibilityStatus[element] = true;
@@ -283,14 +281,26 @@ function bindDataDetailTab(ajaxData) {
 }
 
 // ------------------ 버전 상세보기 ------------------ //
+function versionDetailViewTabClick() {
+    $("#get_version_list").click(function () {
+        bindDataVersionTab();
+
+        init_versionList();
+    });
+}
+
 function bindDataVersionTab() {
+    console.log("Version Detail View Tab ::::");
+    if (callAPI("versionAPI")) {
+        return;
+    }
 
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService');
 
     // ajax 처리 후 데이터 바인딩
     console.log("dataLoad :: getSelectedID → " + selectedPdService);
-    $.ajax("/auth-user/api/arms/pdService/getNode.do?c_id=" + selectedPdService).done(function (json) {
+    $.ajax("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + selectedPdService).done(function (json) {
         console.log("dataLoad :: success → ", json);
 
         $("#version-product-name").html(json.c_title);
@@ -359,115 +369,6 @@ function versionClick(element, c_id) {
             jSuccess("버전 상세 정보 조회가 완료 되었습니다.");
             console.log(xhr + status);
         });
-}
-
-function versionDetailViewTabClick() {
-    $("#get_version_list").click(function () {
-        getVersionDetailViewTab();
-    });
-}
-
-function getVersionDetailViewTab() {
-    console.log("Version Detail View Tab ::::");
-    if (callAPI("versionAPI")) {
-        return;
-    }
-
-    var urlParams = new URL(location.href).searchParams;
-    var selectedPdService = urlParams.get('pdService');
-
-    $.ajax({
-        url: "/auth-user/api/arms/pdService/getVersionList.do" +
-            "?c_id=" + selectedPdService,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                //////////////////////////////////////////////////////////
-                console.log(data.response);
-                // $("#detailversion_contents").html(data.response[0].c_title);
-
-                /*                for (var k in data.response) {
-                                    var obj = data.response[k];
-                                    alert(obj.c_title);
-                                    /!* 가져와지는 건 확인.... *!/
-                                    // var $opt = $("<option />", {
-                                    //     value: obj.c_id,
-                                    //     text: obj.c_title
-                                    // });
-                                }*/
-                // ------------------ 버전 상세보기 ------------------ //
-                // bindDataDetailTab(data);
-                // bindDataVersionDetailTab(data);
-                //////////////////////////////////////////////////////////
-                jSuccess("버전 목록 조회가 완료 되었습니다.");
-            }
-        },
-        beforeSend: function () {
-        },
-        complete: function () {
-        },
-        error: function (e) {
-            jError("버전 목록 조회 중 에러가 발생했습니다.");
-        }
-    });
-}
-
-function bindDataVersionDetailTab(ajaxData) {
-
-    console.log(ajaxData);
-
-    //제품(서비스) 버전 데이터 바인딩
-    /* 박현민 여기에 버전데이터 바인딩 */
-    /*    var selectedPdServiceText = ajaxData.pdService_c_title;
-
-        if (isEmpty(selectedPdServiceText)) {
-            $("#detailview_req_pdservice_name").text("");
-        } else {
-            $("#detailview_req_pdservice_name").text(selectedPdServiceText);
-        }
-
-        $("#detailview_req_id").text(selectedJsTreeId);
-        $("#detailview_req_name").text(ajaxData.reqAdd_c_title);
-
-        //Version 데이터 바인딩
-        if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
-            $("#detailview_req_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
-        } else {
-            $("#detailview_req_pdservice_version").text(ajaxData.pdServiceVersion_c_title);
-        }
-
-        $("#detailview_req_writer").text(ajaxData.reqAdd_c_req_writer);
-        $("#detailview_req_write_date").text(new Date(ajaxData.reqAdd_c_req_create_date).toLocaleString());
-
-        if (ajaxData.reqAdd_c_req_reviewer01 == null || ajaxData.reqAdd_c_req_reviewer01 == "none") {
-            $("#detailview_req_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
-        } else {
-            $("#detailview_req_reviewer01").text(ajaxData.reqAdd_c_req_reviewer01);
-        }
-        if (ajaxData.reqAdd_c_req_reviewer02 == null || ajaxData.reqAdd_c_req_reviewer02 == "none") {
-            $("#detailview_req_reviewer02").text("2번째 리뷰어(연대책임자) 없음");
-        } else {
-            $("#detailview_req_reviewer02").text(ajaxData.reqAdd_c_req_reviewer02);
-        }
-        if (ajaxData.reqAdd_c_req_reviewer03 == null || ajaxData.reqAdd_c_req_reviewer03 == "none") {
-            $("#detailview_req_reviewer03").text("3번째 리뷰어(연대책임자) 없음");
-        } else {
-            $("#detailview_req_reviewer03").text(ajaxData.reqAdd_c_req_reviewer03);
-        }
-        if (ajaxData.reqAdd_c_req_reviewer04 == null || ajaxData.reqAdd_c_req_reviewer04 == "none") {
-            $("#detailview_req_reviewer04").text("4번째 리뷰어(연대책임자) 없음");
-        } else {
-            $("#detailview_req_reviewer04").text(ajaxData.reqAdd_c_req_reviewer04);
-        }
-        if (ajaxData.reqAdd_c_req_reviewer05 == null || ajaxData.reqAdd_c_req_reviewer05 == "none") {
-            $("#detailview_req_reviewer05").text("5번째 리뷰어(연대책임자) 없음");
-        } else {
-            $("#detailview_req_reviewer05").text(ajaxData.reqAdd_c_req_reviewer05);
-        }
-        $("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);*/
 }
 
 // ------------------ 제품의 요구사항 전체 목록 보기 ------------------ //
@@ -695,9 +596,9 @@ function fileLoadByPdService() {
 
         // this.classList.add("filter-active");
 
-        portfolioIsotope.arrange({
-            filter: this.getAttribute("data-filter")
-        });
+        // portfolioIsotope.arrange({
+        //     filter: this.getAttribute("data-filter")
+        // });
 
         portfolioIsotope.on("arrangeComplete", function () {
             AOS.refresh();
@@ -771,7 +672,7 @@ var on = (type, el, listener, all = false) => {
 // ------------------ QnA 게시판보기 ------------------ //
 function reqCommentListViewTabClick() {
     $("#get_req_comment_list").click(function () {
-        getReqCommentList();
+        // getReqCommentList();
     });
 }
 
