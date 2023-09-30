@@ -133,8 +133,6 @@ function execDocReady() {
 			change_tab_action();
 			click_btn_for_connect_req_jira();
 
-			init_fileupload();
-
 			save_req();
 			//jiraProjectConnectionInfo();
 
@@ -382,9 +380,6 @@ function jsTreeClick(selectedNode) {
 		setDetailAndEditViewTab();
 		// defaultType_dataTableLoad(selectedJsTreeId);
 	}
-
-	//파일 데이터셋팅
-	//get_FileList_By_Req();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -784,65 +779,6 @@ function dataTableDrawCallback(tableInfo) {
 		.DataTable()
 		.columns.adjust()
 		.responsive.recalc();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-/** file upload 이니시에이터 **/
-////////////////////////////////////////////////////////////////////////////////////////
-function init_fileupload() {
-	// Initialize the jQuery File Upload widget:
-	var $fileupload = $("#fileupload");
-	$fileupload.fileupload({
-		// Uncomment the following to send cross-domain cookies:
-		//xhrFields: {withCredentials: true},
-		autoUpload: true,
-		url: "/auth-user/api/arms/reqAdd/uploadFileToNode.do",
-		dropZone: $("#dropzone")
-	});
-
-	// Load existing files:
-	$.ajax({
-		// Uncomment the following to send cross-domain cookies:
-		//xhrFields: {withCredentials: true},
-		url: "/auth-user/api/arms/reqAdd/getFilesByNode.do",
-		// data: { fileIdlink: selectId },
-		dataType: "json",
-		context: $fileupload[0]
-	}).done(function (result) {
-		$(this).fileupload("option", "done").call(this, null, { result: result });
-	});
-
-	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
-		// The example input, doesn't have to be part of the upload form:
-		var input = $("#fileIdlink");
-		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-		data.formData = { fileIdlink: input.val(), c_title: tableName };
-		if (!data.formData.fileIdlink) {
-			data.context.find("button").prop("disabled", false);
-			input.focus();
-			return false;
-		}
-	});
-}
-
-function get_FileList_By_Req() {
-	$("#fileIdlink").val(selectedJsTreeId);
-	//jstree click 시 file 컨트롤
-	//파일 리스트 초기화
-	$("table tbody.files").empty();
-	// Load existing files:
-	var $fileupload = $("#fileupload");
-	// Load existing files:
-	$.ajax({
-		// Uncomment the following to send cross-domain cookies:
-		//xhrFields: {withCredentials: true},
-		url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-		data: { fileIdlink: selectedJsTreeId, c_title: "T_ARMS_REQADD_" + $("#selected_pdService").val() },
-		dataType: "json",
-		context: $fileupload[0]
-	}).done(function (result) {
-		$(this).fileupload("option", "done").call(this, null, { result: result });
-	});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
