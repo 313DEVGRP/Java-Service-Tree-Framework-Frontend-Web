@@ -265,7 +265,7 @@ function getUserInfo() {
 					userAttributes = json[0].attributes;
 					userEnabled = json[0].enabled;
 					userGroups = json[0].groups;
-					userID = json[0].id;
+					userID = json[0].sub;
 					userRealmRoles = json[0].realmRoles;
 					console.log("authUserCheck :: userApplicationRoles = " + userApplicationRoles);
 					console.log("authUserCheck :: userAttributes = " + userAttributes);
