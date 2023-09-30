@@ -1395,7 +1395,7 @@ function click_btn_for_req_update() {
 				c_id: $("#editview_req_id").val(),
 				c_title: $("#editview_req_name").val(),
 				c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
-				c_req_writer: "admin",
+				// c_req_writer: "[" + userName + "]" + " - " + userID, 작성자는 최초 작성자로 고정. 수정 시 작성자는 변경하지 않는 것으로 처리
 				c_req_update_date: new Date(),
 				c_priority: $("#editview_req_priority").children(".btn.active").children("input").val(),
 				c_req_reviewer01: reviewers01,
