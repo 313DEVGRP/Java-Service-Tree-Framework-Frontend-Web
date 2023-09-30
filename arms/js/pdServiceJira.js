@@ -72,8 +72,8 @@ function execDocReady() {
 
 			setdata_for_multiSelect();//멀티셀렉트 세팅
 			connect_pdservice_jira(); //제품서비스와 지라프로젝트 연결 실행
-			init_versionList();   //버전 요소 생성
-			downloadChartImage(); //차트 이미지 다운로드
+			init_versionList();   	  //버전 요소 생성
+			downloadChartImage();     //차트 이미지 다운로드
 			
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
@@ -482,11 +482,13 @@ function setdata_for_multiSelect() {
 			for (var k in data) {
 				var obj = data[k];
 				var server_name = obj.c_jira_server_name;
+				var server_type = obj.c_jira_server_type;
 				for(var p in data[k].jiraProjectEntities) {
 					var obj2 = data[k].jiraProjectEntities[p];
 					var jira_name = obj2.c_jira_name;
 					var jira_idx = obj2.c_id;
-					optionData.push("<option value='" + jira_idx + "'>"+"["+server_name+"] "+jira_name + "</option>");
+					optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
+					//optionData.push("<option value='" + jira_idx + "'>"+"["+server_name+"] "+jira_name + "</option>");
 				}
 			}
 
