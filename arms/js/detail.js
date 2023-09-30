@@ -4,6 +4,7 @@
 var selectedJsTreeId; // 요구사항 아이디
 var calledAPIs = {};
 var visibilityStatus = {
+    '#detail' : false,
     '#version': false,
     '#allreq': false,
     '#files': false,
@@ -11,67 +12,70 @@ var visibilityStatus = {
 };
 
 function execDocReady() {
-           var pluginGroups = [
-                [
-                    // Vendor JS Files
-                    "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
-                    "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
-                    "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
-                    // Template Main JS File
-                    "../reference/jquery-plugins/MyResume/assets/js/main.js"
-                ],
+    var pluginGroups = [
+        [
+            // Vendor JS Files
+            "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
+            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
+            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
+            // Template Main JS File
+            "../reference/jquery-plugins/MyResume/assets/js/main.js"
+        ],
 
-                [
-                    "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-                    "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-                    "../reference/lightblue4/docs/lib/widgster/widgster.js",
-                    "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-                    "../reference/light-blue/lib/jquery.fileupload.js",
-                    "../reference/light-blue/lib/jquery.fileupload-fp.js",
-                    "../reference/light-blue/lib/jquery.fileupload-ui.js",
-                    "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-                    "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-                    "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
-                ],
+        [
+            "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+            "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+            "../reference/lightblue4/docs/lib/widgster/widgster.js",
+            "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+            "../reference/light-blue/lib/jquery.fileupload.js",
+            "../reference/light-blue/lib/jquery.fileupload-fp.js",
+            "../reference/light-blue/lib/jquery.fileupload-ui.js",
+            "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
+            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
+            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
+        ],
 
-                [
-                    "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
-                    "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
-                    "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
-                    "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-                ],
+        [
+            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+            "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
+            "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
+            "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
+        ],
 
-                [
-                    // Template CSS File
-                    "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-                    "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-                    "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
-                    // Template Main CSS File
-                    "../reference/jquery-plugins/MyResume/assets/css/style.css"
-                ]
-                // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-            ];
+        [
+            // Template CSS File
+           "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
+           "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
+           "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
+           // Template Main CSS File
+           "../reference/jquery-plugins/MyResume/assets/css/style.css"
+        ]
+        // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+    ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function () {
-            // //위젯 헤더 처리 및 사이드 메뉴 처리
-            // $(".widget").widgster();
-            // setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_regist");
+            // 스크롤 반응하여 API 호출 이벤트
             window.addEventListener('scroll', scrollApiFunc);
 
-            getDetailViewTab();
+            // 메뉴 클릭 이벤트
+            menuClick();
 
+            // 상세정보 탭 클릭 이벤트
+            reqDetailViewTabClick();
+
+            // 버전 상세정보 탭 클릭 이벤트
             versionDetailViewTabClick();
 
+            // 요구사항 전체정보 탭 클릭 이벤트
             allReqListViewTabClick();
 
+            // 제품관련 파일 탭 클릭 이벤트
             filesViewTabClick();
 
-            filterClick();
+            // reqCommentListViewTabClick();
 
-            reqCommentListViewTabClick();
-
-            save_post_btn_click();
+            // save_post_btn_click();
 
         })
         .catch(function (errorMessage) {
@@ -135,7 +139,7 @@ function callAPI(apiName) {
 
 // ------------------ 스크롤 api 호출하기 ------------------ //
 
-function checkVisible( element, check = 'above' ) {
+function checkVisible( element, check = 'visible' ) {
     const viewportHeight = $(window).height(); // Viewport Height
     const scrolltop = $(window).scrollTop(); // Scroll Top
     const y = $(element).offset().top;
@@ -153,8 +157,10 @@ function checkVisible( element, check = 'above' ) {
 var scrollApiFunc = function () {
     for (let element in visibilityStatus) {
         if (!visibilityStatus[element] && checkVisible(element)) {
-
-            if(element === "#version") {
+            if(element === "#detail") {
+                getDetailViewTab();
+            }
+            else if(element === "#version") {
                 bindDataVersionTab();
 
                 init_versionList();
@@ -180,7 +186,22 @@ var scrollApiFunc = function () {
     }
 }
 
+// ------------------ 메뉴 클릭 이벤트 ------------------ //
+function menuClick() {
+    $('.mobile-nav-toggle').click(function (e) {
+        $('body').toggleClass('mobile-nav-active');
+        $(this).toggleClass('bi-list');
+        $(this).toggleClass('bi-x');
+    });
+}
+
 // ------------------ 상세보기 ------------------ //
+function reqDetailViewTabClick() {
+    $("#get_version_list").click(function () {
+        getDetailViewTab();
+    });
+}
+
 function getDetailViewTab() {
 
     if (callAPI("detailAPI")) {
@@ -396,6 +417,7 @@ function build_ReqData_By_PdService() {
     // common.js에 정의되어있는 함수
     jsTreeBuild(jQueryElementID, serviceNameForURL);
 }
+
 /*
 수정 - 김찬호
 작성일 - 0929
@@ -427,17 +449,15 @@ function jsTreeClick(selectedNode) {
         // 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
         // 박현민 - 폴더 일 때 이부분 어떻게 바뀌는지 확인하고 어떻게 바꿀지 고민해야함
         // 김찬호 - 일단 고려 하지 않음. 0929
-        dataTableLoad(selectedJsTreeId, selectRel);
+        // dataTableLoad(selectedJsTreeId, selectRel);
     } else {
         //이전에 화면에 렌더링된 데이터 초기화
         // 상세데이터 영역 바인딩 start
         setDetailViewTab();
-        // defaultType_dataTableLoad(selectedJsTreeId);
     }
 
-    //파일 데이터셋팅
-    //get_FileList_By_Req();
 }
+
 /*
 작성자 - 김찬호
 작성일 - 0929
@@ -446,20 +466,20 @@ function jsTreeClick(selectedNode) {
 function setDetailViewTab() {
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService'); // 해당 서비스는 고정
-	var tableName = "T_ARMS_REQADD_" + selectedPdService;
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true
-	})
-		.done(function (data) {
-	        /*----------- 해당 상세 정보 영역 바인딩 -----------*/
+    var tableName = "T_ARMS_REQADD_" + selectedPdService;
+    $.ajax({
+        url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true
+    })
+        .done(function (data) {
+            /*----------- 해당 상세 정보 영역 바인딩 -----------*/
             bindClickedDataDetail(data);
-		})
-		.fail(function (e) {})
-		.always(function () {});
+        })
+        .fail(function (e) {})
+        .always(function () {});
 }
 /*
 작성자 - 김찬호
@@ -493,6 +513,7 @@ function bindClickedDataDetail(ajaxData) {
 
     //console.table(ajaxData);
     var version_id = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
+    console.log(version_id.toString());
     if(isEmpty(version_id)){
         $("#allreq_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
     }else{
@@ -502,39 +523,39 @@ function bindClickedDataDetail(ajaxData) {
     }
     $("#allreq_pdservice_name").text(ajaxData.pdServiceEntity.c_title); // 요구사항 제품(서비스)
 
-	$("#allreq_pdservice_id").text(ajaxData.c_id);                // 요구사항 아이디
-	$("#allreq_pdservice_title").text(ajaxData.c_title);             // 요구사항 제목
-	$("#allreq_pdservice_writer").text(ajaxData.c_req_writer);       // 요구사항 작성자
-	$("#allreq_pdservice_date").text(new Date(ajaxData.c_req_create_date).toLocaleString());   // 요구사항 최근 작성일
+    $("#allreq_pdservice_id").text(ajaxData.c_id);                // 요구사항 아이디
+    $("#allreq_pdservice_title").text(ajaxData.c_title);             // 요구사항 제목
+    $("#allreq_pdservice_writer").text(ajaxData.c_req_writer);       // 요구사항 작성자
+    $("#allreq_pdservice_date").text(new Date(ajaxData.c_req_create_date).toLocaleString());   // 요구사항 최근 작성일
 
 
     if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
-		$("#allreq_pdservice_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
-	} else {
-		$("#allreq_pdservice_reviewer01").text(ajaxData.c_req_reviewer01);
-	}
-	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
-    		$("#allreq_pdservice_reviewer02").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-    	$("#allreq_pdservice_reviewer02").text(ajaxData.c_req_reviewer02);
+        $("#allreq_pdservice_reviewer01").text(ajaxData.c_req_reviewer01);
+    }
+    if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
+        $("#allreq_pdservice_reviewer02").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+    } else {
+        $("#allreq_pdservice_reviewer02").text(ajaxData.c_req_reviewer02);
     }
     if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
-    		$("#allreq_pdservice_reviewer03").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer03").text("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-    	$("#allreq_pdservice_reviewer03").text(ajaxData.c_req_reviewer03);
+        $("#allreq_pdservice_reviewer03").text(ajaxData.c_req_reviewer03);
     }
     if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
-       	$("#allreq_pdservice_reviewer04").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer04").text("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
         $("#allreq_pdservice_reviewer04").text(ajaxData.c_req_reviewer04);
     }
     if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
-           	$("#allreq_pdservice_reviewer05").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer05").text("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
         $("#allreq_pdservice_reviewer05").text(ajaxData.c_req_reviewer05);
     }
 
-	$("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
+    $("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
 }
 
 // ------------------ 제품 관련 파일 보기 ------------------ //
@@ -554,143 +575,86 @@ function fileLoadByPdService() {
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService');
 
-    $("#fileIdlink").val(selectedPdService);
-    $.ajax({
-        url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-        data: { fileIdLink: selectedPdService },
-        dataType: "json"
-    }).done(function (result) {
-        console.log(result.files);
+        $("#fileIdlink").val(selectedPdService);
+        $.ajax({
+            url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
+            data: {fileIdLink: selectedPdService},
+            async: false,
+            dataType: "json"
+        }).done(function (result) {
+            console.log(result.files);
+            let $portfolioContainer = $('.portfolio-container');
+            if ($portfolioContainer.length) {
+                let portfolioIsotope = new Isotope($portfolioContainer[0], {
+                    itemSelector: '.portfolio-item'
+                });
 
-        for (var key in result) {
-            if (result.hasOwnProperty(key)) {
-                var fileSet = result[key];
+                for (var key in result) {
+                    if (result.hasOwnProperty(key)) {
+                        var fileSet = result[key];
 
-                // 각 파일 정보(fileSet)을 처리
-                fileSet.forEach(function(file) {
-                    console.log(file.fileName);
-                    var $target = $('#filter-files');
-                    var filterClass;
-                    if (file.contentType.includes("image")) {
-                        filterClass = 'filter-image';
-                    }
-                    else if (file.contentType.includes("application")) {
-                        filterClass = 'filter-doc';
-                    }
-                    else {
-                        filterClass = 'filter-etc';
-                    }
+                        // 각 파일 정보(fileSet)을 처리
+                        fileSet.forEach(function (file) {
+                            console.log(file.fileName);
+                            var $target = $('#filter-files');
+                            var filterClass;
+                            if (file.contentType.includes("image")) {
+                                filterClass = 'filter-image';
+                            } else if (file.contentType.includes("application")) {
+                                filterClass = 'filter-doc';
+                            } else {
+                                filterClass = 'filter-etc';
+                            }
 
-                    var imgSrc = "../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"; // 이미지 경로
-                    var title = file.fileName;
-                    var fileSize = file.size;
-                    var newHtml = `<div class="col-lg-4 col-md-6 portfolio-item ${filterClass}">
-                                                <div class="portfolio-wrap">
-                                                    <img src="${imgSrc}" class="img-fluid" alt="">
-                                                    <div class="portfolio-info">
-                                                        <h4>${title}</h4>
-                                                        <p>${fileSize}</p>
-                                                        <div class="portfolio-links">
-                                                            <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="${title}"><i class="bx bx-download"></i></a>
-                                                            <a href="${imgSrc}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>
-                                                        </div>
+                            var imgSrc = "../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"; // 이미지 경로
+                            var title = file.fileName;
+                            var fileSize = file.size;
+                            var $newHtml = $(`<div class="col-lg-4 col-md-6 portfolio-item ${filterClass}">
+                                            <div class="portfolio-wrap">
+                                                <img src="${imgSrc}" class="img-fluid" alt="">
+                                                <div class="portfolio-info">
+                                                    <h4>${title}</h4>
+                                                    <p>${fileSize}</p>
+                                                    <div class="portfolio-links">
+                                                        <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="${title}"><i class="bx bx-download"></i></a>
+                                                        <a href="${imgSrc}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>
                                                     </div>
                                                 </div>
-                                            </div>`;
+                                            </div>
+                                        </div>`);
 
-                    $target.append(newHtml);
-                });
+                            let imgLoadCheck = new Image();
+                            imgLoadCheck.src = imgSrc;
+
+                            imgLoadCheck.onload = function () {
+                                $portfolioContainer.append($newHtml);
+                                portfolioIsotope.appended($newHtml[0]);
+                                portfolioIsotope.arrange();
+                            };
+                    });
+                }
             }
-        }
-        // $(this).fileupload("option", "done").call(this, null, { result: result });
-    });
 
-    var portfolioContainer = select(".portfolio-container");
-    if (portfolioContainer) {
-        var portfolioIsotope = new Isotope(portfolioContainer, {
-            itemSelector: ".portfolio-item"
-        });
-
-        var portfolioFilters = select("#portfolio-flters li", true);
-
-        portfolioFilters.forEach(function (el) {
-            el.classList.remove("filter-active");
-        });
-
-        // this.classList.add("filter-active");
-
-        // portfolioIsotope.arrange({
-        //     filter: this.getAttribute("data-filter")
-        // });
-
-        portfolioIsotope.on("arrangeComplete", function () {
-            AOS.refresh();
-        });
-
-        portfolioIsotope.reloadItems();
-        portfolioIsotope.arrange();
-    }
-}
-
-function filterClick() {
-    $("#portfolio-flters li").click(function () {
-        filterChage();
-    });
-}
-
-function filterChage() {
-    let portfolioContainer = select(".portfolio-container");
-    if (portfolioContainer) {
-        let portfolioIsotope = new Isotope(portfolioContainer, {
-            itemSelector: ".portfolio-item"
-        });
-
-        let portfolioFilters = select("#portfolio-flters li", true);
-
-        on(
-            "click",
-            "#portfolio-flters li",
-            function (e) {
+            /* data-filter 통해서 이미지, 문서, 기타 파일로 클릭 시 나눠지는 부분 */
+            $('#portfolio-flters li').on('click', function(e){
                 e.preventDefault();
-                portfolioFilters.forEach(function (el) {
-                    el.classList.remove("filter-active");
-                });
-                this.classList.add("filter-active");
+                $('#portfolio-flters li').removeClass('filter-active');
+                $(this).addClass('filter-active');
 
                 portfolioIsotope.arrange({
-                    filter: this.getAttribute("data-filter")
+                    filter: $(this).attr('data-filter')
                 });
-                portfolioIsotope.on("arrangeComplete", function () {
+
+                portfolioIsotope.on( 'arrangeComplete', function() {
                     AOS.refresh();
                 });
 
                 portfolioIsotope.reloadItems();
                 portfolioIsotope.arrange();
-            },
-            true
-        );
-    }
-}
-
-var select = (el, all = false) => {
-    el = el.trim();
-    if (all) {
-        return [...document.querySelectorAll(el)];
-    } else {
-        return document.querySelector(el);
-    }
-};
-
-var on = (type, el, listener, all = false) => {
-    let selectEl = select(el, all);
-    if (selectEl) {
-        if (all) {
-            selectEl.forEach((e) => e.addEventListener(type, listener));
-        } else {
-            selectEl.addEventListener(type, listener);
+            });
         }
-    }
-};
+    });
+}
 
 // ------------------ QnA 게시판보기 ------------------ //
 function reqCommentListViewTabClick() {
@@ -782,5 +746,3 @@ function save_post_btn_click() {
         });
     });
 }
-
-
