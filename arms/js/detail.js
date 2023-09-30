@@ -11,46 +11,46 @@ var visibilityStatus = {
 };
 
 function execDocReady() {
-    var pluginGroups = [
-        [
-            // Vendor JS Files
-            "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
-            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
-            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
-            // Template Main JS File
-            "../reference/jquery-plugins/MyResume/assets/js/main.js"
-        ],
+        var pluginGroups = [
+            [
+                // Vendor JS Files
+                "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
+                "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
+                "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
+                // Template Main JS File
+                "../reference/jquery-plugins/MyResume/assets/js/main.js"
+            ],
 
-        [
-            "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-            "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-            "../reference/lightblue4/docs/lib/widgster/widgster.js",
-            "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-            "../reference/light-blue/lib/jquery.fileupload.js",
-            "../reference/light-blue/lib/jquery.fileupload-fp.js",
-            "../reference/light-blue/lib/jquery.fileupload-ui.js",
-            "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
-        ],
+            [
+                "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+                "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+                "../reference/lightblue4/docs/lib/widgster/widgster.js",
+                "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+                "../reference/light-blue/lib/jquery.fileupload.js",
+                "../reference/light-blue/lib/jquery.fileupload-fp.js",
+                "../reference/light-blue/lib/jquery.fileupload-ui.js",
+                "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
+                "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
+                "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
+            ],
 
-        [
-            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
-            "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
-            "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
-            "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-        ],
+            [
+                "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+                "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
+                "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
+                "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
+            ],
 
-        [
-            // Template CSS File
-            "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
-            // Template Main CSS File
-            "../reference/jquery-plugins/MyResume/assets/css/style.css"
-        ]
-        // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-    ];
+            [
+                // Template CSS File
+                "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
+                "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
+                "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
+                // Template Main CSS File
+                "../reference/jquery-plugins/MyResume/assets/css/style.css"
+            ]
+            // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+        ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function () {
@@ -348,7 +348,7 @@ function versionClick(element, c_id) {
             $("#version-name").text(json.c_title);
             $("#version-start-date").text(json.c_pds_version_start_date);
             $("#version-end-date").text(json.c_pds_version_end_date);
-            $("#version-desc").text(json.c_pds_version_contents);
+            $("#version-desc").html(json.c_pds_version_contents);
         })
         // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
         .fail(function (xhr, status, errorThrown) {
@@ -495,13 +495,18 @@ function build_ReqData_By_PdService() {
     // common.js에 정의되어있는 함수
     jsTreeBuild(jQueryElementID, serviceNameForURL);
 }
-
+/*
+수정 - 김찬호
+작성일 - 0929
+트리에서 해당 요구사항 클릭시 해당 요구사항 아이디 조회
+*/
 function jsTreeClick(selectedNode) {
-    console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
-    console.log(selectedNode);
 
-    selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
+    console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
+
+    selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");//요구사항 아이디
     selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
+
     if (selectedJsTreeId == 2) {
         $("#select_Req").text("루트 요구사항이 선택되었습니다.");
     } else {
@@ -511,37 +516,101 @@ function jsTreeClick(selectedNode) {
 
     //요구사항 타입에 따라서 탭의 설정을 변경 (삭제예정)
     if (selectRel == "folder" || selectRel == "drive") {
-        /*        $("#folder_tab").get(0).click();
-                $(".newReqDiv").show();
-                $(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
-                $(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
-                $(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
-
-                // 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
-                // 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
-                // 박현민 - 폴더 일 때 이부분 어떻게 바뀌는지 확인하고 어떻게 바꿀지 고민해야함
-                dataTableLoad(selectedJsTreeId, selectRel);*/
+        /*$("#folder_tab").get(0).click();
+        $(".newReqDiv").show();
+        $(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
+        $(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
+        $(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
+        */
+        // 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
+        // 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
+        // 박현민 - 폴더 일 때 이부분 어떻게 바뀌는지 확인하고 어떻게 바꿀지 고민해야함
+        // 김찬호 - 일단 고려 하지 않음. 0929
+        dataTableLoad(selectedJsTreeId, selectRel);
     } else {
-        // $("#default_tab").get(0).click();
-        // $(".newReqDiv").hide();
-        // $(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
-        // $(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
-        // $(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
-        // $(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
-        // $(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
-
         //이전에 화면에 렌더링된 데이터 초기화
-        // ------------------ 편집하기 ------------------ //
-        // bindDataEditlTab(data);
-        // // ------------------ 상세보기 ------------------ //
-        // bindDataDetailTab(data);
-        //상세보기 탭 셋팅
-        // setDetailAndEditViewTab();
+        // 상세데이터 영역 바인딩 start
+        setDetailViewTab();
         // defaultType_dataTableLoad(selectedJsTreeId);
     }
 
     //파일 데이터셋팅
     //get_FileList_By_Req();
+}
+/*
+작성자 - 김찬호
+작성일 - 0929
+트리에서 해당 요구사항 클릭시 데이터 호출 부분
+*/
+function setDetailViewTab() {
+    var urlParams = new URL(location.href).searchParams;
+    var selectedPdService = urlParams.get('pdService'); // 해당 서비스는 고정
+	var tableName = "T_ARMS_REQADD_" + selectedPdService;
+	$.ajax({
+		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true
+	})
+		.done(function (data) {
+	        /*----------- 해당 상세 정보 영역 바인딩 -----------*/
+            bindClickedDataDetail(data);
+		})
+		.fail(function (e) {})
+		.always(function () {});
+}
+/*
+작성자 - 김찬호
+작성일 - 0929
+해당 상세 정보 영역 데이터 바인딩
+요구사항 버전 미구현
+*/
+function bindClickedDataDetail(ajaxData) {
+
+    console.table(ajaxData);
+
+    $("#allreq_pdservice_name").text(ajaxData.pdServiceEntity.c_title); // 요구사항 제품(서비스)
+
+	$("#allreq_pdservice_version").text(); // 요구사항 버전
+
+	$("#allreq_pdservice_id").text(ajaxData.c_id);                // 요구사항 아이디
+	$("#allreq_pdservice_title").text(ajaxData.c_title);             // 요구사항 제목
+	$("#allreq_pdservice_writer").text(ajaxData.c_req_writer);       // 요구사항 작성자
+	$("#allreq_pdservice_date").text(new Date(ajaxData.c_req_create_date).toLocaleString());   // 요구사항 최근 작성일
+
+
+    if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
+		$("#allreq_pdservice_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+	} else {
+		$("#allreq_pdservice_reviewer01").text(ajaxData.c_req_reviewer01);
+	}
+	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
+    		$("#allreq_pdservice_reviewer02").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+    } else {
+    	$("#allreq_pdservice_reviewer02").text(ajaxData.c_req_reviewer02);
+    }
+    if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
+    		$("#allreq_pdservice_reviewer03").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+    } else {
+    	$("#allreq_pdservice_reviewer03").text(ajaxData.c_req_reviewer03);
+    }
+    if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
+       	$("#allreq_pdservice_reviewer04").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+    } else {
+        $("#allreq_pdservice_reviewer04").text(ajaxData.c_req_reviewer04);
+    }
+    if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
+           	$("#allreq_pdservice_reviewer05").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+    } else {
+        $("#allreq_pdservice_reviewer05").text(ajaxData.c_req_reviewer05);
+    }
+
+
+
+	$("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
+
+
 }
 
 // ------------------ 제품 관련 파일 보기 ------------------ //
@@ -789,3 +858,5 @@ function save_post_btn_click() {
         });
     });
 }
+
+
