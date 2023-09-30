@@ -155,12 +155,12 @@
 	<link
 			href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
 			rel="stylesheet" />
-	<link
-			href="../reference/light-blue/css/application.min.css"
-			rel="stylesheet" />
-	<link
-			href="css/override.css"
-			rel="stylesheet" />
+	<!--	<link-->
+	<!--			href="../reference/light-blue/css/application.min.css"-->
+	<!--			rel="stylesheet" />-->
+	<!--	<link-->
+	<!--			href="css/override.css"-->
+	<!--			rel="stylesheet" />-->
 
 	<!-- jquery and friends -->
 	<script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
@@ -173,13 +173,14 @@
 	<script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/../arms/html/armsDetailExceptTemplate/assets/javascripts/bootstrap.min.js" charset="utf-8"></script>
 
 	<script type="text/javascript" src="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js" charset="utf-8"></script>
 	<link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css" media="screen" />
 
 	<!-- page js -->
 	<script type="text/javascript" src="../arms/js/common.js" charset="utf-8"></script>
+	<!--	<script type="text/javascript" src="../arms/js/common/dwrChat.js" charset="utf-8"></script>-->
 
 	<!-- page interaction -->
 	<script type="text/javascript" src="../reference/jquery-plugins/topbar.js" charset="utf-8"></script>
@@ -187,250 +188,1166 @@
 	<!-- page specific -->
 	<script src="./js/detail.js"></script>
 
+	<!-- Favicons -->
+<!--	<link href="../arms/html/armsDetailExceptTemplate/assets/img/favicon.png" rel="icon">-->
+<!--	<link href="../arms/html/armsDetailExceptTemplate/assets/img/apple-touch-icon.png" rel="apple-touch-icon">-->
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+	<!-- Vendor CSS Files -->
+	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/aos/aos.css" rel="stylesheet">
+	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+	<!-- Template Main CSS File -->
+	<link href="../arms/html/armsDetailExceptTemplate/assets/css/style.css" rel="stylesheet">
+
 </head>
-<body class="background landing">
-<div class="container">
-	<header class="page-header">
-		<div class="navbar">
-			<div class="logo pull-left">
-				<h4>
-					<a href="index.html">
-						<img
-								src="./img/313_logo.png"
-								width="170px" />
-					</a>
-				</h4>
+<body>
+
+<!-- ======= Mobile nav toggle button ======= -->
+<!-- <button type="button" class="mobile-nav-toggle d-xl-none"><i class="bi bi-list mobile-nav-toggle"></i></button> -->
+<i class="bi bi-list mobile-nav-toggle mobile-nav-toggle-none"></i>
+<!-- ======= Header ======= -->
+<header id="header" class="d-flex flex-column justify-content-center">
+
+	<nav id="navbar" class="navbar nav-menu">
+		<ul>
+			<!-- ======= Header ======= -->
+			<li><a href="#detail" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>요구사항 상세</span></a></li>
+			<li><a href="#version" id="get_version_list" class="nav-link scrollto"><i class="bx bx-detail"></i> <span>버전별 상세정보</span></a></li>
+			<li><a href="#allreq" id="get_req_list" class="nav-link scrollto"><i class="bx bx-list-ul"></i> <span>요구사항 목록</span></a></li>
+			<li><a href="#files" id="get_file_list" class="nav-link scrollto"><i class="bx bx-file"></i> <span>파일 목록</span></a></li>
+<!--			<li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>기획서</span></a></li>-->
+			<li><a href="#question" id="get_req_comment_list" class="nav-link scrollto"><i class="bx bx-question-mark"></i> <span>Q&A</span></a></li>
+		</ul>
+	</nav><!-- .nav-menu -->
+
+</header><!-- End Header -->
+
+
+<main id="main">
+	<!-- ======= 요구사항 상세 ======= -->
+	<section id="detail" class="about">
+		<div class="container" data-aos="fade-up">
+
+			<div class="section-title">
+				<h2>요구사항 상세</h2>
+				<p>개발자를 위한 요구사항의 상세 정보를 확인하기 위한 페이지.</p>
 			</div>
-		</div>
-	</header>
-	<div class="content">
-		<div class="body" style="margin-top: 5em">
-			<div
-					class="gradient_middle_border"
-					style="width: 100%; height: 2px"></div>
-			<blockquote
-					class="font13"
-					style="margin-top: 5px">
-				요구사항 세부 내용
-				<div style="float: right">
-					<button
-							class="btn btn-transparent btn-xs"
-							style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-							onclick="return true;">
-						Help
-						<i
-								class="fa fa-question"
-								style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-					</button>
-				</div>
-			</blockquote>
 
 			<div class="row">
-				<div class="col-md-12">
-					<section class="widget">
-						<div class="control-group">
-							<label class="control-label font13">
-								요구사항 제품
-								<sup>서비스</sup>
-								:
-							</label>
+				<div class="col-lg-12 pt-4 pt-lg-0 content">
+					<h3>요구사항 세부 내용</h3>
+					<p class="fst-italic">
 
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-th-list"></i>
-										</span>
-
-								<div
-										id="detailview_req_pdservice_name"
-										class="form-control parsley-validated font13 darkBack"></div>
-							</div>
+					</p>
+					<div class="row">
+						<!--요구사항 세부 내용 좌측 영역-->
+						<div class="col-lg-6">
+							<ul>
+								<!--요구사항 아이디-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>요구사항 제품<sup>서비스</sup></strong>
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-box"></i></div>
+											<div class="form-control" id="detailview_req_pdservice_name"></div>
+										</div>
+									</div>
+								</li>
+								<!--요구사항 아이디-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>요구사항 아이디</strong>
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-card-checklist"></i></div>
+											<div class="form-control" id="detailview_req_id"></div>
+										</div>
+									</div>
+								</li>
+								<!--요구사항 제목-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>요구사항 제목</strong>
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-bookmark-check"></i></div>
+											<div class="form-control" id="detailview_req_name"></div>
+										</div>
+									</div>
+								</li>
+							</ul>
 						</div>
-
-						<div class="control-group">
-							<label class="control-label font13">요구사항 연관 버전 :</label>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-gift"></i>
-										</span>
-
-								<div
-										id="detailview_req_pdservice_version"
-										class="form-control parsley-validated font13 darkBack"></div>
-							</div>
+						<!--요구사항 연관 버전, 작성일, 작성자-->
+						<div class="col-lg-6">
+							<ul>
+								<!--요구사항 연관 버전-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>요구사항 연관 버전</strong>
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-link-45deg"></i></div>
+											<div class="form-control" id="detailview_req_pdservice_version"></div>
+										</div>
+									</div>
+								</li>
+								<!--요구사항 작성자-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>요구사항 작성일</strong>
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-calendar"></i></div>
+											<div class="form-control" id="detailview_req_write_date"></div>
+										</div>
+									</div>
+								</li>
+								<!--요구사항 최근 작성일-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>요구사항 작성자</strong>
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-person"></i></div>
+											<div class="form-control" id="detailview_req_writer"></div>
+										</div>
+									</div>
+								</li>
+							</ul>
 						</div>
-
-						<div class="control-group">
-							<label class="control-label font13">요구사항 아이디 :</label>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-phone"></i>
-										</span>
-
-								<div
-										id="detailview_req_id"
-										class="form-control parsley-validated font13 darkBack"></div>
-							</div>
+					</div>
+					<!--요구사항 제품 서버스 리뷰어 영역-->
+					<div class="row">
+						<div class="col-lg-6">
+							<ul>
+								<!--요구사항 연관 버전-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-chevron-right"></i> <strong>제품(서비스) 리뷰어</strong>
+									</div>
+									<div class="col-lg-8">
+									</div>
+								</li>
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-dash"></i> INFO: 공동 책임자
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
+											<div class="form-control" id="detailview_req_reviewer01"></div>
+										</div>
+									</div>
+								</li>
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-dash"></i> INFO: 공동 책임자
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
+											<div class="form-control" id="detailview_req_reviewer02"></div>
+										</div>
+									</div>
+								</li>
+							</ul>
 						</div>
-
-						<div class="control-group">
-							<label class="control-label font13">요구사항 제목 :</label>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-list-alt"></i>
-										</span>
-
-								<div
-										id="detailview_req_name"
-										class="form-control parsley-validated font13 darkBack"></div>
-							</div>
+						<div class="col-lg-6">
+							<ul>
+								<!--요구사항 연관 버전-->
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-dash"></i> INFO: 공동 책임자
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
+											<div class="form-control" id="detailview_req_reviewer03"></div>
+										</div>
+									</div>
+								</li>
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-dash"></i> INFO: 공동 책임자
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
+											<div class="form-control" id="detailview_req_reviewer04"></div>
+										</div>
+									</div>
+								</li>
+								<li class="col-lg-12 row">
+									<div class="col-lg-4 d-flex  align-items-center">
+										<i class="bi bi-dash"></i> INFO: 공동 책임자
+									</div>
+									<div class="col-lg-8">
+										<div class="input-group">
+											<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
+											<div class="form-control" id="detailview_req_reviewer05"></div>
+										</div>
+									</div>
+								</li>
+							</ul>
 						</div>
+					</div>
+					<!-- 요구사항 상세 내용-->
+					<div class="col-lg-12">
+						<ul>
+							<!--요구사항 연관 버전-->
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 상세</strong>
+								</div>
+								<!--<div class="col-lg-8">
+                                </div>-->
+							</li>
+						</ul>
+						<div class="col-lg-12 form-control" id="detailview_req_contents">
+<!--              ☀ 주의 : 본 이슈는 a-RMS에서 제공하는 요구사항 이슈 입니다.
 
-						<div class="control-group">
-							<label class="control-label font13">요구사항 작성자 :</label>
+              ✔ 본 이슈는 자동으로 관리되므로,
+              ✔ 이슈를 강제로 삭제시 → 연결된 이슈 수집이 되지 않으므로
+              ✔ 현황 통계에서 배제되어 불이익을 받을 수 있습니다.
+              ✔ 아래 링크에서 요구사항을 내용을 확인 할 수 있습니다.
 
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-user"></i>
-										</span>
+              ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+              요구사항 내용 확인 ⇒ http://www.a-rms.net/313devgrp/arms/detail.html?page=detail&pdService=14&pdServiceVersion=25&reqAdd=14&jiraServer=14&jiraProject=28
+              ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
-								<div
-										id="detailview_req_writer"
-										class="form-control parsley-validated font13 darkBack"></div>
-							</div>
-						</div>
+              ※ 『 본 이슈 하위로 Sub-Task를 만들어서 개발(업무)을 진행 하시거나 』
+              ※ 『 관련한 이슈를 연결 (LINK) 하시면, 현황 통계에 자동으로 수집됩니다. 』
 
-						<div class="control-group">
-							<label class="control-label font13">요구사항 최근 작성일 :</label>
+              Implementation plan
 
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i>
-										</span>
+              없음
+              Backout plan
 
-								<div
-										id="detailview_req_write_date"
-										class="form-control parsley-validated font13 darkBack"></div>
-							</div>
-						</div>
+              없음
+              Test plan
 
-						<div class="control-group">
-							<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+              없음
+              하위 작업-->
+            </div>
+					</div>
 
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-inbox"></i>
-										</span>
 
-								<div
-										id="detailview_req_reviewer01"
-										class="form-control parsley-validated font13 darkBack"></div>
 
-								<span class="input-group-addon font11">INFO : 공동 책임자</span>
-							</div>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-inbox"></i>
-										</span>
-
-								<div
-										id="detailview_req_reviewer02"
-										class="form-control parsley-validated font13 darkBack"></div>
-
-								<span class="input-group-addon font11">INFO : 공동 책임자</span>
-							</div>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-inbox"></i>
-										</span>
-
-								<div
-										id="detailview_req_reviewer03"
-										class="form-control parsley-validated font13 darkBack"></div>
-
-								<span class="input-group-addon font11">INFO : 공동 책임자</span>
-							</div>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-inbox"></i>
-										</span>
-
-								<div
-										id="detailview_req_reviewer04"
-										class="form-control parsley-validated font13 darkBack"></div>
-
-								<span class="input-group-addon font11">INFO : 공동 책임자</span>
-							</div>
-
-							<div
-									class="controls form-group input-group"
-									style="margin-left: 180px">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-inbox"></i>
-										</span>
-
-								<div
-										id="detailview_req_reviewer05"
-										class="form-control parsley-validated font13 darkBack"></div>
-
-								<span class="input-group-addon font11">INFO : 공동 책임자</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label
-									class="control-label"
-									style="margin-top: 10px">
-								요구사항 내용 :
-							</label>
-
-							<div
-									class="col-sm-8"
-									style="margin-top: 16px; margin-bottom: 10px">
-								<i class="fa fa-level-down"></i>
-								하단 영역 참조
-							</div>
-
-						</div>
-					</section>
+					<p>
+					</p>
 				</div>
 			</div>
+
+		</div>
+	</section>
+
+	<!-- ======= 버전별 상세정보 ======= -->
+	<section id="version" class="resume">
+		<div class="container" data-aos="fade-up">
+
+			<div class="section-title">
+				<h2>Resume</h2>
+				<p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-6">
+					<h3 class="resume-title">Sumary</h3>
+					<div class="resume-item pb-0">
+						<h4>Brandon Johnson</h4>
+						<p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>
+						<ul>
+							<li>Portland par 127,Orlando, FL</li>
+							<li>(123) 456-7891</li>
+							<li>alice.barkley@example.com</li>
+						</ul>
+					</div>
+
+					<h3 class="resume-title">Education</h3>
+					<div class="resume-item">
+						<h4>Master of Fine Arts &amp; Graphic Design</h4>
+						<h5>2015 - 2016</h5>
+						<p><em>Rochester Institute of Technology, Rochester, NY</em></p>
+						<p>Qui deserunt veniam. Et sed aliquam labore tempore sed quisquam iusto autem sit. Ea vero voluptatum qui ut dignissimos deleniti nerada porti sand markend</p>
+					</div>
+					<div class="resume-item">
+						<h4>Bachelor of Fine Arts &amp; Graphic Design</h4>
+						<h5>2010 - 2014</h5>
+						<p><em>Rochester Institute of Technology, Rochester, NY</em></p>
+						<p>Quia nobis sequi est occaecati aut. Repudiandae et iusto quae reiciendis et quis Eius vel ratione eius unde vitae rerum voluptates asperiores voluptatem Earum molestiae consequatur neque etlon sader mart dila</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<h3 class="resume-title">Professional Experience</h3>
+					<div class="resume-item">
+						<h4>Senior graphic design specialist</h4>
+						<h5>2019 - Present</h5>
+						<p><em>Experion, New York, NY </em></p>
+						<ul>
+							<li>Lead in the design, development, and implementation of the graphic, layout, and production communication materials</li>
+							<li>Delegate tasks to the 7 members of the design team and provide counsel on all aspects of the project. </li>
+							<li>Supervise the assessment of all graphic materials in order to ensure quality and accuracy of the design</li>
+							<li>Oversee the efficient use of production project budgets ranging from $2,000 - $25,000</li>
+						</ul>
+					</div>
+					<div class="resume-item">
+						<h4>Graphic design specialist</h4>
+						<h5>2017 - 2018</h5>
+						<p><em>Stepping Stone Advertising, New York, NY</em></p>
+						<ul>
+							<li>Developed numerous marketing programs (logos, brochures,infographics, presentations, and advertisements).</li>
+							<li>Managed up to 5 projects or tasks at a given time while under pressure</li>
+							<li>Recommended and consulted with clients on the most appropriate graphic design</li>
+							<li>Created 4+ design presentations and proposals a month for clients and account managers</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section><!-- End Resume Section -->
+
+	<section id="allreq" class="resume">
+		<div class="container" data-aos="fade-up">
+			<div class="section-title">
+				<h2>요구사항 전체 목록</h2>
+				<p>해당 탭은 제품 서비스의 요구사항 전체 목록을 확인할 수 있는 탭입니다.</p>
+			</div>
+
+			<div class="row content pt-4 pt-lg-0">
+				<div class="col-lg-5">
+					<h3 class="resume-title">요구사항 목록</h3>
+					<!--               <div class="resume-item pb-0">-->
+					<div    id="req_tree"
+							style="padding-top: 5px; overflow: hidden"
+							class="darkBack border">
+					</div>
+				</div>
+				<div class="about col-lg-7">
+					<h3 class="resume-title">해당 상세 정보</h3>
+<!--
+					<section class="widget widget-tabs">
+						<header>
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a  href="#stats"
+										data-toggle="tab"
+										id="default_tab">
+										<strong>상세 보기</strong>
+									</a>
+								</li>
+								<li>
+									<a  href="#report"
+										data-toggle="tab"
+										id="folder_tab">
+										<strong>리스트로 보기</strong>
+									</a>
+								</li>
+							</ul>
+						</header>
+						<div class="body tab-content">
+							<div    id="stats"
+									class="tab-pane active clearfix"
+									style="padding-top: 10px !important">
+								<form   class="form-horizontal"
+										method="post">
+									<fieldset>
+										<div    class="control-group"
+												for="detailview_req_pdservice_name">
+											<label class="control-label font13">
+												요구사항 제품
+												<sup>서비스</sup>
+												:
+											</label>
+											<div    class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-th-list"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_pdservice_name"
+														name="detailview_req_pdservice_name"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Service Name" />
+											</div>
+										</div>
+										<div    class="control-group"
+												for="detailview_req_pdservice_version">
+											<label class="control-label font13">요구사항 연관 버전 :</label>
+											<div    class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-gift"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_pdservice_version"
+														name="detailview_req_pdservice_version"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Service Version" />
+											</div>
+										</div>
+										<div    class="control-group"
+												for="detailview_req_id">
+											<label class="control-label font13">요구사항 아이디 :</label>
+											<div    class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-phone"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_id"
+														name="detailview_req_id"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Requirement ID" />
+											</div>
+										</div>
+										<div    class="control-group"
+												for="detailview_req_name">
+											<label class="control-label font13">요구사항 제목 :</label>
+											<div    class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-list-alt"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_name"
+														name="detailview_req_name"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Requirement Title" />
+											</div>
+										</div>
+										<div    class="control-group"
+												for="detailview_req_writer">
+											<label class="control-label font13">요구사항 작성자 :</label>
+											<div    class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-user"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_writer"
+														name="detailview_req_writer"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Requirements Author" />
+											</div>
+										</div>
+										<div    class="control-group"
+												for="detailview_req_write_date">
+											<label class="control-label font13">요구사항 최근 작성일 :</label>
+											<div    class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-envelope"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_write_date"
+														name="detailview_req_write_date"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Requirements Last Created Date" />
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+											<div    class="controls input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-inbox"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_reviewer01"
+														name="detailview_req_reviewer01"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="Product (Service) Reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+											<div    class="controls input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-inbox"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_reviewer02"
+														name="detailview_req_reviewer02"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="Product (Service) Reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+											<div    class="controls input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-inbox"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_reviewer03"
+														name="detailview_req_reviewer03"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="Product (Service) Reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+											<div    class="controls input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-inbox"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_reviewer04"
+														name="detailview_req_reviewer04"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="Product (Service) Reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+											<div    class="controls input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-inbox"></i>
+												</span>
+												<input  type="text"
+														id="detailview_req_reviewer05"
+														name="detailview_req_reviewer05"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="공동 책임자"
+														required="required"
+														placeholder="Product (Service) Reviewer"
+														disabled="disabled"
+														style="border: 0px !important; color: #a4c6ff !important" />
+												<span class="input-group-addon font11">INFO : 공동 책임자</span>
+											</div>
+										</div>
+										<div class="control-group">
+											<label  class="control-label"
+													style="margin-top: 10px">
+												요구사항 내용 :
+											</label>
+											<div    class="col-sm-8"
+													style="margin-top: 16px; margin-bottom: 10px">
+												<i class="fa fa-level-down"></i> 하단 영역 참조
+											</div>
+											<br />
+											<br />
+											<br />
+											<div    class="col-sm-12 darkBack"
+													id="detailview_req_contents"
+													style="padding-top: 7px">
+											</div>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+							<div    id="report"
+									class="tab-pane"
+									style="padding-top: 10px !important">
+								<table  class="display"
+										id="req_table"
+										style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
+									<thead>
+									<tr>
+										<th>c_id</th>
+										<th>c_left</th>
+										<th>c_title</th>
+									</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</section>
+-->
+					<div class="content">
+						<ul>
+							<!--요구사항 아이디-->
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 제품(서비스)</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+							<!--요구사항 아이디-->
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 연관 버전</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+							<!--요구사항 제목-->
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 아이디</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 제목</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 작성자</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>요구사항 최근 작성일</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+							<li class="col-lg-12 row">
+								<div class="col-lg-4 d-flex  align-items-center">
+									<i class="bi bi-chevron-right"></i> <strong>제품(서비스) 리뷰어</strong>
+								</div>
+								<div class="col-lg-8">
+									<div class="input-group">
+										<div class="input-group-text"><i class="bi bi-list"></i></div>
+										<div class="form-control"></div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</section><!-- End Resume Section -->
+
+<!--	<section id="allreq" class="resume">
+		<div class="container" data-aos="fade-up">
+
+			<div class="section-title">
+				<h2>요구사항 전체 목록</h2>
+				<p>해당 탭은 제품 서비스의 요구사항 전체 목록을 확인할 수  있는 탭입니다.</p>
+			</div>
+
+			<div class="row content">
+				<div class="col-lg-5">
+					<h3 class="resume-title">요구사항 목록</h3>
+&lt;!&ndash;					<div class="resume-item pb-0">&ndash;&gt;
+						<div    id="req_tree"
+								style="padding-top: 5px; overflow: hidden"
+								class="darkBack">
+						</div>
+						&lt;!&ndash;            <h4>Brandon Johnson</h4>
+                                    <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>
+                                    <ul>
+                                      <li>Portland par 127,Orlando, FL</li>
+                                      <li>(123) 456-7891</li>
+                                      <li>alice.barkley@example.com</li>
+                                    </ul>&ndash;&gt;
+					</div>
+
+					&lt;!&ndash;          <h3 class="resume-title">Education</h3>
+                              <div class="resume-item">
+                                <h4>Master of Fine Arts &amp; Graphic Design</h4>
+                                <h5>2015 - 2016</h5>
+                                <p><em>Rochester Institute of Technology, Rochester, NY</em></p>
+                                <p>Qui deserunt veniam. Et sed aliquam labore tempore sed quisquam iusto autem sit. Ea vero voluptatum qui ut dignissimos deleniti nerada porti sand markend</p>
+                              </div>
+                              <div class="resume-item">
+                                <h4>Bachelor of Fine Arts &amp; Graphic Design</h4>
+                                <h5>2010 - 2014</h5>
+                                <p><em>Rochester Institute of Technology, Rochester, NY</em></p>
+                                <p>Quia nobis sequi est occaecati aut. Repudiandae et iusto quae reiciendis et quis Eius vel ratione eius unde vitae rerum voluptates asperiores voluptatem Earum molestiae consequatur neque etlon sader mart dila</p>
+                              </div>&ndash;&gt;
+&lt;!&ndash;				</div>&ndash;&gt;
+				<div class="col-lg-7">
+					<ul>
+						&lt;!&ndash;요구사항 아이디&ndash;&gt;
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>요구사항 제품(서비스)</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+						&lt;!&ndash;요구사항 아이디&ndash;&gt;
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>요구사항 연관 버전</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+						&lt;!&ndash;요구사항 제목&ndash;&gt;
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>요구사항 아이디</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>요구사항 제목</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>요구사항 작성자</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>요구사항 최근 작성일</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+						<li class="col-lg-12 row">
+							<div class="col-lg-4 d-flex  align-items-center">
+								<i class="bi bi-chevron-right"></i> <strong>제품(서비스) 리뷰어</strong>
+							</div>
+							<div class="col-lg-8">
+								<div class="input-group">
+									<div class="input-group-text"><i class="bi bi-list"></i></div>
+									<div class="form-control"></div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+&lt;!&ndash;				<div class="col-lg-7">
+					<h3 class="resume-title">요구사항 상세 정보</h3>
+					<div class="resume-item">
+						<h4>요구사항 제목</h4>
+						<h5>2019 - Present</h5>
+					</div>
+					<div class="resume-item">
+						<h4>요구사항 작성자</h4>
+						<h5></h5>
+					</div>
+					<div class="resume-item">
+						<h4>요구사항 내용</h4>
+						<h5>2019 - Present</h5>
+					</div>
+					&lt;!&ndash;          <div class="resume-item">
+                                <h4>Graphic design specialist</h4>
+                                <h5>2017 - 2018</h5>
+                                <p><em>Stepping Stone Advertising, New York, NY</em></p>
+                                <ul>
+                                  <li>Developed numerous marketing programs (logos, brochures,infographics, presentations, and advertisements).</li>
+                                  <li>Managed up to 5 projects or tasks at a given time while under pressure</li>
+                                  <li>Recommended and consulted with clients on the most appropriate graphic design</li>
+                                  <li>Created 4+ design presentations and proposals a month for clients and account managers</li>
+                                </ul>
+                              </div>&ndash;&gt;
+				</div>&ndash;&gt;
+			</div>
+
+		</div>
+	</section>&lt;!&ndash; End Resume Section &ndash;&gt;-->
+
+	<!-- ======= 파일 목록 ======= -->
+	<section id="files" class="portfolio section-bg">
+		<div class="container" data-aos="fade-up">
+
+			<div class="section-title">
+				<h2>제품관련 파일목록</h2>
+				<p>해당 탭은 제품관련 이미지, 기획서, 기타 파일들을 확인할 수 있는 탭입니다.</p>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
+					<ul id="portfolio-flters">
+						<li data-filter="*" class="filter-active">All</li>
+						<li data-filter=".filter-image">이미지</li>
+						<li data-filter=".filter-doc">PDF</li>
+						<li data-filter=".filter-etc">기타 파일</li>
+					</ul>
+				</div>
+			</div>
+
+			<div id="filter-files" class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+<!--						<div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>Web 3</h4>
+                              <p>Web</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>App 2</h4>
+                              <p>App</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>Card 2</h4>
+                              <p>Card</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>Web 2</h4>
+                              <p>Web</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>App 3</h4>
+                              <p>App</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>Card 1</h4>
+                              <p>Card</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>Card 3</h4>
+                              <p>Card</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                          <div class="portfolio-wrap">
+                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                              <h4>Web 3</h4>
+                              <p>Web</p>
+                              <div class="portfolio-links">
+                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>-->
+<!--				<div class="col-lg-4 col-md-6 portfolio-item filter-image">
+					<div class="portfolio-wrap">
+						<img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+						<div class="portfolio-info">
+							<h4>라이언.jpg</h4>
+							<p>94.04 KB</p>
+							<div class="portfolio-links">
+								<a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-download"></i></a>
+								<a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 portfolio-item filter-doc">
+					<div class="portfolio-wrap">
+						<img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+						<div class="portfolio-info">
+							<h4>App 1</h4>
+							<p>App</p>
+							<div class="portfolio-links">
+								<a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
+								<a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 portfolio-item filter-etc">
+					<div class="portfolio-wrap">
+						<img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+						<div class="portfolio-info">
+							<h4>App 1</h4>
+							<p>App</p>
+							<div class="portfolio-links">
+								<a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
+								<a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>-->
+
+
+			</div>
+
+		</div>
+	</section><!-- End Portfolio Section -->
+
+	<!-- ======= Q&A ======= -->
+	<section id="question" class="contact">
+		<div class="container" data-aos="fade-up">
+
+			<div class="section-title">
+				<h2>Q & A 게시판</h2>
+			</div>
+
+			<div class="row mt-1">
+
+				<div class="col-lg-4">
+					<div class="info">
+						<div class="address">
+							<i class="bi bi-geo-alt"></i>
+							<h4>Location:</h4>
+							<p>A108 Adam Street, New York, NY 535022</p>
+						</div>
+
+						<div class="email">
+							<i class="bi bi-envelope"></i>
+							<h4>Email:</h4>
+							<p>info@example.com</p>
+						</div>
+
+						<div class="phone">
+							<i class="bi bi-phone"></i>
+							<h4>Call:</h4>
+							<p>+1 5589 55488 55s</p>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="col-lg-8 mt-5 mt-lg-0">
+
+					<form action="forms/contact.php" method="post" role="form" class="php-email-form">
+						<div class="row">
+							<div class="col-md-6 form-group">
+								<input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+							</div>
+							<div class="col-md-6 form-group mt-3 mt-md-0">
+								<input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+							</div>
+						</div>
+						<div class="form-group mt-3">
+							<input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+						</div>
+						<div class="form-group mt-3">
+							<textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+						</div>
+						<div class="my-3">
+							<div class="loading">Loading</div>
+							<div class="error-message"></div>
+							<div class="sent-message">Your message has been sent. Thank you!</div>
+						</div>
+						<div class="text-center"><button type="submit">Send Message</button></div>
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+	</section><!-- End Contact Section -->
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer">
+	<div class="container">
+<!--		<div class="social-links">-->
+<!--			<a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>-->
+<!--			<a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>-->
+<!--			<a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>-->
+<!--			<a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>-->
+<!--			<a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>-->
+<!--		</div>-->
+		<div class="copyright">
+<!--			&copy; Copyright <strong><span>MyResume</span></strong>. All Rights Reserved-->
+			<strong>
+				Copyright &copy; 2020-2021
+				<a href="http://www.a-rms.net">aRMS</a>
+				. All rights reserved.
+			</strong>
+		</div>
+		<div class="credits">
+			<!-- All the links in the footer should remain intact. -->
+			<!-- You can delete the links only if you purchased the pro version. -->
+			<!-- Licensing information: [license-url] -->
+			<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-html-bootstrap-template-my-resume/ -->
+<!--			Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>-->
 		</div>
 	</div>
-</div>
-<div>
-<div
-		id="detailview_req_contents"
-		class="widget widget-white widget-about"
-		style="min-height: 10em">
-	<div class="container">
-	</div>
-</div>
+</footer><!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<!-- Vendor JS Files -->
+<script src="./html/armsDetailExceptTemplate/assets/vendor/aos/aos.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/php-email-form/validate.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/purecounter/purecounter.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/typed.js/typed.min.js"></script>
+<script src="./html/armsDetailExceptTemplate/assets/vendor/waypoints/noframework.waypoints.js"></script>
+
+<!-- Template Main JS File -->
+<script src="./html/armsDetailExceptTemplate/assets/js/main.js"></script>
+
+<!--<script  src="../../../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js" charset="utf-8"></script>
+<script  src="../../../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"></script>-->
 </body>
 </html>
 

@@ -206,6 +206,14 @@ h1, h2, h3, h4, h5, h6 {
 /**
 * Mobile Navigation 
 */
+
+/* 박현민 추가한 부분 */
+@media (min-width: 992px) {
+  .mobile-nav-toggle-none {
+    display: none!important;
+  }
+}
+
 .mobile-nav-toggle {
   position: fixed;
   right: 10px;
@@ -1047,4 +1055,9 @@ section {
 }
 #footer .credits {
   font-size: 13px;
+}
+
+/* 박현민 추가한 부분 */
+.jstree a {
+  color: black!important;
 }
