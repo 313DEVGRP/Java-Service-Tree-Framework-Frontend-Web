@@ -145,35 +145,8 @@
 			href="./img/313_logo.ico"
 			type="image/x-icon" />
 
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-	<script src="../reference/jquery-plugins/html5shiv.js"></script>
-	<script src="../reference/jquery-plugins/respond.js"></script>
-	<![endif]-->
-
-	<link
-			href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
-			rel="stylesheet" />
-	<!--	<link-->
-	<!--			href="../reference/light-blue/css/application.min.css"-->
-	<!--			rel="stylesheet" />-->
-	<!--	<link-->
-	<!--			href="css/override.css"-->
-	<!--			rel="stylesheet" />-->
-
-	<!-- jquery and friends -->
-	<script src="../reference/light-blue/lib/jquery/jquery-2.0.3.min.js"></script>
-
-	<!-- bootstrap default plugins -->
-	<script src="../reference/light-blue/lib/bootstrap/transition.js"></script>
-	<script src="../reference/light-blue/lib/bootstrap/carousel.js"></script>
-
 	<!-- common libraries. required for every page-->
 	<script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js" charset="utf-8"></script>
 
 	<script type="text/javascript" src="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js" charset="utf-8"></script>
 	<link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css" media="screen" />
@@ -188,10 +161,6 @@
 	<!-- page specific -->
 	<script src="./js/detail.js"></script>
 
-	<!-- Favicons -->
-<!--	<link href="../arms/html/armsDetailExceptTemplate/assets/img/favicon.png" rel="icon">-->
-<!--	<link href="../arms/html/armsDetailExceptTemplate/assets/img/apple-touch-icon.png" rel="apple-touch-icon">-->
-
 	<!-- Google Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
@@ -200,8 +169,6 @@
 	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
 	<!-- Template Main CSS File -->
 	<link href="../arms/html/armsDetailExceptTemplate/assets/css/style.css" rel="stylesheet">
@@ -218,7 +185,8 @@
 	<nav id="navbar" class="navbar nav-menu">
 		<ul>
 			<!-- ======= Header ======= -->
-			<li><a href="#detail" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>요구사항 상세</span></a></li>
+			<li><a href="#home" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
+			<li><a href="#detail" id="get_req_detail" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>요구사항 상세</span></a></li>
 			<li><a href="#version" id="get_version_list" class="nav-link scrollto"><i class="bx bx-detail"></i> <span>버전별 상세정보</span></a></li>
 			<li><a href="#allreq" id="get_req_list" class="nav-link scrollto"><i class="bx bx-list-ul"></i> <span>요구사항 목록</span></a></li>
 			<li><a href="#files" id="get_file_list" class="nav-link scrollto"><i class="bx bx-file"></i> <span>파일 목록</span></a></li>
@@ -229,6 +197,12 @@
 
 </header><!-- End Header -->
 
+<section id="home" class="d-flex flex-column justify-content-center">
+	<div class="container" data-aos="zoom-in" data-aos-delay="100">
+		<h1>요구사항 조회 시스템</h1>
+		<p>Requirement <span class="typed" data-typed-items="Management, Collection, Statistics"></span></p>
+	</div>
+</section><!-- End Hero -->
 
 <main id="main">
 	<!-- ======= 요구사항 상세 ======= -->
@@ -418,35 +392,8 @@
 							</li>
 						</ul>
 						<div class="col-lg-12 form-control overflow-auto" id="detailview_req_contents">
-<!--              ☀ 주의 : 본 이슈는 a-RMS에서 제공하는 요구사항 이슈 입니다.
-
-              ✔ 본 이슈는 자동으로 관리되므로,
-              ✔ 이슈를 강제로 삭제시 → 연결된 이슈 수집이 되지 않으므로
-              ✔ 현황 통계에서 배제되어 불이익을 받을 수 있습니다.
-              ✔ 아래 링크에서 요구사항을 내용을 확인 할 수 있습니다.
-
-              ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-              요구사항 내용 확인 ⇒ http://www.a-rms.net/313devgrp/arms/detail.html?page=detail&pdService=14&pdServiceVersion=25&reqAdd=14&jiraServer=14&jiraProject=28
-              ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-
-              ※ 『 본 이슈 하위로 Sub-Task를 만들어서 개발(업무)을 진행 하시거나 』
-              ※ 『 관련한 이슈를 연결 (LINK) 하시면, 현황 통계에 자동으로 수집됩니다. 』
-
-              Implementation plan
-
-              없음
-              Backout plan
-
-              없음
-              Test plan
-
-              없음
-              하위 작업-->
-            </div>
+            			</div>
 					</div>
-
-
-
 					<p>
 					</p>
 				</div>
@@ -696,7 +643,6 @@
 		</div>
 	</section><!-- End 요구사항 전체 목록 Section -->
 
-
 	<!-- ======= 파일 목록 ======= -->
 	<section id="files" class="portfolio section-bg">
 		<div class="container" data-aos="fade-up">
@@ -718,158 +664,6 @@
 			</div>
 
 			<div id="filter-files" class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
-<!--						<div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>Web 3</h4>
-                              <p>Web</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>App 2</h4>
-                              <p>App</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>Card 2</h4>
-                              <p>Card</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>Web 2</h4>
-                              <p>Web</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>App 3</h4>
-                              <p>App</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>Card 1</h4>
-                              <p>Card</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>Card 3</h4>
-                              <p>Card</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                          <div class="portfolio-wrap">
-                            <img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                              <h4>Web 3</h4>
-                              <p>Web</p>
-                              <div class="portfolio-links">
-                                <a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>-->
-<!--				<div class="col-lg-4 col-md-6 portfolio-item filter-image">
-					<div class="portfolio-wrap">
-						<img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-						<div class="portfolio-info">
-							<h4>라이언.jpg</h4>
-							<p>94.04 KB</p>
-							<div class="portfolio-links">
-								<a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-download"></i></a>
-								<a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 portfolio-item filter-doc">
-					<div class="portfolio-wrap">
-						<img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
-						<div class="portfolio-info">
-							<h4>App 1</h4>
-							<p>App</p>
-							<div class="portfolio-links">
-								<a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-								<a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 portfolio-item filter-etc">
-					<div class="portfolio-wrap">
-						<img src="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
-						<div class="portfolio-info">
-							<h4>App 1</h4>
-							<p>App</p>
-							<div class="portfolio-links">
-								<a href="../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-								<a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>-->
-
-
 			</div>
 
 		</div>
@@ -946,15 +740,7 @@
 <!-- ======= Footer ======= -->
 <footer id="footer">
 	<div class="container">
-<!--		<div class="social-links">-->
-<!--			<a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>-->
-<!--			<a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>-->
-<!--			<a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>-->
-<!--			<a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>-->
-<!--			<a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>-->
-<!--		</div>-->
 		<div class="copyright">
-<!--			&copy; Copyright <strong><span>MyResume</span></strong>. All Rights Reserved-->
 			<strong>
 				Copyright &copy; 2020-2021
 				<a href="http://www.a-rms.net">aRMS</a>
@@ -962,11 +748,6 @@
 			</strong>
 		</div>
 		<div class="credits">
-			<!-- All the links in the footer should remain intact. -->
-			<!-- You can delete the links only if you purchased the pro version. -->
-			<!-- Licensing information: [license-url] -->
-			<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-html-bootstrap-template-my-resume/ -->
-<!--			Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>-->
 		</div>
 	</div>
 </footer><!-- End Footer -->
@@ -975,17 +756,14 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 <!-- Vendor JS Files -->
 <script src="./html/armsDetailExceptTemplate/assets/vendor/aos/aos.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="./html/armsDetailExceptTemplate/assets/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="./html/armsDetailExceptTemplate/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/php-email-form/validate.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/purecounter/purecounter.js"></script>
 <script src="./html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.js"></script>
 <script src="./html/armsDetailExceptTemplate/assets/vendor/typed.js/typed.min.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/waypoints/noframework.waypoints.js"></script>
 
 <!-- Template Main JS File -->
-<script src="./html/armsDetailExceptTemplate/assets/js/main.js"></script>
+<!--<script src="./html/armsDetailExceptTemplate/assets/js/main.js"></script>-->
+<script src="./js/index.js"></script>
 
 <!--<script  src="../../../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js" charset="utf-8"></script>
 <script  src="../../../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"></script>-->
