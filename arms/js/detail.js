@@ -11,46 +11,46 @@ var visibilityStatus = {
 };
 
 function execDocReady() {
-        var pluginGroups = [
-            [
-                // Vendor JS Files
-                "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
-                "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
-                "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
-                // Template Main JS File
-                "../reference/jquery-plugins/MyResume/assets/js/main.js"
-            ],
+           var pluginGroups = [
+                [
+                    // Vendor JS Files
+                    "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
+                    "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
+                    "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
+                    // Template Main JS File
+                    "../reference/jquery-plugins/MyResume/assets/js/main.js"
+                ],
 
-            [
-                "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-                "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-                "../reference/lightblue4/docs/lib/widgster/widgster.js",
-                "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-                "../reference/light-blue/lib/jquery.fileupload.js",
-                "../reference/light-blue/lib/jquery.fileupload-fp.js",
-                "../reference/light-blue/lib/jquery.fileupload-ui.js",
-                "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-                "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-                "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
-            ],
+                [
+                    "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+                    "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
+                    "../reference/lightblue4/docs/lib/widgster/widgster.js",
+                    "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+                    "../reference/light-blue/lib/jquery.fileupload.js",
+                    "../reference/light-blue/lib/jquery.fileupload-fp.js",
+                    "../reference/light-blue/lib/jquery.fileupload-ui.js",
+                    "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
+                    "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
+                    "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
+                ],
 
-            [
-                "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
-                "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
-                "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
-                "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-            ],
+                [
+                    "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+                    "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
+                    "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
+                    "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
+                ],
 
-            [
-                // Template CSS File
-                "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-                "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-                "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
-                // Template Main CSS File
-                "../reference/jquery-plugins/MyResume/assets/css/style.css"
-            ]
-            // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-        ];
+                [
+                    // Template CSS File
+                    "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
+                    "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
+                    "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
+                    // Template Main CSS File
+                    "../reference/jquery-plugins/MyResume/assets/css/style.css"
+                ]
+                // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+            ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function () {
@@ -463,17 +463,44 @@ function setDetailViewTab() {
 }
 /*
 작성자 - 김찬호
-작성일 - 0929
+작성일 - 0930
+버전 아이디로 버전 정보상세 조회
+*/
+function getVersionName(c_id , callback) {
+
+    $.ajax({
+        url: "/auth-user/api/arms/pdServiceVersion/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+        data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
+        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+        dataType: "json" // 서버에서 보내줄 데이터의 타입
+    })
+        // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+        .done(function (json) {
+            callback(json);
+        })
+        // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
+        .fail(function (xhr, status, errorThrown) {
+            console.log(xhr + status + errorThrown);
+        })
+}
+
+/*
+작성자 - 김찬호
+수정일 - 0930 (요구사항 버전 바인딩)
 해당 상세 정보 영역 데이터 바인딩
-요구사항 버전 미구현
 */
 function bindClickedDataDetail(ajaxData) {
 
-    console.table(ajaxData);
-
+    //console.table(ajaxData);
+    var version_id = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
+    if(isEmpty(version_id)){
+        $("#allreq_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
+    }else{
+        getVersionName(version_id.toString(), function(response) {
+            $("#allreq_pdservice_version").text(response.c_title); //요구사항 버전
+        });
+    }
     $("#allreq_pdservice_name").text(ajaxData.pdServiceEntity.c_title); // 요구사항 제품(서비스)
-
-	$("#allreq_pdservice_version").text(); // 요구사항 버전
 
 	$("#allreq_pdservice_id").text(ajaxData.c_id);                // 요구사항 아이디
 	$("#allreq_pdservice_title").text(ajaxData.c_title);             // 요구사항 제목
@@ -507,11 +534,7 @@ function bindClickedDataDetail(ajaxData) {
         $("#allreq_pdservice_reviewer05").text(ajaxData.c_req_reviewer05);
     }
 
-
-
 	$("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
-
-
 }
 
 // ------------------ 제품 관련 파일 보기 ------------------ //
