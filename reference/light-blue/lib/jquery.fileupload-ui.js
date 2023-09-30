@@ -568,6 +568,45 @@
         },
 
         _renderDownload: function (files) {
+            var iconsMap = {
+                'application/vnd.ms-htmlhelp': 'CHM.png',
+                'application/vnd.ms-excel': 'XLS.png',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX.png',
+                'application/vnd.ms-powerpoint': 'PPT.png',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PPTX.png',
+                'application/msword': 'DOC.png',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX.png',
+                'application/pdf': 'PDF.png',
+                'application/x-rar-compressed': 'RAR.png',
+                'application/zip': 'ZIP.png',
+                'application/x-msdownload': 'DLL.png',
+                'application/javascript': 'JS.png',
+                'application/x-shockwave-flash': 'SWF.png',
+                'application/xml': 'XML.png',
+                'image/bmp': 'BMP.png',
+                'image/gif': 'GIF.png',
+                'image/jpeg': 'JPEG.png',
+                'image/png': 'PNG.png',
+                'image/tiff': 'TIFF.png',
+                'image/vnd.dwg': 'DWG.png',
+                'text/css': 'CSS.png',
+                'text/html': 'HTML.png',
+                'text/plain': 'TXT.png',
+                'text/richtext': 'RTF.png',
+                'video/mp4': 'MP4.png',
+                'video/mpeg': 'MPEG.png',
+                'audio/mpeg': 'MP3.png',
+                'audio/x-wav': 'WAV.png',
+                // 추가 타입 여기에 추가
+            };
+
+
+            if ($.isArray(files) || $.isPlainObject(files)) {
+              $.each(files, function(index, file) {
+                file.iconFileName = iconsMap[file.contentType] || 'Default.png';
+              });
+            }
+
             return this._renderTemplate(
                 this.options.downloadTemplate,
                 files
