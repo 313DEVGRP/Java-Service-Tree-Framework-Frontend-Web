@@ -73,6 +73,10 @@ function execDocReady() {
 
             save_post_btn_click();
 
+            init_versionList();
+
+            bindDataVersionTab();
+
         })
         .catch(function (errorMessage) {
             console.error(errorMessage);
@@ -279,6 +283,84 @@ function bindDataDetailTab(ajaxData) {
 }
 
 // ------------------ 버전 상세보기 ------------------ //
+function bindDataVersionTab() {
+
+    var urlParams = new URL(location.href).searchParams;
+    var selectedPdService = urlParams.get('pdService');
+
+    // ajax 처리 후 데이터 바인딩
+    console.log("dataLoad :: getSelectedID → " + selectedPdService);
+    $.ajax("/auth-user/api/arms/pdService/getNode.do?c_id=" + selectedPdService).done(function (json) {
+        console.log("dataLoad :: success → ", json);
+
+        $("#version-product-name").html(json.c_title);
+        $("#version-accordion").jsonMenu(json.pdServiceVersionEntities, { speed: 5000 });
+    });
+}
+
+function init_versionList() {
+    let data = ``;
+
+    $.fn.jsonMenu = function (items, options) {
+        $(this).addClass("json-menu");
+
+        for (var i = 0; i < items.length; i++) {
+            data += `
+           <div class="panel">
+               <div class="panel-heading">
+                   <a class="accordion-toggle"
+                            name="versionLink_List"
+                            style="color: #a4c6ff; text-decoration: none; cursor: pointer; border-radius: 5px;  
+                                   align-items: center; display: flex; justify-content: space-between;"
+                            onclick="versionClick(this, ${items[i].c_id});
+                            return false;">
+                       ${items[i].c_title}
+                       <i class="bi bi-chevron-right"></i>
+                   </a>
+               </div>
+           </div>`;
+        }
+
+        $(this).html(data);
+    };
+}
+
+function versionClick(element, c_id) {
+    console.log("versionClick:: c_id  -> ", c_id);
+    $("a[name='versionLink_List']").each(function () {
+        this.style.background = "";
+    });
+    element.style.background = "rgba(241, 240, 71, 0.3)";
+    console.log(element);
+
+    $.ajax({
+        url: "/auth-user/api/arms/pdServiceVersion/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+        data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
+        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+        dataType: "json" // 서버에서 보내줄 데이터의 타입
+    })
+        // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+        .done(function (json) {
+            console.log(" → " + json.c_contents);
+            console.log(json);
+
+            // 데이터 바인딩
+            $("#version-name").text(json.c_title);
+            $("#version-start-date").text(json.c_pds_version_start_date);
+            $("#version-end-date").text(json.c_pds_version_end_date);
+            $("#version-desc").text(json.c_pds_version_contents);
+        })
+        // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
+        .fail(function (xhr, status, errorThrown) {
+            console.log(xhr + status + errorThrown);
+        })
+        //
+        .always(function (xhr, status) {
+            jSuccess("버전 상세 정보 조회가 완료 되었습니다.");
+            console.log(xhr + status);
+        });
+}
+
 function versionDetailViewTabClick() {
     $("#get_version_list").click(function () {
         getVersionDetailViewTab();

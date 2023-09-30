@@ -461,6 +461,97 @@ section {
 }
 
 /*--------------------------------------------------------------
+# 버전
+--------------------------------------------------------------*/
+.version .version-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #45505b;
+}
+
+.version .version-subtitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.version .version-subtitle i {
+  font-size: 16px;
+  margin-right: 5px;
+  color: #0563bb;
+  line-height: 0;
+}
+
+#version-product-name {
+  font-size: 17px;
+  margin-right: 5px;
+  color: #0563bb;
+  line-height: 0;
+}
+
+#version-name {
+  font-size: 17px;
+  margin-right: 5px;
+  color: #0563bb;
+  line-height: 0;
+}
+
+.version .version-item {
+  margin-top: -2px;
+  position: relative;
+}
+
+.version .version-list {
+  border-radius: 5px;
+  background: rgba(140, 191, 241, 0.1);
+  padding: 10px 17px;
+}
+
+.panel {
+  border: none;
+  background-color: rgb(255 255 255);
+  box-shadow: 1px 1px 1px rgb(51 51 51 / 7%);
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.panel:last-child {
+  margin-bottom: 0;
+}
+
+.panel-heading>.accordion-toggle {
+  display: block;
+  padding: 8px 15px;
+}
+
+.version .version-item ul {
+  padding-left: 0;
+}
+
+.version .version-item ul li {
+  padding-bottom: 10px;
+  align-items: center;
+}
+
+.version .version-content {
+  padding-top: 10px;
+  border-radius: 5px;
+  background: rgba(140, 191, 241, 0.1);
+}
+
+.version .version-content-title {
+  margin-left: 21px;
+}
+
+.version .version-content-desc {
+  margin-top: 10px;
+  margin-left: 33px;
+  width: 93%;
+}
+
+/*--------------------------------------------------------------
 # Resume
 --------------------------------------------------------------*/
 .resume .resume-title {
