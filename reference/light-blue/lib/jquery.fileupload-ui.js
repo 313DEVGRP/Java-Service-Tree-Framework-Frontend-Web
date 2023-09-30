@@ -579,10 +579,12 @@
                 'application/pdf': 'PDF.png',
                 'application/x-rar-compressed': 'RAR.png',
                 'application/zip': 'ZIP.png',
+                // 'application/x-gzip': 'ZIP.png',
                 'application/x-msdownload': 'DLL.png',
                 'application/javascript': 'JS.png',
                 'application/x-shockwave-flash': 'SWF.png',
                 'application/xml': 'XML.png',
+                'application/x-yaml': 'YAML.svg',
                 'image/bmp': 'BMP.png',
                 'image/gif': 'GIF.png',
                 'image/jpeg': 'JPEG.png',
@@ -593,11 +595,15 @@
                 'text/html': 'HTML.png',
                 'text/plain': 'TXT.png',
                 'text/richtext': 'RTF.png',
+                'text/xml': 'XML.png',
+                'text/yaml': 'YAML.svg',
+                'text/x-yaml': 'YAML.svg',
                 'video/mp4': 'MP4.png',
                 'video/mpeg': 'MPEG.png',
                 'audio/mpeg': 'MP3.png',
                 'audio/x-wav': 'WAV.png',
                 // 추가 타입 여기에 추가
+                // 'application/java-archive': 'JAR.png',
             };
 
 
