@@ -11,6 +11,44 @@ var visibilityStatus = {
     '#question': false
 };
 
+var iconsMap = {
+    'application/vnd.ms-htmlhelp': 'CHM.png',
+    'application/vnd.ms-excel': 'XLS.png',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX.png',
+    'application/vnd.ms-powerpoint': 'PPT.png',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PPTX.png',
+    'application/msword': 'DOC.png',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX.png',
+    'application/pdf': 'PDF.png',
+    'application/x-rar-compressed': 'RAR.png',
+    'application/zip': 'ZIP.png',
+    // 'application/x-gzip': 'ZIP.png',
+    'application/x-msdownload': 'DLL.png',
+    'application/javascript': 'JS.png',
+    'application/x-shockwave-flash': 'SWF.png',
+    'application/xml': 'XML.png',
+    'application/x-yaml': 'YAML.svg',
+    'image/bmp': 'BMP.png',
+    'image/gif': 'GIF.png',
+    'image/jpeg': 'JPEG.png',
+    'image/png': 'PNG.png',
+    'image/tiff': 'TIFF.png',
+    'image/vnd.dwg': 'DWG.png',
+    'text/css': 'CSS.png',
+    'text/html': 'HTML.png',
+    'text/plain': 'TXT.png',
+    'text/richtext': 'RTF.png',
+    'text/xml': 'XML.png',
+    'text/yaml': 'YAML.svg',
+    'text/x-yaml': 'YAML.svg',
+    'video/mp4': 'MP4.png',
+    'video/mpeg': 'MPEG.png',
+    'audio/mpeg': 'MP3.png',
+    'audio/x-wav': 'WAV.png',
+    // 추가 타입 여기에 추가
+    // 'application/java-archive': 'JAR.png',
+};
+
 function execDocReady() {
     var pluginGroups = [
         [
@@ -593,7 +631,6 @@ function fileLoadByPdService() {
                     // 각 파일 정보(fileSet)을 처리
                     fileSet.forEach(function (file) {
                         console.log(file.fileName);
-                        var $target = $('#filter-files');
                         var filterClass;
                         if (file.contentType.includes("image")) {
                             filterClass = 'filter-image';
@@ -603,18 +640,24 @@ function fileLoadByPdService() {
                             filterClass = 'filter-etc';
                         }
 
-                        var imgSrc = "../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"; // 이미지 경로
+                        var iconFileName = iconsMap[file.contentType] || 'Default.png';
+                        var imgSrc = "./img/fileIconPack/" + iconFileName; // 이미지 경로
                         var title = file.fileName;
-                        var fileSize = file.size;
+                        var downloadUrl = file.url;
+                        var thumbnailUrl = file.thumbnailUrl;
+                        var fileSize = formatBytes(file.size, 3);
+                        // var fileSize = file.size;
+                        var imageLinkHtml = file.contentType.includes("image") ? `<a href="${thumbnailUrl}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>` : '';
+
                         var $newHtml = $(`<div class="col-lg-4 col-md-6 portfolio-item ${filterClass}">
-                                            <div class="portfolio-wrap">
-                                                <img src="${imgSrc}" class="img-fluid" alt="">
+                                            <div class="portfolio-wrap" style="display: grid; background: rgb(69 80 91 / 0%)!important;">
+                                                <img src="${imgSrc}" class="img-fluid" alt="" style="margin:auto;">
                                                 <div class="portfolio-info">
                                                     <h4>${title}</h4>
                                                     <p>${fileSize}</p>
                                                     <div class="portfolio-links">
-                                                        <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="${title}"><i class="bx bx-download"></i></a>
-                                                        <a href="${imgSrc}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>
+                                                        <a href="${downloadUrl}" class="portfolio-details-lightbox" data-glightbox="type: external" title="${title}"><i class="bx bx-download"></i></a>
+                                                        ${imageLinkHtml}
                                                     </div>
                                                 </div>
                                             </div>
@@ -651,6 +694,18 @@ function fileLoadByPdService() {
             });
         }
     });
+}
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 // ------------------ QnA 게시판보기 ------------------ //
