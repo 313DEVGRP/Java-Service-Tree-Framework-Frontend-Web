@@ -392,7 +392,7 @@
                                 </div>-->
 							</li>
 						</ul>
-						<div class="col-lg-12 form-control overflow-auto" id="detailview_req_contents">
+						<div class="col-lg-12 form-control overflow-auto" id="detailview_req_contents" >
             			</div>
 					</div>
 					<p>
@@ -486,29 +486,25 @@
 			<div class="row content pt-4 pt-lg-0">
 				<!-- 요구사항 목록 트리 시작 -->
 				<div class="col-lg-5">
-					<h3 class="resume-title">요구사항 목록</h3>
+					<h3 class="resume-title" >요구사항 목록</h3>
+
+					<div class="pb-3">
+						<i class="bi bi-chevron-right" style="color: #0563bb;"></i> <strong>제품(서비스) :&nbsp;</strong><strong id="allreq_pdservice_name"></strong>
+					</div>
+
 					<div    id="req_tree"
-							style="padding-top: 5px; overflow: hidden"
-							class="darkBack border">
+							style="padding-top: 5px; overflow: hidden; height:712px"
+							class="border">
 					</div>
 				</div>
 				<!-- 요구사항 목록 트리 끝 -->
 				<div class="about col-lg-7">
 					<h3 class="resume-title">해당 상세 정보</h3>
+					<div class="pb-3">
+						<i class="bi bi-chevron-right" style="color: #0563bb;"></i> <strong>최신 버전 :&nbsp;</strong><strong id="allreq_pdservice_version"></strong>
+					</div>
 					<div class="content">
 						<ul>
-							<!--요구사항 제품(서비스)-->
-							<li class="col-lg-12 row">
-								<div class="col-lg-4 d-flex  align-items-center">
-									<i class="bi bi-chevron-right"></i> <strong>요구사항 제품(서비스)</strong>
-								</div>
-								<div class="col-lg-8">
-									<div class="input-group">
-										<div class="input-group-text"><i class="bi bi-box"></i></div>
-										<div class="form-control" id="allreq_pdservice_name"></div>
-									</div>
-								</div>
-							</li>
 							<!--요구사항 연관 버전-->
 							<li class="col-lg-12 row">
 								<div class="col-lg-4 d-flex  align-items-center">
@@ -517,7 +513,7 @@
 								<div class="col-lg-8">
 									<div class="input-group">
 										<div class="input-group-text"><i class="bi bi-link-45deg"></i></div>
-										<div class="form-control" id="allreq_pdservice_version"></div>
+										<div class="form-control" id="allreq_pdservice_version_list"></div>
 									</div>
 								</div>
 							</li>
@@ -566,9 +562,9 @@
 									</div>
 								</div>
 							</li>
-							<li class="col-lg-12 row toggle-content">
+							<li class="col-lg-12 row toggle-content " style="cursor:pointer;">
 								<div class="col-lg-4 d-flex align-items-center">
-									<i class="bi bi-chevron-right"></i> <strong>제품(서비스) 리뷰어</strong>
+									<i class="bi bi-chevron-double-right"></i> <strong>제품(서비스) 리뷰어</strong>
 								</div>
 								<div class="col-lg-8">
 									<div class="input-group">
@@ -577,8 +573,8 @@
 									</div>
 								</div>
 							</li>
-							<li class='col-lg-12 row' id='additional-item2'>
-							<!--<li class='col-lg-12 row d-none' id='additional-item2'>-->
+							<!--<li class='col-lg-12 row' id='additional-item2'>-->
+							<li class='col-lg-12 row d-none' id='additional-item2'>
 								<div class='col-lg-4 d-flex align-items-center'>
 								</div>
 								<div class='col-lg-8'>
@@ -588,8 +584,8 @@
 									</div>
 								</div>
 							</li>
-							<li class='col-lg-12 row' id='additional-item3'>
-							<!--<li class='col-lg-12 row d-none' id='additional-item3'>-->
+							<!--<li class='col-lg-12 row' id='additional-item3'>-->
+							<li class='col-lg-12 row d-none' id='additional-item3'>
 								<div class='col-lg-4 d-flex align-items-center'>
 								</div>
 								<div class='col-lg-8'>
@@ -599,8 +595,8 @@
 									</div>
 								</div>
 							</li>
-							<li class='col-lg-12 row' id='additional-item4'>
-							<!--<li class='col-lg-12 row d-none' id='additional-item4'>-->
+							<!--<li class='col-lg-12 row' id='additional-item4'>-->
+							<li class='col-lg-12 row d-none' id='additional-item4'>
 								<div class='col-lg-4 d-flex align-items-center'>
 								</div>
 								<div class='col-lg-8'>
@@ -610,8 +606,8 @@
 									</div>
 								</div>
 							</li>
-							<li  class='col-lg-12 row' id='additional-item5'>
-							<!--<li  id='additional-item5' class='col-lg-12 row d-none' id='additional-item5'>-->
+							<!--<li  class='col-lg-12 row' id='additional-item5'>-->
+							<li  id='additional-item5' class='col-lg-12 row d-none' id='additional-item5'>
 								<div class='col-lg-4 d-flex align-items-center'>
 								</div>
 								<div class='col-lg-8'>
@@ -780,21 +776,3 @@
 		padding-bottom: 0px;
 	}
 </style>
-<!--
-<script> 제품 서비스 리뷰어 아코디언 처리
-	$(document).ready(function(){
-$(".toggle-content").click(function(){
-if ($('#additional-item2').hasClass('d-none')) {
-    $('#additional-item2').removeClass('d-none');
-    $('#additional-item3').removeClass('d-none');
-    $('#additional-item4').removeClass('d-none');
-    $('#additional-item5').removeClass('d-none');
-} else {
-    $('#additional-item2').addClass('d-none');
-    $('#additional-item3').addClass('d-none');
-    $('#additional-item4').addClass('d-none');
-    $('#additional-item5').addClass('d-none');
-}
-});
-});
-</script>-->

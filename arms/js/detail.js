@@ -112,6 +112,9 @@ function execDocReady() {
 
             // save_post_btn_click();
 
+            // 요구사항 전체 목록 탭 제품(서비스)리뷰어 클릭시 아코디언 효과
+            resize_reviewer();
+
         })
         .catch(function (errorMessage) {
             console.error(errorMessage);
@@ -460,6 +463,10 @@ function build_ReqData_By_PdService() {
 */
 function jsTreeClick(selectedNode) {
 
+    $("#req_tree").slimscroll({
+				height: "712px"
+			});
+
     console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
 
     selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");//요구사항 아이디
@@ -541,21 +548,38 @@ function getVersionName(c_id , callback) {
 
 /*
 작성자 - 김찬호
-수정일 - 0930 (요구사항 버전 바인딩)
+수정일 - 1001 (요구사항 버전 리스트 형태 바인딩)
 해당 상세 정보 영역 데이터 바인딩
 */
 function bindClickedDataDetail(ajaxData) {
 
     //console.table(ajaxData);
-    var version_id = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
-    console.log(version_id.toString());
-    if(isEmpty(version_id)){
+    var version_id_list = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
+    var version_title_list = [];
+
+    if (isEmpty(version_id_list)) {
         $("#allreq_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
-    }else{
-        getVersionName(version_id.toString(), function(response) {
-            $("#allreq_pdservice_version").text(response.c_title); //요구사항 버전
+    } else {
+        var promises = version_id_list.map(function(version_id) {
+            return new Promise(function(version_title) {
+                getVersionName(version_id.toString(), function(response) {
+                    version_title(response.c_title);
+                });
+            });
         });
+
+        Promise.all(promises)
+            .then(function(titles) {
+                titles.sort()
+                titles = titles.slice(-1).concat(titles.slice(0, -1));
+                $("#allreq_pdservice_version").text(titles[titles.length-1]);
+                $("#allreq_pdservice_version_list").text(titles.join(", "));
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
     }
+
     $("#allreq_pdservice_name").text(ajaxData.pdServiceEntity.c_title); // 요구사항 제품(서비스)
 
     $("#allreq_pdservice_id").text(ajaxData.c_id);                // 요구사항 아이디
@@ -591,6 +615,26 @@ function bindClickedDataDetail(ajaxData) {
     }
 
     $("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
+}
+/*
+작성자 - 김찬호
+작성일 - 1001
+2~5번 리뷰어 감추고 "제품(서비스) 리뷰어"클릭시 나머지 리뷰어 확인 가능하게 동작
+*/
+function resize_reviewer(){
+    $(".toggle-content").click(function(){
+    		if ($('#additional-item2').hasClass('d-none')) {
+    			$('#additional-item2').removeClass('d-none');
+    			$('#additional-item3').removeClass('d-none');
+    			$('#additional-item4').removeClass('d-none');
+    			$('#additional-item5').removeClass('d-none');
+    		} else {
+    			$('#additional-item2').addClass('d-none');
+    			$('#additional-item3').addClass('d-none');
+    			$('#additional-item4').addClass('d-none');
+    			$('#additional-item5').addClass('d-none');
+    		}
+    });
 }
 
 // ------------------ 제품 관련 파일 보기 ------------------ //
