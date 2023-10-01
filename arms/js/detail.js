@@ -15,11 +15,11 @@ function execDocReady() {
     var pluginGroups = [
         [
             // Vendor JS Files
-            "../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",
-            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",
-            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",
+            /*"../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",*/
+            /*"../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",*/
+            /*"../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",*/
             // Template Main JS File
-            "../reference/jquery-plugins/MyResume/assets/js/main.js"
+            /*"../reference/jquery-plugins/MyResume/assets/js/main.js"*/
         ],
 
         [
@@ -27,9 +27,6 @@ function execDocReady() {
             "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
             "../reference/lightblue4/docs/lib/widgster/widgster.js",
             "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-            "../reference/light-blue/lib/jquery.fileupload.js",
-            "../reference/light-blue/lib/jquery.fileupload-fp.js",
-            "../reference/light-blue/lib/jquery.fileupload-ui.js",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
             "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
             "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
@@ -44,11 +41,11 @@ function execDocReady() {
 
         [
             // Template CSS File
-           "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-           "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-           "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
-           // Template Main CSS File
-           "../reference/jquery-plugins/MyResume/assets/css/style.css"
+            "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
+            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
+            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
+            // Template Main CSS File
+            "../reference/jquery-plugins/MyResume/assets/css/style.css"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -155,7 +152,7 @@ function checkVisible( element, check = 'visible' ) {
 }
 
 var scrollApiFunc = function () {
-    for (let element in visibilityStatus) {
+    for (const element in visibilityStatus) {
         if (!visibilityStatus[element] && checkVisible(element)) {
             if(element === "#detail") {
                 getDetailViewTab();
@@ -184,7 +181,7 @@ var scrollApiFunc = function () {
             break;
         }
     }
-}
+};
 
 // ------------------ 메뉴 클릭 이벤트 ------------------ //
 function menuClick() {
@@ -575,41 +572,41 @@ function fileLoadByPdService() {
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService');
 
-        $("#fileIdlink").val(selectedPdService);
-        $.ajax({
-            url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-            data: {fileIdLink: selectedPdService},
-            async: false,
-            dataType: "json"
-        }).done(function (result) {
-            console.log(result.files);
-            let $portfolioContainer = $('.portfolio-container');
-            if ($portfolioContainer.length) {
-                let portfolioIsotope = new Isotope($portfolioContainer[0], {
-                    itemSelector: '.portfolio-item'
-                });
+    $("#fileIdlink").val(selectedPdService);
+    $.ajax({
+        url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
+        data: {fileIdLink: selectedPdService},
+        async: false,
+        dataType: "json"
+    }).done(function (result) {
+        console.log(result.files);
+        let $portfolioContainer = $('.portfolio-container');
+        if ($portfolioContainer.length) {
+            let portfolioIsotope = new Isotope($portfolioContainer[0], {
+                itemSelector: '.portfolio-item'
+            });
 
-                for (var key in result) {
-                    if (result.hasOwnProperty(key)) {
-                        var fileSet = result[key];
+            for (var key in result) {
+                if (result.hasOwnProperty(key)) {
+                    var fileSet = result[key];
 
-                        // 각 파일 정보(fileSet)을 처리
-                        fileSet.forEach(function (file) {
-                            console.log(file.fileName);
-                            var $target = $('#filter-files');
-                            var filterClass;
-                            if (file.contentType.includes("image")) {
-                                filterClass = 'filter-image';
-                            } else if (file.contentType.includes("application")) {
-                                filterClass = 'filter-doc';
-                            } else {
-                                filterClass = 'filter-etc';
-                            }
+                    // 각 파일 정보(fileSet)을 처리
+                    fileSet.forEach(function (file) {
+                        console.log(file.fileName);
+                        var $target = $('#filter-files');
+                        var filterClass;
+                        if (file.contentType.includes("image")) {
+                            filterClass = 'filter-image';
+                        } else if (file.contentType.includes("application")) {
+                            filterClass = 'filter-doc';
+                        } else {
+                            filterClass = 'filter-etc';
+                        }
 
-                            var imgSrc = "../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"; // 이미지 경로
-                            var title = file.fileName;
-                            var fileSize = file.size;
-                            var $newHtml = $(`<div class="col-lg-4 col-md-6 portfolio-item ${filterClass}">
+                        var imgSrc = "../arms/html/armsDetailExceptTemplate/assets/img/portfolio/portfolio-3.jpg"; // 이미지 경로
+                        var title = file.fileName;
+                        var fileSize = file.size;
+                        var $newHtml = $(`<div class="col-lg-4 col-md-6 portfolio-item ${filterClass}">
                                             <div class="portfolio-wrap">
                                                 <img src="${imgSrc}" class="img-fluid" alt="">
                                                 <div class="portfolio-info">
@@ -623,14 +620,14 @@ function fileLoadByPdService() {
                                             </div>
                                         </div>`);
 
-                            let imgLoadCheck = new Image();
-                            imgLoadCheck.src = imgSrc;
+                        let imgLoadCheck = new Image();
+                        imgLoadCheck.src = imgSrc;
 
-                            imgLoadCheck.onload = function () {
-                                $portfolioContainer.append($newHtml);
-                                portfolioIsotope.appended($newHtml[0]);
-                                portfolioIsotope.arrange();
-                            };
+                        imgLoadCheck.onload = function () {
+                            $portfolioContainer.append($newHtml);
+                            portfolioIsotope.appended($newHtml[0]);
+                            portfolioIsotope.arrange();
+                        };
                     });
                 }
             }
