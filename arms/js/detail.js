@@ -201,7 +201,7 @@ var scrollApiFunc = function () {
             else if(element === "#version") {
                 bindDataVersionTab();
 
-                init_versionList();
+                initVersionData();
             }
             else if (element === "#allreq") {
                 build_ReqData_By_PdService();
@@ -344,7 +344,7 @@ function versionDetailViewTabClick() {
     $("#get_version_list").click(function () {
         bindDataVersionTab();
 
-        init_versionList();
+        initVersionData();
     });
 }
 
@@ -356,6 +356,7 @@ function bindDataVersionTab() {
 
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService');
+    var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
 
     // ajax 처리 후 데이터 바인딩
     console.log("dataLoad :: getSelectedID → " + selectedPdService);
@@ -363,14 +364,14 @@ function bindDataVersionTab() {
         console.log("dataLoad :: success → ", json);
 
         $("#version-product-name").html(json.c_title);
-        $("#version-accordion").jsonMenu(json.pdServiceVersionEntities, { speed: 5000 });
+        $("#version-accordion").jsonMenu(selectedPdServiceVersion, json.pdServiceVersionEntities, { speed: 5000 });
     });
 }
 
-function init_versionList() {
+function initVersionData() {
     let data = ``;
 
-    $.fn.jsonMenu = function (items, options) {
+    $.fn.jsonMenu = function (c_id, items, options) {
         $(this).addClass("json-menu");
 
         for (var i = 0; i < items.length; i++) {
@@ -379,9 +380,10 @@ function init_versionList() {
                <div class="panel-heading">
                    <a class="accordion-toggle"
                             name="versionLink_List"
-                            style="color: #a4c6ff; text-decoration: none; cursor: pointer; border-radius: 5px;  
+                            style="text-decoration: none; cursor: pointer; border-radius: 5px;  
                                    align-items: center; display: flex; justify-content: space-between;"
-                            onclick="versionClick(this, ${items[i].c_id});
+                            data-value="${items[i].c_id}"
+                            onclick="versionClick(this, ${items[i].c_id})"
                             return false;">
                        ${items[i].c_title}
                        <i class="bi bi-chevron-right"></i>
@@ -389,8 +391,14 @@ function init_versionList() {
                </div>
            </div>`;
         }
-
         $(this).html(data);
+
+        // 버전 데이터 바인딩
+        var element = $("a[data-value='" + c_id + "']");
+        console.log("해당 요구사항의 버전 요소: ", element[0]);
+        element[0].style.background = "rgba(241, 240, 71, 0.3)";
+
+        versionClick(element[0], c_id);
     };
 }
 
@@ -417,6 +425,9 @@ function versionClick(element, c_id) {
             $("#version-name").text(json.c_title);
             $("#version-start-date").text(json.c_pds_version_start_date);
             $("#version-end-date").text(json.c_pds_version_end_date);
+            $("#version-desc").slimscroll({
+                height: "500px"
+            });
             $("#version-desc").html(json.c_pds_version_contents);
         })
         // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
