@@ -647,9 +647,12 @@ function fileLoadByPdService() {
                         var thumbnailUrl = file.thumbnailUrl;
                         var fileSize = formatBytes(file.size, 3);
                         // var fileSize = file.size;
+/*
                         var imageLinkHtml = file.contentType.includes("image") ? `<a href="${thumbnailUrl}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>` : '';
+*/
+                        var imageLinkHtml = '';
 
-                        var $newHtml = $(`<div class="col-lg-4 col-md-6 portfolio-item ${filterClass}">
+                        var $newHtml = $(`<div class="col-lg-2 col-md-3 col-sm-3 portfolio-item ${filterClass}">
                                             <div class="portfolio-wrap" style="display: grid; background: rgb(69 80 91 / 0%)!important;">
                                                 <img src="${imgSrc}" class="img-fluid" alt="" style="margin:auto;">
                                                 <div class="portfolio-info">
