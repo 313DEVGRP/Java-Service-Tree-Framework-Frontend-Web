@@ -6,7 +6,7 @@ var reqStatusDataTable;
 var dataTableRef;
 
 var selectedIssue; //선택한 이슈
-var selectedIssueName;   //선택한
+var selectedIssueKey;   //선택한
 
 function execDocReady() {
 
@@ -323,18 +323,13 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					var _render =
-						'<div style=\'white-space: nowrap; color: #a4c6ff\'>' +
-						'<a href="#" data-target="#my_modal2" data-toggle="modal" onclick="click_issue_name(\''+data+'\')">' + data + "</a>" +
-						"</div>";
-					return _render;
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
 			className: "dt-body-left",
 			visible: true
 		},
-
 		{ name: "c_jira_server_link", title: "지라 서버 아이디", data: "c_jira_server_link", visible: false },
 		{ name: "c_jira_server_url", title: "지라 서버 주소", data: "c_jira_server_url", visible: false },
 		{
@@ -392,7 +387,11 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					var _render =
+						'<div style=\'white-space: nowrap; color: #a4c6ff\'>' + data +
+						'<button data-target="#my_modal2" data-toggle="modal" style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_issue_key(\''+data+'\')"><i class="fa fa-list-alt"></i>' + "</button>"+
+						"</div>";
+					return _render;
 				}
 				return data;
 			},
@@ -508,7 +507,7 @@ function dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = [1,3];
+	var rowsGroupList = [1,3,6];
 	var columnDefList = [
 		{
 			orderable: false,
@@ -562,7 +561,7 @@ function dataTableClick(tempDataTable, selectedData) {
 	console.log(selectedData);
 	selectedIssue = selectedData;
 
-	if(selectedIssueName !== "") {
+	if(selectedIssueKey !== "") {
 		var endPointUrl2 = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val()
 			+ "/getIssueAndSubLinks.do?serverId="+selectedIssue.c_jira_server_link
 			+ "&issueKey="+selectedIssue.c_issue_key
@@ -617,11 +616,11 @@ $("#pdfchecker").on("click", function () {
 	reqStatusDataTable.button(".buttons-pdf").trigger();
 });
 
-function click_issue_name(name) {
-	selectedIssueName = "";
+function click_issue_key(name) {
+	selectedIssueKey = "";
 	console.log("clicked_issue_name ==> " + name);
 	if (name !== "" || name !== undefined) {
-		selectedIssueName = name;
+		selectedIssueKey = name;
 	}
 }
 
