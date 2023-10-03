@@ -172,6 +172,7 @@
                     });
                 } else {
                     if (files.length) {
+                        files = files.filter(file => file !== null);
                         $.each(files, function (index, file) {
                             if (data.maxNumberOfFilesAdjusted && file.error) {
                                 that._adjustMaxNumberOfFiles(1);
