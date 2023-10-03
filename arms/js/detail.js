@@ -270,6 +270,7 @@ function getDetailViewTab() {
             200: function (data) {
                 //////////////////////////////////////////////////////////
                 console.log(data);
+                console.table(data);
                 // ------------------ 상세보기 ------------------ //
                 bindDataDetailTab(data);
                 //////////////////////////////////////////////////////////
@@ -465,7 +466,10 @@ function build_ReqData_By_PdService() {
 
     // common.js에 정의되어있는 함수
     jsTreeBuild(jQueryElementID, serviceNameForURL);
+
+
 }
+
 
 /*
 수정 - 김찬호
@@ -473,10 +477,6 @@ function build_ReqData_By_PdService() {
 트리에서 해당 요구사항 클릭시 해당 요구사항 아이디 조회
 */
 function jsTreeClick(selectedNode) {
-
-    $("#req_tree").slimscroll({
-				height: "712px"
-			});
 
     console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
 
