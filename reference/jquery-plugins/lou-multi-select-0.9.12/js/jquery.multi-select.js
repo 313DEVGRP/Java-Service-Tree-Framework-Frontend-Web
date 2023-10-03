@@ -99,6 +99,7 @@
       var that = this,
           ms = that.$element,
           attributes = "",
+          serverType = "",
           $option = $(option);
 
       for (var cpt = 0; cpt < option.attributes.length; cpt++){
@@ -106,12 +107,28 @@
 
         if(attr.name !== 'value' && attr.name !== 'disabled'){
           attributes += attr.name+'="'+attr.value+'" ';
+          serverType = attr.value;
         }
       }
-      var selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-check\" style=\"color: #e49400;\"></span> '+that.escapeHTML($option.text())+'</span></li>'),
-          selectedLi = selectableLi.clone(),
-          value = $option.val(),
-          elementId = that.sanitize(value);
+
+      var selectableLi,
+          selectedLi,
+          value,
+          elementId;
+
+      if(serverType === "온프레미스" || serverType ==="클라우드") {
+        if (serverType === "온프레미스") {
+           selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-home\" style=\"color: #E49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
+        }
+        if (serverType === "클라우드") {
+           selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-cloud\" style=\"color: #E49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
+        }
+      } else {
+         selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-check\" style=\"color: #e49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
+      }
+      selectedLi = selectableLi.clone(),
+      value = $option.val(),
+      elementId = that.sanitize(value);
 
       selectableLi
         .data('ms-value', value)

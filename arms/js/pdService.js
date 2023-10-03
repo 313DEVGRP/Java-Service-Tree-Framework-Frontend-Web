@@ -577,11 +577,12 @@ function dataTableClick(tempDataTable, selectedData) {
 
 	//제품 클릭 시, 상세보기 tab을 기본값으로 세팅.
 	$('ul.nav-tabs li').removeClass('active');
-	$('.nav-tabs-details').addClass('active');
+	$('.nav-tabs-stats').addClass('active');
 
 	//파일 업로드 관련 레이어 보이기 처리
 	$(".body-middle").show();
-	$(".pdservice-image-row").hide(); // 드래그 앤 드롭(dropzone.js) display none 처리. 편집하기 tab 에서만 보여준다.
+	// 이미지 CRUD 관련 HTML 태그 hide 처리. <편집하기> tab 에서만 보여준다.
+	$(".pdservice-image-row").hide();
 
 	//파일 리스트 초기화
 	$("table tbody.files").empty();

@@ -215,9 +215,11 @@ function authUserCheck() {
 				200: function (json) {
 					console.log("[ common :: authUserCheck ] userName = " + json.preferred_username);
 					console.log("[ common :: authUserCheck ] permissions = ");
+					console.log("[ common :: authUserCheck ] sub = " + json.sub);
 					console.log(json.realm_access.roles);
 					userName = json.preferred_username;
 					permissions = json.realm_access.roles;
+					userID = json.sub;
 
 					var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
 					account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
