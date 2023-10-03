@@ -105,15 +105,18 @@ function execDocReady() {
             // 요구사항 전체정보 탭 클릭 이벤트
             allReqListViewTabClick();
 
+            // 요구사항 전체 목록 탭 제품(서비스)리뷰어 클릭시 아코디언 효과
+            resize_reviewer();
+
             // 제품관련 파일 탭 클릭 이벤트
             filesViewTabClick();
 
-            // reqCommentListViewTabClick();
+            // QnA 채팅 게시판 탭 클릭 이벤트
+            reqCommentListViewTabClick();
 
             // save_post_btn_click();
 
-            // 요구사항 전체 목록 탭 제품(서비스)리뷰어 클릭시 아코디언 효과
-            resize_reviewer();
+
 
         })
         .catch(function (errorMessage) {
@@ -170,8 +173,6 @@ function callAPI(apiName) {
         return true;
     }
 
-    calledAPIs[apiName] = true;
-
     return false;
 }
 
@@ -193,7 +194,7 @@ function checkVisible( element, check = 'visible' ) {
 }
 
 var scrollApiFunc = function () {
-    for (const element in visibilityStatus) {
+    for (var element in visibilityStatus) {
         if (!visibilityStatus[element] && checkVisible(element)) {
             if(element === "#detail") {
                 getDetailViewTab();
@@ -210,7 +211,7 @@ var scrollApiFunc = function () {
                 fileLoadByPdService();
             }
             else if (element === "#question") {
-                // getReqCommentList();
+                getReqCommentList();
             }
 
             visibilityStatus[element] = true;
@@ -271,10 +272,12 @@ function getDetailViewTab() {
                 //////////////////////////////////////////////////////////
                 console.log(data);
                 console.table(data);
+
                 // ------------------ 상세보기 ------------------ //
                 bindDataDetailTab(data);
                 //////////////////////////////////////////////////////////
                 jSuccess("요구사항 조회가 완료 되었습니다.");
+                calledAPIs["detailAPI"] = true;
             }
         },
         beforeSend: function () {
@@ -366,6 +369,8 @@ function bindDataVersionTab() {
 
         $("#version-product-name").html(json.c_title);
         $("#version-accordion").jsonMenu(selectedPdServiceVersion, json.pdServiceVersionEntities, { speed: 5000 });
+
+        calledAPIs["versionAPI"] = true;
     });
 }
 
@@ -466,6 +471,7 @@ function build_ReqData_By_PdService() {
 
     // common.js에 정의되어있는 함수
     jsTreeBuild(jQueryElementID, serviceNameForURL);
+    calledAPIs["allReqListAPI"] = true;
 
 
 }
@@ -634,17 +640,17 @@ function bindClickedDataDetail(ajaxData) {
 */
 function resize_reviewer(){
     $(".toggle-content").click(function(){
-    		if ($('#additional-item2').hasClass('d-none')) {
-    			$('#additional-item2').removeClass('d-none');
-    			$('#additional-item3').removeClass('d-none');
-    			$('#additional-item4').removeClass('d-none');
-    			$('#additional-item5').removeClass('d-none');
-    		} else {
-    			$('#additional-item2').addClass('d-none');
-    			$('#additional-item3').addClass('d-none');
-    			$('#additional-item4').addClass('d-none');
-    			$('#additional-item5').addClass('d-none');
-    		}
+        if ($('#additional-item2').hasClass('d-none')) {
+            $('#additional-item2').removeClass('d-none');
+            $('#additional-item3').removeClass('d-none');
+            $('#additional-item4').removeClass('d-none');
+            $('#additional-item5').removeClass('d-none');
+        } else {
+            $('#additional-item2').addClass('d-none');
+            $('#additional-item3').addClass('d-none');
+            $('#additional-item4').addClass('d-none');
+            $('#additional-item5').addClass('d-none');
+        }
     });
 }
 
@@ -702,9 +708,9 @@ function fileLoadByPdService() {
                         var thumbnailUrl = file.thumbnailUrl;
                         var fileSize = formatBytes(file.size, 3);
                         // var fileSize = file.size;
-/*
-                        var imageLinkHtml = file.contentType.includes("image") ? `<a href="${thumbnailUrl}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>` : '';
-*/
+                        /*
+                                                var imageLinkHtml = file.contentType.includes("image") ? `<a href="${thumbnailUrl}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>` : '';
+                        */
                         var imageLinkHtml = '';
 
                         var $newHtml = $(`<div class="col-lg-2 col-md-3 col-sm-3 portfolio-item ${filterClass}">
@@ -751,6 +757,8 @@ function fileLoadByPdService() {
                 portfolioIsotope.arrange();
             });
         }
+
+        calledAPIs["fileAPI"] = true;
     });
 }
 
@@ -769,7 +777,7 @@ function formatBytes(bytes, decimals = 2) {
 // ------------------ QnA 게시판보기 ------------------ //
 function reqCommentListViewTabClick() {
     $("#get_req_comment_list").click(function () {
-        // getReqCommentList();
+        getReqCommentList();
     });
 }
 
@@ -796,15 +804,69 @@ function getReqCommentList() {
         statusCode: {
             200: function (data) {
                 //모달 팝업 끝내고
+                var $chatMessages = $('#chat_messages');
+
                 console.log(data.response);
                 for (var k in data.response) {
-                    var obj = data.response[k];
-                    // console.log(obj);
+                    var comment = data.response[k];
+
+                    console.log(comment);
                     // var newOption = new Option(obj.c_title, obj.c_id, false, false);
                     // $("#selected_pdService").append(newOption).trigger("change");
+                    var sender = comment.c_req_comment_sender;
+                    var date = comment.c_req_comment_date;
+                    var title = comment.c_title;
+                    var contents = comment.c_req_comment_contents;
+                    var $newHtml;
+                    /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
+                    if (sender !== 'kch') {
+                        $newHtml = $(`<div class="chat-message">
+                                            <div class="sender pull-left">
+                                                <div class="icon">
+                                                    <i class="bi bi-person-fill" style="font-size: 40px"></i>
+                                                </div>
+                                            </div>
+                                            <div class="chat-message-body">
+                                                <span class="arrow"></span>
+                                                <div class="sender">
+                                                    <span class="user-id">${sender}</span>
+                                                    <span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>
+                                                </div>
+                                                <div class="text">
+                                                   ${title}
+                                                </div>
+                                            </div>
+                                       </div>`);
+                    }
+                    else {
+                        $newHtml = $(`<div class="chat-message">
+                                        <div class="sender pull-right">
+                                            <div class="icon">
+                                                <i class="bi bi-person" style="font-size: 40px"></i>
+                                            </div>
+                                        </div>
+                                        <div class="chat-message-body on-left">
+                                            <span class="arrow"></span>
+                                            <div class="sender">
+                                                <span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>
+                                                <span href="#" class="user-id">${sender}</span>
+                                            </div>
+                                            <div class="text">
+                                                ${title}
+                                                <div>
+                                                    <button class="chat-btn edit-chat-btn">수정하기</button>
+                                                    <button class="chat-btn delete-chat-btn">삭제하기</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`);
+                    }
+
+                    $chatMessages.append($newHtml);
                 }
                 // $("#close_pdservice").trigger("click");
                 //데이터 테이블 데이터 재 로드
+                calledAPIs["reqCommentListAPI"] = true;
             }
         },
         beforeSend: function () {
