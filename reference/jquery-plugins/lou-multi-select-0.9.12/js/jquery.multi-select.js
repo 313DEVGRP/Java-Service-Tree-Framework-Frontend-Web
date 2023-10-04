@@ -118,10 +118,10 @@
 
       if(serverType === "온프레미스" || serverType ==="클라우드") {
         if (serverType === "온프레미스") {
-           selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-home\" style=\"color: #E49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
+           selectableLi = $('<li '+attributes+'><span><img src="./img/jira/mark-gradient-blue-jira.svg" width="15px" style=""></img> '+that.escapeHTML($option.text())+'</span></li>');
         }
         if (serverType === "클라우드") {
-           selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-cloud\" style=\"color: #E49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
+           selectableLi = $('<li '+attributes+'><span><img src="./img/jira/mark-gradient-white-jira.svg" width="15px" style=""></img> '+that.escapeHTML($option.text())+'</span></li>');
         }
       } else {
          selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-check\" style=\"color: #e49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
