@@ -2334,7 +2334,6 @@ hr {
 /* =================================== */
 #footer {
    color: #252b33;
-  margin-left: 260px;
   padding: 66px 0px;
   padding: 4.125rem 0;
 }
@@ -2383,44 +2382,7 @@ hr {
 #footer .nav.flex-column .nav-item .nav-link {
   margin: 0.7rem 0px;
 }
-#footer.footer-text-light {
-  color: rgba(250, 250, 250, 0.8);
-}
-#footer.footer-text-light .nav .nav-item .nav-link {
-  color: rgba(250, 250, 250, 0.8);
-}
-#footer.footer-text-light .nav .nav-item .nav-link:hover {
-  color: #fafafa;
-}
-#footer.footer-text-light .footer-copyright {
-  border-color: rgba(250, 250, 250, 0.15);
-  color: rgba(250, 250, 250, 0.5);
-}
-#footer.footer-text-light:not(.bg-primary) .social-icons-light.social-icons li a {
-  color: rgba(250, 250, 250, 0.8);
-}
-#footer.footer-text-light:not(.bg-primary) .social-icons-light.social-icons li a:hover {
-  color: #fafafa;
-}
-#footer.footer-text-light.bg-primary {
-  color: #fff;
-}
-#footer.footer-text-light.bg-primary .nav .nav-item .nav-link {
-  color: #fff;
-}
-#footer.footer-text-light.bg-primary .nav .nav-item .nav-link:hover {
-  color: rgba(250, 250, 250, 0.7);
-}
-#footer.footer-text-light.bg-primary .footer-copyright {
-  border-color: rgba(250, 250, 250, 0.15);
-  color: rgba(250, 250, 250, 0.9);
-}
-#footer.footer-text-light.bg-primary :not(.social-icons) a {
-  color: #fff;
-}
-#footer.footer-text-light.bg-primary :not(.social-icons) a:hover {
-  color: rgba(250, 250, 250, 0.7);
-}
+
 
 @media (max-width: 767.98px) {
   #footer {
