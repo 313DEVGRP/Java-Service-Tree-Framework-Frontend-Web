@@ -5,8 +5,8 @@ var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 var dataTableRef;
 
-var selectedIssue; //선택한 이슈
-var selectedIssueKey;   //선택한
+var selectedIssue;    //선택한 이슈
+var selectedIssueKey; //선택한 이슈 키
 
 function execDocReady() {
 
