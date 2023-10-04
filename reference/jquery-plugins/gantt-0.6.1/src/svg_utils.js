@@ -131,3 +131,18 @@ $.attr = (element, attr, value) => {
 
     element.setAttribute(attr, value);
 };
+
+$.style = (element, attr, value) => {
+    if (!value && typeof attr === 'string') {
+        return element.getAttribute(attr);
+    }
+
+    if (typeof attr === 'object') {
+        for (let key in attr) {
+            $.style(element, key, attr[key]);
+        }
+        return;
+    }
+
+    element.style[attr] = value;
+};

@@ -1,37 +1,35 @@
 import { $ } from './svg_utils';
 
 export default class Table {
-    constructor(wrapper) {
-        this.setup_wrapper(wrapper);
+    constructor(contents) {
+        this.setup_contents(contents);
     }
 
-    setup_wrapper(element) {
-        if (typeof element === 'string') {
-            element = $(element);
-        }
-
-        if (element instanceof HTMLElement) {
-            this.$wrapper = element;
-        } else {
-            throw new TypeError(
-                'Frappé Gantt only supports usage of a string CSS selector,' +
-                    " HTML DOM element or SVG DOM element for the 'element' parameter"
-            );
-        }
+    setup_contents(contents) {
+        const default_contents = {
+            start: 'Start',
+            end: 'End',
+            name: 'Title',
+        };
+        this.contents = { ...default_contents, ...contents };
     }
 
-    draw() {
-        this.$table = document.createElement('table');
-        this.$table.classList.add('table-wrapper');
+    draw_table_header(attr) {
+        const $thead = document.createElement('thead');
+        const $tr = document.createElement('tr');
 
-        this.$table_head = document.createElement('thead');
-        this.$table_head.classList.add('table-header');
+        Object.values(this.contents).forEach((content) => {
+            const $th = document.createElement('th');
+            $th.textContent = content;
 
-        this.$table_body = document.createElement('tbody');
-        this.$table_body.classList.add('table-body');
+            $tr.appendChild($th);
+        });
 
-        this.$table.append(this.$table_head);
-        this.$table.append(this.$table_body);
-        this.$wrapper.append(this.$table);
+        $thead.appendChild($tr);
+        $thead.classList.add('table-header');
+
+        $.style($thead, attr);
+
+        return $thead;
     }
 }

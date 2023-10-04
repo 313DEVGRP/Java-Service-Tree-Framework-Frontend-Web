@@ -1,3 +1,16 @@
+.wrapper {
+  display: flex;
+}
+
+.table-container {
+  border: 0;
+  border-collapse: separate;
+}
+.table-container .table-header {
+  background-color: #ffffff;
+  border-bottom: 1.4rem solid #e0e0e0;
+}
+
 .gantt .grid-background {
   fill: none;
 }
@@ -33,7 +46,7 @@
 }
 .gantt .bar {
   fill: #b8c2cc;
-  stroke: #8D99A6;
+  stroke: #8d99a6;
   stroke-width: 0;
   transition: stroke-width 0.3s ease;
   user-select: none;
@@ -43,7 +56,7 @@
 }
 .gantt .bar-invalid {
   fill: transparent;
-  stroke: #8D99A6;
+  stroke: #8d99a6;
   stroke-width: 1;
   stroke-dasharray: 5;
 }
@@ -88,7 +101,8 @@
 .gantt .bar-wrapper.active .bar-progress {
   fill: #8a8aff;
 }
-.gantt .lower-text, .gantt .upper-text {
+.gantt .lower-text,
+.gantt .upper-text {
   font-size: 12px;
   text-anchor: middle;
 }

@@ -18,13 +18,14 @@ const VIEW_MODE = {
 
 export default class Gantt {
     constructor(wrapper, tasks, options) {
-        this.setup_table(wrapper);
         this.setup_wrapper(wrapper);
         this.setup_options(options);
         this.setup_tasks(tasks);
         // initialize with default view mode
         this.change_view_mode();
         this.bind_events();
+
+        this.setup_table();
     }
 
     setup_wrapper(element) {
@@ -60,12 +61,16 @@ export default class Gantt {
             this.$svg.classList.add('gantt');
         }
 
+        this.$wrapper = document.createElement('div');
+        this.$wrapper.classList.add('wrapper');
+
         // wrapper element
         this.$container = document.createElement('div');
         this.$container.classList.add('gantt-container');
 
         const parent_element = this.$svg.parentElement;
-        parent_element.appendChild(this.$container);
+        parent_element.appendChild(this.$wrapper);
+        this.$wrapper.appendChild(this.$container);
         this.$container.appendChild(this.$svg);
 
         // popup wrapper
@@ -295,16 +300,28 @@ export default class Gantt {
         }
     }
 
-    setup_table(wrapper) {
-        this.table = new Table(wrapper);
-        this.table.draw();
+    setup_table() {
+        this.table = new Table({});
+        this.make_table();
     }
 
-    make_table_background() {}
+    make_table() {
+        const $table = document.createElement('table');
+        $table.classList.add('table-container');
+
+        const $table_header = this.make_table_header();
+
+        $table.append($table_header);
+        this.$wrapper.prepend($table);
+    }
 
     make_table_rows() {}
 
-    make_table_header() {}
+    make_table_header() {
+        const header_height = this.options.header_height + 10 + 'px';
+
+        return this.table.draw_table_header({ height: header_height });
+    }
 
     make_grid() {
         this.make_grid_background();
