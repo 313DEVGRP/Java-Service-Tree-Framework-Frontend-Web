@@ -24,7 +24,7 @@ body {
 body {
   background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="),
   url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-  background-color: rgba(102, 105, 104, 0.9);
+  background-color: rgba(102, 105, 104, 0.9); !important;
   background: radial-gradient(
           farthest-side ellipse at 10% 0,
           rgba(40, 40, 40, 0.9),
@@ -58,7 +58,7 @@ body {
    Template URL: http://demo.harnishdesign.net/html/idocs
    Author URL: https://themeforest.net/user/harnishdesign
    File Description : Main css file of the template
-	
+
 =================================================
   Table of Contents
 =================================================
@@ -86,7 +86,7 @@ body {
 
 =======================================================*/
 /* =================================== */
-/*  1. Basic Style 
+/*  1. Basic Style
 /* =================================== */
 body, html {
   height: 100%;
@@ -103,8 +103,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 999999999 !important;
-  background-color: #fff;
-  top: 0;
+   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -174,8 +173,7 @@ body {
   background: transparent;
 }
 .mfp-container .preloader .lds-ellipsis div {
-  background: #fff;
-}
+ }
 
 ::selection {
   background: #0366d6;
@@ -616,51 +614,14 @@ dl, ol, ul, pre, blockquote, .table {
   opacity: 1;
 }
 
-/* Background light */
-.bg-light-1 {
-  background-color: #e9ecef !important;
-}
-
-.bg-light-2 {
-  background-color: #dee2e6 !important;
-}
-
-.bg-light-3 {
-  background-color: #ced4da !important;
-}
-
-.bg-light-4 {
-  background-color: #adb5bd !important;
-}
-
-/* Background Dark */
-.bg-dark {
-  background-color: #111418 !important;
-}
-
-.bg-dark-1 {
-  background-color: #212529 !important;
-}
-
-.bg-dark-2 {
-  background-color: #343a40 !important;
-}
-
-.bg-dark-3 {
-  background-color: #495057 !important;
-}
-
-.bg-dark-4 {
-  background-color: #6c757d !important;
-}
 
 /* Progress Bar */
 .progress-sm {
-  height: 0.5rem !important;
+  height: 0.5rem ;
 }
 
 .progress-lg {
-  height: 1.5rem !important;
+  height: 1.5rem ;
 }
 
 hr {
@@ -671,8 +632,38 @@ hr {
 /*  3. Layouts
 /* =================================== */
 #main-wrapper {
-  background: #fff;
+
+
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="),
+  url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background-color: rgba(102, 105, 104, 0.9);
+  background: radial-gradient(
+          farthest-side ellipse at 10% 0,
+          rgba(40, 40, 40, 0.9),
+          rgba(90, 100, 130, 0.89),
+          rgba(60, 60, 60, 0.9)
+  ),
+  url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background: -webkit-radial-gradient(
+          10% 0,
+          farthest-side ellipse,
+          rgba(40, 40, 40, 0.9),
+          rgba(90, 100, 130, 0.89),
+          rgba(60, 60, 60, 0.9)
+  ),
+  url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  background: -moz-radial-gradient(
+          10% 0,
+          farthest-side ellipse,
+          rgba(40, 40, 40, 0.9),
+          rgba(90, 100, 130, 0.89),
+          rgba(60, 60, 60, 0.9)
+  ),
+  url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+  padding-bottom: 10px;
+  background-attachment: fixed;
 }
+ }
 
 .box #main-wrapper {
   max-width: 1200px;
@@ -734,14 +725,14 @@ hr {
   top: 0;
 }
 .idocs-navigation .nav .nav .nav-item .nav-link.active:after {
-  border-color: #0366d6;
+  border-color: #a4c6ff;
   border-width: 2px;
 }
 .idocs-navigation .nav .nav-item .nav-link.active + .nav {
   display: block;
 }
 .idocs-navigation .nav .nav .nav-link {
-  color: #6a6a6a;
+  color: white;
   padding: 4px 30px 4px 45px;
   font-size: 15px;
   text-transform: none;
@@ -769,16 +760,16 @@ hr {
   transition: all 0.2s ease;
 }
 .idocs-navigation.docs-navigation-dark .nav .nav-link {
-  color: rgba(250, 250, 250, 0.85);
+  color: white;
 }
 .idocs-navigation.docs-navigation-dark .nav .nav .nav-link {
-  color: rgba(250, 250, 250, 0.7);
+  color: white;
 }
 .idocs-navigation.docs-navigation-dark .nav .nav .nav-item .nav-link:after {
-  border-color: rgba(250, 250, 250, 0.2);
+  color: white;
 }
 .idocs-navigation.docs-navigation-dark .nav .nav .nav-item .nav-link.active:after {
-  border-color: #0366d6;
+  color: white;
 }
 
 /*=== 3.2 Docs Content ===*/
@@ -855,7 +846,6 @@ hr {
   -webkit-box-ordinal-group: 0;
   -ms-flex-item-align: stretch;
   align-self: stretch;
-  background: #fff;
   border-bottom: 1px solid #efefef;
 }
 .primary-menu.bg-transparent {
@@ -967,8 +957,7 @@ hr {
   width: 0;
   height: 0;
   border-style: solid;
-  border-color: transparent transparent #fff transparent;
-  position: absolute;
+   position: absolute;
   border-width: 0px 7px 6px 7px;
   bottom: 0px;
   left: 50%;
@@ -1067,8 +1056,7 @@ hr {
   right: 0;
   bottom: 14px;
   background-color: transparent;
-  color: #fff;
-  border-bottom: 2px solid #0366d6;
+   border-bottom: 2px solid #0366d6;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   transform: translate(-50%, 0) translateZ(0);
@@ -1080,12 +1068,10 @@ hr {
 
 /*== Color Options ==*/
 .primary-menu.navbar-text-light .navbar-toggler span {
-  background: #fff;
-}
+ }
 
 .primary-menu.navbar-text-light .navbar-nav > li > a:not(.btn) {
-  color: #fff;
-}
+ }
 .primary-menu.navbar-text-light .navbar-nav > li:hover > a:not(.btn), .primary-menu.navbar-text-light .navbar-nav > li > a.active:not(.btn) {
   color: rgba(250, 250, 250, 0.75);
 }
@@ -1096,8 +1082,7 @@ hr {
 
 .primary-menu.navbar-dropdown-dark ul.navbar-nav > li.dropdown .dropdown-menu {
   background-color: #252A2C;
-  color: #fff;
-}
+ }
 .primary-menu.navbar-dropdown-dark ul.navbar-nav > li.dropdown .dropdown-menu .dropdown-menu {
   background-color: #272c2e;
 }
@@ -1116,8 +1101,7 @@ hr {
 }
 .primary-menu.navbar-dropdown-primary ul.navbar-nav > li.dropdown .dropdown-menu {
   background-color: #0366d6;
-  color: #fff;
-}
+ }
 .primary-menu.navbar-dropdown-primary ul.navbar-nav > li.dropdown .dropdown-menu .dropdown-menu {
   background-color: #0366d6;
 }
@@ -1211,8 +1195,7 @@ hr {
   top: 99%;
   right: 0;
   left: 0;
-  background: #fff;
-  margin-top: 0px;
+   margin-top: 0px;
   z-index: 1000;
   -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -1319,8 +1302,7 @@ hr {
     top: 99%;
     right: 0;
     left: 0;
-    background: #fff;
-    margin-top: 0px;
+     margin-top: 0px;
     z-index: 1000;
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -1409,7 +1391,7 @@ hr {
     color: #a3a2a2;
   }
   .navbar-expand-sm.navbar-dropdown-dark ul.navbar-nav > li:hover > a {
-    color: #fff;
+    color: #fff
   }
   .navbar-expand-sm.navbar-dropdown-primary ul.navbar-nav li {
     border-color: rgba(250, 250, 250, 0.2);
@@ -1427,8 +1409,7 @@ hr {
     top: 99%;
     right: 0;
     left: 0;
-    background: #fff;
-    margin-top: 0px;
+     margin-top: 0px;
     z-index: 1000;
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -1535,8 +1516,7 @@ hr {
     top: 99%;
     right: 0;
     left: 0;
-    background: #fff;
-    margin-top: 0px;
+     margin-top: 0px;
     z-index: 1000;
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -1643,8 +1623,7 @@ hr {
     top: 99%;
     right: 0;
     left: 0;
-    background: #fff;
-    margin-top: 0px;
+     margin-top: 0px;
     z-index: 1000;
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -1989,15 +1968,15 @@ hr {
 
 /* 5.4 Nav */
 .nav .nav-item .nav-link {
-  color: #222222;
+  color: white;
 }
 
 .nav.nav-light .nav-item .nav-link {
   color: #ddd;
 }
-
+/* 클릭시 나타내는 색상 */
 .nav:not(.nav-pills) .nav-item .nav-link.active, .nav:not(.nav-pills) .nav-item .nav-link:hover {
-  color: #0366d6;
+  color: #a4c6ff;
 }
 
 .nav-pills .nav-link:not(.active):hover {
@@ -2090,8 +2069,7 @@ hr {
 .nav-tabs.flex-column .nav-item .nav-link.active:after {
   height: 100%;
   width: 2px;
-  background: #fff;
-  right: -1px;
+   right: -1px;
   left: auto;
 }
 
@@ -2206,8 +2184,7 @@ hr {
 }
 .featured-box.style-5 {
   text-align: center;
-  background: #fff;
-  border: 1px solid #f0f2f3;
+   border: 1px solid #f0f2f3;
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
   -webkit-transition: all 0.3s ease-in-out;
@@ -2356,8 +2333,7 @@ hr {
 /*  6. Footer
 /* =================================== */
 #footer {
-  background: #fff;
-  color: #252b33;
+   color: #252b33;
   margin-left: 260px;
   padding: 66px 0px;
   padding: 4.125rem 0;
@@ -2922,8 +2898,7 @@ a.bg-primary:focus, a.bg-primary:hover, button.bg-primary:focus, button.bg-prima
 
 /* styles-switcher */
 #styles-switcher {
-  background: #fff;
-  width: 202px;
+   width: 202px;
   position: fixed;
   top: 35%;
   z-index: 99;
