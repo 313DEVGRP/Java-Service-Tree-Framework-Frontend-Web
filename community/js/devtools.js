@@ -5,7 +5,8 @@
 function execDocReady() {
 
 	var pluginGroups = [
-		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js"]
+		[	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+			"../reference/lightblue4/docs/lib/widgster/widgster.js"]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
