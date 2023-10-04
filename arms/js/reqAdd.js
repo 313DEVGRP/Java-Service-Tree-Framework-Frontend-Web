@@ -342,12 +342,16 @@ function jsTreeClick(selectedNode) {
 
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
 	selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
+
+	var selectRel = selectedNode.attr("rel");
+
 	if (selectedJsTreeId == 2) {
 		$("#select_Req").text("루트 요구사항이 선택되었습니다.");
+	} else if (selectRel == "folder") {
+		$("#select_Req").text("(folder)" + $(".jstree-clicked").text());
 	} else {
 		$("#select_Req").text($("#req_tree").jstree("get_selected").text());
 	}
-	var selectRel = selectedNode.attr("rel");
 
 	//요구사항 타입에 따라서 탭의 설정을 변경
 	if (selectRel == "folder" || selectRel == "drive") {
