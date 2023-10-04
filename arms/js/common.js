@@ -144,6 +144,7 @@ function includeLayout(page) {
 //인증관련 공통 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 var userName;
+var fullName;
 var userApplicationRoles;
 var userAttributes;
 var userEnabled;
@@ -151,6 +152,7 @@ var userGroups;
 var userID;
 var userRealmRoles;
 var permissions;
+var userEmail;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 상단 페이지 로드 프로그래스바 설정
@@ -220,6 +222,8 @@ function authUserCheck() {
 					userName = json.preferred_username;
 					permissions = json.realm_access.roles;
 					userID = json.sub;
+					userEmail = json.email;
+					fullName = json.name;
 
 					var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
 					account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
