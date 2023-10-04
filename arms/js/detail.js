@@ -94,7 +94,7 @@ function execDocReady() {
             window.addEventListener('scroll', scrollApiFunc);
 
             // 계정 정보
-            getAccountInfo();
+            bindAccountInfo();
 
             // 메뉴 클릭 이벤트
             menuClick();
@@ -229,32 +229,12 @@ var scrollApiFunc = function () {
 };
 
 // ------------------ 계정 정보 ------------------ //
-function getAccountInfo() {
+function bindAccountInfo() {
 
-    var accountInfo;
+    $("#user-name").html(userName);
+    $("#user-name-detail").html(fullName + ' (' + userName + ')');
+    $("#user-email").html(userEmail);
 
-    $.ajax({
-        url: "/auth-user/me",
-        type: "GET",
-        timeout: 7313,
-        global: false,
-        statusCode: {
-            200: function (json) {
-                accountInfo = json;
-                console.log("계정 정보: ", accountInfo);
-
-                name = json.name;
-                userName = json.preferred_username;
-                userEmail = json.email;
-
-                $("#user-name").html(userName);
-                $("#user-name-detail").html(name + ' (' + userName + ')');
-                $("#user-email").html(userEmail);
-            }
-        }
-    });
-
-    return accountInfo;
 }
 
 // ------------------ 메뉴 클릭 이벤트 ------------------ //
@@ -464,7 +444,7 @@ function versionClick(element, c_id) {
             $("#version-start-date").text(json.c_pds_version_start_date);
             $("#version-end-date").text(json.c_pds_version_end_date);
             $("#version-desc").slimscroll({
-                height: "500px"
+                height: "300px"
             });
             $("#version-desc").html(json.c_pds_version_contents);
         })
@@ -843,61 +823,48 @@ function getReqCommentList() {
                     var comment = data.response[k];
 
                     console.log(comment);
-                    // var newOption = new Option(obj.c_title, obj.c_id, false, false);
-                    // $("#selected_pdService").append(newOption).trigger("change");
                     var sender = comment.c_req_comment_sender;
                     var date = comment.c_req_comment_date;
                     var title = comment.c_title;
                     var contents = comment.c_req_comment_contents;
                     var $newHtml;
+
                     /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
-                    if (sender !== 'kch') {
-                        $newHtml = $(`<div class="chat-message">
-                                            <div class="sender pull-left">
-                                                <div class="icon">
-                                                    <i class="bi bi-person-fill" style="font-size: 40px"></i>
-                                                </div>
-                                            </div>
-                                            <div class="chat-message-body">
-                                                <span class="arrow"></span>
-                                                <div class="sender">
-                                                    <span class="user-id">${sender}</span>
-                                                    <span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>
-                                                </div>
-                                                <div class="text">
-                                                   ${title}
-                                                </div>
-                                            </div>
-                                       </div>`);
+                    var iconPosition = (sender !== userName) ? 'left' : 'right';
+                    var position = (sender !== userName) ? '' : 'on-left';
+                    var personIcon = (sender !== userName) ? 'bi-person-fill' : 'bi-person';
+                    var buttonsHtml = '';
+
+                    if (sender === userName) {
+                        buttonsHtml = `<div>
+                                          <button class="chat-btn edit-chat-btn">수정하기</button>
+                                          <button class="chat-btn delete-chat-btn">삭제하기</button>
+                                       </div>`;
                     }
-                    else {
-                        $newHtml = $(`<div class="chat-message">
-                                        <div class="sender pull-right">
-                                            <div class="icon">
-                                                <i class="bi bi-person" style="font-size: 40px"></i>
-                                            </div>
+
+                    $newHtml = $(`<div class="chat-message">
+                                    <div class="sender pull-${iconPosition}">
+                                        <div class="icon">
+                                            <i class="bi ${personIcon}" style="font-size: 40px"></i>
                                         </div>
-                                        <div class="chat-message-body on-left">
-                                            <span class="arrow"></span>
-                                            <div class="sender">
-                                                <span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>
-                                                <span href="#" class="user-id">${sender}</span>
-                                            </div>
-                                            <div class="text">
-                                                ${title}
-                                                <div>
-                                                    <button class="chat-btn edit-chat-btn">수정하기</button>
-                                                    <button class="chat-btn delete-chat-btn">삭제하기</button>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div class="chat-message-body ${position}">
+                                        <span class="arrow"></span>
+                                        <div class="sender">
+                                            ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
+                                            <span href="#" class="user-id">${sender}</span>
+                                            ${(position === "") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
                                         </div>
-                                    </div>`);
-                    }
+                                        <div class="text">
+                                            ${title}
+                                            ${buttonsHtml}
+                                        </div>
+                                    </div>
+                                </div>`);
 
                     $chatMessages.append($newHtml);
                 }
-                // $("#close_pdservice").trigger("click");
-                //데이터 테이블 데이터 재 로드
+
                 calledAPIs["reqCommentListAPI"] = true;
             }
         },
