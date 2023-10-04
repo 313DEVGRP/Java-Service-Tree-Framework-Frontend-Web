@@ -93,6 +93,9 @@ function execDocReady() {
             // 스크롤 반응하여 API 호출 이벤트
             window.addEventListener('scroll', scrollApiFunc);
 
+            // 계정 정보
+            getAccountInfo();
+
             // 메뉴 클릭 이벤트
             menuClick();
 
@@ -224,6 +227,35 @@ var scrollApiFunc = function () {
         }
     }
 };
+
+// ------------------ 계정 정보 ------------------ //
+function getAccountInfo() {
+
+    var accountInfo;
+
+    $.ajax({
+        url: "/auth-user/me",
+        type: "GET",
+        timeout: 7313,
+        global: false,
+        statusCode: {
+            200: function (json) {
+                accountInfo = json;
+                console.log("계정 정보: ", accountInfo);
+
+                name = json.name;
+                userName = json.preferred_username;
+                userEmail = json.email;
+
+                $("#user-name").html(userName);
+                $("#user-name-detail").html(name + ' (' + userName + ')');
+                $("#user-email").html(userEmail);
+            }
+        }
+    });
+
+    return accountInfo;
+}
 
 // ------------------ 메뉴 클릭 이벤트 ------------------ //
 function menuClick() {

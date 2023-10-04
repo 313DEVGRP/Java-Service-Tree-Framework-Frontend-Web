@@ -164,6 +164,7 @@
 
 	<!-- Google Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbit&display=swap" rel="stylesheet">
 
 	<!-- Vendor CSS Files -->
 	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/aos/aos.css" rel="stylesheet">
@@ -188,7 +189,7 @@
 	<nav id="navbar" class="navbar nav-menu">
 		<ul>
 			<!-- ======= Header ======= -->
-			<li><a href="#home" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
+			<li><a href="#home" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>통계정보</span></a></li>
 			<li><a href="#detail" id="get_req_detail" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>요구사항 상세</span></a></li>
 			<li><a href="#version" id="get_version_list" class="nav-link scrollto"><i class="bx bx-detail"></i> <span>버전별 상세정보</span></a></li>
 			<li><a href="#allreq" id="get_req_list" class="nav-link scrollto"><i class="bx bx-list-ul"></i> <span>요구사항 목록</span></a></li>
@@ -200,12 +201,31 @@
 
 </header><!-- End Header -->
 
-<section id="home" class="d-flex flex-column justify-content-center">
+<!-- 헤더 -->
+<header class="account-info">
+    <h3>A-RMS</h3>
+    <div class="profile">
+        <div id="user-name"></div>님, 환영합니다!
+        <div class="detail">
+            <h6 id="user-name-detail" class="no-margin"></h6>
+            <div>
+                <abbr title="email">e-mail:</abbr>
+                <a id="user-email" href="mailto:#">-</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ======= 타이틀 페이지 ======= -->
+<section id="home" class="d-flex flex-column">
 	<div class="container" data-aos="zoom-in" data-aos-delay="100">
 		<h1>요구사항 조회 시스템</h1>
 		<p>Requirement <span class="typed" data-typed-items="Management, Collection, Statistics"></span></p>
-	</div>
-</section><!-- End Hero -->
+
+        <!-- 통계정보 -->
+
+    </div>
+</section><!-- End Title -->
 
 <main id="main">
 	<!-- ======= 요구사항 상세 ======= -->
@@ -468,7 +488,7 @@
                                     </div>
                                 </li>
                                 <li class="col-lg-12 row">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12 version-scroll">
                                         <div id="version-desc" class="form-control version-content-desc"></div>
                                     </div>
                                 </li>
