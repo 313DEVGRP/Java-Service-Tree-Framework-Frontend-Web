@@ -3,6 +3,7 @@ import { $, createSVG } from './svg_utils';
 import Bar from './bar';
 import Arrow from './arrow';
 import Popup from './popup';
+import Table from './table';
 
 import './gantt.scss';
 
@@ -17,6 +18,7 @@ const VIEW_MODE = {
 
 export default class Gantt {
     constructor(wrapper, tasks, options) {
+        this.setup_table(wrapper);
         this.setup_wrapper(wrapper);
         this.setup_options(options);
         this.setup_tasks(tasks);
@@ -292,6 +294,17 @@ export default class Gantt {
             });
         }
     }
+
+    setup_table(wrapper) {
+        this.table = new Table(wrapper);
+        this.table.draw();
+    }
+
+    make_table_background() {}
+
+    make_table_rows() {}
+
+    make_table_header() {}
 
     make_grid() {
         this.make_grid_background();

@@ -942,6 +942,42 @@ var Gantt = (function () {
         }
     }
 
+    class Table {
+        constructor(wrapper) {
+            this.setup_wrapper(wrapper);
+        }
+
+        setup_wrapper(element) {
+            if (typeof element === 'string') {
+                element = $(element);
+            }
+
+            if (element instanceof HTMLElement) {
+                this.$wrapper = element;
+            } else {
+                throw new TypeError(
+                    'Frappé Gantt only supports usage of a string CSS selector,' +
+                        " HTML DOM element or SVG DOM element for the 'element' parameter"
+                );
+            }
+        }
+
+        draw() {
+            this.$table = document.createElement('table');
+            this.$table.classList.add('table-wrapper');
+
+            this.$table_head = document.createElement('thead');
+            this.$table_head.classList.add('table-header');
+
+            this.$table_body = document.createElement('tbody');
+            this.$table_body.classList.add('table-body');
+
+            this.$table.append(this.$table_head);
+            this.$table.append(this.$table_body);
+            this.$wrapper.append(this.$table);
+        }
+    }
+
     const VIEW_MODE = {
         QUARTER_DAY: 'Quarter Day',
         HALF_DAY: 'Half Day',
@@ -953,6 +989,7 @@ var Gantt = (function () {
 
     class Gantt {
         constructor(wrapper, tasks, options) {
+            this.setup_table(wrapper);
             this.setup_wrapper(wrapper);
             this.setup_options(options);
             this.setup_tasks(tasks);
@@ -1228,6 +1265,17 @@ var Gantt = (function () {
                 });
             }
         }
+
+        setup_table(wrapper) {
+            this.table = new Table(wrapper);
+            this.table.draw();
+        }
+
+        make_table_background() {}
+
+        make_table_rows() {}
+
+        make_table_header() {}
 
         make_grid() {
             this.make_grid_background();
