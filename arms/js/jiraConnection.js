@@ -248,9 +248,11 @@ function jiraServerCardClick(c_id) {
             if (selectServerType === "클라우드") {
                 $("#type_tab").hide();
                 $("#status_tab").hide();
+                $("#resolution_tab").hide();
             } else {
                 $("#type_tab").show();
-                $("#status_tab").show();
+                $("#status_tab").hide();
+                $("#resolution_tab").hide();
             }
 
             // Sender 설정
