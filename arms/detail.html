@@ -174,7 +174,7 @@
 
 	<!-- Template Main CSS File -->
 	<link href="../arms/html/armsDetailExceptTemplate/assets/css/style.css" rel="stylesheet">
-	<link href="../arms/html/armsDetailExceptTemplate/assets/css/qna.css" rel="stylesheet">
+	<link href="html/armsDetailExceptTemplate/assets/css/detail.css" rel="stylesheet">
 
 
 </head>
@@ -703,12 +703,17 @@
 				<div class="body">
 					<div id="chat" class="chat">
 						<div id="chat_messages" class="chat-messages"></div>
+						<div class="pagination-container">
+							<ul class="pagination">
+							</ul>
+						</div>
 						<footer class="chat-footer row">
 							<div class="col-xs-9">
-								<input id="new_message" type="text" class="form-control input-transparent" placeholder="Enter your message..">
+								<textarea class="form-control" id="comment-contents" rows="1" placeholder="Enter your message.." required></textarea>
 							</div>
+
 							<div class="col-xs-3">
-								<button type="button" id="new_message_btn" class="send-chat-btn">Send</button>
+								<button type="button" id="req_comment_save_btn" class="send-chat-btn">Send</button>
 							</div>
 						</footer>
 					</div>
@@ -871,55 +876,3 @@
 <script  src="../../../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"></script>-->
 </body>
 </html>
-
-<style>
-	.form-control {
-		color: black;
-		min-height: 38px;
-	}
-
-	.container .content {
-		padding-bottom: 0px;
-	}
-
-	.portfolio .portfolio-wrap .portfolio-info {
-		overflow-wrap: anywhere;
-	}
-
-	.portfolio .portfolio-wrap .portfolio-info h4 {
-		font-size: 18px!important;
-		color: #45505b;
-		font-weight: 600;
-	}
-
-	@media (min-width: 1px) {
-		.portfolio .portfolio-wrap .portfolio-info h4 {
-			font-size: 16px!important;
-		}
-	}
-
-	@media (min-width: 576px) {
-		.portfolio .portfolio-wrap .portfolio-info h4 {
-			font-size: 14px!important;
-		}
-	}
-
-	@media (min-width: 768px) {
-		.portfolio .portfolio-wrap .portfolio-info h4 {
-			font-size: 16px!important;
-		}
-	}
-
-	@media (min-width: 992px) {
-		.portfolio .portfolio-wrap .portfolio-info h4 {
-			font-size: 16px!important;
-		}
-	}
-	.slimScrollDiv{
-		height:712px !important;
-	}
-	#req_tree{
-		height:712px !important;
-	}
-
-</style>

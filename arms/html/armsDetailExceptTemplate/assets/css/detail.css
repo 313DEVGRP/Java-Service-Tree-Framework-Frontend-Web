@@ -1,3 +1,55 @@
+.form-control {
+    color: black;
+    min-height: 38px;
+}
+
+.container .content {
+    padding-bottom: 0px;
+}
+
+/* 파일 관련 CSS */
+.portfolio .portfolio-wrap .portfolio-info {
+    overflow-wrap: anywhere;
+}
+
+.portfolio .portfolio-wrap .portfolio-info h4 {
+    font-size: 18px!important;
+    color: #45505b;
+    font-weight: 600;
+}
+
+@media (min-width: 1px) {
+    .portfolio .portfolio-wrap .portfolio-info h4 {
+        font-size: 16px!important;
+    }
+}
+
+@media (min-width: 576px) {
+    .portfolio .portfolio-wrap .portfolio-info h4 {
+        font-size: 14px!important;
+    }
+}
+
+@media (min-width: 768px) {
+    .portfolio .portfolio-wrap .portfolio-info h4 {
+        font-size: 16px!important;
+    }
+}
+
+@media (min-width: 992px) {
+    .portfolio .portfolio-wrap .portfolio-info h4 {
+        font-size: 16px!important;
+    }
+}
+.slimScrollDiv{
+    height:712px !important;
+}
+#req_tree{
+    height:712px !important;
+}
+
+
+/* QnA 게시판 관련 CSS */
 .chat-btn {
     margin-right: 10px;
     display: inline-block;
@@ -155,7 +207,7 @@
     width: 100%;
     /* bottom: 25px; */
     /* position: absolute; */
-    height: 40px;
+    /*height: 40px;*/
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -257,4 +309,132 @@
 
 .col-xs-3 {
     width: 25%;
+}
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url("../../../../../reference/light-blue/css/fonts/font-awesome/fontawesome-webfont.eot?v=4.0.3");
+    src: url("../../../../../reference/light-blue/css/fonts/font-awesome/fontawesome-webfont.eot?#iefix&v=4.0.3") format("embedded-opentype"), url("../../../../../reference/light-blue/css/fonts/font-awesome/fontawesome-webfont.woff?v=4.0.3") format("woff"), url("../../../../../reference/light-blue/css/fonts/font-awesome/fontawesome-webfont.ttf?v=4.0.3") format("truetype"), url("../../../../../reference/light-blue/css/fonts/font-awesome/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.fa-angle-double-left:before {
+    content: "\f100";
+}
+
+.fa-angle-double-right:before {
+    content: "\f101";
+}
+
+.fa-angle-double-up:before {
+    content: "\f102";
+}
+
+.fa-angle-double-down:before {
+    content: "\f103";
+}
+
+.fa-angle-left:before {
+    content: "\f104";
+}
+
+.fa-angle-right:before {
+    content: "\f105";
+}
+
+.fa-angle-up:before {
+    content: "\f106";
+}
+
+.fa-angle-down:before {
+    content: "\f107";
+}
+.pagination-container {
+    text-align: center;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+}
+
+.page-item {
+    display: inline; /* instead of inline-block */
+}
+
+.page-item > a {
+    position: relative;
+    float: left;
+
+    /* 동그란 모양을 만들기 위한 스타일 */
+    border-radius: 50%;
+    width: 30px; /* 원하는 크기로 조정하세요 */
+    height: 30px; /* 원하는 크기로 조정하세요 */
+    line-height :30px; /* height와 같게 설정하세요 */
+
+    text-align:center;
+
+    color:#808080; /* 폰트 색상 변경 */
+
+    background-color:#fff;
+
+    border:none;
+    text-decoration:none;
+    cursor: pointer;
+    /*transition : background-color .3s, color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;*/
+
+    margin-right :10px ;/* 페이지 아이템 간의 간격 설정*/
+    /*box-shadow :0px 0px 5px #808080;!* 그림자 효과 추가 *!*/
+}
+
+.page-item:nth-child(1) > a,
+.page-item:nth-child(2) > a,
+.page-item:nth-last-child(2) > a,
+.page-item:last-child > a {
+    border-radius :50%;
+    width :30px ; height :30px ;
+    line-height :30px ;
+}
+
+.page-item.active > a,
+.page-link:focus,
+.page-link:hover {
+    /*font-weight: bold;*/
+    color:#fff !important;/* 활성화 또는 호버 상태에서의 텍스트 색상 변경 */
+    background-color: #0563bb!important;/* 배경색 변경 */
+}
+
+.page-item > a:hover {
+    /*font-weight: bold;*/
+    color:#fff !important;/* 활성화 또는 호버 상태에서의 텍스트 색상 변경 */
+    background-color: #0563bb!important;/* 배경색 변경 */
+}
+
+@media (max-width: 600px) {
+    .page-item > a {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+    }
+
+    .page-item:nth-child(1) > a,
+    .page-item:nth-child(2) > a,
+    .page-item:nth-last-child(2) > a,
+    .page-item:last-child > a {
+        border-radius :50%;
+        width :20px ; height :20px ;
+        line-height :20px ;
+    }
 }

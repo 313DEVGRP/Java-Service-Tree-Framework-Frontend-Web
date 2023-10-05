@@ -115,9 +115,9 @@ function execDocReady() {
             // QnA 채팅 게시판 탭 클릭 이벤트
             reqCommentListViewTabClick();
 
-            // save_post_btn_click();
+            req_comment_save_btn_click();
 
-
+            req_comment_message_size_change();
 
         })
         .catch(function (errorMessage) {
@@ -212,7 +212,7 @@ var scrollApiFunc = function () {
                 fileLoadByPdService();
             }
             else if (element === "#question") {
-                getReqCommentList();
+                getReqCommentList(1);
             }
 
             visibilityStatus[element] = true;
@@ -788,15 +788,34 @@ function formatBytes(bytes, decimals = 2) {
 // ------------------ QnA 게시판보기 ------------------ //
 function reqCommentListViewTabClick() {
     $("#get_req_comment_list").click(function () {
-        getReqCommentList();
+        getReqCommentList(1);
     });
 }
 
-function getReqCommentList() {
+function getReqCommentList(pageNum) {
     console.log("ReqList Tab ::::");
-    if (callAPI("reqCommentListAPI")) {
-        return;
+
+    var pageSize = 10;
+    var totalPages = 0;
+    var curPage = pageNum;
+
+    /* 전체 게시판 게시물 갯수 가져오는 API 호출 필요 */
+    var totalCount = 21;
+
+    if (totalCount !== 0) {
+        totalPages = Math.ceil(totalCount / pageSize);
+        console.log("totalPages : " + totalPages);
+
+        $(".pagination").empty();
+        var htmlStr = bindPagination(curPage, totalPages, "getReqCommentList");
+        console.log("htmlStr : " + htmlStr);
+
+        $(".pagination").append(htmlStr);
     }
+    else{
+        //alert("검색되는 주소없음")
+    }
+
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService');
     var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
@@ -816,12 +835,25 @@ function getReqCommentList() {
             200: function (data) {
                 //모달 팝업 끝내고
                 var $chatMessages = $('#chat_messages');
+                $chatMessages.empty();
 
-                console.log(data.response);
+                console.log(data.response)
+
+                if (data.response.length === 0) {
+                    var reqCommentList = $('#chat_messages').html();
+
+                    if($.trim(reqCommentList) === '') {
+                        /* 게시글이 없을 경우 처리 필요 */
+                        console.log('No content');
+                    } else {
+                        console.log('Content exists');
+                    }
+                }
+
                 for (var k in data.response) {
                     var comment = data.response[k];
 
-                    console.log(comment);
+                    var c_id = comment.c_id;
                     var sender = comment.c_req_comment_sender;
                     var date = comment.c_req_comment_date;
                     var title = comment.c_title;
@@ -836,8 +868,8 @@ function getReqCommentList() {
 
                     if (sender === userName) {
                         buttonsHtml = `<div>
-                                          <button class="chat-btn edit-chat-btn">수정하기</button>
-                                          <button class="chat-btn delete-chat-btn">삭제하기</button>
+                                          <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn" value="${c_id}">수정하기</button>
+                                          <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">삭제하기</button>
                                        </div>`;
                     }
 
@@ -864,7 +896,16 @@ function getReqCommentList() {
                     $chatMessages.append($newHtml);
                 }
 
-                calledAPIs["reqCommentListAPI"] = true;
+                $('.edit-chat-btn').on('click', function(e){
+                    var c_id = $(this).val();
+                    req_comment_edit_btn_click(c_id);
+                });
+
+                $('.delete-chat-btn').on('click', function(e){
+                    var c_id = $(this).val();
+                    req_comment_delete_btn_click(c_id);
+                });
+
             }
         },
         beforeSend: function () {
@@ -877,9 +918,66 @@ function getReqCommentList() {
     });
 }
 
-function save_post_btn_click() {
-    $("#save_req_comment_btn").click(function () {
+function bindPagination(curPage, totalPages, funName) {
+    var pageUrl = "";
 
+    var pageLimit = 5;
+    var startPage = parseInt((curPage - 1) / pageLimit) * pageLimit + 1;
+
+    var endPage = startPage + pageLimit - 1;
+
+    if (totalPages < endPage) {
+        endPage = totalPages;
+    }
+
+
+    var nextPage = endPage + 1;
+    console.log(curPage,"curPage,",startPage,"startPage,",endPage,"endPage,",nextPage,"nextPage")
+
+    //맨 첫 페이지
+    if (curPage > 1 && pageLimit < curPage) {
+        pageUrl += "<li class='page-item'><a class='first_page' href='javascript:" + funName + "(1);'><i class='fa fa-angle-double-left' /></a></li>";
+    }
+    //이전 페이지
+    if (curPage > pageLimit) {
+        pageUrl += "<li class='page-item'><a class='prev_page' href='javascript:" + funName + "(" + (startPage == 1 ? 1 : startPage - 1) + ");'><i class='fa fa-angle-left' /></a></li>";
+    }
+    //~pageLimit 맞게 페이지 수 보여줌
+    for (var i = startPage; i <= endPage; i++) {
+        //현재페이지면 진하게 표시
+        if (i === curPage) {
+            pageUrl += "<li class='page-item active'><a>" + i + "</a>";
+        } else {
+            pageUrl += "<li class='page-item'><a href='javascript:" + funName + "(" + i + ");'> " + i + " </a></li>";
+        }
+    }
+    //다음 페이지
+    if (nextPage <= totalPages) {
+        pageUrl += "<li class='page-item'><a class='next_page' href='javascript:" + funName + "(" + (nextPage < totalPages ? nextPage : totalPages) + ");'><i class='fa fa-angle-right' /></a></li>";
+    }
+    //맨 마지막 페이지
+    if (curPage < totalPages && nextPage < totalPages) {
+        pageUrl += "<li class='page-item'><a class='last_page' href='javascript:" + funName + "(" + totalPages + ");'><i class='fa fa-angle-double-right' /></a></li>";
+    }
+
+    console.log(pageUrl);
+
+    return pageUrl;
+}
+
+function req_comment_save_btn_click() {
+    addReqComment();
+}
+
+function addReqComment() {
+    $('.send-chat-btn').on('click', function(e){
+        var content = $('#comment-contents').val();
+        if (content === null || content === '') {
+            alert("질문을 작성 후 등록해주세요.");
+            return;
+        }
+
+        console.log(content);
         var urlParams = new URL(location.href).searchParams;
         var selectedPdService = urlParams.get('pdService');
         var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
@@ -887,8 +985,8 @@ function save_post_btn_click() {
 
         const cTitle = "";
 
-        $.ajax({
-            url: "/auth-user/api/arms/reqComment/addReqCommentNode.do",
+        /*$.ajax({
+            url: "/auth-user/api/arms/reqComment/addNode.do",
             type: "POST",
             data: {
                 ref: 2,
@@ -913,6 +1011,88 @@ function save_post_btn_click() {
             error: function (e) {
                 jError("신규 게시물 등록 중 에러가 발생했습니다.");
             }
-        });
+        });*/
+    });
+}
+
+function req_comment_edit_btn_click(c_id) {
+    var urlParams = new URL(location.href).searchParams;
+    var selectedPdService = urlParams.get('pdService');
+    var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
+    selectedJsTreeId = urlParams.get('reqAdd');
+    console.log("edit : " + c_id);
+    const cTitle = "";
+    /*$.ajax({
+        url: "/auth-user/api/arms/reqComment/addNode.do",
+        type: "POST",
+        data: {
+            ref: 2,
+            c_pdservice_link: selectedPdService,
+            c_version_link: selectedPdServiceVersion,
+            c_req_link: selectedJsTreeId,
+            c_type: "default",
+            c_title: cTitle
+        },
+        statusCode: {
+            200: function () {
+                //모달 팝업 끝내고
+                alert("success");
+                $("#close_pdservice").trigger("click");
+                //데이터 테이블 데이터 재 로드
+            }
+        },
+        beforeSend: function () {
+        },
+        complete: function () {
+        },
+        error: function (e) {
+            jError("신규 게시물 등록 중 에러가 발생했습니다.");
+        }
+    });*/
+}
+
+function req_comment_delete_btn_click(c_id) {
+    if (confirm("해당글을 삭제하시겠습니까?")) {
+
+        var urlParams = new URL(location.href).searchParams;
+        var selectedPdService = urlParams.get('pdService');
+        var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
+        selectedJsTreeId = urlParams.get('reqAdd');
+
+        const cTitle = "";
+        console.log("delete : " + c_id);
+        /*$.ajax({
+            url: "/auth-user/api/arms/reqComment/addNode.do",
+            type: "POST",
+            data: {
+                ref: 2,
+                c_pdservice_link: selectedPdService,
+                c_version_link: selectedPdServiceVersion,
+                c_req_link: selectedJsTreeId,
+                c_type: "default",
+                c_title: cTitle
+            },
+            statusCode: {
+                200: function () {
+                    //모달 팝업 끝내고
+                    alert("success");
+                    $("#close_pdservice").trigger("click");
+                    //데이터 테이블 데이터 재 로드
+                }
+            },
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+            error: function (e) {
+                jError("신규 게시물 등록 중 에러가 발생했습니다.");
+            }
+        });*/
+    }
+}
+
+function req_comment_message_size_change() {
+    $('#comment-contents').on('input propertychange', function() {
+        $('.chat-footer').height($(this).height());
     });
 }
