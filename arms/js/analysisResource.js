@@ -2,87 +2,53 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
+
     var pluginGroups = [
-        [
-            // Vendor JS Files
-            /*"../reference/jquery-plugins/MyResume/assets/vendor/purecounter/purecounter_vanilla.js",*/
-            /*"../reference/jquery-plugins/MyResume/assets/vendor/glightbox/js/glightbox.min.js",*/
-            /*"../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.js",*/
-            // Template Main JS File
-            /*"../reference/jquery-plugins/MyResume/assets/js/main.js"*/
-        ],
+        [	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
+            "../reference/light-blue/lib/jquery.iframe-transport.js",
+            "../reference/light-blue/lib/jquery.fileupload.js",
+            "../reference/light-blue/lib/jquery.fileupload-fp.js",
+            "../reference/light-blue/lib/jquery.fileupload-ui.js"],
 
-        [
-            "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+        [	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+            "../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
+            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
             "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-            "../reference/lightblue4/docs/lib/widgster/widgster.js",
-            "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+            "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
-        ],
+            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
 
-        [
-            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
-            "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
-            "../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
-            "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-        ],
+        [	"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
+            "../reference/light-blue/lib/bootstrap-datepicker.js",
+            "../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
+            "../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
-        [
-            // Template CSS File
-            "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
-            // Template Main CSS File
-            "../reference/jquery-plugins/MyResume/assets/css/style.css"
-        ]
+        [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
+            "../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
-        .then(function () {
-
+        .then(function() {
+            // 사이드 메뉴 색상 설정
+            $('.widget').widgster();
+            setSideMenu("sidebar_menu_dashboard", "sidebar_menu_dashboard_home");
         })
-        .catch(function (errorMessage) {
-            console.error(errorMessage);
-            console.error("플러그인 로드 중 오류 발생");
+        .catch(function() {
+            console.error('플러그인 로드 중 오류 발생');
         });
-}
 
-////////////////////////////////////////////////////////////////////////////////////////
-// 플러그인 로드 모듈 ( 병렬 시퀀스 )
-////////////////////////////////////////////////////////////////////////////////////////
-function loadPlugin(url) {
-    return new Promise(function(resolve, reject) {
-
-        if( isJavaScriptFile(url) ){
-            $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> " + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
-            $.ajax({
-                url: url,
-                dataType: "script",
-                cache: true,
-                success: function() {
-                    // The request was successful
-
-                    console.log( "[ common :: loadPlugin ] :: url = " + url + ' 자바 스크립트 플러그인 로드 성공');
-                    resolve(); // Promise를 성공 상태로 변경
-                },
-                error: function() {
-                    // The request failed
-                    console.error( "[ common :: loadPlugin ] :: url = " + url + ' 플러그인 로드 실패');
-                    reject(); // Promise를 실패 상태로 변경
-                }
-            });
-        } else {
-            $(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> " + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
-            $("<link/>", {
-                rel: "stylesheet",
-                type: "text/css",
-                href: url
-            }).appendTo("head");
-            console.log( "[ common :: loadPlugin ] :: url = " + url + ' 스타일시트 플러그인 로드 성공');
-            resolve();
-        }
-    });
 }
