@@ -227,7 +227,7 @@
 			    {% } else { %}
 			    <td class="preview">{% if (file.thumbnailUrl) { %}
 			        <a href="{%=file.url%}" title="{%=file.fileName%}" data-gallery="gallery" download="{%=file.fileName%}">
-                    <img src="./img/fileIconPack/{%=file.iconFileName%}" width="80" height="80" class="thumbnail">
+                    <img src="{%=file.iconFileName%}" width="80" height="80" class="thumbnail">
 			        {% } %}</td>
 			    <td class="name" style="vertical-align: middle;">
 			        <a href="{%=file.url%}" title="{%=file.fileName%}" data-gallery="{%=file.thumbnailUrl&&'gallery'%}" download="{%=file.fileName%}">{%=file.fileName%}</a>

@@ -11,42 +11,40 @@ var visibilityStatus = {
     '#question': false
 };
 
+var prefix = "./img/winTypeFileIcons/";
 var iconsMap = {
-    'application/vnd.ms-htmlhelp': 'CHM.png',
-    'application/vnd.ms-excel': 'XLS.png',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX.png',
-    'application/vnd.ms-powerpoint': 'PPT.png',
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PPTX.png',
-    'application/msword': 'DOC.png',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX.png',
-    'application/pdf': 'PDF.png',
-    'application/x-rar-compressed': 'RAR.png',
-    'application/zip': 'ZIP.png',
-    // 'application/x-gzip': 'ZIP.png',
-    'application/x-msdownload': 'DLL.png',
-    'application/javascript': 'JS.png',
-    'application/x-shockwave-flash': 'SWF.png',
-    'application/xml': 'XML.png',
-    'application/x-yaml': 'YAML.svg',
-    'image/bmp': 'BMP.png',
-    'image/gif': 'GIF.png',
-    'image/jpeg': 'JPEG.png',
-    'image/png': 'PNG.png',
-    'image/tiff': 'TIFF.png',
-    'image/vnd.dwg': 'DWG.png',
-    'text/css': 'CSS.png',
-    'text/html': 'HTML.png',
-    'text/plain': 'TXT.png',
-    'text/richtext': 'RTF.png',
-    'text/xml': 'XML.png',
+    'application/vnd.ms-htmlhelp': prefix + 'CHM.File.png',
+    'application/vnd.ms-excel': prefix + 'XLS.File.png',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': prefix + 'XLS.File.png',
+    'application/vnd.ms-powerpoint': prefix + 'PPT.File.png',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': prefix + 'PPT.File.png',
+    'application/msword': prefix + 'DOC.File.png',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': prefix + 'DOC.File.png',
+    'application/haansoftpptx': prefix + 'PPT.File.png',
+    'application/haansoftdocx': prefix + 'DOC.File.png',
+    'application/pdf': prefix + 'PDF.File.png',
+    'application/x-rar-compressed': prefix + 'RAR.File.png',
+    'application/zip': prefix + 'ZIP.File.png',
+    'application/x-gzip': prefix + 'ZIP.File.png',
+    'application/x-msdownload': prefix + 'DLL.File.png',
+    'application/javascript':prefix +  'JS.File.png',
+    'application/x-shockwave-flash': prefix + 'SWF.File.png',
+    'application/xml': prefix + 'XML.File.png',
+    'image/bmp': prefix + 'BMP.File.png',
+    'image/gif': prefix + 'GIF.File.png',
+    'image/jpeg': prefix + 'JPG1.File.png',
+    'image/png': prefix + 'PNG.File.png',
+    'image/tiff': prefix + 'TIFF.File.png',
+    'text/html': prefix + 'HTML.File.png',
+    'text/plain': prefix + 'TXT.File.png',
+    'text/richtext': prefix + 'RTF.File.png',
+    'text/xml': prefix + 'XML.File.png',
     'text/yaml': 'YAML.svg',
-    'text/x-yaml': 'YAML.svg',
-    'video/mp4': 'MP4.png',
-    'video/mpeg': 'MPEG.png',
-    'audio/mpeg': 'MP3.png',
-    'audio/x-wav': 'WAV.png',
+    'video/mp4': prefix + 'MP4.File.png',
+    'audio/mpeg': prefix + 'MP3.File.png',
+    'audio/x-wav': prefix + 'WAV.File.png',
+    'application/java-archive': prefix + 'JAR.File.png',
     // 추가 타입 여기에 추가
-    // 'application/java-archive': 'JAR.png',
 };
 
 function execDocReady() {
@@ -707,14 +705,15 @@ function fileLoadByPdService() {
                         var filterClass;
                         if (file.contentType.includes("image")) {
                             filterClass = 'filter-image';
+                        } else if (file.contentType.includes("text")) {
+                            filterClass = 'filter-doc';
                         } else if (file.contentType.includes("application")) {
                             filterClass = 'filter-doc';
                         } else {
                             filterClass = 'filter-etc';
                         }
 
-                        var iconFileName = iconsMap[file.contentType] || 'Default.png';
-                        var imgSrc = "./img/fileIconPack/" + iconFileName; // 이미지 경로
+                        var imgSrc = iconsMap[file.contentType] || 'https://via.placeholder.com/184x184';
                         var title = file.fileName;
                         var downloadUrl = file.url;
                         var thumbnailUrl = file.thumbnailUrl;
