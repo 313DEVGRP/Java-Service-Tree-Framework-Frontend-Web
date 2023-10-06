@@ -1319,7 +1319,7 @@ var Gantt = (function () {
             const grid_width = this.dates.length * this.options.column_width;
             const grid_height =
                 this.options.header_height +
-                this.options.padding +
+              (this.options.padding / 2) +
                 (this.options.bar_height + this.options.padding) *
                     this.tasks.length;
 
@@ -1333,7 +1333,7 @@ var Gantt = (function () {
             });
 
             $.attr(this.$svg, {
-                height: grid_height + this.options.padding + 100,
+                height: grid_height,
                 width: '100%',
             });
         }
