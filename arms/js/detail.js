@@ -11,6 +11,8 @@ var visibilityStatus = {
     '#question': false
 };
 
+var totalReqCommentCount;
+
 var prefix = "./img/winTypeFileIcons/";
 var iconsMap = {
     'application/vnd.ms-htmlhelp': prefix + 'CHM.File.png',
@@ -129,7 +131,8 @@ function execDocReady() {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 플러그인 로드 모듈 ( 병렬 시퀀스 )
 ////////////////////////////////////////////////////////////////////////////////////////
-function loadPlugin(url) {
+
+/*function loadPlugin(url) {
     return new Promise(function(resolve, reject) {
 
         if( isJavaScriptFile(url) ){
@@ -161,7 +164,7 @@ function loadPlugin(url) {
             resolve();
         }
     });
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 요구사항 상세보기 페이지
@@ -194,7 +197,7 @@ function checkVisible( element, check = 'visible' ) {
         return ((y < (viewportHeight + scrolltop)));
 }
 
-var scrollApiFunc = function () {
+function scrollApiFunc() {
     for (var element in visibilityStatus) {
         if (!visibilityStatus[element] && checkVisible(element)) {
             if(element === "#detail") {
@@ -212,6 +215,8 @@ var scrollApiFunc = function () {
                 fileLoadByPdService();
             }
             else if (element === "#question") {
+                getTotalCount();
+
                 getReqCommentList(1);
             }
 
@@ -228,11 +233,9 @@ var scrollApiFunc = function () {
 
 // ------------------ 계정 정보 ------------------ //
 function bindAccountInfo() {
-
     $("#user-name").html(userName);
     $("#user-name-detail").html(fullName + ' (' + userName + ')');
     $("#user-email").html(userEmail);
-
 }
 
 // ------------------ 메뉴 클릭 이벤트 ------------------ //
@@ -266,6 +269,7 @@ function getDetailViewTab() {
     console.log("Detail Tab ::::");
     var tableName = "T_ARMS_REQADD_";
 
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
     $.ajax({
         url: "/auth-user/api/arms/reqAdd/" + tableName + "/getDetail.do" +
             "?jiraProject=" + selectedJiraProject +
@@ -426,6 +430,7 @@ function versionClick(element, c_id) {
     element.style.background = "rgba(241, 240, 71, 0.3)";
     console.log(element);
 
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
     $.ajax({
         url: "/auth-user/api/arms/pdServiceVersion/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
         data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
@@ -445,6 +450,8 @@ function versionClick(element, c_id) {
                 height: "300px"
             });
             $("#version-desc").html(json.c_pds_version_contents);
+
+            jSuccess("버전 상세 정보 조회가 완료 되었습니다.");
         })
         // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
         .fail(function (xhr, status, errorThrown) {
@@ -452,7 +459,6 @@ function versionClick(element, c_id) {
         })
         //
         .always(function (xhr, status) {
-            jSuccess("버전 상세 정보 조회가 완료 되었습니다.");
             console.log(xhr + status);
         });
 }
@@ -536,6 +542,8 @@ function setDetailViewTab() {
     var urlParams = new URL(location.href).searchParams;
     var selectedPdService = urlParams.get('pdService'); // 해당 서비스는 고정
     var tableName = "T_ARMS_REQADD_" + selectedPdService;
+
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
     $.ajax({
         url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
         type: "GET",
@@ -682,6 +690,7 @@ function fileLoadByPdService() {
     var selectedPdService = urlParams.get('pdService');
 
     $("#fileIdlink").val(selectedPdService);
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
     $.ajax({
         url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
         data: {fileIdLink: selectedPdService},
@@ -769,6 +778,7 @@ function fileLoadByPdService() {
             });
         }
 
+        jSuccess("파일 조회가 완료 되었습니다.");
         calledAPIs["fileAPI"] = true;
     });
 }
@@ -788,7 +798,41 @@ function formatBytes(bytes, decimals = 2) {
 // ------------------ QnA 게시판보기 ------------------ //
 function reqCommentListViewTabClick() {
     $("#get_req_comment_list").click(function () {
+        getTotalCount();
+
         getReqCommentList(1);
+    });
+}
+
+function getTotalCount() {
+    console.log("ReqComment Total Count :::");
+    var urlParams = new URL(location.href).searchParams;
+    var selectedPdService = urlParams.get('pdService');
+    selectedJsTreeId = urlParams.get('reqAdd');
+
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
+    $.ajax({
+        url: "/auth-user/api/arms/reqComment/getTotalCountReqComment.do",
+        type: "GET",
+        data: {
+            c_pdservice_link: selectedPdService,
+            c_req_link: selectedJsTreeId
+        },
+        async: false,
+        statusCode: {
+            200: function (data) {
+                //모달 팝업 끝내고
+                console.log(data.response);
+                totalReqCommentCount = data.response;
+            }
+        },
+        beforeSend: function () {
+        },
+        complete: function () {
+        },
+        error: function (e) {
+            jError("신규 게시물 등록 중 에러가 발생했습니다.");
+        }
     });
 }
 
@@ -798,22 +842,22 @@ function getReqCommentList(pageNum) {
     var pageSize = 10;
     var totalPages = 0;
     var curPage = pageNum;
-
     /* 전체 게시판 게시물 갯수 가져오는 API 호출 필요 */
-    var totalCount = 21;
 
-    if (totalCount !== 0) {
-        totalPages = Math.ceil(totalCount / pageSize);
+    console.log(totalReqCommentCount);
+
+    if (totalReqCommentCount !== null|| totalReqCommentCount !== 0) {
+        totalPages = Math.ceil(totalReqCommentCount / pageSize);
         console.log("totalPages : " + totalPages);
 
         $(".pagination").empty();
         var htmlStr = bindPagination(curPage, totalPages, "getReqCommentList");
-        console.log("htmlStr : " + htmlStr);
 
         $(".pagination").append(htmlStr);
     }
     else{
         //alert("검색되는 주소없음")
+        return;
     }
 
     var urlParams = new URL(location.href).searchParams;
@@ -821,13 +865,16 @@ function getReqCommentList(pageNum) {
     var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
     selectedJsTreeId = urlParams.get('reqAdd');
 
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
     $.ajax({
-        url: "/auth-user/api/arms/reqComment/getReqCommentList.do",
+        url: "/auth-user/api/arms/reqComment/getReqCommentPagingByPdService.do",
         type: "GET",
         data: {
             c_pdservice_link: selectedPdService,
-            c_version_link: selectedPdServiceVersion,
-            c_req_link: selectedJsTreeId
+            /*c_version_link: selectedPdServiceVersion,*/
+            c_req_link: selectedJsTreeId,
+            pageIndex: pageNum,
+            pageUnit: pageSize
         },
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
@@ -887,7 +934,7 @@ function getReqCommentList(pageNum) {
                                             ${(position === "") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
                                         </div>
                                         <div class="text">
-                                            ${title}
+                                            ${contents}
                                             ${buttonsHtml}
                                         </div>
                                     </div>
@@ -930,9 +977,8 @@ function bindPagination(curPage, totalPages, funName) {
         endPage = totalPages;
     }
 
-
     var nextPage = endPage + 1;
-    console.log(curPage,"curPage,",startPage,"startPage,",endPage,"endPage,",nextPage,"nextPage")
+    // console.log(curPage,"curPage,",startPage,"startPage,",endPage,"endPage,",nextPage,"nextPage")
 
     //맨 첫 페이지
     if (curPage > 1 && pageLimit < curPage) {
@@ -960,7 +1006,7 @@ function bindPagination(curPage, totalPages, funName) {
         pageUrl += "<li class='page-item'><a class='last_page' href='javascript:" + funName + "(" + totalPages + ");'><i class='fa fa-angle-double-right' /></a></li>";
     }
 
-    console.log(pageUrl);
+    // console.log(pageUrl);
 
     return pageUrl;
 }
@@ -977,30 +1023,30 @@ function addReqComment() {
             return;
         }
 
-        console.log(content);
         var urlParams = new URL(location.href).searchParams;
         var selectedPdService = urlParams.get('pdService');
         var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
         selectedJsTreeId = urlParams.get('reqAdd');
 
-        const cTitle = "";
-
-        /*$.ajax({
+        $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
+        $.ajax({
             url: "/auth-user/api/arms/reqComment/addNode.do",
             type: "POST",
             data: {
                 ref: 2,
                 c_pdservice_link: selectedPdService,
-                c_version_link: selectedPdServiceVersion,
                 c_req_link: selectedJsTreeId,
                 c_type: "default",
-                c_title: cTitle
+                c_req_comment_sender: userName,
+                c_req_comment_contents: content
             },
             statusCode: {
                 200: function () {
                     //모달 팝업 끝내고
-                    alert("success");
-                    $("#close_pdservice").trigger("click");
+                    jSuccess("등록 되었습니다.");
+                    $('#comment-contents').val('');
+                    getTotalCount();
+                    getReqCommentList(1);
                     //데이터 테이블 데이터 재 로드
                 }
             },
@@ -1011,7 +1057,7 @@ function addReqComment() {
             error: function (e) {
                 jError("신규 게시물 등록 중 에러가 발생했습니다.");
             }
-        });*/
+        });
     });
 }
 
@@ -1052,32 +1098,22 @@ function req_comment_edit_btn_click(c_id) {
 }
 
 function req_comment_delete_btn_click(c_id) {
-    if (confirm("해당글을 삭제하시겠습니까?")) {
-
-        var urlParams = new URL(location.href).searchParams;
-        var selectedPdService = urlParams.get('pdService');
-        var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
-        selectedJsTreeId = urlParams.get('reqAdd');
-
-        const cTitle = "";
+    if (confirm("해당 글을 삭제하시겠습니까?")) {
         console.log("delete : " + c_id);
-        /*$.ajax({
-            url: "/auth-user/api/arms/reqComment/addNode.do",
-            type: "POST",
+        $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
+        $.ajax({
+            url: "/auth-user/api/arms/reqComment/removeNode.do",
+            type: "DELETE",
             data: {
-                ref: 2,
-                c_pdservice_link: selectedPdService,
-                c_version_link: selectedPdServiceVersion,
-                c_req_link: selectedJsTreeId,
-                c_type: "default",
-                c_title: cTitle
+                c_id: c_id
             },
             statusCode: {
                 200: function () {
                     //모달 팝업 끝내고
-                    alert("success");
-                    $("#close_pdservice").trigger("click");
-                    //데이터 테이블 데이터 재 로드
+                    jSuccess("삭제 되었습니다.");
+                    $('#comment-contents').val('');
+                    getTotalCount();
+                    getReqCommentList(1);
                 }
             },
             beforeSend: function () {
@@ -1085,9 +1121,9 @@ function req_comment_delete_btn_click(c_id) {
             complete: function () {
             },
             error: function (e) {
-                jError("신규 게시물 등록 중 에러가 발생했습니다.");
+                jError("게시물 삭제 중 에러가 발생했습니다.");
             }
-        });*/
+        });
     }
 }
 
