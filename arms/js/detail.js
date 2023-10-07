@@ -204,9 +204,8 @@ function scrollApiFunc() {
                 getDetailViewTab();
             }
             else if(element === "#version") {
-                bindDataVersionTab();
-
                 initVersionData();
+                bindDataVersionTab();
             }
             else if (element === "#allreq") {
                 build_ReqData_By_PdService();
@@ -360,9 +359,8 @@ function bindDataDetailTab(ajaxData) {
 // ------------------ 버전 상세보기 ------------------ //
 function versionDetailViewTabClick() {
     $("#get_version_list").click(function () {
-        bindDataVersionTab();
-
         initVersionData();
+        bindDataVersionTab();
     });
 }
 
@@ -378,7 +376,10 @@ function bindDataVersionTab() {
 
     // ajax 처리 후 데이터 바인딩
     console.log("dataLoad :: getSelectedID → " + selectedPdService);
-    $.ajax("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + selectedPdService).done(function (json) {
+    $.ajax({
+        url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + selectedPdService,
+        async: false
+    }).done(function (json) {
         console.log("dataLoad :: success → ", json);
 
         $("#version-product-name").html(json.c_title);
