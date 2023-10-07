@@ -1030,7 +1030,7 @@ function addReqComment() {
 
         $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
         $.ajax({
-            url: "/auth-user/api/arms/reqComment/addNode.do",
+            url: "/auth-user/api/arms/reqComment/addReqComment.do",
             type: "POST",
             data: {
                 ref: 2,
