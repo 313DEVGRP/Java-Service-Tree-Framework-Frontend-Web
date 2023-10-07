@@ -79,11 +79,11 @@ function execDocReady() {
 
         [
             // Template CSS File
-            //"../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-            //"../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-            //"../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
+            "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
+            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
+            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
             // Template Main CSS File
-            //"../reference/jquery-plugins/MyResume/assets/css/style.css"
+            "../reference/jquery-plugins/MyResume/assets/css/style.css"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
