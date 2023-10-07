@@ -608,7 +608,7 @@
 
             if ($.isArray(files) || $.isPlainObject(files)) {
               $.each(files, function(index, file) {
-                file.iconFileName = iconsMap[file.contentType] || 'https://via.placeholder.com/80x80';
+                file.iconFileName = iconsMap[file.contentType] || prefix + 'Default.png';
               });
             }
 
