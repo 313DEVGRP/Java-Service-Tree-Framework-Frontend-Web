@@ -722,7 +722,7 @@ function fileLoadByPdService() {
                             filterClass = 'filter-etc';
                         }
 
-                        var imgSrc = iconsMap[file.contentType] || 'https://via.placeholder.com/184x184';
+                        var imgSrc = iconsMap[file.contentType] || prefix + 'Default.png';
                         var title = file.fileName;
                         var downloadUrl = file.url;
                         var thumbnailUrl = file.thumbnailUrl;
