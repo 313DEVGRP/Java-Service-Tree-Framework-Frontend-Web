@@ -79,11 +79,11 @@ function execDocReady() {
 
         [
             // Template CSS File
-            "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
-            "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
-            "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
+            //"../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
+            //"../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
+            //"../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
             // Template Main CSS File
-            "../reference/jquery-plugins/MyResume/assets/css/style.css"
+            //"../reference/jquery-plugins/MyResume/assets/css/style.css"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -204,9 +204,8 @@ function scrollApiFunc() {
                 getDetailViewTab();
             }
             else if(element === "#version") {
-                bindDataVersionTab();
-
                 initVersionData();
+                bindDataVersionTab();
             }
             else if (element === "#allreq") {
                 build_ReqData_By_PdService();
@@ -360,9 +359,8 @@ function bindDataDetailTab(ajaxData) {
 // ------------------ 버전 상세보기 ------------------ //
 function versionDetailViewTabClick() {
     $("#get_version_list").click(function () {
-        bindDataVersionTab();
-
         initVersionData();
+        bindDataVersionTab();
     });
 }
 
@@ -378,7 +376,10 @@ function bindDataVersionTab() {
 
     // ajax 처리 후 데이터 바인딩
     console.log("dataLoad :: getSelectedID → " + selectedPdService);
-    $.ajax("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + selectedPdService).done(function (json) {
+    $.ajax({
+        url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + selectedPdService,
+        async: false
+    }).done(function (json) {
         console.log("dataLoad :: success → ", json);
 
         $("#version-product-name").html(json.c_title);
