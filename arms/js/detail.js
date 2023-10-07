@@ -902,9 +902,9 @@ function getReqCommentList(pageNum) {
 
                     var c_id = comment.c_id;
                     var sender = comment.c_req_comment_sender;
-                    var date = comment.c_req_comment_date;
+                    var date = dateFormat(comment.c_req_comment_date);
                     var title = comment.c_title;
-                    var contents = comment.c_req_comment_contents;
+                    var contents = `<p id="contents">` + comment.c_req_comment_contents+`</p>`;
                     var $newHtml;
 
                     /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
@@ -914,10 +914,19 @@ function getReqCommentList(pageNum) {
                     var buttonsHtml = '';
 
                     if (sender === userName) {
-                        buttonsHtml = `<div>
-                                          <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn" value="${c_id}">수정하기</button>
-                                          <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">삭제하기</button>
-                                       </div>`;
+                        buttonsHtml = `<div class="dropdown">
+                                            <button class="dropdown-button"><i class="fa fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-content">
+                                                <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn">
+                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-edit"></i></div>
+                                                    <div style="display: inline-block;">수정</div>
+                                                </button>
+                                                <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">
+                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-trash-o"></i></div>
+                                                    <div style="display: inline-block;">삭제</div>
+                                                </button>
+                                            </div>
+                                        </div>`;
                     }
 
                     $newHtml = $(`<div class="chat-message">
@@ -927,6 +936,7 @@ function getReqCommentList(pageNum) {
                                         </div>
                                     </div>
                                     <div class="chat-message-body ${position}">
+                                        ${buttonsHtml}
                                         <span class="arrow"></span>
                                         <div class="sender">
                                             ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
@@ -935,17 +945,32 @@ function getReqCommentList(pageNum) {
                                         </div>
                                         <div class="text">
                                             ${contents}
-                                            ${buttonsHtml}
+                                        </div>
+                                        <div class="edit-comment" style="display: none;">
+                                            <textarea class="edit-text" rows="1"></textarea>
+                                            <div style="text-align: right;">
+                                                <button class="save-button" value="${c_id}">Save</button>
+                                                <button class="cancel-button">Cancel</button>
+                                            </div>
                                         </div>
                                     </div>
+                                    
                                 </div>`);
 
                     $chatMessages.append($newHtml);
                 }
 
                 $('.edit-chat-btn').on('click', function(e){
-                    var c_id = $(this).val();
-                    req_comment_edit_btn_click(c_id);
+                    var parentDiv = $(this).closest('.chat-message-body');
+                    var commentText = parentDiv.find('#contents').text();
+
+                    parentDiv.find('.edit-text').val(commentText);
+                    parentDiv.find('#contents').hide();
+                    parentDiv.find('.dropdown-button').hide();
+                    parentDiv.find('.edit-comment').show();
+
+                    console.log(commentText);
+                    // req_comment_edit_btn_click(c_id);
                 });
 
                 $('.delete-chat-btn').on('click', function(e){
@@ -953,6 +978,21 @@ function getReqCommentList(pageNum) {
                     req_comment_delete_btn_click(c_id);
                 });
 
+                $('.cancel-button').on('click', function(e){
+                    var commentDiv = $(this).closest('.chat-message-body');
+                    commentDiv.find('#contents').show();
+                    commentDiv.find('.dropdown-button').show();
+                    commentDiv.find('.edit-comment').hide();
+                });
+
+                $('.save-button').on('click', function(e){
+                    var c_id = $(this).val();
+                    console.log(c_id);
+                    var editText = $(this).closest('.edit-comment');
+                    var commentText = editText.find('.edit-text').val();
+                    console.log(commentText);
+                    req_comment_edit_btn_click(c_id, commentText);
+                });
             }
         },
         beforeSend: function () {
@@ -1061,40 +1101,45 @@ function addReqComment() {
     });
 }
 
-function req_comment_edit_btn_click(c_id) {
-    var urlParams = new URL(location.href).searchParams;
-    var selectedPdService = urlParams.get('pdService');
-    var selectedPdServiceVersion = urlParams.get('pdServiceVersion');
-    selectedJsTreeId = urlParams.get('reqAdd');
-    console.log("edit : " + c_id);
-    const cTitle = "";
-    /*$.ajax({
-        url: "/auth-user/api/arms/reqComment/addNode.do",
-        type: "POST",
-        data: {
-            ref: 2,
-            c_pdservice_link: selectedPdService,
-            c_version_link: selectedPdServiceVersion,
-            c_req_link: selectedJsTreeId,
-            c_type: "default",
-            c_title: cTitle
-        },
-        statusCode: {
-            200: function () {
-                //모달 팝업 끝내고
-                alert("success");
-                $("#close_pdservice").trigger("click");
-                //데이터 테이블 데이터 재 로드
-            }
-        },
-        beforeSend: function () {
-        },
-        complete: function () {
-        },
-        error: function (e) {
-            jError("신규 게시물 등록 중 에러가 발생했습니다.");
+function req_comment_edit_btn_click(c_id, commentText) {
+    if (confirm("해당 글을 수정하시겠습니까?")) {
+        console.log("edit : " + c_id + "\ncontents : " + commentText);
+        var urlParams = new URL(location.href).searchParams;
+        var selectedPdService = urlParams.get('pdService');
+        selectedJsTreeId = urlParams.get('reqAdd');
+        console.log("edit : " + c_id);
+
+        var content = commentText;
+        if (content === null || content === '') {
+            alert("질문을 작성 후 수정해주세요.");
+            return;
         }
-    });*/
+
+        $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
+        $.ajax({
+            url: "/auth-user/api/arms/reqComment/updateNode.do",
+            type: "PUT",
+            data: {
+                c_id: c_id,
+                c_req_comment_contents: commentText
+            },
+            statusCode: {
+                200: function () {
+                    //모달 팝업 끝내고
+                    jSuccess("수정 되었습니다.");
+                    getTotalCount();
+                    getReqCommentList(1);
+                }
+            },
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+            error: function (e) {
+                jError("신규 게시물 등록 중 에러가 발생했습니다.");
+            }
+        });
+    }
 }
 
 function req_comment_delete_btn_click(c_id) {
