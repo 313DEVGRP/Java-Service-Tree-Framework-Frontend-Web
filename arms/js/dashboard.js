@@ -2,6 +2,11 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedPdServiceId; // 제품(서비스) 아이디
+var reqStatusDataTable;
+var dataTableRef;
+
+var selectedIssue;    //선택한 이슈
+var selectedIssueKey; //선택한 이슈 키
 
 function execDocReady() {
 
@@ -60,12 +65,16 @@ function execDocReady() {
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard_home");
 
+			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
+			//버전 멀티 셀렉트 박스 이니시에이터
+			makeVersionMultiSelectBox();
 		})
 		.catch(function () {
 			console.error('플러그인 로드 중 오류 발생');
 		});
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //제품 서비스 셀렉트 박스
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +126,13 @@ function makePdServiceSelectBox() {
 			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		}
 
+		// //이슈리스트 데이터테이블
+		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		// //통계로드
+		// statisticsLoad($("#selected_pdService").val(), null);
+		// //진행상태 가져오기
 		// progressLoad($("#selected_pdService").val(), null);
+
 	});
 } // end makePdServiceSelectBox()
 
@@ -135,20 +150,43 @@ function progressLoad(pdservice_id, pdservice_version_id){
 		statusCode: {
 			200: function (data) {
 
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-
-					var html_piece = 	"<div	class=\"controls form-group darkBack\"\n" +
-						"		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
-						"<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
-						"</div>";
-					$('#progress_status').append(html_piece);
-				}
+				console.log("==== 장지윤 progress data");
+				console.log(data);
 
 			}
 		}
 	});
+}
+
+function statisticsLoad(pdservice_id, pdservice_version_id){
+
+	//제품 서비스 셀렉트 박스 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+
+				console.log("==== 장지윤 static data");
+				console.log(data);
+
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+
+				$('#version_count').text(data["version"]);
+				$('#req_count').text(data["req"]);
+				$('#alm_server_count').text(data["jiraServer"]);
+				$('#alm_project_count').text(data["jiraProject"]);
+				$('#alm_issue_count').text(data["issue"]);
+			}
+		}
+	});
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -158,22 +196,14 @@ function makeVersionMultiSelectBox() {
 	//버전 선택 셀렉트 박스 이니시에이터
 	$(".multiple-select").multipleSelect({
 		filter: true,
+		bubbles: true,
+		cancelable: true,
 		onClose: function () {
 			console.log("onOpen event fire!\n");
-
-			var checked = $("#checkbox1").is(":checked");
-			var endPointUrl = "";
 			var versionTag = $(".multiple-select").val();
+		},
+		onChange: function () {
 
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-				// dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-				// dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			}
 		}
 	});
 }
@@ -190,21 +220,18 @@ function bind_VersionData_By_PdService() {
 				//////////////////////////////////////////////////////////
 				for (var k in data.response) {
 					var obj = data.response[k];
-					var $opt = $("<option />", {
-						value: obj.c_id,
-						text: obj.c_title
-					});
-					$(".multiple-select").append($opt);
+					var newOption = new Option(obj.c_title, obj.c_id, true, false);
+					$(".multiple-select").append(newOption);
 				}
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				//$('#multiversion').multipleSelect('refresh');
-				//$('#edit_multi_version').multipleSelect('refresh');
+
 				$(".multiple-select").multipleSelect("refresh");
 				//////////////////////////////////////////////////////////
 			}
 		}
 	});
 }
+
