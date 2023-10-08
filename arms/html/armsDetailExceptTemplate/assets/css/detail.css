@@ -79,48 +79,6 @@
     background-color: rgba(255,255,255,0);
 }
 
-.send-btn {
-    width: 100%;
-    display: inline-block;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    cursor: pointer;
-    /* -webkit-user-select: none; */
-    -moz-user-select: none;
-    /* user-select: none; */
-    /* background-color: transparent; */
-    border: 1px solid transparent;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.send-chat-btn {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #fff;
-    background: rgba(51,51,51,0.4);
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: 0.25rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-
-    cursor: pointer;
-
-}
-
 .user-id {
     color: #3264bf;
     font-weight: bolder;
@@ -172,16 +130,18 @@
     padding: 10px 12px;
     color: #666;
     /*background: rgba(51, 51, 51, 0.4);*/
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
+    /*border: 1px solid #ced4da;
+    border-radius: 0.25rem;*/
     margin-bottom: 30px;
     position: relative;
 }
 
 .widget.large {
     /*height: 600px;*/
-    width: 90%;
+    /*width: 100%;*/
     margin: 2%;
+    border-top: 3px solid #d2d6de;
+    box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
 }
 
 .widget .body {
@@ -200,21 +160,6 @@
 /**********************************/
 .chat-messages {
     /*padding-right: 15px;*/
-}
-
-.chat-footer {
-    width: 100%;
-    /* bottom: 25px; */
-    /* position: absolute; */
-    /*height: 40px;*/
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding-top: 10px;
-    margin-bottom: 10px;
-}
-.chat-footer input {
-    margin-bottom: 0;
 }
 
 .chat-message:before, .chat-message:after {
@@ -309,14 +254,6 @@
     border-right: 5px solid #666;
 }
 
-.col-xs-9 {
-    width: 75%;
-}
-
-.col-xs-3 {
-    width: 25%;
-}
-
 @font-face {
     font-family: 'FontAwesome';
     src: url("../../../../../reference/light-blue/css/fonts/font-awesome/fontawesome-webfont.eot?v=4.0.3");
@@ -367,6 +304,7 @@
 }
 .pagination-container {
     text-align: center;
+    height: 60px;
 }
 
 .pagination {
@@ -429,9 +367,9 @@
 
 @media (max-width: 600px) {
     .page-item > a {
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
         font-size: 12px;
     }
 
@@ -440,8 +378,8 @@
     .page-item:nth-last-child(2) > a,
     .page-item:last-child > a {
         border-radius :50%;
-        width :20px ; height :20px ;
-        line-height :20px ;
+        width :25px; height :25px;
+        line-height :25px ;
     }
 }
 
@@ -548,7 +486,7 @@
     text-decoration: none;
     display: block;
 }
-.dropdown-content button:hover { background-color: #adabab; }
+.dropdown-content button:hover { background-color: #e7e7e7; }
 .dropdown:hover .dropdown-content {
     display: inline-block;
     z-index: 9999;
@@ -570,4 +508,136 @@
 .edit-text {
     width: 100%;
     margin-top: 10px;
+}
+
+.cancel-button {
+    background-color: rgba(255,255,255,0);
+}
+
+.edit-save-button {
+    background-color: rgba(255,255,255,0);
+}
+
+/* 게시글 생성 부분 */
+
+.box {
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border-top: 3px solid #d2d6de;
+    margin: 2%;
+    /*width: 100%;*/
+    /*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);*/
+    box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
+    padding: 10px 12px;
+}
+
+.box-body {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 10px
+}
+
+.pad {
+    padding: 10px
+}
+
+.box-header:before,.box-body:before,.box-footer:before,.box-header:after,.box-body:after,.box-footer:after {
+    content: " ";
+    display: table
+}
+
+.box-header:after,.box-body:after,.box-footer:after {
+    clear: both
+}
+
+.box-header {
+    color: #444;
+    display: block;
+    padding: 10px;
+    position: relative
+}
+
+.box-header.with-border {
+    border-bottom: 1px solid #f4f4f4
+}
+
+.collapsed-box .box-header.with-border {
+    border-bottom: none
+}
+
+.box-header>.fa,.box-header>.glyphicon,.box-header>.ion,.box-header .box-title {
+    display: inline-block;
+    font-size: 18px;
+    margin: 0;
+    line-height: 1
+}
+
+.h1 .small, .h1 small, .h2 .small, .h2 small, .h3 .small, .h3 small, h1 .small, h1 small, h2 .small, h2 small, h3 .small, h3 small {
+    font-size: 65%;
+}
+.h1 .small, .h1 small, .h2 .small, .h2 small, .h3 .small, .h3 small, .h4 .small, .h4 small, .h5 .small, .h5 small, .h6 .small, .h6 small, h1 .small, h1 small, h2 .small, h2 small, h3 .small, h3 small, h4 .small, h4 small, h5 .small, h5 small, h6 .small, h6 small {
+    font-weight: 400;
+    line-height: 1;
+    color: #777;
+}
+
+.box-header>.box-tools {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.btn-default {
+    background-color: #f4f4f4;
+    color: #444;
+    border-color: #ddd;
+}
+.btn {
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+.btn-group-sm>.btn, .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+.btn-default {
+    color: #333;
+    /*background-color: #fff;*/
+    border-color: #ccc!important;
+}
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#comment-contents {
+    width: 100%;
+    font-size: 14px;
+    line-height: 18px;
+    border: 1px solid rgb(221, 221, 221);
+    padding: 10px;
 }
