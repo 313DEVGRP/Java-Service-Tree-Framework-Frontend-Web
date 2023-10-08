@@ -126,11 +126,11 @@ function makePdServiceSelectBox() {
 			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		}
 
-		// //이슈리스트 데이터테이블
-		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
-		// //통계로드
-		// statisticsLoad($("#selected_pdService").val(), null);
-		// //진행상태 가져오기
+		//이슈리스트 진행 상황
+		getIssueStatus($("#selected_pdService").val(), endPointUrl);
+		//통계로드
+		statisticsLoad($("#selected_pdService").val(), null);
+		//진행상태 가져오기
 		// progressLoad($("#selected_pdService").val(), null);
 
 	});
@@ -178,11 +178,7 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 					console.log(key + "=" + value);
 				}
 
-				$('#version_count').text(data["version"]);
 				$('#req_count').text(data["req"]);
-				$('#alm_server_count').text(data["jiraServer"]);
-				$('#alm_project_count').text(data["jiraProject"]);
-				$('#alm_issue_count').text(data["issue"]);
 			}
 		}
 	});
@@ -235,3 +231,32 @@ function bind_VersionData_By_PdService() {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+//이슈 리스트 진행 상황
+////////////////////////////////////////////////////////////////////////////////////////
+function getIssueStatus(selectId, endPointUrl) {
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus" + endPointUrl,
+		type: "GET",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//////////////////////////////////////////////////////////
+				var resolvedCount = 0;
+				var closedCount = 0;
+				for (var k in data) {
+					var obj = data[k];
+					if (obj.state === "resolve") {
+						resolvedCount++;
+					} else if (obj.state === "closed") {
+						closedCount++;
+					}
+				}
+				$("#resolved_count").text(resolvedCount);
+				$("#closed_count").text(closedCount);
+				//////////////////////////////////////////////////////////
+			}
+		}
+	});
+}
