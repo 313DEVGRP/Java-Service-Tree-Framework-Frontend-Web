@@ -18,7 +18,8 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.iframe-transport.js",
 			"../reference/light-blue/lib/jquery.fileupload.js",
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
-			"../reference/light-blue/lib/jquery.fileupload-ui.js"],
+			"../reference/light-blue/lib/jquery.fileupload-ui.js",
+			"../reference/jquery-plugins/d3-7.8.2/dist/d3.js"],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -130,33 +131,9 @@ function makePdServiceSelectBox() {
 		getIssueStatus($("#selected_pdService").val(), endPointUrl);
 		//통계로드
 		statisticsLoad($("#selected_pdService").val(), null);
-		//진행상태 가져오기
-		// progressLoad($("#selected_pdService").val(), null);
 
 	});
 } // end makePdServiceSelectBox()
-
-function progressLoad(pdservice_id, pdservice_version_id){
-
-	$('#progress_status').empty(); // 모든 자식 요소 삭제
-
-	//제품 서비스 셀렉트 박스 데이터 바인딩
-	$.ajax({
-		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getProgress.do?version=" + pdservice_version_id,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-
-				console.log("==== 장지윤 progress data");
-				console.log(data);
-
-			}
-		}
-	});
-}
 
 function statisticsLoad(pdservice_id, pdservice_version_id){
 
@@ -255,8 +232,86 @@ function getIssueStatus(selectId, endPointUrl) {
 				}
 				$("#resolved_count").text(resolvedCount);
 				$("#closed_count").text(closedCount);
+
+				drawReqTimeSeries(data)
 				//////////////////////////////////////////////////////////
 			}
 		}
 	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//프로덕트의 요구사항 해결 추이
+////////////////////////////////////////////////////////////////////////////////////////
+function drawReqTimeSeries(data) {
+	console.log("===장지윤 drawReqTimeSeries");
+	console.log(data);
+
+	const data1 = [
+		{ser1: 0.3, ser2: 4},
+		{ser1: 2, ser2: 16},
+		{ser1: 3, ser2: 8}
+	];
+
+	const data2 = [
+		{ser1: 1, ser2: 7},
+		{ser1: 4, ser2: 1},
+		{ser1: 6, ser2: 8}
+	];
+
+	const margin = {top: 10, right: 10, bottom: 10, left: 10},
+		width = 450 - margin.left - margin.right,
+		height = 150 - margin.top - margin.bottom;
+
+	const svg = d3.select("#chart_req_timeSeries")
+		.append("svg")
+		.attr("viewBox", [-10, 0, width + 30, height + 30])
+		.append("g")
+		.attr("transform", `translate(${margin.left},${margin.top})`);
+
+	const x = d3.scaleLinear().range([0,width]);
+	const xAxis = d3.axisBottom().scale(x);
+	svg.append("g")
+		.attr("transform", `translate(0, ${height})`)
+		.attr("class","myXaxis")
+		.attr("stroke-width", 0.6)
+		.style("font-size", "7px");
+
+	const y = d3.scaleLinear().range([height, 0]);
+	const yAxis = d3.axisLeft().scale(y);
+	svg.append("g")
+		.attr("class","myYaxis")
+		.attr("stroke-width", 0.6)
+		.style("font-size", "7px");
+
+	function update(data) {
+
+		x.domain([0, d3.max(data, function(d) { return d.ser1 }) ]);
+		svg.selectAll(".myXaxis").transition()
+			.duration(3000)
+			.call(xAxis);
+
+		y.domain([0, d3.max(data, function(d) { return d.ser2  }) ]);
+		svg.selectAll(".myYaxis")
+			.transition()
+			.duration(3000)
+			.call(yAxis);
+
+		const u = svg.selectAll(".lineTest")
+			.data([data], function(d){ return d.ser1 });
+
+		u
+			.join("path")
+			.attr("class","lineTest")
+			.transition()
+			.duration(3000)
+			.attr("d", d3.line()
+				.x(function(d) { return x(d.ser1); })
+				.y(function(d) { return y(d.ser2); }))
+			.attr("fill", "none")
+			.attr("stroke", "steelblue")
+			.attr("stroke-width", 1.1)
+	}
+
+	update(data1)
 }
