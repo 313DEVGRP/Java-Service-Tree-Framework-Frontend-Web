@@ -188,7 +188,7 @@
 			<nav id="navbar" class="navbar nav-menu">
 				<ul>
 					<!-- ======= Header ======= -->
-					<li><a href="#home" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>통계정보</span></a></li>
+					<li><a href="#stats" id="get_stats" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>통계정보</span></a></li>
 					<li><a href="#detail" id="get_req_detail" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>요구사항 상세</span></a></li>
 					<li><a href="#version" id="get_version_list" class="nav-link scrollto"><i class="bx bx-detail"></i> <span>버전별 상세정보</span></a></li>
 					<li><a href="#allreq" id="get_req_list" class="nav-link scrollto"><i class="bx bx-list-ul"></i> <span>요구사항 목록</span></a></li>
@@ -216,13 +216,196 @@
 		</header>
 
 		<!-- ======= 타이틀 페이지 ======= -->
-		<section id="home" class="d-flex flex-column">
+		<section id="stats" class="d-flex flex-column">
 			<div class="container" data-aos="zoom-in" data-aos-delay="100">
 				<h1>요구사항 조회 시스템</h1>
 				<p>Requirement <span class="typed" data-typed-items="Management, Collection, Statistics"></span></p>
 
 				<!-- 통계정보 -->
+<!--                <div class="row">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <section class="stats-widget normal">-->
+<!--                            <header>-->
+<!--                                <h4>요구사항1</h4>-->
+<!--                            </header>-->
+<!--                            <div class="body">-->
+<!--                                <ul class="overall-stats">-->
+<!--                                    <li>-->
+<!--                                <span>-->
+<!--                                    <i class="bi bi-chevron-right"></i>-->
+<!--                                    전체 요구사항 개수-->
+<!--                                </span>-->
+<!--                                        <span class="badge badge-important">10개</span>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                <span>-->
+<!--                                    <i class="bi bi-chevron-right"></i>-->
+<!--                                    나에게 할당된 요구사항 개수-->
+<!--                                </span>-->
+<!--                                        <span class="badge badge-important">10개</span>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <h5 class="no-margin weight-normal">-->
+<!--                                    <i class="bi bi-chevron-right"></i>-->
+<!--                                    나에게 할당된 요구사항 개수 / 전체 요구사항 개수-->
+<!--                                </h5>-->
+<!--                                <div class="progress">-->
+<!--                                    <div class="progress-bar progress-bar-danger" style="width: 79%;">79%</div>-->
+<!--                                </div>-->
+<!--                                <h5 class="no-margin weight-normal">-->
+<!--                                    <i class="bi bi-chevron-right"></i>-->
+<!--                                    완료된 요구사항 개수 / 나에게 할당된 요구사항 개수-->
+<!--                                </h5>-->
+<!--                                <div class="progress">-->
+<!--                                    <div class="progress-bar progress-bar-success" style="width: 51%;">51%</div>-->
+<!--                                </div>-->
+<!--                                <h5 class="no-margin weight-normal">-->
+<!--                                    <i class="bi bi-chevron-right"></i>-->
+<!--                                    진행 중인 요구사항 개수 / 나에게 할당된 요구사항 개수-->
+<!--                                </h5>-->
+<!--                                <div class="progress progress-striped active">-->
+<!--                                    <div class="progress-bar progress-bar-warning" style="width: 64%;">64%</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </section>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <section class="stats-widget normal">-->
+<!--                            <header>-->
+<!--                                <h4>-->
+<!--                                    <i class="bi bi-chevron-right"></i>-->
+<!--                                    요구사항2-->
+<!--                                </h4>-->
+<!--                            </header>-->
+<!--                            <div class="body">-->
+<!--                                <ul class="overall-stats">-->
+<!--                                    <li>-->
+<!--                                        <span>전체 요구사항 개수</span>-->
+<!--                                        <span class="badge badge-important">10개</span>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <span>나에게 할당된 요구사항 개수</span>-->
+<!--                                        <span class="badge badge-important">10개</span>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <h5 class="no-margin weight-normal">나에게 할당된 요구사항 개수 / 전체 요구사항 개수</h5>-->
+<!--                                <div class="progress">-->
+<!--                                    <div class="progress-bar progress-bar-danger" style="width: 79%;">79%</div>-->
+<!--                                </div>-->
+<!--                                <h5 class="no-margin weight-normal">완료된 요구사항 개수 / 나에게 할당된 요구사항 개수</h5>-->
+<!--                                <div class="progress">-->
+<!--                                    <div class="progress-bar progress-bar-success" style="width: 51%;">51%</div>-->
+<!--                                </div>-->
+<!--                                <h5 class="no-margin weight-normal">진행 중인 요구사항 개수 / 나에게 할당된 요구사항 개수</h5>-->
+<!--                                <div class="progress progress-striped active">-->
+<!--                                    <div class="progress-bar progress-bar-warning" style="width: 64%;">64%</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </section>-->
+<!--                    </div>-->
+<!--                </div>-->
 
+                <div class="row">
+                    <div class="col-md-6" style="overflow: hidden">
+                        <section class="stats-widget">
+                            <header>
+                                <h4>
+                                    <span class="font13" style="font-weight: bold">
+                                        <i class="bi bi-chevron-right"></i>
+                                        제품(서비스) 요구사항 현황
+                                    </span>
+                                </h4>
+                            </header>
+                            <div class="body">
+                                <div class="stats-box">
+                                    <div class="stats-big-text" id="collectSum">10</div>
+                                    <div class="stats-desc">
+                                        전체 요구사항 개수
+                                    </div>
+                                </div>
+                                <ul class="server-stats">
+                                    <li>
+                                        <div class="key pull-right" id="collectY_label">3 개</div>
+                                        <div class="stat">
+                                            <div class="info">내가 맡은 요구사항</div>
+                                            <div class="progress progress-small progress-striped active">
+                                                <div class="progress-bar" id="collectY_display" style="width: 20%;"></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-6" style="overflow: hidden">
+                        <section class="stats-widget">
+                            <header>
+                                <h4>
+                                    <span class="font13" style="font-weight: bold">
+                                        <i class="bi bi-chevron-right"></i>
+                                        해당 요구사항 현황
+                                    </span>
+                                </h4>
+                            </header>
+                            <div class="body">
+                                <div class="stats-box">
+                                    <div class="stats-big-text" id="collectSum">2</div>
+                                    <div class="stats-desc">
+                                        해당 요구사항 개수
+                                    </div>
+                                </div>
+                                <ul class="server-stats">
+                                    <li>
+                                        <div class="key pull-right" id="collectY_label">1 개</div>
+                                        <div class="stat">
+                                            <div class="info">내가 맡은 요구사항</div>
+                                            <div class="progress progress-small progress-striped active">
+                                                <div class="progress-bar" id="collectY_display" style="width: 10%;"></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <section class="stats-widget large">
+                            <header>
+                                <span class="font13" style="font-weight: bold; word-break: keep-all;">
+                                        <i class="bi bi-chevron-right"></i>
+                                        제품(서비스) 요구사항 - 내가 맡은 요구사항 현황
+                                </span>
+                            </header>
+                            <div class="body">
+                                <div id="product-chart-pie" class="chart pie-chart">
+                                    <svg></svg>
+                                </div>
+                            </div>
+                            <footer id="product-chart-footer" class="pie-chart-footer">
+                            </footer>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section class="stats-widget large">
+                            <header>
+                                <span class="font13" style="font-weight: bold; word-break: keep-all;" >
+                                    <i class="bi bi-chevron-right"></i>
+                                    해당 요구사항 - 내가 맡은 요구사항 현황
+                                </span>
+                            </header>
+                            <div class="body">
+                                <div id="requirement-chart-pie" class="chart pie-chart">
+                                    <svg></svg>
+                                </div>
+                            </div>
+                            <footer id="requirement-chart-footer" class="pie-chart-footer">
+                            </footer>
+                        </section>
+                    </div>
+                </div>
 			</div>
 		</section><!-- End Title -->
 
