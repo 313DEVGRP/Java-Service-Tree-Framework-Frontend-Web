@@ -46,33 +46,38 @@
             </header>
             <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-                <blockquote class="font13"
-                            style="margin-top: 5px;">
-                    1. Product(Service)를 선택해주십시오.
-                    <div style="float: right;">
-                        <button class="btn btn-transparent btn-xs"
-                                style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                                onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
-                            Help
-                            <i  class="fa fa-question"
-                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                        </button>
-                    </div>
-                </blockquote>
-                <div class="wrapper">
+                <div class="column">
+                    <blockquote class="font12">
+                        <strong>1. Product<sup>service</sup> 를 선택해 주세요</strong>
+                    </blockquote>
                     <div    class="control-group"
+                            class="darkBack"
                             style="padding-bottom: 10px; border: 0">
-                        <div    class="controls form-group darkBack"
-                                style="margin-bottom: 15px !important">
-                            <!--  select proeduct list-->
+                        <div    class="controls form-group"
+                                class="darkBack"
+                                style="margin-bottom: 5px !important">
                             <select id="selected_pdService"
                                     required="required"
                                     data-placeholder="Select Product(Service)"
                                     class="select-block-level chzn-select darkBack"
                                     tabindex="-1"
-                                    style="width: 100% !important"
-                                    name="selected_pdService">
+                                    name="selected_pdService"
+                                    style="width: 100% !important">
                                 <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <blockquote class="font12">
+                        <strong>2. Product<sup>service</sup>의 버전을 선택해 주세요</strong>
+                    </blockquote>
+                    <div    class="control-group"
+                            style="padding-bottom: 10px; border: 0">
+                        <div    class="controls form-group"
+                                style="margin-bottom: 5px !important">
+                            <select multiple="multiple"
+                                    id="multiversion"
+                                    class="multiple-select btn-block darkBack"
+                                    placeholder="&nbsp;&nbsp;Select Version">
                             </select>
                         </div>
                     </div>
