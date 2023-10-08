@@ -1,17 +1,213 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-lg-4 col-layer">
         <section class="widget">
             <header>
-                <h4 style="font-size: 13px !important; font-weight: 300 !important;">
-                    <img src="./img/leaf.gif"
-                         style="width: 25px; vertical-align: unset;">
-                    Java Service Tree Framework DevTools
+                <h4>
+				<span   class="font13"
+                        style="font-weight: bold">
+					<i class="fa fa-sort-amount-asc"></i>
+					Search
+				</span>
                 </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
             </header>
             <div class="body">
-
-
+                <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    1. Product(Service)를 선택해주십시오.
+                    <div style="float: right;">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
+                                onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
+                            Help
+                            <i  class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
+                <div class="wrapper">
+                    <div    class="control-group"
+                            style="padding-bottom: 10px; border: 0">
+                        <div    class="controls form-group darkBack"
+                                style="margin-bottom: 15px !important">
+                            <!--  select proeduct list-->
+                            <select id="selected_pdService"
+                                    required="required"
+                                    data-placeholder="Select Product(Service)"
+                                    class="select-block-level chzn-select darkBack"
+                                    tabindex="-1"
+                                    style="width: 100% !important"
+                                    name="selected_pdService">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+    </div>
+
+    <div class="col-lg-4 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+				<span   class="font13"
+                        style="font-weight: bold">
+					<i class="fa fa-sort-amount-asc"></i>
+					진행 중인 요구사항
+				</span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    이번 달에 진행 중인 요구사항
+                    <div style="float: right;">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
+                                onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
+                            Help
+                            <i  class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-4 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+				<span   class="font13"
+                        style="font-weight: bold">
+					<i class="fa fa-sort-amount-asc"></i>
+					해결된 요구사항
+				</span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    이번 달에 해결된 요구사항
+                    <div style="float: right;">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
+                                onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
+                            Help
+                            <i  class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
+            </div>
+        </section>
+    </div>
+
     </div>
 </div>
