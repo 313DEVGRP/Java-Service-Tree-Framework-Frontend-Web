@@ -639,12 +639,6 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					} else {
 						$.jstree.rollback(data.rlbk);
 					}
-					if (typeof Chat != "undefined") {
-						Chat.sendMessage("노드를 추가했습니다. 추가된 노드의 아이디는 " + r.id, function (data) {
-							console.log("jsTreeBuild :: create :: data = " + data);
-						});
-					}
-					//jsTreeBuild(jQueryElementID, serviceNameForURL);
 					$(jQueryElementID).jstree("refresh");
 				}
 			);
@@ -660,12 +654,6 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					},
 					success: function (r) {
 						jNotify("Notification : <strong>Remove Node</strong>, Complete !");
-						if (typeof Chat != "undefined") {
-							Chat.sendMessage("노드를 삭제했습니다. 삭제된 노드의 아이디는 " + r.c_id, function (data) {
-								console.log("jsTreeBuild :: remove :: data = " + data);
-							});
-						}
-						//jsTreeBuild(jQueryElementID, serviceNameForURL);
 						$(jQueryElementID).jstree("refresh");
 					}
 				});
@@ -684,12 +672,6 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						$.jstree.rollback(data.rlbk);
 					}
 					jSuccess("Rename Node Complete");
-					if (typeof Chat != "undefined") {
-						Chat.sendMessage("노드의 이름을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id, function (data) {
-							console.log("jsTreeBuild :: rename :: data = " + data);
-						});
-					}
-					//jsTreeBuild(jQueryElementID, serviceNameForURL);
 					$(jQueryElementID).jstree("refresh");
 				}
 			);
@@ -704,12 +686,6 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				},
 				function (r) {
 					jSuccess("Node Type Change");
-					if (typeof Chat != "undefined") {
-						Chat.sendMessage("노드의 타입을 변경했습니다. 변경된 노드의 아이디는 " + r.c_id, function (data) {
-							console.log("jsTreeBuild :: set_type :: data = " + data);
-						});
-					}
-					//jsTreeBuild(jQueryElementID, serviceNameForURL);
 					$(jQueryElementID).jstree("refresh");
 				}
 			);
@@ -741,12 +717,6 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						jNotify("Notification : <strong>Move Node</strong> Complete !");
 
 						$(jQueryElementID).jstree("refresh");
-
-						if (typeof Chat != "undefined") {
-							Chat.sendMessage("노드가 이동되었습니다. 이동된 노드의 아이디는 " +  $(this).attr("id").replace("node_", "").replace("copy_", ""), function (data) {
-								console.log("jsTreeBuild :: move_node :: data = " + data);
-							});
-						}
 					}
 				});
 			});

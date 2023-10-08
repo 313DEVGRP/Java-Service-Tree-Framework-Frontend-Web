@@ -63,7 +63,7 @@ function execDocReady() {
 
 			// 사이드 메뉴 색상 설정
 			$('.widget').widgster();
-			setSideMenu("sidebar_menu_dashboard_home");
+			setSideMenu("sidebar_menu_dashboard");
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();

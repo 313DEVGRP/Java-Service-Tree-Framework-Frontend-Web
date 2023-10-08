@@ -137,6 +137,11 @@ function execDocReady() {
 
             req_comment_message_size_change();
 
+            $('#comment-contents').on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
         })
         .catch(function (errorMessage) {
             console.error(errorMessage);
@@ -956,7 +961,8 @@ function getReqCommentList(pageNum) {
                     var sender = comment.c_req_comment_sender;
                     var date = dateFormat(comment.c_req_comment_date);
                     var title = comment.c_title;
-                    var contents = `<p id="contents">` + comment.c_req_comment_contents+`</p>`;
+                    var req_comment_contents = comment.c_req_comment_contents.replace(/\n/g, '<br>');
+                    var contents = `<p id="contents">` + req_comment_contents +`</p>`;
                     var $newHtml;
 
                     /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
@@ -999,10 +1005,10 @@ function getReqCommentList(pageNum) {
                                             ${contents}
                                         </div>
                                         <div class="edit-comment" style="display: none;">
-                                            <textarea class="edit-text" rows="1"></textarea>
+                                            <textarea class="edit-text form-control"></textarea>
                                             <div style="text-align: right;">
-                                                <button class="save-button" value="${c_id}">Save</button>
-                                                <button class="cancel-button">Cancel</button>
+                                                <button class="mt-2 btn btn-default btn-sm edit-save-button" value="${c_id}">저장</button>
+                                                <button class="mt-2 btn btn-default btn-sm cancel-button">취소</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1014,13 +1020,19 @@ function getReqCommentList(pageNum) {
 
                 $('.edit-chat-btn').on('click', function(e){
                     var parentDiv = $(this).closest('.chat-message-body');
-                    var commentText = parentDiv.find('#contents').text();
+                    var commentText = parentDiv.find('#contents').html();
+                    commentText = commentText.replace(/<br>/g, "\n");
 
                     parentDiv.find('.edit-text').val(commentText);
                     parentDiv.find('#contents').hide();
                     parentDiv.find('.dropdown-button').hide();
+                    parentDiv.find('.dropdown-content').addClass('hide');
                     parentDiv.find('.edit-comment').show();
 
+                    $('.edit-text').on('input', function () {
+                        this.style.height = 'auto';
+                        this.style.height = (this.scrollHeight) + 'px';
+                    });
                     console.log(commentText);
                     // req_comment_edit_btn_click(c_id);
                 });
@@ -1034,10 +1046,11 @@ function getReqCommentList(pageNum) {
                     var commentDiv = $(this).closest('.chat-message-body');
                     commentDiv.find('#contents').show();
                     commentDiv.find('.dropdown-button').show();
+                    commentDiv.find('.dropdown-content').removeClass('hide');
                     commentDiv.find('.edit-comment').hide();
                 });
 
-                $('.save-button').on('click', function(e){
+                $('.edit-save-button').on('click', function(e){
                     var c_id = $(this).val();
                     console.log(c_id);
                     var editText = $(this).closest('.edit-comment');
@@ -1108,7 +1121,7 @@ function req_comment_save_btn_click() {
 }
 
 function addReqComment() {
-    $('.send-chat-btn').on('click', function(e){
+    $('#req_comment_save_btn').on('click', function(e){
         var content = $('#comment-contents').val();
         if (content === null || content === '') {
             alert("질문을 작성 후 등록해주세요.");
