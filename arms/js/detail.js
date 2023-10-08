@@ -4,6 +4,7 @@
 var selectedJsTreeId; // 요구사항 아이디
 var calledAPIs = {};
 var visibilityStatus = {
+    '#stats': false,
     '#detail' : false,
     '#version': false,
     '#allreq': false,
@@ -84,8 +85,19 @@ function execDocReady() {
             "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
             // Template Main CSS File
             "../reference/jquery-plugins/MyResume/assets/css/style.css"
-        ]
+        ],
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+        [
+            // Chart
+            "../reference/light-blue/lib/nvd3/lib/d3.v2.js",
+            "../reference/light-blue/lib/nvd3/nv.d3.custom.js",
+            "../reference/light-blue/lib/nvd3/src/utils.js",
+            "../reference/light-blue/lib/nvd3/src/models/legend.js",
+            "../reference/light-blue/lib/nvd3/src/models/pie.js",
+            "../reference/light-blue/lib/nvd3/src/models/pieChartTotal.js",
+            "../reference/light-blue/lib/nvd3/stream_layers.js",
+            "./html/armsDetailExceptTemplate/assets/js/stats.js"
+        ]
     ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -98,6 +110,10 @@ function execDocReady() {
 
             // 메뉴 클릭 이벤트
             menuClick();
+
+            // 통계정보 탭 (맨 처음 화면이므로 무조건 로드)
+            bindStatsTab();
+            statsViewTabClick();
 
             // 상세정보 탭 클릭 이벤트
             reqDetailViewTabClick();
@@ -200,6 +216,10 @@ function checkVisible( element, check = 'visible' ) {
 function scrollApiFunc() {
     for (var element in visibilityStatus) {
         if (!visibilityStatus[element] && checkVisible(element)) {
+            if(element === "#stats") {
+                bindStatsTab();
+            }
+
             if(element === "#detail") {
                 getDetailViewTab();
             }
@@ -244,6 +264,37 @@ function menuClick() {
         $(this).toggleClass('bi-list');
         $(this).toggleClass('bi-x');
     });
+}
+
+// ------------------ 통계정보 ------------------ //
+function statsViewTabClick() {
+    $("#get_stats").click(function() {
+        bindStatsTab();
+    });
+}
+
+function bindStatsTab() {
+
+    if (callAPI("statsAPI")) {
+        return;
+    }
+
+    console.log("Stats Tab ::::");
+
+    // TODO: api 호출 및 데이터 바인딩
+
+    // 현재는 임시 데이터로 로드
+    var json = {
+        "openCount": 2,
+        "underwayCount": 3,
+        "completeCount": 5,
+        "etcCount": 0
+    };
+
+    loadChart("#product-chart-pie svg", "#product-chart-footer", json);
+    loadChart("#requirement-chart-pie svg", "#requirement-chart-footer", json);
+
+    calledAPIs["statsAPI"] = true;
 }
 
 // ------------------ 상세보기 ------------------ //
