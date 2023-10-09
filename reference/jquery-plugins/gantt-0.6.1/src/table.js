@@ -6,12 +6,7 @@ export default class Table {
     }
 
     setup_contents(contents) {
-        const default_contents = {
-            name: 'Title',
-            start: 'Start Date',
-            end: 'End Date',
-        };
-        this.contents = { ...default_contents, ...contents };
+        this.contents = contents;
     }
 
     draw_table_header(attr) {

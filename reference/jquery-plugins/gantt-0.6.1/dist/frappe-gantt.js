@@ -963,12 +963,7 @@ var Gantt = (function () {
         }
 
         setup_contents(contents) {
-            const default_contents = {
-                name: 'Title',
-                start: 'Start Date',
-                end: 'End Date',
-            };
-            this.contents = { ...default_contents, ...contents };
+            this.contents = contents;
         }
 
         draw_table_header(attr) {
@@ -1013,6 +1008,52 @@ var Gantt = (function () {
         }
     }
 
+    class Split {
+        constructor(wrapper) {
+            this.draw_split_bar(wrapper);
+        }
+
+        draw_split_bar(elem) {
+            const $split_bar = document.createElement('div');
+            $split_bar.classList.add('split-bar');
+
+            let x = 0;
+
+            const mouseDownHandler = function (e) {
+                x = e.clientX;
+
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+            };
+
+            const mouseMoveHandler = function (e) {
+                const $table = $split_bar.previousElementSibling;
+                const $gantt = $split_bar.nextSibling;
+
+                const dx = e.clientX - x;
+                const left = Math.max(
+                    0,
+                    Math.min($split_bar.offsetLeft + dx, elem.clientWidth)
+                );
+
+                $.style($split_bar, { left: `${left}px` });
+                $.style($table, { 'flex-basis': `${left}px` });
+                $.style($gantt, { 'flex-basis': `${elem.clientWidth - left}px` });
+
+                x = e.clientX;
+            };
+
+            const mouseUpHandler = function () {
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', mouseUpHandler);
+            };
+
+            $split_bar.addEventListener('mousedown', mouseDownHandler);
+
+            elem.prepend($split_bar);
+        }
+    }
+
     const VIEW_MODE = {
         QUARTER_DAY: 'Quarter Day',
         HALF_DAY: 'Half Day',
@@ -1023,7 +1064,7 @@ var Gantt = (function () {
     };
 
     class Gantt {
-        constructor(wrapper, tasks, options) {
+        constructor(wrapper, tasks, options, contents) {
             this.setup_wrapper(wrapper);
             this.setup_options(options);
             this.setup_tasks(tasks);
@@ -1031,7 +1072,8 @@ var Gantt = (function () {
             this.change_view_mode();
             this.bind_events();
 
-            this.setup_table();
+            this.setup_split_bar();
+            this.setup_table(contents);
         }
 
         setup_wrapper(element) {
@@ -1306,8 +1348,12 @@ var Gantt = (function () {
             }
         }
 
-        setup_table() {
-            this.table = new Table({});
+        setup_split_bar() {
+            this.split = new Split(this.$wrapper);
+        }
+
+        setup_table(contents) {
+            this.table = new Table(contents);
             this.make_table();
         }
 

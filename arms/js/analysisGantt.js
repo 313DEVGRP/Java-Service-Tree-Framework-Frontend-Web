@@ -307,7 +307,19 @@ function getStatusMonitorData(selectId, endPointUrl) {
 			200: function (data) {
 				if (!isEmpty(data)) {
 					const tasks = setGanttTasks(data);
-					gantt = new Gantt("#gantt-target", tasks);
+					gantt = new Gantt(
+						"#gantt-target",
+						tasks,
+						{ language: "kr" },
+						{
+							assignee: "Assignee",
+							reporter: "Reporter",
+							name: "Title",
+							start: "Start Date",
+							end: "End Date",
+							priority: "Priority"
+						}
+					);
 				}
 			}
 		}
@@ -334,6 +346,8 @@ function setGanttTasks(data) {
 	return data.reduce((acc, cur) => {
 		acc.push({
 			id: String(cur.c_id),
+			assignee: cur.c_issue_assignee,
+			reporter: cur.c_issue_reporter,
 			name: cur.c_title,
 			start: getDate(cur.c_issue_create_date),
 			end: getDate(
@@ -341,6 +355,7 @@ function setGanttTasks(data) {
 			),
 			progress: 20,
 			dependencies: "",
+			priority: cur.c_issue_priority_name,
 			custom_class: cur.c_issue_priority_name // optional
 		});
 

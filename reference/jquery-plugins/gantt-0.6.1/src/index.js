@@ -4,6 +4,7 @@ import Bar from './bar';
 import Arrow from './arrow';
 import Popup from './popup';
 import Table from './table';
+import Split from './split';
 
 import './gantt.scss';
 
@@ -17,7 +18,7 @@ const VIEW_MODE = {
 };
 
 export default class Gantt {
-    constructor(wrapper, tasks, options) {
+    constructor(wrapper, tasks, options, contents) {
         this.setup_wrapper(wrapper);
         this.setup_options(options);
         this.setup_tasks(tasks);
@@ -25,7 +26,8 @@ export default class Gantt {
         this.change_view_mode();
         this.bind_events();
 
-        this.setup_table();
+        this.setup_split_bar();
+        this.setup_table(contents);
     }
 
     setup_wrapper(element) {
@@ -300,8 +302,12 @@ export default class Gantt {
         }
     }
 
-    setup_table() {
-        this.table = new Table({});
+    setup_split_bar() {
+        this.split = new Split(this.$wrapper);
+    }
+
+    setup_table(contents) {
+        this.table = new Table(contents);
         this.make_table();
     }
 
