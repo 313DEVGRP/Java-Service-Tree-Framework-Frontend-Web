@@ -7,6 +7,10 @@
     padding-bottom: 0px;
 }
 
+.shadow-box {
+    border-top: 3px solid #d2d6de;
+    box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
+}
 /* 파일 관련 CSS */
 .portfolio .portfolio-wrap .portfolio-info {
     overflow-wrap: anywhere;
@@ -140,8 +144,6 @@
     /*height: 600px;*/
     /*width: 100%;*/
     margin: 2%;
-    border-top: 3px solid #d2d6de;
-    box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
 }
 
 .widget .body {
@@ -524,11 +526,9 @@
     position: relative;
     border-radius: 3px;
     background: #ffffff;
-    border-top: 3px solid #d2d6de;
     margin: 2%;
     /*width: 100%;*/
     /*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);*/
-    box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
     padding: 10px 12px;
 }
 
