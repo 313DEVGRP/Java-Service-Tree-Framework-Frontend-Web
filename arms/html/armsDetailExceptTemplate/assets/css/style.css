@@ -460,36 +460,7 @@ section {
   transition: 0.9s;
   background-color: #0563bb;
 }
-/*--------------------------------------------------------------
-# 요구사항 상세
---------------------------------------------------------------*/
-#detailview_req_contents{
-  height:650px;
-}
-@media (max-width: 1400px){
-    #detailview_req_contents{
-      height:680px;
-    }
-}
-@media (max-width: 1200px){
-    #detailview_req_contents{
-      height:850px;
-    }
-}
 
-.detailview_title{
-    word-break: keep-all;
-}
-
-/*--------------------------------------------------------------
-# 요구사항 목록
---------------------------------------------------------------*/
-#allreq_pdservice_name{
-    color: #0563bb;
-}
-#allreq_pdservice_version{
-    color: #0563bb;
-}
 
 /*--------------------------------------------------------------
 # Resume
