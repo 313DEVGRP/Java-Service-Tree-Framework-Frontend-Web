@@ -964,9 +964,9 @@ var Gantt = (function () {
 
         setup_contents(contents) {
             const default_contents = {
-                start: 'Start',
-                end: 'End',
                 name: 'Title',
+                start: 'Start Date',
+                end: 'End Date',
             };
             this.contents = { ...default_contents, ...contents };
         }
@@ -985,9 +985,31 @@ var Gantt = (function () {
             $thead.appendChild($tr);
             $thead.classList.add('table-header');
 
-            $.style($thead, attr);
+            $.style($tr, attr);
 
             return $thead;
+        }
+
+        draw_table_body(tasks, attr) {
+            const $tbody = document.createElement('tbody');
+
+            tasks.forEach((task) => {
+                const $tr = document.createElement('tr');
+                $.style($tr, attr);
+
+                Object.keys(this.contents).forEach((content) => {
+                    const $td = document.createElement('td');
+                    $td.textContent = task[content];
+
+                    $tr.append($td);
+                });
+
+                $tbody.append($tr);
+            });
+
+            $tbody.classList.add('table-body');
+
+            return $tbody;
         }
     }
 
@@ -1290,21 +1312,23 @@ var Gantt = (function () {
         }
 
         make_table() {
+            const $table_container = document.createElement('div');
+            $table_container.classList.add('table-container');
             const $table = document.createElement('table');
-            $table.classList.add('table-container');
 
-            const $table_header = this.make_table_header();
+            const $table_header = this.table.draw_table_header({
+                height: this.options.header_height + 10 + 'px',
+            });
+            const $table_body = this.table.draw_table_body(this.tasks, {
+                height: this.options.bar_height + this.options.padding + 'px',
+            });
 
             $table.append($table_header);
-            this.$wrapper.prepend($table);
-        }
+            $table.append($table_body);
 
-        make_table_rows() {}
+            $table_container.append($table);
 
-        make_table_header() {
-            const header_height = this.options.header_height + 10 + 'px';
-
-            return this.table.draw_table_header({ height: header_height });
+            this.$wrapper.prepend($table_container);
         }
 
         make_grid() {
@@ -1319,7 +1343,7 @@ var Gantt = (function () {
             const grid_width = this.dates.length * this.options.column_width;
             const grid_height =
                 this.options.header_height +
-              (this.options.padding / 2) +
+                this.options.padding +
                 (this.options.bar_height + this.options.padding) *
                     this.tasks.length;
 
@@ -1333,7 +1357,7 @@ var Gantt = (function () {
             });
 
             $.attr(this.$svg, {
-                height: grid_height,
+                height: grid_height + this.options.padding + 100,
                 width: '100%',
             });
         }
