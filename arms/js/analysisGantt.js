@@ -333,7 +333,7 @@ function popup_size_setting() {
 function setGanttTasks(data) {
 	return data.reduce((acc, cur) => {
 		acc.push({
-			id: cur.c_id,
+			id: String(cur.c_id),
 			name: cur.c_title,
 			start: getDate(cur.c_issue_create_date),
 			end: getDate(
