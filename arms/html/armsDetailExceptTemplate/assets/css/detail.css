@@ -1073,6 +1073,72 @@ svg {
     font-size: 11px;
     color: #f8f8f8;
 }
+/*--------------------------------------------------------------
+# 요구사항 상세
+--------------------------------------------------------------*/
+#detailview_req_contents{
+  height:675px;
+}
+@media (max-width: 1400px){
+    #detailview_req_contents{
+      height:700px;
+    }
+}
+
+@media (max-width: 1220px){
+    #detailview_req_contents{
+      height:820px;
+    }
+}
+
+@media (max-width: 1200px){
+    #detailview_req_contents{
+      height:915px;
+    }
+}
+
+@media (max-width: 1030px){
+    #detailview_req_contents{
+      height:965px;
+    }
+}
+
+.detailview_title{
+    word-break: keep-all;
+}
+
+.detail-item{
+    border-radius: 3px;
+    padding: 12px 10px 12px 10px;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-truncate:hover {
+    cursor: help;
+}
+
+.text-truncate.show-full {
+ animation: slide-in 4s linear backwards;
+}
+
+@keyframes slide-in {
+    from { text-indent: 0%; }
+    to { text-indent: -30%; }
+}
+/*--------------------------------------------------------------
+# 요구사항 목록
+--------------------------------------------------------------*/
+#allreq_pdservice_name{
+    color: #0563bb;
+}
+#allreq_pdservice_version{
+    color: #0563bb;
+}
 
 /*--------------------------------------------------------------
 # 버전
