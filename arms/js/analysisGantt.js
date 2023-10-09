@@ -296,6 +296,8 @@ function bind_VersionData_By_PdService() {
 ////////////////////////////////////////////////////////////////////////////////////////
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function getStatusMonitorData(selectId, endPointUrl) {
+	$("#gantt-target").empty();
+
 	$.ajax({
 		url: "/auth-user/api/arms/reqStatus" + endPointUrl,
 		type: "GET",
@@ -303,8 +305,10 @@ function getStatusMonitorData(selectId, endPointUrl) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				const tasks = setGanttTasks(data);
-				gantt = new Gantt("#gantt-target", tasks);
+				if (!isEmpty(data)) {
+					const tasks = setGanttTasks(data);
+					gantt = new Gantt("#gantt-target", tasks);
+				}
 			}
 		}
 	});

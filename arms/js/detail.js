@@ -755,6 +755,18 @@ function fileLoadByPdService() {
         dataType: "json"
     }).done(function (result) {
         console.log(result.files);
+
+        if (result.files.length === 0) {
+            let $container = $('#files-container');
+
+            var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px;">
+                                    <i class="bi bi-file-earmark-x" style="font-size:50px;"></i><br>
+                                    등록된 파일이 없습니다.
+                                  </p>`);
+            $container.append($noDataHtml);
+            return;
+        }
+
         let $portfolioContainer = $('.portfolio-container');
         if ($portfolioContainer.length) {
             let portfolioIsotope = new Isotope($portfolioContainer[0], {
@@ -941,17 +953,15 @@ function getReqCommentList(pageNum) {
                 var $chatMessages = $('#chat_messages');
                 $chatMessages.empty();
 
-                console.log(data.response)
+                console.log(data.response);
 
                 if (data.response.length === 0) {
-                    var reqCommentList = $('#chat_messages').html();
-
-                    if($.trim(reqCommentList) === '') {
-                        /* 게시글이 없을 경우 처리 필요 */
-                        console.log('No content');
-                    } else {
-                        console.log('Content exists');
-                    }
+                    /* 게시글이 없을 경우 처리 필요 */
+                    var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px; margin-top: 40px;">
+                                            등록된 글이 없습니다.
+                                         </p>`);
+                    $chatMessages.append($noDataHtml);
+                    return;
                 }
 
                 for (var k in data.response) {
