@@ -7,9 +7,9 @@ export default class Table {
 
     setup_contents(contents) {
         const default_contents = {
-            start: 'Start',
-            end: 'End',
             name: 'Title',
+            start: 'Start Date',
+            end: 'End Date',
         };
         this.contents = { ...default_contents, ...contents };
     }
@@ -28,8 +28,30 @@ export default class Table {
         $thead.appendChild($tr);
         $thead.classList.add('table-header');
 
-        $.style($thead, attr);
+        $.style($tr, attr);
 
         return $thead;
+    }
+
+    draw_table_body(tasks, attr) {
+        const $tbody = document.createElement('tbody');
+
+        tasks.forEach((task) => {
+            const $tr = document.createElement('tr');
+            $.style($tr, attr);
+
+            Object.keys(this.contents).forEach((content) => {
+                const $td = document.createElement('td');
+                $td.textContent = task[content];
+
+                $tr.append($td);
+            });
+
+            $tbody.append($tr);
+        });
+
+        $tbody.classList.add('table-body');
+
+        return $tbody;
     }
 }
