@@ -114,22 +114,19 @@
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
-										투입된 작업 그룹 현황 컬러표
+										Time 분석
 									</span>
                                 </h4>
                             </header>
                             <div class="body">
                                 <ul class="color-labels">
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #3457d5"></i>
-                                            <span class="label-name font12">특급</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #5d8aa8"></i>
-                                            <span class="label-name font12">고급</span>
-                                        </li>
+                                    <div id="light">
+                                        <span class="active" id="red"></span>
+                                        <span id="orange"></span>
+                                        <span id="green"></span>
                                     </div>
+
+                                    <button>Switch Light</button>
                                     <div>
                                         <li>
                                             <i class="fa fa-circle" style="color: #2c5571"></i>
@@ -571,6 +568,42 @@
     img {
         vertical-align: middle;
         border-style: none;
+    }
+
+    /*! Light */
+    #light {
+        background-color: #000;
+        box-shadow: 0 0 5px rgba(0,0,0, .8);
+        overflow: hidden;
+        padding: 0 0 4px;
+        width: 40px;
+        margin-left: 30px;
+        transform:rotate(270deg);
+    }
+
+    #light span {
+        border-radius: 50px;
+        display: block;
+        height: 30px;
+        margin: 4px auto 0;
+        opacity: .5;
+        width: 30px;
+    }
+
+    /*! Light colours */
+    #red    { background-color: red; }
+    #orange { background-color: orange; }
+    #green  { background-color: green; }
+
+    /*! Active states */
+    #light span.active    { opacity: 1; }
+    #light #red.active    { box-shadow: 0 0 10px red; }
+    #light #orange.active { box-shadow: 0 0 10px orange; }
+    #light #green.active  { box-shadow: 0 0 10px green; }
+
+    /*! Toggle button */
+    button {
+        margin-top: 10px;
     }
 
 </style>
