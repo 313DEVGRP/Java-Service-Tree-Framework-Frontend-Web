@@ -837,14 +837,14 @@
 
 			<!-- ======= 파일 목록 ======= -->
 			<section id="files" class="portfolio section-bg">
-				<div class="container" data-aos="fade-up">
+				<div id="files-container" class="container" data-aos="fade-up">
 
 					<div class="section-title">
 						<h2>제품관련 파일목록</h2>
 						<p>해당 탭은 제품관련 이미지, 기획서, 기타 파일들을 확인할 수 있는 탭입니다.</p>
 					</div>
 
-					<div class="row">
+					<div class="row mt-3">
 						<div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
 							<ul id="portfolio-flters">
 								<li data-filter="*" class="filter-active">All</li>
@@ -868,7 +868,12 @@
 						<h2>Q & A</h2>
 						<p>제품 서비스에 대한 질문 및 답변을 확인할 수 있는 탭입니다.</p>
 					</div>
-					<div class="widget large">
+					<div class="widget large shadow-box box">
+						<div class="box-header">
+							<h3 class="box-title"><i class="bi bi-chat-dots"></i>
+								<small>글 목록</small>
+							</h3>
+						</div>
 						<div class="body">
 							<div id="chat" class="chat">
 								<div id="chat_messages" class="chat-messages"></div>
@@ -879,9 +884,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="box">
+					<div class="box shadow-box">
 						<div class="box-header">
-							<h3 class="box-title">Q & A
+							<h3 class="box-title"><i class="bi bi-pen"></i>
 								<small>질문하기</small>
 							</h3>
 							<div class="pull-right box-tools">
