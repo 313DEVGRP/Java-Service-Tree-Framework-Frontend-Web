@@ -419,7 +419,7 @@
 
 					<div class="section-title">
 						<h2>요구사항 상세</h2>
-						<p>개발자를 위한 요구사항의 상세 정보를 확인하기 위한 페이지.</p>
+						<p>요구사항의 상세 정보를 확인하기 위한 페이지입니다.</p>
 					</div>
 
 					<div class="row">
@@ -428,14 +428,14 @@
 							<p class="fst-italic">
 
 							</p>
-							<div class="row">
+							<div class="row ">
 								<!--요구사항 세부 내용 좌측 영역-->
-								<div class="col-lg-6">
+								<div class="col-lg-6 ">
 									<ul>
 										<!--요구사항 아이디-->
 										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>요구사항 제품<sup>서비스</sup></strong>
+											<div class="col-lg-4 d-flex  align-items-center  p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">제품(서비스)</strong>
 											</div>
 											<div class="col-lg-8">
 												<div class="input-group">
@@ -446,8 +446,8 @@
 										</li>
 										<!--요구사항 아이디-->
 										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>요구사항 아이디</strong>
+											<div class="col-lg-4 d-flex  align-items-center  p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 아이디</strong>
 											</div>
 											<div class="col-lg-8">
 												<div class="input-group">
@@ -458,8 +458,8 @@
 										</li>
 										<!--요구사항 제목-->
 										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>요구사항 제목</strong>
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 제목</strong>
 											</div>
 											<div class="col-lg-8">
 												<div class="input-group">
@@ -468,15 +468,10 @@
 												</div>
 											</div>
 										</li>
-									</ul>
-								</div>
-								<!--요구사항 연관 버전, 작성일, 작성자-->
-								<div class="col-lg-6">
-									<ul>
 										<!--요구사항 연관 버전-->
 										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>요구사항 연관 버전</strong>
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 버전</strong>
 											</div>
 											<div class="col-lg-8">
 												<div class="input-group">
@@ -487,8 +482,8 @@
 										</li>
 										<!--요구사항 작성자-->
 										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>요구사항 작성일</strong>
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 작성일</strong>
 											</div>
 											<div class="col-lg-8">
 												<div class="input-group">
@@ -499,107 +494,98 @@
 										</li>
 										<!--요구사항 최근 작성일-->
 										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>요구사항 작성자</strong>
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 작성자</strong>
 											</div>
 											<div class="col-lg-8">
 												<div class="input-group">
 													<div class="input-group-text"><i class="bi bi-person"></i></div>
-													<div class="form-control" id="detailview_req_writer"></div>
+													<div class="form-control text-truncate" id="detailview_req_writer"></div>
 												</div>
 											</div>
 										</li>
+
+										<!--요구사항 연관 버전-->
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">제품(서비스) 리뷰어</strong>
+											</div>
+											<div class="col-lg-8">
+											</div>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-dash"></i><p class="detailview_title"><I>INFO: 공동 책임자</I></p>
+											</div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person-check"></i></div>
+													<div class="form-control text-truncate" id="detailview_req_reviewer01"></div>
+												</div>
+											</div>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-dash"></i><p class="detailview_title"><I>INFO: 공동 책임자</I></p>
+											</div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person-check"></i></div>
+													<div class="form-control text-truncate" id="detailview_req_reviewer02"></div>
+												</div>
+											</div>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-dash"></i><p class="detailview_title"><I>INFO: 공동 책임자</I></p>
+											</div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person-check"></i></div>
+													<div class="form-control text-truncate" id="detailview_req_reviewer03"></div>
+												</div>
+											</div>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-dash"></i><p class="detailview_title"><I>INFO: 공동 책임자</I></p>
+											</div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person-check"></i></div>
+													<div class="form-control text-truncate" id="detailview_req_reviewer04"></div>
+												</div>
+											</div>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center p-2">
+												<i class="bi bi-dash"></i><p class="detailview_title"><I>INFO: 공동 책임자</I></p>
+											</div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person-check"></i></div>
+													<div class="form-control text-truncate" id="detailview_req_reviewer05"></div>
+												</div>
+											</div>
+										</li>
+
 									</ul>
 								</div>
-							</div>
-							<!--요구사항 제품 서버스 리뷰어 영역-->
-							<div class="row">
-								<div class="col-lg-6">
+								<div class="col-lg-6 ">
 									<ul>
 										<!--요구사항 연관 버전-->
 										<li class="col-lg-12 row">
 											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-chevron-right"></i> <strong>제품(서비스) 리뷰어</strong>
-											</div>
-											<div class="col-lg-8">
-											</div>
-										</li>
-										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-dash"></i> INFO: 공동 책임자
-											</div>
-											<div class="col-lg-8">
-												<div class="input-group">
-													<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-													<div class="form-control" id="detailview_req_reviewer01"></div>
-												</div>
-											</div>
-										</li>
-										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-dash"></i> INFO: 공동 책임자
-											</div>
-											<div class="col-lg-8">
-												<div class="input-group">
-													<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-													<div class="form-control" id="detailview_req_reviewer02"></div>
-												</div>
+												<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 상세</strong>
 											</div>
 										</li>
 									</ul>
+									<div class="col-lg-12 form-control overflow-auto" id="detailview_req_contents" >
+									</div>
 								</div>
-								<div class="col-lg-6">
-									<ul>
-										<!--요구사항 연관 버전-->
-										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-dash"></i> INFO: 공동 책임자
-											</div>
-											<div class="col-lg-8">
-												<div class="input-group">
-													<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-													<div class="form-control" id="detailview_req_reviewer03"></div>
-												</div>
-											</div>
-										</li>
-										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-dash"></i> INFO: 공동 책임자
-											</div>
-											<div class="col-lg-8">
-												<div class="input-group">
-													<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-													<div class="form-control" id="detailview_req_reviewer04"></div>
-												</div>
-											</div>
-										</li>
-										<li class="col-lg-12 row">
-											<div class="col-lg-4 d-flex  align-items-center">
-												<i class="bi bi-dash"></i> INFO: 공동 책임자
-											</div>
-											<div class="col-lg-8">
-												<div class="input-group">
-													<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-													<div class="form-control" id="detailview_req_reviewer05"></div>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
+
 							</div>
-							<!-- 요구사항 상세 내용-->
-							<div class="col-lg-12">
-								<ul>
-									<!--요구사항 연관 버전-->
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right"></i> <strong>요구사항 상세</strong>
-										</div>
-									</li>
-								</ul>
-								<div class="col-lg-12 form-control overflow-auto" id="detailview_req_contents" >
-								</div>
-							</div>
+
 							<p>
 							</p>
 						</div>
@@ -851,14 +837,14 @@
 
 			<!-- ======= 파일 목록 ======= -->
 			<section id="files" class="portfolio section-bg">
-				<div id="files-container" class="container" data-aos="fade-up">
+				<div class="container" data-aos="fade-up">
 
 					<div class="section-title">
 						<h2>제품관련 파일목록</h2>
 						<p>해당 탭은 제품관련 이미지, 기획서, 기타 파일들을 확인할 수 있는 탭입니다.</p>
 					</div>
 
-					<div class="row mt-3">
+					<div class="row">
 						<div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
 							<ul id="portfolio-flters">
 								<li data-filter="*" class="filter-active">All</li>
@@ -882,12 +868,7 @@
 						<h2>Q & A</h2>
 						<p>제품 서비스에 대한 질문 및 답변을 확인할 수 있는 탭입니다.</p>
 					</div>
-					<div class="widget large shadow-box box">
-						<div class="box-header">
-							<h3 class="box-title"><i class="bi bi-chat-dots"></i>
-								<small>글 목록</small>
-							</h3>
-						</div>
+					<div class="widget large">
 						<div class="body">
 							<div id="chat" class="chat">
 								<div id="chat_messages" class="chat-messages"></div>
@@ -898,9 +879,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="box shadow-box">
+					<div class="box">
 						<div class="box-header">
-							<h3 class="box-title"><i class="bi bi-pen"></i>
+							<h3 class="box-title">Q & A
 								<small>질문하기</small>
 							</h3>
 							<div class="pull-right box-tools">
