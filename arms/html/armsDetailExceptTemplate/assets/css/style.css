@@ -960,7 +960,21 @@ section {
 # 요구사항 상세
 --------------------------------------------------------------*/
 #detailview_req_contents{
-  height:500px;
+  height:650px;
+}
+@media (max-width: 1400px){
+    #detailview_req_contents{
+      height:680px;
+    }
+}
+@media (max-width: 1200px){
+    #detailview_req_contents{
+      height:850px;
+    }
+}
+
+.detailview_title{
+    word-break: keep-all;
 }
 /*--------------------------------------------------------------
 # 버전
