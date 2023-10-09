@@ -257,7 +257,7 @@ function scrollApiFunc() {
 
 // ------------------ 계정 정보 ------------------ //
 function bindAccountInfo() {
-    $("#user-name").html(userName);
+    $("#user-name").html(userName + "<span style=\"font-weight: normal\">님</span>");
     $("#user-name-detail").html(fullName + ' (' + userName + ')');
     $("#user-email").html(userEmail);
 }
@@ -440,6 +440,9 @@ function bindDataVersionTab() {
 
         $("#version-product-name").html(json.c_title);
         $("#version-accordion").jsonMenu(selectedPdServiceVersion, json.pdServiceVersionEntities, { speed: 5000 });
+        $(".version-list").slimscroll({
+            height: "512px"
+        });
 
         calledAPIs["versionAPI"] = true;
     });
@@ -473,7 +476,6 @@ function initVersionData() {
         // 버전 데이터 바인딩
         var element = $("a[data-value='" + c_id + "']");
         console.log("해당 요구사항의 버전 요소: ", element[0]);
-        element[0].style.background = "rgba(241, 240, 71, 0.3)";
 
         versionClick(element[0], c_id);
     };
@@ -483,8 +485,10 @@ function versionClick(element, c_id) {
     console.log("versionClick:: c_id  -> ", c_id);
     $("a[name='versionLink_List']").each(function () {
         this.style.background = "";
+        this.style.color = "";
     });
-    element.style.background = "rgba(241, 240, 71, 0.3)";
+    element.style.background = "rgba(2, 59, 109, 0.7)";
+    element.style.color = "rgb(255, 255, 255)";
     console.log(element);
 
     $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
