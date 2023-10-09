@@ -160,25 +160,21 @@ function makePdServiceSelectBox() {
 		//getIssueStatus($("#selected_pdService").val(), endPointUrl);
 		//통계로드
 		//statisticsLoad($("#selected_pdService").val(), null);
-		var gaugeMockData = gaugeData;
-		console.log("=== versionProgress start ===");
-		console.log(gaugeMockData);
-		console.log("=== versionProgress end ===")
-		if(gaugeMockData.length != 0) {
-			d3.json("./mock/versionGauge.json", function (data) {
-				//var versionProgress = data.response;
-				var versionProgress = data;
-				console.log("=== versionProgress start ===");
-				console.log(versionProgress);
-				console.log("=== versionProgress end ===")
-				if (versionProgress.length !== 0) {
-					$("#notifyNoVersion").hide();
-					$("#project-start").show();
-					$("#project-end").show();
-					drawVersionProgress(versionProgress);
-				}
-			});
-		}
+
+		d3.json("./mock/versionGauge.json", function (data) {
+			//var versionProgress = data.response;
+			var versionProgress = data;
+			console.log("=== versionProgress start ===");
+			console.log(versionProgress);
+			console.log("=== versionProgress end ===")
+			if (versionProgress.length !== 0) {
+				$("#notifyNoVersion").hide();
+				$("#project-start").show();
+				$("#project-end").show();
+				drawVersionProgress(versionProgress);
+			}
+		});
+
 	});
 } // end makePdServiceSelectBox()
 
