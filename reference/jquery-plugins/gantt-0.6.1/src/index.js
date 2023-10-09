@@ -306,21 +306,23 @@ export default class Gantt {
     }
 
     make_table() {
+        const $table_container = document.createElement('div');
+        $table_container.classList.add('table-container');
         const $table = document.createElement('table');
-        $table.classList.add('table-container');
 
-        const $table_header = this.make_table_header();
+        const $table_header = this.table.draw_table_header({
+            height: this.options.header_height + 10 + 'px',
+        });
+        const $table_body = this.table.draw_table_body(this.tasks, {
+            height: this.options.bar_height + this.options.padding + 'px',
+        });
 
         $table.append($table_header);
-        this.$wrapper.prepend($table);
-    }
+        $table.append($table_body);
 
-    make_table_rows() {}
+        $table_container.append($table);
 
-    make_table_header() {
-        const header_height = this.options.header_height + 10 + 'px';
-
-        return this.table.draw_table_header({ height: header_height });
+        this.$wrapper.prepend($table_container);
     }
 
     make_grid() {
