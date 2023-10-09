@@ -211,10 +211,70 @@
 				display: block;
 				width: 40px;
 				height: 3px;
-				background: #6a6b73;
+				background: #e5603b;
 				bottom: 0;
 				left: calc(50% - 20px);
 			}
+
+            .navi-wrap nav a:hover, .navi-wrap nav a:focus {
+                background: rgba(0,0,0,.08);
+                padding: 0px 15px 0px 15px;
+                border-radius: 5px;
+            }
+
+            a.gradient-btn
+            {
+                position: absolute;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                color: #fff;
+                text-transform:uppercase;
+                text-decoration: none;
+                font-family: sans-serif;
+                box-sizing: border-box;
+                background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+                background-size: 400%;
+                z-index: 1;
+            }
+
+            a.gradient-btn:hover
+            {
+                animation: animate 8s linear infinite;
+            }
+
+            @keyframes animate
+            {
+                0%
+                {
+                    background-position: 0%;
+                }
+
+                100%
+                {
+                    background-position: 400%;
+                }
+            }
+
+            a.gradient-btn:before
+            {
+                content:'';
+                position: absolute;
+                top: -5px;
+                left: -5px;
+                right: -5px;
+                bottom: -5px;
+                z-index: -1;
+                background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+                background-size: 400%;
+                border-radius: 10px;
+            }
+
+            a.gradient-btn:hover:before
+            {
+                filter: blur(20px);
+                opacity: 1;
+                animation: animate 8s linear infinite;
+            }
 		</style>
 		<script
 			type="text/javascript"
@@ -280,7 +340,7 @@
 					<a
 						href="#concept"
 						style="color: #a4c6ff; text-decoration: none">
-						<i class="fa fa-moon-o"></i>
+						<i class="fa fa-quote-left"></i>
 						Concept
 					</a>
 					<a
@@ -323,20 +383,11 @@
 				<nav>
 					<a
 						href="/313devgrp/arms/template.html?page=pdService"
-						class="btn btn-sm btn-transparent"
-						style="font-size: 13px; background-color: #e5603b; border-radius: 3px">
+						class="btn btn-sm btn-transparent gradient-btn"
+						style="font-size: 13px; background-color: #e5603b; border-radius: 10px; margin-left: -20px !important;">
 						<i class="fa fa-desktop"></i>
 						Demo&nbsp;
 						<i class="fa fa-arrow-right"></i>
-					</a>
-
-					<a
-						href="/313devgrp/arms/docs"
-						class="btn btn-sm btn-transparent"
-						style="font-size: 13px; background-color: #2477ff; border-radius: 3px">
-						<i class="fa fa-print"></i>
-						Document&nbsp;
-						<i class="fa fa-download"></i>
 					</a>
 				</nav>
 			</div>
