@@ -8,6 +8,7 @@ var dataTableRef;
 var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
+var dashboardColor;
 function execDocReady() {
 
 	var pluginGroups = [
@@ -19,7 +20,12 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload.js",
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
-			"../reference/jquery-plugins/d3-7.8.2/dist/d3.js"],
+			//"../reference/jquery-plugins/d3-7.8.2/dist/d3.js",
+			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js", //d3 변경
+			"./js/common/colorPalette.js",
+			"./mock/versionGauge.json",
+			"../reference/jquery-plugins/info-chart-v1/js/D.js"
+		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -65,6 +71,9 @@ function execDocReady() {
 			// 사이드 메뉴 색상 설정
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard");
+
+			dashboardColor = dashboardPalette.dashboardPalette04;
+			console.log(dashboardColor);
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
@@ -128,10 +137,28 @@ function makePdServiceSelectBox() {
 		}
 
 		//이슈리스트 진행 상황
-		getIssueStatus($("#selected_pdService").val(), endPointUrl);
+		//getIssueStatus($("#selected_pdService").val(), endPointUrl);
 		//통계로드
-		statisticsLoad($("#selected_pdService").val(), null);
-
+		//statisticsLoad($("#selected_pdService").val(), null);
+		var gaugeMockData = gaugeData;
+		console.log("=== versionProgress start ===");
+		console.log(gaugeMockData);
+		console.log("=== versionProgress end ===")
+		if(gaugeMockData.length != 0) {
+			d3.json("./mock/versionGauge.json", function (data) {
+				//var versionProgress = data.response;
+				var versionProgress = data;
+				console.log("=== versionProgress start ===");
+				console.log(versionProgress);
+				console.log("=== versionProgress end ===")
+				if (versionProgress.length !== 0) {
+					$("#notifyNoVersion").hide();
+					$("#project-start").show();
+					$("#project-end").show();
+					drawVersionProgress(versionProgress);
+				}
+			});
+		}
 	});
 } // end makePdServiceSelectBox()
 
@@ -314,4 +341,277 @@ function drawReqTimeSeries(data) {
 	}
 
 	update(data1)
+}
+
+//
+function drawVersionProgress(data) {
+	var Needle,
+		arc,
+		arcEndRad,
+		arcStartRad,
+		barWidth,   // 색션의 두께
+		chart,
+		chartInset, // 가운데로 들어간 정도
+		el,
+		endPadRad,
+		height,
+		i,
+		margin,		// 차트가 그려지는 위치 마진
+		needle,		// 침
+		numSections,// 색션의 수
+		padRad,
+		percToDeg, percToRad, degToRad, // 고정
+		percent,
+		radius, 	// 반지름
+		ref,
+		sectionIndx, // 색션 인덱스
+		sectionPerc, // 색션의 퍼센트
+		startPadRad,
+		svg,
+		totalPercent,
+		width,
+		versionName,
+		waveName;
+	
+	percent = 0.55;
+	barWidth = 25;
+	padRad = 0;
+	chartInset = 11;
+	totalPercent = 0.75;
+
+	margin = {
+		top: 20,
+		right: 20,
+		bottom: 30,
+		left: 20
+	};
+
+	width = 200;
+	height = width;
+	radius = Math.min(width, height) / 2.1;
+
+	// percToDeg percToRad degToRad 고정
+	percToDeg = function (perc) {
+		return perc * 360;
+	};
+
+	percToRad = function (perc) {
+		return degToRad(percToDeg(perc));
+	};
+
+	degToRad = function (deg) {
+		return (deg * Math.PI) / 180;
+	};
+	//
+	svg = d3
+		.select("#version-progress-bar")
+		.append("svg")
+		.attr("viewBox", [29, 19, width - 40, height - 40])
+		.append("g");
+
+	chart = svg
+		.append("g")
+		.attr("transform", "translate(" + (width + margin.left) / 2 + ", " + (height + margin.top) / 2 + ")");
+
+	var tooltip = d3
+		.select("#version-progress-bar")
+		.append("div")
+		.style("opacity", 0)
+		.attr("class", "tooltip")
+		.style("background-color", "white")
+		.style("border", "solid")
+		.style("border-width", "1px")
+		.style("border-radius", "5px")
+		.style("color", "black")
+		.style("padding", "10px");
+
+	var arc = d3
+		.arc()
+		.innerRadius(radius * 0.6)
+		.outerRadius(radius);
+
+	var outerArc = d3
+		.arc()
+		.innerRadius(radius * 0.9)
+		.outerRadius(radius * 0.9);
+
+	var totalDate;
+	var startDDay;
+	var endDDay;
+
+	numSections = data.length; // 전체 색션의 수(버전의 수)
+	sectionPerc = 1 / numSections / 2; //  '/ 2' for Half-circle
+
+	var fastestStartDate;
+	var latestEndDate;
+	// 가장 빠른날짜, 가장 느린날짜 세팅
+	for (var idx = 0; idx < data.length; idx++) {
+		if (idx === 0) {
+			fastestStartDate = data[idx].start_date;
+			latestEndDate = data[idx].end_date;
+		} else {
+			if (data[idx].start_date < fastestStartDate) {
+				fastestStartDate = data[idx].start_date;
+			}
+			if (data[idx].end_date > latestEndDate) {
+				latestEndDate = data[idx].end_date;
+			}
+		}
+	}
+
+	$("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
+	$("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
+
+	startDDay = Math.floor(
+		Math.abs((new Date(data[0].current_date) - new Date(fastestStartDate)) / (1000 * 60 * 60 * 24))
+	);
+	endDDay = Math.floor(
+		Math.abs((new Date(latestEndDate) - new Date(data[0].current_date)) / (1000 * 60 * 60 * 24)) + 1
+	);
+	$("#startDDay").text("+ " + startDDay);
+	$("#endDDay").text("- " + endDDay);
+
+	totalDate = startDDay + endDDay;
+
+	var mouseover = function (d) {
+		var subgroupName = d.version_name;
+		var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
+		tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
+		//var subgroupName = d.mig_wave_link;
+		//var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
+		//tooltip.html("차수: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
+
+		d3.selectAll(".myWave").style("opacity", 0.2);
+		d3.selectAll(".myStr").style("opacity", 0.2);
+		d3.selectAll(".wave-" + subgroupName).style("opacity", 1);
+	};
+
+	var mousemove = function (d) {
+		tooltip.style("left", d3.mouse(this)[0] + 120 + "px").style("top", d3.mouse(this)[1] + 150 + "px");
+	};
+
+	var mouseleave = function (d) {
+		tooltip.style("opacity", 0);
+		d3.selectAll(".myStr").style("opacity", 1);
+		d3.selectAll(".myWave").style("opacity", 1);
+	};
+
+	for (sectionIndx = i = 1, ref = numSections; 1 <= ref ? i <= ref : i >= ref; sectionIndx = 1 <= ref ? ++i : --i) {
+		arcStartRad = percToRad(totalPercent);
+		arcEndRad = arcStartRad + percToRad(sectionPerc);
+		totalPercent += sectionPerc;
+		startPadRad = sectionIndx === 0 ? 0 : padRad / 2;
+		endPadRad = sectionIndx === numSections ? 0 : padRad / 2;
+		versionName = data[sectionIndx - 1].version_name;
+		//waveName = data[sectionIndx - 1].mig_wave_link;
+
+		var sectionData = data[sectionIndx - 1];
+
+		var arc = d3
+			.arc()
+			.outerRadius(radius - chartInset)
+			.innerRadius(radius - chartInset - barWidth)
+			.startAngle(arcStartRad + startPadRad)
+			.endAngle(arcEndRad - endPadRad);
+
+		var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName);
+		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName);
+
+		section
+			.data([sectionData])
+			.enter()
+			.append("g")
+			.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionName)
+			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + waveName)
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave)
+			.append("path")
+			.attr("fill", function (d) {
+				return dashboardColor.projectProgressColor[(sectionIndx - 1) % data.length];
+			})
+			.attr("stroke", "white")
+			.style("stroke-width", "0.4px")
+			.attr("d", arc);
+
+		chart
+			.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName)
+			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName)
+			.append("text")
+			.attr("class", "no-select")
+			.text(function (d) {
+				return getStrLimit(d.mig_wave_name, 5);
+			})
+			.attr("x", function (d) {
+				return arc.centroid(d)[0];
+			})
+			.attr("y", function (d) {
+				return arc.centroid(d)[1] + 2;
+			})
+			.style("font-size", "7px")
+			.attr("text-anchor", "middle");
+	}
+
+	Needle = (function () {
+		function Needle(len, radius1) {
+			this.len = len;
+			this.radius = radius1;
+		}
+
+		Needle.prototype.drawOn = function (el, perc) {
+			el.append("circle")
+				.attr("class", "needle-center")
+				.attr("cx", 0)
+				.attr("cy", -10)
+				.attr("r", this.radius)
+				.attr("stroke", "white")
+				.style("stroke-width", "0.3px");
+			return el
+				.append("path")
+				.attr("class", "needle")
+				.attr("d", this.mkCmd(perc))
+				.attr("stroke", "white")
+				.style("stroke-width", "0.3px");
+		};
+
+		Needle.prototype.animateOn = function (el, perc) {
+			var self;
+			self = this;
+			return el
+				.selectAll(".needle")
+				.transition()
+				.delay(500)
+				.ease(d3.easeElasticOut)
+				.duration(3000)
+				.attrTween("progress", function () {
+					return function (percentOfPercent) {
+						var progress;
+						progress = percentOfPercent * perc;
+						return d3.select(".needle").attr("d", self.mkCmd(progress));
+					};
+				});
+		};
+
+		Needle.prototype.mkCmd = function (perc) {
+			var centerX, centerY, leftX, leftY, rightX, rightY, thetaRad, topX, topY;
+			thetaRad = percToRad(perc / 2);
+			centerX = 0;
+			centerY = -10;
+			topX = centerX - this.len * Math.cos(thetaRad);
+			topY = centerY - this.len * Math.sin(thetaRad);
+			leftX = centerX - this.radius * Math.cos(thetaRad - Math.PI / 2);
+			leftY = centerY - this.radius * Math.sin(thetaRad - Math.PI / 2);
+			rightX = centerX - this.radius * Math.cos(thetaRad + Math.PI / 2);
+			rightY = centerY - this.radius * Math.sin(thetaRad + Math.PI / 2);
+			return "M " + leftX + " " + leftY + " L " + topX + " " + topY + " L " + rightX + " " + rightY;
+		};
+
+		return Needle;
+	})();
+
+	needle = new Needle(38, 2);
+
+	needle.drawOn(chart, 0);
+
+	needle.animateOn(chart, startDDay / totalDate);
 }
