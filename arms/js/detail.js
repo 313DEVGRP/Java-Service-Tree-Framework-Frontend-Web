@@ -118,6 +118,9 @@ function execDocReady() {
             // 상세정보 탭 클릭 이벤트
             reqDetailViewTabClick();
 
+            // 요구사항 상세 탭 생략된 문장 마우스 호버시 전체 문장 확인 이벤트
+            getFullTextFromTruncated();
+
             // 버전 상세정보 탭 클릭 이벤트
             versionDetailViewTabClick();
 
@@ -257,7 +260,7 @@ function scrollApiFunc() {
 
 // ------------------ 계정 정보 ------------------ //
 function bindAccountInfo() {
-    $("#user-name").html(userName);
+    $("#user-name").html(userName + "<span style=\"font-weight: normal\">님</span>");
     $("#user-name-detail").html(fullName + ' (' + userName + ')');
     $("#user-email").html(userEmail);
 }
@@ -308,7 +311,20 @@ function reqDetailViewTabClick() {
         getDetailViewTab();
     });
 }
-
+// ------------------ 잘린 텍스트 전체 확인 ------------------ //
+function getFullTextFromTruncated(){
+   var elements = document.querySelectorAll(".text-truncate, .text-truncate *");
+    elements.forEach(element => {
+        element.addEventListener("mouseenter", () => {
+        element.classList.add("show-full");
+        element.style.cursor = "help";
+        });
+        element.addEventListener("mouseleave", () => {
+            element.classList.remove("show-full");
+            element.style.cursor = "default";
+        });
+    });
+}
 function getDetailViewTab() {
 
     if (callAPI("detailAPI")) {
@@ -409,7 +425,10 @@ function bindDataDetailTab(ajaxData) {
     } else {
         $("#detailview_req_reviewer05").text(ajaxData.reqAdd_c_req_reviewer05);
     }
+
     $("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
+
+
 }
 
 // ------------------ 버전 상세보기 ------------------ //
@@ -440,6 +459,9 @@ function bindDataVersionTab() {
 
         $("#version-product-name").html(json.c_title);
         $("#version-accordion").jsonMenu(selectedPdServiceVersion, json.pdServiceVersionEntities, { speed: 5000 });
+        $(".version-list").slimscroll({
+            height: "512px"
+        });
 
         calledAPIs["versionAPI"] = true;
     });
@@ -473,7 +495,6 @@ function initVersionData() {
         // 버전 데이터 바인딩
         var element = $("a[data-value='" + c_id + "']");
         console.log("해당 요구사항의 버전 요소: ", element[0]);
-        element[0].style.background = "rgba(241, 240, 71, 0.3)";
 
         versionClick(element[0], c_id);
     };
@@ -483,8 +504,10 @@ function versionClick(element, c_id) {
     console.log("versionClick:: c_id  -> ", c_id);
     $("a[name='versionLink_List']").each(function () {
         this.style.background = "";
+        this.style.color = "";
     });
-    element.style.background = "rgba(241, 240, 71, 0.3)";
+    element.style.background = "rgba(2, 59, 109, 0.7)";
+    element.style.color = "rgb(255, 255, 255)";
     console.log(element);
 
     $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");

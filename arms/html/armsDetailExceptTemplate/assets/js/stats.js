@@ -173,12 +173,66 @@ function loadChart(chartElement, footerElement, json) {
         testData[2].y = json.completeCount;
         testData[3].y = json.etcCount;
 
+        // 요구사항 없을 경우 테스트
+        // testData[0].y = 0;
+        // testData[1].y = 0;
+        // testData[2].y = 0;
+        // testData[3].y = 0;
+
         console.log("testData[0].y: ", testData[0].y);
         console.log("testData[1].y: ", testData[1].y);
         console.log("testData[2].y: ", testData[2].y);
         console.log("testData[3].y: ", testData[3].y);
 
-        var chart = nv.models
+        var chart;
+        var sum = d3.sum(testData, function (d) {
+            return d.y;
+        });
+        var pieElement = chartElement.split(" ")[0];
+
+        if (sum === 0) {
+            console.log("할당된 요구사항이 없는 경우");
+
+            var msg = `
+                <div class="msg">
+                    할당된 요구사항이 없습니다.
+                </div>`;
+
+            $(pieElement).addClass('no-requirement');
+            $(pieElement).html(msg);
+
+            pieFooter
+                .append("div")
+                .classed("controls", true)
+                .selectAll("div")
+                .data(testData)
+                .enter()
+                .append("div")
+                .classed("control", true)
+                .style("border-top", function (d, i) {
+                    return "3px solid " + COLOR_VALUES[i];
+                })
+                .html(function (d) {
+                    return (
+                        "<div class='key'>" +
+                        d.key +
+                        "</div>" +
+                        "<div class='value'>" +
+                        Math.floor(d.y) +
+                        "<span class='font11'> 개 ( 0% )</span></div>"
+                    );
+                });
+
+            return;
+        }
+
+        // 파이 차트 그리기
+        if ($(pieElement).hasClass('no-requirement')) {
+            $(pieElement).removeClass('no-requirement');
+            console.log('할당 요구사항 없을 때의 클래스 제거');
+        }
+
+        chart = nv.models
             .pieChartTotal()
             .x(function (d) {
                 return d.key;
@@ -198,10 +252,6 @@ function loadChart(chartElement, footerElement, json) {
             })
             .donut(true);
         chart.pie.margin({ top: 10, bottom: -20 });
-
-        var sum = d3.sum(testData, function (d) {
-            return d.y;
-        });
 
         pieFooter
             .append("div")
