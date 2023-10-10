@@ -605,156 +605,152 @@
 						<!-- 요구사항 목록 트리 시작 -->
 						<div class="col-lg-5">
 							<h3 class="resume-title" >요구사항 목록</h3>
+							<div class="shadow-box">
+								<div class="pb-3" style="margin-top: 12px;">
+									<i class="bi bi-chevron-right" style="color: #0563bb;"></i> <strong>제품(서비스) :&nbsp;</strong><strong id="allreq_pdservice_name"></strong>
+								</div>
 
-							<div class="pb-3">
-								<i class="bi bi-chevron-right" style="color: #0563bb;"></i> <strong>제품(서비스) :&nbsp;</strong><strong id="allreq_pdservice_name"></strong>
-							</div>
-
-							<div    id="req_tree"
-									style="padding-top: 5px; overflow: hidden; height:712px"
-									class="border">
+								<div    id="req_tree"
+										style="padding-top: 5px; overflow: hidden; height:712px"
+										class="border">
+								</div>
 							</div>
 						</div>
 						<!-- 요구사항 목록 트리 끝 -->
 						<div class="about col-lg-7">
 							<h3 class="resume-title">해당 상세 정보</h3>
-							<div class="pb-3">
-								<i class="bi bi-chevron-right" style="color: #0563bb;"></i> <strong>최신 버전 :&nbsp;</strong><strong id="allreq_pdservice_version"></strong>
-							</div>
-							<div class="content">
-								<ul>
-									<!--요구사항 연관 버전-->
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 연관 버전</strong>
-										</div>
-										<div class="col-lg-8">
-											<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-link-45deg"></i></div>
-												<div class="form-control" id="allreq_pdservice_version_list"></div>
+							<div class="shadow-box">
+								<div class="pb-3" style="margin-top: 12px;">
+									<i class="bi bi-chevron-right" style="color: #0563bb;"></i> <strong>최신 버전 :&nbsp;</strong><strong id="allreq_pdservice_version"></strong>
+								</div>
+								<div class="content">
+									<ul style="margin-bottom: 0px;">
+										<!--요구사항 연관 버전-->
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center">
+												<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 연관 버전</strong>
 											</div>
-										</div>
-									</li>
-									<!--요구사항 아이디-->
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 아이디</strong>
-										</div>
-										<div class="col-lg-8">
-											<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-card-checklist"></i></div>
-												<div class="form-control" id="allreq_pdservice_id"></div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-link-45deg"></i></div>
+													<div class="form-control" id="allreq_pdservice_version_list"></div>
+												</div>
 											</div>
-										</div>
-									</li>
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 제목</strong>
-										</div>
-										<div class="col-lg-8">
-											<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-bookmark-check"></i></div>
-												<div class="form-control text-truncate" id="allreq_pdservice_title"></div>
+										</li>
+										<!--요구사항 아이디-->
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center">
+												<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 아이디</strong>
 											</div>
-										</div>
-									</li>
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right text-truncate"></i> <strong class="text-nowrap">요구사항 작성자</strong>
-										</div>
-										<div class="col-lg-8">
-											<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-person"></i></div>
-												<div class="form-control" id="allreq_pdservice_writer"></div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-card-checklist"></i></div>
+													<div class="form-control" id="allreq_pdservice_id"></div>
+												</div>
 											</div>
-										</div>
-									</li>
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 최근 작성일</strong>
-										</div>
-										<div class="col-lg-8">
-											<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-calendar"></i></div>
-												<div class="form-control" id="allreq_pdservice_date"></div>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center">
+												<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 제목</strong>
 											</div>
-										</div>
-									</li>
-									<li class="col-lg-12 row toggle-content " style="cursor:pointer;">
-										<div class="col-lg-4 d-flex align-items-center">
-											<i class="bi bi-chevron-double-right"></i> <strong class="text-nowrap">제품(서비스) 리뷰어</strong>
-										</div>
-										<div class="col-lg-8">
-											<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-												<div class="form-control text-truncate" id="allreq_pdservice_reviewer01"></div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-bookmark-check"></i></div>
+													<div class="form-control text-truncate" id="allreq_pdservice_title"></div>
+												</div>
 											</div>
-										</div>
-									</li>
-									<!--<li class='col-lg-12 row' id='additional-item2'>-->
-									<li class='col-lg-12 row d-none' id='additional-item2'>
-										<div class='col-lg-4 d-flex align-items-center'>
-										</div>
-										<div class='col-lg-8'>
-											<div class='input-group'>
-												<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
-												<div class="form-control" id="allreq_pdservice_reviewer02"/>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center">
+												<i class="bi bi-chevron-right text-truncate"></i> <strong class="text-nowrap">요구사항 작성자</strong>
 											</div>
-										</div>
-									</li>
-									<!--<li class='col-lg-12 row' id='additional-item3'>-->
-									<li class='col-lg-12 row d-none' id='additional-item3'>
-										<div class='col-lg-4 d-flex align-items-center'>
-										</div>
-										<div class='col-lg-8'>
-											<div class='input-group'>
-												<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
-												<div class="form-control" id="allreq_pdservice_reviewer03"/>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person"></i></div>
+													<div class="form-control" id="allreq_pdservice_writer"></div>
+												</div>
 											</div>
-										</div>
-									</li>
-									<!--<li class='col-lg-12 row' id='additional-item4'>-->
-									<li class='col-lg-12 row d-none' id='additional-item4'>
-										<div class='col-lg-4 d-flex align-items-center'>
-										</div>
-										<div class='col-lg-8'>
-											<div class='input-group'>
-												<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
-												<div class="form-control" id="allreq_pdservice_reviewer04"/>
+										</li>
+										<li class="col-lg-12 row">
+											<div class="col-lg-4 d-flex  align-items-center">
+												<i class="bi bi-chevron-right"></i> <strong class="text-nowrap">요구사항 최근 작성일</strong>
 											</div>
-										</div>
-									</li>
-									<!--<li  class='col-lg-12 row' id='additional-item5'>-->
-									<li  id='additional-item5' class='col-lg-12 row d-none' id='additional-item5'>
-										<div class='col-lg-4 d-flex align-items-center'>
-										</div>
-										<div class='col-lg-8'>
-											<div class='input-group'>
-												<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
-												<div class="form-control" id="allreq_pdservice_reviewer05"/>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-calendar"></i></div>
+													<div class="form-control" id="allreq_pdservice_date"></div>
+												</div>
 											</div>
-										</div>
-									</li>
+										</li>
+										<li class="col-lg-12 row toggle-content " style="cursor:pointer;">
+											<div class="col-lg-4 d-flex align-items-center">
+												<i class="bi bi-chevron-double-right"></i> <strong class="text-nowrap">제품(서비스) 리뷰어</strong>
+											</div>
+											<div class="col-lg-8">
+												<div class="input-group">
+													<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
+													<div class="form-control text-truncate" id="allreq_pdservice_reviewer01"></div>
+												</div>
+											</div>
+										</li>
+										<!--<li class='col-lg-12 row' id='additional-item2'>-->
+										<li class='col-lg-12 row d-none' id='additional-item2'>
+											<div class='col-lg-4 d-flex align-items-center'>
+											</div>
+											<div class='col-lg-8'>
+												<div class='input-group'>
+													<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
+													<div class="form-control" id="allreq_pdservice_reviewer02"/>
+												</div>
+											</div>
+										</li>
+										<!--<li class='col-lg-12 row' id='additional-item3'>-->
+										<li class='col-lg-12 row d-none' id='additional-item3'>
+											<div class='col-lg-4 d-flex align-items-center'>
+											</div>
+											<div class='col-lg-8'>
+												<div class='input-group'>
+													<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
+													<div class="form-control" id="allreq_pdservice_reviewer03"/>
+												</div>
+											</div>
+										</li>
+										<!--<li class='col-lg-12 row' id='additional-item4'>-->
+										<li class='col-lg-12 row d-none' id='additional-item4'>
+											<div class='col-lg-4 d-flex align-items-center'>
+											</div>
+											<div class='col-lg-8'>
+												<div class='input-group'>
+													<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
+													<div class="form-control" id="allreq_pdservice_reviewer04"/>
+												</div>
+											</div>
+										</li>
+										<!--<li  class='col-lg-12 row' id='additional-item5'>-->
+										<li  id='additional-item5' class='col-lg-12 row d-none' id='additional-item5'>
+											<div class='col-lg-4 d-flex align-items-center'>
+											</div>
+											<div class='col-lg-8'>
+												<div class='input-group'>
+													<div class='input-group-text'><i class='bi bi-person-plus'></i></div>
+													<div class="form-control" id="allreq_pdservice_reviewer05"/>
+												</div>
+											</div>
+										</li>
 
 
-									<li class="col-lg-12 row">
-										<div class="col-lg-4 d-flex  align-items-center">
-											<i class="bi bi-chevron-right"></i> <strong  class="text-nowrap">요구사항 상세</strong>
-										</div>
-										<div class="col-lg-8 form-control overflow-auto"  id="allreq_pdservice_content" style="height:340px;">
-											<!--<div class="input-group">
-												<div class="input-group-text"><i class="bi bi-list"></i></div>
-												<div class="form-control"></div>
-											</div>-->
-										</div>
-									</li>
-								</ul>
+										<li class="col-lg-12 row" style="margin: auto;">
+											<div class="col-lg-4 d-flex  align-items-center" style="padding-left: 0px;">
+												<i class="bi bi-chevron-right"></i> <strong  class="text-nowrap">요구사항 상세</strong>
+											</div>
+											<div class="col-lg-8 form-control overflow-auto"  id="allreq_pdservice_content" style="height:340px;">
+											</div>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
-
-
 					</div>
-
 				</div>
 			</section><!-- End 요구사항 전체 목록 Section -->
 

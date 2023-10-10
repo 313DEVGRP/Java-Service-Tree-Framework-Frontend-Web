@@ -8,9 +8,11 @@
 }
 
 .shadow-box {
+    padding: 12px 10px 12px 10px;
     border-top: 3px solid #d2d6de;
     box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
 }
+
 /* 파일 관련 CSS */
 .portfolio .portfolio-wrap .portfolio-info {
     overflow-wrap: anywhere;
@@ -52,6 +54,11 @@
     height:712px !important;
 }
 
+.jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
+.jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
+.about .content ul li:last-child {
+    margin-bottom: 0px!important;
+}
 
 /* QnA 게시판 관련 CSS */
 .chat-btn {

@@ -300,7 +300,7 @@ h1, h2, h3, h4, h5, h6 {
 #home .social-links a:hover {
   color: #0563bb;
 }
-@media (max-width: 992px) {
+@media (max-width: 768px) { /* 원래 992px */
   #home {
     text-align: center;
   }
