@@ -1077,29 +1077,29 @@ svg {
 # 요구사항 상세
 --------------------------------------------------------------*/
 #detailview_req_contents{
-  height:675px;
+  height:655px;
 }
 @media (max-width: 1400px){
     #detailview_req_contents{
-      height:700px;
+      height:710px;
     }
 }
 
 @media (max-width: 1220px){
     #detailview_req_contents{
-      height:820px;
+      height:815px;
     }
 }
 
 @media (max-width: 1200px){
     #detailview_req_contents{
-      height:915px;
+      height:890px;
     }
 }
 
 @media (max-width: 1030px){
     #detailview_req_contents{
-      height:965px;
+      height:930px;
     }
 }
 
@@ -1109,7 +1109,7 @@ svg {
 
 .detail-item{
     border-radius: 3px;
-    padding: 12px 10px 12px 10px;
+    padding: 20px 20px 10px 20px;
 }
 
 .text-truncate {
