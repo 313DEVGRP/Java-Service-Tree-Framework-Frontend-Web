@@ -47,12 +47,7 @@
         font-size: 16px!important;
     }
 }
-.slimScrollDiv{
-    height:712px !important;
-}
-#req_tree{
-    height:712px !important;
-}
+
 
 .jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
 .jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
@@ -1116,7 +1111,7 @@ svg {
 
 .detail-item{
     border-radius: 3px;
-    padding: 20px 20px 10px 20px;
+     padding: 20px 20px 10px 20px;
 }
 
 .text-truncate {
@@ -1146,6 +1141,35 @@ svg {
 #allreq_pdservice_version{
     color: #0563bb;
 }
+
+#allreq_pdservice_content{
+    height:330px;
+}
+
+@media (max-width: 1220px){
+    #allreq_pdservice_content{
+      height: 330px;
+    }
+}
+@media (max-width: 1200px){
+    #allreq_pdservice_content{
+      height:260px;
+    }
+}
+
+@media (max-width: 1030px){
+    #allreq_pdservice_content{
+      height:210px;
+    }
+}
+
+.slimScrollDiv {
+    height:720px !important;
+}
+#req_tree{
+    height:720px !important;
+}
+
 
 /*--------------------------------------------------------------
 # 버전
