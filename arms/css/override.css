@@ -557,31 +557,59 @@ body::-webkit-scrollbar-track {
 	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="),
 		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
 	background-color: rgba(102, 105, 104, 0.9);
-	background: radial-gradient(
-			farthest-side ellipse at 10% 0,
-			rgba(40, 40, 40, 0.9),
-			rgba(77, 77, 80, 0.95),
-			rgba(60, 60, 60, 0.95)
-		),
-		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-	background: -webkit-radial-gradient(
-			10% 0,
-			farthest-side ellipse,
-			rgba(40, 40, 40, 0.9),
-			rgba(77, 77, 80, 0.95),
-			rgba(60, 60, 60, 0.95)
-		),
-		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-	background: -moz-radial-gradient(
-			10% 0,
-			farthest-side ellipse,
-			rgba(40, 40, 40, 0.9),
-			rgba(77, 77, 80, 0.95),
-			rgba(60, 60, 60, 0.95)
-		),
-		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	/*background: radial-gradient(*/
+	/*		farthest-side ellipse at 10% 0,*/
+	/*		rgba(40, 40, 40, 0.9),*/
+	/*		rgba(77, 77, 80, 0.95),*/
+	/*		rgba(60, 60, 60, 0.95)*/
+	/*	),*/
+	/*	url("../../reference/light-blue/img/bgnoise_lg_dark.png");*/
+	/*background: -webkit-radial-gradient(*/
+	/*		10% 0,*/
+	/*		farthest-side ellipse,*/
+	/*		rgba(40, 40, 40, 0.9),*/
+	/*		rgba(77, 77, 80, 0.95),*/
+	/*		rgba(60, 60, 60, 0.95)*/
+	/*	),*/
+	/*	url("../../reference/light-blue/img/bgnoise_lg_dark.png");*/
+	/*background: -moz-radial-gradient(*/
+	/*		10% 0,*/
+	/*		farthest-side ellipse,*/
+	/*		rgba(40, 40, 40, 0.9),*/
+	/*		rgba(77, 77, 80, 0.95),*/
+	/*		rgba(60, 60, 60, 0.95)*/
+	/*	),*/
+	/*	url("../../reference/light-blue/img/bgnoise_lg_dark.png");*/
 	padding-bottom: 10px;
-	border: 2px dotted rgb(125 125 125 / 95%) !important;
+	border: 2px dotted rgb(151 151 151 / 95%) !important;
+	background: linear-gradient(-45deg, rgb(59 59 59 / 93%), rgb(74 78 91 / 91%), rgb(83 83 83 / 90%), rgb(40, 40, 40, 91%));
+	background-size: 400% 400%;
+	-webkit-animation: gradient 15s ease infinite;
+	animation: gradient 15s ease infinite;
+}
+
+@-webkit-keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .tooltip-inner {
