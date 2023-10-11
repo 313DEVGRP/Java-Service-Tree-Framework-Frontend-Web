@@ -2985,3 +2985,8 @@ table tbody tr td {
 		scale: 0;
 	}
 }
+
+.widget-controls>a:hover {
+	color: rgba(255,255,255,.6);
+	text-decoration: none;
+}
