@@ -2997,3 +2997,9 @@ table tbody tr td {
 	height: 12px;
 	background-color: #e5603b;
 }
+
+.modal-content {
+	max-height: calc(100vh - 100px);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
