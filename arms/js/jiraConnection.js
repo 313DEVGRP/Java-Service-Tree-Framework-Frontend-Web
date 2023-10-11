@@ -249,10 +249,14 @@ function jiraServerCardClick(c_id) {
                 $("#type_tab").hide();
                 $("#status_tab").hide();
                 $("#resolution_tab").hide();
+
+                $("#cloudIssueTypeInfo").removeClass("hidden");
             } else {
                 $("#type_tab").show();
                 $("#status_tab").hide();
                 $("#resolution_tab").hide();
+
+                $("#cloudIssueTypeInfo").addClass("hidden");
             }
 
             // Sender 설정
@@ -345,12 +349,18 @@ function project_dataTableLoad(c_id) {
             targets: 0,
             searchable: false,
             orderable: false,
-            render: function(data, type, full, meta){
-                if(type === 'display'){
-                    data = '<label><a href="javascript:void(0)" onclick="click_projectList_table(\''+data+'\')">' + data + "</a></label>";
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    var _render =
+                        '<div style=\'white-space: nowrap; color: #f8f8f8\'>' + data +
+                        '<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_projectList_table(\''+data+'\')"><i class="fa fa-th-list"></i>' + "</button>"+
+                        "</div>";
+                    return _render;
                 }
                 return data;
-            }
+            },
         }
     ];
     var columnDefList_onpremise = [];
