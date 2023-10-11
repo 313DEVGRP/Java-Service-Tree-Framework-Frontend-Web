@@ -242,9 +242,16 @@ function scrollApiFunc() {
                 fileLoadByPdService();
             }
             else if (element === "#question") {
+
+                if (callAPI("reqCommentAPI")) {
+                    return;
+                }
+
                 getTotalCount();
 
                 getReqCommentList(1);
+
+                calledAPIs["reqCommentAPI"] = true;
             }
 
             visibilityStatus[element] = true;
@@ -566,21 +573,122 @@ function build_ReqData_By_PdService() {
     var serviceNameForURL = "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" + selectedPdService;
 
     // common.js에 정의되어있는 함수
-    jsTreeBuild(jQueryElementID, serviceNameForURL);
+    detailTreeBuild(jQueryElementID, serviceNameForURL);
     calledAPIs["allReqListAPI"] = true;
 
 
 }
 
+function detailTreeBuild(jQueryElementID, serviceNameForURL) {
+    console.log("common :: detailTreeBuild : ( jQueryElementID ) → " + jQueryElementID);
+    console.log("common :: detailTreeBuild : ( serviceNameForURL ) → " + serviceNameForURL);
+
+    console.log("common :: detailTreeBuild : ( href ) → " + $(location).attr("href"));
+    console.log("common :: detailTreeBuild : ( protocol ) → " + $(location).attr("protocol"));
+    console.log("common :: detailTreeBuild : ( host ) → " + $(location).attr("host"));
+    console.log("common :: detailTreeBuild : ( pathname ) → " + $(location).attr("pathname"));
+    console.log("common :: detailTreeBuild : ( search ) → " + $(location).attr("search"));
+    console.log("common :: detailTreeBuild : ( hostname ) → " + $(location).attr("hostname"));
+    console.log("common :: detailTreeBuild : ( port ) → " + $(location).attr("port"));
+
+    $(jQueryElementID)
+        .bind("before.jstree", function (e, data) {
+            $("#alog").append(data.func + "<br />");
+            $("li:not([rel='drive']).jstree-open > a > .jstree-icon").css(
+                "background-image",
+                "url(../reference/jquery-plugins/jstree-v.pre1.0/themes/open_folder.png)"
+            );
+            $("li:not([rel='drive']).jstree-closed > a > .jstree-icon").css(
+                "background-image",
+                "url(../reference/jquery-plugins/jstree-v.pre1.0/themes/folder.png)"
+            );
+        })
+        .jstree({
+            // List of active plugins
+            plugins: ["themes", "json_data", "ui", "types"],
+            themes: { theme: ["lightblue4"] },
+            json_data: {
+                ajax: {
+                    url: serviceNameForURL + "/getChildNode.do",
+                    cache: false,
+                    data: function (n) {
+                        console.log("[ common :: detailTreeBuild ] :: json data load = " + JSON.stringify(n));
+                        return {
+                            c_id: n.attr ? n.attr("id").replace("node_", "").replace("copy_", "") : 1
+                        };
+                    },
+                    success: function (n) {
+                        jSuccess("Product(service) Data Load Complete");
+                    }
+                }
+            },
+            types: {
+                max_depth: -1,
+                max_children: -1,
+                valid_children: ["drive"],
+                types: {
+                    default: {
+                        valid_children: "none",
+                        icon: {
+                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/search.png"
+                        }
+                    },
+                    folder: {
+                        valid_children: ["default", "folder"],
+                        icon: {
+                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/folder.png"
+                        }
+                    },
+                    drive: {
+                        valid_children: ["default", "folder"],
+                        icon: {
+                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/root.png"
+                        },
+                        start_drag: false,
+                        move_node: false,
+                        delete_node: false,
+                        remove: false
+                    }
+                }
+            },
+            ui: {
+                initially_select: ["node_4"]
+            },
+            core: {
+                initially_open: ["node_2"]
+            }
+        })
+        .bind("select_node.jstree", function (event, data) {
+            // `data.rslt.obj` is the jquery extended node that was clicked
+            if ($.isFunction(detailTreeClick)) {
+                console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.data('id')" + data.rslt.obj.attr("id"));
+                console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.data('rel')" + data.rslt.obj.attr("rel"));
+                console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.data('class')" + data.rslt.obj.attr("class"));
+                console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.children('a')" + data.rslt.obj.children("a"));
+                console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.children('ul')" + data.rslt.obj.children("ul"));
+                detailTreeClick(data.rslt.obj);
+            }
+        })
+        .bind("loaded.jstree", function (event, data) {
+            /*           setTimeout(function () {
+                           $(jQueryElementID).jstree("open_all");
+                       }, 1500);*/
+
+            $(jQueryElementID).slimscroll({
+                height: "545px"
+            });
+        });
+}
 
 /*
 수정 - 김찬호
 작성일 - 0929
+수정일 - 1010(박현민) - 메소드 명 수정
 트리에서 해당 요구사항 클릭시 해당 요구사항 아이디 조회
 */
-function jsTreeClick(selectedNode) {
+function detailTreeClick(selectedNode) {
 
-    console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
+    console.log("[ detail :: detailTreeClick ] :: selectedNode ");
 
     selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");//요구사항 아이디
     selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
@@ -778,7 +886,9 @@ function fileLoadByPdService() {
         dataType: "json"
     }).done(function (result) {
         console.log(result.files);
+        calledAPIs["fileAPI"] = true;
 
+        /* 데이터가 없을 때 처리 */
         if (result.files.length === 0) {
             let $container = $('#files-container');
 
@@ -871,7 +981,6 @@ function fileLoadByPdService() {
         }
 
         jSuccess("파일 조회가 완료 되었습니다.");
-        calledAPIs["fileAPI"] = true;
     });
 }
 
@@ -890,9 +999,15 @@ function formatBytes(bytes, decimals = 2) {
 // ------------------ QnA 게시판보기 ------------------ //
 function reqCommentListViewTabClick() {
     $("#get_req_comment_list").click(function () {
-        getTotalCount();
 
+        if (callAPI("reqCommentAPI")) {
+            return;
+        }
+
+        getTotalCount();
         getReqCommentList(1);
+
+        calledAPIs["reqCommentAPI"] = true;
     });
 }
 
@@ -938,7 +1053,7 @@ function getReqCommentList(pageNum) {
 
     console.log(totalReqCommentCount);
 
-    if (totalReqCommentCount !== null|| totalReqCommentCount !== 0) {
+    if (totalReqCommentCount !== null && totalReqCommentCount > 0) {
         totalPages = Math.ceil(totalReqCommentCount / pageSize);
         console.log("totalPages : " + totalPages);
 
@@ -949,6 +1064,13 @@ function getReqCommentList(pageNum) {
     }
     else{
         //alert("검색되는 주소없음")
+        var $chatMessages = $('#chat_messages');
+        $chatMessages.empty();
+
+        var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px; margin-top: 40px;">
+                                            등록된 글이 없습니다.
+                                         </p>`);
+        $chatMessages.append($noDataHtml);
         return;
     }
 

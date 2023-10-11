@@ -8,9 +8,11 @@
 }
 
 .shadow-box {
+    padding: 12px 10px 12px 10px;
     border-top: 3px solid #d2d6de;
     box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
 }
+
 /* 파일 관련 CSS */
 .portfolio .portfolio-wrap .portfolio-info {
     overflow-wrap: anywhere;
@@ -45,13 +47,13 @@
         font-size: 16px!important;
     }
 }
-.slimScrollDiv{
-    height:712px !important;
-}
-#req_tree{
-    height:712px !important;
-}
 
+
+.jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
+.jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
+.about .content ul li:last-child {
+    margin-bottom: 0px!important;
+}
 
 /* QnA 게시판 관련 CSS */
 .chat-btn {
@@ -1077,29 +1079,29 @@ svg {
 # 요구사항 상세
 --------------------------------------------------------------*/
 #detailview_req_contents{
-  height:675px;
+  height:655px;
 }
 @media (max-width: 1400px){
     #detailview_req_contents{
-      height:700px;
+      height:710px;
     }
 }
 
 @media (max-width: 1220px){
     #detailview_req_contents{
-      height:820px;
+      height:815px;
     }
 }
 
 @media (max-width: 1200px){
     #detailview_req_contents{
-      height:915px;
+      height:890px;
     }
 }
 
 @media (max-width: 1030px){
     #detailview_req_contents{
-      height:965px;
+      height:930px;
     }
 }
 
@@ -1109,7 +1111,7 @@ svg {
 
 .detail-item{
     border-radius: 3px;
-    padding: 12px 10px 12px 10px;
+     padding: 20px 20px 10px 20px;
 }
 
 .text-truncate {
@@ -1139,6 +1141,35 @@ svg {
 #allreq_pdservice_version{
     color: #0563bb;
 }
+
+#allreq_pdservice_content{
+    height:330px;
+}
+
+@media (max-width: 1220px){
+    #allreq_pdservice_content{
+      height: 330px;
+    }
+}
+@media (max-width: 1200px){
+    #allreq_pdservice_content{
+      height:260px;
+    }
+}
+
+@media (max-width: 1030px){
+    #allreq_pdservice_content{
+      height:210px;
+    }
+}
+
+.slimScrollDiv {
+    height:720px !important;
+}
+#req_tree{
+    height:720px !important;
+}
+
 
 /*--------------------------------------------------------------
 # 버전
