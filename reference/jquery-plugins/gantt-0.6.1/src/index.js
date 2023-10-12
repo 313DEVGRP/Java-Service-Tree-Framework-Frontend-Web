@@ -21,8 +21,10 @@ export default class Gantt {
     sortKey = '';
     sortDirection = 0;
 
-    constructor(wrapper, tasks, options, contents) {
+    constructor(wrapper, tasks, options, contents, modal) {
         this.originTasks = tasks;
+        this.modal_action = modal
+
         this.setup_wrapper(wrapper);
         this.setup_options(options);
         this.setup_tasks(tasks);
