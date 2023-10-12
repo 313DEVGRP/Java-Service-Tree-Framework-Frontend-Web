@@ -1064,7 +1064,11 @@ var Gantt = (function () {
     };
 
     class Gantt {
+        sortKey = '';
+        sortDirection = 0;
+
         constructor(wrapper, tasks, options, contents) {
+            this.originTasks = tasks;
             this.setup_wrapper(wrapper);
             this.setup_options(options);
             this.setup_tasks(tasks);
@@ -1375,6 +1379,8 @@ var Gantt = (function () {
             $table_container.append($table);
 
             this.$wrapper.prepend($table_container);
+
+            $.on($table_header, 'click', '.table-header th', (e) => this.bind_thead_click(e));
         }
 
         make_grid() {
@@ -1883,6 +1889,92 @@ var Gantt = (function () {
                 bar.progress_changed();
                 bar.set_action_completed();
             });
+        }
+
+        set_sort_option(name) {
+            if (!this.sortKey) {
+                this.sortKey = name;
+                this.sortDirection = 1;
+            } else {
+                if (this.sortKey === name){
+                    if (this.sortDirection < 2) this.sortDirection++;
+                    else this.sortDirection = 0;
+                } else {
+                    this.sortKey = name;
+                    this.sortDirection = 0;
+                }
+            }
+        }
+
+        get_thead_keyname() {
+            let keyname = '';
+
+            switch(this.sortKey) {
+                case 'Start Date':
+                    keyname = 'start';
+                    break;
+                case 'End Date':
+                    keyname = 'end';
+                    break;
+                case 'Priority':
+                    keyname = 'priority';
+                    break;
+            }
+
+            return keyname
+        }
+
+        set_tasks_sort() {
+            const orderBy = ['High', 'Medium', 'Low'];
+            const keyname = this.get_thead_keyname();
+            switch (this.sortDirection) {
+                case 1:
+                    this.tasks.sort((a, b) => {
+                        if (keyname === 'priority') {
+                            return orderBy.indexOf(a[keyname]) - orderBy.indexOf(b[keyname])
+                        } else {
+                            return a[keyname].localeCompare(b[keyname])
+                        }
+                    });
+                    break;
+                case 2:
+                    this.tasks.sort((a, b) => {
+                        if (keyname === 'priority') {
+                            return orderBy.indexOf(b[keyname]) - orderBy.indexOf(a[keyname])
+                        } else {
+                            return b[keyname].localeCompare(a[keyname])
+                        }
+                    });
+                    break;
+                default:
+                    this.tasks = this.originTasks;
+                    break;
+            }
+        }
+
+        rerender_table() {
+            document.querySelector('.table-body')?.remove();
+
+            const $table_body = this.table.draw_table_body(this.tasks, {
+                height: this.options.bar_height + this.options.padding + 'px',
+            });
+
+            document.querySelector('.table-container table').appendChild($table_body);
+        }
+
+        sort_render() {
+            this.setup_tasks(this.tasks);
+
+            this.render();
+            this.rerender_table();
+        }
+
+        bind_thead_click(e) {
+            if (!['Start Date', 'End Date', 'Priority'].includes(e.target.innerHTML)) return;
+
+            this.set_sort_option(e.target.innerHTML);
+            this.set_tasks_sort();
+            this.sort_render();
         }
 
         get_all_dependent_tasks(task_id) {
