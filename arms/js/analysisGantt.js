@@ -1421,6 +1421,28 @@ function click_btn_for_connect_req_jira() {
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
+function setGanttTasks(data) {
+	return data.reduce((acc, cur) => {
+		acc.push({
+			id: String(cur.c_id),
+			assignee: cur.c_issue_assignee,
+			reporter: cur.c_issue_reporter,
+			name: cur.c_title,
+			start: getDate(cur.c_issue_create_date),
+			end: getDate(
+				new Date(new Date(cur.c_issue_create_date).setDate(new Date(cur.c_issue_create_date).getDate() + 10)).getTime()
+			),
+			progress: 20,
+			dependencies: `${cur.c_parentid}`,
+			priority: cur.c_issue_priority_name,
+			custom_class: cur.c_issue_priority_name, // optional
+			type: cur.c_type
+		});
+
+		return acc;
+	}, []);
+}
+
 function getStatusMonitorData(selectId, endPointUrl) {
 	$("#gantt-target").empty();
 
@@ -1451,28 +1473,6 @@ function getStatusMonitorData(selectId, endPointUrl) {
 			}
 		}
 	});
-}
-
-function setGanttTasks(data) {
-	return data.reduce((acc, cur) => {
-		acc.push({
-			id: String(cur.c_id),
-			assignee: cur.c_issue_assignee,
-			reporter: cur.c_issue_reporter,
-			name: cur.c_title,
-			start: getDate(cur.c_issue_create_date),
-			end: getDate(
-				new Date(new Date(cur.c_issue_create_date).setDate(new Date(cur.c_issue_create_date).getDate() + 10)).getTime()
-			),
-			progress: 20,
-			dependencies: "",
-			priority: cur.c_issue_priority_name,
-			custom_class: cur.c_issue_priority_name, // optional
-			type: cur.c_type
-		});
-
-		return acc;
-	}, []);
 }
 
 function getDate(stamp) {
