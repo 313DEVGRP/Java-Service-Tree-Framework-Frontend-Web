@@ -59,7 +59,7 @@ export default {
         return date_string + (with_time ? ' ' + time_string : '');
     },
 
-    format(date, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'en') {
+    format(date, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'ko') {
         const dateTimeFormat = new Intl.DateTimeFormat(lang, {
             month: 'long'
         });

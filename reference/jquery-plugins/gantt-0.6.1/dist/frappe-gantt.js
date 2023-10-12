@@ -62,7 +62,7 @@ var Gantt = (function () {
             return date_string + (with_time ? ' ' + time_string : '');
         },
 
-        format(date, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'en') {
+        format(date, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'ko') {
             const dateTimeFormat = new Intl.DateTimeFormat(lang, {
                 month: 'long'
             });
@@ -1149,7 +1149,7 @@ var Gantt = (function () {
                 date_format: 'YYYY-MM-DD',
                 popup_trigger: 'click',
                 custom_popup_html: null,
-                language: 'en',
+                language: 'ko',
             };
             this.options = Object.assign({}, default_options, options);
         }
