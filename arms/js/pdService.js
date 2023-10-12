@@ -34,7 +34,8 @@ function execDocReady() {
 		[	"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
+			"../reference/lightblue4/docs/lib/widgster/widgster.js",
+			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"],
 
 		[	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",

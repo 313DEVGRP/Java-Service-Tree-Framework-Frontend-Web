@@ -3003,3 +3003,67 @@ table tbody tr td {
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+
+/* STYLING SCROLLBAR */
+
+/*::-webkit-scrollbar-track-piece:start {*/
+/*	!* Select the top half (or left half) or scrollbar track individually *!*/
+/*}*/
+/*::-webkit-scrollbar-thumb:window-inactive {*/
+/*	!* Select the thumb when the browser window isn't in focus *!*/
+/*}*/
+/*::-webkit-scrollbar-button:horizontal:decrement:hover {*/
+/*	!* Select the down or left scroll button when it's being hovered by the mouse *!*/
+/*}*/
+
+/*::-webkit-scrollbar {*/
+/*																							width: 12px;*/
+/*																						}*/
+/*::-webkit-scrollbar-track {*/
+/*	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+/*	border-radius: 10px;*/
+/*}*/
+/*::-webkit-scrollbar-thumb {*/
+/*	border-radius: 10px;*/
+/*	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
+/*}*/
+
+
+/* 스크롤 테마 */
+::-webkit-scrollbar {
+	width: 8px; /* 스크롤바의 너비 */
+	height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	height: 30%; /* 스크롤바의 길이 */
+	background: #343434; /* 스크롤바의 색상 */
+
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: radial-gradient(
+			farthest-side ellipse at 10% 0,
+			rgba(40, 40, 40, 0.9),
+			rgba(90, 100, 130, 0.89),
+			rgba(60, 60, 60, 0.9)
+	),
+	url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	background: -webkit-radial-gradient(
+			10% 0,
+			farthest-side ellipse,
+			rgba(40, 40, 40, 0.9),
+			rgba(90, 100, 130, 0.89),
+			rgba(60, 60, 60, 0.9)
+	),
+	url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	background: -moz-radial-gradient(
+			10% 0,
+			farthest-side ellipse,
+			rgba(40, 40, 40, 0.9),
+			rgba(90, 100, 130, 0.89),
+			rgba(60, 60, 60, 0.9)
+	),
+	url("../../reference/light-blue/img/bgnoise_lg_dark.png"); /*스크롤바 뒷 배경 색상*/
+}
