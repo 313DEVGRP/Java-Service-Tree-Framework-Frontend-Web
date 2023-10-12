@@ -13,6 +13,7 @@ test.html
 package-lock.json
 *.log*
 *.yarn.lock
+.github
 
 
 .DS_Store
