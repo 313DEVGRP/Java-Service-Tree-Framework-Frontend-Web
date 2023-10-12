@@ -317,7 +317,7 @@ export default class Gantt {
         const $table = document.createElement('table');
 
         const $table_header = this.table.draw_table_header({
-            height: this.options.header_height + 10 + 'px',
+            height: this.options.header_height + 9 + 'px',
         });
         const $table_body = this.table.draw_table_body(this.tasks, {
             height: this.options.bar_height + this.options.padding + 'px',
@@ -357,7 +357,7 @@ export default class Gantt {
         });
 
         $.attr(this.$svg, {
-            height: grid_height + this.options.padding + 100,
+            height: grid_height,
             width: '100%',
         });
     }
