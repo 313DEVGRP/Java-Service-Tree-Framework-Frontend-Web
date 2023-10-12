@@ -1,13 +1,14 @@
-$bar-color: #b8c2cc !default;
+$bar-color: #f8f8f8 !default;
 $bar-stroke: #8d99a6 !default;
-$border-color: #e0e0e0 !default;
+$border-right-color: #515256 !default;
+$border-color: #b0b0b2 !default;
 $light-bg: #f5f5f5 !default;
 $light-border-color: #ebeff2 !default;
 $light-yellow: #fcf8e3 !default;
 $text-muted: #666 !default;
 $text-light: #555 !default;
-$text-color: #333 !default;
-$blue: #a3a3ff !default;
+$text-color: #fff !default;
+$blue: #a4c6ff !default;
 $handle-color: #ddd !default;
 
 .wrapper {
@@ -31,11 +32,8 @@ $handle-color: #ddd !default;
 
         .table-body {
             tr {
-                border-bottom: 1px solid $border-color;
-                box-sizing: border-box;
-
-                &:last-child {
-                    border-bottom: none;
+                &:first-child {
+                    height: 37px !important;
                 }
             }
         }
@@ -49,7 +47,6 @@ $handle-color: #ddd !default;
             -o-text-overflow: ellipsis;
             -ms-text-overflow: ellipsis;
             padding: 9px 7px;
-            border-right: 0.4px solid $border-color;
             box-sizing: border-box;
 
             &:last-child {
@@ -57,27 +54,16 @@ $handle-color: #ddd !default;
             }
         }
 
-        .table-header {
-            background-color: #ffffff;
-
-            tr {
-                th {
-                    font-weight: 400;
-                    border-bottom: 2px solid $border-color;
-                    box-sizing: border-box;
-                }
-            }
+        .table-header tr th {
+            font-weight: 400;
+            border-top: 1px solid $border-color;
+            border-right: 2px solid $border-right-color;
+            border-bottom: 2px solid $border-color;
         }
 
-        .table-body {
-            tr {
-                & {
-                    background-color: #ffffff;
-                }
-                &:nth-child(even) {
-                    background-color: $light-bg;
-                }
-            }
+        .table-body tr td {
+            border-right: 2px solid $border-right-color;
+            border-bottom: 2px solid #949699 !important;
         }
     }
 }
@@ -100,18 +86,15 @@ $handle-color: #ddd !default;
 
 .gantt {
     .grid-background {
-        fill: none;
+        fill: transparent;
     }
     .grid-header {
-        fill: #ffffff;
+        fill: transparent;
         stroke: $border-color;
         stroke-width: 1.4;
     }
     .grid-row {
-        fill: #ffffff;
-    }
-    .grid-row:nth-child(even) {
-        fill: $light-bg;
+        fill: transparent;
     }
     .row-line {
         stroke: $light-border-color;
@@ -155,7 +138,7 @@ $handle-color: #ddd !default;
         }
     }
     .bar-label {
-        fill: #fff;
+        fill: #333;
         dominant-baseline: central;
         text-anchor: middle;
         font-size: 12px;
@@ -209,12 +192,6 @@ $handle-color: #ddd !default;
     .upper-text {
         font-size: 12px;
         text-anchor: middle;
-    }
-    .upper-text {
-        fill: $text-light;
-    }
-    .lower-text {
-        fill: $text-color;
     }
 
     .hide {

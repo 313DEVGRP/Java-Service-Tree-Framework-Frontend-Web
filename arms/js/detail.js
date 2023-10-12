@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////
-//Document Ready
+// 요구사항 상세보기 페이지 Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedJsTreeId; // 요구사항 아이디
 var calledAPIs = {};
@@ -78,14 +78,14 @@ function execDocReady() {
             "../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
         ],
 
-        [
+        /*[
             // Template CSS File
             "../reference/jquery-plugins/MyResume/assets/vendor/boxicons/css/boxicons.css",
             "../reference/jquery-plugins/MyResume/assets/vendor/glightbox/css/glightbox.min.css",
             "../reference/jquery-plugins/MyResume/assets/vendor/swiper/swiper-bundle.min.css",
             // Template Main CSS File
             "../reference/jquery-plugins/MyResume/assets/css/style.css"
-        ],
+        ],*/
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
         [
             // Chart
@@ -102,10 +102,11 @@ function execDocReady() {
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function () {
+
             // 스크롤 반응하여 API 호출 이벤트
             window.addEventListener('scroll', scrollApiFunc);
 
-            // 계정 정보
+            // 계정 정보 바인딩
             bindAccountInfo();
 
             // 메뉴 클릭 이벤트
@@ -136,15 +137,11 @@ function execDocReady() {
             // QnA 채팅 게시판 탭 클릭 이벤트
             reqCommentListViewTabClick();
 
+            // QnA 글 저장
             req_comment_save_btn_click();
 
+            // QnA 글 작성 시 확장
             req_comment_message_size_change();
-
-            $('#comment-contents').on('input', function () {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-
         })
         .catch(function (errorMessage) {
             console.error(errorMessage);
@@ -152,49 +149,7 @@ function execDocReady() {
         });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// 플러그인 로드 모듈 ( 병렬 시퀀스 )
-////////////////////////////////////////////////////////////////////////////////////////
-
-/*function loadPlugin(url) {
-    return new Promise(function(resolve, reject) {
-
-        if( isJavaScriptFile(url) ){
-            $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> " + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
-            $.ajax({
-                url: url,
-                dataType: "script",
-                cache: true,
-                success: function() {
-                    // The request was successful
-
-                    console.log( "[ common :: loadPlugin ] :: url = " + url + ' 자바 스크립트 플러그인 로드 성공');
-                    resolve(); // Promise를 성공 상태로 변경
-                },
-                error: function() {
-                    // The request failed
-                    console.error( "[ common :: loadPlugin ] :: url = " + url + ' 플러그인 로드 실패');
-                    reject(); // Promise를 실패 상태로 변경
-                }
-            });
-        } else {
-            $(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> " + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
-            $("<link/>", {
-                rel: "stylesheet",
-                type: "text/css",
-                href: url
-            }).appendTo("head");
-            console.log( "[ common :: loadPlugin ] :: url = " + url + ' 스타일시트 플러그인 로드 성공');
-            resolve();
-        }
-    });
-}*/
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 요구사항 상세보기 페이지
-////////////////////////////////////////////////////////////////////////////////////////
-
-// ------------------ api 호출 여부 확인하기 ------------------ //
+// ------------------ api 호출 여부 확인(여러번 발생시키지 않기 위하여) ------------------ //
 function callAPI(apiName) {
     if (calledAPIs[apiName]) {
         console.log("This API has already been called: " + apiName);
@@ -204,8 +159,22 @@ function callAPI(apiName) {
     return false;
 }
 
-// ------------------ 스크롤 api 호출하기 ------------------ //
+// ------------------ 잘린 텍스트 전체 확인 ------------------ //
+function getFullTextFromTruncated(){
+    var elements = document.querySelectorAll(".text-truncate, .text-truncate *");
+    elements.forEach(element => {
+        element.addEventListener("mouseenter", () => {
+            element.classList.add("show-full");
+            element.style.cursor = "help";
+        });
+        element.addEventListener("mouseleave", () => {
+            element.classList.remove("show-full");
+            element.style.cursor = "default";
+        });
+    });
+}
 
+// ------------------ 스크롤 api 호출하기 ------------------ //
 function checkVisible( element, check = 'visible' ) {
     const viewportHeight = $(window).height(); // Viewport Height
     const scrolltop = $(window).scrollTop(); // Scroll Top
@@ -263,9 +232,9 @@ function scrollApiFunc() {
             break;
         }
     }
-};
+}
 
-// ------------------ 계정 정보 ------------------ //
+// ------------------ 계정 정보 바인딩 ------------------ //
 function bindAccountInfo() {
     $("#user-name").html(userName + "<span style=\"font-weight: normal\">님</span>");
     $("#user-name-detail").html(fullName + ' (' + userName + ')');
@@ -312,26 +281,14 @@ function bindStatsTab() {
     calledAPIs["statsAPI"] = true;
 }
 
+
 // ------------------ 상세보기 ------------------ //
 function reqDetailViewTabClick() {
     $("#get_version_list").click(function () {
         getDetailViewTab();
     });
 }
-// ------------------ 잘린 텍스트 전체 확인 ------------------ //
-function getFullTextFromTruncated(){
-   var elements = document.querySelectorAll(".text-truncate, .text-truncate *");
-    elements.forEach(element => {
-        element.addEventListener("mouseenter", () => {
-        element.classList.add("show-full");
-        element.style.cursor = "help";
-        });
-        element.addEventListener("mouseleave", () => {
-            element.classList.remove("show-full");
-            element.style.cursor = "default";
-        });
-    });
-}
+
 function getDetailViewTab() {
 
     if (callAPI("detailAPI")) {
@@ -575,8 +532,6 @@ function build_ReqData_By_PdService() {
     // common.js에 정의되어있는 함수
     detailTreeBuild(jQueryElementID, serviceNameForURL);
     calledAPIs["allReqListAPI"] = true;
-
-
 }
 
 function detailTreeBuild(jQueryElementID, serviceNameForURL) {
@@ -692,22 +647,19 @@ function detailTreeClick(selectedNode) {
 
     selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");//요구사항 아이디
     selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
+    console.log(selectedJsTreeName);
 
     if (selectedJsTreeId == 2) {
         $("#select_Req").text("루트 요구사항이 선택되었습니다.");
     } else {
         $("#select_Req").text($("#req_tree").jstree("get_selected").text());
     }
+
     var selectRel = selectedNode.attr("rel");
 
     //요구사항 타입에 따라서 탭의 설정을 변경 (삭제예정)
     if (selectRel == "folder" || selectRel == "drive") {
-        /*$("#folder_tab").get(0).click();
-        $(".newReqDiv").show();
-        $(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
-        $(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
-        $(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
-        */
+
         // 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
         // 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
         // 박현민 - 폴더 일 때 이부분 어떻게 바뀌는지 확인하고 어떻게 바꿀지 고민해야함
@@ -778,7 +730,6 @@ function bindClickedDataDetail(ajaxData) {
 
     //console.table(ajaxData);
     var version_id_list = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
-    var version_title_list = [];
 
     if (isEmpty(version_id_list)) {
         $("#allreq_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
@@ -888,54 +839,66 @@ function fileLoadByPdService() {
         console.log(result.files);
         calledAPIs["fileAPI"] = true;
 
-        /* 데이터가 없을 때 처리 */
-        if (result.files.length === 0) {
-            let $container = $('#files-container');
+        bindFileList(result);
 
-            var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px;">
+        jSuccess("파일 조회가 완료 되었습니다.");
+    });
+}
+
+function bindFileList(result) {
+    if (result.files.length === 0) {
+        noFileMessage();
+        return;
+    }
+
+    let $portfolioContainer = $('.portfolio-container');
+    if ($portfolioContainer.length) {
+        createFileList($portfolioContainer, result);
+    }
+}
+
+function noFileMessage() {
+    let $container = $('#files-container');
+
+    var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px;">
                                     <i class="bi bi-file-earmark-x" style="font-size:50px;"></i><br>
                                     등록된 파일이 없습니다.
                                   </p>`);
-            $container.append($noDataHtml);
-            return;
-        }
+    $container.append($noDataHtml);
+}
 
-        let $portfolioContainer = $('.portfolio-container');
-        if ($portfolioContainer.length) {
-            let portfolioIsotope = new Isotope($portfolioContainer[0], {
-                itemSelector: '.portfolio-item'
-            });
+function createFileList($portfolioContainer, result) {
 
-            for (var key in result) {
-                if (result.hasOwnProperty(key)) {
-                    var fileSet = result[key];
+    let portfolioIsotope = new Isotope($portfolioContainer[0], {
+        itemSelector: '.portfolio-item'
+    });
 
-                    // 각 파일 정보(fileSet)을 처리
-                    fileSet.forEach(function (file) {
-                        console.log(file.fileName);
-                        var filterClass;
-                        if (file.contentType.includes("image")) {
-                            filterClass = 'filter-image';
-                        } else if (file.contentType.includes("text")) {
-                            filterClass = 'filter-doc';
-                        } else if (file.contentType.includes("application")) {
-                            filterClass = 'filter-doc';
-                        } else {
-                            filterClass = 'filter-etc';
-                        }
+    for (var key in result) {
+        if (result.hasOwnProperty(key)) {
+            var fileSet = result[key];
 
-                        var imgSrc = iconsMap[file.contentType] || prefix + 'Default.png';
-                        var title = file.fileName;
-                        var downloadUrl = file.url;
-                        var thumbnailUrl = file.thumbnailUrl;
-                        var fileSize = formatBytes(file.size, 3);
-                        // var fileSize = file.size;
-                        /*
-                                                var imageLinkHtml = file.contentType.includes("image") ? `<a href="${thumbnailUrl}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="${title}"><i class="bx bx-plus"></i></a>` : '';
-                        */
-                        var imageLinkHtml = '';
+            // 각 파일 정보(fileSet)을 처리
+            fileSet.forEach(function (file) {
+                console.log(file.fileName);
+                var filterClass;
+                if (file.contentType.includes("image")) {
+                    filterClass = 'filter-image';
+                } else if (file.contentType.includes("text")) {
+                    filterClass = 'filter-doc';
+                } else if (file.contentType.includes("application")) {
+                    filterClass = 'filter-doc';
+                } else {
+                    filterClass = 'filter-etc';
+                }
 
-                        var $newHtml = $(`<div class="col-lg-2 col-md-3 col-sm-3 portfolio-item ${filterClass}">
+                var imgSrc = iconsMap[file.contentType] || prefix + 'Default.png';
+                var title = file.fileName;
+                var downloadUrl = file.url;
+                var thumbnailUrl = file.thumbnailUrl;
+                var fileSize = formatBytes(file.size, 3);
+                var imageLinkHtml = '';
+
+                var $newHtml = $(`<div class="col-lg-2 col-md-3 col-sm-3 portfolio-item ${filterClass}">
                                             <div class="portfolio-wrap" style="display: grid; background: rgb(69 80 91 / 0%)!important;">
                                                 <img src="${imgSrc}" class="img-fluid" alt="" style="margin:auto;">
                                                 <div class="portfolio-info">
@@ -949,39 +912,36 @@ function fileLoadByPdService() {
                                             </div>
                                         </div>`);
 
-                        let imgLoadCheck = new Image();
-                        imgLoadCheck.src = imgSrc;
+                let imgLoadCheck = new Image();
+                imgLoadCheck.src = imgSrc;
 
-                        imgLoadCheck.onload = function () {
-                            $portfolioContainer.append($newHtml);
-                            portfolioIsotope.appended($newHtml[0]);
-                            portfolioIsotope.arrange();
-                        };
-                    });
-                }
-            }
-
-            /* data-filter 통해서 이미지, 문서, 기타 파일로 클릭 시 나눠지는 부분 */
-            $('#portfolio-flters li').on('click', function(e){
-                e.preventDefault();
-                $('#portfolio-flters li').removeClass('filter-active');
-                $(this).addClass('filter-active');
-
-                portfolioIsotope.arrange({
-                    filter: $(this).attr('data-filter')
-                });
-
-                portfolioIsotope.on( 'arrangeComplete', function() {
-                    AOS.refresh();
-                });
-
-                portfolioIsotope.reloadItems();
-                portfolioIsotope.arrange();
+                imgLoadCheck.onload = function () {
+                    $portfolioContainer.append($newHtml);
+                    portfolioIsotope.appended($newHtml[0]);
+                    portfolioIsotope.arrange();
+                };
             });
         }
+    }
 
-        jSuccess("파일 조회가 완료 되었습니다.");
+    /* data-filter 통해서 이미지, 문서, 기타 파일로 클릭 시 나눠지는 부분 */
+    $('#portfolio-flters li').on('click', function(e){
+        e.preventDefault();
+        $('#portfolio-flters li').removeClass('filter-active');
+        $(this).addClass('filter-active');
+
+        portfolioIsotope.arrange({
+            filter: $(this).attr('data-filter')
+        });
+
+        portfolioIsotope.on( 'arrangeComplete', function() {
+            AOS.refresh();
+        });
+
+        portfolioIsotope.reloadItems();
+        portfolioIsotope.arrange();
     });
+
 }
 
 function formatBytes(bytes, decimals = 2) {
@@ -1049,9 +1009,6 @@ function getReqCommentList(pageNum) {
     var pageSize = 10;
     var totalPages = 0;
     var curPage = pageNum;
-    /* 전체 게시판 게시물 갯수 가져오는 API 호출 필요 */
-
-    console.log(totalReqCommentCount);
 
     if (totalReqCommentCount !== null && totalReqCommentCount > 0) {
         totalPages = Math.ceil(totalReqCommentCount / pageSize);
@@ -1063,14 +1020,7 @@ function getReqCommentList(pageNum) {
         $(".pagination").append(htmlStr);
     }
     else{
-        //alert("검색되는 주소없음")
-        var $chatMessages = $('#chat_messages');
-        $chatMessages.empty();
-
-        var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px; margin-top: 40px;">
-                                            등록된 글이 없습니다.
-                                         </p>`);
-        $chatMessages.append($noDataHtml);
+        noReqCommentMessage();
         return;
     }
 
@@ -1085,7 +1035,6 @@ function getReqCommentList(pageNum) {
         type: "GET",
         data: {
             c_pdservice_link: selectedPdService,
-            /*c_version_link: selectedPdServiceVersion,*/
             c_req_link: selectedJsTreeId,
             pageIndex: pageNum,
             pageUnit: pageSize
@@ -1094,7 +1043,6 @@ function getReqCommentList(pageNum) {
         dataType: "json",
         statusCode: {
             200: function (data) {
-                //모달 팝업 끝내고
                 var $chatMessages = $('#chat_messages');
                 $chatMessages.empty();
 
@@ -1102,117 +1050,17 @@ function getReqCommentList(pageNum) {
 
                 if (data.response.length === 0) {
                     /* 게시글이 없을 경우 처리 필요 */
-                    var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px; margin-top: 40px;">
-                                            등록된 글이 없습니다.
-                                         </p>`);
-                    $chatMessages.append($noDataHtml);
+                    noReqCommentMessage();
                     return;
                 }
 
-                for (var k in data.response) {
-                    var comment = data.response[k];
-
-                    var c_id = comment.c_id;
-                    var sender = comment.c_req_comment_sender;
-                    var date = dateFormat(comment.c_req_comment_date);
-                    var title = comment.c_title;
-                    var req_comment_contents = comment.c_req_comment_contents.replace(/\n/g, '<br>');
-                    var contents = `<p id="contents">` + req_comment_contents +`</p>`;
-                    var $newHtml;
-
-                    /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
-                    var iconPosition = (sender !== userName) ? 'left' : 'right';
-                    var position = (sender !== userName) ? '' : 'on-left';
-                    var personIcon = (sender !== userName) ? 'bi-person-fill' : 'bi-person';
-                    var buttonsHtml = '';
-
-                    if (sender === userName) {
-                        buttonsHtml = `<div class="dropdown">
-                                            <button class="dropdown-button"><i class="fa fa-ellipsis-v"></i></button>
-                                            <div class="dropdown-content">
-                                                <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn">
-                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-edit"></i></div>
-                                                    <div style="display: inline-block;">수정</div>
-                                                </button>
-                                                <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">
-                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-trash-o"></i></div>
-                                                    <div style="display: inline-block;">삭제</div>
-                                                </button>
-                                            </div>
-                                        </div>`;
-                    }
-
-                    $newHtml = $(`<div class="chat-message">
-                                    <div class="sender pull-${iconPosition}">
-                                        <div class="icon">
-                                            <i class="bi ${personIcon}" style="font-size: 40px"></i>
-                                        </div>
-                                    </div>
-                                    <div class="chat-message-body ${position}">
-                                        ${buttonsHtml}
-                                        <span class="arrow"></span>
-                                        <div class="sender">
-                                            ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
-                                            <span href="#" class="user-id">${sender}</span>
-                                            ${(position === "") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
-                                        </div>
-                                        <div class="text">
-                                            ${contents}
-                                        </div>
-                                        <div class="edit-comment" style="display: none;">
-                                            <textarea class="edit-text form-control"></textarea>
-                                            <div style="text-align: right;">
-                                                <button class="mt-2 btn btn-default btn-sm edit-save-button" value="${c_id}">저장</button>
-                                                <button class="mt-2 btn btn-default btn-sm cancel-button">취소</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>`);
-
-                    $chatMessages.append($newHtml);
-                }
-
-                $('.edit-chat-btn').on('click', function(e){
-                    var parentDiv = $(this).closest('.chat-message-body');
-                    var commentText = parentDiv.find('#contents').html();
-                    commentText = commentText.replace(/<br>/g, "\n");
-
-                    parentDiv.find('.edit-text').val(commentText);
-                    parentDiv.find('#contents').hide();
-                    parentDiv.find('.dropdown-button').hide();
-                    parentDiv.find('.dropdown-content').addClass('hide');
-                    parentDiv.find('.edit-comment').show();
-
-                    $('.edit-text').on('input', function () {
-                        this.style.height = 'auto';
-                        this.style.height = (this.scrollHeight) + 'px';
-                    });
-                    console.log(commentText);
-                    // req_comment_edit_btn_click(c_id);
+                data.response.forEach(function(comment) {
+                    var commentHtml = createReqCommentList(comment);
+                    $chatMessages.append(commentHtml);
                 });
 
-                $('.delete-chat-btn').on('click', function(e){
-                    var c_id = $(this).val();
-                    req_comment_delete_btn_click(c_id);
-                });
+                reqCommentRegisterEventHandlers();
 
-                $('.cancel-button').on('click', function(e){
-                    var commentDiv = $(this).closest('.chat-message-body');
-                    commentDiv.find('#contents').show();
-                    commentDiv.find('.dropdown-button').show();
-                    commentDiv.find('.dropdown-content').removeClass('hide');
-                    commentDiv.find('.edit-comment').hide();
-                });
-
-                $('.edit-save-button').on('click', function(e){
-                    var c_id = $(this).val();
-                    console.log(c_id);
-                    var editText = $(this).closest('.edit-comment');
-                    var commentText = editText.find('.edit-text').val();
-                    console.log(commentText);
-                    req_comment_edit_btn_click(c_id, commentText);
-                });
             }
         },
         beforeSend: function () {
@@ -1269,6 +1117,123 @@ function bindPagination(curPage, totalPages, funName) {
     // console.log(pageUrl);
 
     return pageUrl;
+}
+
+function noReqCommentMessage() {
+    var $chatMessages = $('#chat_messages');
+    $chatMessages.empty();
+
+    var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px; margin-top: 40px;">
+                                            등록된 글이 없습니다.
+                                         </p>`);
+    $chatMessages.append($noDataHtml);
+}
+
+function createReqCommentList(comment) {
+    var c_id = comment.c_id;
+    var sender = comment.c_req_comment_sender;
+    var date = dateFormat(comment.c_req_comment_date);
+    var title = comment.c_title;
+    var req_comment_contents = comment.c_req_comment_contents.replace(/\n/g, '<br>');
+    var contents = `<p id="contents">` + req_comment_contents +`</p>`;
+    var $newHtml;
+
+    /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
+    var iconPosition = (sender !== userName) ? 'left' : 'right';
+    var position = (sender !== userName) ? '' : 'on-left';
+    var personIcon = (sender !== userName) ? 'bi-person-fill' : 'bi-person';
+    var buttonsHtml = '';
+
+    if (sender === userName) {
+        buttonsHtml = `<div class="dropdown">
+                                            <button class="dropdown-button"><i class="fa fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-content">
+                                                <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn">
+                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-edit"></i></div>
+                                                    <div style="display: inline-block;">수정</div>
+                                                </button>
+                                                <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">
+                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-trash-o"></i></div>
+                                                    <div style="display: inline-block;">삭제</div>
+                                                </button>
+                                            </div>
+                                        </div>`;
+    }
+
+    $newHtml = $(`<div class="chat-message">
+                                    <div class="sender pull-${iconPosition}">
+                                        <div class="icon">
+                                            <i class="bi ${personIcon}" style="font-size: 40px"></i>
+                                        </div>
+                                    </div>
+                                    <div class="chat-message-body ${position}">
+                                        ${buttonsHtml}
+                                        <span class="arrow"></span>
+                                        <div class="sender">
+                                            ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
+                                            <span href="#" class="user-id">${sender}</span>
+                                            ${(position === "") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
+                                        </div>
+                                        <div class="text">
+                                            ${contents}
+                                        </div>
+                                        <div class="edit-comment" style="display: none;">
+                                            <textarea class="edit-text form-control"></textarea>
+                                            <div style="text-align: right;">
+                                                <button class="mt-2 btn btn-default btn-sm edit-save-button" value="${c_id}">저장</button>
+                                                <button class="mt-2 btn btn-default btn-sm cancel-button">취소</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>`);
+
+    return $newHtml;
+}
+
+function reqCommentRegisterEventHandlers() {
+    $('.edit-chat-btn').on('click', handleEditClick);
+    $('.delete-chat-btn').on('click', handleDeleteClick);
+    $('.cancel-button').on('click', handleCancelClick);
+    $('.edit-save-button').on('click', handleSaveClick);
+}
+
+function handleEditClick(e){
+    var parentDiv = $(this).closest('.chat-message-body');
+    var commentText = parentDiv.find('#contents').html();
+    commentText = commentText.replace(/<br>/g, "\n");
+
+    parentDiv.find('.edit-text').val(commentText);
+    parentDiv.find('#contents').hide();
+    parentDiv.find('.dropdown-button').hide();
+    parentDiv.find('.dropdown-content').addClass('hide');
+    parentDiv.find('.edit-comment').show();
+
+    $('.edit-text').on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+}
+
+function handleDeleteClick(e){
+    var c_id = $(this).val();
+    req_comment_delete_btn_click(c_id);
+}
+
+function handleCancelClick(e){
+    var commentDiv = $(this).closest('.chat-message-body');
+    commentDiv.find('#contents').show();
+    commentDiv.find('.dropdown-button').show();
+    commentDiv.find('.dropdown-content').removeClass('hide');
+    commentDiv.find('.edit-comment').hide();
+}
+
+function handleSaveClick(e){
+    var c_id = $(this).val();
+    var editText = $(this).closest('.edit-comment');
+    var commentText = editText.find('.edit-text').val();
+
+    req_comment_edit_btn_click(c_id, commentText);
 }
 
 function req_comment_save_btn_click() {
@@ -1393,7 +1358,8 @@ function req_comment_delete_btn_click(c_id) {
 }
 
 function req_comment_message_size_change() {
-    $('#comment-contents').on('input propertychange', function() {
-        $('.chat-footer').height($(this).height());
+    $('#comment-contents').on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
     });
 }
