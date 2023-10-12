@@ -60,35 +60,13 @@ body::-webkit-scrollbar {
 
 body::-webkit-scrollbar-thumb {
 	height: 30%; /* 스크롤바의 길이 */
-	background: #343434; /* 스크롤바의 색상 */
+	background: #313131; /* 스크롤바의 색상 */
 
 	border-radius: 10px;
 }
 
 body::-webkit-scrollbar-track {
-	background: radial-gradient(
-			farthest-side ellipse at 10% 0,
-			rgba(40, 40, 40, 0.9),
-			rgba(90, 100, 130, 0.89),
-			rgba(60, 60, 60, 0.9)
-		),
-		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-	background: -webkit-radial-gradient(
-			10% 0,
-			farthest-side ellipse,
-			rgba(40, 40, 40, 0.9),
-			rgba(90, 100, 130, 0.89),
-			rgba(60, 60, 60, 0.9)
-		),
-		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-	background: -moz-radial-gradient(
-			10% 0,
-			farthest-side ellipse,
-			rgba(40, 40, 40, 0.9),
-			rgba(90, 100, 130, 0.89),
-			rgba(60, 60, 60, 0.9)
-		),
-		url("../../reference/light-blue/img/bgnoise_lg_dark.png"); /*스크롤바 뒷 배경 색상*/
+	background-color: #4b4b4b; /*스크롤바 뒷 배경 색상*/
 }
 
 /* Font */
@@ -3037,33 +3015,11 @@ table tbody tr td {
 
 ::-webkit-scrollbar-thumb {
 	height: 30%; /* 스크롤바의 길이 */
-	background: #343434; /* 스크롤바의 색상 */
+	background: #313131; /* 스크롤바의 색상 */
 
 	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-	background: radial-gradient(
-			farthest-side ellipse at 10% 0,
-			rgba(40, 40, 40, 0.9),
-			rgba(90, 100, 130, 0.89),
-			rgba(60, 60, 60, 0.9)
-	),
-	url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-	background: -webkit-radial-gradient(
-			10% 0,
-			farthest-side ellipse,
-			rgba(40, 40, 40, 0.9),
-			rgba(90, 100, 130, 0.89),
-			rgba(60, 60, 60, 0.9)
-	),
-	url("../../reference/light-blue/img/bgnoise_lg_dark.png");
-	background: -moz-radial-gradient(
-			10% 0,
-			farthest-side ellipse,
-			rgba(40, 40, 40, 0.9),
-			rgba(90, 100, 130, 0.89),
-			rgba(60, 60, 60, 0.9)
-	),
-	url("../../reference/light-blue/img/bgnoise_lg_dark.png"); /*스크롤바 뒷 배경 색상*/
+	background-color: #4b4b4b; /*스크롤바 뒷 배경 색상*/
 }
