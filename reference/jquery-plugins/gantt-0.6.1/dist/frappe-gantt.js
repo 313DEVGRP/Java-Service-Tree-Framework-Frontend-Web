@@ -1073,9 +1073,11 @@ var Gantt = (function () {
             this.originTasks = tasks;
             this.modal_action = modal;
 
-            this.setup_wrapper(wrapper);
             this.setup_options(options);
             this.setup_tasks(tasks);
+
+            this.setup_wrapper(wrapper);
+
             // initialize with default view mode
             this.change_view_mode();
             this.bind_events();
@@ -1128,6 +1130,7 @@ var Gantt = (function () {
             parent_element.appendChild(this.$wrapper);
             this.$wrapper.appendChild(this.$container);
             this.$container.appendChild(this.$svg);
+            element.appendChild(this.setup_mode_handler());
 
             // popup wrapper
             this.popup_wrapper = document.createElement('div');
@@ -1135,6 +1138,26 @@ var Gantt = (function () {
             this.$container.appendChild(this.popup_wrapper);
         }
 
+        setup_mode_handler() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'mt well well-sm';
+
+            Object.keys(VIEW_MODE).forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = `btn btn-default btn-sm mr-xs ${VIEW_MODE[key] === this.options.view_mode ? 'active' : ''}`;
+                btn.innerText = VIEW_MODE[key];
+                btn.addEventListener('click', (e) => {
+                    e.target.classList.add('active');
+                    e.target.parentNode.childNodes.forEach(b => b.classList.remove('active'));
+
+                    this.change_view_mode(VIEW_MODE[key]);
+                });
+
+                wrapper.appendChild(btn);
+            });
+
+            return wrapper;
+        }
         setup_options(options) {
             const default_options = {
                 header_height: 50,
