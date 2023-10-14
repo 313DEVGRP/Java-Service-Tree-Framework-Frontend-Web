@@ -181,9 +181,9 @@ function makePdServiceSelectBox() {
 		var endPointUrl = "";
 
 		if (checked) {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
+			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
 		} else {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
+			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
 		}
 		//
 		getStatusMonitorData($("#selected_pdService").val(), endPointUrl);
@@ -1412,8 +1412,10 @@ function click_btn_for_connect_req_jira() {
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
 	return data
-		.sort((a, b) => a.c_parentid - b.c_parentid || a.c_issue_create_date - b.c_issue_create_date)
+		.sort((a, b) => a.c_parentid - b.c_parentid || a.c_req_create_date - b.c_req_create_date)
 		.reduce((acc, cur) => {
+			if (cur.c_parentid < 2) return acc;
+
 			const task = {
 				id: String(cur.c_id),
 				assignee: cur.c_issue_assignee,
@@ -1423,7 +1425,7 @@ function setGanttTasks(data) {
 				end: getDate(cur.c_req_end_date),
 				progress: 20,
 				dependencies: `${cur.c_parentid}`,
-				priority: cur.c_issue_priority_name,
+				priority: cur.state,
 				custom_class: cur.c_issue_priority_name, // optional
 				type: cur.c_type,
 				etc: cur.c_etc,
@@ -1440,7 +1442,7 @@ function setGanttTasks(data) {
 			if (cur.c_parentid === 2) {
 				acc.push(task);
 			} else {
-				acc.splice(acc.findIndex((item) => item.id === cur.c_parentid) + 1, 0, task);
+				acc.splice(acc.findIndex((item) => Number(item.id) === cur.c_parentid) + 1, 0, task);
 			}
 
 			return acc;
@@ -1451,15 +1453,13 @@ function getStatusMonitorData(selectId, endPointUrl) {
 	$("#gantt-target").empty();
 
 	$.ajax({
-		url: "/auth-user/api/arms/reqStatus" + endPointUrl,
+		url: "/auth-user/api/arms/reqAdd" + endPointUrl,
 		type: "GET",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (data) {
 				if (!isEmpty(data)) {
-					// const tasks = setGanttTasks(data);
-					console.log("####################### setGanttTasks ::", setGanttTasks(data));
 					gantt = new Gantt(
 						"#gantt-target",
 						setGanttTasks(data),
