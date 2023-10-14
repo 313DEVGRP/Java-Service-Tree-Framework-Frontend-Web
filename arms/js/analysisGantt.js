@@ -1440,7 +1440,7 @@ function setGanttTasks(data) {
 			};
 
 			if (cur.c_parentid === 2) {
-				delete task.dependencies;
+				task.dependencies = "";
 				acc.push(task);
 			} else {
 				acc.splice(acc.findIndex((item) => Number(item.id) === cur.c_parentid) + 1, 0, task);
@@ -1464,7 +1464,7 @@ function getStatusMonitorData(selectId, endPointUrl) {
 					gantt = new Gantt(
 						"#gantt-target",
 						setGanttTasks(data),
-						{ language: "kr" },
+						{ language: navigator.language?.split("-")[0] || navigator.userLanguage },
 						{
 							name: "작업",
 							etc: "비고",
