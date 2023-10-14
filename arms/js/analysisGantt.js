@@ -1423,21 +1423,33 @@ function click_btn_for_connect_req_jira() {
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
 	return data.reduce((acc, cur) => {
-		acc.push({
+		const task = {
 			id: String(cur.c_id),
 			assignee: cur.c_issue_assignee,
 			reporter: cur.c_issue_reporter,
 			name: cur.c_title,
-			start: getDate(cur.c_issue_create_date),
-			end: getDate(
-				new Date(new Date(cur.c_issue_create_date).setDate(new Date(cur.c_issue_create_date).getDate() + 10)).getTime()
-			),
+			start: getDate(cur.c_req_start_date),
+			end: getDate(cur.c_req_end_date),
 			progress: 20,
 			dependencies: `${cur.c_parentid}`,
 			priority: cur.c_issue_priority_name,
 			custom_class: cur.c_issue_priority_name, // optional
-			type: cur.c_type
-		});
+			type: cur.c_type,
+			etc: cur.c_etc,
+			tmm: '',
+			p_work: '',
+			t_period: '',
+			tpp: '',
+			result: '',
+			plan: '',
+			performance: ''
+		}
+
+		if (cur.c_parentid === 2) {
+			acc.push(task);
+		} else {
+			acc.splice((acc.findIndex(item => item.id === cur.c_parentid) + 1), 0, task);
+		}
 
 		return acc;
 	}, []);
@@ -1454,18 +1466,25 @@ function getStatusMonitorData(selectId, endPointUrl) {
 		statusCode: {
 			200: function (data) {
 				if (!isEmpty(data)) {
-					const tasks = setGanttTasks(data);
+					// const tasks = setGanttTasks(data);
+					console.log('####################### setGanttTasks ::', setGanttTasks(data))
 					gantt = new Gantt(
 						"#gantt-target",
-						tasks,
+						setGanttTasks(data),
 						{ language: "kr" },
 						{
-							assignee: "Assignee",
-							reporter: "Reporter",
-							name: "Title",
-							start: "Start Date",
-							end: "End Date",
-							priority: "Priority"
+							name: '작업',
+							etc: '비고',
+							start: "시작일",
+							end: "완료일",
+							tmm: '총 작업량',
+							p_work: '계획작업',
+							t_period: '총 기간',
+							tpp: '계획기간',
+							assignee: "담당",
+							result: '산출물',
+							plan: '계획',
+							performance: '실적'
 						},
 						modalOpen
 					);
@@ -1476,6 +1495,8 @@ function getStatusMonitorData(selectId, endPointUrl) {
 }
 
 function getDate(stamp) {
+	if (!stamp) return `0000-00-00`;
+
 	const time = new Date(stamp);
 	return `${time.getFullYear()}-${addZero(time.getMonth() + 1)}-${addZero(time.getDate())}`;
 }
