@@ -1440,6 +1440,7 @@ function setGanttTasks(data) {
 			};
 
 			if (cur.c_parentid === 2) {
+				delete task.dependencies;
 				acc.push(task);
 			} else {
 				acc.splice(acc.findIndex((item) => Number(item.id) === cur.c_parentid) + 1, 0, task);
