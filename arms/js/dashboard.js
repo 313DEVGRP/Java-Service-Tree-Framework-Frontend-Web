@@ -24,6 +24,9 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			//"../reference/jquery-plugins/d3-7.8.2/dist/d3.js",
 			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js", //d3 변경
+			"../reference/c3/c3.min.css",
+			"../reference/c3/c3-custom.css",
+			"../reference/c3/c3.min.js",
 			"./js/common/colorPalette.js",
 			"./mock/versionGauge.json",
 			"../reference/jquery-plugins/info-chart-v1/js/D.js"
@@ -181,6 +184,8 @@ function makePdServiceSelectBox() {
 				drawVersionProgress(versionProgress);
 			}
 		});
+		donutChart();
+		combinationChart();
 
 		// 투입 인력별 요구사항 관여 차트 mock 데이터 fetch
 		d3.json("./mock/manRequirement.json", function (data) {
@@ -1016,3 +1021,140 @@ var SankeyChart = (function ($) {
 
 	return { loadChart, drawEmptyChart };
 })(jQuery);
+
+function donutChart() {
+	const data = [
+		{
+			"key": "Open",
+			"docCount": 18,
+			"percent": 47.368421052631575
+		},
+		{
+			"key": "완료됨",
+			"docCount": 7,
+			"percent": 18.421052631578945
+		},
+		{
+			"key": "In Progress",
+			"docCount": 6,
+			"percent": 15.789473684210526
+		},
+		{
+			"key": "Backlog",
+			"docCount": 3,
+			"percent": 7.894736842105263
+		},
+		{
+			"key": "진행 중",
+			"docCount": 2,
+			"percent": 5.263157894736842
+		},
+		{
+			"key": "Closed",
+			"docCount": 1,
+			"percent": 2.631578947368421
+		},
+		{
+			"key": "Resolved",
+			"docCount": 1,
+			"percent": 2.631578947368421
+		}
+	];
+	const columnsData = [];
+	let totalDocCount = 0;
+	for (let i = 0; i < data.length; i++) {
+		columnsData.push([data[i].key, data[i].docCount]);
+		totalDocCount += data[i].docCount;
+	}
+
+	const chart = c3.generate({
+		bindto: '#donut-chart',
+		data: {
+			columns: columnsData,
+			type : 'donut',
+		},
+		donut: {
+			title: "Total : " + totalDocCount
+		},
+		tooltip: {
+			format: {
+				value: function (value, ratio, id, index) {
+					return value;
+				}
+			},
+		},
+	});
+
+	$(document).on('click', '#donut-chart .c3-legend-item', function() {
+		const id = $(this).text();
+		const isHidden = $(this).hasClass('c3-legend-item-hidden');
+		const correspondingData = data.find(x => x.key === id);
+		if (isHidden) {
+			totalDocCount -= correspondingData.docCount;
+		} else {
+			totalDocCount += correspondingData.docCount;
+		}
+		$('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
+	});
+}
+
+function combinationChart() {
+	const monthlyData = {
+		"2020-01": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+		"2020-02": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+		"2020-03": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+		"2020-04": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+	};
+
+	const issueStatusTypes = ['Open', 'In Progress', '완료됨', 'Backlog', '진행 중', 'Closed', 'Resolved'];
+	let columnsData = [];
+
+	issueStatusTypes.forEach((status) => {
+		const columnData = [status];
+		Object.keys(monthlyData).forEach((month) => {
+			columnData.push(monthlyData[month].issueStatus[status] || 0);
+		});
+		columnsData.push(columnData);
+	});
+
+	const requirementCounts = ['요구사항'];
+	Object.keys(monthlyData).forEach((month) => {
+		requirementCounts.push(monthlyData[month].requirementCount);
+	});
+	columnsData.push(requirementCounts);
+
+	const chart = c3.generate({
+		bindto: '#combination-chart',
+		data: {
+			x: 'x',
+			columns: [
+				['x', ...Object.keys(monthlyData)],
+				...columnsData,
+			],
+			type: 'bar',
+			types: {
+				'요구사항': 'area',
+			},
+		},
+		axis: {
+			x: {
+				type: 'category',
+			},
+		},
+	});
+}
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

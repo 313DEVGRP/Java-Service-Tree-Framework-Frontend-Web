@@ -199,7 +199,7 @@ export default class Bar {
     show_popup() {
         if (this.gantt.bar_being_dragged) return;
 
-        this.gantt.modal_action({id: this.task.id, type: this.task.type});
+        this.gantt.modal_action({ id: this.task.id, type: this.task.type });
 
         // const start_date = date_utils.format(
         //     this.task._start,

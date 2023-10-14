@@ -1417,7 +1417,7 @@ function setGanttTasks(data) {
 			if (cur.c_parentid < 2) return acc;
 
 			const task = {
-				id: String(cur.c_id),
+				id: `${cur.c_id}`,
 				assignee: cur.c_issue_assignee,
 				reporter: cur.c_issue_reporter,
 				name: cur.c_title,
@@ -1440,6 +1440,7 @@ function setGanttTasks(data) {
 			};
 
 			if (cur.c_parentid === 2) {
+				delete task.dependencies;
 				acc.push(task);
 			} else {
 				acc.splice(acc.findIndex((item) => Number(item.id) === cur.c_parentid) + 1, 0, task);
