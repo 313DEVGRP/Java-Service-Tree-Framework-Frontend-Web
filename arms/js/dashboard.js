@@ -29,7 +29,9 @@ function execDocReady() {
 			"../reference/c3/c3.min.js",
 			"./js/common/colorPalette.js",
 			"./mock/versionGauge.json",
-			"../reference/jquery-plugins/info-chart-v1/js/D.js"
+			"../reference/jquery-plugins/info-chart-v1/js/D.js",
+			"./js/dashboard/chart/timeline_custom.js",
+			"./js/dashboard/chart/infographic_custom.css"
 		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -47,7 +49,9 @@ function execDocReady() {
 			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			// 투입 인력별 요구사항 관여 차트
 			"../reference/jquery-plugins/Jit-2.0.1/jit.js",
-			"../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css"],
+			"../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
+			// 제품-버전-투입인력 차트
+			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"],
 
 		["../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -168,20 +172,13 @@ function makePdServiceSelectBox() {
 		//getIssueStatus($("#selected_pdService").val(), endPointUrl);
 		//통계로드
 		//statisticsLoad($("#selected_pdService").val(), null);
+		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
+		statisticsMonitor($("#selected_pdService").val());
 
-		d3.json("./mock/versionGauge.json", function (data) {
-			//var versionProgress = data.response;
-			var versionProgress = data;
-			console.log("=== versionProgress start ===");
-			console.log(versionProgress);
-			console.log("=== versionProgress end ===")
-			if (versionProgress.length !== 0) {
-				$("#notifyNoVersion").hide();
-				$("#project-start").show();
-				$("#project-end").show();
-				drawVersionProgress(versionProgress);
-			}
-		});
+		//타임라인
+		$("#notifyNoVersion2").hide();
+		Timeline.init($("#version-timeline-bar"), graphViewList);
+
 		donutChart();
 		combinationChart();
 
@@ -190,6 +187,10 @@ function makePdServiceSelectBox() {
 			drawManRequirementTreeMapChart(data);
 		});
 
+		// 제품-버전-투입인력 차트 mock 데이터 fetch
+		d3.json("./mock/productToMan.json", function (data) {
+			drawProductToManSankeyChart(data);
+		});
 	});
 } // end makePdServiceSelectBox()
 
@@ -373,6 +374,70 @@ function drawReqTimeSeries(data) {
 
 	update(data1)
 }
+// 1. 제품서비스로만 볼 경우
+// 2. 버전만 따로 선택해서 보고싶은 경우.
+function statisticsMonitor(pdservice_id, pdservice_version_id) {
+	//1. 좌상 게이지 차트.
+	//2. Time ( 작업일정 ) - 버전 개수 삽입
+	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
+		console.log("================= by YHS");
+		console.log(json);
+
+		let versionData = json.pdServiceVersionEntities;
+		let version_count = versionData.length;
+		console.log("등록된 버전 개수 = " + version_count);
+		if(version_count !== undefined) {
+			$('#version_count').text(version_count);
+
+			if (version_count >= 0) {
+				let today = new Date();
+				console.log(today);
+
+				$("#notifyNoVersion").hide();
+				$("#project-start").show();
+				$("#project-end").show();
+				var versionGauge = [];
+				versionData.forEach(function (versionElement, idx) {
+					console.log(idx);
+					console.log(versionElement);
+					var gaugeElement = {
+						"current_date": today.toString(),
+						"version_name": versionElement.c_title,
+						"version_id": versionElement.c_id,
+						"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
+						"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+					}
+					versionGauge.push(gaugeElement);
+				});
+				console.log(versionGauge);
+				drawVersionProgress(versionGauge);
+			}
+		}
+	});
+
+	//제품서비스 - status 기반
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log(data);
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+				//해당 제품의 총 요구사항 수 (by db, not es)
+				$('#active_version_count').text(data["version"]);
+				$('#req_count').text(data["req"]);
+				$('#linkedIssue_subtask_count').text(+data["issue"]);
+			}
+		}
+	});
+}
+
 
 //
 function drawVersionProgress(data) {
@@ -401,6 +466,7 @@ function drawVersionProgress(data) {
 		svg,
 		totalPercent,
 		width,
+		versionId,
 		versionName,
 		waveName;
 	
@@ -419,7 +485,7 @@ function drawVersionProgress(data) {
 
 	width = 200;
 	height = width;
-	radius = Math.min(width, height) / 2.1;
+	radius = Math.min(width, height) / 2.5;
 
 	// percToDeg percToRad degToRad 고정
 	percToDeg = function (perc) {
@@ -435,7 +501,7 @@ function drawVersionProgress(data) {
 	};
 	//
 	svg = d3
-		.select("#version-progress-bar")
+		.select("#versionGaugeChart")
 		.append("svg")
 		.attr("viewBox", [29, 19, width - 40, height - 40])
 		.append("g");
@@ -445,7 +511,7 @@ function drawVersionProgress(data) {
 		.attr("transform", "translate(" + (width + margin.left) / 2 + ", " + (height + margin.top) / 2 + ")");
 
 	var tooltip = d3
-		.select("#version-progress-bar")
+		.select("#versionGaugeChart")
 		.append("div")
 		.style("opacity", 0)
 		.attr("class", "tooltip")
@@ -505,6 +571,7 @@ function drawVersionProgress(data) {
 	totalDate = startDDay + endDDay;
 
 	var mouseover = function (d) {
+		var subgroupId = d.version_id;
 		var subgroupName = d.version_name;
 		var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
 		tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
@@ -514,7 +581,8 @@ function drawVersionProgress(data) {
 
 		d3.selectAll(".myWave").style("opacity", 0.2);
 		d3.selectAll(".myStr").style("opacity", 0.2);
-		d3.selectAll(".wave-" + subgroupName).style("opacity", 1);
+		d3.selectAll(".wave-" + subgroupId).style("opacity", 1);
+		//d3.selectAll(".wave-" + subgroupName).style("opacity", 1);
 	};
 
 	var mousemove = function (d) {
@@ -533,9 +601,10 @@ function drawVersionProgress(data) {
 		totalPercent += sectionPerc;
 		startPadRad = sectionIndx === 0 ? 0 : padRad / 2;
 		endPadRad = sectionIndx === numSections ? 0 : padRad / 2;
+		versionId = data[sectionIndx - 1].version_id;
 		versionName = data[sectionIndx - 1].version_name;
 		//waveName = data[sectionIndx - 1].mig_wave_link;
-
+		console.log(versionId);
 		var sectionData = data[sectionIndx - 1];
 
 		var arc = d3
@@ -545,14 +614,16 @@ function drawVersionProgress(data) {
 			.startAngle(arcStartRad + startPadRad)
 			.endAngle(arcEndRad - endPadRad);
 
-		var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName);
+		var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionId);
+		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName);
 		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName);
 
 		section
 			.data([sectionData])
 			.enter()
 			.append("g")
-			.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionName)
+			.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionId)
+			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionName)
 			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + waveName)
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
@@ -566,7 +637,8 @@ function drawVersionProgress(data) {
 			.attr("d", arc);
 
 		chart
-			.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName)
+			.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionId)
+			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName)
 			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName)
 			.append("text")
 			.attr("class", "no-select")
@@ -640,7 +712,7 @@ function drawVersionProgress(data) {
 		return Needle;
 	})();
 
-	needle = new Needle(38, 2);
+	needle = new Needle(25, 7.5);
 
 	needle.drawOn(chart, 0);
 
@@ -799,6 +871,223 @@ function init(treeMapInfos) {
 	});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+// 제품-버전-투입인력 차트 생성
+////////////////////////////////////////////////////////////////////////////////////////
+function drawProductToManSankeyChart(data) {
+	console.log("==== 장지윤 data");
+	console.log(data);
+	SankeyChart.loadChart(data);
+}
+
+var SankeyChart = (function ($) {
+	"use strict";
+
+	var initSvg = function () {
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var height = 500 - margin.top - margin.bottom;
+
+		var vx = width + margin.left + margin.right;
+		var vy = height + margin.top + margin.bottom;
+
+		return d3
+			.select("#chart-product-manpower")
+			.append("svg")
+			.attr("viewBox", "0 0 " + vx + " " + vy)
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	};
+
+	var drawEmptyChart = function () {
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var height = 500 - margin.top - margin.bottom;
+
+		initSvg()
+			.append("text")
+			.style("font-size", "12px")
+			.style("fill", "white")
+			.style("font-weight", 5)
+			.text("선택된 어플리케이션이 없습니다.")
+			.attr("x", width / 2)
+			.attr("y", height / 2);
+	};
+
+	var loadChart = function (data) {
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var height = 500 - margin.top - margin.bottom;
+
+		var formatNumber = d3.format(",.0f");
+		var format = function (d) {
+			return formatNumber(d);
+		};
+
+		var iconXs = [10, 12, 11.5, 12];
+		var nodeIcons = ['<i class="fa fa-cube"></i>', '<i class="fa fa-server"></i>', '<i class="fa fa-database"></i>'];
+		var colors = ["#1f77b4", "#2ca02c", "#d62728"];
+
+		var svg = initSvg();
+
+		console.log("=== 장지윤 data");
+		console.log(data);
+
+		if (isEmpty(data.nodes)) {
+			svg
+				.append("text")
+				.style("font-size", "12px")
+				.style("fill", "white")
+				.style("font-weight", 5)
+				.text("해당 프로젝트에 매핑된 버전이 없습니다.")
+				.attr("x", width / 2)
+				.attr("y", height / 2);
+
+			return;
+		}
+
+		var sankey = d3.sankey().nodeWidth(36).nodePadding(40).size([width, height]);
+
+		var graph = {
+			nodes: [],
+			links: []
+		};
+		var nodeMap = { };
+
+		var color = d3.scaleOrdinal(colors);
+		var iconX = d3.scaleOrdinal(iconXs);
+		var nodeIcon = d3.scaleOrdinal(nodeIcons);
+
+		data.nodes.forEach(function (nodeInfos) {
+			graph.nodes.push(nodeInfos);
+		});
+
+		data.links.forEach(function (nodeLinks) {
+			graph.links.push(nodeLinks);
+		});
+
+		graph.nodes.forEach(function (node) {
+			nodeMap[node.id] = node;
+		});
+
+		graph.links = graph.links.map(function (link) {
+			return {
+				source: nodeMap[link.source],
+				target: nodeMap[link.target],
+				value: 1
+			};
+		});
+
+		graph = sankey(graph);
+
+		var link = svg
+			.append("g")
+			.selectAll(".link")
+			.data(graph.links)
+			.enter()
+			.append("path")
+			.attr("class", "link")
+			.attr("d", d3.sankeyLinkHorizontal())
+			.attr("stroke-width", function (d) {
+				return d.width;
+			});
+
+		link.append("title").text(function (d) {
+			return d.source.name + " → " + d.target.name + "\n" + format(d.value);
+		});
+
+		var node = svg.append("g").selectAll(".node").data(graph.nodes).enter().append("g").attr("class", "node");
+
+		node
+			.append("rect")
+			.attr("x", function (d) {
+				return d.x0;
+			})
+			.attr("y", function (d) {
+				return d.y0;
+			})
+			.attr("height", function (d) {
+				return d.y1 - d.y0;
+			})
+			.attr("width", sankey.nodeWidth())
+			.style("fill", function (d) {
+				return (d.color = color(d.type));
+			})
+			.style("stroke", function (d) {
+				return d3.rgb(d.color).darker(2);
+			})
+			.append("title")
+			.text(function (d) {
+				return d.name + "\n" + format(d.value);
+			});
+
+		node
+			.append("svg:foreignObject")
+			.attr("x", function (d) {
+				return d.x0 + iconX(d.type);
+			})
+			.attr("y", function (d) {
+				return (d.y1 + d.y0 - 16) / 2;
+			})
+			.attr("height", "16px")
+			.attr("width", "16px")
+			.html((d) => nodeIcon(d.type));
+
+		node
+			.append("text")
+			.attr("x", function (d) {
+				return d.x0 > 0 ? d.x0 - 6 : d.x1 - d.x0 + 6;
+			})
+			.attr("y", function (d) {
+				return (d.y1 + d.y0 - 18) / 2;
+			})
+			.attr("dy", "0.35em")
+			.style("fill", function (d) {
+				return (d.color = color(d.type));
+			})
+			.style("text-shadow", function (d) {
+				return `0 1px 0 ${(d.color = color(d.type))}`;
+			})
+			.attr("text-anchor", function (d) {
+				return d.x0 > 0 ? "end" : "start";
+			})
+			.text(function (d) {
+				return `[${d.type}]`;
+			})
+			.filter(function (d) {
+				return d.x < width / 2;
+			})
+			.attr("x", 6 + sankey.nodeWidth())
+			.attr("text-anchor", "start");
+
+		node
+			.append("text")
+			.attr("x", function (d) {
+				return d.x0 > 0 ? d.x0 - 6 : d.x1 - d.x0 + 6;
+			})
+			.attr("y", function (d) {
+				return (d.y1 + d.y0 + 18) / 2;
+			})
+			.attr("dy", ".35em")
+			.attr("text-anchor", function (d) {
+				return d.x0 > 0 ? "end" : "start";
+			})
+			.attr("transform", null)
+			.text(function (d) {
+				return d.name;
+			})
+			.filter(function (d) {
+				return d.x < width / 2;
+			})
+			.attr("x", 6 + sankey.nodeWidth())
+			.attr("text-anchor", "start");
+	};
+
+	return { loadChart, drawEmptyChart };
+})(jQuery);
+
 function donutChart() {
 	const data = [
 		{
@@ -935,3 +1224,37 @@ function combinationChart() {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+//mock
+var graphViewList = [
+	{
+		title: '엔씨소프트 ( NCSOFT )',
+		startDate: '2019.12.30',
+		endDate: '2022.11.04',
+	},
+	{
+		title: 'Daumsoft',
+		startDate: '2010.12.01',
+		endDate: '2011.12.01',
+	},
+	{
+		title: '대성그룹 대성글로벌네트워크 1차',
+		startDate: '2008.08.01',
+		endDate: '2010.12.01',
+	},
+	{
+		title: '고려대학교 컴퓨터정보통신대학원',
+		startDate: '2013.02.01',
+		endDate: '2016.07.01',
+	},
+	{
+		title: '대성그룹 대성글로벌네트워크 2차',
+		startDate: '2011.12.01',
+		endDate: '2013.05.01',
+	},
+	{
+		title: '안철수연구소 ( AHNLAB )',
+		startDate: '2013.05.01',
+		endDate: '2019.12.30',
+	},
+];
