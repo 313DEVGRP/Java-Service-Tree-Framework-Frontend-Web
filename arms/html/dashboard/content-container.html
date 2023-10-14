@@ -426,7 +426,7 @@
                             </blockquote>
                             <div class="row">
                                 <div id="chart-product-manpower">
-                                    ddd
+
                                 </div>
                                 <div id="chart-manpower-requirement" style="height: 555px; margin: 1rem 1.5rem 0rem 1.5rem">
                                 </div>
@@ -684,5 +684,25 @@
         translate: -50% -50%;
         font-size: 12px;
         font-weight: bold;
+    }
+
+    .node rect {
+        fill-opacity: 0.9;
+        shape-rendering: crispEdges;
+    }
+
+    .node text {
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff;
+    }
+
+    .link {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: 0.2;
+    }
+
+    .link:hover {
+        stroke-opacity: 0.5;
     }
 </style>
