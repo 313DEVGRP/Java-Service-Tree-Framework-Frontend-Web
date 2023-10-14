@@ -1442,7 +1442,8 @@ function setGanttTasks(data) {
 			tpp: '',
 			result: '',
 			plan: '',
-			performance: ''
+			performance: '',
+			level: cur.c_level
 		}
 
 		if (cur.c_parentid === 2) {

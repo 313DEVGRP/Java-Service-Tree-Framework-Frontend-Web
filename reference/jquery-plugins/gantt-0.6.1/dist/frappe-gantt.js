@@ -998,6 +998,10 @@ var Gantt = (function () {
                     const $td = document.createElement('td');
                     $td.textContent = task[content];
 
+                    if (content === 'name' && (task.level > 2)) {
+                        $td.className = `indent-${task.level}`;
+                    }
+
                     $tr.append($td);
                 });
 

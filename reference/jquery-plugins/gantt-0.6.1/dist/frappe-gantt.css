@@ -45,6 +45,15 @@
   border-right: 2px solid #515256;
   border-bottom: 2px solid #949699 !important;
 }
+.table-container table .table-body tr td.indent-1 {
+  padding-left: 20px;
+}
+.table-container table .table-body tr td.indent-2 {
+  padding-left: 40px;
+}
+.table-container table .table-body tr td.indent-3 {
+  padding-left: 60px;
+}
 
 .split-bar {
   position: absolute;
