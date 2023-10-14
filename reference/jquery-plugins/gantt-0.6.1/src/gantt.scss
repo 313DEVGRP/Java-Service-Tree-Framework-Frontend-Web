@@ -2,7 +2,7 @@ $bar-color: #f8f8f8 !default;
 $bar-stroke: #8d99a6 !default;
 $border-right-color: #515256 !default;
 $border-color: #b0b0b2 !default;
-$light-bg: #f5f5f5 !default;
+$light-bg: rgba(51, 51, 51, 0.325) !default;
 $light-border-color: #ebeff2 !default;
 $light-yellow: #fcf8e3 !default;
 $text-muted: #666 !default;
@@ -28,12 +28,15 @@ $handle-color: #ddd !default;
         border-collapse: collapse;
         table-layout: fixed;
         border-spacing: 0;
-        border-right: 1px solid $border-color;
 
         .table-body {
             tr {
                 &:first-child {
                     height: 37px !important;
+                }
+
+                &:nth-child(odd) {
+                    background-color: $light-bg;
                 }
             }
         }
@@ -48,22 +51,16 @@ $handle-color: #ddd !default;
             -ms-text-overflow: ellipsis;
             padding: 9px 7px;
             box-sizing: border-box;
-
-            &:last-child {
-                border-right: none;
-            }
-        }
-
-        .table-header tr th {
-            font-weight: 400;
-            border-top: 1px solid $border-color;
-            border-right: 2px solid $border-right-color;
-            border-bottom: 2px solid $border-color;
         }
 
         .table-body tr td {
             border-right: 2px solid $border-right-color;
-            border-bottom: 2px solid #949699 !important;
+
+            @for $i from 1 through 3 {
+                &.indent-#{$i} {
+                    padding-left: 20px * $i;
+                }
+            }
         }
     }
 }
@@ -76,7 +73,8 @@ $handle-color: #ddd !default;
     z-index: 9;
     width: 5px;
     height: 100%;
-    background-color: $border-color;
+    border-radius: 2.5px;
+    background-color: $border-right-color;
     cursor: col-resize;
 
     &:hover {
@@ -90,11 +88,12 @@ $handle-color: #ddd !default;
     }
     .grid-header {
         fill: transparent;
-        stroke: $border-color;
-        stroke-width: 1.4;
     }
     .grid-row {
         fill: transparent;
+    }
+    .grid-row:nth-child(odd) {
+        fill: $light-bg;
     }
     .row-line {
         stroke: $light-border-color;
@@ -145,7 +144,7 @@ $handle-color: #ddd !default;
         font-weight: lighter;
 
         &.big {
-            fill: $text-light;
+            fill: $handle-color;
             text-anchor: start;
         }
     }

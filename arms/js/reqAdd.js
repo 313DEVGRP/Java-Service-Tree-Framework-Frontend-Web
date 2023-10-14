@@ -4,7 +4,7 @@
 var selectedJsTreeId; // 요구사항 아이디
 var selectedJsTreeName; // 요구사항 이름
 var tempDataTable;
- var isChecked = [];   // 지라 프로젝트 연결 목록 체크
+var isChecked = [];   // 지라 프로젝트 연결 목록 체크
 var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
 
 function execDocReady() {
@@ -1316,6 +1316,13 @@ function save_req() {
 
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
+		var c_type_value;
+		if ( isEmpty( $("input[name=reqType]:checked").val() )){
+			c_type_value = "default";
+		}else{
+			c_type_value = $("input[name=reqType]:checked").val();
+		}
+
 		if($("#popup_version").val().length >= 1) {
 			if($("#req_title").val().trim() !== "" ) {
 				$.ajax({
@@ -1324,7 +1331,7 @@ function save_req() {
 					data: {
 						ref: selectedJsTreeId,
 						c_title: $("#req_title").val(),
-						c_type: $("input[name=reqType]:checked").val(),
+						c_type: c_type_value,
 						c_req_pdservice_link: $("#selected_pdService").val(),
 						c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
 						c_req_writer: "[" + userName + "]" + " - " + userID,

@@ -1,0 +1,167 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "276",
+            "$color": "#1F2421",
+            "$area": 276
+          },
+          "id": "req-2-1",
+          "name": "대시보드 백엔드 개발"
+        },
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "271",
+            "$color": "#216869",
+            "$area": 271
+          },
+          "id": "req-1-1",
+          "name": "대시보드 프론트엔드 개발"
+        }
+      ],
+      "data": {
+        "totalInvolvedCount": 547,
+        "$area": 547
+      },
+      "id": "manpower-1",
+      "name": "유현덕"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "209",
+            "$color": "#216869",
+            "$area": 209
+          },
+          "id": "req-1-2",
+          "name": "대시보드 프론트엔드 개발"
+        }
+      ],
+      "data": {
+        "totalInvolvedCount": 209,
+        "$area": 209
+      },
+      "id": "manpower-2",
+      "name": "관운장"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "260",
+            "$color": "#9CC5A1",
+            "$area": 260
+          },
+          "id": "req-4",
+          "name": "제품관리 프론트엔드 개발"
+        },
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "254",
+            "$color": "#49A078",
+            "$area": 254
+          },
+          "id": "req-3",
+          "name": "제품관리 백엔드 개발"
+        }
+      ],
+      "data": {
+        "totalInvolvedCount": 514,
+        "$area": 514
+      },
+      "id": "manpower-3",
+      "name": "장익덕"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "181",
+            "$color": "#1F2421",
+            "$area": 181
+          },
+          "id": "req-2-2",
+          "name": "대시보드 백엔드 개발"
+        }
+      ],
+      "data": {
+        "totalInvolvedCount": 181,
+        "$area": 181
+      },
+      "id": "manpower-4",
+      "name": "사마의"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "229",
+            "$color": "#73B38D",
+            "$area": 229
+          },
+          "id": "req-6-1",
+          "name": "엔진 개발"
+        },
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "185",
+            "$color": "#358471",
+            "$area": 185
+          },
+          "id": "req-5-1",
+          "name": "간트 차트 개발"
+        }
+      ],
+      "data": {
+        "totalInvolvedCount": 414,
+        "$area": 414
+      },
+      "id": "manpower-5",
+      "name": "제갈량"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "398",
+            "$color": "#358471",
+            "$area": 398
+          },
+          "id": "req-5-2",
+          "name": "간트 차트 개발"
+        },
+        {
+          "children": [],
+          "data": {
+            "involvedCount": "203",
+            "$color": "#73B38D",
+            "$area": 203
+          },
+          "id": "req-6-2",
+          "name": "엔진 개발"
+        }
+      ],
+      "data": {
+        "totalInvolvedCount": 601,
+        "$area": 601
+      },
+      "id": "manpower-6",
+      "name": "조맹덕"
+    }
+  ],
+  "data": {},
+  "id": "root",
+  "name": "작업자별 요구사항 관여 트리맵"
+}

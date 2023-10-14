@@ -9,6 +9,8 @@ var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
+var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
+
 function execDocReady() {
 
 	var pluginGroups = [
@@ -22,6 +24,9 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			//"../reference/jquery-plugins/d3-7.8.2/dist/d3.js",
 			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js", //d3 변경
+			"../reference/c3/c3.min.css",
+			"../reference/c3/c3-custom.css",
+			"../reference/c3/c3.min.js",
 			"./js/common/colorPalette.js",
 			"./mock/versionGauge.json",
 			"../reference/jquery-plugins/info-chart-v1/js/D.js",
@@ -41,7 +46,12 @@ function execDocReady() {
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
 			"../reference/lightblue4/docs/lib/widgster/widgster.js",
-			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"],
+			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+			// 투입 인력별 요구사항 관여 차트
+			"../reference/jquery-plugins/Jit-2.0.1/jit.js",
+			"../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
+			// 제품-버전-투입인력 차트
+			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"],
 
 		["../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -76,7 +86,6 @@ function execDocReady() {
 
 			dashboardColor = dashboardPalette.dashboardPalette04;
 			console.log(dashboardColor);
-			//console.log("version-timeline-bar element"); console.log($("#version-timeline-bar")[0]);
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
@@ -127,7 +136,6 @@ function makePdServiceSelectBox() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
-
 				for (var k in data.response) {
 					var obj = data.response[k];
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
@@ -167,12 +175,22 @@ function makePdServiceSelectBox() {
 		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
 		statisticsMonitor($("#selected_pdService").val());
 
-		
 		//타임라인
 		$("#notifyNoVersion2").hide();
 		Timeline.init($("#version-timeline-bar"), graphViewList);
 
+		donutChart();
+		combinationChart();
 
+		// 투입 인력별 요구사항 관여 차트 mock 데이터 fetch
+		d3.json("./mock/manRequirement.json", function (data) {
+			drawManRequirementTreeMapChart(data);
+		});
+
+		// 제품-버전-투입인력 차트 mock 데이터 fetch
+		d3.json("./mock/productToMan.json", function (data) {
+			drawProductToManSankeyChart(data);
+		});
 	});
 } // end makePdServiceSelectBox()
 
@@ -701,6 +719,513 @@ function drawVersionProgress(data) {
 	needle.animateOn(chart, startDDay / totalDate);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+// 투입 인력별 요구사항 관여 차트 생성
+////////////////////////////////////////////////////////////////////////////////////////
+function drawManRequirementTreeMapChart(data) {
+	if ($("#chart-manpower-requirement").children().length !== 0) {
+		$("#chart-manpower-requirement").empty();
+	}
+	init(data);
+}
+
+(function () {
+	var ua = navigator.userAgent,
+		iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
+		typeOfCanvas = typeof HTMLCanvasElement,
+		nativeCanvasSupport = typeOfCanvas == "object" || typeOfCanvas == "function",
+		textSupport =
+			nativeCanvasSupport && typeof document.createElement("canvas").getContext("2d").fillText == "function";
+	//I'm setting this based on the fact that ExCanvas provides text support for IE
+	//and that as of today iPhone/iPad current text support is lame
+	labelType = !nativeCanvasSupport || (textSupport && !iStuff) ? "Native" : "HTML";
+	nativeTextSupport = labelType == "Native";
+	useGradients = nativeCanvasSupport;
+	animate = !(iStuff || !nativeCanvasSupport);
+})();
+
+var Log = {
+	elem: false,
+	write: function (text) {
+		if (!this.elem) this.elem = document.getElementById("log");
+		this.elem.innerHTML = text;
+		this.elem.style.left = 500 - this.elem.offsetWidth / 2 + "px";
+	}
+};
+
+function init(treeMapInfos) {
+	//init TreeMap
+	var tm = new $jit.TM.Squarified({
+		//where to inject the visualization
+		injectInto: "chart-manpower-requirement",
+		//parent box title heights
+		titleHeight: 22,
+		//enable animations
+		animate: animate,
+		//box offsets
+		offset: 2.5,
+		//Attach left and right click events
+		Events: {
+			enable: true,
+			onClick: function (node) {
+				if (node) tm.enter(node);
+			},
+			onRightClick: function () {
+				tm.out();
+			}
+		},
+		duration: 300,
+		//Enable tips
+		Tips: {
+			enable: true,
+			//add positioning offsets
+			offsetX: 20,
+			offsetY: 20,
+			//implement the onShow method to
+			//add content to the tooltip when a node
+			//is hovered
+			onShow: function (tip, node, isLeaf, domElement) {
+				var html =
+					'<div class="tip-title" style="font-size: 13px; font-weight: bolder">' +
+					node.name +
+					'</div><div class="tip-text">';
+				var data = node.data;
+				if (data.involvedCount) {
+					html +=
+						"<div style='white-space: pre-wrap; font-size: 11px;'>관여한 횟수 : <span style='color: lawngreen'>" +
+						data.involvedCount +
+						"<br/></span></div>";
+				}
+				if (data.totalInvolvedCount) {
+					html +=
+						"<div style='white-space: pre-wrap; font-size: 11px;'>작업자가 관여한 총 횟수 : <span style='color: orange'>" +
+						data.totalInvolvedCount +
+						"<br/></span></div>";
+				}
+				if (data.image) {
+					html += '<img src="' + data.image + '" class="album" />';
+				}
+				html +=
+					"<div style='white-space: pre-wrap; margin-top: 8px; color: #d0d0d0; font-size: 10px'>우클릭 시 뒤로 갑니다.<br/></div>";
+				tip.innerHTML = html;
+			}
+		},
+		//Add the name of the node in the correponding label
+		//This method is called once, on label creation.
+		onCreateLabel: function (domElement, node) {
+			if (node.id === "root" || !node.id.includes("app")) {
+				var html =
+					'<div style="font-size: 13px; font-weight: bolder; text-align: center; margin: 2.5px 0 0 0">' +
+					node.name +
+					"</div>";
+			} else {
+				var html =
+					'<div style="font-size: 15.5px; font-weight: 600; text-align: center; margin: 2.5px 0 0 0; color: #464649">' +
+					// '<span style="color: whitesmoke; -webkit-text-stroke: 0.1px #1A2920;">' +
+					node.name +
+					// "</span>" +
+					"</div>";
+			}
+			domElement.innerHTML = html;
+			var style = domElement.style;
+			style.display = "";
+			style.border = "1.5px solid transparent";
+			// style.borderRadius = "50%";
+			domElement.onmouseover = function () {
+				style.border = "1.5px solid #9FD4FF";
+			};
+			domElement.onmouseout = function () {
+				style.border = "1.5px solid transparent";
+			};
+		}
+	});
+	tm.loadJSON(treeMapInfos);
+	tm.refresh();
+	//end
+	//add events to radio buttons
+	var sq = $jit.id("r-sq"),
+		st = $jit.id("r-st"),
+		sd = $jit.id("r-sd");
+	var util = $jit.util;
+	util.addEvent(sq, "change", function () {
+		if (!sq.checked) return;
+		util.extend(tm, new $jit.Layouts.TM.Squarified());
+		tm.refresh();
+	});
+	util.addEvent(st, "change", function () {
+		if (!st.checked) return;
+		util.extend(tm, new $jit.Layouts.TM.Strip());
+		tm.layout.orientation = "v";
+		tm.refresh();
+	});
+	util.addEvent(sd, "change", function () {
+		if (!sd.checked) return;
+		util.extend(tm, new $jit.Layouts.TM.SliceAndDice());
+		tm.layout.orientation = "v";
+		tm.refresh();
+	});
+	//add event to the back button
+	var back = $jit.id("back");
+	$jit.util.addEvent(back, "click", function () {
+		tm.out();
+	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 제품-버전-투입인력 차트 생성
+////////////////////////////////////////////////////////////////////////////////////////
+function drawProductToManSankeyChart(data) {
+	console.log("==== 장지윤 data");
+	console.log(data);
+	SankeyChart.loadChart(data);
+}
+
+var SankeyChart = (function ($) {
+	"use strict";
+
+	var initSvg = function () {
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var height = 500 - margin.top - margin.bottom;
+
+		var vx = width + margin.left + margin.right;
+		var vy = height + margin.top + margin.bottom;
+
+		return d3
+			.select("#chart-product-manpower")
+			.append("svg")
+			.attr("viewBox", "0 0 " + vx + " " + vy)
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	};
+
+	var drawEmptyChart = function () {
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var height = 500 - margin.top - margin.bottom;
+
+		initSvg()
+			.append("text")
+			.style("font-size", "12px")
+			.style("fill", "white")
+			.style("font-weight", 5)
+			.text("선택된 어플리케이션이 없습니다.")
+			.attr("x", width / 2)
+			.attr("y", height / 2);
+	};
+
+	var loadChart = function (data) {
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var height = 500 - margin.top - margin.bottom;
+
+		var formatNumber = d3.format(",.0f");
+		var format = function (d) {
+			return formatNumber(d);
+		};
+
+		var iconXs = [10, 12, 11.5, 12];
+		var nodeIcons = ['<i class="fa fa-cube"></i>', '<i class="fa fa-server"></i>', '<i class="fa fa-database"></i>'];
+		var colors = ["#1f77b4", "#2ca02c", "#d62728"];
+
+		var svg = initSvg();
+
+		console.log("=== 장지윤 data");
+		console.log(data);
+
+		if (isEmpty(data.nodes)) {
+			svg
+				.append("text")
+				.style("font-size", "12px")
+				.style("fill", "white")
+				.style("font-weight", 5)
+				.text("해당 프로젝트에 매핑된 버전이 없습니다.")
+				.attr("x", width / 2)
+				.attr("y", height / 2);
+
+			return;
+		}
+
+		var sankey = d3.sankey().nodeWidth(36).nodePadding(40).size([width, height]);
+
+		var graph = {
+			nodes: [],
+			links: []
+		};
+		var nodeMap = { };
+
+		var color = d3.scaleOrdinal(colors);
+		var iconX = d3.scaleOrdinal(iconXs);
+		var nodeIcon = d3.scaleOrdinal(nodeIcons);
+
+		data.nodes.forEach(function (nodeInfos) {
+			graph.nodes.push(nodeInfos);
+		});
+
+		data.links.forEach(function (nodeLinks) {
+			graph.links.push(nodeLinks);
+		});
+
+		graph.nodes.forEach(function (node) {
+			nodeMap[node.id] = node;
+		});
+
+		graph.links = graph.links.map(function (link) {
+			return {
+				source: nodeMap[link.source],
+				target: nodeMap[link.target],
+				value: 1
+			};
+		});
+
+		graph = sankey(graph);
+
+		var link = svg
+			.append("g")
+			.selectAll(".link")
+			.data(graph.links)
+			.enter()
+			.append("path")
+			.attr("class", "link")
+			.attr("d", d3.sankeyLinkHorizontal())
+			.attr("stroke-width", function (d) {
+				return d.width;
+			});
+
+		link.append("title").text(function (d) {
+			return d.source.name + " → " + d.target.name + "\n" + format(d.value);
+		});
+
+		var node = svg.append("g").selectAll(".node").data(graph.nodes).enter().append("g").attr("class", "node");
+
+		node
+			.append("rect")
+			.attr("x", function (d) {
+				return d.x0;
+			})
+			.attr("y", function (d) {
+				return d.y0;
+			})
+			.attr("height", function (d) {
+				return d.y1 - d.y0;
+			})
+			.attr("width", sankey.nodeWidth())
+			.style("fill", function (d) {
+				return (d.color = color(d.type));
+			})
+			.style("stroke", function (d) {
+				return d3.rgb(d.color).darker(2);
+			})
+			.append("title")
+			.text(function (d) {
+				return d.name + "\n" + format(d.value);
+			});
+
+		node
+			.append("svg:foreignObject")
+			.attr("x", function (d) {
+				return d.x0 + iconX(d.type);
+			})
+			.attr("y", function (d) {
+				return (d.y1 + d.y0 - 16) / 2;
+			})
+			.attr("height", "16px")
+			.attr("width", "16px")
+			.html((d) => nodeIcon(d.type));
+
+		node
+			.append("text")
+			.attr("x", function (d) {
+				return d.x0 > 0 ? d.x0 - 6 : d.x1 - d.x0 + 6;
+			})
+			.attr("y", function (d) {
+				return (d.y1 + d.y0 - 18) / 2;
+			})
+			.attr("dy", "0.35em")
+			.style("fill", function (d) {
+				return (d.color = color(d.type));
+			})
+			.style("text-shadow", function (d) {
+				return `0 1px 0 ${(d.color = color(d.type))}`;
+			})
+			.attr("text-anchor", function (d) {
+				return d.x0 > 0 ? "end" : "start";
+			})
+			.text(function (d) {
+				return `[${d.type}]`;
+			})
+			.filter(function (d) {
+				return d.x < width / 2;
+			})
+			.attr("x", 6 + sankey.nodeWidth())
+			.attr("text-anchor", "start");
+
+		node
+			.append("text")
+			.attr("x", function (d) {
+				return d.x0 > 0 ? d.x0 - 6 : d.x1 - d.x0 + 6;
+			})
+			.attr("y", function (d) {
+				return (d.y1 + d.y0 + 18) / 2;
+			})
+			.attr("dy", ".35em")
+			.attr("text-anchor", function (d) {
+				return d.x0 > 0 ? "end" : "start";
+			})
+			.attr("transform", null)
+			.text(function (d) {
+				return d.name;
+			})
+			.filter(function (d) {
+				return d.x < width / 2;
+			})
+			.attr("x", 6 + sankey.nodeWidth())
+			.attr("text-anchor", "start");
+	};
+
+	return { loadChart, drawEmptyChart };
+})(jQuery);
+
+function donutChart() {
+	const data = [
+		{
+			"key": "Open",
+			"docCount": 18,
+			"percent": 47.368421052631575
+		},
+		{
+			"key": "완료됨",
+			"docCount": 7,
+			"percent": 18.421052631578945
+		},
+		{
+			"key": "In Progress",
+			"docCount": 6,
+			"percent": 15.789473684210526
+		},
+		{
+			"key": "Backlog",
+			"docCount": 3,
+			"percent": 7.894736842105263
+		},
+		{
+			"key": "진행 중",
+			"docCount": 2,
+			"percent": 5.263157894736842
+		},
+		{
+			"key": "Closed",
+			"docCount": 1,
+			"percent": 2.631578947368421
+		},
+		{
+			"key": "Resolved",
+			"docCount": 1,
+			"percent": 2.631578947368421
+		}
+	];
+	const columnsData = [];
+	let totalDocCount = 0;
+	for (let i = 0; i < data.length; i++) {
+		columnsData.push([data[i].key, data[i].docCount]);
+		totalDocCount += data[i].docCount;
+	}
+
+	const chart = c3.generate({
+		bindto: '#donut-chart',
+		data: {
+			columns: columnsData,
+			type : 'donut',
+		},
+		donut: {
+			title: "Total : " + totalDocCount
+		},
+		tooltip: {
+			format: {
+				value: function (value, ratio, id, index) {
+					return value;
+				}
+			},
+		},
+	});
+
+	$(document).on('click', '#donut-chart .c3-legend-item', function() {
+		const id = $(this).text();
+		const isHidden = $(this).hasClass('c3-legend-item-hidden');
+		const correspondingData = data.find(x => x.key === id);
+		if (isHidden) {
+			totalDocCount -= correspondingData.docCount;
+		} else {
+			totalDocCount += correspondingData.docCount;
+		}
+		$('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
+	});
+}
+
+function combinationChart() {
+	const monthlyData = {
+		"2020-01": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+		"2020-02": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+		"2020-03": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+		"2020-04": {
+			"requirementCount": getRandomInt(0, 100),
+			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
+		},
+	};
+
+	const issueStatusTypes = ['Open', 'In Progress', '완료됨', 'Backlog', '진행 중', 'Closed', 'Resolved'];
+	let columnsData = [];
+
+	issueStatusTypes.forEach((status) => {
+		const columnData = [status];
+		Object.keys(monthlyData).forEach((month) => {
+			columnData.push(monthlyData[month].issueStatus[status] || 0);
+		});
+		columnsData.push(columnData);
+	});
+
+	const requirementCounts = ['요구사항'];
+	Object.keys(monthlyData).forEach((month) => {
+		requirementCounts.push(monthlyData[month].requirementCount);
+	});
+	columnsData.push(requirementCounts);
+
+	const chart = c3.generate({
+		bindto: '#combination-chart',
+		data: {
+			x: 'x',
+			columns: [
+				['x', ...Object.keys(monthlyData)],
+				...columnsData,
+			],
+			type: 'bar',
+			types: {
+				'요구사항': 'area',
+			},
+		},
+		axis: {
+			x: {
+				type: 'category',
+			},
+		},
+	});
+}
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+//mock
 var graphViewList = [
 	{
 		title: '엔씨소프트 ( NCSOFT )',

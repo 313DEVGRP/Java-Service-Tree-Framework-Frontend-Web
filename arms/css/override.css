@@ -880,7 +880,7 @@ select option {
 .link {
 	fill: none;
 	stroke: #ccc;
-	stroke-width: 1.5px;
+	/*stroke-width: 1.5px;*/
 }
 .templink {
 	fill: none;

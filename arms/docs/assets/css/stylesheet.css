@@ -800,10 +800,7 @@ hr {
     padding: 0px;
   }
 }
-/*=== 3.3 Section Divider ===*/
-.divider {
-  margin: 4rem 0;
-}
+
 
 /* =================================== */
 /*  4. Header
@@ -811,10 +808,13 @@ hr {
 #header {
   -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease;
+  opacity: 1; /* 투명도를 1로 설정하여 투명하지 않게 만듭니다 */
+
 }
 #header .navbar {
   padding: 0px;
   min-height: 70px;
+  opacity: 1;
 }
 #header .logo {
   -webkit-box-align: center;
@@ -826,6 +826,14 @@ hr {
   -ms-flex-item-align: stretch;
   align-self: stretch;
 }
+.sticky-top {
+  position: -webkit-sticky; /* Safari 브라우저 지원 */
+  position: sticky;
+  top: 0; /* 화면 상단에 고정 */
+  z-index: 1020; /* 다른 요소들보다 앞에 표시 */
+  opacity: 1;
+}
+
 
 /*=== 4.1 Main Navigation ===*/
 .navbar-light .navbar-nav .active > .nav-link {
@@ -846,9 +854,11 @@ hr {
   -webkit-box-ordinal-group: 0;
   -ms-flex-item-align: stretch;
   align-self: stretch;
-  border-bottom: 1px solid #efefef;
+/*  border-bottom: 1px solid #efefef;*/
+
 }
 .primary-menu.bg-transparent {
+
   position: absolute;
   z-index: 999;
   top: 0;
@@ -858,6 +868,7 @@ hr {
   border-bottom: 1px solid rgba(250, 250, 250, 0.3);
 }
 .primary-menu.sticky-on {
+
   position: fixed;
   top: 0;
   width: 100%;
@@ -2943,4 +2954,60 @@ input:-internal-autofill-selected {
   right: auto;
   left: -40px;
   border-radius: 4px 0px 0px 4px;
+}
+
+
+
+*
+.jstree-default-context {
+  font-family: "Nanum Gothic";
+  font-size: 12px;
+  color: #f8f8f8;
+}
+.title {
+  font-size: 26px;
+}
+.subtitle {
+  font-size: 23px;
+}
+.content {
+  font-family: "Nanum Gothic";
+  font-size: 16px;
+  color: #f8f8f8;
+}
+.divider_white {
+  border-color: #f8f8f8;
+  margin: 4rem 0;
+  border-style: solid;
+  border-width: 1px;
+}
+/* 그라디언트 보더 */
+.gradient_left_border {
+  border-left: 1px dashed transparent;
+  border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+  border-image-slice: 1;
+}
+
+.gradient_right_border {
+  border-right: 1px dashed transparent;ß
+  border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+  border-image-slice: 1;
+}
+.gradient_bottom_border {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+  border-image-slice: 1;
+}
+.gradient_middle_border {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #666666, rgb(0 0 0 / 0%));
+  border-image-slice: 1;
+}
+
+
+
+.lead_white {
+  @include font-size($lead-font-size);
+  border-color: #f8f8f8;
+  font-weight: $lead-font-weight;
 }

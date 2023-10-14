@@ -370,10 +370,10 @@ $.clean = function(elem) {
   (end code)
 */
 $.addEvent = function(obj, type, fn) {
-  if (obj.addEventListener)
+  if (obj?.addEventListener) //원본 코드 수정으로 인해 후에 체크가 필요합니다
     obj.addEventListener(type, fn, false);
   else
-    obj.attachEvent('on' + type, fn);
+    obj?.attachEvent('on' + type, fn); //원본 코드 수정으로 인해 후에 체크가 필요합니다
 };
 
 $.addEvents = function(obj, typeObj) {

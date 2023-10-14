@@ -15,10 +15,12 @@
   border-collapse: collapse;
   table-layout: fixed;
   border-spacing: 0;
-  border-right: 1px solid #b0b0b2;
 }
 .table-container table .table-body tr:first-child {
   height: 37px !important;
+}
+.table-container table .table-body tr:nth-child(odd) {
+  background-color: rgba(51, 51, 51, 0.325);
 }
 .table-container table .table-header tr th,
 .table-container table .table-body tr td {
@@ -31,19 +33,17 @@
   padding: 9px 7px;
   box-sizing: border-box;
 }
-.table-container table .table-header tr th:last-child,
-.table-container table .table-body tr td:last-child {
-  border-right: none;
-}
-.table-container table .table-header tr th {
-  font-weight: 400;
-  border-top: 1px solid #b0b0b2;
-  border-right: 2px solid #515256;
-  border-bottom: 2px solid #b0b0b2;
-}
 .table-container table .table-body tr td {
   border-right: 2px solid #515256;
-  border-bottom: 2px solid #949699 !important;
+}
+.table-container table .table-body tr td.indent-1 {
+  padding-left: 20px;
+}
+.table-container table .table-body tr td.indent-2 {
+  padding-left: 40px;
+}
+.table-container table .table-body tr td.indent-3 {
+  padding-left: 60px;
 }
 
 .split-bar {
@@ -54,7 +54,8 @@
   z-index: 9;
   width: 5px;
   height: 100%;
-  background-color: #b0b0b2;
+  border-radius: 2.5px;
+  background-color: #515256;
   cursor: col-resize;
 }
 .split-bar:hover {
@@ -66,11 +67,12 @@
 }
 .gantt .grid-header {
   fill: transparent;
-  stroke: #b0b0b2;
-  stroke-width: 1.4;
 }
 .gantt .grid-row {
   fill: transparent;
+}
+.gantt .grid-row:nth-child(odd) {
+  fill: rgba(51, 51, 51, 0.325);
 }
 .gantt .row-line {
   stroke: #ebeff2;
@@ -118,7 +120,7 @@
   font-weight: lighter;
 }
 .gantt .bar-label.big {
-  fill: #555;
+  fill: #ddd;
   text-anchor: start;
 }
 .gantt .handle {
