@@ -67,7 +67,7 @@ $handle-color: #ddd !default;
 
             @for $i from 1 through 3 {
                 &.indent-#{$i} {
-                    padding-left: 20px * $i
+                    padding-left: 20px * $i;
                 }
             }
         }
