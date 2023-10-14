@@ -1422,7 +1422,7 @@ function click_btn_for_connect_req_jira() {
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
-	return data.reduce((acc, cur) => {
+	return data.sort((a, b) => a.c_issue_create_date - b.c_issue_create_date).reduce((acc, cur) => {
 		const task = {
 			id: String(cur.c_id),
 			assignee: cur.c_issue_assignee,
