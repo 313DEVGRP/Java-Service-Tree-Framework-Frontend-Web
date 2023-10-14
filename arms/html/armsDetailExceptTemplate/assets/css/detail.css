@@ -1145,7 +1145,10 @@ svg {
      right: 10px;
      width:40px;
      height:40px;
-     border-radius:0.5rem
+     border-radius:0.5rem;
+     display:flex;        /* flexbox 모델 적용 */
+     justify-content:center;  /* 가로축에서 중앙 정렬 */
+     align-items:center;   /* 세로축에서 중앙 정렬 */
 
 }
 #view_allreq_btn{
@@ -1155,11 +1158,24 @@ svg {
 .view-btn:hover {
    opacity :1;
 }
-
-
+.modal{
+    z-index:10001;
+}
+.modal-content{
+    height: 80vh;
+}
 .modal-dialog{
     width: 65vw;
     max-width: 100%;
+    margin: auto;
+    margin-top: 55px;
+}
+@media (max-width: 500px) {
+  .modal-dialog {
+    width: 90vw;
+    margin:auto;
+    margin-top: 45px;
+  }
 }
 
 .view-btn i {
@@ -1167,6 +1183,31 @@ svg {
     margin-right: initial !important;
     color: white !important;
     line-height: initial !important;
+}
+
+@media (max-width: 500px){
+   .view-btn {
+       background-color: #0678e3;
+       color: white;
+       border: none;
+       text-align: center;
+        opacity: .5;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width:25px;
+        height:25px;
+        border-radius:0.5rem;
+        display:flex;        /* flexbox 모델 적용 */
+        justify-content:center;  /* 가로축에서 중앙 정렬 */
+        align-items:center;   /* 세로축에서 중앙 정렬 */
+   }
+   .view-btn i {
+       font-size: 14px !important;
+       margin-right: initial !important;
+       color: white !important;
+       line-height: initial !important;
+   }
 }
 
 /*--------------------------------------------------------------
