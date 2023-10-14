@@ -1,18 +1,20 @@
 <br/>
 <br/>
-<h2>2. 제품(서비스) 조망 </h2>
-<h3> 2.1 제품(서비스) 구성도</h3>
+<div class="lead" style="color: white;">
+
+<h2 class="lead" style="color: white;">2. 제품(서비스) 조망 </h2>
+<h3 class="lead" style="color: white;" 2.1 제품(서비스) 구성도</h3>
 <p>제품(서비스) 조망 구성의 시작은 Business Architecture 입니다. </p>
 <p>input은 project charter를 활용하면서, 기본적인 요구사항을 구체화합니다. </p>
 <p>구체화된 요구사항에 맞춰서 비지니스 아키텍쳐가 이 요구사항을 대응할 수 있어야 하고, 추상화 단계는 최상위 레벨인 시스템 수준의 대단위 모듈로 대응 할 수 있어야
     합니다.</p>
-<img src="./assets/images/document/srs_01.png" style="width:100%;" alt="제품(서비스) 구성도">
+<img src="./assets/images/docs/srs_01.png" style="width:100%; height:600px;;" alt="제품(서비스) 구성도">
 <p>input인 비지니스 아키텍쳐로 부터, 세부적인 요구사항의 기능을 대응할 시스템 하위 컴포넌트 레벨의 모듈을 구성하고, 해당 모듈의 핵심적인 기능을 기록하도록 합니다.</p>
 <br/>
 <br/>
-<h3> 2.2 제품(서비스) 동작 방식</h3>
-<h4>2.2.1 인증 시스템 모듈 동작 방식</h4>
-<h4>2.2.1.1 통합 계정 관리 시스템</h4>
+<h3 class="lead" style="color: white;"> 2.2 제품(서비스) 동작 방식</h3>
+<h4 class="lead" style="color: white;">2.2.1 인증 시스템 모듈 동작 방식</h4>
+<h4 class="lead" style="color: white;">2.2.1.1 통합 계정 관리 시스템</h4>
 
 <ul>
     <li>통합 계정 관리 시스템은 계정 관리를 목적으로 하는 시스템 입니다.</li>
@@ -24,7 +26,7 @@
     <li>통합 계정 관리 시스템은 권한을 부여할 수 있습니다.</li>
     <li>통합 계정 관리 시스템은 통합 권한 관리 시스템으로부터 권한을 확인하고 추가, 갱신, 삭제, 조회를 할 수 있습니다.</li>
 </ul>
-<h3>2.2.1.2 통합 권한 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.1.2 통합 권한 관리 시스템</h3>
 <ul>
     <li>통합 권한 관리 시스템은 Tree 형식의 권한 체계를 구성 할 수 있습니다.
     </li>
@@ -41,7 +43,7 @@
     </li>
 </ul>
 <br/>
-<h3> 2.2.1.3 로컬 계정 관리 시스템</h3>
+<h3 class="lead" style="color: white;"> 2.2.1.3 로컬 계정 관리 시스템</h3>
 <ul>
     <li>로컬 계정 관리 시스템은 A-RMS 내부의 미리 정의된 admin 계정을 관리합니다.
     </li>
@@ -51,16 +53,16 @@
     </li>
 </ul>
 <br/>
-<h3> 2.2.1.4 연동 계정 관리 시스템</h3>
-<ul>
+<h3 class="lead" style="color: white;"> 2.2.1.4 연동 계정 관리 시스템</h3>
+<ul class="lead" style="color: white;">
     <li>연동 계정 관리 시스템은 LDAP, Crowd, 등 계정 통합 관리 시스템과 연동하여 데이터를 로드합니다.
     </li>
     <li>연동 계정 관리 시스템은 로드된 데이터를 기계적으로 저장하거나 갱신할 뿐, 사용자에 의한 변경은 처리하지 않습니다.
     </li>
 </ul>
 <br/>
-<h3>2.2.1.5 사용자별 맞춤 시스템</h3>
-<ul>
+<h3 class="lead" style="color: white;">2.2.1.5 사용자별 맞춤 시스템</h3>
+<ul class="lead" style="color: white;">
     <li>사용자별 맞춤 시스템은 사용자 권한별 대시보드 시스템을 제공합니다.
     </li>
     <li>사용자별 맞춤 시스템은 미리정의된 anonymous, user, admin을 구분하여 대시보드를 제공합니다.
@@ -72,16 +74,16 @@
     <li>사용자별 맞춤 시스템은 admin 을 위한 시스템 관리 대시보드를 제공합니다.</li>
 </ul>
 
-<h3>2.2.2 제품(서비스) 관리 시스템 모듈 동작 방식 </h3>
-<h3>2.2.2.1 제품(서비스) 관리 시스템</h3>
-<ul>
+<h3 class="lead" style="color: white;">2.2.2 제품(서비스) 관리 시스템 모듈 동작 방식 </h3>
+<h3 class="lead" style="color: white;">2.2.2.1 제품(서비스) 관리 시스템</h3>
+<ul class="lead" style="color: white;">
     <li>제품(서비스) 관리 시스템은 제품(서비스)를 등록하고 관리 할 수 있는 시스템을 제공합니다.
     </li>
     <li>제품(서비스) 관리 시스템은 사용자에 의해 Tree 로 관리됩니다 ( CRUD ) 및 복사 기능 제공을 합니다.
     </li>
 </ul>
 
-<h3>2.2.2.2 제품(서비스) ALM 간 Mapping 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.2.2 제품(서비스) ALM 간 Mapping 시스템</h3>
 <ul>
     <li>제품(서비스) ALM Mapping 시스템은 제품(서비스)에서 사용할 Jira 의 정보를 관리 할 수 있습니다.
     </li>
@@ -97,7 +99,7 @@
     <li>제품(서비스) 별로 등록된 요구사항에 대한 필터를 적용하여 정보를 수집- 통계 및 수치화가 가능합니다.
     </li>
 </ul>
-<h3> 2.2.2.3 제품(서비스) - 요구사항 - Jira Issue 맵핑 관리 시스템 </h3>
+<h3 class="lead" style="color: white;"> 2.2.2.3 제품(서비스) - 요구사항 - Jira Issue 맵핑 관리 시스템 </h3>
 <ul>
     <li>요구사항 Jira Issue 맵핑 관리 시스템은 요구사항 이슈를 연계된 Jira project 에 등록하고 관리하는 시스템입니다.
     </li>
@@ -106,51 +108,51 @@
     <li>요구사항 Jira Issue 맵핑 관리 시스템은 이후 요구사항 승인 및 연동 시스템에 의하여 처리 액션을 실행합니다.
     </li>
 </ul>
-<h3>2.2.2.4 제품(서비스) - 요구사항 - Confluence 맵핑 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.2.4 제품(서비스) - 요구사항 - Confluence 맵핑 관리 시스템</h3>
 <ul>
     <li>요구사항 Confluence 맵핑 관리 시스템은 요구사항 이슈가 관리될 때, 등록된 confluence 의 space에 template 문서를 등록하고 연계합니다.
     </li>
     <li>요구사항 Confluence 맵핑 관리 시스템은 template 문서를 등록하고 연계시 요구사항 승인 및 연동 시스템의해 처리됩니다.
     </li>
 </ul>
-<h3>2.2.2.5 제품(서비스) - 요구사항 - Bitbucket 맵핑 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.2.5 제품(서비스) - 요구사항 - Bitbucket 맵핑 관리 시스템</h3>
 <ul>
     <li>요구사항 BitBucket 맵핑 관리 시스템은 Jira 에 등록된 VCS의 정보를 로드하여 표시합니다.
     </li>
     <li>요구사항 BitBucket 맵핑 관리 시스템은 VCS 정보를 로드할 때 요구사항 승인 및 연동 시스템처리기를 통해 로드합니다.
     </li>
 </ul>
-<h3>2.2.2.6 제품(서비스) - 요구사항 - Sonarqube 맵핑 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.2.6 제품(서비스) - 요구사항 - Sonarqube 맵핑 관리 시스템</h3>
 <ul>
     <li>요구사항 Sonarqube 맵핑 관리 시스템은 Jira 에 등록된 CodeQuality System의 정보를 로드하여 표시합니다.
     </li>
     <li>요구사항 Sonarqube 맵핑 관리 시스템은 CodeQuality 정보를 로드할 때 요구사항 승인 및 연동 시스템처리기를 통해 로드 합니다.
     </li>
 </ul>
-<h3>2.2.2.7 제품(서비스) - 요구사항 - CI/CD 맵핑 관리 시스템 </h3>
+<h3 class="lead" style="color: white;">2.2.2.7 제품(서비스) - 요구사항 - CI/CD 맵핑 관리 시스템 </h3>
 <ul>
     <li>요구사항 Sonarqube 맵핑 관리 시스템은 Jira 에 등록된 CICD System의 정보를 로드하여 표시합니다.
     </li>
     <li>요구사항 Sonarqube 맵핑 관리 시스템은 CICD정보를 로드할 때 요구사항 승인 및 연동 시스템처리기를 통해 로드합니다.
     </li>
 </ul>
-<h3>2.2.3 요구사항 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.3 요구사항 관리 시스템</h3>
 
-<h3>2.2.3.1 요구사항 등록 시스템 </h3>
+<h3 class="lead" style="color: white;">2.2.3.1 요구사항 등록 시스템 </h3>
 <ul>
     <li>요구사항 등록 시스템은 제품(서비스) 하위에서 관리할 요구사항 타입의 이슈를 동록 할 수 있도록 지원합니다.
     </li>
     <li>요구사항 등록 시스템은 제품(서비스) 와 연계된 Jira Project에 등록한 요구사항이 자동으로 등록됩니다.
     </li>
 </ul>
-<h3>2.2.3.2 요구사항 리뷰 시스템 </h3>
+<h3 class="lead" style="color: white;">2.2.3.2 요구사항 리뷰 시스템 </h3>
 <ul>
     <li>요구사항 리뷰 시스템은 제품(서비스)에 등록된 요구사항에 대하여 리뷰어를 등록할 수 있도록 합니다.
     </li>
     <li>요구사항 리뷰 시스템은 등록된 리뷰어의 리뷰가 완료됬을 때, 연계된 Jira Project 에 요구사항이 등록, 갱신, 삭제 처리 됩니다.
     </li>
 </ul>
-<h3>2.2.3.3 요구사항 권한 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.3.3 요구사항 권한 관리 시스템</h3>
 <ul>
     <li>요구사항 권한 관리 시스템은 조회의 경우 제품(서비스)에 등록된 사용자는 모두 가능합니다.
     </li>
@@ -165,7 +167,7 @@
     <li>요구사항 권한 관리 시스템은 삭제 처리의 경우 등록된 리뷰어의 과반 (50%)의 승인을 얻을 경우 가능합니다.
     </li>
 </ul>
-<h3>2.2.3.4 요구사항 버전 관리 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.3.4 요구사항 버전 관리 시스템</h3>
 <ul>
     <li>요구사항 버전 관리 시스템은 제품(서비스) 관리 시스템의 하위에 요구사항의 집합을 적용할 버전을 관리하는 시스템입니다.
     </li>
@@ -174,45 +176,46 @@
     <li>요구사항 버전 관리 시스템은 요구사항 관리 시스템에 의해 승인된 요구사항을 Version 에 맵핑 할 수 있습니다.
     </li>
 </ul>
-<h3>2.2.3.5 요구사항 승인 및 연동 시스템 처리</h3>
+<h3 class="lead" style="color: white;">2.2.3.5 요구사항 승인 및 연동 시스템 처리</h3>
 <ul>
     <li>요구사항 승인 및 연동 시스템은 요구사항 권한 관리 시스템의 변동이 생겼을 경우 처리 하는 시스템입니다.
     </li>
     <li>요구사항 승인 및 연동 시스템은 변동된 요구사항의 이슈 처리를 연계된 Jira Project 에 반영하고 반영된 결과를 리뷰어를 포함하여 알립 니다.
     </li>
 </ul>
-<h3>2.2.3.6 모니터링 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.3.6 모니터링 시스템</h3>
 
-<h3>2.2.6.1 Server 모니터링 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.6.1 Server 모니터링 시스템</h3>
 <ul>
     <li> MetricBeat 를 활용한 데이터 수집 및 모니터링
     </li>
 </ul>
-<h3>2.2.6.2 Application 성능 모니터링 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.6.2 Application 성능 모니터링 시스템</h3>
 <ul>
     <li> Elastic APM 과 Scouter를 활용한 성능 데이터 수집 및 모니터링
     </li>
 </ul>
-<h3>2.2.6.3 Database 모니터링 시스템</h3>
+<h3 class="lead" style="color: white;">2.2.6.3 Database 모니터링 시스템</h3>
 <ul>
     <li> Packetbeat 를 활용한 SQL 데이터 수집 및 모니터링
     </li>
 </ul>
-<h3>2.2.6.4 연동 시스템 모니터링</h3>
+<h3 class="lead" style="color: white;">2.2.6.4 연동 시스템 모니터링</h3>
 <ul>
     <li> Heartbeat 를 활용한 연동시스템 상태 데이터 수집 및 모니터링
     </li>
 </ul>
-<h3>2.2.6.5 클라이언트 모니터링 시스템
+<h3 class="lead" style="color: white;">2.2.6.5 클라이언트 모니터링 시스템
 </h3>
 <ul>
     <li> Filebeat 를 활용한 Log 분석 시스템을 통하여 클라이언트 데이터 수집 및 모니터링
     </li>
 </ul>
-<h3>2.2.6.6 장애 탐지 알람 시스템
+<h3 class="lead" style="color: white;">2.2.6.6 장애 탐지 알람 시스템
 </h3>
 <ul>
     <li>상기 데이터 수집의 결과 데이터를 InfluxDB ( 시계열 데이터베이스 )에 누적하여, 임계 수치를 적용, 알람 시스템을 통한 상황 전파를 담당하는 시스템 입니다
     </li>
 </ul>
 <hr class="divider">
+</div>
