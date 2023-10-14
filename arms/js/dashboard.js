@@ -24,7 +24,9 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js", //d3 변경
 			"./js/common/colorPalette.js",
 			"./mock/versionGauge.json",
-			"../reference/jquery-plugins/info-chart-v1/js/D.js"
+			"../reference/jquery-plugins/info-chart-v1/js/D.js",
+			"./js/dashboard/chart/timeline_custom.js",
+			"./js/dashboard/chart/infographic_custom.css"
 		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -74,6 +76,7 @@ function execDocReady() {
 
 			dashboardColor = dashboardPalette.dashboardPalette04;
 			console.log(dashboardColor);
+			//console.log("version-timeline-bar element"); console.log($("#version-timeline-bar")[0]);
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
@@ -124,6 +127,7 @@ function makePdServiceSelectBox() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
+
 				for (var k in data.response) {
 					var obj = data.response[k];
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
@@ -160,20 +164,14 @@ function makePdServiceSelectBox() {
 		//getIssueStatus($("#selected_pdService").val(), endPointUrl);
 		//통계로드
 		//statisticsLoad($("#selected_pdService").val(), null);
+		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
+		statisticsMonitor($("#selected_pdService").val());
 
-		d3.json("./mock/versionGauge.json", function (data) {
-			//var versionProgress = data.response;
-			var versionProgress = data;
-			console.log("=== versionProgress start ===");
-			console.log(versionProgress);
-			console.log("=== versionProgress end ===")
-			if (versionProgress.length !== 0) {
-				$("#notifyNoVersion").hide();
-				$("#project-start").show();
-				$("#project-end").show();
-				drawVersionProgress(versionProgress);
-			}
-		});
+		
+		//타임라인
+		$("#notifyNoVersion2").hide();
+		Timeline.init($("#version-timeline-bar"), graphViewList);
+
 
 	});
 } // end makePdServiceSelectBox()
@@ -358,6 +356,70 @@ function drawReqTimeSeries(data) {
 
 	update(data1)
 }
+// 1. 제품서비스로만 볼 경우
+// 2. 버전만 따로 선택해서 보고싶은 경우.
+function statisticsMonitor(pdservice_id, pdservice_version_id) {
+	//1. 좌상 게이지 차트.
+	//2. Time ( 작업일정 ) - 버전 개수 삽입
+	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
+		console.log("================= by YHS");
+		console.log(json);
+
+		let versionData = json.pdServiceVersionEntities;
+		let version_count = versionData.length;
+		console.log("등록된 버전 개수 = " + version_count);
+		if(version_count !== undefined) {
+			$('#version_count').text(version_count);
+
+			if (version_count >= 0) {
+				let today = new Date();
+				console.log(today);
+
+				$("#notifyNoVersion").hide();
+				$("#project-start").show();
+				$("#project-end").show();
+				var versionGauge = [];
+				versionData.forEach(function (versionElement, idx) {
+					console.log(idx);
+					console.log(versionElement);
+					var gaugeElement = {
+						"current_date": today.toString(),
+						"version_name": versionElement.c_title,
+						"version_id": versionElement.c_id,
+						"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
+						"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+					}
+					versionGauge.push(gaugeElement);
+				});
+				console.log(versionGauge);
+				drawVersionProgress(versionGauge);
+			}
+		}
+	});
+
+	//제품서비스 - status 기반
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log(data);
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+				//해당 제품의 총 요구사항 수 (by db, not es)
+				$('#active_version_count').text(data["version"]);
+				$('#req_count').text(data["req"]);
+				$('#linkedIssue_subtask_count').text(+data["issue"]);
+			}
+		}
+	});
+}
+
 
 //
 function drawVersionProgress(data) {
@@ -386,6 +448,7 @@ function drawVersionProgress(data) {
 		svg,
 		totalPercent,
 		width,
+		versionId,
 		versionName,
 		waveName;
 	
@@ -404,7 +467,7 @@ function drawVersionProgress(data) {
 
 	width = 200;
 	height = width;
-	radius = Math.min(width, height) / 2.1;
+	radius = Math.min(width, height) / 2.5;
 
 	// percToDeg percToRad degToRad 고정
 	percToDeg = function (perc) {
@@ -420,7 +483,7 @@ function drawVersionProgress(data) {
 	};
 	//
 	svg = d3
-		.select("#version-progress-bar")
+		.select("#versionGaugeChart")
 		.append("svg")
 		.attr("viewBox", [29, 19, width - 40, height - 40])
 		.append("g");
@@ -430,7 +493,7 @@ function drawVersionProgress(data) {
 		.attr("transform", "translate(" + (width + margin.left) / 2 + ", " + (height + margin.top) / 2 + ")");
 
 	var tooltip = d3
-		.select("#version-progress-bar")
+		.select("#versionGaugeChart")
 		.append("div")
 		.style("opacity", 0)
 		.attr("class", "tooltip")
@@ -490,6 +553,7 @@ function drawVersionProgress(data) {
 	totalDate = startDDay + endDDay;
 
 	var mouseover = function (d) {
+		var subgroupId = d.version_id;
 		var subgroupName = d.version_name;
 		var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
 		tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
@@ -499,7 +563,8 @@ function drawVersionProgress(data) {
 
 		d3.selectAll(".myWave").style("opacity", 0.2);
 		d3.selectAll(".myStr").style("opacity", 0.2);
-		d3.selectAll(".wave-" + subgroupName).style("opacity", 1);
+		d3.selectAll(".wave-" + subgroupId).style("opacity", 1);
+		//d3.selectAll(".wave-" + subgroupName).style("opacity", 1);
 	};
 
 	var mousemove = function (d) {
@@ -518,9 +583,10 @@ function drawVersionProgress(data) {
 		totalPercent += sectionPerc;
 		startPadRad = sectionIndx === 0 ? 0 : padRad / 2;
 		endPadRad = sectionIndx === numSections ? 0 : padRad / 2;
+		versionId = data[sectionIndx - 1].version_id;
 		versionName = data[sectionIndx - 1].version_name;
 		//waveName = data[sectionIndx - 1].mig_wave_link;
-
+		console.log(versionId);
 		var sectionData = data[sectionIndx - 1];
 
 		var arc = d3
@@ -530,14 +596,16 @@ function drawVersionProgress(data) {
 			.startAngle(arcStartRad + startPadRad)
 			.endAngle(arcEndRad - endPadRad);
 
-		var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName);
+		var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionId);
+		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName);
 		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName);
 
 		section
 			.data([sectionData])
 			.enter()
 			.append("g")
-			.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionName)
+			.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionId)
+			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionName)
 			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + waveName)
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
@@ -551,7 +619,8 @@ function drawVersionProgress(data) {
 			.attr("d", arc);
 
 		chart
-			.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName)
+			.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionId)
+			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName)
 			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName)
 			.append("text")
 			.attr("class", "no-select")
@@ -625,9 +694,42 @@ function drawVersionProgress(data) {
 		return Needle;
 	})();
 
-	needle = new Needle(38, 2);
+	needle = new Needle(25, 7.5);
 
 	needle.drawOn(chart, 0);
 
 	needle.animateOn(chart, startDDay / totalDate);
 }
+
+var graphViewList = [
+	{
+		title: '엔씨소프트 ( NCSOFT )',
+		startDate: '2019.12.30',
+		endDate: '2022.11.04',
+	},
+	{
+		title: 'Daumsoft',
+		startDate: '2010.12.01',
+		endDate: '2011.12.01',
+	},
+	{
+		title: '대성그룹 대성글로벌네트워크 1차',
+		startDate: '2008.08.01',
+		endDate: '2010.12.01',
+	},
+	{
+		title: '고려대학교 컴퓨터정보통신대학원',
+		startDate: '2013.02.01',
+		endDate: '2016.07.01',
+	},
+	{
+		title: '대성그룹 대성글로벌네트워크 2차',
+		startDate: '2011.12.01',
+		endDate: '2013.05.01',
+	},
+	{
+		title: '안철수연구소 ( AHNLAB )',
+		startDate: '2013.05.01',
+		endDate: '2019.12.30',
+	},
+];
