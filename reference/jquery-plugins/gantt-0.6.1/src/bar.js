@@ -199,24 +199,26 @@ export default class Bar {
     show_popup() {
         if (this.gantt.bar_being_dragged) return;
 
-        const start_date = date_utils.format(
-            this.task._start,
-            'MMM D',
-            this.gantt.options.language
-        );
-        const end_date = date_utils.format(
-            date_utils.add(this.task._end, -1, 'second'),
-            'MMM D',
-            this.gantt.options.language
-        );
-        const subtitle = start_date + ' - ' + end_date;
+        this.gantt.modal_action({id: this.task.id, type: this.task.type});
 
-        this.gantt.show_popup({
-            target_element: this.$bar,
-            title: this.task.name,
-            subtitle: subtitle,
-            task: this.task,
-        });
+        // const start_date = date_utils.format(
+        //     this.task._start,
+        //     'MMM D',
+        //     this.gantt.options.language
+        // );
+        // const end_date = date_utils.format(
+        //     date_utils.add(this.task._end, -1, 'second'),
+        //     'MMM D',
+        //     this.gantt.options.language
+        // );
+        // const subtitle = start_date + ' - ' + end_date;
+        //
+        // this.gantt.show_popup({
+        //     target_element: this.$bar,
+        //     title: this.task.name,
+        //     subtitle: subtitle,
+        //     task: this.task,
+        // });
     }
 
     update_bar_position({ x = null, width = null }) {

@@ -615,6 +615,18 @@ function detailTreeBuild(jQueryElementID, serviceNameForURL) {
         })
         .bind("select_node.jstree", function (event, data) {
             // `data.rslt.obj` is the jquery extended node that was clicked
+
+            var selectRel = data.rslt.obj.attr("rel");
+
+            if (selectRel == "folder" || selectRel == "drive") {
+                var nodeIsOpen = $('#req_tree').jstree("is_open", data.node);
+                if (nodeIsOpen) {
+                    $('#req_tree').jstree("close_node", data.node);
+                } else {
+                    $('#req_tree').jstree("open_node", data.node);
+                }
+            }
+
             if ($.isFunction(detailTreeClick)) {
                 console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.data('id')" + data.rslt.obj.attr("id"));
                 console.log("[ detailTreeBuild :: select_node ] :: data.rslt.obj.data('rel')" + data.rslt.obj.attr("rel"));
@@ -647,6 +659,7 @@ function detailTreeClick(selectedNode) {
 
     selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");//요구사항 아이디
     selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
+
     console.log(selectedJsTreeName);
 
     if (selectedJsTreeId == 2) {

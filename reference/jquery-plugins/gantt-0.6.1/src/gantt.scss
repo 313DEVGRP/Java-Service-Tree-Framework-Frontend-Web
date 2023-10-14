@@ -64,6 +64,12 @@ $handle-color: #ddd !default;
         .table-body tr td {
             border-right: 2px solid $border-right-color;
             border-bottom: 2px solid #949699 !important;
+
+            @for $i from 1 through 3 {
+                &.indent-#{$i} {
+                    padding-left: 20px * $i;
+                }
+            }
         }
     }
 }
