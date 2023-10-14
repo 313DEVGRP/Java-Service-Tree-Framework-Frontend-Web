@@ -1079,23 +1079,23 @@ svg {
 # 요구사항 상세
 --------------------------------------------------------------*/
 #detailview_req_contents{
-  height:655px;
+  height:645px;
 }
 @media (max-width: 1400px){
     #detailview_req_contents{
-      height:710px;
+      height:695px;
     }
 }
 
 @media (max-width: 1220px){
     #detailview_req_contents{
-      height:815px;
+      height:805px;
     }
 }
 
 @media (max-width: 1200px){
     #detailview_req_contents{
-      height:890px;
+      height:875px;
     }
 }
 
@@ -1132,6 +1132,43 @@ svg {
     from { text-indent: 0%; }
     to { text-indent: -30%; }
 }
+
+/* 상세 보기 확대 버튼*/
+.view-btn {
+    background-color: #0678e3;
+    color: white;
+    border: none;
+    text-align: center;
+     opacity: .5;
+     position: absolute;
+     top: 10px;
+     right: 10px;
+     width:40px;
+     height:40px;
+     border-radius:0.5rem
+
+}
+#view_allreq_btn{
+     display:none;
+}
+
+.view-btn:hover {
+   opacity :1;
+}
+
+
+.modal-dialog{
+    width: 65vw;
+    max-width: 100%;
+}
+
+.view-btn i {
+    font-size: 24px !important;
+    margin-right: initial !important;
+    color: white !important;
+    line-height: initial !important;
+}
+
 /*--------------------------------------------------------------
 # 요구사항 목록
 --------------------------------------------------------------*/
@@ -1143,23 +1180,23 @@ svg {
 }
 
 #allreq_pdservice_content{
-    height:330px;
+    height:315px;
 }
 
 @media (max-width: 1220px){
     #allreq_pdservice_content{
-      height: 330px;
+      height: 290px;
     }
 }
 @media (max-width: 1200px){
     #allreq_pdservice_content{
-      height:260px;
+      height:245px;
     }
 }
 
 @media (max-width: 1030px){
     #allreq_pdservice_content{
-      height:210px;
+      height:195px;
     }
 }
 

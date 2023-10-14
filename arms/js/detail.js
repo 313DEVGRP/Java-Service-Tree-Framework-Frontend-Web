@@ -96,7 +96,8 @@ function execDocReady() {
             "../reference/light-blue/lib/nvd3/src/models/pie.js",
             "../reference/light-blue/lib/nvd3/src/models/pieChartTotal.js",
             "../reference/light-blue/lib/nvd3/stream_layers.js",
-            "./html/armsDetailExceptTemplate/assets/js/stats.js"
+            "./html/armsDetailExceptTemplate/assets/js/stats.js",
+            "./html/armsDetailExceptTemplate/assets/vendor/bootstrap/js/bootstrap.min.js"
         ]
     ];
 
@@ -391,6 +392,7 @@ function bindDataDetailTab(ajaxData) {
     }
 
     $("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
+    $("#req_detail_contents").html(ajaxData.reqAdd_c_req_contents);
 
 
 }
@@ -741,6 +743,12 @@ function getVersionName(c_id , callback) {
 */
 function bindClickedDataDetail(ajaxData) {
 
+    var buttonElement = document.querySelector('#view_allreq_btn');
+
+    if(buttonElement){
+        buttonElement.style.display = "block";
+    }
+
     //console.table(ajaxData);
     var version_id_list = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
 
@@ -802,6 +810,9 @@ function bindClickedDataDetail(ajaxData) {
     }
 
     $("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
+    $("#req_all_detail_contents").html(ajaxData.c_req_contents);
+
+
 }
 /*
 작성자 - 김찬호
