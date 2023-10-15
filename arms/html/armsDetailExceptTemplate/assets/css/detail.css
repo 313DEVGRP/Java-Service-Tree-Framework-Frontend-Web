@@ -48,7 +48,7 @@
     }
 }
 
-
+/* 트리 색상 변경 */
 .jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
 .jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
 .about .content ul li:last-child {
@@ -523,7 +523,6 @@
 }
 
 /* 게시글 생성 부분 */
-
 .box {
     position: relative;
     border-radius: 3px;
@@ -1075,6 +1074,7 @@ svg {
     font-size: 11px;
     color: #f8f8f8;
 }
+
 /*--------------------------------------------------------------
 # 요구사항 상세
 --------------------------------------------------------------*/
@@ -1354,4 +1354,109 @@ svg {
 
 .version-scroll .slimScrollDiv {
     height: auto !important;
+}
+
+/* 요구사항 전체 목록 테스트 부분 */
+.dd {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 5px;
+    max-width: 600px;
+    list-style: none;
+    font-size: 13px;
+    line-height: 20px;
+    height: 720px;
+    overflow: hidden;
+}
+
+.dd-list {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dd-list .dd-list {
+    padding-left: 30px;
+}
+
+.dd-item, .dd-empty, .dd-placeholder {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.dd-handle {
+    display: block;
+    min-height: 30px;
+    margin: 5px 0;
+    padding: 5px 10px;
+    color: #666;
+    text-decoration: none;
+    background: #fff;
+    -webkit-box-shadow: 0 -1px 1px rgba(103,103,103,0.4), 0 1px 1px rgba(103,103,103,0.4);
+    -moz-box-shadow: 0 -1px 1px rgba(103,103,103,0.4),0 1px 1px rgba(103,103,103,0.4);
+    box-shadow: 0 -1px 1px rgba(103,103,103,0.4), 0 1px 1px rgba(103,103,103,0.4);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.dd-item>button {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 25px;
+    height: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+    color: #666;
+}
+
+.dd-item>button:before {
+    content: '+';
+    display: block;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+}
+
+.dd-item>button[data-action="collapse"]:before {
+    content: '-'
+}
+
+.dd-handle:hover,
+.dd-handle:focus {
+    background-color:#0563bb;
+    color: white;
+}
+
+.fa-clipboard:before {
+    content: "\f0ea";
+}
+
+.fa-files-o:before {
+    content: "\f0c5";
+}
+
+.fa-file-text-o:before {
+    content: "\f0f6";
 }
