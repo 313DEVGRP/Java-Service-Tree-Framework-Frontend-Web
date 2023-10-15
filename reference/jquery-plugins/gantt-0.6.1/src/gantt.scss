@@ -38,6 +38,11 @@ $handle-color: #ddd !default;
                 &:nth-child(odd) {
                     background-color: $light-bg;
                 }
+
+                &.dragging {
+                    opacity: 0.5;
+                    border: 2px dashed red;
+                }
             }
         }
 

@@ -22,6 +22,10 @@
 .table-container table .table-body tr:nth-child(odd) {
   background-color: rgba(51, 51, 51, 0.325);
 }
+.table-container table .table-body tr.dragging {
+  opacity: 0.5;
+  border: 2px dashed red;
+}
 .table-container table .table-header tr th,
 .table-container table .table-body tr td {
   max-width: 300px;

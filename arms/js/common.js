@@ -5,8 +5,7 @@ $(function () {
 	authUserCheck();
 });
 
-function runScript(){
-
+function runScript() {
 	// Page load & 상단 페이지 로드 프로그래스바
 	topbarConfig();
 	topbar.show();
@@ -37,77 +36,79 @@ function runScript(){
 		var page = urlParams.get("page");
 		if (includeLayout(page)) {
 			$.getScript("js/" + page + ".js", function () {
-
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
 				dwr_login(userName, userName);
 			});
 		}
 	}
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 플러그인 로드 모듈 ( 병렬 시퀀스 )
 ////////////////////////////////////////////////////////////////////////////////////////
 function loadPlugin(url) {
-	return new Promise(function(resolve, reject) {
-
-		if( isJavaScriptFile(url) ){
-			$(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> " + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다...");
+	return new Promise(function (resolve, reject) {
+		if (isJavaScriptFile(url)) {
+			$(".spinner").html(
+				'<i class="fa fa-spinner fa-spin"></i> ' + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다..."
+			);
 			$.ajax({
 				url: url,
 				dataType: "script",
 				cache: true,
-				success: function() {
+				success: function () {
 					// The request was successful
 
-					console.log( "[ common :: loadPlugin ] :: url = " + url + ' 자바 스크립트 플러그인 로드 성공');
+					console.log("[ common :: loadPlugin ] :: url = " + url + " 자바 스크립트 플러그인 로드 성공");
 					resolve(); // Promise를 성공 상태로 변경
 				},
-				error: function() {
+				error: function () {
 					// The request failed
-					console.error( "[ common :: loadPlugin ] :: url = " + url + ' 플러그인 로드 실패');
+					console.error("[ common :: loadPlugin ] :: url = " + url + " 플러그인 로드 실패");
 					reject(); // Promise를 실패 상태로 변경
 				}
 			});
 		} else {
-			$(".spinner").html("<i class=\"fa fa fa-circle-o-notch fa-spin\"></i> " + getFileNameFromURL(url) + " 스타일시트를 다운로드 중입니다...");
+			$(".spinner").html(
+				'<i class="fa fa fa-circle-o-notch fa-spin"></i> ' +
+					getFileNameFromURL(url) +
+					" 스타일시트를 다운로드 중입니다..."
+			);
 			$("<link/>", {
 				rel: "stylesheet",
 				type: "text/css",
 				href: url
 			}).appendTo("head");
-			console.log( "[ common :: loadPlugin ] :: url = " + url + ' 스타일시트 플러그인 로드 성공');
+			console.log("[ common :: loadPlugin ] :: url = " + url + " 스타일시트 플러그인 로드 성공");
 			resolve();
 		}
 	});
 }
 
 function getFileNameFromURL(url) {
-	var parts = url.split('/');
+	var parts = url.split("/");
 	return parts[parts.length - 1];
 }
 
 function isJavaScriptFile(filename) {
-	return filename.endsWith('.js');
+	return filename.endsWith(".js");
 }
 
 function loadPluginGroupSequentially(group) {
-	return group.reduce(function(promise, url) {
-		return promise.then(function() {
+	return group.reduce(function (promise, url) {
+		return promise.then(function () {
 			return loadPlugin(url);
 		});
 	}, Promise.resolve());
 }
 
 function loadPluginGroupsParallelAndSequential(groups) {
-	var promises = groups.map(function(group) {
+	var promises = groups.map(function (group) {
 		return loadPluginGroupSequentially(group);
 	});
 	return Promise.all(promises);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // include 레이아웃 html 파일을 로드하는 함수
@@ -118,7 +119,7 @@ function includeLayout(page) {
 	$.each(includeArea, function () {
 		self = $(this);
 		url = self.data("include");
-		console.log ( "[ common :: authUserCheck ] page = " + url );
+		console.log("[ common :: authUserCheck ] page = " + url);
 
 		if (url.indexOf("content-header") !== -1) {
 			url = "html/" + page + "/content-header.html";
@@ -202,12 +203,10 @@ function rightBottomTopForwardIcon() {
 // 로그인 인증 여부 체크 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function authUserCheck() {
-
 	var str = window.location.href;
 	if (str.indexOf("community") > 0) {
 		runScript();
 	} else {
-
 		$.ajax({
 			url: "/auth-user/me",
 			type: "GET",
@@ -375,7 +374,7 @@ function setSideMenu(categoryName, listName, collapse) {
 
 	setTimeout(function () {
 		//jira_icon
-		if ( categoryName === "sidebar_menu_jira" ) {
+		if (categoryName === "sidebar_menu_jira") {
 			$("#side_jira_neutral_icon").removeClass("hidden");
 			$("#side_jira_white_icon").addClass("hidden");
 		} else {
@@ -386,14 +385,16 @@ function setSideMenu(categoryName, listName, collapse) {
 		$(`#${categoryName}`).css({ color: "#a4c6ff" });
 		$(`#${categoryName}`).css({ "font-weight": "900" });
 
-		if(isEmpty(listName)){
+		if (isEmpty(listName)) {
 			console.log("[ common :: setSideMenu ] :: listName → is null");
-		}else{
+		} else {
 			$(`#${listName}`).addClass("active");
 			$(`#${listName}`).css({ color: "#a4c6ff" });
 			$(`#${listName}`).css({ "font-weight": "900" });
 		}
-		$(".spinner").html("<img src=\"./img/loading.gif\" width='25px' height='25px'/> 어플리케이션 API Data를 가져오는 중입니다...");
+		$(".spinner").html(
+			"<img src=\"./img/loading.gif\" width='25px' height='25px'/> 어플리케이션 API Data를 가져오는 중입니다..."
+		);
 	}, 1000);
 }
 
@@ -692,6 +693,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 		})
 		.bind("move_node.jstree", function (e, data) {
 			data.rslt.o.each(function (i) {
+				console.log("##### move :::", data);
 				$.ajax({
 					async: false,
 					type: "POST",
@@ -795,7 +797,6 @@ function dataTable_build(
 	buttonList,
 	isServerSide
 ) {
-
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg, "");
@@ -807,13 +808,13 @@ function dataTable_build(
 				var data = $.map(columns, function (col, i) {
 					return col.hidden
 						? "<div class='gradient_bottom_border' style='margin-bottom: 5px;float:left;width:180px;'>" +
-						"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" +
-						col.title +
-						"</strong></div>" +
-						"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" +
-						col.data +
-						"</div>" +
-						"</div>"
+								"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" +
+								col.title +
+								"</strong></div>" +
+								"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" +
+								col.data +
+								"</div>" +
+								"</div>"
 						: "";
 				}).join("");
 				outer += data;
@@ -949,10 +950,10 @@ function ajax_setup() {
 					 * ColorOverlay / String        Default : #000 - Color of the overlay background (only Hex. color code)
 					 * OpacityOverlay / Integer        Default : 0.3 - Opacity CSS property of the overlay background. From 0 to 1 max.
 					 */
-					autoHide : true, // added in v2.0
-					TimeShown : 3000,
-					HorizontalPosition : 'center',
-					VerticalPosition : 'top'
+					autoHide: true, // added in v2.0
+					TimeShown: 3000,
+					HorizontalPosition: "center",
+					VerticalPosition: "top"
 					//    onCompleted : function(){ // added in v2.0
 					//    alert('jNofity is completed !');
 					// }
@@ -975,10 +976,10 @@ function ajax_setup() {
 					 * ColorOverlay / String        Default : #000 - Color of the overlay background (only Hex. color code)
 					 * OpacityOverlay / Integer        Default : 0.3 - Opacity CSS property of the overlay background. From 0 to 1 max.
 					 */
-					autoHide : true, // added in v2.0
-					TimeShown : 3000,
-					HorizontalPosition : 'center',
-					VerticalPosition : 'top'
+					autoHide: true, // added in v2.0
+					TimeShown: 3000,
+					HorizontalPosition: "center",
+					VerticalPosition: "top"
 					//    onCompleted : function(){ // added in v2.0
 					//    alert('jNofity is completed !');
 					// }
