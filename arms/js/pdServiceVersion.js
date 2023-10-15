@@ -145,7 +145,25 @@ function dataTableLoad() {
 	var columnDefList = [];
 	var selectList = {};
 	var orderList = [[0, "asc"]];
-	var buttonList = [];
+	var buttonList = [
+		"copy",
+		"excel",
+		"print",
+		{
+			extend: "csv",
+			text: "Export csv",
+			charset: "utf-8",
+			extension: ".csv",
+			fieldSeparator: ",",
+			fieldBoundary: "",
+			bom: true
+		},
+		{
+			extend: "pdfHtml5",
+			orientation: "landscape",
+			pageSize: "LEGAL"
+		}
+	];
 
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
@@ -164,6 +182,22 @@ function dataTableLoad() {
 		buttonList,
 		isServerSide
 	);
+
+	$("#copychecker").on("click", function () {
+		dataTableRef.button(".buttons-copy").trigger();
+	});
+	$("#printchecker").on("click", function () {
+		dataTableRef.button(".buttons-print").trigger();
+	});
+	$("#csvchecker").on("click", function () {
+		dataTableRef.button(".buttons-csv").trigger();
+	});
+	$("#excelchecker").on("click", function () {
+		dataTableRef.button(".buttons-excel").trigger();
+	});
+	$("#pdfchecker").on("click", function () {
+		dataTableRef.button(".buttons-pdf").trigger();
+	});
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
