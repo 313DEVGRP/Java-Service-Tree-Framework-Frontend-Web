@@ -134,7 +134,7 @@ function mockData(stream_names, points_count) {
             key: stream_names[i],
             values: data.map(function (d, j) {
                 return {
-                    y: Math.floor(Math.random() * 10) + 1 //just a coefficient
+                    y: 0 //just a coefficient
                 };
             })
         };
@@ -145,6 +145,7 @@ function roundToPrecision(subject, precision) {
     return +(+subject).toFixed(precision);
 }
 
+// testData
 var openCount = 2;
 var underwayCount = 2;
 var completeCount = 5;
@@ -157,21 +158,20 @@ function loadChart(chartElement, footerElement, json) {
          * calculating it
          * pie chart uses y-property by default, so setting sum there.
          */
-        var testData = mockData(["열림", "진행 중", "완료", "기타"], 25); // just 25 points, since there are lots of charts
+
+        var keys = Object.keys(json);
+        // console.log(json);
+        // console.log("keys: " + keys);
+        var data = mockData(keys, 25); // just 25 points, since there are lots of charts
         var pieChart;
         var pieFooter = d3.select(footerElement);
 
-        // for (var i = 0; i < testData.length; i++){
-        //     testData[i].y = Math.floor(d3.sum(testData[i].values, function(d){
-        //         return d.y;
-        //     }))
-        // }
+        for (var i = 0; i < data.length; i++){
+            data[i].y = json[keys[i]];
+            console.log("data[" + i + "].y: ", keys[i] + " - " + data[i].y);
+        }
 
-        console.log("testData.length = " + testData.length);
-        testData[0].y = json.openCount;
-        testData[1].y = json.underwayCount;
-        testData[2].y = json.completeCount;
-        testData[3].y = json.etcCount;
+        console.log("data.length = " + data.length);
 
         // 요구사항 없을 경우 테스트
         // testData[0].y = 0;
@@ -179,13 +179,8 @@ function loadChart(chartElement, footerElement, json) {
         // testData[2].y = 0;
         // testData[3].y = 0;
 
-        console.log("testData[0].y: ", testData[0].y);
-        console.log("testData[1].y: ", testData[1].y);
-        console.log("testData[2].y: ", testData[2].y);
-        console.log("testData[3].y: ", testData[3].y);
-
         var chart;
-        var sum = d3.sum(testData, function (d) {
+        var sum = d3.sum(data, function (d) {
             return d.y;
         });
         var pieElement = chartElement.split(" ")[0];
@@ -205,7 +200,7 @@ function loadChart(chartElement, footerElement, json) {
                 .append("div")
                 .classed("controls", true)
                 .selectAll("div")
-                .data(testData)
+                .data(data)
                 .enter()
                 .append("div")
                 .classed("control", true)
@@ -257,13 +252,14 @@ function loadChart(chartElement, footerElement, json) {
             .append("div")
             .classed("controls", true)
             .selectAll("div")
-            .data(testData)
+            .data(data)
             .enter()
             .append("div")
             .classed("control", true)
             .style("border-top", function (d, i) {
                 return "3px solid " + COLOR_VALUES[i];
             })
+            .style("width", "calc(" + (100/data.length) + "% - 3px)")
             .html(function (d) {
                 // return "<div class='key'>" + d.key + "</div>" + "<div class='value'>" + Math.floor(100 * d.y / sum) + "%</div>";
                 return (
@@ -278,7 +274,7 @@ function loadChart(chartElement, footerElement, json) {
                 );
             });
 
-        d3.select(chartElement).datum([testData]).transition(500).call(chart);
+        d3.select(chartElement).datum([data]).transition(500).call(chart);
         nv.utils.windowResize(chart.update);
 
         d3.selectAll(".nv-label text").each(function (d, i) {
