@@ -40,7 +40,7 @@ export default class Table {
                 $td.textContent = task[content];
 
                 if (content === 'name' && task.level > 2) {
-                    $td.className = `indent-${task.level}`;
+                    $td.className = `indent-${task.level - 2}`;
                 }
 
                 $tr.append($td);

@@ -13,6 +13,8 @@ var visibilityStatus = {
 };
 
 var totalReqCommentCount;
+/* 요구사항 전체목록 전역변수 */
+var reqTreeList;
 
 var prefix = "./img/winTypeFileIcons/";
 var iconsMap = {
@@ -96,7 +98,8 @@ function execDocReady() {
             "../reference/light-blue/lib/nvd3/src/models/pie.js",
             "../reference/light-blue/lib/nvd3/src/models/pieChartTotal.js",
             "../reference/light-blue/lib/nvd3/stream_layers.js",
-            "./html/armsDetailExceptTemplate/assets/js/stats.js"
+            "./html/armsDetailExceptTemplate/assets/js/stats.js",
+            "./html/armsDetailExceptTemplate/assets/vendor/bootstrap/js/bootstrap.min.js"
         ]
     ];
 
@@ -142,6 +145,9 @@ function execDocReady() {
 
             // QnA 글 작성 시 확장
             req_comment_message_size_change();
+
+            // 요구사항 전체목록 호출 메소드
+            // req_list_load();
         })
         .catch(function (errorMessage) {
             console.error(errorMessage);
@@ -206,6 +212,10 @@ function scrollApiFunc() {
             }
             else if (element === "#allreq") {
                 build_ReqData_By_PdService();
+
+                // 요구사항 전체목록 호출 후 전역변수에서 바인딩작업
+                // set_req_list_view();
+                // set_req_list_button();
             }
             else if (element === "#files") {
                 fileLoadByPdService();
@@ -391,6 +401,7 @@ function bindDataDetailTab(ajaxData) {
     }
 
     $("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
+    $("#req_detail_contents").html(ajaxData.reqAdd_c_req_contents);
 
 
 }
@@ -511,6 +522,10 @@ function versionClick(element, c_id) {
 function allReqListViewTabClick() {
     $("#get_req_list").click(function () {
         build_ReqData_By_PdService();
+
+        // 요구사항 전체목록 호출 후 전역변수에서 바인딩작업
+        // set_req_list_view();
+        // set_req_list_button();
     });
 }
 
@@ -741,6 +756,12 @@ function getVersionName(c_id , callback) {
 */
 function bindClickedDataDetail(ajaxData) {
 
+    var buttonElement = document.querySelector('#view_allreq_btn');
+
+    if(buttonElement){
+        buttonElement.style.display = "block";
+    }
+
     //console.table(ajaxData);
     var version_id_list = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
 
@@ -802,6 +823,9 @@ function bindClickedDataDetail(ajaxData) {
     }
 
     $("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
+    $("#req_all_detail_contents").html(ajaxData.c_req_contents);
+
+
 }
 /*
 작성자 - 김찬호
@@ -1375,4 +1399,160 @@ function req_comment_message_size_change() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
     });
+}
+
+// 요구사항 전체목록 디자인 변경 관련한 메소드들
+async function req_list_load() {
+    var urlParams = new URL(location.href).searchParams;
+    var selectedPdService = urlParams.get('pdService');
+    var tableName = "T_ARMS_REQADD_" + selectedPdService;
+
+    try {
+        // AJAX 요청을 Promise 형태로 변환
+        const response = await $.ajax({
+            url: "/auth-user/api/arms/reqAdd/" + tableName + "/getMonitor.do",
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true
+        });
+
+        // 결과 c_left 기반 정렬
+        response.sort(function(a, b) {
+            return a.c_left - b.c_left;
+        });
+
+        // 전역 변수에 데이터 저장
+        reqTreeList = response;
+
+    } catch (error) {
+        console.error("AJAX 요청 실패:", error);
+    }
+}
+
+function set_req_list_view() {
+    $(".dd-list").empty();
+    $(".dd").slimscroll({
+        height: "720px"
+    });
+
+    reqTreeList.sort(function(a, b) {
+        return a.c_left - b.c_left;
+    });
+    var data = reqTreeList;
+
+    console.log (data);
+
+    var firstBranchChecker = true;
+    $.each(data, function (key, value) {
+        console.log("key : " + key + "\nvalue : " + value);
+        if (value.c_contents == null || value.c_contents == "null") {
+            value.c_contents = "";
+        }
+
+        console.log(value.c_id + "=" + value.c_type + "=" + value.c_title + "//" + value.c_parentid);
+
+        var iconHtml;
+        if (value.c_type == "root" || value.c_type == "drive") {
+            iconHtml = "<i class='fa fa-clipboard'></i>";
+        } else if (value.c_type == "folder") {
+            iconHtml = "<i class='fa fa-files-o'></i>";
+        } else {
+            iconHtml = "<i class='fa fa-file-text-o'></i>";
+        }
+
+        if (value.c_type == "root") {
+            console.log("ROOT 노드는 처리하지 않습니다.");
+        } else if (value.c_type == "drive" || value.c_type == "folder") {
+            if (firstBranchChecker) {
+                $(".dd-list").append(
+                    "<li class='dd-item' id='" +
+                    "T_ARMS_REQ_" +
+                    value.c_id +
+                    "' data-id='" +
+                    value.c_id +
+                    "'>" +
+                    "<div class='dd-handle'>" +
+                    iconHtml +
+                    " " +
+                    value.c_title +
+                    "</div>" +
+                    "</li>"
+                );
+                firstBranchChecker = false;
+            } else {
+                $("#T_ARMS_REQ_" + value.c_parentid).append(
+                    "<ol class='dd-list'>" +
+                    "<li class='dd-item' id='" +
+                    "T_ARMS_REQ_" +
+                    value.c_id +
+                    "' data-id='" +
+                    value.c_id +
+                    "'>" +
+                    "<div class='dd-handle'>" +
+                    iconHtml +
+                    " " +
+                    value.c_title +
+                    "</div>" +
+                    "</li>" +
+                    "</ol>"
+                );
+            }
+        } else {
+            $("#T_ARMS_REQ_" + value.c_parentid).append(
+                "<ol class='dd-list'>" +
+                "<li class='dd-item' id='" +
+                "T_ARMS_REQ_" +
+                value.c_id +
+                "' data-id='" +
+                value.c_id +
+                "'>" +
+                "<div class='dd-handle'>" +
+                iconHtml +
+                " " +
+                value.c_title +
+                "</div>" +
+                "</li>" +
+                "</ol>"
+            );
+        }
+
+
+    });
+
+    $('.dd-handle').on('click', function() {
+        var dataId = $(this).closest('.dd-list').data('id');
+        console.log(dataId);  // 콘솔에 data-id 값 출력
+    });
+}
+
+function set_req_list_button() {
+    $('.dd-item').each(function() {
+        if ($(this).children('ol').length > 0) {
+            $(this).prepend('<button data-action="collapse" type="button" class="collapseBtn"  style="display: block;">Collapse</button>' +
+                '<button data-action="expand" type="button" class="expandBtn" style="display: none;">Expand</button>');
+        }
+    });
+
+    collapse_or_expand_button_click();
+}
+
+function collapse_or_expand_button_click() {
+    $('.collapseBtn').on('click', collapse_button_click_event);
+    $('.expandBtn').on('click', expand_button_click_event);
+
+}
+
+function collapse_button_click_event(e){
+    var parentDiv = $(this).closest('.dd-list');
+    parentDiv.find('.dd-list').css('display', 'none');
+    parentDiv.find('.collapseBtn').css('display', 'none');
+    parentDiv.find('.expandBtn').css('display', 'block');
+}
+
+function expand_button_click_event(e){
+    var parentDiv = $(this).closest('.dd-list');
+    parentDiv.find('.dd-list').css('display', 'block');
+    parentDiv.find('.collapseBtn').css('display', 'block');
+    parentDiv.find('.expandBtn').css('display', 'none');
 }

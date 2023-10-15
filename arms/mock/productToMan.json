@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "id": "1-product",
+      "name": "안랩 V3 Lite",
+      "type": "제품"
+    },
+    {
+      "id": "1-version",
+      "name": "BaseVersion",
+      "type": "버전"
+    },
+    {
+      "id": "2-version",
+      "name": "1.0.0",
+      "type": "버전"
+    },
+    {
+      "id": "3-version",
+      "name": "1.0.1",
+      "type": "버전"
+    },
+    {
+      "id": "1-manpower",
+      "name": "유현덕",
+      "type": "작업자"
+    },
+    {
+      "id": "2-manpower",
+      "name": "제갈량",
+      "type": "작업자"
+    },
+    {
+      "id": "3-manpower",
+      "name": "장익덕",
+      "type": "작업자"
+    },
+    {
+      "id": "4-manpower",
+      "name": "조맹덕",
+      "type": "작업자"
+    },
+    {
+      "id": "5-manpower",
+      "name": "관운장",
+      "type": "작업자"
+    }
+  ],
+  "links": [
+    {
+      "source": "1-product",
+      "target": "1-version"
+    },
+    {
+      "source": "1-product",
+      "target": "2-version"
+    },
+    {
+      "source": "1-product",
+      "target": "3-version"
+    },
+    {
+      "source": "1-version",
+      "target": "3-manpower"
+    },
+    {
+      "source": "1-version",
+      "target": "3-manpower"
+    },
+    {
+      "source": "2-version",
+      "target": "1-manpower"
+    },
+    {
+      "source": "3-version",
+      "target": "1-manpower"
+    },
+    {
+      "source": "2-version",
+      "target": "2-manpower"
+    },
+    {
+      "source": "2-version",
+      "target": "4-manpower"
+    },
+    {
+      "source": "2-version",
+      "target": "5-manpower"
+    }
+  ]
+}

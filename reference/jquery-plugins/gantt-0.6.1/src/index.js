@@ -23,7 +23,7 @@ export default class Gantt {
 
     constructor(wrapper, tasks, options, contents, modal) {
         this.originTasks = tasks;
-        this.modal_action = modal
+        this.modal_action = modal;
 
         this.setup_options(options);
         this.setup_tasks(tasks);
@@ -94,19 +94,23 @@ export default class Gantt {
         const wrapper = document.createElement('div');
         wrapper.className = 'mt well well-sm';
 
-        Object.keys(VIEW_MODE).forEach(key => {
+        Object.keys(VIEW_MODE).forEach((key) => {
             const btn = document.createElement('button');
-            btn.className = `btn btn-default btn-sm mr-xs ${VIEW_MODE[key] === this.options.view_mode ? 'active' : ''}`;
+            btn.className = `btn btn-default btn-sm mr-xs ${
+                VIEW_MODE[key] === this.options.view_mode ? 'active' : ''
+            }`;
             btn.innerText = VIEW_MODE[key];
             btn.addEventListener('click', (e) => {
                 e.target.classList.add('active');
-                e.target.parentNode.childNodes.forEach(b => b.classList.remove('active'));
+                e.target.parentNode.childNodes.forEach((b) =>
+                    b.classList.remove('active')
+                );
 
-                this.change_view_mode(VIEW_MODE[key])
+                this.change_view_mode(VIEW_MODE[key]);
             });
 
             wrapper.appendChild(btn);
-        })
+        });
 
         return wrapper;
     }
@@ -359,7 +363,9 @@ export default class Gantt {
 
         this.$wrapper.prepend($table_container);
 
-        $.on($table_header, 'click', '.table-header th', (e) => this.bind_thead_click(e))
+        $.on($table_header, 'click', '.table-header th', (e) =>
+            this.bind_thead_click(e)
+        );
     }
 
     make_grid() {
@@ -395,7 +401,7 @@ export default class Gantt {
 
     make_grid_rows() {
         const rows_layer = createSVG('g', { append_to: this.layers.grid });
-        const lines_layer = createSVG('g', { append_to: this.layers.grid });
+        // const lines_layer = createSVG('g', { append_to: this.layers.grid });
 
         const row_width = this.dates.length * this.options.column_width;
         const row_height = this.options.bar_height + this.options.padding;
@@ -412,14 +418,14 @@ export default class Gantt {
                 append_to: rows_layer,
             });
 
-            createSVG('line', {
-                x1: 0,
-                y1: row_y + row_height,
-                x2: row_width,
-                y2: row_y + row_height,
-                class: 'row-line',
-                append_to: lines_layer,
-            });
+            // createSVG('line', {
+            //     x1: 0,
+            //     y1: row_y + row_height,
+            //     x2: row_width,
+            //     y2: row_y + row_height,
+            //     class: 'row-line',
+            //     append_to: lines_layer,
+            // });
 
             row_y += this.options.bar_height + this.options.padding;
         }
@@ -875,7 +881,7 @@ export default class Gantt {
             this.sortKey = name;
             this.sortDirection = 1;
         } else {
-            if (this.sortKey === name){
+            if (this.sortKey === name) {
                 if (this.sortDirection < 2) this.sortDirection++;
                 else this.sortDirection = 0;
             } else {
@@ -888,7 +894,7 @@ export default class Gantt {
     get_thead_keyname() {
         let keyname = '';
 
-        switch(this.sortKey) {
+        switch (this.sortKey) {
             case 'Start Date':
                 keyname = 'start';
                 break;
@@ -902,7 +908,7 @@ export default class Gantt {
                 break;
         }
 
-        return keyname
+        return keyname;
     }
 
     set_tasks_sort() {
@@ -912,18 +918,24 @@ export default class Gantt {
             case 1:
                 this.tasks.sort((a, b) => {
                     if (keyname === 'priority') {
-                        return orderBy.indexOf(a[keyname]) - orderBy.indexOf(b[keyname])
+                        return (
+                            orderBy.indexOf(a[keyname]) -
+                            orderBy.indexOf(b[keyname])
+                        );
                     } else {
-                        return a[keyname].localeCompare(b[keyname])
+                        return a[keyname].localeCompare(b[keyname]);
                     }
                 });
                 break;
             case 2:
                 this.tasks.sort((a, b) => {
                     if (keyname === 'priority') {
-                        return orderBy.indexOf(b[keyname]) - orderBy.indexOf(a[keyname])
+                        return (
+                            orderBy.indexOf(b[keyname]) -
+                            orderBy.indexOf(a[keyname])
+                        );
                     } else {
-                        return b[keyname].localeCompare(a[keyname])
+                        return b[keyname].localeCompare(a[keyname]);
                     }
                 });
                 break;
@@ -940,7 +952,9 @@ export default class Gantt {
             height: this.options.bar_height + this.options.padding + 'px',
         });
 
-        document.querySelector('.table-container table').appendChild($table_body)
+        document
+            .querySelector('.table-container table')
+            .appendChild($table_body);
     }
 
     sort_render() {
@@ -951,11 +965,14 @@ export default class Gantt {
     }
 
     bind_thead_click(e) {
-        if (!['Start Date', 'End Date', 'Priority'].includes(e.target.innerHTML)) return;
+        if (
+            !['Start Date', 'End Date', 'Priority'].includes(e.target.innerHTML)
+        )
+            return;
 
         this.set_sort_option(e.target.innerHTML);
         this.set_tasks_sort();
-        this.sort_render()
+        this.sort_render();
     }
 
     get_all_dependent_tasks(task_id) {

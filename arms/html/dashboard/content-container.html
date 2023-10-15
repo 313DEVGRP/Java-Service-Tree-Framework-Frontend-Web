@@ -114,11 +114,29 @@
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-clock-o"></i>
-										Time 분석
+										Time ( 작업 일정 )
 									</span>
                                 </h4>
                             </header>
                             <div class="body">
+                                <div    class="control-group"
+                                        class="darkBack"
+                                        style="padding-bottom: 10px; border: 0">
+                                    <div    class="controls form-group"
+                                            class="darkBack"
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 총 제품(서비스) 버전 개수 : <a id="version_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 요구사항이 있는 제품(서비스) 버전 개수 : <a id="active_version_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                    </div>
+                                    <div    class="control-group"
+                                            class="darkBack"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack"
+                                                id="version_progress_status"
+                                                style="margin-bottom: 5px !important;">
+                                        </div>
+                                    </div>
+                                </div>
                                 <ul class="color-labels">
                                     <div id="light">
                                         <span class="active" id="red"></span>
@@ -126,7 +144,7 @@
                                         <span id="green"></span>
                                     </div>
 
-                                    <button class="btn btn-primary btn-block btn-sm">Switch Light</button>
+                                    <button class="btn btn-primary btn-block btn-sm hidden">Switch Light</button>
                                 </ul>
                             </div>
                         </section>
@@ -138,34 +156,31 @@
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-calendar-o"></i>
-										투입된 작업 그룹 현황 컬러표
+										Scope ( 요구사항 및 연결이슈 수 )
 									</span>
                                 </h4>
                             </header>
                             <div class="body">
-                                <ul class="color-labels">
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #3457d5"></i>
-                                            <span class="label-name font12">특급</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #5d8aa8"></i>
-                                            <span class="label-name font12">고급</span>
-                                        </li>
+                                <div    class="control-group"
+                                        class="darkBack"
+                                        style="padding-bottom: 10px; border: 0">
+                                    <div    class="controls form-group"
+                                            class="darkBack"
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 총 제품(서비스) 요구사항 개수 : <a id="req_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 요구사항 연결이슈 및 하위이슈 개수: <a id="linkedIssue_subtask_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 요구사항 별 연결된 평균 이슈 개수: <a id="linkedIssue_subtask_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 요구사항 별 연결된 평균 처리일: <a id="linkedIssue_subtask_count" style="font-weight: bold;">n/a</a> 개</span><br>
                                     </div>
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #2c5571"></i>
-                                            <span class="label-name font12">중급</span>
-                                        </li>
-
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #1f305e"></i>
-                                            <span class="label-name font12">초급</span>
-                                        </li>
+                                    <div    class="control-group"
+                                            class="darkBack"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack"
+                                                id="scope_progress_status"
+                                                style="margin-bottom: 5px !important;">
+                                        </div>
                                     </div>
-                                </ul>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -176,34 +191,33 @@
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-dollar"></i>
-										투입된 작업 그룹 현황 컬러표
+										Resource ( 자원분배 )
 									</span>
                                 </h4>
                             </header>
                             <div class="body">
-                                <ul class="color-labels">
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #3457d5"></i>
-                                            <span class="label-name font12">특급</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #5d8aa8"></i>
-                                            <span class="label-name font12">고급</span>
-                                        </li>
+                                <div    class="control-group"
+                                        class="darkBack"
+                                        style="padding-bottom: 10px; border: 0">
+                                    <div    class="controls form-group"
+                                            class="darkBack"
+                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
+                                        <span>✔ 제품(서비스)에 투입된 총 인원 : <a id="resource_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 버전별 인원 평균: <a id="resource_per_version" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 투입 인원 월평균 요구사항 수: <a id="avg_req_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 투입 인원 월평균 요구사항 처리 수: <a id="avg_req_resolve_or_close_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 투입 인원 월평균 요구사항 연결 이슈 수: <a id="avg_req_linkedIssue_subtask_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                        <span>✔ 투입 인원 월평균 요구사항 연결 이슈 처리 수: <a id="avg_req_linkedIssue_resolve_or_close_count" style="font-weight: bold;">n/a</a> 개</span><br>
                                     </div>
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #2c5571"></i>
-                                            <span class="label-name font12">중급</span>
-                                        </li>
-
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #1f305e"></i>
-                                            <span class="label-name font12">초급</span>
-                                        </li>
+                                    <div    class="control-group"
+                                            class="darkBack"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack"
+                                                id="scope_progress_status"
+                                                style="margin-bottom: 5px !important;">
+                                        </div>
                                     </div>
-                                </ul>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -280,7 +294,7 @@
                                 </div>
                             </blockquote>-->
                             <div class="row">
-                                <div class="col-lg-4 col-layer" style="padding-right: 0px !important;">
+                                <div class="col-lg-4 col-layer" style="padding-right: 4px !important;">
                                     <section class="widget large">
                                         <header>
                                             <h4>
@@ -329,11 +343,11 @@
                                                     현재 선택된 제품이 없습니다.
                                                 </div>
                                             </div>
-                                            <div id="version-progress-bar"></div>
+                                            <div id="versionGaugeChart"></div>
                                         </div>
                                     </section>
                                 </div>
-                                <div class="col-lg-8 col-layer" style="padding-left: 0px !important;">
+                                <div class="col-lg-8" style="padding-left: 0px !important;">
                                     <section class="widget large">
                                         <header>
                                             <h4>
@@ -348,15 +362,13 @@
                                         <div
                                                 class="body"
                                                 id="version-timeline-wrapper">
-                                            <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
-                                                <div
+                                            <div
                                                         class="box"
                                                         id="notifyNoVersion2"
                                                         style="width: 100%; text-align: center; color: #e49400">
                                                     현재 선택된 제품이 없습니다.
-                                                </div>
                                             </div>
-<!--                                            <div id="version-progress-bar"></div>-->
+                                            <div id="version-timeline-bar" class="time_element"></div>
                                         </div>
                                     </section>
                                 </div>
@@ -424,12 +436,13 @@
                                     </button>
                                 </div>
                             </blockquote>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
+                            <div class="row">
+                                <div id="chart-product-manpower">
+
+                                </div>
+                                <div id="chart-manpower-requirement" style="height: 555px; margin: 1rem 1.5rem 0rem 1.5rem">
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -483,26 +496,24 @@
                             </div>
                         </header>
                         <div class="body">
-                            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-                            <blockquote class="font13"
-                                        style="margin-top: 5px;">
-                                프로덕트의 요구사항 해결 추이
-                                <div style="float: right;">
-                                    <button class="btn btn-transparent btn-xs"
-                                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                                            onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
-                                        Help
-                                        <i  class="fa fa-question"
-                                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                                    </button>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <section class="widget large">
+                                        <header>
+                                            <h4><i class="fa fa-pie-chart"></i> 제품의 이슈 상태</h4>
+                                        </header>
+                                        <div class="body" id="donut-chart"></div>
+                                    </section>
                                 </div>
-                            </blockquote>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
+                                <div class="col-lg-8">
+                                    <section class="widget large">
+                                        <header>
+                                            <h4><i class="fa fa-bar-chart"></i> 월 별 제품의 요구사항 및 이슈 상태 </h4>
+                                        </header>
+                                        <div class="body" id="combination-chart"></div>
+                                    </section>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -683,5 +694,32 @@
         translate: -50% -50%;
         font-size: 12px;
         font-weight: bold;
+    }
+    .timeline:before {
+     left: 0px !important;
+    }
+    .time_element {
+        overflow-x: scroll;
+        white-space:nowrap;
+    }
+
+    .node rect {
+        fill-opacity: 0.9;
+        shape-rendering: crispEdges;
+    }
+
+    .node text {
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff;
+    }
+
+    .link {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: 0.2;
+    }
+
+    .link:hover {
+        stroke-opacity: 0.5;
     }
 </style>

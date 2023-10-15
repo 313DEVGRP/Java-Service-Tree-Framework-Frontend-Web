@@ -172,6 +172,7 @@
 		<link href="../arms/html/armsDetailExceptTemplate/assets/css/style.css" rel="stylesheet">
 		<link href="./html/armsDetailExceptTemplate/assets/css/detail.css" rel="stylesheet">
 
+
 	</head>
 	<body>
 
@@ -211,8 +212,34 @@
 					</div>
 				</div>
 			</div>
-		</header>
+			<!-- Modal -->
 
+		</header>
+		<!-- 모달창 -->
+		<div class="modal fade" id="viewDetailReqModal" data-bs-backdrop="static"  tabindex="-1" aria-labelledby="viewDetailReqModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered modal-dialog-scrollable modal-lg" >
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="viewDetailReqModalLabel">요구사항 상세 보기</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="req_detail_contents">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="viewAllReqModal" data-bs-backdrop="static"  tabindex="-1" aria-labelledby="viewAllReqModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered modal-dialog-scrollable modal-lg" >
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="viewAllReqModalLabel">요구사항 상세 보기</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="req_all_detail_contents">
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- ======= 타이틀 페이지 ======= -->
         <section id="home" class="d-flex flex-column justify-content-center">
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -489,16 +516,23 @@
 									</div>
 									<!--우측 영역-->
 									<div class="col-lg-6 ">
-
 											<ul>
 												<li class="col-lg-12 row">
 													<div class="col-lg-4 d-flex  align-items-center">
 														<i class="bi bi-chevron-right"></i> <strong class="detailview_title">요구사항 상세</strong>
+
 													</div>
 												</li>
 											</ul>
-											<div class="col-lg-12 form-control overflow-auto" id="detailview_req_contents" >
-											</div>
+										<div class="col-lg-12 form-control" style="position: relative;">
+											<div id="detailview_req_contents" class="overflow-auto"></div>
+
+											<button class="view-btn" data-bs-toggle="modal" data-bs-target="#viewDetailReqModal" >
+												<i class="bi bi-arrows-fullscreen"style="font-size: 24px;"></i>
+											</button>
+
+										</div>
+
 									</div>
 								</div>
 							</div>
@@ -608,6 +642,12 @@
 										style="padding-top: 5px; overflow: hidden; height:712px"
 										class="border">
 								</div>
+
+								<!-- 요구사항 전체목록 디자인 변경 관련 html -->
+								<!-- <div    class="dd"
+										id="nestable1">
+										<ol class="dd-list"></ol>
+									 </div>-->
 							</div>
 						</div>
 						<!-- 요구사항 목록 트리 끝 -->
@@ -737,7 +777,13 @@
 											<div class="col-lg-4 d-flex  align-items-center pb-2" style="padding-left: 0px;">
 												<i class="bi bi-chevron-right"></i> <strong  class="detailview_title">요구사항 상세</strong>
 											</div>
-											<div class="col-lg-8 form-control overflow-auto"  id="allreq_pdservice_content">
+											<div class="col-lg-12 form-control" style="position: relative;">
+												<div id="allreq_pdservice_content" class="overflow-auto"></div>
+
+												<button class="view-btn" data-bs-toggle="modal" data-bs-target="#viewAllReqModal" id="view_allreq_btn">
+													<i class="bi bi-arrows-fullscreen"></i>
+												</button>
+
 											</div>
 										</li>
 									</ul>

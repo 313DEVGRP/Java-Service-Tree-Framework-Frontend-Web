@@ -48,7 +48,7 @@
     }
 }
 
-
+/* 트리 색상 변경 */
 .jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
 .jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
 .about .content ul li:last-child {
@@ -523,7 +523,6 @@
 }
 
 /* 게시글 생성 부분 */
-
 .box {
     position: relative;
     border-radius: 3px;
@@ -1075,27 +1074,28 @@ svg {
     font-size: 11px;
     color: #f8f8f8;
 }
+
 /*--------------------------------------------------------------
 # 요구사항 상세
 --------------------------------------------------------------*/
 #detailview_req_contents{
-  height:655px;
+  height:645px;
 }
 @media (max-width: 1400px){
     #detailview_req_contents{
-      height:710px;
+      height:695px;
     }
 }
 
 @media (max-width: 1220px){
     #detailview_req_contents{
-      height:815px;
+      height:805px;
     }
 }
 
 @media (max-width: 1200px){
     #detailview_req_contents{
-      height:890px;
+      height:875px;
     }
 }
 
@@ -1132,6 +1132,84 @@ svg {
     from { text-indent: 0%; }
     to { text-indent: -30%; }
 }
+
+/* 상세 보기 확대 버튼*/
+.view-btn {
+    background-color: #0678e3;
+    color: white;
+    border: none;
+    text-align: center;
+     opacity: .5;
+     position: absolute;
+     top: 10px;
+     right: 10px;
+     width:40px;
+     height:40px;
+     border-radius:0.5rem;
+     display:flex;        /* flexbox 모델 적용 */
+     justify-content:center;  /* 가로축에서 중앙 정렬 */
+     align-items:center;   /* 세로축에서 중앙 정렬 */
+
+}
+#view_allreq_btn{
+     display:none;
+}
+
+.view-btn:hover {
+   opacity :1;
+}
+.modal{
+    z-index:10001;
+}
+.modal-content{
+    height: 80vh;
+}
+.modal-dialog{
+    width: 65vw;
+    max-width: 100%;
+    margin: auto;
+    margin-top: 55px;
+}
+@media (max-width: 500px) {
+  .modal-dialog {
+    width: 90vw;
+    margin:auto;
+    margin-top: 45px;
+  }
+}
+
+.view-btn i {
+    font-size: 24px !important;
+    margin-right: initial !important;
+    color: white !important;
+    line-height: initial !important;
+}
+
+@media (max-width: 500px){
+   .view-btn {
+       background-color: #0678e3;
+       color: white;
+       border: none;
+       text-align: center;
+        opacity: .5;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width:25px;
+        height:25px;
+        border-radius:0.5rem;
+        display:flex;        /* flexbox 모델 적용 */
+        justify-content:center;  /* 가로축에서 중앙 정렬 */
+        align-items:center;   /* 세로축에서 중앙 정렬 */
+   }
+   .view-btn i {
+       font-size: 14px !important;
+       margin-right: initial !important;
+       color: white !important;
+       line-height: initial !important;
+   }
+}
+
 /*--------------------------------------------------------------
 # 요구사항 목록
 --------------------------------------------------------------*/
@@ -1143,23 +1221,23 @@ svg {
 }
 
 #allreq_pdservice_content{
-    height:330px;
+    height:315px;
 }
 
 @media (max-width: 1220px){
     #allreq_pdservice_content{
-      height: 330px;
+      height: 290px;
     }
 }
 @media (max-width: 1200px){
     #allreq_pdservice_content{
-      height:260px;
+      height:245px;
     }
 }
 
 @media (max-width: 1030px){
     #allreq_pdservice_content{
-      height:210px;
+      height:195px;
     }
 }
 
@@ -1276,4 +1354,109 @@ svg {
 
 .version-scroll .slimScrollDiv {
     height: auto !important;
+}
+
+/* 요구사항 전체 목록 테스트 부분 */
+.dd {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 5px;
+    max-width: 600px;
+    list-style: none;
+    font-size: 13px;
+    line-height: 20px;
+    height: 720px;
+    overflow: hidden;
+}
+
+.dd-list {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dd-list .dd-list {
+    padding-left: 30px;
+}
+
+.dd-item, .dd-empty, .dd-placeholder {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.dd-handle {
+    display: block;
+    min-height: 30px;
+    margin: 5px 0;
+    padding: 5px 10px;
+    color: #666;
+    text-decoration: none;
+    background: #fff;
+    -webkit-box-shadow: 0 -1px 1px rgba(103,103,103,0.4), 0 1px 1px rgba(103,103,103,0.4);
+    -moz-box-shadow: 0 -1px 1px rgba(103,103,103,0.4),0 1px 1px rgba(103,103,103,0.4);
+    box-shadow: 0 -1px 1px rgba(103,103,103,0.4), 0 1px 1px rgba(103,103,103,0.4);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.dd-item>button {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 25px;
+    height: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+    color: #666;
+}
+
+.dd-item>button:before {
+    content: '+';
+    display: block;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+}
+
+.dd-item>button[data-action="collapse"]:before {
+    content: '-'
+}
+
+.dd-handle:hover,
+.dd-handle:focus {
+    background-color:#0563bb;
+    color: white;
+}
+
+.fa-clipboard:before {
+    content: "\f0ea";
+}
+
+.fa-files-o:before {
+    content: "\f0c5";
+}
+
+.fa-file-text-o:before {
+    content: "\f0f6";
 }
