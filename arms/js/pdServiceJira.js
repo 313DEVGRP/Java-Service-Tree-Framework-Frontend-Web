@@ -113,7 +113,25 @@ function dataTableLoad() {
 	var columnDefList = [];
 	var selectList = {};
 	var orderList = [[0, "asc"]];
-	var buttonList = [];
+	var buttonList = [
+		"copy",
+		"excel",
+		"print",
+		{
+			extend: "csv",
+			text: "Export csv",
+			charset: "utf-8",
+			extension: ".csv",
+			fieldSeparator: ",",
+			fieldBoundary: "",
+			bom: true
+		},
+		{
+			extend: "pdfHtml5",
+			orientation: "landscape",
+			pageSize: "LEGAL"
+		}
+	];
 
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
@@ -133,6 +151,23 @@ function dataTableLoad() {
 		buttonList,
 		isServerSide
 	);
+
+}
+
+function copychecker() {
+	dataTableRef.button(".buttons-copy").trigger();
+}
+function printchecker() {
+	dataTableRef.button(".buttons-print").trigger();
+}
+function csvchecker() {
+	dataTableRef.button(".buttons-csv").trigger();
+}
+function excelchecker() {
+	dataTableRef.button(".buttons-excel").trigger();
+}
+function pdfchecker() {
+	dataTableRef.button(".buttons-pdf").trigger();
 }
 
 
@@ -153,7 +188,7 @@ function dataTableClick(tempDataTable, selectedData) {
 	$(".searchable").multiSelect("deselect_all");  // // 멀티셀렉트에서 모든 선택 해제
 	$("#pdservice_connect").removeClass("btn-success");
  	$("#pdservice_connect").addClass("btn-primary");
-	$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
+	$("#pdservice_connect").text("제품(서비스)-버전-ALM 연결 등록");
 
 	//초기 태그 삭제
 	$("#initDefaultVersion").remove();
@@ -377,20 +412,13 @@ function versionClicks(element, c_id, c_title) {
 			if (versionClickData.length == 0) {
 				$("#pdservice_connect").removeClass("btn-success");
 				$("#pdservice_connect").addClass("btn-primary");
-				$("#pdservice_connect").text("제품(서비스) Jira 연결 등록");
-				console.log("versionClickData length 0 ==");
-				// updateD3ByMultiSelect(obj);
+				$("#pdservice_connect").text("제품(서비스)-버전-ALM 연결 등록");
 			} else {
 				$("#pdservice_connect").removeClass("btn-primary");
 				$("#pdservice_connect").addClass("btn-success");
-				$("#pdservice_connect").text("제품(서비스) Jira 연결 변경");
+				$("#pdservice_connect").text("제품(서비스)-버전-ALM 연결 변경");
 
-				console.log("multiSelectData - " + multiSelectData.toString());
-				console.log("multiSelectData - " + multiSelectData);
 				$("#multiselect").multiSelect("select", multiSelectData.toString().split(","));
-
-
-				//updateD3ByMultiSelect();
 			}
 		})
 		.fail(function (e) {

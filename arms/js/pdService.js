@@ -115,6 +115,7 @@ function execDocReady() {
 			update_btn_click();
 
 			popup_update_btn_click();
+
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			//editorReadOnly();
 		})
@@ -1067,7 +1068,7 @@ function modalPopup(popupName) {
 	} else { //팝업 창으로 편집하기
 
 		$("#my_modal1_title").text("신규 제품(서비스) 수정 팝업");
-		$("#my_modal1_sub").text("a-RMS에 신규 제품(서비스)의 정보를 수정합니다.")
+		$("#my_modal1_sub").text("A-RMS에 신규 제품(서비스)의 정보를 수정합니다.")
 		$("#extendupdate_pdservice").removeClass("hidden");
 
 
