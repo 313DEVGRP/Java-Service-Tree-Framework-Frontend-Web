@@ -22,16 +22,19 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload.js",
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
-			//"../reference/jquery-plugins/d3-7.8.2/dist/d3.js",
-			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js", //d3 변경
+			//d3 변경
+			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
 			"../reference/c3/c3.min.css",
 			"../reference/c3/c3-custom.css",
 			"../reference/c3/c3.min.js",
 			"./js/common/colorPalette.js",
-			"./mock/versionGauge.json",
+			//timeline
 			"../reference/jquery-plugins/info-chart-v1/js/D.js",
 			"./js/dashboard/chart/timeline_custom.js",
-			"./js/dashboard/chart/infographic_custom.css"
+			"./js/dashboard/chart/infographic_custom.css",
+			//echarts
+			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
+			"./js/dashboard/chart/barChartOnPolar.js"
 		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -191,6 +194,8 @@ function makePdServiceSelectBox() {
 		d3.json("./mock/productToMan.json", function (data) {
 			drawProductToManSankeyChart(data);
 		});
+
+		drawBarOnPolar("polar_bar", categories_mock, data_mock);
 	});
 } // end makePdServiceSelectBox()
 
