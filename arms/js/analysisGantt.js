@@ -186,7 +186,7 @@ function makePdServiceSelectBox() {
 			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
 		}
 		//
-		getStatusMonitorData($("#selected_pdService").val(), endPointUrl);
+		getMonitorData($("#selected_pdService").val(), endPointUrl);
 		//통계로드
 		statisticsLoad($("#selected_pdService").val(), null);
 		//진행상태 가져오기
@@ -279,14 +279,14 @@ function makeVersionMultiSelectBox() {
 					$("#selected_pdService").val() +
 					"/getStatusMonitor.do?disable=true&versionTag=" +
 					versionTag;
-				getStatusMonitorData($("#selected_pdService").val(), endPointUrl);
+				getMonitorData($("#selected_pdService").val(), endPointUrl);
 			} else {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" +
 					$("#selected_pdService").val() +
 					"/getStatusMonitor.do?disable=false&versionTag=" +
 					versionTag;
-				getStatusMonitorData($("#selected_pdService").val(), endPointUrl);
+				getMonitorData($("#selected_pdService").val(), endPointUrl);
 			}
 		}
 	});
@@ -1411,48 +1411,59 @@ function click_btn_for_connect_req_jira() {
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
-	return data
-		.sort((a, b) => a.c_parentid - b.c_parentid || a.c_req_create_date - b.c_req_create_date)
-		.reduce((acc, cur) => {
-			if (cur.c_parentid < 2) return acc;
+	return data.reduce((acc, cur) => {
+		if (cur.c_parentid < 2) return acc;
 
-			const task = {
-				id: `${cur.c_id}`,
-				assignee: cur.c_issue_assignee,
-				reporter: cur.c_issue_reporter,
-				name: cur.c_title,
-				start: getDate(cur.c_req_start_date),
-				end: getDate(cur.c_req_end_date),
-				progress: 20,
-				dependencies: `${cur.c_parentid}`,
-				priority: cur.state,
-				custom_class: cur.c_issue_priority_name, // optional
-				type: cur.c_type,
-				etc: cur.c_etc,
-				tmm: "",
-				p_work: "",
-				t_period: "",
-				tpp: "",
-				result: "",
-				plan: "",
-				performance: "",
-				level: cur.c_level
-			};
+		acc.push({
+			id: `${cur.c_id}`,
+			assignee: cur.c_issue_assignee,
+			reporter: cur.c_issue_reporter,
+			name: cur.c_title,
+			start: getDate(cur.c_req_start_date),
+			end: getDate(cur.c_req_end_date),
+			progress: 20,
+			dependencies: cur.c_parentid === 2 ? "" : `${cur.c_parentid}`,
+			priority: cur.state,
+			custom_class: cur.c_issue_priority_name, // optional
+			type: cur.c_type,
+			etc: cur.c_etc,
+			tmm: "",
+			p_work: "",
+			t_period: "",
+			tpp: "",
+			result: "",
+			plan: "",
+			performance: "",
+			level: cur.c_level,
+			parentId: cur.c_parentid,
+			position: cur.c_position
+		});
 
-			if (cur.c_parentid === 2) {
-				task.dependencies = "";
-				acc.push(task);
-			} else {
-				acc.splice(acc.findIndex((item) => Number(item.id) === cur.c_parentid) + 1, 0, task);
-			}
-
-			return acc;
-		}, []);
+		return acc;
+	}, []);
 }
 
-function getStatusMonitorData(selectId, endPointUrl) {
-	$("#gantt-target").empty();
+async function draggableNode(data) {
+	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
+	await $.ajax({
+		async: false,
+		type: "POST",
+		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/moveNode.do",
+		data: {
+			c_id: data.c_id,
+			ref: data.ref,
+			c_position: data.c_position,
+			copy: 0,
+			multiCounter: 0
+		},
+		progress: true,
+		success: function (r) {
+			gantt.draggble_rerender(data);
+		}
+	});
+}
 
+function getMonitorData(selectId, endPointUrl) {
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd" + endPointUrl,
 		type: "GET",
@@ -1461,32 +1472,37 @@ function getStatusMonitorData(selectId, endPointUrl) {
 		statusCode: {
 			200: function (data) {
 				if (!isEmpty(data)) {
-					gantt = new Gantt(
-						"#gantt-target",
-						setGanttTasks(data),
-						{ language: navigator.language?.split("-")[0] || navigator.userLanguage },
-						{
-							name: "작업",
-							etc: "비고",
-							start: "시작일",
-							end: "완료일",
-							tmm: "총 작업량",
-							p_work: "계획작업",
-							t_period: "총 기간",
-							tpp: "계획기간",
-							assignee: "담당",
-							result: "산출물",
-							plan: "계획",
-							performance: "실적"
-						},
-						modalOpen
-					);
+					initGantt(data);
 				}
 			}
 		}
 	});
 }
 
+function initGantt(data) {
+	$("#gantt-target").empty();
+
+	gantt = new Gantt(
+		"#gantt-target",
+		setGanttTasks(data),
+		{ language: navigator.language?.split("-")[0] || navigator.userLanguage },
+		{
+			name: "작업",
+			etc: "비고",
+			start: "시작일",
+			end: "완료일",
+			tmm: "총 작업량",
+			p_work: "계획작업",
+			t_period: "총 기간",
+			tpp: "계획기간",
+			assignee: "담당",
+			result: "산출물",
+			plan: "계획",
+			performance: "실적"
+		},
+		{ draggableNode, modal: modalOpen }
+	);
+}
 function getDate(stamp) {
 	if (!stamp) return `0000-00-00`;
 

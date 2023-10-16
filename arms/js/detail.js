@@ -115,8 +115,8 @@ function execDocReady() {
             // 메뉴 클릭 이벤트
             menuClick();
 
-            // 통계정보 탭 (맨 처음 화면이므로 무조건 로드)
-            bindStatsTab();
+            // 통계정보 탭
+            //bindStatsTab();
             statsViewTabClick();
 
             // 상세정보 탭 클릭 이벤트
@@ -275,18 +275,88 @@ function bindStatsTab() {
 
     console.log("Stats Tab ::::");
 
-    // TODO: api 호출 및 데이터 바인딩
+    var urlParams= new URL(location.href).searchParams;
+    var selectedPdService = urlParams.get('pdService');
+    var selectedReq = urlParams.get('reqAdd');
+    var selectedJiraServer = urlParams.get('jiraServer');
 
+    // api 호출 및 데이터 바인딩
+    $.ajax({
+        url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + selectedPdService + "/getPdReqStats.do" +
+            "?assigneeEmail=" + userEmail,
+        type: "GET",
+        async: false,
+        statusCode: {
+            200: function (json) {
+                console.log("::제품 요구사항 통계::");
+                console.log(json);
+
+                $("#product-all-req").text(json.allReq);
+                $("#product-my-req").text(json.myReq + " 개");
+                $("#product-my-req-display").css("width", ((json.myReq/json.allReq) * 100).toFixed(2) + "%");
+
+                var excludeKey = ["allReq", "myReq"];
+                var newJson = Object.assign({}, json);
+                for (var key in excludeKey) {
+                    delete newJson[excludeKey[key]];
+                }
+
+                console.log("newJson: " + JSON.stringify(newJson));
+                loadChart("#product-chart-pie svg", "#product-chart-footer", newJson);
+            }
+        },
+        beforeSend: function () {
+        },
+        complete: function () {
+        },
+        error: function (e) {
+            jError("통계 자료를 불러오는 중 에러가 발생했습니다.");
+        }
+    });
+
+    $.ajax({
+        url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + selectedPdService + "/getPdRelatedReqStats.do" +
+            "?assigneeEmail=" + userEmail,
+        type: "GET",
+        data: {
+            c_jira_server_link: selectedJiraServer,
+            c_req_link: selectedReq
+        },
+        async: false,
+        statusCode: {
+            200: function (json) {
+                console.log("::해당 요구사항 통계::");
+                console.log(json);
+
+                $("#req-all-req").text(json.allReq);
+                $("#req-my-req").text(json.myReq + " 개");
+                $("#req-my-req-display").css("width", ((json.myReq/json.allReq) * 100).toFixed(2) + "%");
+
+                var excludeKey = ["allReq", "myReq"];
+                var newJson = Object.assign({}, json);
+                for (var key in excludeKey) {
+                    delete newJson[excludeKey[key]];
+                }
+                console.log("newJson: " + JSON.stringify(newJson));
+                loadChart("#requirement-chart-pie svg", "#requirement-chart-footer", newJson);
+            }
+        },
+        beforeSend: function () {
+        },
+        complete: function () {
+        },
+        error: function (e) {
+            jError("통계 자료를 불러오는 중 에러가 발생했습니다.");
+        }
+    });
+    
     // 현재는 임시 데이터로 로드
-    var json = {
-        "openCount": 2,
-        "underwayCount": 3,
-        "completeCount": 5,
-        "etcCount": 0
-    };
-
-    loadChart("#product-chart-pie svg", "#product-chart-footer", json);
-    loadChart("#requirement-chart-pie svg", "#requirement-chart-footer", json);
+    // var json = {
+    //     "openCount": 2,
+    //     "underwayCount": 3,
+    //     "completeCount": 5,
+    //     "etcCount": 0
+    // };
 
     calledAPIs["statsAPI"] = true;
 }

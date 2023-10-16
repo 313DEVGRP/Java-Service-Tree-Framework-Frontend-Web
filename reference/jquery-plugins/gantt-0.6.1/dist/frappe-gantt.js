@@ -64,15 +64,13 @@ var Gantt = (function () {
 
         format(date, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'ko') {
             const dateTimeFormat = new Intl.DateTimeFormat(lang, {
-                month: 'long',
+                month: 'long'
             });
             const month_name = dateTimeFormat.format(date);
             const month_name_capitalized =
                 month_name.charAt(0).toUpperCase() + month_name.slice(1);
 
-            const values = this.get_date_values(date).map((d) =>
-                padStart(d, 2, 0)
-            );
+            const values = this.get_date_values(date).map(d => padStart(d, 2, 0));
             const format_map = {
                 YYYY: values[0],
                 MM: padStart(+values[1] + 1, 2, 0),
@@ -242,10 +240,7 @@ var Gantt = (function () {
     }
 
     function createSVG(tag, attrs) {
-        const elem = document.createElementNS(
-            'http://www.w3.org/2000/svg',
-            tag
-        );
+        const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
         for (let attr in attrs) {
             if (attr === 'append_to') {
                 const parent = attrs.append_to;
@@ -260,12 +255,7 @@ var Gantt = (function () {
     }
 
     function animateSVG(svgElement, attr, from, to) {
-        const animatedSvgElement = getAnimationElement(
-            svgElement,
-            attr,
-            from,
-            to
-        );
+        const animatedSvgElement = getAnimationElement(svgElement, attr, from, to);
 
         if (animatedSvgElement === svgElement) {
             // triggered 2nd time programmatically
@@ -566,20 +556,16 @@ var Gantt = (function () {
         }
 
         setup_click_event() {
-            $.on(
-                this.group,
-                'focus ' + this.gantt.options.popup_trigger,
-                (e) => {
-                    if (this.action_completed) {
-                        // just finished a move action, wait for a few seconds
-                        return;
-                    }
-
-                    this.show_popup();
-                    this.gantt.unselect_all();
-                    this.group.classList.add('active');
+            $.on(this.group, 'focus ' + this.gantt.options.popup_trigger, (e) => {
+                if (this.action_completed) {
+                    // just finished a move action, wait for a few seconds
+                    return;
                 }
-            );
+
+                this.show_popup();
+                this.gantt.unselect_all();
+                this.group.classList.add('active');
+            });
 
             $.on(this.group, 'dblclick', (e) => {
                 if (this.action_completed) {
@@ -594,7 +580,10 @@ var Gantt = (function () {
         show_popup() {
             if (this.gantt.bar_being_dragged) return;
 
-            this.gantt.modal_action({ id: this.task.id, type: this.task.type });
+            this.gantt.modal_handler({
+                id: this.task.id,
+                type: this.task.type,
+            });
 
             // const start_date = date_utils.format(
             //     this.task._start,
@@ -644,8 +633,7 @@ var Gantt = (function () {
 
         date_changed() {
             let changed = false;
-            const { new_start_date, new_end_date } =
-                this.compute_start_end_date();
+            const { new_start_date, new_end_date } = this.compute_start_end_date();
 
             if (Number(this.task._start) !== Number(new_start_date)) {
                 changed = true;
@@ -669,10 +657,7 @@ var Gantt = (function () {
         progress_changed() {
             const new_progress = this.compute_progress();
             this.task.progress = new_progress;
-            this.gantt.trigger_event('progress_change', [
-                this.task,
-                new_progress,
-            ]);
+            this.gantt.trigger_event('progress_change', [this.task, new_progress]);
         }
 
         set_action_completed() {
@@ -688,8 +673,7 @@ var Gantt = (function () {
                 x_in_units * this.gantt.options.step,
                 'hour'
             );
-            const width_in_units =
-                bar.getWidth() / this.gantt.options.column_width;
+            const width_in_units = bar.getWidth() / this.gantt.options.column_width;
             const new_end_date = date_utils.add(
                 new_start_date,
                 width_in_units * this.gantt.options.step,
@@ -802,10 +786,7 @@ var Gantt = (function () {
                 .setAttribute('x', bar.getEndX() - 9);
             const handle = this.group.querySelector('.handle.progress');
             handle &&
-                handle.setAttribute(
-                    'points',
-                    this.get_progress_polygon_points()
-                );
+                handle.setAttribute('points', this.get_progress_polygon_points());
         }
 
         update_arrow_position() {
@@ -831,10 +812,8 @@ var Gantt = (function () {
                 this.from_task.$bar.getX() + this.from_task.$bar.getWidth() / 2;
 
             const condition = () =>
-                this.to_task.$bar.getX() <
-                    start_x + this.gantt.options.padding &&
-                start_x >
-                    this.from_task.$bar.getX() + this.gantt.options.padding;
+                this.to_task.$bar.getX() < start_x + this.gantt.options.padding &&
+                start_x > this.from_task.$bar.getX() + this.gantt.options.padding;
 
             while (condition()) {
                 start_x -= 10;
@@ -847,8 +826,7 @@ var Gantt = (function () {
                     this.from_task.task._index +
                 this.gantt.options.padding;
 
-            const end_x =
-                this.to_task.$bar.getX() - this.gantt.options.padding / 2;
+            const end_x = this.to_task.$bar.getX() - this.gantt.options.padding / 2;
             const end_y =
                 this.gantt.options.header_height +
                 this.gantt.options.bar_height / 2 +
@@ -883,8 +861,7 @@ var Gantt = (function () {
                     this.to_task.$bar.getY() +
                     this.to_task.$bar.getHeight() / 2 -
                     curve_y;
-                const left =
-                    this.to_task.$bar.getX() - this.gantt.options.padding;
+                const left = this.to_task.$bar.getX() - this.gantt.options.padding;
 
                 this.path = `
                 M ${start_x} ${start_y}
@@ -986,12 +963,10 @@ var Gantt = (function () {
     }
 
     class Table {
-        constructor(contents) {
-            this.setup_contents(contents);
-        }
-
-        setup_contents(contents) {
+        constructor(gantt, contents, handler) {
+            this.gantt = gantt;
             this.contents = contents;
+            this.handler = handler;
         }
 
         draw_table_header(attr) {
@@ -1013,11 +988,20 @@ var Gantt = (function () {
             return $thead;
         }
 
-        draw_table_body(tasks, attr) {
+        draw_table_bodys(tasks, attr) {
+            return tasks.reduce(
+                (acc, cur) => (acc.push(this.make_table_body(cur, attr)), acc),
+                []
+            );
+        }
+
+        make_table_body(tasks, attr) {
             const $tbody = document.createElement('tbody');
 
             tasks.forEach((task) => {
                 const $tr = document.createElement('tr');
+                $tr.setAttribute('draggable', 'true');
+                $tr.setAttribute('data-id', task.id);
                 $.style($tr, attr);
 
                 Object.keys(this.contents).forEach((content) => {
@@ -1031,12 +1015,74 @@ var Gantt = (function () {
                     $tr.append($td);
                 });
 
+                if (task.parentId === 2) $tbody.setAttribute('data-id', task.id);
+
+                $tr.addEventListener('dragstart', (e) => {
+                    e.target.classList.add('dragging');
+                });
+                $tr.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                });
+
                 $tbody.append($tr);
             });
 
             $tbody.classList.add('table-body');
 
+            $tbody.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            $tbody.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                let afterElement = null;
+                let position = tasks.length;
+                const targetEl = this.gantt.get_task(
+                    e.target.parentNode.getAttribute('data-id')
+                );
+                const draggable = document.querySelector('.dragging');
+                const dragEl = this.gantt.get_task(
+                    document.querySelector('.dragging').getAttribute('data-id')
+                );
+
+                if (targetEl.parentId !== 2) {
+                    afterElement = this.get_drag_after_element($tbody, e.clientY);
+                    position = this.gantt.get_task(
+                        afterElement.getAttribute('data-id')
+                    ).position;
+                }
+
+                await this.handler({
+                    c_id: dragEl.id,
+                    ref: $tbody.getAttribute('data-id'),
+                    c_position: position,
+                    p_position: dragEl.position,
+                    p_parentId: dragEl.parentId,
+                });
+
+                $tbody.insertBefore(draggable, afterElement);
+            });
+
             return $tbody;
+        }
+
+        get_drag_after_element(container, y) {
+            const draggableElements = [
+                ...container.querySelectorAll('tr:not(.dragging)'),
+            ];
+
+            return draggableElements.reduce(
+                (closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                },
+                { offset: Number.NEGATIVE_INFINITY }
+            ).element;
         }
     }
 
@@ -1070,9 +1116,7 @@ var Gantt = (function () {
 
                 $.style($split_bar, { left: `${left}px` });
                 $.style($table, { 'flex-basis': `${left}px` });
-                $.style($gantt, {
-                    'flex-basis': `${elem.clientWidth - left}px`,
-                });
+                $.style($gantt, { 'flex-basis': `${elem.clientWidth - left}px` });
 
                 x = e.clientX;
             };
@@ -1098,12 +1142,9 @@ var Gantt = (function () {
     };
 
     class Gantt {
-        sortKey = '';
-        sortDirection = 0;
-
-        constructor(wrapper, tasks, options, contents, modal) {
+        constructor(wrapper, tasks, options, contents, handler) {
             this.originTasks = tasks;
-            this.modal_action = modal;
+            this.modal_handler = handler.modal;
 
             this.setup_options(options);
             this.setup_tasks(tasks);
@@ -1115,7 +1156,7 @@ var Gantt = (function () {
             this.bind_events();
 
             this.setup_split_bar();
-            this.setup_table(contents);
+            this.setup_table(contents, handler.draggableNode);
         }
 
         setup_wrapper(element) {
@@ -1177,8 +1218,8 @@ var Gantt = (function () {
             Object.keys(VIEW_MODE).forEach((key) => {
                 const btn = document.createElement('button');
                 btn.className = `btn btn-default btn-sm mr-xs ${
-                    VIEW_MODE[key] === this.options.view_mode ? 'active' : ''
-                }`;
+                VIEW_MODE[key] === this.options.view_mode ? 'active' : ''
+            }`;
                 btn.innerText = VIEW_MODE[key];
                 btn.addEventListener('click', (e) => {
                     e.target.classList.add('active');
@@ -1194,6 +1235,7 @@ var Gantt = (function () {
 
             return wrapper;
         }
+
         setup_options(options) {
             const default_options = {
                 header_height: 50,
@@ -1213,9 +1255,29 @@ var Gantt = (function () {
             this.options = Object.assign({}, default_options, options);
         }
 
+        division_tasks(tasks) {
+            return tasks
+                .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
+                .reduce(
+                    (acc, cur) => (
+                        cur.parentId === 2
+                            ? acc.push([cur])
+                            : acc.forEach(
+                                  (arr) =>
+                                      arr.some(
+                                          (t) => Number(t.id) === cur.parentId
+                                      ) && arr.push(cur)
+                              ),
+                        acc
+                    ),
+                    []
+                );
+        }
+
         setup_tasks(tasks) {
+            this.divisionTasks = this.division_tasks(tasks);
             // prepare tasks
-            this.tasks = tasks.map((task, i) => {
+            this.tasks = this.divisionTasks.flat().map((task, i) => {
                 // convert to Date objects
                 task._start = date_utils.parse(task.start);
                 task._end = date_utils.parse(task.end);
@@ -1256,10 +1318,7 @@ var Gantt = (function () {
                 }
 
                 // dependencies
-                if (
-                    typeof task.dependencies === 'string' ||
-                    !task.dependencies
-                ) {
+                if (typeof task.dependencies === 'string' || !task.dependencies) {
                     let deps = [];
                     if (task.dependencies) {
                         deps = task.dependencies
@@ -1279,6 +1338,10 @@ var Gantt = (function () {
             });
 
             this.setup_dependencies();
+        }
+
+        get_task(id, n) {
+            return this.originTasks.find((t) => t.id === id);
         }
 
         setup_dependencies() {
@@ -1354,20 +1417,13 @@ var Gantt = (function () {
                 this.gantt_start = date_utils.add(this.gantt_start, -7, 'day');
                 this.gantt_end = date_utils.add(this.gantt_end, 7, 'day');
             } else if (this.view_is(VIEW_MODE.MONTH)) {
-                this.gantt_start = date_utils.start_of(
-                    this.gantt_start,
-                    'year'
-                );
+                this.gantt_start = date_utils.start_of(this.gantt_start, 'year');
                 this.gantt_end = date_utils.add(this.gantt_end, 1, 'year');
             } else if (this.view_is(VIEW_MODE.YEAR)) {
                 this.gantt_start = date_utils.add(this.gantt_start, -2, 'year');
                 this.gantt_end = date_utils.add(this.gantt_end, 2, 'year');
             } else {
-                this.gantt_start = date_utils.add(
-                    this.gantt_start,
-                    -1,
-                    'month'
-                );
+                this.gantt_start = date_utils.add(this.gantt_start, -1, 'month');
                 this.gantt_end = date_utils.add(this.gantt_end, 1, 'month');
             }
         }
@@ -1413,16 +1469,44 @@ var Gantt = (function () {
             this.set_scroll_position();
         }
 
+        draggble_rerender(item) {
+            this.setup_tasks(this.update_origin_tasks(item));
+            this.render();
+        }
+
+        update_origin_tasks(item) {
+            return this.originTasks.reduce((acc, cur) => {
+                if (cur.id === item.c_id) {
+                    cur = {
+                        ...cur,
+                        parentId: Number(item.ref),
+                        dependencies: [item.ref],
+                        position: item.c_position,
+                    };
+                } else {
+                    if (cur.parentId === Number(item.ref)) {
+                        cur.position =
+                            cur.position < item.c_position
+                                ? cur.position
+                                : cur.position + 1;
+                    }
+
+                    if (cur.parentId === item.p_parentId) {
+                        cur.position =
+                            cur.position < item.p_position
+                                ? cur.position
+                                : cur.position - 1;
+                    }
+                }
+
+                acc.push(cur);
+                return acc;
+            }, []);
+        }
+
         setup_layers() {
             this.layers = {};
-            const layers = [
-                'grid',
-                'date',
-                'arrow',
-                'progress',
-                'bar',
-                'details',
-            ];
+            const layers = ['grid', 'date', 'arrow', 'progress', 'bar', 'details'];
             // make group layers
             for (let layer of layers) {
                 this.layers[layer] = createSVG('g', {
@@ -1436,8 +1520,8 @@ var Gantt = (function () {
             this.split = new Split(this.$wrapper);
         }
 
-        setup_table(contents) {
-            this.table = new Table(contents);
+        setup_table(contents, handler) {
+            this.table = new Table(this, contents, handler);
             this.make_table();
         }
 
@@ -1449,20 +1533,17 @@ var Gantt = (function () {
             const $table_header = this.table.draw_table_header({
                 height: this.options.header_height + 9 + 'px',
             });
-            const $table_body = this.table.draw_table_body(this.tasks, {
+
+            const $table_bodys = this.table.draw_table_bodys(this.divisionTasks, {
                 height: this.options.bar_height + this.options.padding + 'px',
             });
 
             $table.append($table_header);
-            $table.append($table_body);
+            $table_bodys.forEach((body) => $table.append(body));
 
             $table_container.append($table);
 
             this.$wrapper.prepend($table_container);
-
-            $.on($table_header, 'click', '.table-header th', (e) =>
-                this.bind_thead_click(e)
-            );
         }
 
         make_grid() {
@@ -1563,10 +1644,7 @@ var Gantt = (function () {
                     tick_class += ' thick';
                 }
                 // thick ticks for quarters
-                if (
-                    this.view_is(VIEW_MODE.MONTH) &&
-                    date.getMonth() % 3 === 0
-                ) {
+                if (this.view_is(VIEW_MODE.MONTH) && date.getMonth() % 3 === 0) {
                     tick_class += ' thick';
                 }
 
@@ -1591,11 +1669,7 @@ var Gantt = (function () {
             // highlight today's date
             if (this.view_is(VIEW_MODE.DAY)) {
                 const x =
-                    (date_utils.diff(
-                        date_utils.today(),
-                        this.gantt_start,
-                        'hour'
-                    ) /
+                    (date_utils.diff(date_utils.today(), this.gantt_start, 'hour') /
                         this.options.step) *
                     this.options.column_width;
                 const y = 0;
@@ -1639,8 +1713,7 @@ var Gantt = (function () {
 
                     // remove out-of-bound dates
                     if (
-                        $upper_text.getBBox().x2 >
-                        this.layers.grid.getBBox().width
+                        $upper_text.getBBox().x2 > this.layers.grid.getBBox().width
                     ) {
                         $upper_text.remove();
                     }
@@ -1679,29 +1752,13 @@ var Gantt = (function () {
                         : '',
                 Week_lower:
                     date.getMonth() !== last_date.getMonth()
-                        ? date_utils.format(
-                              date,
-                              'D MMM',
-                              this.options.language
-                          )
+                        ? date_utils.format(date, 'D MMM', this.options.language)
                         : date_utils.format(date, 'D', this.options.language),
-                Month_lower: date_utils.format(
-                    date,
-                    'MMMM',
-                    this.options.language
-                ),
-                Year_lower: date_utils.format(
-                    date,
-                    'YYYY',
-                    this.options.language
-                ),
+                Month_lower: date_utils.format(date, 'MMMM', this.options.language),
+                Year_lower: date_utils.format(date, 'YYYY', this.options.language),
                 'Quarter Day_upper':
                     date.getDate() !== last_date.getDate()
-                        ? date_utils.format(
-                              date,
-                              'D MMM',
-                              this.options.language
-                          )
+                        ? date_utils.format(date, 'D MMM', this.options.language)
                         : '',
                 'Half Day_upper':
                     date.getDate() !== last_date.getDate()
@@ -1711,11 +1768,7 @@ var Gantt = (function () {
                                   'D MMM',
                                   this.options.language
                               )
-                            : date_utils.format(
-                                  date,
-                                  'D',
-                                  this.options.language
-                              )
+                            : date_utils.format(date, 'D', this.options.language)
                         : '',
                 Day_upper:
                     date.getMonth() !== last_date.getMonth()
@@ -1860,44 +1913,39 @@ var Gantt = (function () {
                 return is_dragging || is_resizing_left || is_resizing_right;
             }
 
-            $.on(
-                this.$svg,
-                'mousedown',
-                '.bar-wrapper, .handle',
-                (e, element) => {
-                    const bar_wrapper = $.closest('.bar-wrapper', element);
+            $.on(this.$svg, 'mousedown', '.bar-wrapper, .handle', (e, element) => {
+                const bar_wrapper = $.closest('.bar-wrapper', element);
 
-                    if (element.classList.contains('left')) {
-                        is_resizing_left = true;
-                    } else if (element.classList.contains('right')) {
-                        is_resizing_right = true;
-                    } else if (element.classList.contains('bar-wrapper')) {
-                        is_dragging = true;
-                    }
-
-                    bar_wrapper.classList.add('active');
-
-                    x_on_start = e.offsetX;
-                    y_on_start = e.offsetY;
-
-                    parent_bar_id = bar_wrapper.getAttribute('data-id');
-                    const ids = [
-                        parent_bar_id,
-                        ...this.get_all_dependent_tasks(parent_bar_id),
-                    ];
-                    bars = ids.map((id) => this.get_bar(id));
-
-                    this.bar_being_dragged = parent_bar_id;
-
-                    bars.forEach((bar) => {
-                        const $bar = bar.$bar;
-                        $bar.ox = $bar.getX();
-                        $bar.oy = $bar.getY();
-                        $bar.owidth = $bar.getWidth();
-                        $bar.finaldx = 0;
-                    });
+                if (element.classList.contains('left')) {
+                    is_resizing_left = true;
+                } else if (element.classList.contains('right')) {
+                    is_resizing_right = true;
+                } else if (element.classList.contains('bar-wrapper')) {
+                    is_dragging = true;
                 }
-            );
+
+                bar_wrapper.classList.add('active');
+
+                x_on_start = e.offsetX;
+                y_on_start = e.offsetY;
+
+                parent_bar_id = bar_wrapper.getAttribute('data-id');
+                const ids = [
+                    parent_bar_id,
+                    ...this.get_all_dependent_tasks(parent_bar_id),
+                ];
+                bars = ids.map((id) => this.get_bar(id));
+
+                this.bar_being_dragged = parent_bar_id;
+
+                bars.forEach((bar) => {
+                    const $bar = bar.$bar;
+                    $bar.ox = $bar.getX();
+                    $bar.oy = $bar.getY();
+                    $bar.owidth = $bar.getWidth();
+                    $bar.finaldx = 0;
+                });
+            });
 
             $.on(this.$svg, 'mousemove', (e) => {
                 if (!action_in_progress()) return;
@@ -1977,8 +2025,7 @@ var Gantt = (function () {
                 $bar_progress.finaldx = 0;
                 $bar_progress.owidth = $bar_progress.getWidth();
                 $bar_progress.min_dx = -$bar_progress.getWidth();
-                $bar_progress.max_dx =
-                    $bar.getWidth() - $bar_progress.getWidth();
+                $bar_progress.max_dx = $bar.getWidth() - $bar_progress.getWidth();
             });
 
             $.on(this.$svg, 'mousemove', (e) => {
@@ -2005,105 +2052,6 @@ var Gantt = (function () {
                 bar.progress_changed();
                 bar.set_action_completed();
             });
-        }
-
-        set_sort_option(name) {
-            if (!this.sortKey) {
-                this.sortKey = name;
-                this.sortDirection = 1;
-            } else {
-                if (this.sortKey === name) {
-                    if (this.sortDirection < 2) this.sortDirection++;
-                    else this.sortDirection = 0;
-                } else {
-                    this.sortKey = name;
-                    this.sortDirection = 0;
-                }
-            }
-        }
-
-        get_thead_keyname() {
-            let keyname = '';
-
-            switch (this.sortKey) {
-                case 'Start Date':
-                    keyname = 'start';
-                    break;
-                case 'End Date':
-                    keyname = 'end';
-                    break;
-                case 'Priority':
-                    keyname = 'priority';
-                    break;
-            }
-
-            return keyname;
-        }
-
-        set_tasks_sort() {
-            const orderBy = ['High', 'Medium', 'Low'];
-            const keyname = this.get_thead_keyname();
-            switch (this.sortDirection) {
-                case 1:
-                    this.tasks.sort((a, b) => {
-                        if (keyname === 'priority') {
-                            return (
-                                orderBy.indexOf(a[keyname]) -
-                                orderBy.indexOf(b[keyname])
-                            );
-                        } else {
-                            return a[keyname].localeCompare(b[keyname]);
-                        }
-                    });
-                    break;
-                case 2:
-                    this.tasks.sort((a, b) => {
-                        if (keyname === 'priority') {
-                            return (
-                                orderBy.indexOf(b[keyname]) -
-                                orderBy.indexOf(a[keyname])
-                            );
-                        } else {
-                            return b[keyname].localeCompare(a[keyname]);
-                        }
-                    });
-                    break;
-                default:
-                    this.tasks = this.originTasks;
-                    break;
-            }
-        }
-
-        rerender_table() {
-            document.querySelector('.table-body')?.remove();
-
-            const $table_body = this.table.draw_table_body(this.tasks, {
-                height: this.options.bar_height + this.options.padding + 'px',
-            });
-
-            document
-                .querySelector('.table-container table')
-                .appendChild($table_body);
-        }
-
-        sort_render() {
-            this.setup_tasks(this.tasks);
-
-            this.render();
-            this.rerender_table();
-        }
-
-        bind_thead_click(e) {
-            if (
-                !['Start Date', 'End Date', 'Priority'].includes(
-                    e.target.innerHTML
-                )
-            )
-                return;
-
-            this.set_sort_option(e.target.innerHTML);
-            this.set_tasks_sort();
-            this.sort_render();
         }
 
         get_all_dependent_tasks(task_id) {
@@ -2236,5 +2184,6 @@ var Gantt = (function () {
     }
 
     return Gantt;
+
 })();
 //# sourceMappingURL=frappe-gantt.js.map

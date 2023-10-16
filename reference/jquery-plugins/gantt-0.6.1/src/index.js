@@ -18,12 +18,9 @@ const VIEW_MODE = {
 };
 
 export default class Gantt {
-    sortKey = '';
-    sortDirection = 0;
-
-    constructor(wrapper, tasks, options, contents, modal) {
+    constructor(wrapper, tasks, options, contents, handler) {
         this.originTasks = tasks;
-        this.modal_action = modal;
+        this.modal_handler = handler.modal;
 
         this.setup_options(options);
         this.setup_tasks(tasks);
@@ -35,7 +32,7 @@ export default class Gantt {
         this.bind_events();
 
         this.setup_split_bar();
-        this.setup_table(contents);
+        this.setup_table(contents, handler.draggableNode);
     }
 
     setup_wrapper(element) {
@@ -114,6 +111,7 @@ export default class Gantt {
 
         return wrapper;
     }
+
     setup_options(options) {
         const default_options = {
             header_height: 50,
@@ -133,9 +131,29 @@ export default class Gantt {
         this.options = Object.assign({}, default_options, options);
     }
 
+    division_tasks(tasks) {
+        return tasks
+            .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
+            .reduce(
+                (acc, cur) => (
+                    cur.parentId === 2
+                        ? acc.push([cur])
+                        : acc.forEach(
+                              (arr) =>
+                                  arr.some(
+                                      (t) => Number(t.id) === cur.parentId
+                                  ) && arr.push(cur)
+                          ),
+                    acc
+                ),
+                []
+            );
+    }
+
     setup_tasks(tasks) {
+        this.divisionTasks = this.division_tasks(tasks);
         // prepare tasks
-        this.tasks = tasks.map((task, i) => {
+        this.tasks = this.divisionTasks.flat().map((task, i) => {
             // convert to Date objects
             task._start = date_utils.parse(task.start);
             task._end = date_utils.parse(task.end);
@@ -196,6 +214,10 @@ export default class Gantt {
         });
 
         this.setup_dependencies();
+    }
+
+    get_task(id, n) {
+        return this.originTasks.find((t) => t.id === id);
     }
 
     setup_dependencies() {
@@ -323,6 +345,41 @@ export default class Gantt {
         this.set_scroll_position();
     }
 
+    draggble_rerender(item) {
+        this.setup_tasks(this.update_origin_tasks(item));
+        this.render();
+    }
+
+    update_origin_tasks(item) {
+        return this.originTasks.reduce((acc, cur) => {
+            if (cur.id === item.c_id) {
+                cur = {
+                    ...cur,
+                    parentId: Number(item.ref),
+                    dependencies: [item.ref],
+                    position: item.c_position,
+                };
+            } else {
+                if (cur.parentId === Number(item.ref)) {
+                    cur.position =
+                        cur.position < item.c_position
+                            ? cur.position
+                            : cur.position + 1;
+                }
+
+                if (cur.parentId === item.p_parentId) {
+                    cur.position =
+                        cur.position < item.p_position
+                            ? cur.position
+                            : cur.position - 1;
+                }
+            }
+
+            acc.push(cur);
+            return acc;
+        }, []);
+    }
+
     setup_layers() {
         this.layers = {};
         const layers = ['grid', 'date', 'arrow', 'progress', 'bar', 'details'];
@@ -339,8 +396,8 @@ export default class Gantt {
         this.split = new Split(this.$wrapper);
     }
 
-    setup_table(contents) {
-        this.table = new Table(contents);
+    setup_table(contents, handler) {
+        this.table = new Table(this, contents, handler);
         this.make_table();
     }
 
@@ -352,20 +409,17 @@ export default class Gantt {
         const $table_header = this.table.draw_table_header({
             height: this.options.header_height + 9 + 'px',
         });
-        const $table_body = this.table.draw_table_body(this.tasks, {
+
+        const $table_bodys = this.table.draw_table_bodys(this.divisionTasks, {
             height: this.options.bar_height + this.options.padding + 'px',
         });
 
         $table.append($table_header);
-        $table.append($table_body);
+        $table_bodys.forEach((body) => $table.append(body));
 
         $table_container.append($table);
 
         this.$wrapper.prepend($table_container);
-
-        $.on($table_header, 'click', '.table-header th', (e) =>
-            this.bind_thead_click(e)
-        );
     }
 
     make_grid() {
@@ -874,105 +928,6 @@ export default class Gantt {
             bar.progress_changed();
             bar.set_action_completed();
         });
-    }
-
-    set_sort_option(name) {
-        if (!this.sortKey) {
-            this.sortKey = name;
-            this.sortDirection = 1;
-        } else {
-            if (this.sortKey === name) {
-                if (this.sortDirection < 2) this.sortDirection++;
-                else this.sortDirection = 0;
-            } else {
-                this.sortKey = name;
-                this.sortDirection = 0;
-            }
-        }
-    }
-
-    get_thead_keyname() {
-        let keyname = '';
-
-        switch (this.sortKey) {
-            case 'Start Date':
-                keyname = 'start';
-                break;
-            case 'End Date':
-                keyname = 'end';
-                break;
-            case 'Priority':
-                keyname = 'priority';
-                break;
-            default:
-                break;
-        }
-
-        return keyname;
-    }
-
-    set_tasks_sort() {
-        const orderBy = ['High', 'Medium', 'Low'];
-        const keyname = this.get_thead_keyname();
-        switch (this.sortDirection) {
-            case 1:
-                this.tasks.sort((a, b) => {
-                    if (keyname === 'priority') {
-                        return (
-                            orderBy.indexOf(a[keyname]) -
-                            orderBy.indexOf(b[keyname])
-                        );
-                    } else {
-                        return a[keyname].localeCompare(b[keyname]);
-                    }
-                });
-                break;
-            case 2:
-                this.tasks.sort((a, b) => {
-                    if (keyname === 'priority') {
-                        return (
-                            orderBy.indexOf(b[keyname]) -
-                            orderBy.indexOf(a[keyname])
-                        );
-                    } else {
-                        return b[keyname].localeCompare(a[keyname]);
-                    }
-                });
-                break;
-            default:
-                this.tasks = this.originTasks;
-                break;
-        }
-    }
-
-    rerender_table() {
-        document.querySelector('.table-body')?.remove();
-
-        const $table_body = this.table.draw_table_body(this.tasks, {
-            height: this.options.bar_height + this.options.padding + 'px',
-        });
-
-        document
-            .querySelector('.table-container table')
-            .appendChild($table_body);
-    }
-
-    sort_render() {
-        this.setup_tasks(this.tasks);
-
-        this.render();
-        this.rerender_table();
-    }
-
-    bind_thead_click(e) {
-        if (
-            !['Start Date', 'End Date', 'Priority'].includes(e.target.innerHTML)
-        )
-            return;
-
-        this.set_sort_option(e.target.innerHTML);
-        this.set_tasks_sort();
-        this.sort_render();
     }
 
     get_all_dependent_tasks(task_id) {
