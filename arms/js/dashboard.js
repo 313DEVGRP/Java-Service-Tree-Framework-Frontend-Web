@@ -469,7 +469,7 @@ function drawVersionProgress(data) {
 		versionId,
 		versionName,
 		waveName;
-	
+
 	percent = 0.55;
 	barWidth = 25;
 	padRad = 0;
@@ -1149,66 +1149,73 @@ function donutChart(pdServiceLink = "10", pdServiceVersionLinks = "10,11,12,13")
 	});
 }
 
-function combinationChart() {
-	const monthlyData = {
-		"2020-01": {
-			"requirementCount": getRandomInt(0, 100),
-			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
-		},
-		"2020-02": {
-			"requirementCount": getRandomInt(0, 100),
-			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
-		},
-		"2020-03": {
-			"requirementCount": getRandomInt(0, 100),
-			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
-		},
-		"2020-04": {
-			"requirementCount": getRandomInt(0, 100),
-			"issueStatus": {"Open": getRandomInt(0, 100), "In Progress": getRandomInt(0, 100), "완료됨": getRandomInt(0, 100), "Backlog": getRandomInt(0, 100), "진행 중": getRandomInt(0, 100), "Closed": 1, "Resolved": 1}
-		},
-	};
+function combinationChart(pdServiceLink = 10, pdServiceVersionLinks = "10,11,12,13") {
+	$.ajax({
+		url: "/auth-user/api/arms/dashboard/requirements-jira-issue-statuses",
+		type: "GET",
+		data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersionLinks},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				const issueStatusTypesSet = new Set();
+				for (const month in data) {
+					for (const status in data[month].statuses) {
+						issueStatusTypesSet.add(status);
+					}
+				}
+				const issueStatusTypes = [...issueStatusTypesSet];
 
-	const issueStatusTypes = ['Open', 'In Progress', '완료됨', 'Backlog', '진행 중', 'Closed', 'Resolved'];
-	let columnsData = [];
+				let columnsData = [];
 
-	issueStatusTypes.forEach((status) => {
-		const columnData = [status];
-		Object.keys(monthlyData).forEach((month) => {
-			columnData.push(monthlyData[month].issueStatus[status] || 0);
-		});
-		columnsData.push(columnData);
-	});
+				issueStatusTypes.forEach((status) => {
+					const columnData = [status];
+					for (const month in data) {
+						const count = data[month].statuses[status] || 0;
+						columnData.push(count);
+					}
+					columnsData.push(columnData);
+				});
 
-	const requirementCounts = ['요구사항'];
-	Object.keys(monthlyData).forEach((month) => {
-		requirementCounts.push(monthlyData[month].requirementCount);
-	});
-	columnsData.push(requirementCounts);
-
-	const chart = c3.generate({
-		bindto: '#combination-chart',
-		data: {
-			x: 'x',
-			columns: [
-				['x', ...Object.keys(monthlyData)],
-				...columnsData,
-			],
-			type: 'bar',
-			types: {
-				'요구사항': 'area',
-			},
-		},
-		axis: {
-			x: {
-				type: 'category',
-			},
-		},
+				const requirementCounts = ['요구사항'];
+				for (const month in data) {
+					requirementCounts.push(data[month].totalRequirements);
+				}
+				columnsData.push(requirementCounts);
+				const chart = c3.generate({
+					bindto: '#combination-chart',
+					data: {
+						x: 'x',
+						columns: [
+							['x', ...Object.keys(data)],
+							...columnsData,
+						],
+						type: 'bar',
+						types: {
+							'요구사항': 'area',
+						},
+					},
+					axis: {
+						x: {
+							type: 'category',
+						},
+					},
+					tooltip: {
+						format: {
+							title: function (index) {
+								const month = Object.keys(data)[index];
+								const totalIssues = data[month].totalIssues;
+								return `${month} | Total : ${totalIssues}`;
+							},
+						},
+					}
+				});
+			}
+		}
 	});
 }
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+
 
 //mock
 var graphViewList = [
