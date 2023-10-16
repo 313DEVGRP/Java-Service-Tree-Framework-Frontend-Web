@@ -131,29 +131,9 @@ export default class Gantt {
         this.options = Object.assign({}, default_options, options);
     }
 
-    division_tasks(tasks) {
-        return tasks
-            .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
-            .reduce(
-                (acc, cur) => (
-                    cur.parentId === 2
-                        ? acc.push([cur])
-                        : acc.forEach(
-                              (arr) =>
-                                  arr.some(
-                                      (t) => Number(t.id) === cur.parentId
-                                  ) && arr.push(cur)
-                          ),
-                    acc
-                ),
-                []
-            );
-    }
-
     setup_tasks(tasks) {
-        this.divisionTasks = this.division_tasks(tasks);
         // prepare tasks
-        this.tasks = this.divisionTasks.flat().map((task, i) => {
+        this.tasks = this.sort_tasks(tasks).map((task, i) => {
             // convert to Date objects
             task._start = date_utils.parse(task.start);
             task._end = date_utils.parse(task.end);
@@ -214,10 +194,6 @@ export default class Gantt {
         });
 
         this.setup_dependencies();
-    }
-
-    get_task(id, n) {
-        return this.originTasks.find((t) => t.id === id);
     }
 
     setup_dependencies() {
@@ -345,33 +321,99 @@ export default class Gantt {
         this.set_scroll_position();
     }
 
+    rerender_table() {
+        document.querySelector('.table-body')?.remove();
+
+        const $table_body = this.table.draw_table_body(this.tasks, {
+            height: this.options.bar_height + this.options.padding + 'px',
+        });
+
+        document
+            .querySelector('.table-container table')
+            .appendChild($table_body);
+    }
+
     draggble_rerender(item) {
-        this.setup_tasks(this.update_origin_tasks(item));
+        this.update_origin_tasks(item);
+        this.setup_tasks(this.originTasks);
         this.render();
+        this.rerender_table();
+    }
+
+    sort_tasks(tasks) {
+        return tasks
+            .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
+            .reduce((acc, cur) => {
+                if (cur.parentId === 2) acc.push([cur]);
+                else this.set_task_array(acc, cur);
+                return acc;
+            }, [])
+            .flat()
+            .flat();
+    }
+
+    set_task_array(arr, cur) {
+        const rootItem = arr.flat().filter((t) => t.parentId === 2);
+        const rootIndex = rootItem.findIndex(
+            (t) => Number(t.id) === cur.parentId
+        );
+
+        if (rootIndex < 0) {
+            const parentItem = arr
+                .flat()
+                .flat()
+                .find((t) => Number(t.id) === cur.parentId);
+            const rootIndex = rootItem.findIndex(
+                (t) => Number(t.id) === parentItem.parentId
+            );
+            const parentIndex = arr[rootIndex]
+                .flat()
+                .findIndex((t) => Number(t.id) === cur.parentId);
+
+            arr[rootIndex][parentIndex].push(
+                cur.type === 'default' ? cur : [cur]
+            );
+        } else {
+            arr[rootIndex].push(cur.type === 'default' ? cur : [cur]);
+        }
     }
 
     update_origin_tasks(item) {
-        return this.originTasks.reduce((acc, cur) => {
+        this.originTasks = this.originTasks.reduce((acc, cur) => {
             if (cur.id === item.c_id) {
                 cur = {
                     ...cur,
                     parentId: Number(item.ref),
                     dependencies: [item.ref],
                     position: item.c_position,
+                    level: item.level,
                 };
             } else {
+                if (
+                    cur.parentId === Number(item.ref) &&
+                    item.c_position === item.p_position
+                ) {
+                    acc.push(cur);
+                    return acc;
+                }
+
                 if (cur.parentId === Number(item.ref)) {
                     cur.position =
                         cur.position < item.c_position
                             ? cur.position
-                            : cur.position + 1;
-                }
-
-                if (cur.parentId === item.p_parentId) {
-                    cur.position =
-                        cur.position < item.p_position
-                            ? cur.position
-                            : cur.position - 1;
+                            : item.c_position > item.p_position
+                            ? cur.position + 1
+                            : cur.position >= item.c_position &&
+                              cur.position < item.p_position
+                            ? cur.position + 1
+                            : cur.position;
+                } else {
+                    if (cur.parentId === item.p_parentId) {
+                        cur.position =
+                            cur.position < item.p_position
+                                ? cur.position
+                                : cur.position - 1;
+                    }
                 }
             }
 
@@ -397,7 +439,7 @@ export default class Gantt {
     }
 
     setup_table(contents, handler) {
-        this.table = new Table(this, contents, handler);
+        this.table = new Table(contents, handler);
         this.make_table();
     }
 
@@ -410,12 +452,12 @@ export default class Gantt {
             height: this.options.header_height + 9 + 'px',
         });
 
-        const $table_bodys = this.table.draw_table_bodys(this.divisionTasks, {
+        const $table_body = this.table.draw_table_body(this.tasks, {
             height: this.options.bar_height + this.options.padding + 'px',
         });
 
         $table.append($table_header);
-        $table_bodys.forEach((body) => $table.append(body));
+        $table.append($table_body);
 
         $table_container.append($table);
 

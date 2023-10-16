@@ -963,8 +963,7 @@ var Gantt = (function () {
     }
 
     class Table {
-        constructor(gantt, contents, handler) {
-            this.gantt = gantt;
+        constructor(contents, handler) {
             this.contents = contents;
             this.handler = handler;
         }
@@ -988,17 +987,20 @@ var Gantt = (function () {
             return $thead;
         }
 
-        draw_table_bodys(tasks, attr) {
-            return tasks.reduce(
-                (acc, cur) => (acc.push(this.make_table_body(cur, attr)), acc),
-                []
-            );
+        draw_table_body(tasks, attr) {
+            this.tasks = tasks;
+            const $tbody = document.createElement('tbody');
+            $tbody.classList.add('table-body');
+
+            this.make_table_row(attr).forEach((row) => $tbody.append(row));
+
+            this.bind_draggable_event($tbody);
+
+            return $tbody;
         }
 
-        make_table_body(tasks, attr) {
-            const $tbody = document.createElement('tbody');
-
-            tasks.forEach((task) => {
+        make_table_row(attr) {
+            return this.tasks.map((task) => {
                 const $tr = document.createElement('tr');
                 $tr.setAttribute('draggable', 'true');
                 $tr.setAttribute('data-id', task.id);
@@ -1015,8 +1017,6 @@ var Gantt = (function () {
                     $tr.append($td);
                 });
 
-                if (task.parentId === 2) $tbody.setAttribute('data-id', task.id);
-
                 $tr.addEventListener('dragstart', (e) => {
                     e.target.classList.add('dragging');
                 });
@@ -1024,46 +1024,8 @@ var Gantt = (function () {
                     e.target.classList.remove('dragging');
                 });
 
-                $tbody.append($tr);
+                return $tr;
             });
-
-            $tbody.classList.add('table-body');
-
-            $tbody.addEventListener('dragover', (e) => {
-                e.preventDefault();
-            });
-
-            $tbody.addEventListener('drop', async (e) => {
-                e.preventDefault();
-                let afterElement = null;
-                let position = tasks.length;
-                const targetEl = this.gantt.get_task(
-                    e.target.parentNode.getAttribute('data-id')
-                );
-                const draggable = document.querySelector('.dragging');
-                const dragEl = this.gantt.get_task(
-                    document.querySelector('.dragging').getAttribute('data-id')
-                );
-
-                if (targetEl.parentId !== 2) {
-                    afterElement = this.get_drag_after_element($tbody, e.clientY);
-                    position = this.gantt.get_task(
-                        afterElement.getAttribute('data-id')
-                    ).position;
-                }
-
-                await this.handler({
-                    c_id: dragEl.id,
-                    ref: $tbody.getAttribute('data-id'),
-                    c_position: position,
-                    p_position: dragEl.position,
-                    p_parentId: dragEl.parentId,
-                });
-
-                $tbody.insertBefore(draggable, afterElement);
-            });
-
-            return $tbody;
         }
 
         get_drag_after_element(container, y) {
@@ -1083,6 +1045,54 @@ var Gantt = (function () {
                 },
                 { offset: Number.NEGATIVE_INFINITY }
             ).element;
+        }
+
+        find_task_item(id) {
+            return this.tasks.find((t) => t.id === id);
+        }
+
+        bind_draggable_event($tbody) {
+            $tbody.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                this.draggableEl = document.querySelector('.dragging');
+
+                this.afterElement = this.get_drag_after_element($tbody, e.clientY);
+
+                $tbody.insertBefore(this.draggableEl, this.afterElement);
+            });
+
+            $tbody.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                const targetItem = this.find_task_item(
+                    e.target.parentNode.getAttribute('data-id')
+                );
+                const dragItem = this.find_task_item(
+                    this.draggableEl.getAttribute('data-id')
+                );
+                const afterItem = this.find_task_item(
+                    this.afterElement.getAttribute('data-id')
+                );
+
+                const params = {
+                    c_id: dragItem.id,
+                    ref: afterItem.parentId,
+                    c_position: afterItem.position,
+                    level: afterItem.level,
+                    p_position: dragItem.position,
+                    p_parentId: dragItem.parentId,
+                };
+
+                if (targetItem.type !== 'default') {
+                    const arr = this.tasks.filter(
+                        (t) => t.parentId === Number(targetItem.id)
+                    ).length;
+                    params.ref = targetItem.id;
+                    params.level = targetItem.level + 1;
+                    params.c_position = arr ? arr : 0;
+                }
+
+                await this.handler(params);
+            });
         }
     }
 
@@ -1255,29 +1265,9 @@ var Gantt = (function () {
             this.options = Object.assign({}, default_options, options);
         }
 
-        division_tasks(tasks) {
-            return tasks
-                .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
-                .reduce(
-                    (acc, cur) => (
-                        cur.parentId === 2
-                            ? acc.push([cur])
-                            : acc.forEach(
-                                  (arr) =>
-                                      arr.some(
-                                          (t) => Number(t.id) === cur.parentId
-                                      ) && arr.push(cur)
-                              ),
-                        acc
-                    ),
-                    []
-                );
-        }
-
         setup_tasks(tasks) {
-            this.divisionTasks = this.division_tasks(tasks);
             // prepare tasks
-            this.tasks = this.divisionTasks.flat().map((task, i) => {
+            this.tasks = this.sort_tasks(tasks).map((task, i) => {
                 // convert to Date objects
                 task._start = date_utils.parse(task.start);
                 task._end = date_utils.parse(task.end);
@@ -1338,10 +1328,6 @@ var Gantt = (function () {
             });
 
             this.setup_dependencies();
-        }
-
-        get_task(id, n) {
-            return this.originTasks.find((t) => t.id === id);
         }
 
         setup_dependencies() {
@@ -1469,33 +1455,99 @@ var Gantt = (function () {
             this.set_scroll_position();
         }
 
+        rerender_table() {
+            document.querySelector('.table-body')?.remove();
+
+            const $table_body = this.table.draw_table_body(this.tasks, {
+                height: this.options.bar_height + this.options.padding + 'px',
+            });
+
+            document
+                .querySelector('.table-container table')
+                .appendChild($table_body);
+        }
+
         draggble_rerender(item) {
-            this.setup_tasks(this.update_origin_tasks(item));
+            this.update_origin_tasks(item);
+            this.setup_tasks(this.originTasks);
             this.render();
+            this.rerender_table();
+        }
+
+        sort_tasks(tasks) {
+            return tasks
+                .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
+                .reduce((acc, cur) => {
+                    if (cur.parentId === 2) acc.push([cur]);
+                    else this.set_task_array(acc, cur);
+                    return acc;
+                }, [])
+                .flat()
+                .flat();
+        }
+
+        set_task_array(arr, cur) {
+            const rootItem = arr.flat().filter((t) => t.parentId === 2);
+            const rootIndex = rootItem.findIndex(
+                (t) => Number(t.id) === cur.parentId
+            );
+
+            if (rootIndex < 0) {
+                const parentItem = arr
+                    .flat()
+                    .flat()
+                    .find((t) => Number(t.id) === cur.parentId);
+                const rootIndex = rootItem.findIndex(
+                    (t) => Number(t.id) === parentItem.parentId
+                );
+                const parentIndex = arr[rootIndex]
+                    .flat()
+                    .findIndex((t) => Number(t.id) === cur.parentId);
+
+                arr[rootIndex][parentIndex].push(
+                    cur.type === 'default' ? cur : [cur]
+                );
+            } else {
+                arr[rootIndex].push(cur.type === 'default' ? cur : [cur]);
+            }
         }
 
         update_origin_tasks(item) {
-            return this.originTasks.reduce((acc, cur) => {
+            this.originTasks = this.originTasks.reduce((acc, cur) => {
                 if (cur.id === item.c_id) {
                     cur = {
                         ...cur,
                         parentId: Number(item.ref),
                         dependencies: [item.ref],
                         position: item.c_position,
+                        level: item.level,
                     };
                 } else {
+                    if (
+                        cur.parentId === Number(item.ref) &&
+                        item.c_position === item.p_position
+                    ) {
+                        acc.push(cur);
+                        return acc;
+                    }
+
                     if (cur.parentId === Number(item.ref)) {
                         cur.position =
                             cur.position < item.c_position
                                 ? cur.position
-                                : cur.position + 1;
-                    }
-
-                    if (cur.parentId === item.p_parentId) {
-                        cur.position =
-                            cur.position < item.p_position
-                                ? cur.position
-                                : cur.position - 1;
+                                : item.c_position > item.p_position
+                                ? cur.position + 1
+                                : cur.position >= item.c_position &&
+                                  cur.position < item.p_position
+                                ? cur.position + 1
+                                : cur.position;
+                    } else {
+                        if (cur.parentId === item.p_parentId) {
+                            cur.position =
+                                cur.position < item.p_position
+                                    ? cur.position
+                                    : cur.position - 1;
+                        }
                     }
                 }
 
@@ -1521,7 +1573,7 @@ var Gantt = (function () {
         }
 
         setup_table(contents, handler) {
-            this.table = new Table(this, contents, handler);
+            this.table = new Table(contents, handler);
             this.make_table();
         }
 
@@ -1534,12 +1586,12 @@ var Gantt = (function () {
                 height: this.options.header_height + 9 + 'px',
             });
 
-            const $table_bodys = this.table.draw_table_bodys(this.divisionTasks, {
+            const $table_body = this.table.draw_table_body(this.tasks, {
                 height: this.options.bar_height + this.options.padding + 'px',
             });
 
             $table.append($table_header);
-            $table_bodys.forEach((body) => $table.append(body));
+            $table.append($table_body);
 
             $table_container.append($table);
 

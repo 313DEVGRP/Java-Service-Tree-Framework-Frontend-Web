@@ -1,8 +1,7 @@
 import { $ } from './svg_utils';
 
 export default class Table {
-    constructor(gantt, contents, handler) {
-        this.gantt = gantt;
+    constructor(contents, handler) {
         this.contents = contents;
         this.handler = handler;
     }
@@ -26,17 +25,20 @@ export default class Table {
         return $thead;
     }
 
-    draw_table_bodys(tasks, attr) {
-        return tasks.reduce(
-            (acc, cur) => (acc.push(this.make_table_body(cur, attr)), acc),
-            []
-        );
+    draw_table_body(tasks, attr) {
+        this.tasks = tasks;
+        const $tbody = document.createElement('tbody');
+        $tbody.classList.add('table-body');
+
+        this.make_table_row(attr).forEach((row) => $tbody.append(row));
+
+        this.bind_draggable_event($tbody);
+
+        return $tbody;
     }
 
-    make_table_body(tasks, attr) {
-        const $tbody = document.createElement('tbody');
-
-        tasks.forEach((task) => {
+    make_table_row(attr) {
+        return this.tasks.map((task) => {
             const $tr = document.createElement('tr');
             $tr.setAttribute('draggable', 'true');
             $tr.setAttribute('data-id', task.id);
@@ -53,8 +55,6 @@ export default class Table {
                 $tr.append($td);
             });
 
-            if (task.parentId === 2) $tbody.setAttribute('data-id', task.id);
-
             $tr.addEventListener('dragstart', (e) => {
                 e.target.classList.add('dragging');
             });
@@ -62,46 +62,8 @@ export default class Table {
                 e.target.classList.remove('dragging');
             });
 
-            $tbody.append($tr);
+            return $tr;
         });
-
-        $tbody.classList.add('table-body');
-
-        $tbody.addEventListener('dragover', (e) => {
-            e.preventDefault();
-        });
-
-        $tbody.addEventListener('drop', async (e) => {
-            e.preventDefault();
-            let afterElement = null;
-            let position = tasks.length;
-            const targetEl = this.gantt.get_task(
-                e.target.parentNode.getAttribute('data-id')
-            );
-            const draggable = document.querySelector('.dragging');
-            const dragEl = this.gantt.get_task(
-                document.querySelector('.dragging').getAttribute('data-id')
-            );
-
-            if (targetEl.parentId !== 2) {
-                afterElement = this.get_drag_after_element($tbody, e.clientY);
-                position = this.gantt.get_task(
-                    afterElement.getAttribute('data-id')
-                ).position;
-            }
-
-            await this.handler({
-                c_id: dragEl.id,
-                ref: $tbody.getAttribute('data-id'),
-                c_position: position,
-                p_position: dragEl.position,
-                p_parentId: dragEl.parentId,
-            });
-
-            $tbody.insertBefore(draggable, afterElement);
-        });
-
-        return $tbody;
     }
 
     get_drag_after_element(container, y) {
@@ -121,5 +83,53 @@ export default class Table {
             },
             { offset: Number.NEGATIVE_INFINITY }
         ).element;
+    }
+
+    find_task_item(id) {
+        return this.tasks.find((t) => t.id === id);
+    }
+
+    bind_draggable_event($tbody) {
+        $tbody.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            this.draggableEl = document.querySelector('.dragging');
+
+            this.afterElement = this.get_drag_after_element($tbody, e.clientY);
+
+            $tbody.insertBefore(this.draggableEl, this.afterElement);
+        });
+
+        $tbody.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            const targetItem = this.find_task_item(
+                e.target.parentNode.getAttribute('data-id')
+            );
+            const dragItem = this.find_task_item(
+                this.draggableEl.getAttribute('data-id')
+            );
+            const afterItem = this.find_task_item(
+                this.afterElement.getAttribute('data-id')
+            );
+
+            const params = {
+                c_id: dragItem.id,
+                ref: afterItem.parentId,
+                c_position: afterItem.position,
+                level: afterItem.level,
+                p_position: dragItem.position,
+                p_parentId: dragItem.parentId,
+            };
+
+            if (targetItem.type !== 'default') {
+                const arr = this.tasks.filter(
+                    (t) => t.parentId === Number(targetItem.id)
+                ).length;
+                params.ref = targetItem.id;
+                params.level = targetItem.level + 1;
+                params.c_position = arr ? arr : 0;
+            }
+
+            await this.handler(params);
+        });
     }
 }
