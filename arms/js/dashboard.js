@@ -1088,79 +1088,64 @@ var SankeyChart = (function ($) {
 	return { loadChart, drawEmptyChart };
 })(jQuery);
 
-function donutChart() {
-	const data = [
-		{
-			"key": "Open",
-			"docCount": 18,
-			"percent": 47.368421052631575
-		},
-		{
-			"key": "완료됨",
-			"docCount": 7,
-			"percent": 18.421052631578945
-		},
-		{
-			"key": "In Progress",
-			"docCount": 6,
-			"percent": 15.789473684210526
-		},
-		{
-			"key": "Backlog",
-			"docCount": 3,
-			"percent": 7.894736842105263
-		},
-		{
-			"key": "진행 중",
-			"docCount": 2,
-			"percent": 5.263157894736842
-		},
-		{
-			"key": "Closed",
-			"docCount": 1,
-			"percent": 2.631578947368421
-		},
-		{
-			"key": "Resolved",
-			"docCount": 1,
-			"percent": 2.631578947368421
-		}
-	];
-	const columnsData = [];
-	let totalDocCount = 0;
-	for (let i = 0; i < data.length; i++) {
-		columnsData.push([data[i].key, data[i].docCount]);
-		totalDocCount += data[i].docCount;
-	}
+function donutChart(pdServiceLink = "10", pdServiceVersionLinks = "10,11,12,13") {
+	$.ajax({
+		url: "/auth-user/api/arms/dashboard/jira-issue-statuses",
+		type: "GET",
+		data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersionLinks},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				const columnsData = [];
 
-	const chart = c3.generate({
-		bindto: '#donut-chart',
-		data: {
-			columns: columnsData,
-			type : 'donut',
-		},
-		donut: {
-			title: "Total : " + totalDocCount
-		},
-		tooltip: {
-			format: {
-				value: function (value, ratio, id, index) {
-					return value;
-				}
-			},
-		},
-	});
+				data.forEach(status => {
+					columnsData.push([status.key, status.docCount]);
+				});
 
-	$(document).on('click', '#donut-chart .c3-legend-item', function() {
-		const id = $(this).text();
-		const isHidden = $(this).hasClass('c3-legend-item-hidden');
-		const correspondingData = data.find(x => x.key === id);
-		if (isHidden) {
-			totalDocCount -= correspondingData.docCount;
-		} else {
-			totalDocCount += correspondingData.docCount;
+				let totalDocCount = columnsData.reduce((sum, [_, count]) => sum + count, 0);
+
+				const chart = c3.generate({
+					bindto: '#donut-chart',
+					data: {
+						columns: columnsData,
+						type: 'donut',
+					},
+					donut: {
+						title: "Total : " + totalDocCount
+					},
+					tooltip: {
+						format: {
+							value: function (value, ratio, id, index) {
+								return value;
+							}
+						},
+					},
+				});
+
+				$(document).on('click', '#donut-chart .c3-legend-item', function () {
+					const id = $(this).text();
+					const isHidden = $(this).hasClass('c3-legend-item-hidden');
+					let docCount = 0;
+
+					for (const status of data) {
+						if (status.key === id) {
+							docCount = status.docCount;
+							break;
+						}
+					}
+					if (docCount) {
+						if (isHidden) {
+							totalDocCount -= docCount;
+						} else {
+							totalDocCount += docCount;
+						}
+					}
+					$('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
+				});
+			}
 		}
-		$('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
 	});
 }
 
