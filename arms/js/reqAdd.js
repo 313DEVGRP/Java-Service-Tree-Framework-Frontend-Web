@@ -357,8 +357,8 @@ function jsTreeClick(selectedNode) {
 	if (selectRel == "folder" || selectRel == "drive") {
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").hide(); //편집하기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
