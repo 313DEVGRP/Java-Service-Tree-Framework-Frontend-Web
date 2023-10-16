@@ -113,7 +113,25 @@ function dataTableLoad() {
 	var columnDefList = [];
 	var selectList = {};
 	var orderList = [[0, "asc"]];
-	var buttonList = [];
+	var buttonList = [
+		"copy",
+		"excel",
+		"print",
+		{
+			extend: "csv",
+			text: "Export csv",
+			charset: "utf-8",
+			extension: ".csv",
+			fieldSeparator: ",",
+			fieldBoundary: "",
+			bom: true
+		},
+		{
+			extend: "pdfHtml5",
+			orientation: "landscape",
+			pageSize: "LEGAL"
+		}
+	];
 
 	var jquerySelector = "#pdservice_table";
 	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
@@ -133,6 +151,23 @@ function dataTableLoad() {
 		buttonList,
 		isServerSide
 	);
+
+}
+
+function copychecker() {
+	dataTableRef.button(".buttons-copy").trigger();
+}
+function printchecker() {
+	dataTableRef.button(".buttons-print").trigger();
+}
+function csvchecker() {
+	dataTableRef.button(".buttons-csv").trigger();
+}
+function excelchecker() {
+	dataTableRef.button(".buttons-excel").trigger();
+}
+function pdfchecker() {
+	dataTableRef.button(".buttons-pdf").trigger();
 }
 
 

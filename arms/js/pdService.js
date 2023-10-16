@@ -115,6 +115,7 @@ function execDocReady() {
 			update_btn_click();
 
 			popup_update_btn_click();
+
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			//editorReadOnly();
 		})

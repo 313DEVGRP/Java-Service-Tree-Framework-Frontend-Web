@@ -14,7 +14,9 @@ function execDocReady() {
 		.then(function() {
 
 			console.log('모든 플러그인 로드 완료');
+
 			//좌측 메뉴
+			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard", "");
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
