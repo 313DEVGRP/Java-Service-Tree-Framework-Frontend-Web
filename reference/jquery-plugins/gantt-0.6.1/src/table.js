@@ -1,6 +1,7 @@
 import { $ } from './svg_utils';
 
 export default class Table {
+    dragStartY = 0;
     constructor(contents, handler) {
         this.contents = contents;
         this.handler = handler;
@@ -92,8 +93,9 @@ export default class Table {
     bind_draggable_event($tbody) {
         $tbody.addEventListener('dragover', (e) => {
             e.preventDefault();
-            this.draggableEl = document.querySelector('.dragging');
+            if (!this.dragStartY) this.dragStartY = e.clientY;
 
+            this.draggableEl = document.querySelector('.dragging');
             this.afterElement = this.get_drag_after_element($tbody, e.clientY);
 
             $tbody.insertBefore(this.draggableEl, this.afterElement);
@@ -114,7 +116,10 @@ export default class Table {
             const params = {
                 c_id: dragItem.id,
                 ref: afterItem.parentId,
-                c_position: afterItem.position,
+                c_position:
+                    e.clientY > this.dragStartY
+                        ? afterItem.position - 1
+                        : afterItem.position,
                 level: afterItem.level,
                 p_position: dragItem.position,
                 p_parentId: dragItem.parentId,
@@ -129,6 +134,7 @@ export default class Table {
                 params.c_position = arr ? arr : 0;
             }
 
+            this.dragStartY = 0;
             await this.handler(params);
         });
     }

@@ -399,12 +399,15 @@ export default class Gantt {
 
                 if (cur.parentId === Number(item.ref)) {
                     cur.position =
-                        cur.position < item.c_position
+                        item.c_position > item.p_position
+                            ? cur.position < item.p_position
+                                ? cur.position
+                                : cur.position <= item.c_position
+                                ? cur.position - 1
+                                : cur.position
+                            : cur.position > item.p_position
                             ? cur.position
-                            : item.c_position > item.p_position
-                            ? cur.position + 1
-                            : cur.position >= item.c_position &&
-                              cur.position < item.p_position
+                            : cur.position >= item.c_position
                             ? cur.position + 1
                             : cur.position;
                 } else {
