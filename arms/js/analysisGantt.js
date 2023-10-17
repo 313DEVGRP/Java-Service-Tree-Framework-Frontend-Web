@@ -1445,24 +1445,22 @@ function setGanttTasks(data) {
 
 async function draggableNode(data) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-	// await $.ajax({
-	// 	async: false,
-	// 	type: "POST",
-	// 	url: "/auth-user/api/arms/reqAdd/" + endPoint + "/moveNode.do",
-	// 	data: {
-	// 		c_id: data.c_id,
-	// 		ref: data.ref,
-	// 		c_position: data.c_position,
-	// 		copy: 0,
-	// 		multiCounter: 0
-	// 	},
-	// 	progress: true,
-	// 	success: function (r) {
-	// 		gantt.draggble_rerender(data);
-	// 	}
-	// });
-
-	gantt.draggble_rerender(data);
+	await $.ajax({
+		async: false,
+		type: "POST",
+		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/moveNode.do",
+		data: {
+			c_id: data.c_id,
+			ref: data.ref,
+			c_position: data.c_position,
+			copy: 0,
+			multiCounter: 0
+		},
+		progress: true,
+		success: function (r) {
+			gantt.draggble_rerender(data);
+		}
+	});
 }
 
 function getMonitorData(selectId, endPointUrl) {
