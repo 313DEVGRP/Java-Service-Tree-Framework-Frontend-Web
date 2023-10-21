@@ -10,10 +10,12 @@ $text-light: #555 !default;
 $text-color: #fff !default;
 $blue: #a4c6ff !default;
 $handle-color: #ddd !default;
+$selected: #e5603b !default;
 
 .wrapper {
     display: flex;
     position: relative;
+    border-top: 1px solid $border-right-color;
 }
 
 .table-container {
@@ -96,6 +98,10 @@ $handle-color: #ddd !default;
     }
     .grid-row {
         fill: transparent;
+
+        &.selected {
+            background-color: $selected;
+        }
     }
     .grid-row:nth-child(odd) {
         fill: $light-bg;

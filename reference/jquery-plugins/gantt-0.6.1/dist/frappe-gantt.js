@@ -1216,10 +1216,10 @@ var Gantt = (function () {
             this.$container.classList.add('gantt-container');
 
             const parent_element = this.$svg.parentElement;
+            element.appendChild(this.setup_mode_handler());
             parent_element.appendChild(this.$wrapper);
             this.$wrapper.appendChild(this.$container);
             this.$container.appendChild(this.$svg);
-            element.appendChild(this.setup_mode_handler());
 
             // popup wrapper
             this.popup_wrapper = document.createElement('div');

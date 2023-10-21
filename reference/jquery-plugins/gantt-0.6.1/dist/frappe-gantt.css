@@ -1,6 +1,7 @@
 .wrapper {
   display: flex;
   position: relative;
+  border-top: 1px solid #515256;
 }
 
 .table-container {
@@ -74,6 +75,9 @@
 }
 .gantt .grid-row {
   fill: transparent;
+}
+.gantt .grid-row.selected {
+  background-color: #e5603b;
 }
 .gantt .grid-row:nth-child(odd) {
   fill: rgba(51, 51, 51, 0.325);
