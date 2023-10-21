@@ -12,6 +12,7 @@ var selectedIssue; //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
 var gantt;
+var ganttTasks;
 
 function execDocReady() {
 	var pluginGroups = [
@@ -1411,7 +1412,7 @@ function click_btn_for_connect_req_jira() {
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
-	return data.reduce((acc, cur) => {
+	ganttTasks = data.reduce((acc, cur) => {
 		if (cur.c_parentid < 2) return acc;
 
 		acc.push({
@@ -1441,6 +1442,8 @@ function setGanttTasks(data) {
 
 		return acc;
 	}, []);
+
+	return ganttTasks;
 }
 
 async function draggableNode(data) {
@@ -1479,13 +1482,34 @@ function getMonitorData(selectId, endPointUrl) {
 	});
 }
 
+function updateNode(data) {
+	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
+	$.ajax({
+		async: false,
+		type: "POST",
+		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateNode.do",
+		data: data,
+		progress: true,
+		statusCode: {}
+	});
+}
+
 function initGantt(data) {
 	$("#gantt-target").empty();
 
 	gantt = new Gantt(
 		"#gantt-target",
 		setGanttTasks(data),
-		{ language: navigator.language?.split("-")[0] || navigator.userLanguage },
+		{
+			on_date_change: (task, start, end) => {
+				console.log(start, end);
+				updateNode({ c_id: task.id, c_req_start_date: start, c_req_end_date: end });
+			},
+			on_progress_change: (task, progress) => {
+				console.log(task, progress);
+			},
+			language: navigator.language?.split("-")[0] || navigator.userLanguage
+		},
 		{
 			name: "작업",
 			etc: "비고",

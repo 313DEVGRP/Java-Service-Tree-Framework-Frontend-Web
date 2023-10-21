@@ -23,14 +23,17 @@ export default class Split {
             const $gantt = $split_bar.nextSibling;
 
             const dx = e.clientX - x;
-            const left = Math.max(
-                0,
-                Math.min($split_bar.offsetLeft + dx, elem.clientWidth)
-            );
+            const left =
+                (Math.max(
+                    0,
+                    Math.min($split_bar.offsetLeft + dx, elem.clientWidth)
+                ) /
+                    elem.clientWidth) *
+                100;
 
-            $.style($split_bar, { left: `${left}px` });
-            $.style($table, { 'flex-basis': `${left}px` });
-            $.style($gantt, { 'flex-basis': `${elem.clientWidth - left}px` });
+            $.style($split_bar, { left: `${left}%` });
+            $.style($table, { 'flex-basis': `${left}%` });
+            $.style($gantt, { 'flex-basis': `${100 - left}%` });
 
             x = e.clientX;
         };

@@ -209,6 +209,7 @@ export default class Gantt {
     refresh(tasks) {
         this.setup_tasks(tasks);
         this.change_view_mode();
+        this.rerender_table();
     }
 
     change_view_mode(mode = this.options.view_mode) {
