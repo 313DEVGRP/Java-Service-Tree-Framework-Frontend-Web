@@ -1,6 +1,32 @@
+/* 새로운 포맷을 위해 추가한 css*/
+.gradient_middle_border {
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #666666, rgb(0 0 0 / 0%));
+    border-image-slice: 1;
+}
+
+blockquote {
+    padding: 9px 0px 9px 18px !important;
+    margin: 9px 0 9px !important;
+    font-size: 16.25px;
+    border-left: 5px solid;
+}
+.font13 {
+    font-family: "Nanum Gothic";
+    font-size: 13px;
+}
+
+@media (max-width: 992px) {
+    .justify-content-md-end {
+        justify-content: flex-start !important;
+    }
+}
+
+/*-------------------------------------------------------------*/
 .form-control {
     color: black;
-    min-height: 38px;
+    min-height: 33px;
+    border-radius: 0rem;
 }
 
 .container .content {
@@ -8,9 +34,9 @@
 }
 
 .shadow-box {
-    padding: 12px 10px 12px 10px;
+    padding: 10px 10px 10px 10px;
     border-top: 3px solid #d2d6de;
-    box-shadow: 0 0.525rem 2.55rem rgba(0,0,0,.075) !important;
+    box-shadow: 0 3px 5px rgb(0 0 0 / 25%);
 }
 
 /* 파일 관련 CSS */
@@ -133,19 +159,19 @@
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
-    padding: 10px 12px;
+    padding: 5px;
     color: #666;
     /*background: rgba(51, 51, 51, 0.4);*/
     /*border: 1px solid #ced4da;
     border-radius: 0.25rem;*/
-    margin-bottom: 30px;
+    /*margin-bottom: 30px;*/
     position: relative;
 }
 
 .widget.large {
     /*height: 600px;*/
     /*width: 100%;*/
-    margin: 2%;
+    /* margin: 2%; */
 }
 
 .widget .body {
@@ -527,7 +553,7 @@
     position: relative;
     border-radius: 3px;
     background: #ffffff;
-    margin: 2%;
+    /* margin: 2%; */
     /*width: 100%;*/
     /*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);*/
     padding: 10px 12px;
@@ -538,7 +564,7 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    padding: 10px
+    /*padding: 10px*/
 }
 
 .pad {
@@ -557,7 +583,7 @@
 .box-header {
     color: #444;
     display: block;
-    padding: 10px;
+    /* padding: 10px; */
     position: relative
 }
 
@@ -596,17 +622,11 @@
     color: #444;
     border-color: #ddd;
 }
-.btn {
-    border-radius: 3px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    border: 1px solid transparent;
-}
 .btn-group-sm>.btn, .btn-sm {
     padding: 5px 10px;
     font-size: 12px;
     line-height: 1.5;
-    border-radius: 3px;
+    /* border-radius: 3px; */
 }
 .btn-default {
     color: #333;
@@ -628,7 +648,7 @@
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
-    border-radius: 4px;
+    border-radius: 0px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -849,7 +869,7 @@ ul.messenger.messenger-fixed {
 }
 
 .progress-small {
-    height: 8px;
+    height: 24px;
 }
 
 .progress-striped .progress-bar {
@@ -1087,31 +1107,31 @@ svg {
 # 요구사항 상세
 --------------------------------------------------------------*/
 #detailview_req_contents{
-  height:645px;
+    height:535px;
 }
-@media (max-width: 1400px){
+/*@media (max-width: 1400px){
     #detailview_req_contents{
-      height:695px;
+        height:695px;
     }
 }
 
 @media (max-width: 1220px){
     #detailview_req_contents{
-      height:805px;
+        height:805px;
     }
 }
 
 @media (max-width: 1200px){
     #detailview_req_contents{
-      height:875px;
+        height:875px;
     }
 }
 
 @media (max-width: 1030px){
     #detailview_req_contents{
-      height:930px;
+        height:930px;
     }
-}
+}*/
 
 .detailview_title{
     word-break: keep-all;
@@ -1119,7 +1139,7 @@ svg {
 
 .detail-item{
     border-radius: 3px;
-     padding: 20px 20px 10px 20px;
+    /*   padding: 20px 20px 10px 20px;*/
 }
 
 .text-truncate {
@@ -1133,7 +1153,7 @@ svg {
 }
 
 .text-truncate.show-full {
- animation: slide-in 4s linear backwards;
+    animation: slide-in 4s linear backwards;
 }
 
 @keyframes slide-in {
@@ -1143,28 +1163,28 @@ svg {
 
 /* 상세 보기 확대 버튼*/
 .view-btn {
-    background-color: #0678e3;
-    color: white;
+    background-color: white;
+    color: black;
     border: none;
     text-align: center;
-     opacity: .5;
-     position: absolute;
-     top: 10px;
-     right: 10px;
-     width:40px;
-     height:40px;
-     border-radius:0.5rem;
-     display:flex;        /* flexbox 모델 적용 */
-     justify-content:center;  /* 가로축에서 중앙 정렬 */
-     align-items:center;   /* 세로축에서 중앙 정렬 */
+    opacity: .5;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width:40px;
+    height:40px;
+    border-radius:0.5rem;
+    display:flex;        /* flexbox 모델 적용 */
+    justify-content:center;  /* 가로축에서 중앙 정렬 */
+    align-items:center;   /* 세로축에서 중앙 정렬 */
 
 }
 #view_allreq_btn{
-     display:none;
+    display:none;
 }
 
 .view-btn:hover {
-   opacity :1;
+    opacity :1;
 }
 .modal{
     z-index:10001;
@@ -1179,26 +1199,26 @@ svg {
     margin-top: 55px;
 }
 @media (max-width: 500px) {
-  .modal-dialog {
-    width: 90vw;
-    margin:auto;
-    margin-top: 45px;
-  }
+    .modal-dialog {
+        width: 90vw;
+        margin:auto;
+        margin-top: 45px;
+    }
 }
 
 .view-btn i {
     font-size: 24px !important;
     margin-right: initial !important;
-    color: white !important;
+    color: black !important;
     line-height: initial !important;
 }
 
 @media (max-width: 500px){
-   .view-btn {
-       background-color: #0678e3;
-       color: white;
-       border: none;
-       text-align: center;
+    .view-btn {
+        background-color: #0678e3;
+        color: white;
+        border: none;
+        text-align: center;
         opacity: .5;
         position: absolute;
         top: 10px;
@@ -1209,13 +1229,10 @@ svg {
         display:flex;        /* flexbox 모델 적용 */
         justify-content:center;  /* 가로축에서 중앙 정렬 */
         align-items:center;   /* 세로축에서 중앙 정렬 */
-   }
-   .view-btn i {
-       font-size: 14px !important;
-       margin-right: initial !important;
-       color: white !important;
-       line-height: initial !important;
-   }
+    }
+    .view-btn i {
+        font-size: 14px !important;
+    }
 }
 
 /*--------------------------------------------------------------
@@ -1229,23 +1246,23 @@ svg {
 }
 
 #allreq_pdservice_content{
-    height:315px;
+    height:345px;
 }
 
 @media (max-width: 1220px){
     #allreq_pdservice_content{
-      height: 290px;
+        height: 345px;
     }
 }
 @media (max-width: 1200px){
     #allreq_pdservice_content{
-      height:245px;
+        height:345px;
     }
 }
 
 @media (max-width: 1030px){
     #allreq_pdservice_content{
-      height:195px;
+        height:345px;
     }
 }
 
@@ -1284,14 +1301,14 @@ svg {
 }
 
 #version-product-name {
-    font-size: 17px;
+    font-size: 14px;
     margin-right: 5px;
     color: #0563bb;
     line-height: 0;
 }
 
 #version-name {
-    font-size: 17px;
+    font-size: 14px;
     margin-right: 5px;
     color: #0563bb;
     line-height: 0;
@@ -1357,7 +1374,8 @@ svg {
 }
 
 .version .version-content ul i {
-    color: #0563bb;
+    /* color: #0563bb; */
+    color: #666;
 }
 
 .version-scroll .slimScrollDiv {
@@ -1467,4 +1485,73 @@ svg {
 
 .fa-file-text-o:before {
     content: "\f0f6";
+}
+
+.fa-tags:before {
+    content: "\f02c";
+}
+
+.fa-tag:before {
+    content: "\f02b";
+}
+
+.fa-sitemap:before {
+    content: "\f0e8";
+}
+
+.fa-info:before {
+    content: "\f129";
+}
+
+.fa-info-circle:before {
+    content: "\f05a";
+}
+
+.fa-comments-o:before {
+    content: "\f0e6";
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff!important;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #eee;
+    border: 1px solid #ced4da;
+    border-radius: 0;
+}
+
+.about .content ul i {
+    font-size: 16px;
+    color: #666;
+    line-height: 0;
+    margin: auto;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #fff;
+    opacity: 1;
+}
+
+.about .content ul strong {
+    margin-right: -5px;
+}
+
+.font14 {
+    font-size: 14px;
+}
+
+@media (max-width: 992px){
+    .min-mt-30 {
+        margin-top: 30px;
+    }
+}
+
+.pdServiceName {
+    white-space: pre;
 }

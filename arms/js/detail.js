@@ -3,6 +3,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedJsTreeId; // 요구사항 아이디
 var calledAPIs = {};
+var totalReqCommentCount;
+/* 요구사항 전체목록 전역변수 */
+var reqTreeList;
 var visibilityStatus = {
     '#stats': false,
     '#detail' : false,
@@ -12,9 +15,6 @@ var visibilityStatus = {
     '#question': false
 };
 
-var totalReqCommentCount;
-/* 요구사항 전체목록 전역변수 */
-var reqTreeList;
 
 var prefix = "./img/winTypeFileIcons/";
 var iconsMap = {
@@ -115,6 +115,8 @@ function execDocReady() {
             // 메뉴 클릭 이벤트
             menuClick();
 
+            // 상세정보 제일 먼저 호출 후 pdService 제목과 req 제목 바인딩
+            getDetailViewTab();
             // 통계정보 탭
             //bindStatsTab();
             statsViewTabClick();
@@ -153,6 +155,14 @@ function execDocReady() {
             console.error(errorMessage);
             console.error("플러그인 로드 중 오류 발생");
         });
+}
+
+function setPdServiceName(pdServiceName) {
+    $(".pdServiceName").text(pdServiceName);
+}
+
+function setRequirementName(requirementName) {
+    $(".requirementName").text(requirementName);
 }
 
 // ------------------ api 호출 여부 확인(여러번 발생시키지 않기 위하여) ------------------ //
@@ -361,7 +371,6 @@ function bindStatsTab() {
     calledAPIs["statsAPI"] = true;
 }
 
-
 // ------------------ 상세보기 ------------------ //
 function reqDetailViewTabClick() {
     $("#get_version_list").click(function () {
@@ -426,48 +435,50 @@ function bindDataDetailTab(ajaxData) {
     var selectedPdServiceText = ajaxData.pdService_c_title;
 
     if (isEmpty(selectedPdServiceText)) {
-        $("#detailview_req_pdservice_name").text("");
+        $("#detailview_req_pdservice_name").val("");
     } else {
-        $("#detailview_req_pdservice_name").text(selectedPdServiceText);
+        $("#detailview_req_pdservice_name").val(selectedPdServiceText);
+        setPdServiceName(selectedPdServiceText);
     }
 
-    $("#detailview_req_id").text(selectedJsTreeId);
-    $("#detailview_req_name").text(ajaxData.reqAdd_c_title);
+    $("#detailview_req_id").val(selectedJsTreeId);
+    $("#detailview_req_name").val(ajaxData.reqAdd_c_title);
+    setRequirementName(ajaxData.reqAdd_c_title);
 
     //Version 데이터 바인딩
     if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
-        $("#detailview_req_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
+        $("#detailview_req_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
     } else {
-        $("#detailview_req_pdservice_version").text(ajaxData.pdServiceVersion_c_title);
+        $("#detailview_req_pdservice_version").val(ajaxData.pdServiceVersion_c_title);
     }
 
-    $("#detailview_req_writer").text(ajaxData.reqAdd_c_req_writer);
-    $("#detailview_req_write_date").text(new Date(ajaxData.reqAdd_c_req_create_date).toLocaleString());
+    $("#detailview_req_writer").val(ajaxData.reqAdd_c_req_writer);
+    $("#detailview_req_write_date").val(new Date(ajaxData.reqAdd_c_req_create_date).toLocaleString());
 
     if (ajaxData.reqAdd_c_req_reviewer01 == null || ajaxData.reqAdd_c_req_reviewer01 == "none") {
-        $("#detailview_req_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#detailview_req_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#detailview_req_reviewer01").text(ajaxData.reqAdd_c_req_reviewer01);
+        $("#detailview_req_reviewer01").val(ajaxData.reqAdd_c_req_reviewer01);
     }
     if (ajaxData.reqAdd_c_req_reviewer02 == null || ajaxData.reqAdd_c_req_reviewer02 == "none") {
-        $("#detailview_req_reviewer02").text("2번째 리뷰어(연대책임자) 없음");
+        $("#detailview_req_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer02").text(ajaxData.reqAdd_c_req_reviewer02);
+        $("#detailview_req_reviewer02").val(ajaxData.reqAdd_c_req_reviewer02);
     }
     if (ajaxData.reqAdd_c_req_reviewer03 == null || ajaxData.reqAdd_c_req_reviewer03 == "none") {
-        $("#detailview_req_reviewer03").text("3번째 리뷰어(연대책임자) 없음");
+        $("#detailview_req_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer03").text(ajaxData.reqAdd_c_req_reviewer03);
+        $("#detailview_req_reviewer03").val(ajaxData.reqAdd_c_req_reviewer03);
     }
     if (ajaxData.reqAdd_c_req_reviewer04 == null || ajaxData.reqAdd_c_req_reviewer04 == "none") {
-        $("#detailview_req_reviewer04").text("4번째 리뷰어(연대책임자) 없음");
+        $("#detailview_req_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer04").text(ajaxData.reqAdd_c_req_reviewer04);
+        $("#detailview_req_reviewer04").val(ajaxData.reqAdd_c_req_reviewer04);
     }
     if (ajaxData.reqAdd_c_req_reviewer05 == null || ajaxData.reqAdd_c_req_reviewer05 == "none") {
-        $("#detailview_req_reviewer05").text("5번째 리뷰어(연대책임자) 없음");
+        $("#detailview_req_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
     } else {
-        $("#detailview_req_reviewer05").text(ajaxData.reqAdd_c_req_reviewer05);
+        $("#detailview_req_reviewer05").val(ajaxData.reqAdd_c_req_reviewer05);
     }
 
     $("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
@@ -505,7 +516,7 @@ function bindDataVersionTab() {
         $("#version-product-name").html(json.c_title);
         $("#version-accordion").jsonMenu(selectedPdServiceVersion, json.pdServiceVersionEntities, { speed: 5000 });
         $(".version-list").slimscroll({
-            height: "512px"
+            height: "502px"
         });
 
         calledAPIs["versionAPI"] = true;
@@ -568,9 +579,9 @@ function versionClick(element, c_id) {
             console.log(json);
 
             // 데이터 바인딩
-            $("#version-name").text(json.c_title);
-            $("#version-start-date").text(json.c_pds_version_start_date);
-            $("#version-end-date").text(json.c_pds_version_end_date);
+            $("#version-name").html(json.c_title);
+            $("#version-start-date").val(json.c_pds_version_start_date);
+            $("#version-end-date").val(json.c_pds_version_end_date);
             $("#version-desc").slimscroll({
                 height: "300px"
             });
@@ -825,7 +836,6 @@ function getVersionName(c_id , callback) {
 해당 상세 정보 영역 데이터 바인딩
 */
 function bindClickedDataDetail(ajaxData) {
-
     var buttonElement = document.querySelector('#view_allreq_btn');
 
     if(buttonElement){
@@ -836,7 +846,7 @@ function bindClickedDataDetail(ajaxData) {
     var version_id_list = JSON.parse(ajaxData.c_req_pdservice_versionset_link);
 
     if (isEmpty(version_id_list)) {
-        $("#allreq_pdservice_version").text("요구사항에 등록된 버전이 없습니다.");
+        $("#allreq_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
     } else {
         var promises = version_id_list.map(function(version_id) {
             return new Promise(function(version_title) {
@@ -850,46 +860,45 @@ function bindClickedDataDetail(ajaxData) {
             .then(function(titles) {
                 titles.sort()
                 titles = titles.slice(-1).concat(titles.slice(0, -1));
-                $("#allreq_pdservice_version").text(titles[titles.length-1]);
-                $("#allreq_pdservice_version_list").text(titles.join(", "));
+                $("#allreq_pdservice_version").val(titles[titles.length-1]);
+                $("#allreq_pdservice_version_list").val(titles.join(", "));
             })
             .catch(function(error) {
                 console.error(error);
             });
     }
 
-    $("#allreq_pdservice_name").text(ajaxData.pdServiceEntity.c_title); // 요구사항 제품(서비스)
+    $("#allreq_pdservice_name").val(ajaxData.pdServiceEntity.c_title); // 요구사항 제품(서비스)
 
-    $("#allreq_pdservice_id").text(ajaxData.c_id);                // 요구사항 아이디
-    $("#allreq_pdservice_title").text(ajaxData.c_title);             // 요구사항 제목
-    $("#allreq_pdservice_writer").text(ajaxData.c_req_writer);       // 요구사항 작성자
-    $("#allreq_pdservice_date").text(new Date(ajaxData.c_req_create_date).toLocaleString());   // 요구사항 최근 작성일
-
+    $("#allreq_pdservice_id").val(ajaxData.c_id);                // 요구사항 아이디
+    $("#allreq_pdservice_title").val(ajaxData.c_title);             // 요구사항 제목
+    $("#allreq_pdservice_writer").val(ajaxData.c_req_writer);       // 요구사항 작성자
+    $("#allreq_pdservice_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());   // 요구사항 최근 작성일
 
     if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
-        $("#allreq_pdservice_reviewer01").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#allreq_pdservice_reviewer01").text(ajaxData.c_req_reviewer01);
+        $("#allreq_pdservice_reviewer01").val(ajaxData.c_req_reviewer01);
     }
     if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
-        $("#allreq_pdservice_reviewer02").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer02").val("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#allreq_pdservice_reviewer02").text(ajaxData.c_req_reviewer02);
+        $("#allreq_pdservice_reviewer02").val(ajaxData.c_req_reviewer02);
     }
     if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
-        $("#allreq_pdservice_reviewer03").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer03").val("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#allreq_pdservice_reviewer03").text(ajaxData.c_req_reviewer03);
+        $("#allreq_pdservice_reviewer03").val(ajaxData.c_req_reviewer03);
     }
     if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
-        $("#allreq_pdservice_reviewer04").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer04").val("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#allreq_pdservice_reviewer04").text(ajaxData.c_req_reviewer04);
+        $("#allreq_pdservice_reviewer04").val(ajaxData.c_req_reviewer04);
     }
     if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
-        $("#allreq_pdservice_reviewer05").text("리뷰어(연대책임자)가 존재하지 않습니다.");
+        $("#allreq_pdservice_reviewer05").val("리뷰어(연대책임자)가 존재하지 않습니다.");
     } else {
-        $("#allreq_pdservice_reviewer05").text(ajaxData.c_req_reviewer05);
+        $("#allreq_pdservice_reviewer05").val(ajaxData.c_req_reviewer05);
     }
 
     $("#allreq_pdservice_content").html(ajaxData.c_req_contents);       // 요구사항 내용
