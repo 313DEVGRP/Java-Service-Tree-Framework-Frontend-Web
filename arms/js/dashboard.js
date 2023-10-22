@@ -182,8 +182,8 @@ function makePdServiceSelectBox() {
 		//타임라인
 		$("#notifyNoVersion2").hide();
 
-		donutChart();
-		combinationChart();
+		donutChart($("#selected_pdService").val(), "");
+		combinationChart($("#selected_pdService").val(), "");
 
 		// 투입 인력별 요구사항 관여 차트 mock 데이터 fetch
 		d3.json("./mock/manRequirement.json", function (data) {
@@ -237,6 +237,11 @@ function makeVersionMultiSelectBox() {
 		onClose: function () {
 			console.log("onOpen event fire!\n");
 			var versionTag = $(".multiple-select").val();
+
+			const currentSelectedVersionString = versionTag.join(",");
+			donutChart($("#selected_pdService").val(), currentSelectedVersionString, 'update');
+			combinationChart($("#selected_pdService").val(), currentSelectedVersionString, 'update');
+
 		},
 		onChange: function () {
 
@@ -1169,7 +1174,25 @@ var SankeyChart = (function ($) {
 	return { loadChart, drawEmptyChart };
 })(jQuery);
 
-function donutChart(pdServiceLink = "10", pdServiceVersionLinks = "10,11,12,13") {
+function donutChart(pdServiceLink = "", pdServiceVersionLinks = "", type = "init") {
+	function donutChartNoData() {
+		c3.generate({
+			bindto: '#donut-chart',
+			data: {
+				columns: [],
+				type: 'donut',
+			},
+			donut: {
+				title: "Total : 0"
+			},
+		});
+	}
+
+	if((type === "update" && pdServiceVersionLinks === "") || pdServiceLink === "") {
+		donutChartNoData();
+		return;
+	}
+
 	$.ajax({
 		url: "/auth-user/api/arms/dashboard/jira-issue-statuses",
 		type: "GET",
@@ -1179,6 +1202,13 @@ function donutChart(pdServiceLink = "10", pdServiceVersionLinks = "10,11,12,13")
 		progress: true,
 		statusCode: {
 			200: function (data) {
+				if ((Array.isArray(data) && data.length === 0) ||
+					(typeof data === 'object' && Object.keys(data).length === 0) ||
+					(typeof data === 'string' && data === "{}")) {
+					donutChartNoData();
+					return;
+				}
+
 				const columnsData = [];
 
 				data.forEach(status => {
@@ -1230,7 +1260,24 @@ function donutChart(pdServiceLink = "10", pdServiceVersionLinks = "10,11,12,13")
 	});
 }
 
-function combinationChart(pdServiceLink = 10, pdServiceVersionLinks = "10,11,12,13") {
+function combinationChart(pdServiceLink = "", pdServiceVersionLinks = "", type = "init") {
+	function combinationChartNoData() {
+		c3.generate({
+			bindto: '#combination-chart',
+			data: {
+				x: 'x',
+				columns: [],
+				type: 'bar',
+				types: {},
+			},
+		});
+	}
+
+	if((type === "update" && pdServiceVersionLinks === "") || pdServiceLink === "") {
+		combinationChartNoData();
+		return;
+	}
+
 	$.ajax({
 		url: "/auth-user/api/arms/dashboard/requirements-jira-issue-statuses",
 		type: "GET",
@@ -1240,6 +1287,13 @@ function combinationChart(pdServiceLink = 10, pdServiceVersionLinks = "10,11,12,
 		progress: true,
 		statusCode: {
 			200: function (data) {
+				if ((Array.isArray(data) && data.length === 0) ||
+					(typeof data === 'object' && Object.keys(data).length === 0) ||
+					(typeof data === 'string' && data === "{}")) {
+					combinationChartNoData();
+					return;
+				}
+
 				const issueStatusTypesSet = new Set();
 				for (const month in data) {
 					for (const status in data[month].statuses) {
@@ -1264,6 +1318,14 @@ function combinationChart(pdServiceLink = 10, pdServiceVersionLinks = "10,11,12,
 					requirementCounts.push(data[month].totalRequirements);
 				}
 				columnsData.push(requirementCounts);
+
+				let monthlyTotals = {};
+
+				for (const month in data) {
+					monthlyTotals[month] = data[month].totalIssues + data[month].totalRequirements;
+				}
+
+
 				const chart = c3.generate({
 					bindto: '#combination-chart',
 					data: {
@@ -1286,10 +1348,33 @@ function combinationChart(pdServiceLink = 10, pdServiceVersionLinks = "10,11,12,
 						format: {
 							title: function (index) {
 								const month = Object.keys(data)[index];
-								const totalIssues = data[month].totalIssues;
-								return `${month} | Total : ${totalIssues}`;
+								const total = monthlyTotals[month];
+								return `${month} | Total : ${total}`;
 							},
 						},
+					}
+				});
+
+				$(document).on('click', '#combination-chart .c3-legend-item', function () {
+					const id = $(this).text();
+					const isHidden = $(this).hasClass('c3-legend-item-hidden');
+					let docCount = 0;
+
+					for (const month in data) {
+						if (data[month].statuses.hasOwnProperty(id)) {
+							docCount = data[month].statuses[id];
+						} else if (id === '요구사항') {
+							docCount = data[month].totalRequirements;
+						}
+					}
+
+					// 월별 통계 값 업데이트
+					for (const month in data) {
+						if (isHidden) {
+							monthlyTotals[month] -= docCount;
+						} else {
+							monthlyTotals[month] += docCount;
+						}
 					}
 				});
 			}
