@@ -1443,15 +1443,12 @@ function setGanttTasks(data) {
 		return acc;
 	}, []);
 
-	console.log(ganttTasks);
-
 	return ganttTasks;
 }
 
 async function draggableNode(data) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	await $.ajax({
-		async: false,
 		type: "POST",
 		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/moveNode.do",
 		data: {
@@ -1484,15 +1481,25 @@ function getMonitorData(selectId, endPointUrl) {
 	});
 }
 
-function updateNode(data) {
+function updateNode(data, task) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
-		async: false,
 		type: "POST",
 		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateNode.do",
 		data: data,
 		progress: true,
 		statusCode: {}
+	}).done(function () {
+		var tasks = $.map(ganttTasks, function (ganttTask) {
+			if (ganttTask.id === data.c_id) {
+				return $.extend({}, ganttTask, task);
+			}
+
+			return ganttTask;
+		});
+
+		ganttTasks = tasks;
+		gantt.refresh(tasks);
 	});
 }
 
@@ -1505,11 +1512,21 @@ function initGantt(data) {
 		{
 			on_date_change: (task, start, end) => {
 				console.log(start, end);
-				updateNode({ c_id: task.id, c_req_start_date: start, c_req_end_date: end });
+				updateNode(
+					{ c_id: task.id, c_req_start_date: start, c_req_end_date: end },
+					{ start: getDate(start), end: getDate(end) }
+				);
 			},
 			on_progress_change: (task, progress) => {
 				console.log(task, progress);
-				updateNode({ c_id: task.id, c_req_plan_progress: progress });
+				updateNode(
+					{ c_id: task.id, c_req_plan_progress: progress },
+					{
+						progress: progress,
+						plan: `${progress || 0}%`,
+						performance: `${progress || 0}%`
+					}
+				);
 			},
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},
