@@ -890,7 +890,7 @@ var SankeyChart = (function ($) {
 
 	var initSvg = function () {
 		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
-		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+		var width = document.getElementById("chart-product-manpower").offsetWidth;
 		var height = 500 - margin.top - margin.bottom;
 
 		var vx = width + margin.left + margin.right;
