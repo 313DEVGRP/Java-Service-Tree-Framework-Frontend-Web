@@ -16,7 +16,7 @@ var Timeline = (function () {
 				startYear: null,
 				endYear: null,
 				yearLength: 0,
-				maxWidth: 1080,//widgetWidth,//1080,
+				maxWidth: 880,//widgetWidth,//1080,
 				width: 0,
 				lastWidth: 0,
 				lastStart: {
@@ -154,6 +154,8 @@ var Timeline = (function () {
 
 					if (d.startDate <= data[i - 1].endDate) {
 						return data[i - 1].height + 10;
+					} else {
+						return data[i - 1].height + 20;
 					}
 
 					return 20;
@@ -161,6 +163,7 @@ var Timeline = (function () {
 
 				// 타임라인 z-index
 				d.zIndex = (function () {
+					console.log("i(z-index) =" + i);
 					if (i === 0) return 9999;
 
 					if (d.startDate <= data[i - 1].endDate) {
@@ -171,7 +174,7 @@ var Timeline = (function () {
 				})();
 
 				// 라벨 높이 레벨을 정한다
-				d.labelHeight = d.height * 2 + 10;
+				d.labelHeight = d.height * 2 + 20;
 				//d.labelHeight = d.height * 2 + 20;
 			}
 		},
