@@ -196,6 +196,9 @@ function makePdServiceSelectBox() {
 		});
 
 		drawBarOnPolar("polar_bar", categories_mock, data_mock);
+
+		// 요구사항별 투입 인력 데이터테이블
+		dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	});
 } // end makePdServiceSelectBox()
 
@@ -210,10 +213,6 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 		progress: true,
 		statusCode: {
 			200: function (data) {
-
-				console.log("==== 장지윤 static data");
-				console.log(data);
-
 				for (var key in data) {
 					var value = data[key];
 					console.log(key + "=" + value);
@@ -308,8 +307,6 @@ function getIssueStatus(selectId, endPointUrl) {
 //프로덕트의 요구사항 해결 추이
 ////////////////////////////////////////////////////////////////////////////////////////
 function drawReqTimeSeries(data) {
-	console.log("===장지윤 drawReqTimeSeries");
-	console.log(data);
 
 	const data1 = [
 		{ser1: 0.3, ser2: 4},
@@ -880,8 +877,6 @@ function init(treeMapInfos) {
 // 제품-버전-투입인력 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
 function drawProductToManSankeyChart(data) {
-	console.log("==== 장지윤 data");
-	console.log(data);
 	SankeyChart.loadChart(data);
 }
 
@@ -936,9 +931,6 @@ var SankeyChart = (function ($) {
 		var colors = ["#1f77b4", "#2ca02c", "#d62728"];
 
 		var svg = initSvg();
-
-		console.log("=== 장지윤 data");
-		console.log(data);
 
 		if (isEmpty(data.nodes)) {
 			svg
@@ -1255,3 +1247,123 @@ var graphViewList = [
 		endDate: '2019.12.30',
 	},
 ];
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 요구사항별 투입 인력 및 상태값 데이터 테이블
+////////////////////////////////////////////////////////////////////////////////////////
+function dataTableLoad(selectId, endPointUrl) {
+	var columnList = [
+		{ name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
+		{ name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
+		{
+			name: "c_req_name",
+			title: "요구사항",
+			data: "c_req_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{ name: "c_issue_status_link", title: "요구사항 이슈 상태 아이디", data: "c_issue_status_link", visible: false },
+		{
+			name: "c_issue_status_name",
+			title: "요구사항 이슈 상태",
+			data: "c_issue_status_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "c_issue_assignee",
+			title: "요구사항 이슈 할당자",
+			data: "c_issue_assignee",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		}
+	];
+	var rowsGroupList = [];
+	var columnDefList = [
+		{
+			orderable: false,
+			className: "select-checkbox",
+			targets: 0
+		}
+	];
+	var orderList = [[1, "asc"]];
+	var jquerySelector = "#manpowerPerReqTable";
+	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+	var jsonRoot = "";
+	var scrollY = 160;
+	var buttonList = [
+		"copy",
+		"excel",
+		"print",
+		{
+			extend: "csv",
+			text: "Export csv",
+			charset: "utf-8",
+			extension: ".csv",
+			fieldSeparator: ",",
+			fieldBoundary: "",
+			bom: true
+		},
+		{
+			extend: "pdfHtml5",
+			orientation: "landscape",
+			pageSize: "LEGAL"
+		}
+	];
+	var selectList = {};
+	var isServerSide = false;
+
+	reqStatusDataTable = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide,
+		scrollY
+	);
+}
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(tempDataTable, selectedData) {
+}
+
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
+function dataTableCallBack(settings, json) {
+	console.log("check");
+}
+
+function dataTableDrawCallback(tableInfo) {
+	$("#" + tableInfo.sInstance)
+		.DataTable()
+		.columns.adjust()
+		.responsive.recalc();
+}

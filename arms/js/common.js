@@ -795,7 +795,8 @@ function dataTable_build(
 	selectList,
 	orderList,
 	buttonList,
-	isServerSide
+	isServerSide,
+	scrollY
 ) {
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
@@ -857,6 +858,7 @@ function dataTable_build(
 		select: selectList,
 		order: orderList,
 		buttons: buttonList,
+		scrollY: scrollY,
 		language: {
 			processing: "",
 			loadingRecords:
