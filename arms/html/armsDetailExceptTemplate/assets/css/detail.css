@@ -75,8 +75,21 @@ blockquote {
 }
 
 /* 트리 색상 변경 */
-.jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
-.jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }
+/*.jstree-lightblue4 .jstree-hovered { color: #ffffff; background-color: rgba(255, 106, 0, 0.60) !important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }*/
+.jstree-hovered {
+  color: white !important;
+  background-color: rgba(0, 0, 0, 0.15) !important;
+  padding:0 2px 0 1px;
+  border-radius: 0.3rem;
+  font-weight: bold;
+}
+
+/*.jstree-lightblue4 .jstree-clicked { color: #ffffff; background-color: #ffee58!important; border-color: rgba(0, 0, 0, 0.15); padding:0 2px 0 1px; }*/
+.jstree-clicked {
+  padding:0 2px 0 1px;
+  background-color: white !important;
+  font-weight: bold;
+}
 .about .content ul li:last-child {
     margin-bottom: 0px!important;
 }
@@ -1142,7 +1155,7 @@ svg {
     /*   padding: 20px 20px 10px 20px;*/
 }
 
-.text-truncate {
+/*.text-truncate {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1154,7 +1167,7 @@ svg {
 
 .text-truncate.show-full {
     animation: slide-in 4s linear backwards;
-}
+}*/
 
 @keyframes slide-in {
     from { text-indent: 0%; }
@@ -1163,7 +1176,8 @@ svg {
 
 /* 상세 보기 확대 버튼*/
 .view-btn {
-    background-color: white;
+    /*background-color: white;*/
+    background: none;
     color: black;
     border: none;
     text-align: center;
@@ -1246,23 +1260,23 @@ svg {
 }
 
 #allreq_pdservice_content{
-    height:345px;
+    height:325px;
 }
 
 @media (max-width: 1220px){
     #allreq_pdservice_content{
-        height: 345px;
+        height: 325px;
     }
 }
 @media (max-width: 1200px){
     #allreq_pdservice_content{
-        height:345px;
+        height:325px;
     }
 }
 
 @media (max-width: 1030px){
     #allreq_pdservice_content{
-        height:345px;
+        height:325px;
     }
 }
 
@@ -1277,6 +1291,10 @@ svg {
 /*--------------------------------------------------------------
 # 버전
 --------------------------------------------------------------*/
+#view_version_req_btn{
+    right:20px;
+}
+
 .version .version-title {
     font-size: 26px;
     font-weight: 700;

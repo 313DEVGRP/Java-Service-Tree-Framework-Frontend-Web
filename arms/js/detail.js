@@ -125,7 +125,7 @@ function execDocReady() {
             reqDetailViewTabClick();
 
             // 요구사항 상세 탭 생략된 문장 마우스 호버시 전체 문장 확인 이벤트
-            getFullTextFromTruncated();
+            //getFullTextFromTruncated();
 
             // 버전 상세정보 탭 클릭 이벤트
             versionDetailViewTabClick();
@@ -176,6 +176,7 @@ function callAPI(apiName) {
 }
 
 // ------------------ 잘린 텍스트 전체 확인 ------------------ //
+/*
 function getFullTextFromTruncated(){
     var elements = document.querySelectorAll(".text-truncate, .text-truncate *");
     elements.forEach(element => {
@@ -189,6 +190,7 @@ function getFullTextFromTruncated(){
         });
     });
 }
+*/
 
 // ------------------ 스크롤 api 호출하기 ------------------ //
 function checkVisible( element, check = 'visible' ) {
@@ -586,6 +588,7 @@ function versionClick(element, c_id) {
                 height: "300px"
             });
             $("#version-desc").html(json.c_pds_version_contents);
+            $("#req_version_detail_contents").html(json.c_pds_version_contents);
 
             jSuccess("버전 상세 정보 조회가 완료 되었습니다.");
         })
