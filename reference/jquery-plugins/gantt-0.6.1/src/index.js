@@ -452,11 +452,19 @@ export default class Gantt {
         $table_container.classList.add('table-container');
         const $table = document.createElement('table');
 
+        const table_data = [...this.tasks];
+        table_data.forEach((task) => {
+            task.dependencies.forEach((task_id) => {
+                const dependency = this.get_task(task_id);
+                if (!dependency) return;
+                table_data[dependency._index].has_children = true;
+            });
+        });
+
         const $table_header = this.table.draw_table_header({
             height: this.options.header_height + 9 + 'px',
         });
-
-        const $table_body = this.table.draw_table_body(this.tasks, {
+        const $table_body = this.table.draw_table_body(table_data, {
             height: this.options.bar_height + this.options.padding + 'px',
         });
 
