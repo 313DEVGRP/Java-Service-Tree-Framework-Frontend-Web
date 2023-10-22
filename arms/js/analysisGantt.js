@@ -1506,19 +1506,24 @@ function updateNode(data, task) {
 function initGantt(data) {
 	$("#gantt-target").empty();
 
+	var tasks = setGanttTasks(data);
+
+	if (isEmpty(tasks)) return;
+
 	gantt = new Gantt(
 		"#gantt-target",
-		setGanttTasks(data),
+		tasks,
 		{
 			on_date_change: (task, start, end) => {
-				console.log(start, end);
+				console.log("Update Start Date :: ", start);
+				console.log("Update End Date :: ", end);
 				updateNode(
 					{ c_id: task.id, c_req_start_date: start, c_req_end_date: end },
 					{ start: getDate(start), end: getDate(end) }
 				);
 			},
 			on_progress_change: (task, progress) => {
-				console.log(task, progress);
+				console.log("Update Progress :: ", progress);
 				updateNode(
 					{ c_id: task.id, c_req_plan_progress: progress },
 					{
