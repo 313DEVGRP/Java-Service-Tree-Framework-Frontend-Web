@@ -176,11 +176,11 @@ function makePdServiceSelectBox() {
 		//통계로드
 		//statisticsLoad($("#selected_pdService").val(), null);
 		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
-		statisticsMonitor($("#selected_pdService").val());
+
+		statisticsMonitor($("#selected_pdService").val()); //ES모으는중 by YHS
 
 		//타임라인
 		$("#notifyNoVersion2").hide();
-		Timeline.init($("#version-timeline-bar"), graphViewList);
 
 		donutChart();
 		combinationChart();
@@ -195,7 +195,7 @@ function makePdServiceSelectBox() {
 			drawProductToManSankeyChart(data);
 		});
 
-		drawBarOnPolar("polar_bar", categories_mock, data_mock);
+		//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 
 		// 요구사항별 투입 인력 데이터테이블
 		dataTableLoad($("#selected_pdService").val(), endPointUrl);
@@ -377,9 +377,10 @@ function drawReqTimeSeries(data) {
 	update(data1)
 }
 // 1. 제품서비스로만 볼 경우
-// 2. 버전만 따로 선택해서 보고싶은 경우.
+// 2. 버전만 따로 선택해서 보고싶은 경우(미완)
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
-	//1. 좌상 게이지 차트.
+	console.log("선택된 서비스 ===> " + pdservice_id);
+	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
 		console.log("================= by YHS");
@@ -392,27 +393,38 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 			$('#version_count').text(version_count);
 
 			if (version_count >= 0) {
-				let today = new Date();
-				console.log(today);
+				let today = new Date(); // console.log(today);
+				let plusDate = new Date();
 
 				$("#notifyNoVersion").hide();
 				$("#project-start").show();
 				$("#project-end").show();
+				
+				$("#versionGaugeChart").html(""); //게이지 차트 초기화
 				var versionGauge = [];
+				var versionTimeline = [];
 				versionData.forEach(function (versionElement, idx) {
-					console.log(idx);
-					console.log(versionElement);
+					//console.log(idx); console.log(versionElement);
 					var gaugeElement = {
 						"current_date": today.toString(),
 						"version_name": versionElement.c_title,
 						"version_id": versionElement.c_id,
 						"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
 						"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+						//"end_date": (versionElement.c_pds_version_end_date == "end" ? plusDate.setMonth(plusDate.getMonth()+1) : versionElement.c_pds_version_end_date)
 					}
 					versionGauge.push(gaugeElement);
+					var timelineElement = {
+						"title" : "버전: "+versionElement.c_title,
+						"startDate" : (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
+						"endDate" : (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+						//"endDate" : (versionElement.c_pds_version_end_date == "end" ? plusDate : versionElement.c_pds_version_end_date)
+					};
+					versionTimeline.push(timelineElement);
 				});
-				console.log(versionGauge);
-				drawVersionProgress(versionGauge);
+
+				drawVersionProgress(versionGauge); // 버전 게이지
+				Timeline.init($("#version-timeline-bar"), versionTimeline);
 			}
 		}
 	});
@@ -434,10 +446,82 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				//해당 제품의 총 요구사항 수 (by db, not es)
 				$('#active_version_count').text(data["version"]);
 				$('#req_count').text(data["req"]);
-				$('#linkedIssue_subtask_count').text(+data["issue"]);
 			}
 		}
 	});
+
+	// 제품서비스별 담당자 통계
+	///*
+	$.ajax({
+		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
+		type: "get",
+		data: {"pdServiceId" : pdservice_id},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//console.log(data); console.log(Object.keys(data).length);
+				
+				//담당자 미지정 이슈 수
+				$('#no_assigned_issue_count').text(data["담당자 미지정"]); 
+				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
+					//제품(서비스)에 투입된 총 인원수
+					$('#resource_count').text(+Object.keys(data).length-1);
+				} else {
+					$('#resource_count').text("n/a");
+				}
+			}
+		}
+	});
+	//*/
+
+	// Scope - (2) 요구사항에 연결된 이슈 총 개수
+	$.ajax({
+		url:"/auth-user/api/arms/dashboard/jira-linkedIssue-subTask",
+		type: "get",
+		data: { "pdServiceId" : pdservice_id },
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("연결이슈 서브테스크 조회");
+				//console.log(data); console.log(data.검색결과);
+				var arrays = data.검색결과.group_by_pdServiceVersion;
+				var linkedOrSubtaskCount = 0;
+				if(arrays !== "") {
+					arrays.forEach(function(target, idx){
+						linkedOrSubtaskCount += target.개수;
+					});
+					console.log("요구사항 연결이슈 및 하위이슈 총합 = " + linkedOrSubtaskCount);
+					$('#linkedIssue_subtask_count').text(linkedOrSubtaskCount);
+				}
+			}
+		}
+	});
+
+	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
+	$.ajax({
+		url:"/auth-user/api/arms/dashboard/assignee-jira-issue-statuses",
+		type: "get",
+		data: {"pdServiceLink" : pdservice_id},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("for polar-bar chart");
+				console.log(data);
+				console.log(Object.keys(data).length);
+				let keyArray = Object.keys(data);
+				console.log(keyArray);
+				drawBarOnPolar2("polar_bar", keyArray);
+				//drawBarOnPolar("polar_bar", keyArray, data_mock);
+			}
+		}
+	});
+
 }
 
 
@@ -1247,6 +1331,7 @@ var graphViewList = [
 		endDate: '2019.12.30',
 	},
 ];
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 요구사항별 투입 인력 및 상태값 데이터 테이블
