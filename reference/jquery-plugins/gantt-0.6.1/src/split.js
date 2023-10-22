@@ -34,17 +34,24 @@ export default class Split {
             $.style($split_bar, { left: `${left}%` });
             $.style($table, { 'flex-basis': `${left}%` });
             $.style($gantt, { 'flex-basis': `${100 - left}%` });
+            $.style($table, { 'overflow-x': 'hidden' });
+            $.style($gantt, { 'overflow-x': 'hidden' });
 
             x = e.clientX;
         };
 
         const mouseUpHandler = function () {
+            const $table = $split_bar.previousElementSibling;
+            const $gantt = $split_bar.nextSibling;
+
             document.removeEventListener('mousemove', mouseMoveHandler);
             document.removeEventListener('mouseup', mouseUpHandler);
+
+            $.style($table, { 'overflow-x': 'auto' });
+            $.style($gantt, { 'overflow-x': 'auto' });
         };
 
         $split_bar.addEventListener('mousedown', mouseDownHandler);
-
         elem.prepend($split_bar);
     }
 }

@@ -1417,24 +1417,24 @@ function setGanttTasks(data) {
 
 		acc.push({
 			id: `${cur.c_id}`,
-			assignee: cur.c_issue_assignee,
+			assignee: cur.c_req_manager,
 			reporter: cur.c_issue_reporter,
 			name: cur.c_title,
 			start: getDate(cur.c_req_start_date),
 			end: getDate(cur.c_req_end_date),
-			progress: 20,
+			progress: cur.c_req_plan_progress || 0,
 			dependencies: cur.c_parentid === 2 ? "" : `${cur.c_parentid}`,
 			priority: cur.state,
 			custom_class: cur.c_issue_priority_name, // optional
 			type: cur.c_type,
 			etc: cur.c_etc,
-			tmm: "",
-			p_work: "",
-			t_period: "",
-			tpp: "",
-			result: "",
-			plan: "",
-			performance: "",
+			tmm: cur.c_req_total_resource,
+			p_work: cur.c_req_plan_resource,
+			t_period: cur.c_req_total_time,
+			tpp: cur.c_req_plan_time,
+			result: cur.c_req_output,
+			plan: `${cur.c_req_plan_progress || 0}%`,
+			performance: `${cur.c_req_plan_progress || 0}%`,
 			level: cur.c_level,
 			parentId: cur.c_parentid,
 			position: cur.c_position
@@ -1449,7 +1449,6 @@ function setGanttTasks(data) {
 async function draggableNode(data) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	await $.ajax({
-		async: false,
 		type: "POST",
 		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/moveNode.do",
 		data: {
@@ -1482,31 +1481,57 @@ function getMonitorData(selectId, endPointUrl) {
 	});
 }
 
-function updateNode(data) {
+function updateNode(data, task) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
-		async: false,
 		type: "POST",
 		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateNode.do",
 		data: data,
 		progress: true,
 		statusCode: {}
+	}).done(function () {
+		var tasks = $.map(ganttTasks, function (ganttTask) {
+			if (ganttTask.id === data.c_id) {
+				return $.extend({}, ganttTask, task);
+			}
+
+			return ganttTask;
+		});
+
+		ganttTasks = tasks;
+		gantt.refresh(tasks);
 	});
 }
 
 function initGantt(data) {
 	$("#gantt-target").empty();
 
+	var tasks = setGanttTasks(data);
+
+	if (isEmpty(tasks)) return;
+
 	gantt = new Gantt(
 		"#gantt-target",
-		setGanttTasks(data),
+		tasks,
 		{
 			on_date_change: (task, start, end) => {
-				console.log(start, end);
-				updateNode({ c_id: task.id, c_req_start_date: start, c_req_end_date: end });
+				console.log("Update Start Date :: ", start);
+				console.log("Update End Date :: ", end);
+				updateNode(
+					{ c_id: task.id, c_req_start_date: start, c_req_end_date: end },
+					{ start: getDate(start), end: getDate(end) }
+				);
 			},
 			on_progress_change: (task, progress) => {
-				console.log(task, progress);
+				console.log("Update Progress :: ", progress);
+				updateNode(
+					{ c_id: task.id, c_req_plan_progress: progress },
+					{
+						progress: progress,
+						plan: `${progress || 0}%`,
+						performance: `${progress || 0}%`
+					}
+				);
 			},
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},

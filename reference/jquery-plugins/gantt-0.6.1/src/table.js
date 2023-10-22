@@ -47,12 +47,24 @@ export default class Table {
 
             Object.keys(this.contents).forEach((content) => {
                 const $td = document.createElement('td');
-                $td.textContent = task[content];
 
-                if (content === 'name' && task.level > 2) {
-                    $td.className = `indent-${task.level - 2}`;
+                if (content === 'name' && task.level > 1) {
+                    if (task.has_children) {
+                        const expand_btn = document.createElement('button');
+                        expand_btn.className = 'expand_btn';
+
+                        expand_btn.addEventListener('click', () => {
+                            expand_btn.classList.toggle('collapse-list');
+                        });
+
+                        $td.append(expand_btn);
+                    }
+
+                    $td.className = `indent-${task.level - 1}`;
                 }
 
+                const text = document.createTextNode(task[content] ?? '');
+                $td.append(text);
                 $tr.append($td);
             });
 

@@ -1009,12 +1009,24 @@ var Gantt = (function () {
 
                 Object.keys(this.contents).forEach((content) => {
                     const $td = document.createElement('td');
-                    $td.textContent = task[content];
 
-                    if (content === 'name' && task.level > 2) {
-                        $td.className = `indent-${task.level - 2}`;
+                    if (content === 'name' && task.level > 1) {
+                        if (task.has_children) {
+                            const expand_btn = document.createElement('button');
+                            expand_btn.className = 'expand_btn';
+
+                            expand_btn.addEventListener('click', () => {
+                                expand_btn.classList.toggle('collapse-list');
+                            });
+
+                            $td.append(expand_btn);
+                        }
+
+                        $td.className = `indent-${task.level - 1}`;
                     }
 
+                    const text = document.createTextNode(task[content] ?? '');
+                    $td.append(text);
                     $tr.append($td);
                 });
 
@@ -1136,17 +1148,24 @@ var Gantt = (function () {
                 $.style($split_bar, { left: `${left}%` });
                 $.style($table, { 'flex-basis': `${left}%` });
                 $.style($gantt, { 'flex-basis': `${100 - left}%` });
+                $.style($table, { 'overflow-x': 'hidden' });
+                $.style($gantt, { 'overflow-x': 'hidden' });
 
                 x = e.clientX;
             };
 
             const mouseUpHandler = function () {
+                const $table = $split_bar.previousElementSibling;
+                const $gantt = $split_bar.nextSibling;
+
                 document.removeEventListener('mousemove', mouseMoveHandler);
                 document.removeEventListener('mouseup', mouseUpHandler);
+
+                $.style($table, { 'overflow-x': 'auto' });
+                $.style($gantt, { 'overflow-x': 'auto' });
             };
 
             $split_bar.addEventListener('mousedown', mouseDownHandler);
-
             elem.prepend($split_bar);
         }
     }
@@ -1595,11 +1614,19 @@ var Gantt = (function () {
             $table_container.classList.add('table-container');
             const $table = document.createElement('table');
 
+            const table_data = [...this.tasks];
+            table_data.forEach((task) => {
+                task.dependencies.forEach((task_id) => {
+                    const dependency = this.get_task(task_id);
+                    if (!dependency) return;
+                    table_data[dependency._index].has_children = true;
+                });
+            });
+
             const $table_header = this.table.draw_table_header({
                 height: this.options.header_height + 9 + 'px',
             });
-
-            const $table_body = this.table.draw_table_body(this.tasks, {
+            const $table_body = this.table.draw_table_body(table_data, {
                 height: this.options.bar_height + this.options.padding + 'px',
             });
 

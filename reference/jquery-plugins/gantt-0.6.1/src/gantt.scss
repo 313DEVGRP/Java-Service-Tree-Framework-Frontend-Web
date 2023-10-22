@@ -63,9 +63,30 @@ $selected: #e5603b !default;
         .table-body tr td {
             border-right: 2px solid $border-right-color;
 
+            .expand_btn {
+                width: 0;
+                height: 0;
+                margin: 0 6px;
+                padding: 0;
+                background: none;
+                outline: none;
+                border: none;
+                border-top: 8px solid transparent;
+                border-left: 8px solid $border-color;
+
+                &.collapse-list {
+                    border-top: 8px solid $border-color;
+                    border-left: 8px solid transparent;
+                }
+            }
+
             @for $i from 1 through 3 {
                 &.indent-#{$i} {
-                    padding-left: 20px * $i;
+                    padding-left: 20px * ($i);
+
+                    &:has(.expand_btn) {
+                        padding-left: 20px * ($i - 1);
+                    }
                 }
             }
         }
@@ -242,4 +263,8 @@ $selected: #e5603b !default;
             border-top-color: rgba(0, 0, 0, 0.8);
         }
     }
+}
+
+.hide {
+    display: none;
 }
