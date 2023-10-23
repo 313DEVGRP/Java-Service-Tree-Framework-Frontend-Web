@@ -90,6 +90,16 @@ function execDocReady() {
 				disableFadeOut: false
 			});
 
+			$("#assign_status").slimScroll({
+				height: "195px",
+				railVisible: true,
+				railColor: "#222",
+				railOpacity: 0.3,
+				wheelStep: 10,
+				allowPageScroll: false,
+				disableFadeOut: false
+			});
+
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
@@ -156,8 +166,41 @@ function makePdServiceSelectBox() {
 		//진행상태 가져오기
 		progressLoad($("#selected_pdService").val(), null);
 
+		resourceLoad($("#selected_pdService").val(), null);
+
 	});
 } // end makePdServiceSelectBox()
+
+
+function resourceLoad(pdservice_id, pdservice_version_id){
+
+	$('#assign_status').empty(); // 모든 자식 요소 삭제
+
+	//제품 서비스 셀렉트 박스 데이터 바인딩
+	$.ajax({
+		url: "/auth-user/api/arms/dashboard/jira-issue-assignee?pdServiceId=" + pdservice_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+
+					var html_piece = 	"<div	class=\"controls form-group darkBack\"\n" +
+						"		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
+						"<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
+						"</div>";
+					$('#assign_status').append(html_piece);
+				}
+
+			}
+		}
+	});
+}
 
 function progressLoad(pdservice_id, pdservice_version_id){
 
