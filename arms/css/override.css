@@ -560,7 +560,13 @@ body::-webkit-scrollbar-track {
 	/*	url("../../reference/light-blue/img/bgnoise_lg_dark.png");*/
 	padding-bottom: 10px;
 	border: 2px dotted rgb(151 151 151 / 95%) !important;
-	background: linear-gradient(-45deg, rgb(59 59 59 / 93%), rgb(74 78 91 / 91%), rgb(83 83 83 / 90%), rgb(40, 40, 40, 91%));
+	background: linear-gradient(
+		-45deg,
+		rgb(59 59 59 / 93%),
+		rgb(74 78 91 / 91%),
+		rgb(83 83 83 / 90%),
+		rgb(40, 40, 40, 91%)
+	);
 	background-size: 400% 400%;
 	-webkit-animation: gradient 15s ease infinite;
 	animation: gradient 15s ease infinite;
@@ -2964,8 +2970,8 @@ table tbody tr td {
 	}
 }
 
-.widget-controls>a:hover {
-	color: rgba(255,255,255,.6);
+.widget-controls > a:hover {
+	color: rgba(255, 255, 255, 0.6);
 	text-decoration: none;
 }
 
@@ -3006,7 +3012,6 @@ table tbody tr td {
 /*	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
 /*}*/
 
-
 /* 스크롤 테마 */
 ::-webkit-scrollbar {
 	width: 8px; /* 스크롤바의 너비 */
@@ -3022,4 +3027,77 @@ table tbody tr td {
 
 ::-webkit-scrollbar-track {
 	background-color: #4b4b4b; /*스크롤바 뒷 배경 색상*/
+}
+
+/*--------------------------------------------------------------
+# 기대효과
+--------------------------------------------------------------*/
+#benefit {
+	padding: 60px 0;
+}
+.board-thumb {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.board-thumb::after {
+	content: "";
+	display: block;
+	padding-bottom: 75.2631578947%;
+}
+
+.board-thumb.img-1 {
+	background-image: url("../img/landing/board_img_1.jpg");
+}
+
+.board-thumb.img-2 {
+	background-image: url("../img/landing/board_img_2.jpg");
+}
+
+.board-thumb.img-3 {
+	background-image: url("../img/landing/board_img_3.jpg");
+}
+
+.board-desc {
+	margin: -65px auto 0;
+	max-width: 88.1578947368%;
+	background-color: #fff;
+	padding: 24px 20px;
+}
+
+.board-title {
+	text-align: center;
+	font-size: 1.35em;
+	font-weight: 700;
+	color: #15235b;
+}
+
+.board-title .em {
+	color: #ff8500;
+	font-weight: 700;
+}
+
+.board-bar {
+	margin: 1.25rem auto;
+	width: 2rem;
+	height: 3px !important;
+	background-color: #666;
+}
+
+.board-text {
+	font-weight: 300;
+	color: #666666;
+	text-align: center;
+	word-break: keep-all;
+}
+
+@media (max-width: 768px) {
+	#benefit .row {
+		flex-direction: column;
+	}
+
+	#benefit .col-4 {
+		width: 100%;
+	}
 }
