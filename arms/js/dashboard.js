@@ -184,16 +184,16 @@ function makePdServiceSelectBox() {
 
 		donutChart($("#selected_pdService").val(), "");
 		combinationChart($("#selected_pdService").val(), "");
-
+		drawProductToManSankeyChart($("#selected_pdService").val(), "");
 		// 투입 인력별 요구사항 관여 차트 mock 데이터 fetch
 		d3.json("./mock/manRequirement.json", function (data) {
 			drawManRequirementTreeMapChart(data);
 		});
 
 		// 제품-버전-투입인력 차트 mock 데이터 fetch
-		d3.json("./mock/productToMan.json", function (data) {
-			drawProductToManSankeyChart(data);
-		});
+		// d3.json("./mock/productToMan.json", function (data) {
+		// 	drawProductToManSankeyChart(data);
+		// });
 
 		//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 
@@ -965,8 +965,21 @@ function init(treeMapInfos) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 제품-버전-투입인력 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
-function drawProductToManSankeyChart(data) {
-	SankeyChart.loadChart(data);
+function drawProductToManSankeyChart() {
+	$.ajax({
+		url: "/auth-user/api/arms/dashboard/version-assignee",
+		type: "GET",
+		data: {"pdServiceLink": 10, "pdServiceVersionLinks": "10,11,12,13" },
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				SankeyChart.loadChart(data);
+			}
+		}
+	});
+
 }
 
 var SankeyChart = (function ($) {

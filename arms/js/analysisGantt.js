@@ -1553,9 +1553,7 @@ function initGantt(data) {
 	);
 }
 function getDate(stamp) {
-	if (!stamp) return `0000-00-00`;
-
-	const time = new Date(stamp);
+	const time = !stamp || stamp < 0 ? new Date() : new Date(stamp);
 	return `${time.getFullYear()}-${addZero(time.getMonth() + 1)}-${addZero(time.getDate())}`;
 }
 

@@ -1511,34 +1511,27 @@ var Gantt = (function () {
                     else this.set_task_array(acc, cur);
                     return acc;
                 }, [])
-                .flat()
-                .flat();
+                .flat(Infinity);
         }
 
-        set_task_array(arr, cur) {
-            const rootItem = arr.flat().filter((t) => t.parentId === 2);
-            const rootIndex = rootItem.findIndex(
-                (t) => Number(t.id) === cur.parentId
+        set_task_array(root, cur) {
+            const arr = this.get_target_array(root, cur);
+
+            !!arr && arr.push(cur.type === 'default' ? cur : [cur]);
+        }
+        get_target_array(root, cur) {
+            const rootArr = root.find((arr) =>
+                arr.flat(Infinity).some((t) => Number(t.id) === cur.parentId)
             );
 
-            if (rootIndex < 0) {
-                const parentItem = arr
-                    .flat()
-                    .flat()
-                    .find((t) => Number(t.id) === cur.parentId);
-                const rootIndex = rootItem.findIndex(
-                    (t) => Number(t.id) === parentItem.parentId
-                );
-                const parentIndex = arr[rootIndex]
-                    .flat()
-                    .findIndex((t) => Number(t.id) === cur.parentId);
-
-                arr[rootIndex][parentIndex].push(
-                    cur.type === 'default' ? cur : [cur]
-                );
-            } else {
-                arr[rootIndex].push(cur.type === 'default' ? cur : [cur]);
+            if (rootArr.some((t) => Number(t.id) === cur.parentId)) {
+                return rootArr;
             }
+
+            return this.get_target_array(
+                rootArr.filter((r) => Array.isArray(r)),
+                cur
+            );
         }
 
         update_origin_tasks(item) {
