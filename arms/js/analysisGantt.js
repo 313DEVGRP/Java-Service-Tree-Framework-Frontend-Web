@@ -1417,24 +1417,24 @@ function setGanttTasks(data) {
 
 		acc.push({
 			id: `${cur.c_id}`,
-			assignee: cur.c_req_manager,
-			reporter: cur.c_issue_reporter,
+			assignee: cur.c_req_owner,
+			reporter: cur.c_req_writer,
 			name: cur.c_title,
 			start: getDate(cur.c_req_start_date),
 			end: getDate(cur.c_req_end_date),
 			progress: cur.c_req_plan_progress || 0,
 			dependencies: cur.c_parentid === 2 ? "" : `${cur.c_parentid}`,
 			priority: cur.state,
-			custom_class: cur.c_issue_priority_name, // optional
+			custom_class: cur.status, // optional
 			type: cur.c_type,
-			etc: cur.c_etc,
+			etc: cur.c_req_etc,
 			tmm: cur.c_req_total_resource,
 			p_work: cur.c_req_plan_resource,
 			t_period: cur.c_req_total_time,
 			tpp: cur.c_req_plan_time,
 			result: cur.c_req_output,
 			plan: `${cur.c_req_plan_progress || 0}%`,
-			performance: `${cur.c_req_plan_progress || 0}%`,
+			performance: `${cur.c_req_performance_progress || 0}%`,
 			level: cur.c_level,
 			parentId: cur.c_parentid,
 			position: cur.c_position
