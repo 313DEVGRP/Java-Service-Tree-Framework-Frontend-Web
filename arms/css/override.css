@@ -3060,7 +3060,7 @@ table tbody tr td {
 }
 
 .board-desc {
-	margin: -65px auto 0;
+	margin: -55px auto 0;
 	max-width: 88.1578947368%;
 	background-color: #fff;
 	padding: 24px 20px;
@@ -3079,7 +3079,7 @@ table tbody tr td {
 }
 
 .board-bar {
-	margin: 1.25rem auto;
+	margin: 1.5rem auto;
 	width: 2rem;
 	height: 3px !important;
 	background-color: #666;
