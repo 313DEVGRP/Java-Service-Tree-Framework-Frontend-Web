@@ -182,9 +182,9 @@ function makePdServiceSelectBox() {
 		//타임라인
 		$("#notifyNoVersion2").hide();
 
-		donutChart($("#selected_pdService").val(), "");
-		combinationChart($("#selected_pdService").val(), "");
-		drawProductToManSankeyChart($("#selected_pdService").val(), "");
+		donutChart($("#selected_pdService").val());
+		combinationChart($("#selected_pdService").val());
+		drawProductToManSankeyChart($("#selected_pdService").val());
 		// 투입 인력별 요구사항 관여 차트 mock 데이터 fetch
 		d3.json("./mock/manRequirement.json", function (data) {
 			drawManRequirementTreeMapChart(data);
@@ -236,11 +236,12 @@ function makeVersionMultiSelectBox() {
 		cancelable: true,
 		onClose: function () {
 			console.log("onOpen event fire!\n");
-			var versionTag = $(".multiple-select").val();
-
+			const versionTag = $(".multiple-select").val();
+			const pdServiceLink = $("#selected_pdService").val();
 			const currentSelectedVersionString = versionTag.join(",");
-			donutChart($("#selected_pdService").val(), currentSelectedVersionString, 'update');
-			combinationChart($("#selected_pdService").val(), currentSelectedVersionString, 'update');
+			donutChart(pdServiceLink, currentSelectedVersionString, 'update');
+			combinationChart(pdServiceLink, currentSelectedVersionString, 'update');
+			drawProductToManSankeyChart(pdServiceLink, currentSelectedVersionString, 'update');
 
 		},
 		onChange: function () {
@@ -965,16 +966,35 @@ function init(treeMapInfos) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 제품-버전-투입인력 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
-function drawProductToManSankeyChart() {
+function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks = "", type = "init") {
+	function removeSankeyChart() {
+		const svgElement = d3.select("#chart-product-manpower").select("svg");
+		if (!svgElement.empty()) {
+			svgElement.remove();
+		}
+	}
+
+	if((type === "update" && pdServiceVersionLinks === "") || pdServiceLink === "") {
+		removeSankeyChart();
+		return;
+	}
+
 	$.ajax({
 		url: "/auth-user/api/arms/dashboard/version-assignee",
 		type: "GET",
-		data: {"pdServiceLink": 10, "pdServiceVersionLinks": "10,11,12,13" },
+		data: {
+			"pdServiceLink": pdServiceLink,
+			"pdServiceVersionLinks": pdServiceVersionLinks,
+			"type": type
+		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (data) {
+				if(type === "update") {
+					removeSankeyChart();
+				}
 				SankeyChart.loadChart(data);
 			}
 		}
