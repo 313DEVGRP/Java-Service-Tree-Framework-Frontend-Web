@@ -974,10 +974,7 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks = "", 
 		}
 	}
 
-	if((type === "update" && pdServiceVersionLinks === "") || pdServiceLink === "") {
-		removeSankeyChart();
-		return;
-	}
+
 
 	$.ajax({
 		url: "/auth-user/api/arms/dashboard/version-assignee",
@@ -992,9 +989,7 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks = "", 
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				if(type === "update") {
-					removeSankeyChart();
-				}
+				removeSankeyChart();
 				SankeyChart.loadChart(data);
 			}
 		}
