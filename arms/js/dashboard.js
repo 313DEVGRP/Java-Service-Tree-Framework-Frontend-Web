@@ -4,7 +4,7 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
 var dataTableRef;
-
+var selectedVersionId; // 선택된 버전 아이디
 var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
@@ -182,19 +182,9 @@ function makePdServiceSelectBox() {
 		//타임라인
 		$("#notifyNoVersion2").hide();
 
-		donutChart($("#selected_pdService").val());
-		combinationChart($("#selected_pdService").val());
-		drawProductToManSankeyChart($("#selected_pdService").val());
-		// 투입 인력별 요구사항 관여 차트 mock 데이터 fetch
 		d3.json("./mock/manRequirement.json", function (data) {
 			drawManRequirementTreeMapChart(data);
 		});
-
-		// 제품-버전-투입인력 차트 mock 데이터 fetch
-		// d3.json("./mock/productToMan.json", function (data) {
-		// 	drawProductToManSankeyChart(data);
-		// });
-
 		//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 
 		// 요구사항별 투입 인력 데이터테이블
@@ -238,11 +228,11 @@ function makeVersionMultiSelectBox() {
 			console.log("onOpen event fire!\n");
 			const versionTag = $(".multiple-select").val();
 			const pdServiceLink = $("#selected_pdService").val();
-			const currentSelectedVersionString = versionTag.join(",");
-			donutChart(pdServiceLink, currentSelectedVersionString, 'update');
-			combinationChart(pdServiceLink, currentSelectedVersionString, 'update');
-			drawProductToManSankeyChart(pdServiceLink, currentSelectedVersionString, 'update');
-
+			selectedVersionId = versionTag.join(',');
+			donutChart($("#selected_pdService").val(), selectedVersionId);
+			combinationChart($("#selected_pdService").val(), selectedVersionId);
+			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
+			// drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 		},
 		onChange: function () {
 
@@ -260,11 +250,18 @@ function bind_VersionData_By_PdService() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
+				var pdServiceVersionIds = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
+					pdServiceVersionIds.push(obj.c_id);
 					var newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
+				selectedVersionId = pdServiceVersionIds.join(',');
+				donutChart($("#selected_pdService").val(), selectedVersionId);
+				combinationChart($("#selected_pdService").val(), selectedVersionId);
+				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
+				// drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -966,7 +963,7 @@ function init(treeMapInfos) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 제품-버전-투입인력 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
-function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks = "", type = "init") {
+function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 	function removeSankeyChart() {
 		const svgElement = d3.select("#chart-product-manpower").select("svg");
 		if (!svgElement.empty()) {
@@ -974,15 +971,12 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks = "", 
 		}
 	}
 
-
-
 	$.ajax({
-		url: "/auth-user/api/arms/dashboard/version-assignee",
+		url: "/auth-user/api/arms/dashboard/version-assignees",
 		type: "GET",
 		data: {
 			"pdServiceLink": pdServiceLink,
-			"pdServiceVersionLinks": pdServiceVersionLinks,
-			"type": type
+			"pdServiceVersionLinks": pdServiceVersionLinks
 		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
@@ -1202,7 +1196,7 @@ var SankeyChart = (function ($) {
 	return { loadChart, drawEmptyChart };
 })(jQuery);
 
-function donutChart(pdServiceLink = "", pdServiceVersionLinks = "", type = "init") {
+function donutChart(pdServiceLink, pdServiceVersionLinks) {
 	function donutChartNoData() {
 		c3.generate({
 			bindto: '#donut-chart',
@@ -1216,7 +1210,7 @@ function donutChart(pdServiceLink = "", pdServiceVersionLinks = "", type = "init
 		});
 	}
 
-	if((type === "update" && pdServiceVersionLinks === "") || pdServiceLink === "") {
+	if(pdServiceLink === "" || pdServiceVersionLinks === "") {
 		donutChartNoData();
 		return;
 	}
@@ -1288,7 +1282,7 @@ function donutChart(pdServiceLink = "", pdServiceVersionLinks = "", type = "init
 	});
 }
 
-function combinationChart(pdServiceLink = "", pdServiceVersionLinks = "", type = "init") {
+function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 	function combinationChartNoData() {
 		c3.generate({
 			bindto: '#combination-chart',
@@ -1301,7 +1295,7 @@ function combinationChart(pdServiceLink = "", pdServiceVersionLinks = "", type =
 		});
 	}
 
-	if((type === "update" && pdServiceVersionLinks === "") || pdServiceLink === "") {
+	if(pdServiceLink === "" || pdServiceVersionLinks === "") {
 		combinationChartNoData();
 		return;
 	}
