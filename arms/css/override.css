@@ -2374,6 +2374,20 @@ blockquote {
 	background: rgba(51, 51, 51, 0.3);
 	border-radius: 3px;
 	position: relative;
+	border-color: #a4c6ff;
+}
+
+.chat-message .chat-message-body.arrow:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 21px;
+	left: -7px;
+	width: 0;
+	height: 0;
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+	border-right: 5px solid #a4c6ff;
 }
 
 .widget > .carousel {
@@ -3100,4 +3114,69 @@ table tbody tr td {
 	#benefit .col-4 {
 		width: 100%;
 	}
+}
+
+.flex {
+	display: flex;
+}
+.flex-space-between {
+	justify-content: space-between;
+}
+
+#shcedule_update {
+	height: 28px;
+}
+
+.project-progress .progress-group {
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 10px;
+}
+
+.progress-group label {
+	flex-shrink: 0;
+	width: 150px;
+	line-height: 30px;
+	text-align: right;
+	margin-right: 5px;
+}
+
+.progress-group .progress-desc {
+	display: flex;
+	align-items: flex-start;
+}
+
+.progress-group .progress-desc .icon {
+	width: 38px;
+	height: 30px;
+}
+
+.progress-group .progress-desc .progress-input {
+	flex-shrink: 0;
+	display: flex;
+	width: 125px;
+	align-items: center;
+}
+
+.project-progress input {
+	width: 63px !important;
+	margin-right: 2px;
+	padding: 5px !important;
+	text-align: right;
+}
+
+.project-progress .input-group-addon.input-desc {
+	display: flex;
+	width: auto;
+	text-align: left;
+	line-height: 18px;
+}
+.project-progress .input-group-addon .fa {
+	line-height: 15px;
+}
+
+.project-progress .input-desc .font11 {
+	margin-left: 5px;
+	white-space: normal;
+	word-break: keep-all;
 }

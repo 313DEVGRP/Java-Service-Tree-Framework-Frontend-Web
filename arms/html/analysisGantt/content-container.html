@@ -1,266 +1,314 @@
-<div class="col-lg-12 col-layer">
-	<section class="widget">
-		<header>
-			<h4>
-				<span
-					class="font13"
-					style="font-weight: bold">
-					<i class="fa fa-edit"></i>
-					Service - Version 선택
-				</span>
-			</h4>
-			<div class="widget-controls">
-				<a
-					data-widgster="toleft"
-					title="change width to left"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-left"></i>
-				</a>
-				<a
-					data-widgster="expand"
-					title="Expand"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-up"></i>
-				</a>
-				<a
-					data-widgster="collapse"
-					title="Collapse"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-down"></i>
-				</a>
-				<a
-					data-widgster="toright"
-					title="change width to right"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-right"></i>
-				</a>
-				<a
-					data-widgster="restore"
-					title="Restore"
-					href="#">
-					<span class="glyphicon glyphicon-repeat"></span>
-				</a>
-				<a
-					data-widgster="fullscreen"
-					title="Fullscreen"
-					href="#">
-					<i
-						class="glyphicon glyphicon-fullscreen"
-						style="font-size: 11px"></i>
-				</a>
-			</div>
-		</header>
-		<div class="body">
-			<div
-				class="gradient_middle_border"
-				style="width: 100%; height: 2px"></div>
-			<blockquote
-				class="font13"
-				style="margin-top: 5px">
-				1. 제품(서비스) 선택
-				<div style="float: right">
-					<button
-						class="btn btn-transparent btn-xs"
-						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-						onclick="window.open('docs/guide.html#reqstatus_version_selection')">
-						Help
-						<i
-							class="fa fa-question"
-							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-					</button>
-				</div>
-			</blockquote>
+<div class="row">
+  <div class="col-lg-5 col-layer">
+    <section class="widget">
+      <header>
+        <h4>
+          <span
+            class="font13"
+            style="font-weight: bold">
+            <i class="fa fa-edit"></i>
+            Service - Version 선택
+          </span>
+        </h4>
+        <div class="widget-controls">
+          <a
+            data-widgster="toleft"
+            title="change width to left"
+            href="#">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+          </a>
+          <a
+            data-widgster="expand"
+            title="Expand"
+            href="#">
+            <i class="glyphicon glyphicon-chevron-up"></i>
+          </a>
+          <a
+            data-widgster="collapse"
+            title="Collapse"
+            href="#">
+            <i class="glyphicon glyphicon-chevron-down"></i>
+          </a>
+          <a
+            data-widgster="toright"
+            title="change width to right"
+            href="#">
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </a>
+          <a
+            data-widgster="restore"
+            title="Restore"
+            href="#">
+            <span class="glyphicon glyphicon-repeat"></span>
+          </a>
+          <a
+            data-widgster="fullscreen"
+            title="Fullscreen"
+            href="#">
+            <i
+              class="glyphicon glyphicon-fullscreen"
+              style="font-size: 11px"></i>
+          </a>
+        </div>
+      </header>
+      <div class="body">
+        <div
+          class="gradient_middle_border"
+          style="width: 100%; height: 2px"></div>
+        <blockquote
+          class="font13"
+          style="margin-top: 5px">
+          1. 제품(서비스) 선택
+          <div style="float: right">
+            <button
+              class="btn btn-transparent btn-xs"
+              style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+              onclick="window.open('docs/guide.html#reqstatus_version_selection')">
+              Help
+              <i
+                class="fa fa-question"
+                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+            </button>
+          </div>
+        </blockquote>
 
-			<div class="row">
-				<div class="col-md-4">
-					<section
-						class="widget"
-						style="margin-bottom: 0px !important">
-						<header>
-							<label><strong>Search</strong></label>
-						</header>
-						<div class="body">
-							<div class="column">
-								<blockquote class="font12">
-									<strong>
-										1. Product
-										<sup>service</sup>
-										를 선택해 주세요
-									</strong>
-								</blockquote>
-								<div
-									class="control-group"
-									class="darkBack"
-									style="padding-bottom: 10px; border: 0">
-									<div
-										class="controls form-group"
-										class="darkBack"
-										style="margin-bottom: 5px !important">
-										<select
-											id="selected_pdService"
-											required="required"
-											data-placeholder="Select Product(Service)"
-											class="select-block-level chzn-select darkBack"
-											tabindex="-1"
-											name="selected_pdService"
-											style="width: 100% !important">
-											<option value=""></option>
-										</select>
-									</div>
-								</div>
-								<!--								<blockquote class="font12">-->
-								<!--									<strong>-->
-								<!--										2. Product-->
-								<!--										<sup>service</sup>-->
-								<!--										의 버전을 선택해 주세요-->
-								<!--									</strong>-->
-								<!--								</blockquote>-->
-								<!--								<div-->
-								<!--									class="control-group"-->
-								<!--									style="padding-bottom: 10px; border: 0">-->
-								<!--									<div-->
-								<!--										class="controls form-group"-->
-								<!--										style="margin-bottom: 5px !important">-->
-								<!--										<select-->
-								<!--											multiple="multiple"-->
-								<!--											id="multiversion"-->
-								<!--											class="multiple-select btn-block darkBack"-->
-								<!--											placeholder="&nbsp;&nbsp;Select Version"></select>-->
-								<!--									</div>-->
-								<!--								</div>-->
-							</div>
-						</div>
-					</section>
-				</div>
+        <div class="row">
+          <div class="col-md-12">
+            <section
+            class="widget"
+            style="margin-bottom: 0px !important">
+              <header>
+                <label><strong>Search</strong></label>
+              </header>
+              <div class="body">
+                <div class="column">
+                  <blockquote class="font12">
+                    <strong>
+                      1. Product
+                      <sup>service</sup>
+                      를 선택해 주세요
+                    </strong>
+                  </blockquote>
+                  <div
+                    class="control-group"
+                    class="darkBack"
+                    style="padding-bottom: 10px; border: 0">
+                    <div
+                      class="controls form-group"
+                      class="darkBack"
+                      style="margin-bottom: 5px !important">
+                      <select
+                        id="selected_pdService"
+                        required="required"
+                        data-placeholder="Select Product(Service)"
+                        class="select-block-level chzn-select darkBack"
+                        tabindex="-1"
+                        name="selected_pdService"
+                        style="width: 100% !important">
+                        <option value=""></option>
+                      </select>
+                    </div>
+                  </div>
+                  <blockquote class="font12">
+                    <strong>
+                      2. Product
+                      <sup>service</sup>
+                      의 버전을 선택해 주세요
+                    </strong>
+                  </blockquote>
+                  <div
+                    class="control-group"
+                    style="padding-bottom: 10px; border: 0">
+                    <div
+                      class="controls form-group"
+                      style="margin-bottom: 5px !important">
+                      <select
+                        multiple="multiple"
+                        id="multiversion"
+                        class="multiple-select btn-block darkBack"
+                        placeholder="&nbsp;&nbsp;Select Version"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+    </div>
+    </section>
+  </div>
+  <div class="col-lg-7 col-layer">
+    <section class="widget">
+      <header>
+        <h4>
+          <span
+            class="font13"
+            style="font-weight: bold">
+            <i class="fa fa-edit"></i>
+            프로젝트 진척율
+          </span>
+        </h4>
+      </header>
+      <div class="body">
+        <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+        <blockquote class="font13" style="margin-top: 5px;">
+          <div style="float: right;">
+            <button class="btn btn-transparent btn-xs" style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;" onclick="window.open('docs/guide.html#jira_edit_delete')">
+              Help
+              <i class="fa fa-question" style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+            </button>
+          </div>
+          2. 일정변경 관리하지 않을 때
+        </blockquote>
+        <div class="flex flex-space-between">
+          <div class="chat-message">
+            <div class="chat-message-body arrow">
+              <p class="font11">* 프로젝트 작업량과 진척율을 보여줍니다.</p>
+              <p class="font11">* "스케쥴 업데이트" 버튼 클릭 시 아래 항목이 자동 계산됩니다.</p>
+            </div>
+          </div>
 
-				<div class="col-md-4">
-					<section
-						class="widget"
-						style="margin-bottom: 0px !important">
-						<header>
-							<label><strong>Statistics</strong></label>
-						</header>
-						<div class="body">
-							<div class="column">
-								<blockquote class="font12">
-									<strong>3. 제품(서비스) 요구사항 통계</strong>
-								</blockquote>
-								<div
-									class="control-group"
-									class="darkBack"
-									style="padding-bottom: 10px; border: 0">
-									<div
-										class="controls form-group"
-										class="darkBack"
-										style="margin-bottom: 5px !important; padding-top: 5px !important">
-										<span>
-											✔ 총 제품(서비스) 버전 개수 :
-											<a
-												id="version_count"
-												style="font-weight: bold">
-												n/a
-											</a>
-											개
-										</span>
-										<br />
-									</div>
-									<div
-										class="controls form-group"
-										class="darkBack"
-										style="margin-bottom: 5px !important; padding-top: 5px !important">
-										<span>
-											✔ 총 요구사항 이슈 개수 :
-											<a
-												id="req_count"
-												style="font-weight: bold">
-												n/a
-											</a>
-											개
-										</span>
-									</div>
-								</div>
-								<blockquote class="font12">
-									<strong>4. 요구사항 이슈에 연결된 통계</strong>
-								</blockquote>
-								<div
-									class="control-group"
-									style="border: 0">
-									<div
-										class="controls form-group"
-										class="darkBack"
-										style="margin-bottom: 5px !important; padding-top: 5px !important">
-										<span>
-											✔ 연결된 ALM 서버 개수 :
-											<a
-												id="alm_server_count"
-												style="font-weight: bold">
-												n/a
-											</a>
-											개
-										</span>
-									</div>
-									<div
-										class="controls form-group"
-										class="darkBack"
-										style="margin-bottom: 5px !important; padding-top: 5px !important">
-										<span>
-											✔ 연결된 ALM 프로젝트 개수 :
-											<a
-												id="alm_project_count"
-												style="font-weight: bold">
-												n/a
-											</a>
-											개
-										</span>
-									</div>
-									<div
-										class="controls form-group"
-										class="darkBack"
-										style="margin-bottom: 5px !important; padding-top: 5px !important">
-										<span>
-											✔ 연결된 ALM 이슈 개수 :
-											<a
-												id="alm_issue_count"
-												style="font-weight: bold">
-												n/a
-											</a>
-											개
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-
-				<div class="col-md-4">
-					<section
-						class="widget"
-						style="margin-bottom: 0px !important">
-						<header>
-							<label><strong>Progress</strong></label>
-						</header>
-						<div class="body">
-							<div class="column">
-								<blockquote class="font12">
-									<strong>5. 연결된 ALM 이슈의 진척도</strong>
-								</blockquote>
-								<div
-									class="control-group"
-									class="darkBack"
-									style="padding-bottom: 10px; border: 0">
-									<div
-										class="controls form-group darkBack"
-										id="progress_status"
-										style="margin-bottom: 5px !important"></div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-			</div>
-		</div>
-	</section>
+          <button type="button" id="shcedule_update" onclick="scheduleUpdate()" class="btn btn-success btn-sm mr-1">
+            스케쥴 업데이트
+          </button>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="body tab-content">
+              <div class="project-progress">
+                <div class="progress-group">
+                  <label for="total_work">
+                    프로젝트 전체 작업량 :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                      </span>
+                      <span class="progress-input font11">
+                        <input type="text" id="total_work" name="total_work" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        Man/Day
+                      </span>
+                      <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">프로젝트 전체의 작업량을 Man/Day로 표시한다. 가중치를 적용한 값이다.</span>
+                      </span>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <label for="planed_work">
+                    현재일까지 계획된 작업량 :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                      </span>
+                    <span class="progress-input font11">
+                        <input type="text" id="planed_work" name="planed_work" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        Man/Day
+                      </span>
+                    <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">해당작업의 시작일부터 현재일까지의 작업기간을 의미함(현재 날짜까지 진행되었어야 할 기간)</span>
+                      </span>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <label for="performance_capability">
+                    실적기성 :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                      </span>
+                    <span class="progress-input font11">
+                        <input type="text" id="performance_capability" name="performance_capability" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        Man/Day
+                      </span>
+                    <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">실적기성(총기간 x 총실적진행율)</span>
+                      </span>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <label for="actual_input">
+                    실제 투입된 작업량 :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                      </span>
+                    <span class="progress-input font11">
+                        <input type="text" id="actual_input" name="actual_input" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        Man/Day
+                      </span>
+                    <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">일정변경 관리할 때 현재까지 실제로 투입된 작업기간을 표시함</span>
+                      </span>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <label for="planned_progress">
+                    계획 진척율(A) :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                      </span>
+                    <span class="progress-input font11">
+                        <input type="text" id="planned_progress" name="planned_progress" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        %
+                      </span>
+                    <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">현재날짜까지 계획된 진척율, WBS의 "계획진척율"의 전체 합계 진척율을 표시함</span>
+                      </span>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <label for="performance_progress">
+                    실적 진척율(B) :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                      </span>
+                    <span class="progress-input font11">
+                        <input type="text" id="performance_progress" name="performance_progress" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        %
+                      </span>
+                    <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">현재날짜까지 실제로 진행된 진척율, WBS의 "실적진척율"의 전체 합계 진척율을 표시함</span>
+                      </span>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <label for="project_progress">
+                    차이(B-A) :
+                  </label>
+                  <div class="progress-desc">
+                      <span class="icon input-group-addon">
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                      </span>
+                    <span class="progress-input font11">
+                        <input type="text" id="project_progress" name="project_progress" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
+                        %
+                      </span>
+                    <span class="input-group-addon input-desc">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="font11">양수이면 계획보다 빨리 진행, 음수이면 지연</span>
+                      </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
 
 <div class="col-lg-12 col-layer">
@@ -327,7 +375,7 @@
 			<blockquote
 				class="font13"
 				style="margin-top: 5px">
-				2. 제품(서비스)의 내용을 확인하고 편집/삭제
+				3. 제품(서비스)의 내용을 확인하고 편집/삭제
 				<div style="float: right">
 					<button
 						class="btn btn-transparent btn-xs"
