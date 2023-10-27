@@ -95,6 +95,65 @@ blockquote {
 }
 
 /* QnA 게시판 관련 CSS */
+.footer-chat {
+    width: calc(65% - 66px);
+    height: 80px;
+    display:flex;
+    align-items: center;
+    position:absolute;
+    bottom: 0;
+    background-color: transparent;
+    border-top: 2px solid #EEE;
+
+  }
+
+  .chat .footer-chat .icon {
+    margin-left: 30px;
+    color:#C0C0C0;
+    font-size: 14pt;
+  }
+
+  .chat .footer-chat .send {
+    color:#fff;
+    background-color: #4f6ebd;
+    position: absolute;
+    right: 50px;
+    padding: 12px 12px 12px 12px;
+    border-radius: 50px;
+    font-size: 14pt;
+  }
+
+  .chat .footer-chat .name {
+    margin: 0 0 0 20px;
+    text-transform: uppercase;
+    font-family:'Montserrat', sans-serif;
+    font-size: 13pt;
+    color:#515151;
+  }
+
+  .chat .footer-chat .right {
+    position: absolute;
+    right: 40px;
+  }
+
+.date-separator {
+    text-align: center;
+    width: 180px;
+    margin: 10px auto;
+    padding: 6px;
+    font-size: 15px;
+    background-color: #f2f2f2;
+    border-radius: 15px;
+}
+
+.chat-message-body.on-left {
+  float: right;
+}
+
+.chat-message-body.on-right {
+  float: left;
+}
+
 .chat-btn {
     display: inline-block;
     -webkit-box-sizing: content-box;
@@ -127,6 +186,7 @@ blockquote {
 .user-id {
     color: #3264bf;
     font-weight: bolder;
+    font-size:16px;
     text-decoration: none;
 }
 
@@ -153,7 +213,7 @@ blockquote {
     margin-left: .3em;
 }
 .box .icon, .box .big-text {
-    margin-top: 15px;
+    /*margin-top: 15px;*/
     font-size: 36px;
     line-height: 36px;
     height: 36px;
@@ -216,9 +276,9 @@ blockquote {
     position: relative;
     z-index: 1;
     text-align: center;
-    width: 53px;
+    width: 80px;
     height: 53px;
-    line-height: 53px;
+    line-height: 10px;
     vertical-align: middle;
     -webkit-border-radius: 53px;
     -moz-border-radius: 53px;
@@ -251,30 +311,18 @@ blockquote {
 }
 
 .chat-message-body {
-    margin-left: 63px;
-    padding: 8px 10px;
-    background: #dedede;
-    position: relative;
-    border-left: 3px solid #666;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    -ms-border-radius: 1px;
-    -o-border-radius: 1px;
-    border-radius: 1px;
+        background-color: #f6f6f6;
+        padding: 15px;
+        border-radius: 12px;
 }
 .chat-message-body.on-left {
     margin-left: 0;
-    margin-right: 63px;
     border-left: none;
-    border-right: 3px solid #666;
-    background: #e9ecef;
+    /*border-right: 3px solid #666;*/
+    background: #e3effd;
+    padding: 10px 20px;
 }
-.chat-message-body.on-left .arrow {
-    left: auto;
-    right: -7px;
-    border-right: none;
-    border-left: 5px solid #666;
-}
+
 .chat-message-body.on-left .sender {
     text-align: right;
     display: inline-block;
@@ -283,19 +331,12 @@ blockquote {
 
 .chat-message-body.on-left .text {
     text-align: right;
+    color:black;
+}
+.chat-message-body .text p{
+    margin-bottom: 0rem;
 }
 
-.chat-message-body .arrow {
-    display: block;
-    position: absolute;
-    top: 21px;
-    left: -7px;
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-right: 5px solid #666;
-}
 
 @font-face {
     font-family: 'FontAwesome';
@@ -509,6 +550,9 @@ blockquote {
     padding: 8px;
     font-size: 15px;
     border: none;
+    display: flex;
+        justify-content: center;
+        align-items: center;
 }
 .dropdown {
     position: relative;
@@ -562,6 +606,60 @@ blockquote {
 }
 
 /* 게시글 생성 부분 */
+.edit-comment-button:hover{
+    background:#0d6efd;
+    color: #fff;
+}
+
+.chat-container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    display: flex;
+    border-radius: 5px;
+}
+
+#comment-contents {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    overflow-y: hidden;
+    padding: 5px;
+    line-height: 1.5;
+}
+
+#req_comment_save_btn {
+    background: #0678e3;
+        color: #fff;
+        border-radius: 0.5rem;
+}
+
+
+button {
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 0;
+     display: flex;
+     height:40px;
+}
+button i {
+    vertical-align: middle;
+}
+
 .box {
     position: relative;
     border-radius: 3px;
@@ -668,13 +766,13 @@ blockquote {
     user-select: none;
 }
 
-#comment-contents {
+/*#comment-contents {
     width: 100%;
     font-size: 14px;
     line-height: 18px;
     border: 1px solid rgb(221, 221, 221);
     padding: 10px;
-}
+}*/
 
 /*--------------------------------------------------------------
 # 헤더 (계정 정보)
