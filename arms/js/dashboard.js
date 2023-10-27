@@ -1360,6 +1360,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 						types: {
 							'요구사항': 'area',
 						},
+						groups: [issueStatusTypes]
 					},
 					axis: {
 						x: {
