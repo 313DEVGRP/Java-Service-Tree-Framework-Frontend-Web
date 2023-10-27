@@ -10,6 +10,7 @@ var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
+var req_count, subtask_count, resource_count;
 
 function execDocReady() {
 
@@ -80,7 +81,7 @@ function execDocReady() {
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
-			}, 3000); // 2초 후에 실행됩니다.
+			}, 3000); // 3초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
 			// 사이드 메뉴 색상 설정
@@ -185,7 +186,10 @@ function makePdServiceSelectBox() {
 		d3.json("./mock/manRequirement.json", function (data) {
 			drawManRequirementTreeMapChart(data);
 		});
-		//drawBarOnPolar("polar_bar", categories_mock, data_mock);
+
+		//  d3.json("./mock/productToMan.json", function (data) {
+		//  	drawProductToManSankeyChart(data);
+		//  });
 
 		// 요구사항별 투입 인력 데이터테이블
 		dataTableLoad($("#selected_pdService").val(), endPointUrl);
@@ -383,6 +387,9 @@ function drawReqTimeSeries(data) {
 // 2. 버전만 따로 선택해서 보고싶은 경우(미완)
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("선택된 서비스 ===> " + pdservice_id);
+	req_count = 0;
+	subtask_count = 0;
+	resource_count = 0;
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
@@ -432,77 +439,16 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		}
 	});
 
-	//제품서비스 - status 기반
-	$.ajax({
-		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log(data);
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-				}
-				//해당 제품의 총 요구사항 수 (by db, not es)
-				$('#active_version_count').text(data["version"]);
-				$('#req_count').text(data["req"]);
-			}
-		}
-	});
 
+	// 제품서비스 - status
+	getReqCount(pdservice_id, "");
 	// 제품서비스별 담당자 통계
-	///*
-	$.ajax({
-		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
-		type: "get",
-		data: {"pdServiceId" : pdservice_id},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				//console.log(data); console.log(Object.keys(data).length);
-				
-				//담당자 미지정 이슈 수
-				$('#no_assigned_issue_count').text(data["담당자 미지정"]); 
-				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
-					//제품(서비스)에 투입된 총 인원수
-					$('#resource_count').text(+Object.keys(data).length-1);
-				} else {
-					$('#resource_count').text("n/a");
-				}
-			}
-		}
-	});
-	//*/
+	getAssigneeInfo(pdservice_id, "");
 
-	// Scope - (2) 요구사항에 연결된 이슈 총 개수
-	$.ajax({
-		url:"/auth-user/api/arms/dashboard/jira-linkedIssue-subTask",
-		type: "get",
-		data: { "pdServiceId" : pdservice_id },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log("연결이슈 서브테스크 조회");
-				//console.log(data); console.log(data.검색결과);
-				var arrays = data.검색결과.group_by_pdServiceVersion;
-				var linkedOrSubtaskCount = 0;
-				if(arrays !== "") {
-					arrays.forEach(function(target, idx){
-						linkedOrSubtaskCount += target.개수;
-					});
-					console.log("요구사항 연결이슈 및 하위이슈 총합 = " + linkedOrSubtaskCount);
-					$('#linkedIssue_subtask_count').text(linkedOrSubtaskCount);
-				}
-			}
-		}
-	});
+	setTimeout(function () {
+		//Scope - (2) 요구사항에 연결된 이슈 총 개수
+		getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
+	},1000);
 
 	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 	$.ajax({
@@ -990,7 +936,6 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 	});
 
 }
-
 var SankeyChart = (function ($) {
 	"use strict";
 
@@ -1559,4 +1504,87 @@ function dataTableDrawCallback(tableInfo) {
 		.DataTable()
 		.columns.adjust()
 		.responsive.recalc();
+}
+
+function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
+	var _url = "/auth-user/api/arms/dashboard/normal/"+pdservice_id;
+	$.ajax({
+		url: _url,
+		type: "GET",
+		data: { "서비스아이디" : pdservice_id,
+			"메인그룹필드" : "pdServiceVersion",
+			"요구사항인지여부" : false,
+			"컨텐츠보기여부" : false,
+			"크기" : 1000,
+			"하위그룹필드들" : "parentReqKey"},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("연결이슈 서브테스크 조회 ==========");
+				console.log(data); //console.log(data.검색결과);
+				subtask_count = data.전체합계;
+				$('#linkedIssue_subtask_count').text(subtask_count);
+				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
+				$('#linkedIssue_subtask_count_per_req').text((subtask_count/req_count).toFixed(1));
+				$('#avg_req_count').text((req_count/resource_count).toFixed(1));
+			}
+		}
+	});
+}
+
+
+function getReqCount(pdservice_id, pdServiceVersionLinks) {
+	$.ajax({
+		//url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdServiceVersionLinks,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log(data);
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+				//해당 제품의 총 요구사항 수 (by db)
+				$('#active_version_count').text(data["version"]);
+				$('#req_count').text(data["req"]);
+				if(data["req"] == "" || data["req"] == 0) {
+					req_count = -1;
+				} else {
+					req_count = data["req"];
+				}
+
+			}
+		}
+	});
+}
+function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
+	$.ajax({
+		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
+		type: "get",
+		data: {"pdServiceId" : pdservice_id},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//console.log(data); console.log(Object.keys(data).length);
+
+				//담당자 미지정 이슈 수
+				$('#no_assigned_issue_count').text(data["담당자 미지정"]);
+				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
+					//제품(서비스)에 투입된 총 인원수
+					resource_count = +Object.keys(data).length-1;
+					$('#resource_count').text(resource_count);
+				} else {
+					$('#resource_count').text("n/a");
+				}
+			}
+		}
+	});
 }
