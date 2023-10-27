@@ -787,7 +787,7 @@ ul.messenger.messenger-fixed {
     border-radius: 1px;
     box-sizing: content-box;
     padding: 10px 12px;
-    color: #45505b;
+    color: #666;
     border-radius: 3px;
     margin-bottom: 30px;
     position: relative;
@@ -1070,11 +1070,11 @@ svg {
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
-    background: rgba(51, 51, 51, 0.25);
+    background: #eee;
     text-align: center;
     font-weight: normal;
     padding: 3px;
-    color: white;
+    color: #666;
     width: 20.625%;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -1113,7 +1113,7 @@ svg {
 .font11 {
     font-family: "Nanum Gothic";
     font-size: 11px;
-    color: #f8f8f8;
+    color: #666;
 }
 
 /*--------------------------------------------------------------
