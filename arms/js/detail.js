@@ -1174,7 +1174,9 @@ function getReqCommentList(pageNum) {
                 }
 
                 data.response.forEach(function(comment) {
-                    var commentHtml = createReqCommentList(comment);
+                    var result = createReqCommentList(comment,previousDate);
+                    var commentHtml = result.$newHtml;
+                    previousDate = result.date;
                     $chatMessages.append(commentHtml);
                 });
 
@@ -1248,66 +1250,82 @@ function noReqCommentMessage() {
     $chatMessages.append($noDataHtml);
 }
 
-function createReqCommentList(comment) {
+function createReqCommentList(comment, previousDate) {
     var c_id = comment.c_id;
     var sender = comment.c_req_comment_sender;
-    var date = dateFormat(comment.c_req_comment_date);
+
+    var fullDate = dateFormat(comment.c_req_comment_date);
+    var date = fullDate.split(' - ')[1]; // "1:51 AM"
+    //var date = dateFormat(comment.c_req_comment_date);
     var title = comment.c_title;
     var req_comment_contents = comment.c_req_comment_contents.replace(/\n/g, '<br>');
     var contents = `<p id="contents">` + req_comment_contents +`</p>`;
     var $newHtml;
 
+    var showDateSeparator = fullDate.split(' - ')[0] !== previousDate;
+    var dateSeparator = showDateSeparator ? `<div class="date-separator"><i class="bx bx-calendar"></i> ${fullDate.split(' - ')[0]}</div>` : '';
+
     /* 로그인한 사용자 일 경우 우측으로 아닐 경우 좌측으로 보이게 하기 */
     var iconPosition = (sender !== userName) ? 'left' : 'right';
-    var position = (sender !== userName) ? '' : 'on-left';
+    var position = (sender !== userName) ? 'on-right' : 'on-left';
     var personIcon = (sender !== userName) ? 'bi-person-fill' : 'bi-person';
     var buttonsHtml = '';
 
     if (sender === userName) {
         buttonsHtml = `<div class="dropdown">
-                                            <button class="dropdown-button"><i class="fa fa-ellipsis-v"></i></button>
-                                            <div class="dropdown-content">
-                                                <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn">
-                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-edit"></i></div>
-                                                    <div style="display: inline-block;">수정</div>
-                                                </button>
-                                                <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">
-                                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-trash-o"></i></div>
-                                                    <div style="display: inline-block;">삭제</div>
-                                                </button>
-                                            </div>
-                                        </div>`;
+                            <button class="dropdown-button"><i class="fa fa-ellipsis-v" style="color:#666666;"></i></button>
+                            <div class="dropdown-content">
+                                <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn">
+                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-edit"></i></div>
+                                    <div style="display: inline-block;">수정</div>
+                                </button>
+                                <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">
+                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-trash-o"></i></div>
+                                    <div style="display: inline-block;">삭제</div>
+                                </button>
+                            </div>
+                       </div>`;
     }
 
-    $newHtml = $(`<div class="chat-message">
-                                    <div class="sender pull-${iconPosition}">
-                                        <div class="icon">
-                                            <i class="bi ${personIcon}" style="font-size: 40px"></i>
-                                        </div>
-                                    </div>
-                                    <div class="chat-message-body ${position}">
-                                        ${buttonsHtml}
-                                        <span class="arrow"></span>
-                                        <div class="sender">
-                                            ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
-                                            <span href="#" class="user-id">${sender}</span>
-                                            ${(position === "") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
-                                        </div>
-                                        <div class="text">
-                                            ${contents}
-                                        </div>
-                                        <div class="edit-comment" style="display: none;">
-                                            <textarea class="edit-text form-control"></textarea>
-                                            <div style="text-align: right;">
-                                                <button class="mt-2 btn btn-default btn-sm edit-save-button" value="${c_id}">저장</button>
-                                                <button class="mt-2 btn btn-default btn-sm cancel-button">취소</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>`);
+    $newHtml = $(`
+                    ${dateSeparator}
+                    <div class="chat-message">
+                        <div class="sender pull-${iconPosition}">
+                            <div class="icon">
+                                <i class="bi ${personIcon}" style="font-size: 40px"></i>
+                                <span href="#" class="user-id">${sender}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; position: relative; flex-direction: column; align-items: ${position === 'on-left' ? 'flex-end' : 'flex-start'}; width: fit-content; float:${position === 'on-left' ? 'right' : 'left'};">                                       <div class="chat-message-body ${position}">
+                            <div class="text">
+                                ${contents}
+                            </div>
+                            <div class="buttons" style="position: absolute; top: 3px; right:0px;">
+                             ${buttonsHtml}
+                            </div>
 
-    return $newHtml;
+                            <div class="edit-comment" style="display: none;">
+                                <textarea class="edit-text form-control"></textarea>
+                                <div style="text-align: right;">
+                                    <button style="border-radius:1.5rem" class="mt-2 btn btn-default btn-sm edit-save-button edit-comment-button" value="${c_id}">저장</button>
+                                    <button style="border-radius:1.5rem" class="mt-2 btn btn-default btn-sm cancel-button edit-comment-button">취소</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sender ${position}">
+                            ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
+                            ${(position === "on-right") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
+                        </div>
+
+                    </div>
+                    </div>
+
+                `);
+    return {
+            $newHtml: $newHtml,
+            date: fullDate.split(' - ')[0],
+        };
 }
 
 function reqCommentRegisterEventHandlers() {
@@ -1389,6 +1407,7 @@ function addReqComment() {
                     //모달 팝업 끝내고
                     jSuccess("등록 되었습니다.");
                     $('#comment-contents').val('');
+                    $('#comment-contents').css('height', '40px');
                     getTotalCount();
                     getReqCommentList(1);
                     //데이터 테이블 데이터 재 로드
