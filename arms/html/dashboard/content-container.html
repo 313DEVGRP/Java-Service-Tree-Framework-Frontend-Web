@@ -63,20 +63,21 @@
 
                     <div class="col-md-3">
                         <section class="widget dashboard-top-section">
-                            <header style="margin-bottom: 15px">
+                            <header style="margin-bottom: 20px">
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
 										제품(서비스) - 버전 선택
 									</span>
                                 </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
                                 <div class="column">
                                     <span>1. Product<sup>service</sup> 를 선택해 주세요</span>
                                     <div    class="control-group"
                                             class="darkBack"
-                                            style="padding-top: 10px; padding-bottom: 10px; border: 0">
+                                            style="padding-top: 10px; padding-bottom: 15px; border: 0">
                                         <div    class="controls form-group"
                                                 class="darkBack"
                                                 style="margin-bottom: 5px !important">
@@ -91,7 +92,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <span>2. Product<sup>service</sup>의 버전을 선택해 주세요</span>
+                                    <span>2. 버전을 선택해 주세요</span>
                                     <div    class="control-group"
                                             style="padding-top: 10px; padding-bottom: 10px; border: 0">
                                         <div    class="controls form-group"
@@ -117,18 +118,23 @@
 										Time ( 작업 일정 )
 									</span>
                                 </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
                                 <div    class="control-group"
                                         class="darkBack"
                                         style="padding-bottom: 10px; border: 0">
-                                    <div    class="controls form-group darkBack"
-                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
-                                        <span>✔ 총 제품(서비스) 버전 개수 : <a id="version_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                    <div    class="darkBack"
+                                            style="margin-bottom: 15px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>총 버전 개수 <br/><a id="version_count" style="font-weight: bold;">n/a</a> 개</span><br>
                                     </div>
-                                    <div    class="controls form-group darkBack"
-                                            style="margin-bottom: 5px !important; padding-top: 5px !important;">
-                                        <span>✔ 요구사항이 있는 제품(서비스) 버전 개수 : <a id="active_version_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                    <div    class="controls form-group darkBack col-md-6"
+                                            style="margin-bottom: 5px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>요구사항 존재 <br/><a id="active_version_count" style="font-weight: bold;">n/a</a> 개</span><br>
+                                    </div>
+                                    <div    class="controls form-group darkBack col-md-6"
+                                            style="margin-bottom: 5px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>요구사항 미존재 <br/><a id="inactive_version_count" style="font-weight: bold;">n/a</a> 개</span><br>
                                     </div>
 <!--                                    <div    class="control-group "
                                             style="padding-bottom: 10px; border: 0">
@@ -138,15 +144,15 @@
                                         </div>
                                     </div>-->
                                 </div>
-                                <ul class="color-labels">
-                                    <div id="light">
-                                        <span class="active" id="red"></span>
-                                        <span id="orange"></span>
-                                        <span id="green"></span>
-                                    </div>
+<!--                                <div class="color-light">-->
+<!--                                    <div id="light">-->
+<!--                                        <span class="active" id="red"></span>-->
+<!--                                        <span id="orange"></span>-->
+<!--                                        <span id="green"></span>-->
+<!--                                    </div>-->
 
-                                    <button class="btn btn-primary btn-block btn-sm hidden">Switch Light</button>
-                                </ul>
+<!--                                    <button class="btn btn-primary btn-block btn-sm hidden">Switch Light</button>-->
+<!--                                </div>-->
                             </div>
                         </section>
                     </div>
@@ -778,5 +784,9 @@
     }
     .dashboard-top-section {
         min-height: 230px;
+    }
+
+    .ms-choice {
+        height: 16px;
     }
 </style>
