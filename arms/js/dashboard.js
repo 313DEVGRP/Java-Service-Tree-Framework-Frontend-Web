@@ -1513,7 +1513,7 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 		type: "GET",
 		data: { "서비스아이디" : pdservice_id,
 			"메인그룹필드" : "pdServiceVersion",
-			"요구사항인지여부" : false,
+			"isReq" : false,
 			"컨텐츠보기여부" : false,
 			"크기" : 1000,
 			"하위그룹필드들" : "parentReqKey"},
