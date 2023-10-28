@@ -191,8 +191,11 @@ function makePdServiceSelectBox() {
 		//  	drawProductToManSankeyChart(data);
 		//  });
 
-		// 요구사항별 투입 인력 데이터테이블
-		dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		// 투입 인력별 요구사항 차트
+		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		d3.json("./mock/issuePerManPower.json", function (data) {
+			drawIssuePerManPower(data);
+		});
 	});
 } // end makePdServiceSelectBox()
 
@@ -1587,4 +1590,151 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
 			}
 		}
 	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// --- 투입 인력별 요구사항 차트 --- //
+////////////////////////////////////////////////////////////////////////////////////////
+function drawIssuePerManPower(data) {
+
+	var width = 410,
+		height = 360,
+		margin = 10;
+
+	var svg = d3
+		.select("#issue-manpower-chart")
+		.append("svg")
+		.attr("viewBox", [0, -10, width - 40, height + 40])
+		.append("g");
+
+	var subgroups = ["issueCount", "relatedIssueCount"];
+
+	var groups = d3
+		.map(data, function (d) {
+			return d.manpowerName;
+		})
+		.keys();
+
+	var finalMaxGroupValue = 0;
+	data.forEach(function (d) {
+		var totalSumCount = d.issueCount + d.relatedIssueCount
+		if (totalSumCount > finalMaxGroupValue) {
+			finalMaxGroupValue = totalSumCount;
+		}
+	});
+
+	var x = d3.scaleLinear().domain([0, finalMaxGroupValue]).range([0, width]);
+	var xAxisTicks = x.ticks().filter(function (tick) {
+		return Number.isInteger(tick);
+	});
+	svg
+		.append("g")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x).tickValues(xAxisTicks).tickFormat(d3.format("d")).tickSizeOuter(0))
+		.style("font-size", "15px");
+
+	var y = d3.scaleBand().domain(groups).rangeRound([0, height]).paddingInner([0.25]).padding(0.5);
+	svg
+		.append("g")
+		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
+		.style("font-size", "15px");
+
+	var color = d3.scaleOrdinal().domain(subgroups).range(["#155f92", "#1f841f"]);
+
+	var stackedData = d3.stack().keys(subgroups)(data).concat(data);
+
+	var tooltip = d3
+		.select("#issue-manpower-chart")
+		.append("div")
+		.style("opacity", 0)
+		.attr("class", "tooltip")
+		.style("background-color", "white")
+		.style("border", "solid")
+		.style("border-width", "1px")
+		.style("border-radius", "5px")
+		.style("color", "black")
+		.style("padding", "10px");
+
+	var mouseover = function (d) {
+		var subgroupName = d3.select(this.parentNode).datum().key;
+		var subgroupValue = d.data[subgroupName];
+		var subgroupNameKorean;
+
+		tooltip
+			.html(function (d) {
+				if (subgroupName === "expert_worker_count") {
+					subgroupNameKorean = "특급";
+				} else if (subgroupName === "advanced_worker_count") {
+					subgroupNameKorean = "고급";
+				} else if (subgroupName === "intermediate_worker_count") {
+					subgroupNameKorean = "중급";
+				} else if (subgroupName === "junior_worker_count") {
+					subgroupNameKorean = "초급";
+				}
+				return "상태: " + subgroupNameKorean + "<br>" + "작업자 수: " + roundToPrecision(subgroupValue, 0) + "명";
+			})
+			.style("opacity", 1);
+
+		d3.selectAll(".myGroup").style("opacity", 0.2);
+		d3.selectAll("." + subgroupName).style("opacity", 1);
+	};
+	var mousemove = function () {
+		tooltip.style("left", d3.mouse(this)[0] + 90 + "px").style("top", d3.mouse(this)[1] + "px");
+	};
+	var mouseleave = function () {
+		tooltip.style("opacity", 0);
+		d3.selectAll(".myGroup").style("opacity", 1);
+	};
+
+	svg
+		.append("g")
+		.selectAll("g")
+		.data(stackedData)
+		.enter()
+		.append("g")
+		.attr("fill", function (d) {
+			return color(d.key);
+		})
+		.attr("class", function (d) {
+			return "myGroup " + d.key;
+		})
+		.selectAll("rect")
+		.data(function (d) {
+			return d;
+		})
+		.enter()
+		.append("rect")
+		.attr("class", function (d) {
+			return " myWave wave-" + d.data.manpowerId;
+		})
+		.attr("x", function (d) {
+			return 0;
+		})
+		.attr("y", function (d) {
+			return y(d.data.manpowerName);
+		})
+		.attr("height", function () {
+			return y.bandwidth();
+		})
+		.attr("width", function (d) {
+			return 0;
+		})
+		.attr("stroke", "white")
+		.style("stroke-width", "0.5px")
+		.on("mouseover", mouseover)
+		.on("mousemove", mousemove)
+		.on("mouseleave", mouseleave)
+		.transition()
+		.delay(500)
+		.ease(d3.easeElasticOut)
+		.duration(1800)
+		.attr("x", function (d) {
+			return x(d[0]);
+		})
+		.attr("width", function (d) {
+			return x(d[1]) - x(d[0]);
+		})
+		.delay(function (d, i) {
+			return i * 70;
+		});
 }
