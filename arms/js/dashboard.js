@@ -1606,14 +1606,14 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
 function drawIssuePerManPower(data) {
 	$("#issue-manpower-chart").html("");
 
-	var width = 410,
-		height = 360,
+	var width = 270,
+		height = 380,
 		margin = 10;
 
 	var svg = d3
 		.select("#issue-manpower-chart")
 		.append("svg")
-		.attr("viewBox", [0, -10, width - 40, height + 40])
+		.attr("viewBox", [-20, 20, width, height])
 		.append("g");
 
 	var subgroups = ["issueCount", "relatedIssueCount"];
@@ -1671,15 +1671,6 @@ function drawIssuePerManPower(data) {
 
 		tooltip
 			.html(function (d) {
-				if (subgroupName === "expert_worker_count") {
-					subgroupNameKorean = "특급";
-				} else if (subgroupName === "advanced_worker_count") {
-					subgroupNameKorean = "고급";
-				} else if (subgroupName === "intermediate_worker_count") {
-					subgroupNameKorean = "중급";
-				} else if (subgroupName === "junior_worker_count") {
-					subgroupNameKorean = "초급";
-				}
 				return "상태: " + subgroupNameKorean + "<br>" + "작업자 수: " + roundToPrecision(subgroupValue, 0) + "명";
 			})
 			.style("opacity", 1);
