@@ -10,7 +10,7 @@ var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
-var req_count, subtask_count, resource_count;
+var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
 
 function execDocReady() {
 
@@ -390,17 +390,20 @@ function drawReqTimeSeries(data) {
 // 2. 버전만 따로 선택해서 보고싶은 경우(미완)
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("선택된 서비스 ===> " + pdservice_id);
+	tot_ver_count = 0;
+	active_ver_count = 0;
 	req_count = 0;
 	subtask_count = 0;
 	resource_count = 0;
+
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
-		console.log("================= by YHS");
-		console.log(json);
 
 		let versionData = json.pdServiceVersionEntities;
 		let version_count = versionData.length;
+		tot_ver_count = version_count;
+
 		console.log("등록된 버전 개수 = " + version_count);
 		if(version_count !== undefined) {
 			$('#version_count').text(version_count);
@@ -451,6 +454,8 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	setTimeout(function () {
 		//Scope - (2) 요구사항에 연결된 이슈 총 개수
 		getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
+
+		$('#inactive_version_count').text( tot_ver_count - active_ver_count );
 	},1000);
 
 	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
@@ -1525,8 +1530,8 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("연결이슈 서브테스크 조회 ==========");
-				console.log(data); //console.log(data.검색결과);
+				//console.log("연결이슈 서브테스크 조회 ==========");
+				//console.log(data); //console.log(data.검색결과);
 				subtask_count = data.전체합계;
 				$('#linkedIssue_subtask_count').text(subtask_count);
 				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
@@ -1554,7 +1559,10 @@ function getReqCount(pdservice_id, pdServiceVersionLinks) {
 					console.log(key + "=" + value);
 				}
 				//해당 제품의 총 요구사항 수 (by db)
-				$('#active_version_count').text(data["version"]);
+				active_ver_count = data["version"];
+				$('#active_version_count').text(active_ver_count);
+				console.log("active_ver_count = " + active_ver_count);
+
 				$('#req_count').text(data["req"]);
 				if(data["req"] == "" || data["req"] == 0) {
 					req_count = -1;
