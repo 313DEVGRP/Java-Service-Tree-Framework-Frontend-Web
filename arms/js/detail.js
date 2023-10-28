@@ -1128,7 +1128,7 @@ function getReqCommentList(pageNum) {
     var pageSize = 10;
     var totalPages = 0;
     var curPage = pageNum;
-
+    var previousDate = null;
     if (totalReqCommentCount !== null && totalReqCommentCount > 0) {
         totalPages = Math.ceil(totalReqCommentCount / pageSize);
         console.log("totalPages : " + totalPages);
