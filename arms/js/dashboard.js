@@ -1604,6 +1604,7 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
 // --- 투입 인력별 요구사항 차트 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function drawIssuePerManPower(data) {
+	$("#issue-manpower-chart").html("");
 
 	var width = 410,
 		height = 360,
