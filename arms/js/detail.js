@@ -1296,11 +1296,12 @@ function createReqCommentList(comment, previousDate) {
                                 <span href="#" class="user-id">${sender}</span>
                             </div>
                         </div>
-                        <div style="display: flex; position: relative; flex-direction: column; align-items: ${position === 'on-left' ? 'flex-end' : 'flex-start'}; width: fit-content; float:${position === 'on-left' ? 'right' : 'left'};">                                       <div class="chat-message-body ${position}">
+                        <div style="display: flex; position: relative; flex-direction: column; align-items: ${position === 'on-left' ? 'flex-end' : 'flex-start'}; width: fit-content; float:${position === 'on-left' ? 'right' : 'left'};">
+                        <div class="chat-message-body ${position}">
                             <div class="text">
                                 ${contents}
                             </div>
-                            <div class="buttons" style="position: absolute; top: 3px; right:0px;">
+                            <div class="buttons" style="position: absolute; top: 3px; left:0px;">
                              ${buttonsHtml}
                             </div>
 
@@ -1338,13 +1339,17 @@ function reqCommentRegisterEventHandlers() {
 function handleEditClick(e){
     var parentDiv = $(this).closest('.chat-message-body');
     var commentText = parentDiv.find('#contents').html();
+    var commentWidth = parentDiv.find('#contents').width();
     commentText = commentText.replace(/<br>/g, "\n");
 
     parentDiv.find('.edit-text').val(commentText);
+
     parentDiv.find('#contents').hide();
     parentDiv.find('.dropdown-button').hide();
     parentDiv.find('.dropdown-content').addClass('hide');
     parentDiv.find('.edit-comment').show();
+
+    parentDiv.find('.edit-text').css('width', commentWidth + 'px')
 
     $('.edit-text').on('input', function () {
         this.style.height = 'auto';

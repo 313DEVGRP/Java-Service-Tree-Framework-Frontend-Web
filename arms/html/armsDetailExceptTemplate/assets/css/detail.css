@@ -95,6 +95,46 @@ blockquote {
 }
 
 /* QnA 게시판 관련 CSS */
+@media (max-width: 480px){
+    #contents{
+        max-width:200px;
+    }
+}
+@media (min-width: 480px){
+    #contents{
+        max-width:300px;
+    }
+}
+@media (min-width: 800px){
+    #contents{
+        max-width:500px;
+    }
+}
+
+@media (min-width: 1200px){
+    #contents{
+        max-width:700px;
+    }
+}
+
+@media (min-width: 1400px){
+    #contents{
+        max-width:900px;
+    }
+}
+
+@media (max-width: 480px){
+    #contents{
+        max-width:200px;
+    }
+}
+
+textarea {
+    width: auto;
+    box-sizing: border-box;
+}
+
+
 .footer-chat {
     width: calc(65% - 66px);
     height: 80px;
@@ -593,7 +633,6 @@ blockquote {
 }
 
 .edit-text {
-    width: 100%;
     margin-top: 10px;
 }
 
