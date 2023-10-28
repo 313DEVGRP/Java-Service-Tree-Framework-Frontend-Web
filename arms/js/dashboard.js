@@ -399,8 +399,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
-		console.log("================= by YHS");
-		console.log(json);
 
 		let versionData = json.pdServiceVersionEntities;
 		let version_count = versionData.length;
@@ -1532,8 +1530,8 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("연결이슈 서브테스크 조회 ==========");
-				console.log(data); //console.log(data.검색결과);
+				//console.log("연결이슈 서브테스크 조회 ==========");
+				//console.log(data); //console.log(data.검색결과);
 				subtask_count = data.전체합계;
 				$('#linkedIssue_subtask_count').text(subtask_count);
 				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
