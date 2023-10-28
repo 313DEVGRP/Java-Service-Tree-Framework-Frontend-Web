@@ -181,7 +181,7 @@ function makePdServiceSelectBox() {
 		statisticsMonitor($("#selected_pdService").val()); //ES모으는중 by YHS
 
 		//타임라인
-		$("#notifyNoVersion2").hide();
+		// $("#notifyNoVersion2").hide();
 
 		d3.json("./mock/manRequirement.json", function (data) {
 			drawManRequirementTreeMapChart(data);
@@ -406,7 +406,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				let today = new Date(); // console.log(today);
 				let plusDate = new Date();
 
-				$("#notifyNoVersion").hide();
+				$("#notifyNoVersion").slideUp();
 				$("#project-start").show();
 				$("#project-end").show();
 				
