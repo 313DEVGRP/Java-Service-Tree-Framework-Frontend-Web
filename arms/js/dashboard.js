@@ -520,13 +520,13 @@ function drawVersionProgress(data) {
 	totalPercent = 0.75;
 
 	margin = {
-		top: 20,
-		right: 20,
-		bottom: 30,
-		left: 20
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0
 	};
 
-	width = 200;
+	width = 220;
 	height = width;
 	radius = Math.min(width, height) / 2.5;
 
@@ -546,7 +546,7 @@ function drawVersionProgress(data) {
 	svg = d3
 		.select("#versionGaugeChart")
 		.append("svg")
-		.attr("viewBox", [29, 19, width - 40, height - 40])
+		.attr("viewBox", [70, 10, width -150, height -100])
 		.append("g");
 
 	chart = svg
@@ -755,7 +755,7 @@ function drawVersionProgress(data) {
 		return Needle;
 	})();
 
-	needle = new Needle(25, 7.5);
+	needle = new Needle(35, 3);
 
 	needle.drawOn(chart, 0);
 

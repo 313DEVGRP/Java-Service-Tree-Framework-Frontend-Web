@@ -308,9 +308,9 @@
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
             </header>
             <div class="body">
-                <div class="row">
-                    <div class="col-lg-4 col-layer" style="padding-right: 4px !important;">
-                        <section class="widget large">
+                <div class="row" style="height: 130px">
+                    <div class="col-md-12 col-layer">
+                        <section class="widget" style="margin-bottom: 2px">
                             <header>
                                 <h4>
                                     <span
@@ -327,8 +327,8 @@
                                 <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
                                     <div
                                             id="project-start"
-                                            class="box col-md-6 fade-in-box"
-                                            style="width: 47%; position: relative; display: none">
+                                            class="box col-sm-4 fade-in-box"
+                                            style="display: none; margin-bottom: 0px; margin-right: 10px">
                                         <span>시작일로부터</span>
                                         <br />
                                         <span
@@ -340,8 +340,8 @@
                                     </div>
                                     <div
                                             id="project-end"
-                                            class="box col-sm-6 fade-in-box"
-                                            style="width: 47%; position: relative; display: none">
+                                            class="box col-sm-4 fade-in-box"
+                                            style="display: none;margin-bottom: 0px; padding-bottom: 30px;">
                                         <span>종료일까지</span>
                                         <br />
                                         <span
@@ -351,13 +351,16 @@
                                                 class="day-progress"
                                                 id="endDDay"></div>
                                     </div>
+                                    <div class="col-sm-4 fade-in-box" id="versionGaugeChart" style="height: 90px"></div>
                                 </div>
-                                <div id="versionGaugeChart"></div>
+
                             </div>
                         </section>
                     </div>
-                    <div class="col-lg-8">
-                        <section class="widget large">
+                </div>
+                <div class="row" style="height: 230px; margin-top: 15px">
+                    <div class="col-lg-12 col-layer">
+                        <section class="widget">
                             <header>
                                 <h4>
                                     <span
@@ -370,7 +373,7 @@
                             </header>
                             <div
                                     class="body"
-                                    id="version-timeline-wrapper">
+                                    id="version-timeline-wrapper"  style="height: 150px;">
                                 <div id="version-timeline-bar" class="time_element"></div>
                             </div>
                         </section>
@@ -708,11 +711,11 @@
 
     .day-progress {
         position: absolute;
-        top: 85%;
+        top: 75%;
         left: 50%;
         translate: -50% -50%;
-        font-size: 12px;
-        font-weight: bold;
+        font-size: 14px;
+        font-weight: 600;
     }
     .timeline:before {
      left: 0px !important;
@@ -747,5 +750,10 @@
 
     .ms-choice {
         height: 16px;
+    }
+
+    .needle,
+    .needle-center {
+        fill: #f1f2f6;
     }
 </style>
