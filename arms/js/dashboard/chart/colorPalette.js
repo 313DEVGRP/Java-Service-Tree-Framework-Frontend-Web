@@ -36,7 +36,7 @@ var dashboardPalette = {
 			'#6C567B'//요구사항
 		],
 		manpowerReqColor: [
-			"#82de32", "#b3e299"
+			"#b3e299", "#f8f4ff"
 		],
 		manpowerPerformance: [
 			'#32de77',
