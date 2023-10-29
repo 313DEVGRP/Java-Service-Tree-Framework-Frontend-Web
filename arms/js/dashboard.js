@@ -188,14 +188,6 @@ function makePdServiceSelectBox() {
 		//타임라인
 		// $("#notifyNoVersion2").hide();
 
-		d3.json("./mock/manRequirement.json", function (data) {
-			drawManRequirementTreeMapChart(data);
-		});
-
-		//  d3.json("./mock/productToMan.json", function (data) {
-		//  	drawProductToManSankeyChart(data);
-		//  });
-
 		// 투입 인력별 요구사항 차트
 		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
 		d3.json("./mock/issuePerManPower.json", function (data) {
@@ -244,7 +236,7 @@ function makeVersionMultiSelectBox() {
 			donutChart($("#selected_pdService").val(), selectedVersionId);
 			combinationChart($("#selected_pdService").val(), selectedVersionId);
 			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
-			// drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
+			drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 		},
 		onChange: function () {
 
@@ -273,7 +265,7 @@ function bind_VersionData_By_PdService() {
 				donutChart($("#selected_pdService").val(), selectedVersionId);
 				combinationChart($("#selected_pdService").val(), selectedVersionId);
 				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
-				// drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
+				drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -770,11 +762,32 @@ function drawVersionProgress(data) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 투입 인력별 요구사항 관여 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
-function drawManRequirementTreeMapChart(data) {
-	if ($("#chart-manpower-requirement").children().length !== 0) {
-		$("#chart-manpower-requirement").empty();
-	}
-	init(data);
+function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
+	$.ajax({
+		url: "/auth-user/api/arms/dashboard/assignees-requirements-involvements",
+		type: "GET",
+		data: {
+			"pdServiceLink": pdServiceLink,
+			"pdServiceVersionLinks": pdServiceVersionLinks
+		},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				if ($("#chart-manpower-requirement").children().length !== 0) {
+					$("#chart-manpower-requirement").empty();
+				}
+				const treeMapInfos = {
+					"id": "root",
+					"name": "작업자별 요구사항 관여 트리맵",
+					"data": {},
+					"children": data
+				};
+				init(treeMapInfos);
+			}
+		}
+	});
 }
 
 (function () {
@@ -802,6 +815,27 @@ var Log = {
 };
 
 function init(treeMapInfos) {
+	const colorMapping = {};
+	// TODO: 요구사항의 가짓수가 많아지면 색상을 더 추가해야 함
+	let colors = d3.schemeCategory20;
+	function getColorForName(name) {
+		if (!colorMapping[name]) {
+			const selectedColor = colors.shift();
+			colorMapping[name] = selectedColor;
+			colors = colors.filter(color => color !== selectedColor);
+		}
+		return colorMapping[name];
+	}
+
+	treeMapInfos.children.forEach((worker) => {
+		worker.children.forEach((task) => {
+			const color = getColorForName(task.name);
+			task.data.$color = color;
+			task.id = task.id + "-" + worker.id;
+			task.data.$area = task.data.involvedCount;
+		});
+		worker.data.$area = worker.data.totalInvolvedCount;
+	});
 	//init TreeMap
 	var tm = new $jit.TM.Squarified({
 		//where to inject the visualization
