@@ -591,6 +591,20 @@
                                 <h4><i class="fa fa-bar-chart"></i> 인력별 요구사항&연결이슈 (top 5) </h4>
                             </header>
                             <div class="body" id="issue-manpower-chart"></div>
+                            <div id="total-icon-legend">
+                                <div>
+									<span
+                                            class="circle"
+                                            style="background-color: #155f92"></span>
+                                    <span class="text">요구사항</span>
+                                </div>
+                                <div>
+									<span
+                                            class="circle"
+                                            style="background-color: #1f841f"></span>
+                                    <span class="text">연결이슈</span>
+                                </div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-5" style="padding-left: 4px !important;">
@@ -756,5 +770,37 @@
     .needle,
     .needle-center {
         fill: #f1f2f6;
+    }
+
+    #total-icon-legend {
+        position: absolute;
+        top: 50px;
+        right: 10px;
+    }
+
+    #total-icon-legend > div {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.3em;
+    }
+
+    #total-icon-legend > div:last-child {
+        margin-bottom: 0;
+    }
+
+    #total-icon-legend > div > .text {
+        padding-top: 3px;
+        font-size: 10px;
+    }
+
+    .circle {
+        display: inline-block;
+        background-color: red;
+        width: 11px;
+        height: 11px;
+        border-radius: 50px;
+        margin-top: 4px;
+        margin-right: 8px;
+        border: 1px solid white;
     }
 </style>

@@ -35,7 +35,9 @@ function execDocReady() {
 			"./js/dashboard/chart/infographic_custom.css",
 			//echarts
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
-			"./js/dashboard/chart/barChartOnPolar.js"
+			"./js/dashboard/chart/barChartOnPolar.js",
+			//chart Colors
+			"./js/dashboard/chart/colorPalette.js"
 		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -95,6 +97,9 @@ function execDocReady() {
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			// 컬러 테스트 by 장지윤
+			colorsForDashboard = dashboardPalette.dashboardPalette04;
 
 			$('button').on('click', function() {
 				// Caching
@@ -1192,6 +1197,9 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 
 				let totalDocCount = columnsData.reduce((sum, [_, count]) => sum + count, 0);
 
+				console.log("=== 장지윤 columnsData");
+				console.log(columnsData);
+
 				const chart = c3.generate({
 					bindto: '#donut-chart',
 					data: {
@@ -1200,6 +1208,11 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 					},
 					donut: {
 						title: "Total : " + totalDocCount
+					},
+					colors: {
+						Open: '#fff',
+						data2: '#fff',
+						data3: '#fff'
 					},
 					tooltip: {
 						format: {
