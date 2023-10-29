@@ -58,8 +58,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/Jit-2.0.1/jit.js",
 			"../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
 			// 제품-버전-투입인력 차트
-			//"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"],
-			"../reference/jquery-plugins/d3-sankey/d3-sankey.min.js"],
+			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"],
 
 		["../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
