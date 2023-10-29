@@ -96,7 +96,7 @@ function execDocReady() {
             "../reference/light-blue/lib/nvd3/src/utils.js",
             "../reference/light-blue/lib/nvd3/src/models/legend.js",
             "../reference/light-blue/lib/nvd3/src/models/pie.js",
-            "../reference/light-blue/lib/nvd3/src/models/pieChartTotal.js",
+            "./html/armsDetailExceptTemplate/assets/js/pieChartTotal.js",
             "../reference/light-blue/lib/nvd3/stream_layers.js",
             "./html/armsDetailExceptTemplate/assets/js/stats.js",
             "./html/armsDetailExceptTemplate/assets/vendor/bootstrap/js/bootstrap.min.js"
@@ -293,6 +293,7 @@ function bindStatsTab() {
     var selectedJiraServer = urlParams.get('jiraServer');
 
     // api 호출 및 데이터 바인딩
+    $(".spinner").html("<i class=\"fa fa-spinner fa-spin\"></i> 데이터를 로드 중입니다...");
     $.ajax({
         url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + selectedPdService + "/getPdReqStats.do" +
             "?assigneeEmail=" + userEmail,
@@ -315,6 +316,8 @@ function bindStatsTab() {
 
                 console.log("newJson: " + JSON.stringify(newJson));
                 loadChart("#product-chart-pie svg", "#product-chart-footer", newJson);
+
+                jSuccess("통계 정보 조회가 완료 되었습니다.");
             }
         },
         beforeSend: function () {
@@ -351,6 +354,8 @@ function bindStatsTab() {
                 }
                 console.log("newJson: " + JSON.stringify(newJson));
                 loadChart("#requirement-chart-pie svg", "#requirement-chart-footer", newJson);
+
+                jSuccess("통계 정보 조회가 완료 되었습니다.");
             }
         },
         beforeSend: function () {

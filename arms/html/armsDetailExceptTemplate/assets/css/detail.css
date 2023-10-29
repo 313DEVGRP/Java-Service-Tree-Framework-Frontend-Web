@@ -1141,16 +1141,25 @@ svg {
     stroke: #000;
 }
 
-.pie-chart .total {
+.product-title, .requirement-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     position: absolute;
     left: 0;
     top: 50%;
+    width: 100px;
+    height: 50px;
+    overflow: hidden;
 }
 
-.pie-chart .requirements {
+.product-content, .requirement-content .product-total .requirement-total {
     font-weight: 300;
-    font-size: 16.25px;
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .no-requirement {
