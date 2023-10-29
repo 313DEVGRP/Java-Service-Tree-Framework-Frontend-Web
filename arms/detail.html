@@ -188,7 +188,7 @@
 			<li><a href="#detail" id="get_req_detail" class="nav-link scrollto"><i class="bx bi-info-lg"></i> <span>요구사항 상세정보</span></a></li>
 			<li><a href="#version" id="get_version_list" class="nav-link scrollto"><i class="bx bi-tags"></i> <span>버전별 상세정보</span></a></li>
 			<li><a href="#allreq" id="get_req_list" class="nav-link scrollto"><i class="bx bi-list-ul"></i> <span>요구사항 목록</span></a></li>
-			<li><a href="#files" id="get_file_list" class="nav-link scrollto"><i class="bx bi-images"></i> <span>파일 목록</span></a></li>
+			<li><a href="#files" id="get_file_list" class="nav-link scrollto"><i class="bx bi-images"></i> <span>제품 기획서</span></a></li>
 			<li><a href="#question" id="get_req_comment_list" class="nav-link scrollto"><i style="font-weight: bolder;" class="bx bx-question-mark"></i> <span>Q&A</span></a></li>
 		</ul>
 	</nav><!-- .nav-menu -->
@@ -978,7 +978,7 @@
 		<div id="files-container" class="container" data-aos="fade-up">
 
 			<div class="section-title">
-				<h2>파일 목록</h2>
+				<h2>제품 기획서</h2>
 				<p>제품(서비스)관련 이미지, 문서, 기타 파일 등을 확인할 수 있습니다.</p>
 			</div>
 
@@ -1016,35 +1016,30 @@
 					</header>
 				</div>
 				<div class="body">
-					<div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-					<div class="clearfix" style="margin-bottom: 10px; margin-top: 10px;">
+					<div class="gradient_middle_border pb-2 pt-2" style="width: 100%; height: 2px"></div>
+					<div class="clearfix pb-2 pt-2" style="margin-bottom: 10px; margin-top: 10px;">
 					</div>
-					<div id="chat" class="chat">
+					<div id="chat" class="chat"><!-- 채팅 -->
 						<div id="chat_messages" class="chat-messages"></div>
-						<div class="pagination-container">
+						<div class="gradient_middle_border pb-2 pt-2" style="width: 100%; height: 2px"></div>
+						<div class="pagination-container pb-2">
 							<ul class="pagination">
 							</ul>
 						</div>
+
+						<div class="chat-container pt-2">
+							<div class="chat-input">
+								<textarea id="comment-contents" placeholder="Type your message..."></textarea>
+								<button id="req_comment_save_btn">
+									<i class="bi bi-chat-dots" ></i>
+								</button>
+							</div>
+						</div>
 					</div>
+
 				</div>
 			</div>
-			<div class="box shadow-box mt-4">
-				<div class="box-header">
-					<header>
-                  <span class="font14" style="font-weight: bold; line-height: 35px;">
-                  <i  class="fa fa-edit" style="vertical-align: middle;"></i>
-                     질문하기
-                  </span>
-					</header>
-					<div class="pull-right box-tools">
-						<button type="button" id="req_comment_save_btn" class="btn btn-default btn-sm">
-							등록</button>
-					</div>
-				</div>
-				<div class="box-body pad mt-3">
-					<textarea id="comment-contents" class="form-control" rows="2" placeholder="Enter your message.."></textarea>
-				</div>
-			</div>
+
 		</div>
 	</section>
 </main><!-- End #main -->

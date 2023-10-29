@@ -10,6 +10,7 @@ var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
+var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
 
 function execDocReady() {
 
@@ -80,7 +81,7 @@ function execDocReady() {
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
-			}, 3000); // 2초 후에 실행됩니다.
+			}, 3000); // 3초 후에 실행됩니다.
 			console.log('모든 플러그인 로드 완료');
 
 			// 사이드 메뉴 색상 설정
@@ -180,15 +181,21 @@ function makePdServiceSelectBox() {
 		statisticsMonitor($("#selected_pdService").val()); //ES모으는중 by YHS
 
 		//타임라인
-		$("#notifyNoVersion2").hide();
+		// $("#notifyNoVersion2").hide();
 
 		d3.json("./mock/manRequirement.json", function (data) {
 			drawManRequirementTreeMapChart(data);
 		});
-		//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 
-		// 요구사항별 투입 인력 데이터테이블
-		dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		//  d3.json("./mock/productToMan.json", function (data) {
+		//  	drawProductToManSankeyChart(data);
+		//  });
+
+		// 투입 인력별 요구사항 차트
+		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
+		d3.json("./mock/issuePerManPower.json", function (data) {
+			drawIssuePerManPower(data);
+		});
 	});
 } // end makePdServiceSelectBox()
 
@@ -383,14 +390,20 @@ function drawReqTimeSeries(data) {
 // 2. 버전만 따로 선택해서 보고싶은 경우(미완)
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("선택된 서비스 ===> " + pdservice_id);
+	tot_ver_count = 0;
+	active_ver_count = 0;
+	req_count = 0;
+	subtask_count = 0;
+	resource_count = 0;
+
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
-		console.log("================= by YHS");
-		console.log(json);
 
 		let versionData = json.pdServiceVersionEntities;
 		let version_count = versionData.length;
+		tot_ver_count = version_count;
+
 		console.log("등록된 버전 개수 = " + version_count);
 		if(version_count !== undefined) {
 			$('#version_count').text(version_count);
@@ -399,7 +412,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				let today = new Date(); // console.log(today);
 				let plusDate = new Date();
 
-				$("#notifyNoVersion").hide();
+				$("#notifyNoVersion").slideUp();
 				$("#project-start").show();
 				$("#project-end").show();
 				
@@ -432,77 +445,18 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		}
 	});
 
-	//제품서비스 - status 기반
-	$.ajax({
-		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log(data);
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-				}
-				//해당 제품의 총 요구사항 수 (by db, not es)
-				$('#active_version_count').text(data["version"]);
-				$('#req_count').text(data["req"]);
-			}
-		}
-	});
 
+	// 제품서비스 - status
+	getReqCount(pdservice_id, "");
 	// 제품서비스별 담당자 통계
-	///*
-	$.ajax({
-		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
-		type: "get",
-		data: {"pdServiceId" : pdservice_id},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				//console.log(data); console.log(Object.keys(data).length);
-				
-				//담당자 미지정 이슈 수
-				$('#no_assigned_issue_count').text(data["담당자 미지정"]); 
-				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
-					//제품(서비스)에 투입된 총 인원수
-					$('#resource_count').text(+Object.keys(data).length-1);
-				} else {
-					$('#resource_count').text("n/a");
-				}
-			}
-		}
-	});
-	//*/
+	getAssigneeInfo(pdservice_id, "");
 
-	// Scope - (2) 요구사항에 연결된 이슈 총 개수
-	$.ajax({
-		url:"/auth-user/api/arms/dashboard/jira-linkedIssue-subTask",
-		type: "get",
-		data: { "pdServiceId" : pdservice_id },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log("연결이슈 서브테스크 조회");
-				//console.log(data); console.log(data.검색결과);
-				var arrays = data.검색결과.group_by_pdServiceVersion;
-				var linkedOrSubtaskCount = 0;
-				if(arrays !== "") {
-					arrays.forEach(function(target, idx){
-						linkedOrSubtaskCount += target.개수;
-					});
-					console.log("요구사항 연결이슈 및 하위이슈 총합 = " + linkedOrSubtaskCount);
-					$('#linkedIssue_subtask_count').text(linkedOrSubtaskCount);
-				}
-			}
-		}
-	});
+	setTimeout(function () {
+		//Scope - (2) 요구사항에 연결된 이슈 총 개수
+		getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
+
+		$('#inactive_version_count').text( tot_ver_count - active_ver_count );
+	},1000);
 
 	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 	$.ajax({
@@ -566,13 +520,13 @@ function drawVersionProgress(data) {
 	totalPercent = 0.75;
 
 	margin = {
-		top: 20,
-		right: 20,
-		bottom: 30,
-		left: 20
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0
 	};
 
-	width = 200;
+	width = 220;
 	height = width;
 	radius = Math.min(width, height) / 2.5;
 
@@ -592,7 +546,7 @@ function drawVersionProgress(data) {
 	svg = d3
 		.select("#versionGaugeChart")
 		.append("svg")
-		.attr("viewBox", [29, 19, width - 40, height - 40])
+		.attr("viewBox", [70, 10, width -150, height -100])
 		.append("g");
 
 	chart = svg
@@ -801,7 +755,7 @@ function drawVersionProgress(data) {
 		return Needle;
 	})();
 
-	needle = new Needle(25, 7.5);
+	needle = new Needle(35, 3);
 
 	needle.drawOn(chart, 0);
 
@@ -990,7 +944,6 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 	});
 
 }
-
 var SankeyChart = (function ($) {
 	"use strict";
 
@@ -1360,6 +1313,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 						types: {
 							'요구사항': 'area',
 						},
+						groups: [issueStatusTypes]
 					},
 					axis: {
 						x: {
@@ -1558,4 +1512,229 @@ function dataTableDrawCallback(tableInfo) {
 		.DataTable()
 		.columns.adjust()
 		.responsive.recalc();
+}
+
+function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
+	var _url = "/auth-user/api/arms/dashboard/normal/"+pdservice_id;
+	$.ajax({
+		url: _url,
+		type: "GET",
+		data: { "서비스아이디" : pdservice_id,
+			"메인그룹필드" : "pdServiceVersion",
+			"isReq" : false,
+			"컨텐츠보기여부" : false,
+			"크기" : 1000,
+			"하위그룹필드들" : "parentReqKey"},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//console.log("연결이슈 서브테스크 조회 ==========");
+				//console.log(data); //console.log(data.검색결과);
+				subtask_count = data.전체합계;
+				$('#linkedIssue_subtask_count').text(subtask_count);
+				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
+				$('#linkedIssue_subtask_count_per_req').text((subtask_count/req_count).toFixed(1));
+				$('#avg_req_count').text((req_count/resource_count).toFixed(1));
+			}
+		}
+	});
+}
+
+
+function getReqCount(pdservice_id, pdServiceVersionLinks) {
+	$.ajax({
+		//url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
+		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdServiceVersionLinks,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log(data);
+				for (var key in data) {
+					var value = data[key];
+					console.log(key + "=" + value);
+				}
+				//해당 제품의 총 요구사항 수 (by db)
+				active_ver_count = data["version"];
+				$('#active_version_count').text(active_ver_count);
+				console.log("active_ver_count = " + active_ver_count);
+
+				$('#req_count').text(data["req"]);
+				if(data["req"] == "" || data["req"] == 0) {
+					req_count = -1;
+				} else {
+					req_count = data["req"];
+				}
+
+			}
+		}
+	});
+}
+function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
+	$.ajax({
+		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
+		type: "get",
+		data: {"pdServiceId" : pdservice_id},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				//console.log(data); console.log(Object.keys(data).length);
+
+				//담당자 미지정 이슈 수
+				$('#no_assigned_issue_count').text(data["담당자 미지정"]);
+				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
+					//제품(서비스)에 투입된 총 인원수
+					resource_count = +Object.keys(data).length-1;
+					$('#resource_count').text(resource_count);
+				} else {
+					$('#resource_count').text("n/a");
+				}
+			}
+		}
+	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// --- 투입 인력별 요구사항 차트 --- //
+////////////////////////////////////////////////////////////////////////////////////////
+function drawIssuePerManPower(data) {
+	$("#issue-manpower-chart").html("");
+
+	var width = 270,
+		height = 380,
+		margin = 10;
+
+	var svg = d3
+		.select("#issue-manpower-chart")
+		.append("svg")
+		.attr("viewBox", [-20, 20, width, height])
+		.append("g");
+
+	var subgroups = ["issueCount", "relatedIssueCount"];
+
+	var groups = d3
+		.map(data, function (d) {
+			return d.manpowerName;
+		})
+		.keys();
+
+	var finalMaxGroupValue = 0;
+	data.forEach(function (d) {
+		var totalSumCount = d.issueCount + d.relatedIssueCount
+		if (totalSumCount > finalMaxGroupValue) {
+			finalMaxGroupValue = totalSumCount;
+		}
+	});
+
+	var x = d3.scaleLinear().domain([0, finalMaxGroupValue]).range([0, width]);
+	var xAxisTicks = x.ticks().filter(function (tick) {
+		return Number.isInteger(tick);
+	});
+	svg
+		.append("g")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x).tickValues(xAxisTicks).tickFormat(d3.format("d")).tickSizeOuter(0))
+		.style("font-size", "15px");
+
+	var y = d3.scaleBand().domain(groups).rangeRound([0, height]).paddingInner([0.25]).padding(0.5);
+	svg
+		.append("g")
+		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
+		.style("font-size", "15px");
+
+	var color = d3.scaleOrdinal().domain(subgroups).range(["#155f92", "#1f841f"]);
+
+	var stackedData = d3.stack().keys(subgroups)(data).concat(data);
+
+	var tooltip = d3
+		.select("#issue-manpower-chart")
+		.append("div")
+		.style("opacity", 0)
+		.attr("class", "tooltip")
+		.style("background-color", "white")
+		.style("border", "solid")
+		.style("border-width", "1px")
+		.style("border-radius", "5px")
+		.style("color", "black")
+		.style("padding", "10px");
+
+	var mouseover = function (d) {
+		var subgroupName = d3.select(this.parentNode).datum().key;
+		var subgroupValue = d.data[subgroupName];
+		var subgroupNameKorean;
+
+		tooltip
+			.html(function (d) {
+				return "상태: " + subgroupNameKorean + "<br>" + "작업자 수: " + roundToPrecision(subgroupValue, 0) + "명";
+			})
+			.style("opacity", 1);
+
+		d3.selectAll(".myGroup").style("opacity", 0.2);
+		d3.selectAll("." + subgroupName).style("opacity", 1);
+	};
+	var mousemove = function () {
+		tooltip.style("left", d3.mouse(this)[0] + 90 + "px").style("top", d3.mouse(this)[1] + "px");
+	};
+	var mouseleave = function () {
+		tooltip.style("opacity", 0);
+		d3.selectAll(".myGroup").style("opacity", 1);
+	};
+
+	svg
+		.append("g")
+		.selectAll("g")
+		.data(stackedData)
+		.enter()
+		.append("g")
+		.attr("fill", function (d) {
+			return color(d.key);
+		})
+		.attr("class", function (d) {
+			return "myGroup " + d.key;
+		})
+		.selectAll("rect")
+		.data(function (d) {
+			return d;
+		})
+		.enter()
+		.append("rect")
+		.attr("class", function (d) {
+			return " myWave wave-" + d.data.manpowerId;
+		})
+		.attr("x", function (d) {
+			return 0;
+		})
+		.attr("y", function (d) {
+			return y(d.data.manpowerName);
+		})
+		.attr("height", function () {
+			return y.bandwidth();
+		})
+		.attr("width", function (d) {
+			return 0;
+		})
+		.attr("stroke", "white")
+		.style("stroke-width", "0.5px")
+		.on("mouseover", mouseover)
+		.on("mousemove", mousemove)
+		.on("mouseleave", mouseleave)
+		.transition()
+		.delay(500)
+		.ease(d3.easeElasticOut)
+		.duration(1800)
+		.attr("x", function (d) {
+			return x(d[0]);
+		})
+		.attr("width", function (d) {
+			return x(d[1]) - x(d[0]);
+		})
+		.delay(function (d, i) {
+			return i * 70;
+		});
 }

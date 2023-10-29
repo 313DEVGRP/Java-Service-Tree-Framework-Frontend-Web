@@ -1584,3 +1584,21 @@ function popup_size_setting() {
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// 프로젝트 진행율
+///////////////////////////////////////////////////////////////////////////////
+function scheduleUpdate() {
+	console.log("::: scheduleUpdate :::");
+	bindProjectProgress();
+}
+
+function bindProjectProgress(data) {
+	$("#total_work").val(1234.56);
+	$("#planed_work").val(7890.12);
+	$("#performance_capability").val(3456.78);
+	$("#actual_input").val(9012.34);
+	$("#planned_progress").val(5678.9);
+	$("#performance_progress").val(9876.54);
+	$("#project_progress").val(3210.98);
+}
