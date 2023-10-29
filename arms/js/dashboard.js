@@ -11,7 +11,8 @@ var selectedIssueKey; //선택한 이슈 키
 var dashboardColor;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
-
+var top5ReqLinkedIssue = [];
+var top5performance = [];
 function execDocReady() {
 
 	var pluginGroups = [
@@ -57,7 +58,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/Jit-2.0.1/jit.js",
 			"../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
 			// 제품-버전-투입인력 차트
-			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"],
+			//"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"],
+			"../reference/jquery-plugins/d3-sankey/d3-sankey.min.js"],
 
 		["../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -190,9 +192,6 @@ function makePdServiceSelectBox() {
 
 		// 투입 인력별 요구사항 차트
 		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
-		d3.json("./mock/issuePerManPower.json", function (data) {
-			drawIssuePerManPower(data);
-		});
 	});
 } // end makePdServiceSelectBox()
 
@@ -448,12 +447,17 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	// 제품서비스별 담당자 통계
 	getAssigneeInfo(pdservice_id, "");
 
+	getReqAndLinkedIssueTop5(pdservice_id); // 우하단 수평바
+	getIssueResponsibleStatusTop5(pdservice_id); // 우하단 폴라바
+	// 우하단 폴라바
+
 	setTimeout(function () {
 		//Scope - (2) 요구사항에 연결된 이슈 총 개수
 		getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
 
 		$('#inactive_version_count').text( tot_ver_count - active_ver_count );
 	},1000);
+
 
 	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
 	$.ajax({
@@ -977,7 +981,15 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 		statusCode: {
 			200: function (data) {
 				removeSankeyChart();
+				/*console.log("sankey data");
+				console.log(data);
+				var _node = [data.nodes];
+				var _link = [data.links];
+				//SankeyChart2({nodes:_node, links: _link},					{width: $("#chart-product-manpower").offsetWidth});
+				//var sankey = d3.sankey();
+*/
 				SankeyChart.loadChart(data);
+
 			}
 		}
 	});
@@ -995,7 +1007,7 @@ var SankeyChart = (function ($) {
 		var vy = height + margin.top + margin.bottom;
 
 		return d3
-			.select("#chart-product-manpower")
+			.select("#chart-product-manpower") // 그려지는 위치
 			.append("svg")
 			.attr("viewBox", "0 0 " + vx + " " + vy)
 			.attr("width", width)
@@ -1016,7 +1028,7 @@ var SankeyChart = (function ($) {
 			.style("font-weight", 5)
 			.text("선택된 어플리케이션이 없습니다.")
 			.attr("x", width / 2)
-			.attr("y", height / 2);
+			.attr("y", height / 2);R
 	};
 
 	var loadChart = function (data) {
@@ -1048,7 +1060,10 @@ var SankeyChart = (function ($) {
 			return;
 		}
 
-		var sankey = d3.sankey().nodeWidth(36).nodePadding(40).size([width, height]);
+		var sankey = d3.sankey()
+						.nodeWidth(36)
+						.nodePadding(40)
+						.size([width, height]);
 
 		var graph = {
 			nodes: [],
@@ -1559,6 +1574,99 @@ function dataTableDrawCallback(tableInfo) {
 		.DataTable()
 		.columns.adjust()
 		.responsive.recalc();
+}
+
+function getIssueResponsibleStatusTop5(pdservice_id) {
+	var _url = "/auth-user/api/arms/dashboard/normal/issue-responsible-status-top5/"+pdservice_id;
+	$.ajax({
+		url: _url,
+		type: "GET",
+		data: { "서비스아이디" : pdservice_id,
+			"메인그룹필드" : "assignee.assignee_emailAddress.keyword",
+			"isReq" : false,
+			"컨텐츠보기여부" : true,
+			"크기" : 5,
+			"하위그룹필드들" : "status.status_name.keyword"},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("인력별 퍼포먼스 조회 시작 YHS ==========");
+				console.log(data); //console.log(data.검색결과);
+				console.log("인력별 퍼포먼스 조회 끝 ==========");
+			}
+		}
+	});
+}
+
+function getReqAndLinkedIssueTop5(pdservice_id) {
+	var url1 = "/auth-user/api/arms/dashboard/exclusion-isreq-normal/req-and-linked-issue-top5/"+pdservice_id;
+	$.ajax({
+		url: url1,
+		type: "GET",
+		data: { "서비스아이디" : pdservice_id,
+			"메인그룹필드" : "assignee.assignee_emailAddress.keyword",
+			"isReq" : false,
+			"컨텐츠보기여부" : true,
+			"크기" : 5,
+			"하위그룹필드들" : "isReq"},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("우하단 수평 바 조회 ==========");
+				//console.log(data); //console.log(data.검색결과);
+				top5ReqLinkedIssue = []; // 초기화
+				var issueCount = 0;
+				var relatedIssueCount =0;
+
+				for(let i =0; i<5; i++) {
+					if (data[i] !== undefined) {
+						var 아이디 = getIdFromMail(data[i].필드명);
+						var groupByIsReq = data[i].하위검색결과.group_by_isReq;
+
+						if(groupByIsReq[0] !== undefined) {
+							if(groupByIsReq[0].필드명 === "true") {
+								issueCount = groupByIsReq[0].개수; // 요구사항 갯수
+							}
+							if(groupByIsReq[0].필드명 ==="false") {
+								relatedIssueCount = groupByIsReq[0].개수; // 연결이슈 갯수
+							}
+						}
+						if(groupByIsReq[1] !== undefined) {
+							if(groupByIsReq[1].필드명 === "true") {
+								issueCount = groupByIsReq[1].개수; // 요구사항 갯수
+							}
+							if(groupByIsReq[1].필드명 ==="false") {
+								relatedIssueCount = groupByIsReq[1].개수; // 연결이슈 갯수
+							}
+						}
+						var performance = {
+							"manpowerId" : i,
+							"manpowerName" : 아이디,
+							"issueCount" : issueCount,
+							"relatedIssueCount" : relatedIssueCount
+						}
+						top5ReqLinkedIssue.push(performance)
+					}
+					 else {
+						 console.log("data[" + i +"] 는 존재하지 않습니다.");
+					}
+				}
+
+				drawIssuePerManPower(top5ReqLinkedIssue);
+
+			}
+		}
+	});
+}
+
+function getIdFromMail (param) {
+	var full_str = param;
+	var indexOfAt = full_str.indexOf('@');
+	return full_str.substring(0,indexOfAt);
 }
 
 function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
