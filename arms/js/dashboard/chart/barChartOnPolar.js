@@ -119,7 +119,7 @@ function drawBarOnPolar(target, categories, data) {
     };
 }
 
-function drawBarOnPolar2(target, categories, color) {
+function drawBarOnPolar2(target, categories, color, legends, nameArr, dataSeries) {
     var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
 
@@ -131,16 +131,16 @@ function drawBarOnPolar2(target, categories, color) {
             data: categories
         },
         radiusAxis: {},
-        polar: {},
+        polar: { center: ["50%", "60%"], radius: "60%"},
         series: [
             {
                 type: 'bar',
-                data: [1, 2, 3, 4, 3, 5, 1],
+                data: [1, 2, 3, 4, 3], // seriesArr1
                 itemStyle: {
                     color: color[0]
                 },
                 coordinateSystem: 'polar',
-                name: 'A',
+                name: legends[0],
                 stack: 'a',
                 emphasis: {
                     focus: 'series'
@@ -148,12 +148,12 @@ function drawBarOnPolar2(target, categories, color) {
             },
             {
                 type: 'bar',
-                data: [2, 4, 6, 1, 3, 2, 1],
+                data: [2, 4, 6, 1, 3], // seriesArr2
                 itemStyle: {
                     color: color[1]
                 },
                 coordinateSystem: 'polar',
-                name: 'B',
+                name: legends[1],
                 stack: 'a',
                 emphasis: {
                     focus: 'series'
@@ -161,12 +161,12 @@ function drawBarOnPolar2(target, categories, color) {
             },
             {
                 type: 'bar',
-                data: [1, 2, 3, 4, 1, 2, 5],
+                data: [1, 2, 3, 4, 1], // seriesArr3
                 itemStyle: {
                     color: color[2]
                 },
                 coordinateSystem: 'polar',
-                name: 'C',
+                name: legends[2],
                 stack: 'a',
                 emphasis: {
                     focus: 'series'
@@ -174,12 +174,64 @@ function drawBarOnPolar2(target, categories, color) {
             },
             {
                 type: 'bar',
-                data: [2, 2, 2, 2, 4, 2, 1],
+                data: [2, 2, 2, 2, 4], // seriesArr4
                 itemStyle: {
                     color: color[3]
                 },
                 coordinateSystem: 'polar',
-                name: 'D',
+                name: legends[3],
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [2, 2, 2, 2, 4], // seriesArr5
+                itemStyle: {
+                    color: color[4]
+                },
+                coordinateSystem: 'polar',
+                name: legends[4],
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [2, 2, 2, 2, 4], // seriesArr6
+                itemStyle: {
+                    color: color[5]
+                },
+                coordinateSystem: 'polar',
+                name: legends[5],
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [2, 2, 2, 2, 4], // seriesArr7
+                itemStyle: {
+                    color: color[6]
+                },
+                coordinateSystem: 'polar',
+                name: legends[6],
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [2, 2, 2, 2, 4], // seriesArr8
+                itemStyle: {
+                    color: color[7]
+                },
+                coordinateSystem: 'polar',
+                name: legends[7],
                 stack: 'a',
                 emphasis: {
                     focus: 'series'
@@ -188,7 +240,10 @@ function drawBarOnPolar2(target, categories, color) {
         ],
         legend: {
             show: true,
-            data: ['A', 'B', 'C', 'D']
+            data: legends, // [ A, B , C , D, ...]
+            textStyle: {
+                color: "#FFFFFF"
+            }
         }
     };
     myChart.setOption(option);

@@ -457,7 +457,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 
 	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
-	$.ajax({
+	/*$.ajax({
 		url:"/auth-user/api/arms/dashboard/assignee-jira-issue-statuses",
 		type: "get",
 		data: {"pdServiceLink" : pdservice_id},
@@ -471,12 +471,12 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				console.log(Object.keys(data).length);
 				let keyArray = Object.keys(data);
 				console.log(keyArray);
-				drawBarOnPolar2("polar_bar", keyArray, dashboardColor.manpowerPerformance);
+				//drawBarOnPolar2("polar_bar", keyArray, dashboardColor.manpowerPerformance);
 				//drawBarOnPolar("polar_bar", keyArray, data_mock);
 			}
 		}
 	});
-
+*/
 }
 
 
@@ -1415,42 +1415,6 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 	});
 }
 
-
-//mock
-var graphViewList = [
-	{
-		title: '엔씨소프트 ( NCSOFT )',
-		startDate: '2019.12.30',
-		endDate: '2022.11.04',
-	},
-	{
-		title: 'Daumsoft',
-		startDate: '2010.12.01',
-		endDate: '2011.12.01',
-	},
-	{
-		title: '대성그룹 대성글로벌네트워크 1차',
-		startDate: '2008.08.01',
-		endDate: '2010.12.01',
-	},
-	{
-		title: '고려대학교 컴퓨터정보통신대학원',
-		startDate: '2013.02.01',
-		endDate: '2016.07.01',
-	},
-	{
-		title: '대성그룹 대성글로벌네트워크 2차',
-		startDate: '2011.12.01',
-		endDate: '2013.05.01',
-	},
-	{
-		title: '안철수연구소 ( AHNLAB )',
-		startDate: '2013.05.01',
-		endDate: '2019.12.30',
-	},
-];
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // 요구사항별 투입 인력 및 상태값 데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1589,11 +1553,50 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 			200: function (data) {
 				console.log("인력별 퍼포먼스 조회 시작 YHS ==========");
 				console.log(data); //console.log(data.검색결과);
+				//var cat_persions = [];
+				//var 아이디 = getIdFromMail(data[0].필드명);
+				var cat_persons = Object.keys(data);
+				console.log(cat_persons);
+				console.log(cat_persons.length);
+				const N = cat_persons.length;
+
+				console.log(data[cat_persons[0]]["group_by_status.status_name.keyword"]);
+
+				var in_progress_arr = []; var Open_arr = []; var Closed_arr = []; var Backlog_arr = []; var 완료됨_arr = []; var 진행중_arr = [];
+				var sfd_arr = [];
+
+				let set = new Set();
+
+				for (let i=0; i<cat_persons.length; i++) {
+					console.log(cat_persons[i]);
+					data[cat_persons[i]]["group_by_status.status_name.keyword"].forEach( (target, idx) => {
+							console.log('Index: ' + idx);
+							console.log(target);
+							console.log(target.필드명);
+							set.add(target.필드명);
+						}
+					);
+				}
+				console.log(set);
+				var legend_arr = []; //레전드 리스트
+				set.forEach((element) => {legend_arr.push(element);})
+				console.log(legend_arr);
+
+				let arrForDataByPersion = new Array(N).fill(0);
+				const M = legend_arr.length;
+				let arrForDataByLegends = new Array(M).fill(0);
+				console.log(arrForDataByPersion);
+				// 만약 set의 갯수가 n개이면 n개의 series가 필요하다
+
+
 				console.log("인력별 퍼포먼스 조회 끝 ==========");
+				drawBarOnPolar2("polar_bar", cat_persons, dashboardColor.manpowerPerformance, legend_arr);
 			}
 		}
 	});
 }
+
+
 
 function getReqAndLinkedIssueTop5(pdservice_id) {
 	var url1 = "/auth-user/api/arms/dashboard/exclusion-isreq-normal/req-and-linked-issue-top5/"+pdservice_id;
@@ -1612,7 +1615,6 @@ function getReqAndLinkedIssueTop5(pdservice_id) {
 		statusCode: {
 			200: function (data) {
 				console.log("우하단 수평 바 조회 ==========");
-				//console.log(data); //console.log(data.검색결과);
 				top5ReqLinkedIssue = []; // 초기화
 				var issueCount = 0;
 				var relatedIssueCount =0;
