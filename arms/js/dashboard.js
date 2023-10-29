@@ -1718,8 +1718,16 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 				subtask_count = data.전체합계;
 				$('#linkedIssue_subtask_count').text(subtask_count);
 				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
-				$('#linkedIssue_subtask_count_per_req').text((subtask_count/req_count).toFixed(1));
-				$('#avg_req_count').text((req_count/resource_count).toFixed(1));
+				if (req_count == 0) {
+					$('#linkedIssue_subtask_count_per_req').text("-");
+				} else {
+					$('#linkedIssue_subtask_count_per_req').text((subtask_count / req_count).toFixed(1));
+				}
+				if (resource_count == 0) {
+					$('#avg_req_count').text("-");
+				} else {
+					$('#avg_req_count').text((req_count/resource_count).toFixed(1));
+				}
 			}
 		}
 	});
