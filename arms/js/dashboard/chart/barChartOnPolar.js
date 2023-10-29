@@ -119,7 +119,7 @@ function drawBarOnPolar(target, categories, data) {
     };
 }
 
-function drawBarOnPolar2(target, categories) {
+function drawBarOnPolar2(target, categories, color) {
     var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
 
@@ -136,6 +136,9 @@ function drawBarOnPolar2(target, categories) {
             {
                 type: 'bar',
                 data: [1, 2, 3, 4, 3, 5, 1],
+                itemStyle: {
+                    color: color[0]
+                },
                 coordinateSystem: 'polar',
                 name: 'A',
                 stack: 'a',
@@ -146,6 +149,9 @@ function drawBarOnPolar2(target, categories) {
             {
                 type: 'bar',
                 data: [2, 4, 6, 1, 3, 2, 1],
+                itemStyle: {
+                    color: color[1]
+                },
                 coordinateSystem: 'polar',
                 name: 'B',
                 stack: 'a',
@@ -156,6 +162,9 @@ function drawBarOnPolar2(target, categories) {
             {
                 type: 'bar',
                 data: [1, 2, 3, 4, 1, 2, 5],
+                itemStyle: {
+                    color: color[2]
+                },
                 coordinateSystem: 'polar',
                 name: 'C',
                 stack: 'a',
@@ -166,6 +175,9 @@ function drawBarOnPolar2(target, categories) {
             {
                 type: 'bar',
                 data: [2, 2, 2, 2, 4, 2, 1],
+                itemStyle: {
+                    color: color[3]
+                },
                 coordinateSystem: 'polar',
                 name: 'D',
                 stack: 'a',

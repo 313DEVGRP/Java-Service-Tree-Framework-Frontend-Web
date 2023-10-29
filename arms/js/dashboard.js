@@ -91,16 +91,14 @@ function execDocReady() {
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard");
 
-			dashboardColor = dashboardPalette.dashboardPalette04;
+			// 컬러 테스트 by 장지윤
+			dashboardColor = dashboardPalette.dashboardPalette01;
 			console.log(dashboardColor);
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
-
-			// 컬러 테스트 by 장지윤
-			colorsForDashboard = dashboardPalette.dashboardPalette04;
 
 			$('button').on('click', function() {
 				// Caching
@@ -473,7 +471,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				console.log(Object.keys(data).length);
 				let keyArray = Object.keys(data);
 				console.log(keyArray);
-				drawBarOnPolar2("polar_bar", keyArray);
+				drawBarOnPolar2("polar_bar", keyArray, dashboardColor.manpowerPerformance);
 				//drawBarOnPolar("polar_bar", keyArray, data_mock);
 			}
 		}
@@ -1042,7 +1040,7 @@ var SankeyChart = (function ($) {
 
 		var iconXs = [10, 12, 11.5, 12];
 		var nodeIcons = ['<i class="fa fa-cube"></i>', '<i class="fa fa-server"></i>', '<i class="fa fa-database"></i>'];
-		var colors = ["#1f77b4", "#2ca02c", "#d62728"];
+		var colors = dashboardColor.productToMan;
 
 		var svg = initSvg();
 
@@ -1245,9 +1243,6 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 
 				let totalDocCount = columnsData.reduce((sum, [_, count]) => sum + count, 0);
 
-				console.log("=== 장지윤 columnsData");
-				console.log(columnsData);
-
 				const chart = c3.generate({
 					bindto: '#donut-chart',
 					data: {
@@ -1257,10 +1252,8 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 					donut: {
 						title: "Total : " + totalDocCount
 					},
-					colors: {
-						Open: '#fff',
-						data2: '#fff',
-						data3: '#fff'
+					color: {
+						pattern: dashboardColor.issueStatusColor
 					},
 					tooltip: {
 						format: {
@@ -1375,6 +1368,9 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 							'요구사항': 'area',
 						},
 						groups: [issueStatusTypes]
+					},
+					color: {
+						pattern: dashboardColor.issueStatusColor
 					},
 					axis: {
 						x: {
@@ -1802,7 +1798,7 @@ function drawIssuePerManPower(data) {
 		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
 		.style("font-size", "15px");
 
-	var color = d3.scaleOrdinal().domain(subgroups).range(["#155f92", "#1f841f"]);
+	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.manpowerReqColor);
 
 	var stackedData = d3.stack().keys(subgroups)(data).concat(data);
 
@@ -1823,11 +1819,11 @@ function drawIssuePerManPower(data) {
 		var subgroupValue = d.data[subgroupName];
 		var subgroupNameKorean;
 
-		tooltip
-			.html(function (d) {
-				return "상태: " + subgroupNameKorean + "<br>" + "작업자 수: " + roundToPrecision(subgroupValue, 0) + "명";
-			})
-			.style("opacity", 1);
+		// tooltip
+		// 	.html(function (d) {
+		// 		return "상태: " + subgroupNameKorean + "<br>" + "작업자 수: " + roundToPrecision(subgroupValue, 0) + "명";
+		// 	})
+		// 	.style("opacity", 1);
 
 		d3.selectAll(".myGroup").style("opacity", 0.2);
 		d3.selectAll("." + subgroupName).style("opacity", 1);
