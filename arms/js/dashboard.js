@@ -817,7 +817,8 @@ var Log = {
 function init(treeMapInfos) {
 	const colorMapping = {};
 	// TODO: 요구사항의 가짓수가 많아지면 색상을 더 추가해야 함
-	let colors = d3.schemeCategory20;
+	// let colors = d3.schemeCategory20;
+	let colors = dashboardColor.accumulatedIssueStatusColor;
 	function getColorForName(name) {
 		if (!colorMapping[name]) {
 			const selectedColor = colors.shift();
