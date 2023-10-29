@@ -1126,6 +1126,7 @@ var SankeyChart = (function ($) {
 			.style("fill", function (d) {
 				return (d.color = color(d.type));
 			})
+			.style("cursor", "default")
 			.style("stroke", function (d) {
 				return d3.rgb(d.color).darker(2);
 			})
@@ -1144,6 +1145,7 @@ var SankeyChart = (function ($) {
 			})
 			.attr("height", "16px")
 			.attr("width", "16px")
+			.style("cursor", "default")
 			.html((d) => nodeIcon(d.type));
 
 		node
@@ -1194,6 +1196,19 @@ var SankeyChart = (function ($) {
 			})
 			.attr("x", 6 + sankey.nodeWidth())
 			.attr("text-anchor", "start");
+
+		console.log("==== 장지윤 data");
+		console.log(data);
+
+		// data.nodes.forEach(function(node) {
+		// 	if (node.depth === 0) {
+		// 		node.x = 0; // X-position for product nodes
+		// 	} else if (node.depth === 1) {
+		// 		node.x = 1; // X-position for version nodes
+		// 	} else if (node.depth === 2) {
+		// 		node.x = 2; // X-position for worker nodes
+		// 	}
+		// });
 	};
 
 	return { loadChart, drawEmptyChart };
@@ -1369,7 +1384,12 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 						groups: [issueStatusTypes]
 					},
 					color: {
-						pattern: dashboardColor.issueStatusColor
+						pattern: dashboardColor.accumulatedIssueStatusColor,
+					},
+					onrendered: function() {
+						d3.selectAll('.c3-line, .c3-bar, .c3-arc')
+							.style('stroke', 'white')
+							.style('stroke-width', '0.3px');
 					},
 					axis: {
 						x: {
@@ -1783,7 +1803,7 @@ function drawIssuePerManPower(data) {
 	$("#issue-manpower-chart").html("");
 
 	var width = 270,
-		height = 380,
+		height = 430,
 		margin = 10;
 
 	var svg = d3

@@ -39,16 +39,10 @@ var Timeline = (function () {
 			};
 			// 컬러 테스트 by 장지윤
 			colors = [
-				"#4E79A7",
-				"#F18E2C",
-				"#E15759",
-				"#76B6B2",
-				"#58A14E",
-				"#EDC849",
-				"#AF7AA1",
-				"#FE9DA6",
-				"#9C755E",
-				"#BAAFAB"
+				'#f8f4ff',
+				'#B15EFF',
+				'#FFA33C',
+				'#FFFB73'
 			];
 
 			var t = [];
