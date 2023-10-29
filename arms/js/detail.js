@@ -1301,7 +1301,7 @@ function createReqCommentList(comment, previousDate) {
                             <div class="text">
                                 ${contents}
                             </div>
-                            <div class="buttons" style="position: absolute; top: 3px; left:0px;">
+                            <div class="buttons" style="position: absolute; top: 10px; left:0px;">
                              ${buttonsHtml}
                             </div>
 
