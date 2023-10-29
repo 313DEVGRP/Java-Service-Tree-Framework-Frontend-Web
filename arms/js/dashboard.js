@@ -1763,7 +1763,7 @@ function drawIssuePerManPower(data) {
 	var svg = d3
 		.select("#issue-manpower-chart")
 		.append("svg")
-		.attr("viewBox", [-20, 20, width, height])
+		.attr("viewBox", [-33, 20, width, height])
 		.append("g");
 
 	var subgroups = ["issueCount", "relatedIssueCount"];
@@ -1815,18 +1815,19 @@ function drawIssuePerManPower(data) {
 		.style("padding", "10px");
 
 	var mouseover = function (d) {
-		var subgroupName = d3.select(this.parentNode).datum().key;
-		var subgroupValue = d.data[subgroupName];
-		var subgroupNameKorean;
+		var boxSelector = d3.select(this.parentNode).datum().key;
+		var subgroupName = d.data.manpowerName;
+		var issueCount = d.data.issueCount;
+		var relatedIssueCount = d.data.relatedIssueCount;
 
-		// tooltip
-		// 	.html(function (d) {
-		// 		return "상태: " + subgroupNameKorean + "<br>" + "작업자 수: " + roundToPrecision(subgroupValue, 0) + "명";
-		// 	})
-		// 	.style("opacity", 1);
+		tooltip
+			.html(function (d) {
+				return "작업자: " + subgroupName + "<br>" + "요구사항: " + issueCount + "<br>" + "연결이슈: " + relatedIssueCount;
+			})
+			.style("opacity", 1);
 
 		d3.selectAll(".myGroup").style("opacity", 0.2);
-		d3.selectAll("." + subgroupName).style("opacity", 1);
+		d3.selectAll("." + boxSelector).style("opacity", 1);
 	};
 	var mousemove = function () {
 		tooltip.style("left", d3.mouse(this)[0] + 90 + "px").style("top", d3.mouse(this)[1] + "px");

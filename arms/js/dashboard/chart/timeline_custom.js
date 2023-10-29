@@ -37,7 +37,7 @@ var Timeline = (function () {
 				},
 				allMonthArray: []
 			};
-
+			// 컬러 테스트 by 장지윤
 			colors = [
 				"#4E79A7",
 				"#F18E2C",
@@ -187,7 +187,7 @@ var Timeline = (function () {
 				})();
 
 				// 색상을 정한다
-				d.color = colors[i % colors.length].concat("80");
+				d.color = colors[i % colors.length].concat("c7");
 
 				// 높이 레벨을 정한다
 				d.height = (function () {
