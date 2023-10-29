@@ -12,7 +12,6 @@ var dashboardColor;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
 var top5ReqLinkedIssue = [];
-var top5performance = [];
 function execDocReady() {
 
 	var pluginGroups = [
@@ -1551,46 +1550,71 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("인력별 퍼포먼스 조회 시작 YHS ==========");
-				console.log(data); //console.log(data.검색결과);
-				//var cat_persions = [];
-				//var 아이디 = getIdFromMail(data[0].필드명);
+				console.log("인력별 퍼포먼스 조회 ==========");
+				//console.log(data); //console.log(data.검색결과);
 				var cat_persons = Object.keys(data);
 				console.log(cat_persons);
-				console.log(cat_persons.length);
-				const N = cat_persons.length;
-
-				console.log(data[cat_persons[0]]["group_by_status.status_name.keyword"]);
-
-				var in_progress_arr = []; var Open_arr = []; var Closed_arr = []; var Backlog_arr = []; var 완료됨_arr = []; var 진행중_arr = [];
-				var sfd_arr = [];
+				const persion_size = cat_persons.length;
+				//console.log(data[cat_persons[0]]["group_by_status.status_name.keyword"]);
 
 				let set = new Set();
 
+				// 각 담당자별 status를 set에 넣는다.
 				for (let i=0; i<cat_persons.length; i++) {
-					console.log(cat_persons[i]);
 					data[cat_persons[i]]["group_by_status.status_name.keyword"].forEach( (target, idx) => {
-							console.log('Index: ' + idx);
-							console.log(target);
-							console.log(target.필드명);
+							//console.log('Index: ' + idx); console.log(target); console.log(target.필드명);
 							set.add(target.필드명);
 						}
 					);
 				}
-				console.log(set);
+
 				var legend_arr = []; //레전드 리스트
-				set.forEach((element) => {legend_arr.push(element);})
-				console.log(legend_arr);
+				set.forEach((element) => {legend_arr.push(element);}); // Set to List
 
-				let arrForDataByPersion = new Array(N).fill(0);
-				const M = legend_arr.length;
-				let arrForDataByLegends = new Array(M).fill(0);
-				console.log(arrForDataByPersion);
-				// 만약 set의 갯수가 n개이면 n개의 series가 필요하다
+				const legend_size = legend_arr.length;
 
+				var arr2di = new Array(legend_size); // Status의 종류의 수
+				for ( var i =0; i<arr2di.length; i++) {
+					arr2di[i] = new Array(persion_size).fill(0); // 길이5
+				}
+				for (let i=0; i<cat_persons.length; i++) {
+					data[cat_persons[i]]["group_by_status.status_name.keyword"].forEach( (target, idx) => {
+							//console.log('Index: ' + idx); console.log(target.필드명); console.log(target.개수);
+							var 상태이름 = target.필드명; // "Backlog", "Resolved"..
+							var 상태idx = legend_arr.indexOf(상태이름);
+							arr2di[상태idx][i] = target.개수;
+						}
+					);
+				}
+				var colorArr = dashboardColor.issueStatusColor;
 
-				console.log("인력별 퍼포먼스 조회 끝 ==========");
-				drawBarOnPolar2("polar_bar", cat_persons, dashboardColor.manpowerPerformance, legend_arr);
+				var testSeries = {
+					type: 'bar',
+					data: "", // seriesArr1
+					itemStyle: {
+						color: ""
+					},
+					coordinateSystem: 'polar',
+					name: "",
+					stack: 'a',
+					emphasis: {
+						focus: 'series'
+					}
+				}
+
+				var arrSeries = new Array(legend_size);
+
+				for (let i=0; i<legend_size; i++) {
+					let _temp = JSON.parse(JSON.stringify(testSeries));
+					//var _temp = Object.assign({}, testSeries); 이 경우 2단 복사 안됨.
+					_temp.data = arr2di[i];
+					_temp.itemStyle.color = colorArr[i];
+					_temp.name = legend_arr[i];
+					arrSeries[i] = _temp;
+				}
+				console.log(arrSeries);
+
+				drawBarOnPolar("polar_bar", cat_persons, legend_arr, arrSeries);
 			}
 		}
 	});
