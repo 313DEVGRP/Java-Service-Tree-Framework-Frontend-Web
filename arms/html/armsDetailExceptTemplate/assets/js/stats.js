@@ -165,6 +165,7 @@ function loadChart(chartElement, footerElement, json) {
         var data = mockData(keys, 25); // just 25 points, since there are lots of charts
         var pieChart;
         var pieFooter = d3.select(footerElement);
+        var keyToColor = {};
 
         for (var i = 0; i < data.length; i++){
             data[i].y = json[keys[i]];
@@ -214,7 +215,7 @@ function loadChart(chartElement, footerElement, json) {
                         "</div>" +
                         "<div class='value'>" +
                         Math.floor(d.y) +
-                        "<span class='font11'> 개 ( 0% )</span></div>"
+                        "<span class='font11'> 개 (0%)</span></div>"
                     );
                 });
 
@@ -227,26 +228,19 @@ function loadChart(chartElement, footerElement, json) {
             console.log('할당 요구사항 없을 때의 클래스 제거');
         }
 
-        chart = nv.models
-            .pieChartTotal()
-            .x(function (d) {
-                return d.key;
-            })
-            .margin({ top: 0, right: 20, bottom: 20, left: 20 })
-            .values(function (d) {
-                return d;
-            })
-            .color(COLOR_VALUES)
-            .showLabels(true)
-            .showLegend(false)
-            .tooltipContent(function (key, y, e, graph) {
-                return "<h4>" + key + "</h4>" + "<p>" + roundToPrecision((100 * y) / sum, 1) + "%</p>";
-            })
-            .total(function (count) {
-                return "<div class='requirements'>" + count + "<br/> requirements </div>";
-            })
-            .donut(true);
-        chart.pie.margin({ top: 10, bottom: -20 });
+        var statusTitle;
+        var statusContent;
+        var totalContent;
+        var matches = chartElement.match(/#(.*?)-/);
+        if (matches) {
+            var status = matches[1]; // "#requirement-chart-pie svg"에서 "requirement" 문자열 추출
+            statusTitle = status + "-title";
+            statusContent = status + "-content";
+            totalContent = status + "-total";
+            //console.log(statusTitle, statusContent);
+        } else {
+            console.log("일치하는 문자열을 찾을 수 없습니다.");
+        }
 
         pieFooter
             .append("div")
@@ -257,6 +251,7 @@ function loadChart(chartElement, footerElement, json) {
             .append("div")
             .classed("control", true)
             .style("border-top", function (d, i) {
+                keyToColor[d.key] = i;
                 return "3px solid " + COLOR_VALUES[i];
             })
             .style("width", "calc(" + (100/data.length) + "% - 3px)")
@@ -268,11 +263,45 @@ function loadChart(chartElement, footerElement, json) {
                     "</div>" +
                     "<div class='value'>" +
                     Math.floor(d.y) +
-                    "<span class='font11'> 개 ( " +
+                    "<span class='font11'> 개 (" +
                     Math.floor((100 * d.y) / sum) +
-                    "% )</span></div>"
+                    "%)</span></div>"
                 );
             });
+
+        chart = nv.models
+            .pieChartTotal()
+            .x(function (d) {
+                return d.key;
+            })
+            .margin({ top: 0, right: 20, bottom: 20, left: 20 })
+            .values(function (d) {
+                return d;
+            })
+            .color(COLOR_VALUES)
+            .showLabels(false)
+            .showLegend(false)
+            .tooltips(false)
+            .status(function (key, y, e, graph) {
+                return (
+                    "<div class="+statusContent+">" +
+                    "<span style='color: " + COLOR_VALUES[keyToColor[key]] + "; font-weight: bold; font-size: 20px;'>" +
+                    roundToPrecision((100 * y) / sum, 1) + "%" + "</span>" +
+                    "<br/>" + key + "</div>"
+                );
+            })
+            .total(function (count) {
+                return (
+                    "<div class="+totalContent+">" +
+                    "<span style='font-weight: bold; font-size: 20px;'>" +
+                    count + "</span>" +
+                    "<br> 요구사항 </div>"
+                );
+            })
+            .totalClassName(totalContent)
+            .statusClassName(statusTitle)
+            .donut(true);
+        chart.pie.margin({ top: 10, bottom: -20 });
 
         d3.select(chartElement).datum([data]).transition(500).call(chart);
         nv.utils.windowResize(chart.update);
