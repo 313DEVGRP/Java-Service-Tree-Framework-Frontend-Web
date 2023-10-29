@@ -1855,9 +1855,6 @@ function drawIssuePerManPower(data) {
 		})
 		.enter()
 		.append("rect")
-		.attr("class", function (d) {
-			return " myWave wave-" + d.data.manpowerId;
-		})
 		.attr("x", function (d) {
 			return 0;
 		})
