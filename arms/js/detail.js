@@ -1271,22 +1271,6 @@ function createReqCommentList(comment, previousDate) {
     var personIcon = (sender !== userName) ? 'bi-person-fill' : 'bi-person';
     var buttonsHtml = '';
 
-    if (sender === userName) {
-        buttonsHtml = `<div class="dropdown">
-                            <button class="dropdown-button"><i class="fa fa-ellipsis-v" style="color:#666666;"></i></button>
-                            <div class="dropdown-content">
-                                <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn">
-                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-edit"></i></div>
-                                    <div style="display: inline-block;">수정</div>
-                                </button>
-                                <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}">
-                                    <div style="width:40px; vertical-align: middle; display: inline-block;"><i style="float: left; " class="fa fa-trash-o"></i></div>
-                                    <div style="display: inline-block;">삭제</div>
-                                </button>
-                            </div>
-                       </div>`;
-    }
-
     $newHtml = $(`
                     ${dateSeparator}
                     <div class="chat-message">
@@ -1296,31 +1280,38 @@ function createReqCommentList(comment, previousDate) {
                                 <span href="#" class="user-id">${sender}</span>
                             </div>
                         </div>
-                        <div style="display: flex; position: relative; flex-direction: column; align-items: ${position === 'on-left' ? 'flex-end' : 'flex-start'}; width: fit-content; float:${position === 'on-left' ? 'right' : 'left'};">
-                        <div class="chat-message-body ${position}">
-                            <div class="text">
-                                ${contents}
+                        <div class="chat-contents" style="display: flex; position: relative; flex-direction: column; align-items: ${position === 'on-left' ? 'flex-end' : 'flex-start'}; width: fit-content; float:${position === 'on-left' ? 'right' : 'left'};">
+                            <div class="chat-message-body ${position}">
+                                <div class="text">
+                                    ${contents}
+                                </div>
+                                <div class="edit-comment" style="display: none;">
+                                    <textarea class="edit-text form-control" style="min-width: 100px;"></textarea>
+                                    <div style="text-align: right;">
+                                        <button style="border-radius:1.5rem" class="mt-2 btn btn-default btn-sm edit-save-button edit-comment-button" value="${c_id}">저장</button>
+                                        <button style="border-radius:1.5rem" class="mt-2 btn btn-default btn-sm cancel-button edit-comment-button">취소</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="buttons" style="position: absolute; top: 10px; left:0px;">
-                             ${buttonsHtml}
-                            </div>
-
-                            <div class="edit-comment" style="display: none;">
-                                <textarea class="edit-text form-control"></textarea>
-                                <div style="text-align: right;">
-                                    <button style="border-radius:1.5rem" class="mt-2 btn btn-default btn-sm edit-save-button edit-comment-button" value="${c_id}">저장</button>
-                                    <button style="border-radius:1.5rem" class="mt-2 btn btn-default btn-sm cancel-button edit-comment-button">취소</button>
+                            <div class="sender ${position}" style="display: flex; justify-content: space-between; align-items: center;">
+                                ${(sender === userName) ? `
+                                    <div class="chat-buttons" style="margin-right:20px;">
+                                        <button id="req_comment_edit_btn" class="chat-btn edit-chat-btn" style="padding:0px 10px 0px 10px;">
+                                            <i style="color:gray;" class="fa fa-edit"></i>
+                                        </button>
+                                        <button id="req_comment_delete_btn" class="chat-btn delete-chat-btn" value="${c_id}" style="padding:0 2 0 2px;">
+                                            <i style=" color:gray" class="fa fa-trash-o"></i>
+                                        </button>
+                                    </div>
+                                ` : ''}
+                                <div>
+                                    ${(position === 'on-left') ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
+                                    ${(position === 'on-right') ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span> ` : ''}
                                 </div>
                             </div>
                         </div>
-
-                        <div class="sender ${position}">
-                            ${(position === "on-left") ? `<span class="write-time">${date}&nbsp;&nbsp;&nbsp;\t</span>` : ''}
-                            ${(position === "on-right") ? `<span class="write-time">&nbsp;&nbsp;&nbsp;${date}</span>` : ''}
-                        </div>
-
                     </div>
-                    </div>
+
 
                 `);
     return {
@@ -1328,6 +1319,7 @@ function createReqCommentList(comment, previousDate) {
             date: fullDate.split(' - ')[0],
         };
 }
+
 
 function reqCommentRegisterEventHandlers() {
     $('.edit-chat-btn').on('click', handleEditClick);
@@ -1337,10 +1329,13 @@ function reqCommentRegisterEventHandlers() {
 }
 
 function handleEditClick(e){
-    var parentDiv = $(this).closest('.chat-message-body');
+    var parentDiv = $(this).closest('.chat-contents');
     var commentText = parentDiv.find('#contents').html();
     var commentWidth = parentDiv.find('#contents').width();
     commentText = commentText.replace(/<br>/g, "\n");
+
+    $('.edit-chat-btn').hide();
+    $('.delete-chat-btn').hide();
 
     parentDiv.find('.edit-text').val(commentText);
 
@@ -1368,6 +1363,9 @@ function handleCancelClick(e){
     commentDiv.find('.dropdown-button').show();
     commentDiv.find('.dropdown-content').removeClass('hide');
     commentDiv.find('.edit-comment').hide();
+
+    $('.edit-chat-btn').show();
+    $('.delete-chat-btn').show();
 }
 
 function handleSaveClick(e){
@@ -1376,6 +1374,8 @@ function handleSaveClick(e){
     var commentText = editText.find('.edit-text').val();
 
     req_comment_edit_btn_click(c_id, commentText);
+    $('.edit-chat-btn').show();
+    $('.delete-chat-btn').show();
 }
 
 function req_comment_save_btn_click() {

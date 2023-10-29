@@ -209,7 +209,7 @@ textarea {
     vertical-align: baseline;
     border: none;
     border-color: rgba(0,0,0,0.15) rgba(0,0,0,0.15) rgba(0,0,0,0.25);
-    padding: 2px 6px;
+
     line-height: 1.5;
     border-radius: 0;
     align-items: center;
@@ -693,7 +693,7 @@ button {
     cursor: pointer;
     flex: 0;
      display: flex;
-     height:40px;
+
 }
 button i {
     vertical-align: middle;
