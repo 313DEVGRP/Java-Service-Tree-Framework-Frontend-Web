@@ -817,8 +817,7 @@ var Log = {
 function init(treeMapInfos) {
 	const colorMapping = {};
 	// TODO: 요구사항의 가짓수가 많아지면 색상을 더 추가해야 함
-	// let colors = d3.schemeCategory20;
-	let colors = dashboardColor.accumulatedIssueStatusColor;
+	let colors = dashboardColor.treeMapColor;
 	function getColorForName(name) {
 		if (!colorMapping[name]) {
 			const selectedColor = colors.shift();
@@ -1197,19 +1196,6 @@ var SankeyChart = (function ($) {
 			})
 			.attr("x", 6 + sankey.nodeWidth())
 			.attr("text-anchor", "start");
-
-		console.log("==== 장지윤 data");
-		console.log(data);
-
-		// data.nodes.forEach(function(node) {
-		// 	if (node.depth === 0) {
-		// 		node.x = 0; // X-position for product nodes
-		// 	} else if (node.depth === 1) {
-		// 		node.x = 1; // X-position for version nodes
-		// 	} else if (node.depth === 2) {
-		// 		node.x = 2; // X-position for worker nodes
-		// 	}
-		// });
 	};
 
 	return { loadChart, drawEmptyChart };

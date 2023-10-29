@@ -53,6 +53,19 @@ var dashboardPalette = {
 			'#e3cc85',
 			'#17cde5',
 			'#e5db17'
+		],
+		treeMapColor: [
+			'#32de77',//InProgress
+			'#82de32',//Backlog
+			'#b3e299',//Closed
+			'#1774e5',//Open
+			'#17abe5',//완료됨
+			'#e2e299',//Resolved
+			'#bede32',//진행중
+			'#f8f4ff',//SelectedForDevelopment
+			'rgba(144,142,147,0.58)',//테스트1
+			'rgba(78,77,80,0.58)',//테스트2
+			'#6C567B'//요구사항
 		]
 	}
 };
