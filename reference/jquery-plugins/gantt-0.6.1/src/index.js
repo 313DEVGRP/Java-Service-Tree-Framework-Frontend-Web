@@ -221,6 +221,7 @@ export default class Gantt {
         this.setup_tasks(tasks);
         this.change_view_mode();
         this.rerender_table();
+        this.originTasks = tasks;
     }
 
     change_view_mode(mode = this.options.view_mode) {
@@ -345,7 +346,7 @@ export default class Gantt {
             .appendChild($table_body);
 
         $table_body.addEventListener('click', (event) =>
-            this.bind_table_event(event)
+            this.bind_table_event(event, $table_body)
         );
     }
 
@@ -433,6 +434,7 @@ export default class Gantt {
         }, []);
 
         this.setup_tasks(tasks);
+        this.originTasks = tasks;
     }
 
     setup_layers() {
@@ -456,24 +458,59 @@ export default class Gantt {
         this.make_table();
     }
 
-    bind_table_event(event) {
+    bind_table_event(event, $table_body) {
         const $tr = event.target.closest('tr');
         const id = $tr.dataset.id;
 
         if (event.target.classList.contains('expand_btn')) {
-            const toggle_list = this.tasks.filter((task) =>
-                task.dependencies.includes(id)
-            );
+            let tasks = [...this.tasks];
 
-            event.target.classList.toggle('collapse-list');
+            if (event.target.classList.contains('collapse-list')) {
+                this.originTasks.forEach((task) => {
+                    if (task.dependencies.includes(id)) {
+                        const table_row = $table_body.querySelector(
+                            `[data-id='${task.id}']`
+                        );
 
-            toggle_list.forEach((task) => {
-                const table_row = $table_body.querySelector(
-                    `[data-id='${task.id}']`
+                        table_row.classList.remove('hide');
+                        tasks.splice(task._index, 0, task);
+                    }
+                });
+
+                event.target.classList.remove('collapse-list');
+            } else {
+                const { update_list, remove_list } = this.tasks.reduce(
+                    (acc, task) => {
+                        if (!task.dependencies.includes(id)) {
+                            return {
+                                update_list: [...acc.update_list, task],
+                                remove_list: acc.remove_list,
+                            };
+                        }
+
+                        return {
+                            update_list: acc.update_list,
+                            remove_list: [...acc.remove_list, task],
+                        };
+                    },
+                    { update_list: [], remove_list: [] }
                 );
 
-                table_row.classList.toggle('hide');
-            });
+                remove_list.forEach((task) => {
+                    const table_row = $table_body.querySelector(
+                        `[data-id='${task.id}']`
+                    );
+
+                    table_row.classList.remove('selected');
+                    table_row.classList.add('hide');
+                });
+
+                tasks = update_list;
+                event.target.classList.add('collapse-list');
+            }
+
+            this.setup_tasks(tasks);
+            this.render();
 
             return;
         }
@@ -514,7 +551,7 @@ export default class Gantt {
         $table.append($table_body);
 
         $table_body.addEventListener('click', (event) =>
-            this.bind_table_event(event)
+            this.bind_table_event(event, $table_body)
         );
 
         $table_container.append($table);
