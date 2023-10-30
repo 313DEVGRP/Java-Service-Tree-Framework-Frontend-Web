@@ -806,19 +806,19 @@ select option {
 }
 
 .xdsoft_datetimepicker .xdsoft_calendar th:first-child {
-	color: red !important;
+	color: #ef7979 !important;
 }
 
 .xdsoft_datetimepicker .xdsoft_calendar th:last-child {
-	color: blue !important;
+	color: #a0a0ff !important;
 }
 
 .xdsoft_day_of_week0 {
-	color: red !important;
+	color: #ef7979 !important;
 }
 
 .xdsoft_day_of_week6 {
-	color: blue !important;
+	color: #a0a0ff !important;
 }
 
 /* ************************************* 임시 ************************************* */
