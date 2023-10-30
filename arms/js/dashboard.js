@@ -25,9 +25,9 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			//d3 변경
 			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
-			"../reference/c3/c3.min.css",
-			"../reference/c3/c3-custom.css",
-			"../reference/c3/c3.min.js",
+			"../reference/jquery-plugins/c3/c3.min.css",
+			"../reference/jquery-plugins/c3/c3-custom.css",
+			"../reference/jquery-plugins/c3/c3.min.js",
 			"./js/common/colorPalette.js",
 			//timeline
 			"../reference/jquery-plugins/info-chart-v1/js/D.js",
