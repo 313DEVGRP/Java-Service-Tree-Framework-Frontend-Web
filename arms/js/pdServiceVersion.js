@@ -79,19 +79,23 @@ function execDocReady() {
 			}, 313 /*milli*/);
 
 			$("#input_pdservice_start_date").datetimepicker({
-				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],
+			    theme:'dark'
 			});
 
 			$("#input_pdservice_end_date").datetimepicker({
-				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],
+				theme:'dark'
 			});
 
 			$("#btn_enabled_date").datetimepicker({
-				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],
+				theme:'dark'
 			});
 
 			$("#btn_end_date").datetimepicker({
-				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+				allowTimes: ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],
+				theme:'dark'
 			});
 
 			// --- 데이터 테이블 설정 --- //
@@ -509,15 +513,15 @@ function dataLoad(getSelectedText, selectedText) {
 			$("#input_pdservice_name").val(selectedText);
 			$("#input_pdservice_version").val(json.pdServiceVersionEntities[0].c_title);
 
-			$("#input_pdservice_start_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 });
-			$("#input_pdservice_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 });
+			$("#input_pdservice_start_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 , theme:'dark'});
+			$("#input_pdservice_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 , theme:'dark'});
 			CKEDITOR.instances.input_pdservice_editor.setData(json.pdServiceVersionEntities[0].c_contents);
 
 			//편집하기 팝업
 			$("#tooltip_enabled_service_name").val(selectedText);
 			$("#tooltip_enabled_service_version").val(json.pdServiceVersionEntities[0].c_title);
-			$("#btn_enabled_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 });
-			$("#btn_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 });
+			$("#btn_enabled_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 , theme:'dark'});
+			$("#btn_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 , theme:'dark'});
 			CKEDITOR.instances.extend_modal_editor.setData(json.pdServiceVersionEntities[0].c_contents);
 		}
 	});
@@ -637,10 +641,10 @@ function versionClick(element, c_id) {
 			$("#input_pdservice_end_date").val(json.c_pds_version_end_date);
 			CKEDITOR.instances.input_pdservice_editor.setData(json.c_pds_version_contents);
 
-			$("#input_pdservice_start_date").datetimepicker({ value: json.c_pds_version_start_date + " 09:00", step: 10 });
-			$("#input_pdservice_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 });
-			$("#btn_enabled_date").datetimepicker({ value: json.c_pds_version_start_date + " 09:00", step: 10 });
-			$("#btn_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 });
+			$("#input_pdservice_start_date").datetimepicker({ value: json.c_pds_version_start_date + " 09:00", step: 10 , theme:'dark'});
+			$("#input_pdservice_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 , theme:'dark'});
+			$("#btn_enabled_date").datetimepicker({ value: json.c_pds_version_start_date + " 09:00", step: 10 , theme:'dark'});
+			$("#btn_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 , theme:'dark'});
 
 			// sender 데이터 바인딩 및 선택 색상 표기
 			$("#select_Version").text(json.c_title);
