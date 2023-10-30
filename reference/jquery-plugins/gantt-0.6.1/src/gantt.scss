@@ -10,7 +10,7 @@ $text-light: #555 !default;
 $text-color: #fff !default;
 $blue: #a4c6ff !default;
 $handle-color: #ddd !default;
-$selected: #e5603b !default;
+$selected: rgba(229, 96, 59, 0.2) !default;
 
 .wrapper {
     display: flex;
@@ -44,6 +44,10 @@ $selected: #e5603b !default;
                 &.dragging {
                     opacity: 0.5;
                     border: 2px dashed red;
+                }
+
+                &.selected {
+                    background-color: $selected;
                 }
             }
         }
@@ -120,12 +124,13 @@ $selected: #e5603b !default;
     .grid-row {
         fill: transparent;
 
-        &.selected {
-            background-color: $selected;
+        &:nth-child(odd) {
+            fill: $light-bg;
         }
-    }
-    .grid-row:nth-child(odd) {
-        fill: $light-bg;
+
+        &.selected {
+            fill: $selected;
+        }
     }
     .row-line {
         stroke: $light-border-color;
@@ -138,7 +143,7 @@ $selected: #e5603b !default;
         }
     }
     .today-highlight {
-        fill: $light-yellow;
+        fill: rgb(97, 97, 97);
         opacity: 0.5;
     }
 

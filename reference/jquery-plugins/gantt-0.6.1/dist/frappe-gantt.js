@@ -580,29 +580,25 @@ var Gantt = (function () {
         show_popup() {
             if (this.gantt.bar_being_dragged) return;
 
-            this.gantt.modal_handler({
-                id: this.task.id,
-                type: this.task.type,
-            });
+            const start_date = date_utils.format(
+                this.task._start,
+                'MMM D',
+                this.gantt.options.language
+            );
+            const end_date = date_utils.format(
+                date_utils.add(this.task._end, -1, 'second'),
+                'MMM D',
+                this.gantt.options.language
+            );
+            const subtitle = start_date + ' - ' + end_date;
 
-            // const start_date = date_utils.format(
-            //     this.task._start,
-            //     'MMM D',
-            //     this.gantt.options.language
-            // );
-            // const end_date = date_utils.format(
-            //     date_utils.add(this.task._end, -1, 'second'),
-            //     'MMM D',
-            //     this.gantt.options.language
-            // );
-            // const subtitle = start_date + ' - ' + end_date;
-            //
-            // this.gantt.show_popup({
-            //     target_element: this.$bar,
-            //     title: this.task.name,
-            //     subtitle: subtitle,
-            //     task: this.task,
-            // });
+            this.gantt.show_popup({
+                target_element: this.$bar,
+                title: this.task.name,
+                subtitle: subtitle,
+                task: this.task,
+            });
+            this.gantt.handle_selected(this.task);
         }
 
         update_bar_position({ x = null, width = null }) {
@@ -1626,6 +1622,19 @@ var Gantt = (function () {
             $table.append($table_header);
             $table.append($table_body);
 
+            $table_body.addEventListener('click', (event) => {
+                const $tr = event.target.closest('tr');
+                const id = $tr.dataset.id;
+                const task = this.get_task(id);
+
+                this.handle_selected(task);
+
+                this.modal_handler({
+                    id: id,
+                    type: task.type,
+                });
+            });
+
             $table_container.append($table);
 
             this.$wrapper.prepend($table_container);
@@ -1637,6 +1646,22 @@ var Gantt = (function () {
             this.make_grid_header();
             this.make_grid_ticks();
             this.make_grid_highlights();
+        }
+
+        handle_selected(task) {
+            const $tr = this.$wrapper.querySelectorAll('tr')[task._index + 1];
+            const $grid_row =
+                this.$wrapper.querySelectorAll('.grid-row')[task._index];
+
+            if (!$tr.classList.contains('selected')) {
+                Array.prototype.forEach.call(
+                    this.$wrapper.querySelectorAll('.selected'),
+                    (elem) => elem.classList.remove('selected')
+                );
+            }
+
+            $tr?.classList.toggle('selected');
+            $grid_row?.classList.toggle('selected');
         }
 
         make_grid_background() {

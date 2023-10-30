@@ -27,6 +27,9 @@
   opacity: 0.5;
   border: 2px dashed red;
 }
+.table-container table .table-body tr.selected {
+  background-color: rgba(229, 96, 59, 0.2);
+}
 .table-container table .table-header tr th,
 .table-container table .table-body tr td {
   max-width: 300px;
@@ -100,11 +103,11 @@
 .gantt .grid-row {
   fill: transparent;
 }
-.gantt .grid-row.selected {
-  background-color: #e5603b;
-}
 .gantt .grid-row:nth-child(odd) {
   fill: rgba(51, 51, 51, 0.325);
+}
+.gantt .grid-row.selected {
+  fill: rgba(229, 96, 59, 0.2);
 }
 .gantt .row-line {
   stroke: #ebeff2;
@@ -117,7 +120,7 @@
   stroke-width: 0.4;
 }
 .gantt .today-highlight {
-  fill: #fcf8e3;
+  fill: rgb(97, 97, 97);
   opacity: 0.5;
 }
 .gantt .arrow {

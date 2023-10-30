@@ -464,6 +464,19 @@ export default class Gantt {
         $table.append($table_header);
         $table.append($table_body);
 
+        $table_body.addEventListener('click', (event) => {
+            const $tr = event.target.closest('tr');
+            const id = $tr.dataset.id;
+            const task = this.get_task(id);
+
+            this.handle_selected(task);
+
+            this.modal_handler({
+                id: id,
+                type: task.type,
+            });
+        });
+
         $table_container.append($table);
 
         this.$wrapper.prepend($table_container);
@@ -475,6 +488,22 @@ export default class Gantt {
         this.make_grid_header();
         this.make_grid_ticks();
         this.make_grid_highlights();
+    }
+
+    handle_selected(task) {
+        const $tr = this.$wrapper.querySelectorAll('tr')[task._index + 1];
+        const $grid_row =
+            this.$wrapper.querySelectorAll('.grid-row')[task._index];
+
+        if (!$tr.classList.contains('selected')) {
+            Array.prototype.forEach.call(
+                this.$wrapper.querySelectorAll('.selected'),
+                (elem) => elem.classList.remove('selected')
+            );
+        }
+
+        $tr?.classList.toggle('selected');
+        $grid_row?.classList.toggle('selected');
     }
 
     make_grid_background() {
