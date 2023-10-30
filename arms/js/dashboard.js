@@ -977,13 +977,7 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 		statusCode: {
 			200: function (data) {
 				removeSankeyChart();
-				/*console.log("sankey data");
-				console.log(data);
-				var _node = [data.nodes];
-				var _link = [data.links];
-				//SankeyChart2({nodes:_node, links: _link},					{width: $("#chart-product-manpower").offsetWidth});
-				//var sankey = d3.sankey();
-*/
+
 				SankeyChart.loadChart(data);
 
 			}
@@ -1551,7 +1545,8 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 			"isReq" : false,
 			"컨텐츠보기여부" : true,
 			"크기" : 5,
-			"하위그룹필드들" : "status.status_name.keyword"},
+			"하위그룹필드들" : "status.status_name.keyword",
+			"하위크기": 10},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
@@ -1837,7 +1832,7 @@ function drawIssuePerManPower(data) {
 	svg
 		.append("g")
 		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
-		.style("font-size", "15px");
+		.style("font-size", "17px").style("font-weight","700");
 
 	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.manpowerReqColor);
 
@@ -1863,7 +1858,12 @@ function drawIssuePerManPower(data) {
 
 		tooltip
 			.html(function (d) {
-				return "작업자: " + subgroupName + "<br>" + "요구사항: " + issueCount + "<br>" + "연결이슈: " + relatedIssueCount;
+				if (boxSelector === "issueCount") {
+					return "작업자: " + subgroupName + "<br>" + "요구사항: " + issueCount;
+				}
+				if (boxSelector === "relatedIssueCount") {
+					return "작업자: " + subgroupName + "<br>" + "연결이슈: " + relatedIssueCount;
+				}
 			})
 			.style("opacity", 1);
 
@@ -1878,7 +1878,8 @@ function drawIssuePerManPower(data) {
 		d3.selectAll(".myGroup").style("opacity", 1);
 	};
 
-	svg
+	var chart =
+		svg
 		.append("g")
 		.selectAll("g")
 		.data(stackedData)
@@ -1894,7 +1895,19 @@ function drawIssuePerManPower(data) {
 		.data(function (d) {
 			return d;
 		})
-		.enter()
+		.enter();
+	var typeRects = chart
+		.append("g")
+		.attr("class", function (d) {
+			console.log(d);
+			return "myType type-"+ d.data.manpowerId;
+		})
+		.on("mouseover", mouseover)
+		.on("mousemove", mousemove)
+		.on("mouseleave", mouseleave);
+
+	var rect =
+		typeRects
 		.append("rect")
 		.attr("x", function (d) {
 			return 0;
@@ -1910,9 +1923,6 @@ function drawIssuePerManPower(data) {
 		})
 		.attr("stroke", "white")
 		.style("stroke-width", "0.5px")
-		.on("mouseover", mouseover)
-		.on("mousemove", mousemove)
-		.on("mouseleave", mouseleave)
 		.transition()
 		.delay(500)
 		.ease(d3.easeElasticOut)
@@ -1926,4 +1936,31 @@ function drawIssuePerManPower(data) {
 		.delay(function (d, i) {
 			return i * 70;
 		});
+
+	var text = typeRects
+		.append("text")
+		.style("font-size", "17px")
+		.style("font-weight","700")
+		.attr("class", function (d) {
+			return "no-select";
+		})
+		.append("tspan")
+		.text(function (d) {
+			var hostCount;
+			if(d[0] === 0 && d.data.issueCount !== 0) { // 시작지점 0이고, 요구사항 개수!= 0
+				hostCount = d.data.issueCount;
+			} else { // 그외 모두 연결이슈
+				hostCount = d.data.relatedIssueCount;
+			}
+			if (hostCount) {
+				return `${hostCount}개`;
+			}
+		})
+		.attr("x", function (d) {
+			return x(d[0]) + (x(d[1]) - x(d[0])) / 2;
+		})
+		.attr("dy", function (d, i) {
+			return y(d.data.manpowerName) + y.bandwidth() / 2 + 5;
+		})
+		.style("text-anchor", "middle");
 }
