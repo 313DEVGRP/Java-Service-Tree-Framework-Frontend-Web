@@ -1497,11 +1497,14 @@ var Gantt = (function () {
             document
                 .querySelector('.table-container table')
                 .appendChild($table_body);
+
+            $table_body.addEventListener('click', (event) =>
+                this.bind_table_event(event)
+            );
         }
 
         draggble_rerender(item) {
             this.update_origin_tasks(item);
-            this.setup_tasks(this.originTasks);
             this.render();
             this.rerender_table();
         }
@@ -1538,7 +1541,7 @@ var Gantt = (function () {
         }
 
         update_origin_tasks(item) {
-            this.originTasks = this.originTasks.reduce((acc, cur) => {
+            const tasks = this.tasks.reduce((acc, cur) => {
                 if (cur.id === item.c_id) {
                     cur = {
                         ...cur,
@@ -1582,6 +1585,8 @@ var Gantt = (function () {
                 acc.push(cur);
                 return acc;
             }, []);
+
+            this.setup_tasks(tasks);
         }
 
         setup_layers() {
@@ -1605,10 +1610,43 @@ var Gantt = (function () {
             this.make_table();
         }
 
+        bind_table_event(event) {
+            const $tr = event.target.closest('tr');
+            const id = $tr.dataset.id;
+
+            if (event.target.classList.contains('expand_btn')) {
+                const toggle_list = this.tasks.filter((task) =>
+                    task.dependencies.includes(id)
+                );
+
+                event.target.classList.toggle('collapse-list');
+
+                toggle_list.forEach((task) => {
+                    const table_row = $table_body.querySelector(
+                        `[data-id='${task.id}']`
+                    );
+
+                    table_row.classList.toggle('hide');
+                });
+
+                return;
+            }
+
+            const task = this.get_task(id);
+
+            this.handle_selected(task);
+
+            this.modal_handler({
+                id: id,
+                type: task.type,
+            });
+        }
+
         make_table() {
             const $table_container = document.createElement('div');
-            $table_container.classList.add('table-container');
             const $table = document.createElement('table');
+
+            $table_container.className = 'table-container';
 
             const table_data = [...this.tasks];
             table_data.forEach((task) => {
@@ -1629,37 +1667,9 @@ var Gantt = (function () {
             $table.append($table_header);
             $table.append($table_body);
 
-            $table_body.addEventListener('click', (event) => {
-                const $tr = event.target.closest('tr');
-                const id = $tr.dataset.id;
-
-                if (event.target.classList.contains('expand_btn')) {
-                    const toggle_list = this.tasks.filter((task) =>
-                        task.dependencies.includes(id)
-                    );
-
-                    event.target.classList.toggle('collapse-list');
-
-                    toggle_list.forEach((task) => {
-                        const table_row = $table_body.querySelector(
-                            `[data-id='${task.id}']`
-                        );
-
-                        table_row.classList.toggle('hide');
-                    });
-
-                    return;
-                }
-
-                const task = this.get_task(id);
-
-                this.handle_selected(task);
-
-                this.modal_handler({
-                    id: id,
-                    type: task.type,
-                });
-            });
+            $table_body.addEventListener('click', (event) =>
+                this.bind_table_event(event)
+            );
 
             $table_container.append($table);
 
