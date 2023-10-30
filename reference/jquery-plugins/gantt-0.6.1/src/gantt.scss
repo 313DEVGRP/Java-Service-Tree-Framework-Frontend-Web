@@ -12,6 +12,10 @@ $blue: #a4c6ff !default;
 $handle-color: #ddd !default;
 $selected: rgba(229, 96, 59, 0.2) !default;
 
+.hide {
+    display: none;
+}
+
 .wrapper {
     display: flex;
     position: relative;
@@ -21,6 +25,26 @@ $selected: rgba(229, 96, 59, 0.2) !default;
 .table-container {
     flex: 1;
     overflow: auto;
+    &::-webkit-scrollbar {
+        height: 10px;
+    }
+
+    &:hover::-webkit-scrollbar-track {
+        background-color: #414141;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: #784a3d;
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+    }
 
     table {
         min-width: 100%;
@@ -240,6 +264,27 @@ $selected: rgba(229, 96, 59, 0.2) !default;
     position: relative;
     overflow: auto;
     font-size: 12px;
+
+    &::-webkit-scrollbar {
+        height: 10px;
+    }
+
+    &:hover::-webkit-scrollbar-track {
+        background-color: #414141;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: #784a3d;
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+    }
 
     .popup-wrapper {
         position: absolute;

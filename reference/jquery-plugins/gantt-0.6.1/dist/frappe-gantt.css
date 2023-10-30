@@ -1,3 +1,7 @@
+.hide {
+  display: none;
+}
+
 .wrapper {
   display: flex;
   position: relative;
@@ -7,6 +11,21 @@
 .table-container {
   flex: 1;
   overflow: auto;
+}
+.table-container::-webkit-scrollbar {
+  height: 10px;
+}
+.table-container:hover::-webkit-scrollbar-track {
+  background-color: #414141;
+}
+.table-container:hover::-webkit-scrollbar-thumb {
+  background-color: #784a3d;
+}
+.table-container::-webkit-scrollbar-track, .table-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+.table-container::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }
 .table-container table {
   min-width: 100%;
@@ -199,6 +218,21 @@
   position: relative;
   overflow: auto;
   font-size: 12px;
+}
+.gantt-container::-webkit-scrollbar {
+  height: 10px;
+}
+.gantt-container:hover::-webkit-scrollbar-track {
+  background-color: #414141;
+}
+.gantt-container:hover::-webkit-scrollbar-thumb {
+  background-color: #784a3d;
+}
+.gantt-container::-webkit-scrollbar-track, .gantt-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+.gantt-container::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }
 .gantt-container .popup-wrapper {
   position: absolute;

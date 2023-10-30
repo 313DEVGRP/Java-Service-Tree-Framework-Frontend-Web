@@ -1011,10 +1011,6 @@ var Gantt = (function () {
                             const expand_btn = document.createElement('button');
                             expand_btn.className = 'expand_btn';
 
-                            expand_btn.addEventListener('click', () => {
-                                expand_btn.classList.toggle('collapse-list');
-                            });
-
                             $td.append(expand_btn);
                         }
 
@@ -1247,7 +1243,15 @@ var Gantt = (function () {
 
         setup_mode_handler() {
             const wrapper = document.createElement('div');
-            wrapper.className = 'mt well well-sm';
+            const excel_export = document.createElement('button');
+            const btn_group = document.createElement('div');
+
+            wrapper.className = 'mt well well-sm clearfix';
+            excel_export.className = 'btn btn-default btn-sm mr-xs';
+
+            excel_export.innerText = 'Excel';
+
+            $.style(btn_group, { float: 'right' });
 
             Object.keys(VIEW_MODE).forEach((key) => {
                 const btn = document.createElement('button');
@@ -1264,8 +1268,11 @@ var Gantt = (function () {
                     this.change_view_mode(VIEW_MODE[key]);
                 });
 
-                wrapper.appendChild(btn);
+                btn_group.appendChild(btn);
             });
+
+            wrapper.append(excel_export);
+            wrapper.append(btn_group);
 
             return wrapper;
         }
@@ -1625,6 +1632,25 @@ var Gantt = (function () {
             $table_body.addEventListener('click', (event) => {
                 const $tr = event.target.closest('tr');
                 const id = $tr.dataset.id;
+
+                if (event.target.classList.contains('expand_btn')) {
+                    const toggle_list = this.tasks.filter((task) =>
+                        task.dependencies.includes(id)
+                    );
+
+                    event.target.classList.toggle('collapse-list');
+
+                    toggle_list.forEach((task) => {
+                        const table_row = $table_body.querySelector(
+                            `[data-id='${task.id}']`
+                        );
+
+                        table_row.classList.toggle('hide');
+                    });
+
+                    return;
+                }
+
                 const task = this.get_task(id);
 
                 this.handle_selected(task);
