@@ -454,28 +454,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		$('#inactive_version_count').text( tot_ver_count - active_ver_count );
 	},1000);
 
-
-	//drawBarOnPolar("polar_bar", categories_mock, data_mock);
-	/*$.ajax({
-		url:"/auth-user/api/arms/dashboard/assignee-jira-issue-statuses",
-		type: "get",
-		data: {"pdServiceLink" : pdservice_id},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log("for polar-bar chart");
-				console.log(data);
-				console.log(Object.keys(data).length);
-				let keyArray = Object.keys(data);
-				console.log(keyArray);
-				//drawBarOnPolar2("polar_bar", keyArray, dashboardColor.manpowerPerformance);
-				//drawBarOnPolar("polar_bar", keyArray, data_mock);
-			}
-		}
-	});
-*/
 }
 
 
@@ -615,14 +593,10 @@ function drawVersionProgress(data) {
 		var subgroupName = d.version_name;
 		var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
 		tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
-		//var subgroupName = d.mig_wave_link;
-		//var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
-		//tooltip.html("차수: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
 
 		d3.selectAll(".myWave").style("opacity", 0.2);
 		d3.selectAll(".myStr").style("opacity", 0.2);
 		d3.selectAll(".wave-" + subgroupId).style("opacity", 1);
-		//d3.selectAll(".wave-" + subgroupName).style("opacity", 1);
 	};
 
 	var mousemove = function (d) {
@@ -643,8 +617,7 @@ function drawVersionProgress(data) {
 		endPadRad = sectionIndx === numSections ? 0 : padRad / 2;
 		versionId = data[sectionIndx - 1].version_id;
 		versionName = data[sectionIndx - 1].version_name;
-		//waveName = data[sectionIndx - 1].mig_wave_link;
-		console.log(versionId);
+
 		var sectionData = data[sectionIndx - 1];
 
 		var arc = d3
@@ -655,16 +628,12 @@ function drawVersionProgress(data) {
 			.endAngle(arcEndRad - endPadRad);
 
 		var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionId);
-		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName);
-		//var section = chart.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName);
 
 		section
 			.data([sectionData])
 			.enter()
 			.append("g")
 			.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionId)
-			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + versionName)
-			//.attr("class", "arc chart-color" + sectionIndx + " myWave wave-" + waveName)
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave)
@@ -678,12 +647,10 @@ function drawVersionProgress(data) {
 
 		chart
 			.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionId)
-			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + versionName)
-			//.selectAll(".arc.chart-color" + sectionIndx + ".myWave.wave-" + waveName)
 			.append("text")
 			.attr("class", "no-select")
 			.text(function (d) {
-				return getStrLimit(d.mig_wave_name, 5);
+				return getStrLimit(d.version_name, 9);
 			})
 			.attr("x", function (d) {
 				return arc.centroid(d)[0];
@@ -691,7 +658,8 @@ function drawVersionProgress(data) {
 			.attr("y", function (d) {
 				return arc.centroid(d)[1] + 2;
 			})
-			.style("font-size", "7px")
+			.style("font-size", "10px")
+			.style("font-weight", "700")
 			.attr("text-anchor", "middle");
 	}
 
@@ -1536,6 +1504,8 @@ function dataTableDrawCallback(tableInfo) {
 }
 
 function getIssueResponsibleStatusTop5(pdservice_id) {
+	$("#polar_bar").html("");
+
 	var _url = "/auth-user/api/arms/dashboard/normal/issue-responsible-status-top5/"+pdservice_id;
 	$.ajax({
 		url: _url,
