@@ -53,10 +53,6 @@ export default class Table {
                         const expand_btn = document.createElement('button');
                         expand_btn.className = 'expand_btn';
 
-                        expand_btn.addEventListener('click', () => {
-                            expand_btn.classList.toggle('collapse-list');
-                        });
-
                         $td.append(expand_btn);
                     }
 

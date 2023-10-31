@@ -1,3 +1,7 @@
+.hide {
+  display: none;
+}
+
 .wrapper {
   display: flex;
   position: relative;
@@ -7,6 +11,21 @@
 .table-container {
   flex: 1;
   overflow: auto;
+}
+.table-container::-webkit-scrollbar {
+  height: 10px;
+}
+.table-container:hover::-webkit-scrollbar-track {
+  background-color: #414141;
+}
+.table-container:hover::-webkit-scrollbar-thumb {
+  background-color: #784a3d;
+}
+.table-container::-webkit-scrollbar-track, .table-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+.table-container::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }
 .table-container table {
   min-width: 100%;
@@ -26,6 +45,9 @@
 .table-container table .table-body tr.dragging {
   opacity: 0.5;
   border: 2px dashed red;
+}
+.table-container table .table-body tr.selected {
+  background-color: rgba(229, 96, 59, 0.2);
 }
 .table-container table .table-header tr th,
 .table-container table .table-body tr td {
@@ -100,11 +122,11 @@
 .gantt .grid-row {
   fill: transparent;
 }
-.gantt .grid-row.selected {
-  background-color: #e5603b;
-}
 .gantt .grid-row:nth-child(odd) {
   fill: rgba(51, 51, 51, 0.325);
+}
+.gantt .grid-row.selected {
+  fill: rgba(229, 96, 59, 0.2);
 }
 .gantt .row-line {
   stroke: #ebeff2;
@@ -117,7 +139,7 @@
   stroke-width: 0.4;
 }
 .gantt .today-highlight {
-  fill: #fcf8e3;
+  fill: rgb(97, 97, 97);
   opacity: 0.5;
 }
 .gantt .arrow {
@@ -196,6 +218,21 @@
   position: relative;
   overflow: auto;
   font-size: 12px;
+}
+.gantt-container::-webkit-scrollbar {
+  height: 10px;
+}
+.gantt-container:hover::-webkit-scrollbar-track {
+  background-color: #414141;
+}
+.gantt-container:hover::-webkit-scrollbar-thumb {
+  background-color: #784a3d;
+}
+.gantt-container::-webkit-scrollbar-track, .gantt-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+.gantt-container::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }
 .gantt-container .popup-wrapper {
   position: absolute;

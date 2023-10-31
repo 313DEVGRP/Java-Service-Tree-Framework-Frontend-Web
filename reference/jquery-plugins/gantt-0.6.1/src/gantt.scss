@@ -10,7 +10,11 @@ $text-light: #555 !default;
 $text-color: #fff !default;
 $blue: #a4c6ff !default;
 $handle-color: #ddd !default;
-$selected: #e5603b !default;
+$selected: rgba(229, 96, 59, 0.2) !default;
+
+.hide {
+    display: none;
+}
 
 .wrapper {
     display: flex;
@@ -21,6 +25,26 @@ $selected: #e5603b !default;
 .table-container {
     flex: 1;
     overflow: auto;
+    &::-webkit-scrollbar {
+        height: 10px;
+    }
+
+    &:hover::-webkit-scrollbar-track {
+        background-color: #414141;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: #784a3d;
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+    }
 
     table {
         min-width: 100%;
@@ -44,6 +68,10 @@ $selected: #e5603b !default;
                 &.dragging {
                     opacity: 0.5;
                     border: 2px dashed red;
+                }
+
+                &.selected {
+                    background-color: $selected;
                 }
             }
         }
@@ -120,12 +148,13 @@ $selected: #e5603b !default;
     .grid-row {
         fill: transparent;
 
-        &.selected {
-            background-color: $selected;
+        &:nth-child(odd) {
+            fill: $light-bg;
         }
-    }
-    .grid-row:nth-child(odd) {
-        fill: $light-bg;
+
+        &.selected {
+            fill: $selected;
+        }
     }
     .row-line {
         stroke: $light-border-color;
@@ -138,7 +167,7 @@ $selected: #e5603b !default;
         }
     }
     .today-highlight {
-        fill: $light-yellow;
+        fill: rgb(97, 97, 97);
         opacity: 0.5;
     }
 
@@ -235,6 +264,27 @@ $selected: #e5603b !default;
     position: relative;
     overflow: auto;
     font-size: 12px;
+
+    &::-webkit-scrollbar {
+        height: 10px;
+    }
+
+    &:hover::-webkit-scrollbar-track {
+        background-color: #414141;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: #784a3d;
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+    }
 
     .popup-wrapper {
         position: absolute;

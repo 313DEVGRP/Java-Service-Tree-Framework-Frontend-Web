@@ -580,29 +580,25 @@ var Gantt = (function () {
         show_popup() {
             if (this.gantt.bar_being_dragged) return;
 
-            this.gantt.modal_handler({
-                id: this.task.id,
-                type: this.task.type,
-            });
+            const start_date = date_utils.format(
+                this.task._start,
+                'MMM D',
+                this.gantt.options.language
+            );
+            const end_date = date_utils.format(
+                date_utils.add(this.task._end, -1, 'second'),
+                'MMM D',
+                this.gantt.options.language
+            );
+            const subtitle = start_date + ' - ' + end_date;
 
-            // const start_date = date_utils.format(
-            //     this.task._start,
-            //     'MMM D',
-            //     this.gantt.options.language
-            // );
-            // const end_date = date_utils.format(
-            //     date_utils.add(this.task._end, -1, 'second'),
-            //     'MMM D',
-            //     this.gantt.options.language
-            // );
-            // const subtitle = start_date + ' - ' + end_date;
-            //
-            // this.gantt.show_popup({
-            //     target_element: this.$bar,
-            //     title: this.task.name,
-            //     subtitle: subtitle,
-            //     task: this.task,
-            // });
+            this.gantt.show_popup({
+                target_element: this.$bar,
+                title: this.task.name,
+                subtitle: subtitle,
+                task: this.task,
+            });
+            this.gantt.handle_selected(this.task);
         }
 
         update_bar_position({ x = null, width = null }) {
@@ -1015,10 +1011,6 @@ var Gantt = (function () {
                             const expand_btn = document.createElement('button');
                             expand_btn.className = 'expand_btn';
 
-                            expand_btn.addEventListener('click', () => {
-                                expand_btn.classList.toggle('collapse-list');
-                            });
-
                             $td.append(expand_btn);
                         }
 
@@ -1251,7 +1243,15 @@ var Gantt = (function () {
 
         setup_mode_handler() {
             const wrapper = document.createElement('div');
-            wrapper.className = 'mt well well-sm';
+            const excel_export = document.createElement('button');
+            const btn_group = document.createElement('div');
+
+            wrapper.className = 'mt well well-sm clearfix';
+            excel_export.className = 'btn btn-default btn-sm mr-xs';
+
+            excel_export.innerText = 'Excel';
+
+            $.style(btn_group, { float: 'right' });
 
             Object.keys(VIEW_MODE).forEach((key) => {
                 const btn = document.createElement('button');
@@ -1268,8 +1268,11 @@ var Gantt = (function () {
                     this.change_view_mode(VIEW_MODE[key]);
                 });
 
-                wrapper.appendChild(btn);
+                btn_group.appendChild(btn);
             });
+
+            wrapper.append(excel_export);
+            wrapper.append(btn_group);
 
             return wrapper;
         }
@@ -1372,6 +1375,7 @@ var Gantt = (function () {
             this.setup_tasks(tasks);
             this.change_view_mode();
             this.rerender_table();
+            this.originTasks = tasks;
         }
 
         change_view_mode(mode = this.options.view_mode) {
@@ -1494,11 +1498,14 @@ var Gantt = (function () {
             document
                 .querySelector('.table-container table')
                 .appendChild($table_body);
+
+            $table_body.addEventListener('click', (event) =>
+                this.bind_table_event(event, $table_body)
+            );
         }
 
         draggble_rerender(item) {
             this.update_origin_tasks(item);
-            this.setup_tasks(this.originTasks);
             this.render();
             this.rerender_table();
         }
@@ -1535,7 +1542,7 @@ var Gantt = (function () {
         }
 
         update_origin_tasks(item) {
-            this.originTasks = this.originTasks.reduce((acc, cur) => {
+            const tasks = this.tasks.reduce((acc, cur) => {
                 if (cur.id === item.c_id) {
                     cur = {
                         ...cur,
@@ -1579,6 +1586,9 @@ var Gantt = (function () {
                 acc.push(cur);
                 return acc;
             }, []);
+
+            this.setup_tasks(tasks);
+            this.originTasks = tasks;
         }
 
         setup_layers() {
@@ -1602,10 +1612,78 @@ var Gantt = (function () {
             this.make_table();
         }
 
+        bind_table_event(event, $table_body) {
+            const $tr = event.target.closest('tr');
+            const id = $tr.dataset.id;
+
+            if (event.target.classList.contains('expand_btn')) {
+                let tasks = [...this.tasks];
+
+                if (event.target.classList.contains('collapse-list')) {
+                    this.originTasks.forEach((task) => {
+                        if (task.dependencies.includes(id)) {
+                            const table_row = $table_body.querySelector(
+                                `[data-id='${task.id}']`
+                            );
+
+                            table_row.classList.remove('hide');
+                            tasks.splice(task._index, 0, task);
+                        }
+                    });
+
+                    event.target.classList.remove('collapse-list');
+                } else {
+                    const { update_list, remove_list } = this.tasks.reduce(
+                        (acc, task) => {
+                            if (!task.dependencies.includes(id)) {
+                                return {
+                                    update_list: [...acc.update_list, task],
+                                    remove_list: acc.remove_list,
+                                };
+                            }
+
+                            return {
+                                update_list: acc.update_list,
+                                remove_list: [...acc.remove_list, task],
+                            };
+                        },
+                        { update_list: [], remove_list: [] }
+                    );
+
+                    remove_list.forEach((task) => {
+                        const table_row = $table_body.querySelector(
+                            `[data-id='${task.id}']`
+                        );
+
+                        table_row.classList.remove('selected');
+                        table_row.classList.add('hide');
+                    });
+
+                    tasks = update_list;
+                    event.target.classList.add('collapse-list');
+                }
+
+                this.setup_tasks(tasks);
+                this.render();
+
+                return;
+            }
+
+            const task = this.get_task(id);
+
+            this.handle_selected(task);
+
+            this.modal_handler({
+                id: id,
+                type: task.type,
+            });
+        }
+
         make_table() {
             const $table_container = document.createElement('div');
-            $table_container.classList.add('table-container');
             const $table = document.createElement('table');
+
+            $table_container.className = 'table-container';
 
             const table_data = [...this.tasks];
             table_data.forEach((task) => {
@@ -1626,6 +1704,10 @@ var Gantt = (function () {
             $table.append($table_header);
             $table.append($table_body);
 
+            $table_body.addEventListener('click', (event) =>
+                this.bind_table_event(event, $table_body)
+            );
+
             $table_container.append($table);
 
             this.$wrapper.prepend($table_container);
@@ -1637,6 +1719,22 @@ var Gantt = (function () {
             this.make_grid_header();
             this.make_grid_ticks();
             this.make_grid_highlights();
+        }
+
+        handle_selected(task) {
+            const $tr = this.$wrapper.querySelectorAll('tr')[task._index + 1];
+            const $grid_row =
+                this.$wrapper.querySelectorAll('.grid-row')[task._index];
+
+            if (!$tr.classList.contains('selected')) {
+                Array.prototype.forEach.call(
+                    this.$wrapper.querySelectorAll('.selected'),
+                    (elem) => elem.classList.remove('selected')
+                );
+            }
+
+            $tr?.classList.toggle('selected');
+            $grid_row?.classList.toggle('selected');
         }
 
         make_grid_background() {

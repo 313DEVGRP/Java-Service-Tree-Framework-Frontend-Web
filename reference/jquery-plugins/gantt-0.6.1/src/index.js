@@ -89,7 +89,15 @@ export default class Gantt {
 
     setup_mode_handler() {
         const wrapper = document.createElement('div');
-        wrapper.className = 'mt well well-sm';
+        const excel_export = document.createElement('button');
+        const btn_group = document.createElement('div');
+
+        wrapper.className = 'mt well well-sm clearfix';
+        excel_export.className = 'btn btn-default btn-sm mr-xs';
+
+        excel_export.innerText = 'Excel';
+
+        $.style(btn_group, { float: 'right' });
 
         Object.keys(VIEW_MODE).forEach((key) => {
             const btn = document.createElement('button');
@@ -106,8 +114,11 @@ export default class Gantt {
                 this.change_view_mode(VIEW_MODE[key]);
             });
 
-            wrapper.appendChild(btn);
+            btn_group.appendChild(btn);
         });
+
+        wrapper.append(excel_export);
+        wrapper.append(btn_group);
 
         return wrapper;
     }
@@ -210,6 +221,7 @@ export default class Gantt {
         this.setup_tasks(tasks);
         this.change_view_mode();
         this.rerender_table();
+        this.originTasks = tasks;
     }
 
     change_view_mode(mode = this.options.view_mode) {
@@ -332,11 +344,14 @@ export default class Gantt {
         document
             .querySelector('.table-container table')
             .appendChild($table_body);
+
+        $table_body.addEventListener('click', (event) =>
+            this.bind_table_event(event, $table_body)
+        );
     }
 
     draggble_rerender(item) {
         this.update_origin_tasks(item);
-        this.setup_tasks(this.originTasks);
         this.render();
         this.rerender_table();
     }
@@ -373,7 +388,7 @@ export default class Gantt {
     }
 
     update_origin_tasks(item) {
-        this.originTasks = this.originTasks.reduce((acc, cur) => {
+        const tasks = this.tasks.reduce((acc, cur) => {
             if (cur.id === item.c_id) {
                 cur = {
                     ...cur,
@@ -417,6 +432,9 @@ export default class Gantt {
             acc.push(cur);
             return acc;
         }, []);
+
+        this.setup_tasks(tasks);
+        this.originTasks = tasks;
     }
 
     setup_layers() {
@@ -440,10 +458,78 @@ export default class Gantt {
         this.make_table();
     }
 
+    bind_table_event(event, $table_body) {
+        const $tr = event.target.closest('tr');
+        const id = $tr.dataset.id;
+
+        if (event.target.classList.contains('expand_btn')) {
+            let tasks = [...this.tasks];
+
+            if (event.target.classList.contains('collapse-list')) {
+                this.originTasks.forEach((task) => {
+                    if (task.dependencies.includes(id)) {
+                        const table_row = $table_body.querySelector(
+                            `[data-id='${task.id}']`
+                        );
+
+                        table_row.classList.remove('hide');
+                        tasks.splice(task._index, 0, task);
+                    }
+                });
+
+                event.target.classList.remove('collapse-list');
+            } else {
+                const { update_list, remove_list } = this.tasks.reduce(
+                    (acc, task) => {
+                        if (!task.dependencies.includes(id)) {
+                            return {
+                                update_list: [...acc.update_list, task],
+                                remove_list: acc.remove_list,
+                            };
+                        }
+
+                        return {
+                            update_list: acc.update_list,
+                            remove_list: [...acc.remove_list, task],
+                        };
+                    },
+                    { update_list: [], remove_list: [] }
+                );
+
+                remove_list.forEach((task) => {
+                    const table_row = $table_body.querySelector(
+                        `[data-id='${task.id}']`
+                    );
+
+                    table_row.classList.remove('selected');
+                    table_row.classList.add('hide');
+                });
+
+                tasks = update_list;
+                event.target.classList.add('collapse-list');
+            }
+
+            this.setup_tasks(tasks);
+            this.render();
+
+            return;
+        }
+
+        const task = this.get_task(id);
+
+        this.handle_selected(task);
+
+        this.modal_handler({
+            id: id,
+            type: task.type,
+        });
+    }
+
     make_table() {
         const $table_container = document.createElement('div');
-        $table_container.classList.add('table-container');
         const $table = document.createElement('table');
+
+        $table_container.className = 'table-container';
 
         const table_data = [...this.tasks];
         table_data.forEach((task) => {
@@ -464,6 +550,10 @@ export default class Gantt {
         $table.append($table_header);
         $table.append($table_body);
 
+        $table_body.addEventListener('click', (event) =>
+            this.bind_table_event(event, $table_body)
+        );
+
         $table_container.append($table);
 
         this.$wrapper.prepend($table_container);
@@ -475,6 +565,22 @@ export default class Gantt {
         this.make_grid_header();
         this.make_grid_ticks();
         this.make_grid_highlights();
+    }
+
+    handle_selected(task) {
+        const $tr = this.$wrapper.querySelectorAll('tr')[task._index + 1];
+        const $grid_row =
+            this.$wrapper.querySelectorAll('.grid-row')[task._index];
+
+        if (!$tr.classList.contains('selected')) {
+            Array.prototype.forEach.call(
+                this.$wrapper.querySelectorAll('.selected'),
+                (elem) => elem.classList.remove('selected')
+            );
+        }
+
+        $tr?.classList.toggle('selected');
+        $grid_row?.classList.toggle('selected');
     }
 
     make_grid_background() {

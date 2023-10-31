@@ -343,7 +343,7 @@ function dataTableLoad() {
 		//select node 정보를 가져온다.
 		console.log("tableName:: " + tableName);
 		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedId,
 			type: "GET",
 			contentType: "application/json;charset=UTF-8",
 			dataType: "json",
@@ -407,7 +407,7 @@ function dataTableLoad() {
 		var buttonList = [];
 
 		var jquerySelector = "#req_table";
-		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do?c_id=" + selectId;
+		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do?c_id=" + selectedId;
 		var jsonRoot = "";
 		var isServerSide = false;
 
@@ -1567,8 +1567,11 @@ function addZero(n) {
 function modalOpen(item) {
 	selectedId = item.id;
 	selectedType = item.type;
-	if (item.type === "default") setDetailAndEditViewTab();
-	else dataTableLoad();
+
+	setDetailAndEditViewTab();
+
+	// if (item.type === "default") setDetailAndEditViewTab();
+	// else dataTableLoad();
 }
 
 function popup_size_setting() {
