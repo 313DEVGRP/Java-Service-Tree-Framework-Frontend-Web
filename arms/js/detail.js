@@ -677,7 +677,7 @@ function detailTreeBuild(jQueryElementID, serviceNameForURL) {
                         };
                     },
                     success: function (n) {
-                        jSuccess("Product(service) Data Load Complete");
+                        jSuccess("요구사항 목록 조회가 완료되었습니다.");
                     }
                 }
             },
@@ -965,7 +965,7 @@ function fileLoadByPdService() {
 
         bindFileList(result);
 
-        jSuccess("파일 조회가 완료 되었습니다.");
+        jSuccess("기획서 조회가 완료 되었습니다.");
     });
 }
 
@@ -1122,7 +1122,7 @@ function getTotalCount() {
         complete: function () {
         },
         error: function (e) {
-            jError("신규 게시물 등록 중 에러가 발생했습니다.");
+            jError("QnA 게시물 조회 중 에러가 발생했습니다.");
         }
     });
 }
@@ -1194,7 +1194,7 @@ function getReqCommentList(pageNum) {
         complete: function () {
         },
         error: function (e) {
-            jError("신규 게시물 등록 중 에러가 발생했습니다.");
+            jError("QnA 게시물 조회 중 에러가 발생했습니다.");
         }
     });
 }
@@ -1469,7 +1469,7 @@ function req_comment_edit_btn_click(c_id, commentText) {
             complete: function () {
             },
             error: function (e) {
-                jError("신규 게시물 등록 중 에러가 발생했습니다.");
+                jError("게시물 수정 중 에러가 발생했습니다.");
             }
         });
     }

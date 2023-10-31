@@ -1477,7 +1477,7 @@ function chk_issue_type_whether_issue_can_be_created(list) {
     var arr = list; var chk_result = "false";
     if (arr.length != 0) {
         arr.forEach( function (info, index) {
-            if (info.c_check = "true") {
+            if (info.c_check === "true") {
                 chk_result = "true";
             } else if (info.c_issue_type_name === "arms-requirement") {
                 chk_result = "true";
