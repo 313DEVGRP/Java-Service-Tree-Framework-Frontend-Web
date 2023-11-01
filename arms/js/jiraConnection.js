@@ -415,14 +415,16 @@ function dataTableDrawCallback(tableInfo) {
     }
     var tableData = tableInfo.aoData;
     if(!isEmpty(tableData)) {
-        tableData.forEach(function (rowInfo, index) {
-            var tableRowData = rowInfo._aData;
-            var rowIsDefault = tableRowData.c_check;
-            var rowNameClass = "." + className + "-data" + index;
+        tableData.forEach(function (rowInfo, index) { console.log("forEach");
+            if(rowInfo._aData !== undefined) {
+                var tableRowData = rowInfo._aData;
+                var rowIsDefault = tableRowData.c_check;
+                var rowNameClass = "." + className + "-data" + index;
 
-            var appendHtml = rowNameClass+">input";
-            if (rowIsDefault ==="true") {
-                $(appendHtml).prop("checked", "true");
+                var appendHtml = rowNameClass+">input";
+                if (rowIsDefault ==="true") {
+                    $(appendHtml).prop("checked", "true");
+                }
             }
         });
 

@@ -195,7 +195,21 @@ function makePdServiceSelectBox() {
 		var selectedService = $("#selected_pdService").select2("data")[0].text;
 
 		$("#select_PdService").text(selectedService);
-		$("#select_Service").text(selectedService);   // 선택된 제품(서비스)
+
+		var selectedHtml =
+			`<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
+				<span class="text" style="color: #a4c6ff;">
+				` + selectedService +
+				`
+				</span>
+				</div>
+				</div>
+				`;
+		$("#reqSender").html(selectedHtml); // 선택된 제품(서비스)
+
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
 		//서비스(어플리케이션) 트리 로드
 		build_ReqData_By_PdService();

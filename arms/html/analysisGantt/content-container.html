@@ -148,6 +148,46 @@
             프로젝트 진척율
           </span>
         </h4>
+        <div class="widget-controls">
+            <a
+                    data-widgster="toleft"
+                    title="change width to left"
+                    href="#">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+            </a>
+            <a
+                    data-widgster="expand"
+                    title="Expand"
+                    href="#">
+                <i class="glyphicon glyphicon-chevron-up"></i>
+            </a>
+            <a
+                    data-widgster="collapse"
+                    title="Collapse"
+                    href="#">
+                <i class="glyphicon glyphicon-chevron-down"></i>
+            </a>
+            <a
+                    data-widgster="toright"
+                    title="change width to right"
+                    href="#">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+            <a
+                    data-widgster="restore"
+                    title="Restore"
+                    href="#">
+                <span class="glyphicon glyphicon-repeat"></span>
+            </a>
+            <a
+                    data-widgster="fullscreen"
+                    title="Fullscreen"
+                    href="#">
+                <i
+                        class="glyphicon glyphicon-fullscreen"
+                        style="font-size: 11px"></i>
+            </a>
+          </div>
       </header>
       <div class="body">
         <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
@@ -159,15 +199,9 @@
             </button>
           </div>
           2. 일정변경 관리하지 않을 때
+          <p class="font12"><i class="fa fa-info-circle"></i> 프로젝트 작업량과 진척율을 보여줍니다. <strong>"스케쥴 업데이트"</strong> 버튼 클릭 시 아래 항목이 자동 계산됩니다.</p>
         </blockquote>
-        <div class="flex flex-space-between">
-          <div class="chat-message">
-            <div class="chat-message-body arrow">
-              <p class="font11">* 프로젝트 작업량과 진척율을 보여줍니다.</p>
-              <p class="font11">* "스케쥴 업데이트" 버튼 클릭 시 아래 항목이 자동 계산됩니다.</p>
-            </div>
-          </div>
-
+        <div class="flex" style="flex-direction: row-reverse;">
           <button type="button" id="shcedule_update" onclick="scheduleUpdate()" class="btn btn-success btn-sm mr-1">
             스케쥴 업데이트
           </button>
