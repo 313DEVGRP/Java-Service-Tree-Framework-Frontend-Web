@@ -18,9 +18,8 @@ const VIEW_MODE = {
 };
 
 export default class Gantt {
-    constructor(wrapper, tasks, options, contents, handler) {
+    constructor(wrapper, tasks, options, contents) {
         this.originTasks = tasks;
-        this.modal_handler = handler.modal;
 
         this.setup_options(options);
         this.setup_tasks(tasks);
@@ -32,7 +31,7 @@ export default class Gantt {
         this.bind_events();
 
         this.setup_split_bar();
-        this.setup_table(contents, handler.draggableNode);
+        this.setup_table(contents);
     }
 
     setup_wrapper(element) {
@@ -454,7 +453,7 @@ export default class Gantt {
     }
 
     setup_table(contents, handler) {
-        this.table = new Table(contents, handler);
+        this.table = new Table(this, contents, handler);
         this.make_table();
     }
 
@@ -521,11 +520,6 @@ export default class Gantt {
         const task = this.get_task(id);
 
         this.handle_selected(task);
-
-        this.modal_handler({
-            id: id,
-            type: task.type,
-        });
     }
 
     make_table() {

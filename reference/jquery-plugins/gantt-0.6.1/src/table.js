@@ -2,9 +2,13 @@ import { $ } from './svg_utils';
 
 export default class Table {
     dragStartY = 0;
-    constructor(contents, handler) {
+    constructor(gantt, contents) {
+        this.set_defaults(gantt, contents);
+    }
+
+    set_defaults(gantt, contents) {
+        this.gantt = gantt;
         this.contents = contents;
-        this.handler = handler;
     }
 
     draw_table_header(attr) {
@@ -143,7 +147,8 @@ export default class Table {
             }
 
             this.dragStartY = 0;
-            await this.handler(params);
+            this.gantt.draggble_rerender(params);
+            this.gantt.trigger_event('drag_row', [params]);
         });
     }
 }

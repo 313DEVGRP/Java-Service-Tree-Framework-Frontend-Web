@@ -1474,10 +1474,7 @@ async function draggableNode(data) {
 			copy: 0,
 			multiCounter: 0
 		},
-		progress: true,
-		success: function (r) {
-			gantt.draggble_rerender(data);
-		}
+		progress: true
 	});
 }
 
@@ -1549,6 +1546,7 @@ function initGantt(data) {
 					}
 				);
 			},
+			on_drag_row: draggableNode,
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},
 		{
@@ -1564,8 +1562,7 @@ function initGantt(data) {
 			result: "산출물",
 			plan: "계획",
 			performance: "실적"
-		},
-		{ draggableNode, modal: modalOpen }
+		}
 	);
 }
 function getDate(stamp) {

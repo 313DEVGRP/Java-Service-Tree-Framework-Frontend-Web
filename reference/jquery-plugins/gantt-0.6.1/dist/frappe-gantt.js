@@ -960,9 +960,13 @@ var Gantt = (function () {
 
     class Table {
         dragStartY = 0;
-        constructor(contents, handler) {
+        constructor(gantt, contents) {
+            this.set_defaults(gantt, contents);
+        }
+
+        set_defaults(gantt, contents) {
+            this.gantt = gantt;
             this.contents = contents;
-            this.handler = handler;
         }
 
         draw_table_header(attr) {
@@ -1101,7 +1105,8 @@ var Gantt = (function () {
                 }
 
                 this.dragStartY = 0;
-                await this.handler(params);
+                this.gantt.draggble_rerender(params);
+                this.gantt.trigger_event('drag_row', [params]);
             });
         }
     }
@@ -1172,9 +1177,8 @@ var Gantt = (function () {
     };
 
     class Gantt {
-        constructor(wrapper, tasks, options, contents, handler) {
+        constructor(wrapper, tasks, options, contents) {
             this.originTasks = tasks;
-            this.modal_handler = handler.modal;
 
             this.setup_options(options);
             this.setup_tasks(tasks);
@@ -1186,7 +1190,7 @@ var Gantt = (function () {
             this.bind_events();
 
             this.setup_split_bar();
-            this.setup_table(contents, handler.draggableNode);
+            this.setup_table(contents);
         }
 
         setup_wrapper(element) {
@@ -1608,7 +1612,7 @@ var Gantt = (function () {
         }
 
         setup_table(contents, handler) {
-            this.table = new Table(contents, handler);
+            this.table = new Table(this, contents, handler);
             this.make_table();
         }
 
@@ -1675,11 +1679,6 @@ var Gantt = (function () {
             const task = this.get_task(id);
 
             this.handle_selected(task);
-
-            this.modal_handler({
-                id: id,
-                type: task.type,
-            });
         }
 
         make_table() {
