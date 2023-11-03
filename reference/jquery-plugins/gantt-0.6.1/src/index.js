@@ -472,6 +472,9 @@ export default class Gantt {
                             `[data-id='${task.id}']`
                         );
 
+                        table_row
+                            .querySelector('.collapse-list')
+                            ?.classList.remove('collapse-list');
                         table_row.classList.remove('hide');
                         tasks.splice(task._index, 0, task);
                     }

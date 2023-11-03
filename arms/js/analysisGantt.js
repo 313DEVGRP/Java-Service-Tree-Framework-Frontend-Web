@@ -1415,6 +1415,22 @@ function setGanttTasks(data) {
 	ganttTasks = data.reduce((acc, cur) => {
 		if (cur.c_parentid < 2) return acc;
 
+		let dependencies = "";
+
+		if (cur.c_parentid !== 2) {
+			function setDependencies(parentId, parents) {
+				const node = data.find((task) => task.c_id === parentId);
+
+				if (node.c_parentid <= 2) {
+					return parents;
+				}
+
+				return setDependencies(node.c_parentid, parents.concat(`${node.c_parentid}`));
+			}
+
+			dependencies = setDependencies(cur.c_parentid, [`${cur.c_parentid}`]);
+		}
+
 		acc.push({
 			id: `${cur.c_id}`,
 			assignee: cur.c_req_owner,
@@ -1423,7 +1439,7 @@ function setGanttTasks(data) {
 			start: getDate(cur.c_req_start_date),
 			end: getDate(cur.c_req_end_date),
 			progress: cur.c_req_plan_progress || 0,
-			dependencies: cur.c_parentid === 2 ? "" : `${cur.c_parentid}`,
+			dependencies: dependencies,
 			priority: cur.state,
 			custom_class: cur.status, // optional
 			type: cur.c_type,
