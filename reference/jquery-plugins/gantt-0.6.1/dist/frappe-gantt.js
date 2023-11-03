@@ -960,22 +960,22 @@ var Gantt = (function () {
 
     class Table {
         dragStartY = 0;
-        constructor(gantt, contents) {
-            this.set_defaults(gantt, contents);
+        constructor(gantt, columns) {
+            this.set_defaults(gantt, columns);
         }
 
-        set_defaults(gantt, contents) {
+        set_defaults(gantt, columns) {
             this.gantt = gantt;
-            this.contents = contents;
+            this.columns = columns;
         }
 
-        draw_table_header(attr) {
+        draw_table_header() {
             const $thead = document.createElement('thead');
             const $tr = document.createElement('tr');
 
-            Object.values(this.contents).forEach((content) => {
+            this.columns.forEach((column) => {
                 const $th = document.createElement('th');
-                $th.textContent = content;
+                $th.textContent = column.title;
 
                 $tr.appendChild($th);
             });
@@ -983,34 +983,42 @@ var Gantt = (function () {
             $thead.appendChild($tr);
             $thead.classList.add('table-header');
 
-            $.style($tr, attr);
+            $.style($tr, {
+                height: this.gantt.options.header_height + 9 + 'px',
+            });
 
             return $thead;
         }
 
-        draw_table_body(tasks, attr) {
+        draw_table_body(tasks) {
             this.tasks = tasks;
             const $tbody = document.createElement('tbody');
             $tbody.classList.add('table-body');
 
-            this.make_table_row(attr).forEach((row) => $tbody.append(row));
+            this.make_table_row().forEach((row) => $tbody.append(row));
 
             this.bind_draggable_event($tbody);
 
             return $tbody;
         }
 
-        make_table_row(attr) {
+        make_table_row() {
             return this.tasks.map((task) => {
                 const $tr = document.createElement('tr');
                 $tr.setAttribute('draggable', 'true');
                 $tr.setAttribute('data-id', task.id);
-                $.style($tr, attr);
+                $.style($tr, {
+                    height:
+                        this.gantt.options.bar_height +
+                        this.gantt.options.padding +
+                        'px',
+                });
 
-                Object.keys(this.contents).forEach((content) => {
+                this.columns.forEach((column) => {
                     const $td = document.createElement('td');
+                    const { data, render } = column;
 
-                    if (content === 'name' && task.level > 1) {
+                    if (data === 'name' && task.level > 1) {
                         if (task.has_children) {
                             const expand_btn = document.createElement('button');
                             expand_btn.className = 'expand_btn';
@@ -1021,8 +1029,14 @@ var Gantt = (function () {
                         $td.className = `indent-${task.level - 1}`;
                     }
 
-                    const text = document.createTextNode(task[content] ?? '');
-                    $td.append(text);
+                    if (render) {
+                        const child_node = render(task[data], task);
+                        $td.append(child_node);
+                    } else {
+                        const text = document.createTextNode(task[data] ?? '');
+                        $td.append(text);
+                    }
+
                     $tr.append($td);
                 });
 
@@ -1696,12 +1710,8 @@ var Gantt = (function () {
                 });
             });
 
-            const $table_header = this.table.draw_table_header({
-                height: this.options.header_height + 9 + 'px',
-            });
-            const $table_body = this.table.draw_table_body(table_data, {
-                height: this.options.bar_height + this.options.padding + 'px',
-            });
+            const $table_header = this.table.draw_table_header();
+            const $table_body = this.table.draw_table_body(table_data);
 
             $table.append($table_header);
             $table.append($table_body);

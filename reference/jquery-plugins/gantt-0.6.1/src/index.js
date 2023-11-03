@@ -537,12 +537,8 @@ export default class Gantt {
             });
         });
 
-        const $table_header = this.table.draw_table_header({
-            height: this.options.header_height + 9 + 'px',
-        });
-        const $table_body = this.table.draw_table_body(table_data, {
-            height: this.options.bar_height + this.options.padding + 'px',
-        });
+        const $table_header = this.table.draw_table_header();
+        const $table_body = this.table.draw_table_body(table_data);
 
         $table.append($table_header);
         $table.append($table_body);

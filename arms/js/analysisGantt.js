@@ -1546,23 +1546,58 @@ function initGantt(data) {
 					}
 				);
 			},
-			on_drag_row: draggableNode,
+			on_drag_row: (node) => {
+				console.log("Move Node :: ", node);
+				draggableNode(node);
+			},
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},
-		{
-			name: "작업",
-			etc: "비고",
-			start: "시작일",
-			end: "완료일",
-			tmm: "총 작업량",
-			p_work: "계획작업",
-			t_period: "총 기간",
-			tpp: "계획기간",
-			assignee: "담당",
-			result: "산출물",
-			plan: "계획",
-			performance: "실적"
-		}
+		[
+			{ data: "name", title: "작업" },
+			{ data: "etc", title: "비고" },
+			{ data: "start", title: "시작일" },
+			{ data: "end", title: "완료일" },
+			{ data: "tmm", title: "총 작업량" },
+			{ data: "p_work", title: "계획작업" },
+			{ data: "t_period", title: "총 기간" },
+			{ data: "tpp", title: "계획기간" },
+			{ data: "assignee", title: "담당" },
+			{ data: "result", title: "산출물" },
+			{ data: "plan", title: "계획" },
+			{ data: "performance", title: "실적" },
+			{
+				data: "id",
+				title: "",
+				render: (data, row) => {
+					const btnWrapper = $("<div />");
+					const updateBtn = $("<button />")
+						.addClass("btn btn-success btn-sm")
+						.append($("<i />").addClass("fa fa-pencil"))
+						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
+						.on("click", () => updateNodeModalOpen(row));
+					const addBtn = $("<button />")
+						.addClass("btn btn-primary btn-sm")
+						.append($("<i />").addClass("fa fa-plus-circle"))
+						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
+						.on("click", addNodeModalOpen);
+
+					btnWrapper.append(updateBtn);
+					btnWrapper.append(addBtn);
+
+					if (row.type !== "default") {
+						const addLevelDownBtn = $("<button />")
+							.addClass("btn btn-primary btn-sm")
+							.append($("<i />").addClass("fa fa-level-down"))
+							.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
+							.on("click", addNodeModalOpen);
+
+						btnWrapper.append(addLevelDownBtn);
+					}
+
+					return btnWrapper[0];
+				}
+			}
+		]
 	);
 }
 function getDate(stamp) {
@@ -1577,14 +1612,17 @@ function addZero(n) {
 ///////////////////////////////////////////////////////////////////////////////
 // 모달
 ///////////////////////////////////////////////////////////////////////////////
-function modalOpen(item) {
+function updateNodeModalOpen(item) {
 	selectedId = item.id;
 	selectedType = item.type;
 
-	setDetailAndEditViewTab();
+	if (item.type === "default") return setDetailAndEditViewTab();
 
-	// if (item.type === "default") setDetailAndEditViewTab();
-	// else dataTableLoad();
+	dataTableLoad();
+}
+
+function addNodeModalOpen() {
+	$("#my_modal1").modal("show");
 }
 
 function popup_size_setting() {
