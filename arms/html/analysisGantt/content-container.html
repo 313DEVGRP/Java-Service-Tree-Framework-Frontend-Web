@@ -1,348 +1,416 @@
 <div class="row">
-  <div class="col-lg-4 col-layer">
-    <section class="widget">
-      <header>
-        <h4>
-          <span
-            class="font13"
-            style="font-weight: bold">
-            <i class="fa fa-edit"></i>
-            Service - Version 선택
-          </span>
-        </h4>
-        <div class="widget-controls">
-          <a
-            data-widgster="toleft"
-            title="change width to left"
-            href="#">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-          </a>
-          <a
-            data-widgster="expand"
-            title="Expand"
-            href="#">
-            <i class="glyphicon glyphicon-chevron-up"></i>
-          </a>
-          <a
-            data-widgster="collapse"
-            title="Collapse"
-            href="#">
-            <i class="glyphicon glyphicon-chevron-down"></i>
-          </a>
-          <a
-            data-widgster="toright"
-            title="change width to right"
-            href="#">
-            <i class="glyphicon glyphicon-chevron-right"></i>
-          </a>
-          <a
-            data-widgster="restore"
-            title="Restore"
-            href="#">
-            <span class="glyphicon glyphicon-repeat"></span>
-          </a>
-          <a
-            data-widgster="fullscreen"
-            title="Fullscreen"
-            href="#">
-            <i
-              class="glyphicon glyphicon-fullscreen"
-              style="font-size: 11px"></i>
-          </a>
-        </div>
-      </header>
-      <div class="body">
-        <div
-          class="gradient_middle_border"
-          style="width: 100%; height: 2px"></div>
-        <blockquote
-          class="font13"
-          style="margin-top: 5px">
-          1. 제품(서비스) 선택
-          <div style="float: right">
-            <button
-              class="btn btn-transparent btn-xs"
-              style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-              onclick="window.open('docs/guide.html#reqstatus_version_selection')">
-              Help
-              <i
-                class="fa fa-question"
-                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-            </button>
-          </div>
-        </blockquote>
+	<div class="col-lg-4 col-layer">
+		<section class="widget">
+			<header>
+				<h4>
+					<span
+						class="font13"
+						style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						Service - Version 선택
+					</span>
+				</h4>
+				<div class="widget-controls">
+					<a
+						data-widgster="toleft"
+						title="change width to left"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="toright"
+						title="change width to right"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>
+					<a
+						data-widgster="restore"
+						title="Restore"
+						href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+				</div>
+			</header>
+			<div class="body">
+				<div
+					class="gradient_middle_border"
+					style="width: 100%; height: 2px"></div>
+				<blockquote
+					class="font13"
+					style="margin-top: 5px">
+					1. 제품(서비스) 선택
+					<div style="float: right">
+						<button
+							class="btn btn-transparent btn-xs"
+							style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+							onclick="window.open('docs/guide.html#reqstatus_version_selection')">
+							Help
+							<i
+								class="fa fa-question"
+								style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+						</button>
+					</div>
+				</blockquote>
 
-        <div class="row">
-          <div class="col-md-12">
-            <section
-            class="widget"
-            style="margin-bottom: 0px !important">
-              <header>
-                <label><strong>Search</strong></label>
-              </header>
-              <div class="body">
-                <div class="column">
-                  <blockquote class="font12">
-                    <strong>
-                      1. Product
-                      <sup>service</sup>
-                      를 선택해 주세요
-                    </strong>
-                  </blockquote>
-                  <div
-                    class="control-group"
-                    class="darkBack"
-                    style="padding-bottom: 10px; border: 0">
-                    <div
-                      class="controls form-group"
-                      class="darkBack"
-                      style="margin-bottom: 5px !important">
-                      <select
-                        id="selected_pdService"
-                        required="required"
-                        data-placeholder="Select Product(Service)"
-                        class="select-block-level chzn-select darkBack"
-                        tabindex="-1"
-                        name="selected_pdService"
-                        style="width: 100% !important">
-                        <option value=""></option>
-                      </select>
-                    </div>
-                  </div>
-                  <blockquote class="font12">
-                    <strong>
-                      2. Product
-                      <sup>service</sup>
-                      의 버전을 선택해 주세요
-                    </strong>
-                  </blockquote>
-                  <div
-                    class="control-group"
-                    style="padding-bottom: 10px; border: 0">
-                    <div
-                      class="controls form-group"
-                      style="margin-bottom: 5px !important">
-                      <select
-                        multiple="multiple"
-                        id="multiversion"
-                        class="multiple-select btn-block darkBack"
-                        placeholder="&nbsp;&nbsp;Select Version"></select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-    </div>
-    </section>
-  </div>
-  <div class="col-lg-8 col-layer">
-    <section class="widget">
-      <header>
-        <h4>
-          <span
-            class="font13"
-            style="font-weight: bold">
-            <i class="fa fa-edit"></i>
-            프로젝트 진척율
-          </span>
-        </h4>
-        <div class="widget-controls">
-            <a
-                    data-widgster="toleft"
-                    title="change width to left"
-                    href="#">
-                <i class="glyphicon glyphicon-chevron-left"></i>
-            </a>
-            <a
-                    data-widgster="expand"
-                    title="Expand"
-                    href="#">
-                <i class="glyphicon glyphicon-chevron-up"></i>
-            </a>
-            <a
-                    data-widgster="collapse"
-                    title="Collapse"
-                    href="#">
-                <i class="glyphicon glyphicon-chevron-down"></i>
-            </a>
-            <a
-                    data-widgster="toright"
-                    title="change width to right"
-                    href="#">
-                <i class="glyphicon glyphicon-chevron-right"></i>
-            </a>
-            <a
-                    data-widgster="restore"
-                    title="Restore"
-                    href="#">
-                <span class="glyphicon glyphicon-repeat"></span>
-            </a>
-            <a
-                    data-widgster="fullscreen"
-                    title="Fullscreen"
-                    href="#">
-                <i
-                        class="glyphicon glyphicon-fullscreen"
-                        style="font-size: 11px"></i>
-            </a>
-          </div>
-      </header>
-      <div class="body">
-        <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-        <blockquote class="font13" style="margin-top: 5px;">
-          <div style="float: right;">
-            <button class="btn btn-transparent btn-xs" style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;" onclick="window.open('docs/guide.html#jira_edit_delete')">
-              Help
-              <i class="fa fa-question" style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-            </button>
-          </div>
-          2. 일정변경 관리하지 않을 때
-          <p class="font12"><i class="fa fa-info-circle"></i> 프로젝트 작업량과 진척율을 보여줍니다. <strong>"스케쥴 업데이트"</strong> 버튼 클릭 시 아래 항목이 자동 계산됩니다.</p>
-        </blockquote>
-        <div class="flex" style="flex-direction: row-reverse;">
-          <button type="button" id="shcedule_update" onclick="scheduleUpdate()" class="btn btn-success btn-sm mr-1">
-            스케쥴 업데이트
-          </button>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="body tab-content">
-              <div class="project-progress">
-                <div class="progress-group">
-                  <label for="total_work">
-                    프로젝트 전체 작업량 :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                      </span>
-                      <span class="progress-input font11">
-                        <input type="text" id="total_work" name="total_work" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        Man/Day
-                      </span>
-                      <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">프로젝트 전체의 작업량을 Man/Day로 표시한다. 가중치를 적용한 값이다.</span>
-                      </span>
-                  </div>
-                </div>
-                <div class="progress-group">
-                  <label for="planed_work">
-                    현재일까지 계획된 작업량 :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                      </span>
-                    <span class="progress-input font11">
-                        <input type="text" id="planed_work" name="planed_work" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        Man/Day
-                      </span>
-                    <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">해당작업의 시작일부터 현재일까지의 작업기간을 의미함(현재 날짜까지 진행되었어야 할 기간)</span>
-                      </span>
-                  </div>
-                </div>
-                <div class="progress-group">
-                  <label for="performance_capability">
-                    실적기성 :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-list-alt"></i>
-                      </span>
-                    <span class="progress-input font11">
-                        <input type="text" id="performance_capability" name="performance_capability" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        Man/Day
-                      </span>
-                    <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">실적기성(총기간 x 총실적진행율)</span>
-                      </span>
-                  </div>
-                </div>
-                <div class="progress-group">
-                  <label for="actual_input">
-                    실제 투입된 작업량 :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                      </span>
-                    <span class="progress-input font11">
-                        <input type="text" id="actual_input" name="actual_input" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        Man/Day
-                      </span>
-                    <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">일정변경 관리할 때 현재까지 실제로 투입된 작업기간을 표시함</span>
-                      </span>
-                  </div>
-                </div>
-                <div class="progress-group">
-                  <label for="planned_progress">
-                    계획 진척율(A) :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-list-alt"></i>
-                      </span>
-                    <span class="progress-input font11">
-                        <input type="text" id="planned_progress" name="planned_progress" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        %
-                      </span>
-                    <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">현재날짜까지 계획된 진척율, WBS의 "계획진척율"의 전체 합계 진척율을 표시함</span>
-                      </span>
-                  </div>
-                </div>
-                <div class="progress-group">
-                  <label for="performance_progress">
-                    실적 진척율(B) :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-list-alt"></i>
-                      </span>
-                    <span class="progress-input font11">
-                        <input type="text" id="performance_progress" name="performance_progress" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        %
-                      </span>
-                    <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">현재날짜까지 실제로 진행된 진척율, WBS의 "실적진척율"의 전체 합계 진척율을 표시함</span>
-                      </span>
-                  </div>
-                </div>
-                <div class="progress-group">
-                  <label for="project_progress">
-                    차이(B-A) :
-                  </label>
-                  <div class="progress-desc">
-                      <span class="icon input-group-addon">
-                        <i class="glyphicon glyphicon-list-alt"></i>
-                      </span>
-                    <span class="progress-input font11">
-                        <input type="text" id="project_progress" name="project_progress" class="form-control parsley-validated font13 darkBack" style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important" placeholder="0000.00" required="required" readonly="">
-                        %
-                      </span>
-                    <span class="input-group-addon input-desc">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="font11">양수이면 계획보다 빨리 진행, 음수이면 지연</span>
-                      </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+				<div class="row">
+					<div class="col-md-12">
+						<section
+							class="widget"
+							style="margin-bottom: 0px !important">
+							<header>
+								<label><strong>Search</strong></label>
+							</header>
+							<div class="body">
+								<div class="column">
+									<blockquote class="font12">
+										<strong>
+											1. Product
+											<sup>service</sup>
+											를 선택해 주세요
+										</strong>
+									</blockquote>
+									<div
+										class="control-group"
+										class="darkBack"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group"
+											class="darkBack"
+											style="margin-bottom: 5px !important">
+											<select
+												id="selected_pdService"
+												required="required"
+												data-placeholder="Select Product(Service)"
+												class="select-block-level chzn-select darkBack"
+												tabindex="-1"
+												name="selected_pdService"
+												style="width: 100% !important">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+									<blockquote class="font12">
+										<strong>
+											2. Product
+											<sup>service</sup>
+											의 버전을 선택해 주세요
+										</strong>
+									</blockquote>
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group"
+											style="margin-bottom: 5px !important">
+											<select
+												multiple="multiple"
+												id="multiversion"
+												class="multiple-select btn-block darkBack"
+												placeholder="&nbsp;&nbsp;Select Version"></select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="col-lg-8 col-layer">
+		<section class="widget">
+			<header>
+				<h4>
+					<span
+						class="font13"
+						style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						프로젝트 진척율
+					</span>
+				</h4>
+				<div class="widget-controls">
+					<a
+						data-widgster="toleft"
+						title="change width to left"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="toright"
+						title="change width to right"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>
+					<a
+						data-widgster="restore"
+						title="Restore"
+						href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+				</div>
+			</header>
+			<div class="body">
+				<div
+					class="gradient_middle_border"
+					style="width: 100%; height: 2px"></div>
+				<blockquote
+					class="font13"
+					style="margin-top: 5px">
+					<div style="float: right">
+						<button
+							class="btn btn-transparent btn-xs"
+							style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+							onclick="window.open('docs/guide.html#jira_edit_delete')">
+							Help
+							<i
+								class="fa fa-question"
+								style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+						</button>
+					</div>
+					2. 일정변경 관리하지 않을 때
+					<p class="font12">
+						<i class="fa fa-info-circle"></i>
+						프로젝트 작업량과 진척율을 보여줍니다.
+						<strong>"스케쥴 업데이트"</strong>
+						버튼 클릭 시 아래 항목이 자동 계산됩니다.
+					</p>
+				</blockquote>
+				<div
+					class="flex"
+					style="flex-direction: row-reverse">
+					<button
+						type="button"
+						id="shcedule_update"
+						onclick="scheduleUpdate()"
+						class="btn btn-success btn-sm mr-1">
+						스케쥴 업데이트
+					</button>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="body tab-content">
+							<div class="project-progress">
+								<div class="progress-group">
+									<label for="total_work">프로젝트 전체 작업량 :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="total_work"
+												name="total_work"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											Man/Day
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">프로젝트 전체의 작업량을 Man/Day로 표시한다. 가중치를 적용한 값이다.</span>
+										</span>
+									</div>
+								</div>
+								<div class="progress-group">
+									<label for="planed_work">현재일까지 계획된 작업량 :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="planed_work"
+												name="planed_work"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											Man/Day
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">
+												해당작업의 시작일부터 현재일까지의 작업기간을 의미함(현재 날짜까지 진행되었어야 할 기간)
+											</span>
+										</span>
+									</div>
+								</div>
+								<div class="progress-group">
+									<label for="performance_capability">실적기성 :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="performance_capability"
+												name="performance_capability"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											Man/Day
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">실적기성(총기간 x 총실적진행율)</span>
+										</span>
+									</div>
+								</div>
+								<div class="progress-group">
+									<label for="actual_input">실제 투입된 작업량 :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="actual_input"
+												name="actual_input"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											Man/Day
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">일정변경 관리할 때 현재까지 실제로 투입된 작업기간을 표시함</span>
+										</span>
+									</div>
+								</div>
+								<div class="progress-group">
+									<label for="planned_progress">계획 진척율(A) :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="planned_progress"
+												name="planned_progress"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											%
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">
+												현재날짜까지 계획된 진척율, WBS의 "계획진척율"의 전체 합계 진척율을 표시함
+											</span>
+										</span>
+									</div>
+								</div>
+								<div class="progress-group">
+									<label for="performance_progress">실적 진척율(B) :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="performance_progress"
+												name="performance_progress"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											%
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">
+												현재날짜까지 실제로 진행된 진척율, WBS의 "실적진척율"의 전체 합계 진척율을 표시함
+											</span>
+										</span>
+									</div>
+								</div>
+								<div class="progress-group">
+									<label for="project_progress">차이(B-A) :</label>
+									<div class="progress-desc">
+										<span class="icon input-group-addon">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</span>
+										<span class="progress-input font11">
+											<input
+												type="text"
+												id="project_progress"
+												name="project_progress"
+												class="form-control parsley-validated font13 darkBack"
+												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+												placeholder="0000.00"
+												required="required"
+												readonly="" />
+											%
+										</span>
+										<span class="input-group-addon input-desc">
+											<i class="fa fa-question-circle"></i>
+											<span class="font11">양수이면 계획보다 빨리 진행, 음수이면 지연</span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
 </div>
 
 <div class="col-lg-12 col-layer">
@@ -560,7 +628,7 @@
 								data-target="#my_modal1"
 								data-toggle="modal"
 								style="width: 100%; background-color: #2477ff !important">
-                                A-RMS의 신규 요구사항 등록하기
+								A-RMS의 신규 요구사항 등록하기
 							</label>
 						</div>
 						<div
@@ -1166,7 +1234,7 @@
 											<!-- timeline time label -->
 											<li class="time-label">
 												<a class="btn btn-danger btn-sm">
-                                                    A-RMS 모든 이력을 시간순으로 표시 :
+													A-RMS 모든 이력을 시간순으로 표시 :
 													<i class="fa fa-check"></i>
 												</a>
 											</li>
@@ -1586,181 +1654,334 @@
 						class="search-result"
 						style="border-left: 5px solid #e5603b">
 						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
-                            A-RMS에 신규 요구사항을 등록합니다.
+							A-RMS에 신규 요구사항을 등록합니다.
 						</p>
 					</section>
 				</h4>
 			</div>
-			<div
-				class="modal-body"
-				style="padding: 5px">
-				<form
-					class="form-horizontal"
-					method="post">
+			<div class="modal-body">
+				<form method="post">
 					<fieldset>
-						<br />
-						<div class="control-group col-sm-12">
-							<div class="controls form-group col-sm-1">&nbsp;</div>
-							<label
-								for="title"
-								class="control-label"
-								style="color: #f8f8f8">
-								요구사항 등록 모드
-								<span class="required">*</span>
-								<span
-									class="input-group-addon"
-									style="display: inline !important">
-									<i class="glyphicon glyphicon-plus"></i>
-								</span>
-							</label>
-							<div class="controls form-group col-sm-8">
-								<div
-									class="btn-group"
-									data-toggle="buttons">
+						<div class="widget">
+							<div class="form-group">
+								<div class="control-group">
 									<label
-										class="btn btn-transparent btn-sm active"
-										data-toggle-class="btn-primary"
-										data-toggle-passive-class="btn-default">
-										<input
-											type="radio"
-											name="reqType"
-											value="default" />
-										일반 요구사항 등록 모드
+										class="control-label"
+										style="vertical-align: center">
+										요구사항 등록 모드 :
 									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div
+											class="input-group"
+											style="text-align: left">
+											<span class="input-group-addon">
+												<i class="fa fa-sliders"></i>
+											</span>
+											<div
+												class="btn-group"
+												data-toggle="buttons">
+												<label
+													class="btn btn-transparent btn-sm active"
+													style="color: #f8f8f8 !important">
+													<input type="radio" />
+													요구사항 등록 모드
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
 									<label
-										class="btn btn-transparent btn-sm"
-										data-toggle-class="btn-primary"
-										data-toggle-passive-class="btn-default">
-										<input
-											type="radio"
-											name="reqType"
-											value="folder" />
-										폴더 형식으로 등록
+										class="control-label"
+										for="addview_req_pdservice_name">
+										요구사항 제품
+										<sup>서비스</sup>
+										:
 									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-th-list"></i>
+											</span>
+											<input
+												id="addview_req_pdservice_name"
+												disabled="disabled"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												size="16"
+												type="text"
+												placeholder="제품(서비스)명을 입력해 주세요" />
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						<br />
-						<div class="control-group col-sm-12">
-							<div class="controls form-group col-sm-1">&nbsp;</div>
-							<label
-								for="title"
-								class="control-label"
-								style="color: #f8f8f8">
-								반영 제품(서비스)
-								<span class="required">*</span>
-								<span
-									class="input-group-addon"
-									style="display: inline !important">
-									<i class="glyphicon glyphicon-th-list"></i>
-								</span>
-							</label>
-							<div class="controls form-group col-sm-8">
-								<input
-									type="text"
-									id="disabled_input_pdservice"
-									class="form-control"
-									disabled="disabled"
-									value="" />
-							</div>
-						</div>
-						<div
-							class="control-group col-sm-12"
-							id="popup_version_div">
-							<div class="controls form-group col-sm-1">&nbsp;</div>
-							<label
-								for="title"
-								class="control-label"
-								style="color: #f8f8f8">
-								반영 버전
-								<span class="required">*</span>
-								<span
-									class="input-group-addon"
-									style="display: inline !important">
-									<i class="glyphicon glyphicon-gift"></i>
-								</span>
-							</label>
-							<div class="controls form-group col-sm-8">
-								<select
-									multiple="multiple"
-									id="popup_version"
-									class="multiple-select btn-block darkBack"
-									placeholder="&nbsp;버전을 선택해주세요"></select>
-							</div>
-						</div>
-						<div
-							class="control-group col-sm-12"
-							id="popup_reviewer_div">
-							<div class="controls form-group col-sm-1">&nbsp;</div>
-							<label
-								class="control-label"
-								for="editview_req_reviewers"
-								style="color: #f8f8f8">
-								반영 리뷰어
-								<span class="required">*</span>
-								<span
-									class="input-group-addon"
-									style="display: inline !important">
-									<i class="glyphicon glyphicon-inbox"></i>
-								</span>
-							</label>
-							<div
-								class="controls form-group col-sm-6"
-								style="margin-bottom: 10px">
-								<div
-									class="input-group col-sm-12"
-									style="width: 100%">
-									<select
-										id="popup_pdservice_reviewers"
-										class="js-data-example-ajax form-control font13 darkBack"
-										name="selectedReviewers[]"
-										multiple="multiple"
-										style="width: 100%"></select>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="edit_multi_version">
+										요구사항 연관 버전 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-gift"></i>
+											</span>
+											<select
+												multiple="multiple"
+												id="add_multi_version"
+												class="multiple-select btn-block darkBack"
+												placeholder="&nbsp;버전을 선택해주세요"
+												style="color: #a4c6ff"></select>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						<div class="control-group col-sm-12">
-							<div class="controls form-group col-sm-1">&nbsp;</div>
-							<label
-								for="req_title"
-								class="control-label"
-								style="color: #f8f8f8">
-								요구사항 제목
-								<span class="required">*</span>
-								<span
-									class="input-group-addon"
-									style="display: inline !important">
-									<i class="glyphicon glyphicon-list-alt"></i>
-								</span>
-							</label>
-							<div class="controls form-group col-sm-8">
-								<input
-									type="text"
-									id="req_title"
-									name="title"
-									class="form-control parsley-validated"
-									required="required" />
-							</div>
-						</div>
-						<div class="control-group col-sm-12">
-							<div class="controls form-group col-sm-1">&nbsp;</div>
-							<label
-								for="modal_editor"
-								class="control-label"
-								style="color: #f8f8f8">
-								요구사항 내용
-								<span class="required">*</span>
-								<span
-									class="input-group-addon"
-									style="display: inline !important">
-									<i class="glyphicon glyphicon-book"></i>
-								</span>
-							</label>
-							<div class="controls form-group col-sm-12">
-								<div
-									id="modal_editor"
-									class="darkBack">
-									<p>요구사항 내용을 기록합니다.</p>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_name">
+										요구사항 제목 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-list-alt"></i>
+											</span>
+											<input
+												id="addview_req_name"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												size="16"
+												type="text"
+												placeholder="요구사항 제목을 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_writer">
+										요구사항 작성자 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-user"></i>
+											</span>
+											<input
+												id="addview_req_writer"
+												disabled="disabled"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												size="16"
+												type="text"
+												placeholder="요구사항 작성자를 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_reviewers">
+										요구사항 리뷰어 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-inbox"></i>
+											</span>
+											<select
+												id="addview_req_reviewers"
+												class="js-data-example-ajax form-control font13 darkBack"
+												name="selectedReviewers[]"
+												multiple="multiple"
+												style="width: 100%; color: #a4c6ff"></select>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_start_date">
+										요구사항 시작날짜 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</span>
+											<input
+												id="addview_req_start_date"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												placeholder="요구사항 시작날짜를 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_end_date">
+										요구사항 종료날짜 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</span>
+											<input
+												id="addview_req_end_date"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												placeholder="요구사항 종료날짜를 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_total_resource">
+										총 작업 공수 (MM) :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</span>
+											<input
+												id="addview_req_total_resource"
+												type="number"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												placeholder="요구사항 작업 공수를 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_plan_resource">
+										총 계획 공수 (MM) :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</span>
+											<input
+												id="addview_req_plan_resource"
+												type="number"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												placeholder="요구사항 계획 공수를 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_total_time">
+										총 작업 기간 (Day) :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</span>
+											<input
+												id="addview_req_total_time"
+												type="number"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												placeholder="요구사항 작업 기간을 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_plan_time">
+										총 계획 기간 (Day) :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</span>
+											<input
+												id="addview_req_plan_time"
+												type="number"
+												class="form-control font13 darkBack"
+												style="color: #a4c6ff"
+												placeholder="요구사항 계획 기간을 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="addview_req_manager">
+										요구사항 담당자 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-user"></i>
+											</span>
+											<select
+												id="addview_req_manager"
+												class="js-data-example-ajax form-control font13 darkBack"
+												name="selectedManager"
+												style="width: 100%; color: #a4c6ff"></select>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										class="control-label"
+										for="add_tabmodal_editor">
+										요구사항 내용 :
+									</label>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 10px">
+										<div
+											class="input-group"
+											style="padding-top: 5px">
+											<i class="fa fa-level-down"></i>
+											하단 영역 참조
+										</div>
+									</div>
+									<br />
+									<div
+										class="col-sm-12 darkBack"
+										id="add_tabmodal_editor">
+										<p>요구사항 내용을 기록합니다.</p>
+									</div>
 								</div>
 							</div>
 						</div>

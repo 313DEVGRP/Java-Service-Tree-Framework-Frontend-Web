@@ -66,7 +66,10 @@ function execDocReady() {
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 		[
 			"../reference/jquery-plugins/gantt-0.6.1/dist/frappe-gantt.js",
-			"../reference/jquery-plugins/gantt-0.6.1/dist/frappe-gantt.css"
+			"../reference/jquery-plugins/gantt-0.6.1/dist/frappe-gantt.css",
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
+			"../reference/light-blue/lib/bootstrap-datepicker.js",
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"
 		]
 	];
 
@@ -92,6 +95,7 @@ function execDocReady() {
 						if (window.CKEDITOR.status == "loaded") {
 							CKEDITOR.replace("detailview_req_contents", { skin: "office2013" });
 							CKEDITOR.replace("edit_tabmodal_editor", { skin: "office2013" });
+							CKEDITOR.replace("add_tabmodal_editor", { skin: "office2013" });
 							clearInterval(waitCKEDITOR);
 						}
 					}
@@ -111,6 +115,7 @@ function execDocReady() {
 
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
+			click_btn_for_req_add();
 			click_btn_for_req_update();
 			click_btn_for_search_history();
 			change_tab_action();
@@ -126,8 +131,9 @@ function execDocReady() {
 				disableFadeOut: false
 			});
 		})
-		.catch(function () {
+		.catch(function (e) {
 			console.error("플러그인 로드 중 오류 발생");
+			console.error(e);
 		});
 }
 
@@ -1062,6 +1068,57 @@ function formatUserSelection(jsonData) {
 	return jsonData.text;
 }
 
+function click_btn_for_req_add() {
+	$("#save_req").click(function () {
+		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
+		var reqName = $("#addview_req_name").val();
+
+		var reviewers01 = "none";
+		var reviewers02 = "none";
+		var reviewers03 = "none";
+		var reviewers04 = "none";
+		var reviewers05 = "none";
+		if ($("#addview_req_reviewers").select2("data")[0] != undefined) {
+			reviewers01 = $("#addview_req_reviewers").select2("data")[0].text;
+		}
+		if ($("#addview_req_reviewers").select2("data")[1] != undefined) {
+			reviewers02 = $("#addview_req_reviewers").select2("data")[1].text;
+		}
+		if ($("#addview_req_reviewers").select2("data")[2] != undefined) {
+			reviewers03 = $("#addview_req_reviewers").select2("data")[2].text;
+		}
+		if ($("#addview_req_reviewers").select2("data")[3] != undefined) {
+			reviewers04 = $("#addview_req_reviewers").select2("data")[3].text;
+		}
+		if ($("#addview_req_reviewers").select2("data")[4] != undefined) {
+			reviewers05 = $("#addview_req_reviewers").select2("data")[4].text;
+		}
+
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
+			type: "POST",
+			data: {
+				c_req_pdservice_versionset_link: JSON.stringify($("#add_multi_version").val()),
+				c_req_writer: "[" + userName + "]" + " - " + userID,
+				c_req_create_date: new Date(),
+				c_req_update_date: new Date(),
+				c_req_reviewer01: reviewers01,
+				c_req_reviewer02: reviewers02,
+				c_req_reviewer03: reviewers03,
+				c_req_reviewer04: reviewers04,
+				c_req_reviewer05: reviewers05,
+				c_req_status: "AppendReq",
+				c_req_contents: CKEDITOR.instances["add_tabmodal_editor"].getData()
+			},
+			statusCode: {
+				200: function () {
+					jSuccess("신규 요구사항 ( " + reqName + " )이 추가되었습니다.");
+				}
+			}
+		});
+	});
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 편집 탭 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
@@ -1111,7 +1168,6 @@ function click_btn_for_req_update() {
 			},
 			statusCode: {
 				200: function () {
-					$("#req_tree").jstree("refresh");
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
 				}
 			}
@@ -1571,14 +1627,18 @@ function initGantt(data) {
 				render: (data, row) => {
 					const btnWrapper = $("<div />");
 					const updateBtn = $("<button />")
-						.addClass("btn btn-success btn-sm")
+						.addClass("btn btn-success btn-sm mr-xs")
 						.append($("<i />").addClass("fa fa-pencil"))
 						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
+						.attr({ "data-placement": "left", "data-original-title": "상세정보 조회 및 수정" })
+						.tooltip()
 						.on("click", () => updateNodeModalOpen(row));
 					const addBtn = $("<button />")
-						.addClass("btn btn-primary btn-sm")
+						.addClass("btn btn-primary btn-sm mr-xs")
 						.append($("<i />").addClass("fa fa-plus-circle"))
 						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
+						.attr({ "data-placement": "left", "data-original-title": "동일 레벨에 요구사항 추가" })
+						.tooltip()
 						.on("click", addNodeModalOpen);
 
 					btnWrapper.append(updateBtn);
@@ -1586,9 +1646,11 @@ function initGantt(data) {
 
 					if (row.type !== "default") {
 						const addLevelDownBtn = $("<button />")
-							.addClass("btn btn-primary btn-sm")
+							.addClass("btn btn-primary btn-sm mr-xs")
 							.append($("<i />").addClass("fa fa-level-down"))
 							.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
+							.attr({ "data-placement": "left", "data-original-title": "하위에 요구사항 추가" })
+							.tooltip()
 							.on("click", addNodeModalOpen);
 
 						btnWrapper.append(addLevelDownBtn);
@@ -1621,7 +1683,23 @@ function updateNodeModalOpen(item) {
 	dataTableLoad();
 }
 
-function addNodeModalOpen() {
+function addNodeModalOpen(parentId) {
+	//제품(서비스) 데이터 바인딩
+	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
+	if (isEmpty(selectedPdServiceText)) {
+		$("#addview_req_pdservice_name").val("");
+	} else {
+		$("#addview_req_pdservice_name").val(selectedPdServiceText);
+	}
+
+	$("#add_multi_version").multipleSelect("uncheckAll");
+	$("#addview_req_name").val("");
+	$("#addview_req_writer").val("[" + userName + "]" + " - " + userID);
+	$("#addview_req_reviewers").val(null).trigger("change");
+	$("#addview_req_manager").val(null).trigger("change");
+
+	CKEDITOR.instances.add_tabmodal_editor.setData($("<p />").text("요구사항 내용을 기록합니다."));
+
 	$("#my_modal1").modal("show");
 }
 
