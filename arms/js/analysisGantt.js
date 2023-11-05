@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedId; // 요구사항 아이디
 var selectedType;
+var parentIdOfSelected;
 
 var selectedPdServiceId; // 제품(서비스) 아이디
 var reqStatusDataTable;
@@ -120,6 +121,7 @@ function execDocReady() {
 			click_btn_for_search_history();
 			change_tab_action();
 			click_btn_for_connect_req_jira();
+			change_input_for_req_date();
 
 			$("#progress_status").slimScroll({
 				height: "195px",
@@ -1068,6 +1070,9 @@ function formatUserSelection(jsonData) {
 	return jsonData.text;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// 신규 요구사항 등록 버튼
+///////////////////////////////////////////////////////////////////////////////
 function click_btn_for_req_add() {
 	$("#save_req").click(function () {
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
@@ -1098,6 +1103,7 @@ function click_btn_for_req_add() {
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 			type: "POST",
 			data: {
+				c_parentid: parentIdOfSelected,
 				c_req_pdservice_versionset_link: JSON.stringify($("#add_multi_version").val()),
 				c_req_writer: "[" + userName + "]" + " - " + userID,
 				c_req_create_date: new Date(),
@@ -1107,12 +1113,20 @@ function click_btn_for_req_add() {
 				c_req_reviewer03: reviewers03,
 				c_req_reviewer04: reviewers04,
 				c_req_reviewer05: reviewers05,
+				c_req_start_date: new Date($("#addview_req_start_date").val()),
+				c_req_end_date: new Date($("#addview_req_end_date").val()),
+				c_req_total_resource: $("#addview_req_total_resource").val(),
+				c_req_plan_resource: $("#addview_req_plan_resource").val(),
+				c_req_total_time: $("#addview_req_total_time").val(),
+				c_req_plan_time: $("#addview_req_plan_time").val(),
+				c_req_manager: $("#addview_req_manager").select2("data")[0].text,
 				c_req_status: "AppendReq",
 				c_req_contents: CKEDITOR.instances["add_tabmodal_editor"].getData()
 			},
 			statusCode: {
 				200: function () {
 					jSuccess("신규 요구사항 ( " + reqName + " )이 추가되었습니다.");
+					getMonitorData($("#selected_pdService").val(), tableName + "/getMonitor.do");
 				}
 			}
 		});
@@ -1169,6 +1183,7 @@ function click_btn_for_req_update() {
 			statusCode: {
 				200: function () {
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
+					getMonitorData($("#selected_pdService").val(), tableName + "/getMonitor.do");
 				}
 			}
 		});
@@ -1464,6 +1479,36 @@ function click_btn_for_connect_req_jira() {
 	});
 }
 
+function change_input_for_req_date() {
+	var start = $("#addview_req_start_date");
+	var end = $("#addview_req_end_date");
+
+	function handle_change_date() {
+		if (isEmpty(start.val()) || isEmpty(end.val())) return;
+
+		if (Date.parse(start.val()) > Date.parse(end.val())) {
+			end.val(start.val());
+		}
+
+		var startDate = new Date(start.val());
+		var endDate = new Date(end.val());
+
+		var diffYear = endDate.getFullYear() - startDate.getFullYear();
+		var diffMonth = endDate.getMonth() - startDate.getMonth();
+		var timeDiff = endDate.getTime() - startDate.getTime();
+		var dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+		$("#addview_req_total_resource").val(diffYear * 12 + diffMonth);
+		$("#addview_req_plan_resource").val(diffYear * 12 + diffMonth);
+
+		$("#addview_req_total_time").val(dayDiff);
+		$("#addview_req_plan_time").val(dayDiff);
+	}
+
+	start.change(handle_change_date);
+	end.change(handle_change_date);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
@@ -1639,7 +1684,7 @@ function initGantt(data) {
 						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
 						.attr({ "data-placement": "left", "data-original-title": "동일 레벨에 요구사항 추가" })
 						.tooltip()
-						.on("click", addNodeModalOpen);
+						.on("click", () => addNodeModalOpen(row.parentId));
 
 					btnWrapper.append(updateBtn);
 					btnWrapper.append(addBtn);
@@ -1651,7 +1696,7 @@ function initGantt(data) {
 							.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
 							.attr({ "data-placement": "left", "data-original-title": "하위에 요구사항 추가" })
 							.tooltip()
-							.on("click", addNodeModalOpen);
+							.on("click", () => addNodeModalOpen(row.parentId));
 
 						btnWrapper.append(addLevelDownBtn);
 					}
@@ -1685,7 +1730,16 @@ function updateNodeModalOpen(item) {
 
 function addNodeModalOpen(parentId) {
 	//제품(서비스) 데이터 바인딩
+	parentIdOfSelected = parentId;
 	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
+	var datepickerOption = {
+		timepicker: false,
+		format: "Y/m/d",
+		formatDate: "Y/m/d",
+		value: new Date(),
+		scrollInput: false
+	};
+
 	if (isEmpty(selectedPdServiceText)) {
 		$("#addview_req_pdservice_name").val("");
 	} else {
@@ -1697,6 +1751,9 @@ function addNodeModalOpen(parentId) {
 	$("#addview_req_writer").val("[" + userName + "]" + " - " + userID);
 	$("#addview_req_reviewers").val(null).trigger("change");
 	$("#addview_req_manager").val(null).trigger("change");
+
+	$("#addview_req_start_date").datetimepicker(datepickerOption);
+	$("#addview_req_end_date").datetimepicker(datepickerOption);
 
 	CKEDITOR.instances.add_tabmodal_editor.setData($("<p />").text("요구사항 내용을 기록합니다."));
 
