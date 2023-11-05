@@ -343,9 +343,6 @@ function dataTableLoad() {
 	// 데이터 테이블 컬럼 및 열그룹 구성
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
-	var c_type = $("#req_tree").jstree("get_selected").attr("rel");
-	console.log("dataTableLoad - c_type:::" + c_type);
-
 	var dataTableRef;
 
 	if (selectedType !== "folder") {
@@ -721,17 +718,6 @@ function setDetailAndEditViewTab() {
 		progress: true
 	})
 		.done(function (data) {
-			// 임시 우회 코드
-			if (!data) {
-				dataTableLoad();
-				return;
-			}
-			// ------------------ modal open ------------------ //
-			$("#my_modal").modal("show");
-			$("#default_tab").get(0).click();
-			$(".newReqDiv").hide();
-			$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
-			$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide();
 			// ------------------ 편집하기 ------------------ //
 			bindDataEditlTab(data);
 			// ------------------ 상세보기 ------------------ //
@@ -883,8 +869,6 @@ function bindDataEditlTab(ajaxData) {
 
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
-	console.log(ajaxData);
-
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
 	if (isEmpty(selectedPdServiceText)) {
@@ -1803,9 +1787,32 @@ function updateNodeModalOpen(item) {
 	selectedId = item.id;
 	selectedType = item.type;
 
-	if (item.type === "default") return setDetailAndEditViewTab();
+	$("#my_modal").modal("show");
 
-	dataTableLoad();
+	if (selectedType == "folder" || selectedType == "drive") {
+		$("#folder_tab").get(0).click();
+		$(".newReqDiv").show();
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").hide(); //편집하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
+
+		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
+		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
+		dataTableLoad();
+	} else {
+		$("#default_tab").get(0).click();
+		$(".newReqDiv").hide();
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
+
+		//상세보기 탭 셋팅
+		setDetailAndEditViewTab();
+	}
 }
 
 function addNodeModalOpen(parentId) {
@@ -1845,7 +1852,6 @@ function popup_size_setting() {
 
 	$("#my_modal").on("hidden.bs.modal", function (e) {
 		console.log("modal close");
-		console.log($(this).find("form")[0]);
 		$(this).find("form")[0].reset();
 	});
 
