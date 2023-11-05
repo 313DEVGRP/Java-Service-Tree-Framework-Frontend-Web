@@ -122,6 +122,7 @@ function execDocReady() {
 			change_tab_action();
 			click_btn_for_connect_req_jira();
 			change_input_for_req_date();
+			change_input_for_new_req_date();
 
 			$("#progress_status").slimScroll({
 				height: "195px",
@@ -746,6 +747,13 @@ function bindDataEditlTab(ajaxData) {
 
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
+	var datepickerOption = {
+		timepicker: false,
+		format: "Y/m/d",
+		formatDate: "Y/m/d",
+		scrollInput: false
+	};
+
 	if (isEmpty(selectedPdServiceText)) {
 		$("#editview_req_pdservice_name").val("");
 	} else {
@@ -849,6 +857,27 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_status").val(ajaxData.c_req_status);
 	$("#editview_req_writer").val(ajaxData.c_req_writer); //ajaxData.c_req_reviewer01
 	$("#editview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
+
+	$("#editview_req_start_date").datetimepicker(
+		$.extend({}, datepickerOption, { value: new Date(ajaxData.c_req_start_date) })
+	);
+	$("#editview_req_end_date").datetimepicker(
+		$.extend({}, datepickerOption, { value: new Date(ajaxData.c_req_end_date) })
+	);
+
+	$("#editview_req_total_resource").val(ajaxData.c_req_total_resource);
+	$("#editview_req_plan_resource").val(ajaxData.c_req_plan_resource);
+
+	$("#editview_req_total_time").val(ajaxData.c_req_total_time);
+	$("#editview_req_plan_time").val(ajaxData.c_req_plan_time);
+
+	if (isEmpty(ajaxData.c_req_manager)) {
+		$("#editview_req_manager").val(null).trigger("change");
+	} else {
+		var manager = new Option(ajaxData.c_req_manager, ajaxData.c_req_manager, true, true);
+		$("#editview_req_manager").append(manager).trigger("change");
+	}
+
 	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_req_contents);
 }
 
@@ -911,6 +940,17 @@ function bindDataDetailTab(ajaxData) {
 		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
 	}
 	//$("#detailview_req_contents").html(ajaxData.c_req_contents);
+
+	$("#detailview_req_start_date").val(getDate(new Date(ajaxData.c_req_start_date)));
+	$("#detailview_req_end_date").val(getDate(new Date(ajaxData.c_req_end_date)));
+
+	$("#detailview_req_total_resource").val(ajaxData.c_req_total_resource);
+	$("#detailview_req_plan_resource").val(ajaxData.c_req_plan_resource);
+
+	$("#detailview_req_total_time").val(ajaxData.c_req_total_time);
+	$("#detailview_req_plan_time").val(ajaxData.c_req_plan_time);
+
+	$("#detailview_req_manager").val(ajaxData.c_req_manager);
 
 	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
 }
@@ -1119,14 +1159,14 @@ function click_btn_for_req_add() {
 				c_req_plan_resource: $("#addview_req_plan_resource").val(),
 				c_req_total_time: $("#addview_req_total_time").val(),
 				c_req_plan_time: $("#addview_req_plan_time").val(),
-				c_req_manager: $("#addview_req_manager").select2("data")[0].text,
+				c_req_manager: $("#addview_req_manager").select2("data")[0]?.text,
 				c_req_status: "AppendReq",
 				c_req_contents: CKEDITOR.instances["add_tabmodal_editor"].getData()
 			},
 			statusCode: {
 				200: function () {
 					jSuccess("신규 요구사항 ( " + reqName + " )이 추가되었습니다.");
-					getMonitorData($("#selected_pdService").val(), tableName + "/getMonitor.do");
+					getMonitorData($("#selected_pdService").val(), "/" + tableName + "/getMonitor.do");
 				}
 			}
 		});
@@ -1177,13 +1217,20 @@ function click_btn_for_req_update() {
 				c_req_reviewer03: reviewers03,
 				c_req_reviewer04: reviewers04,
 				c_req_reviewer05: reviewers05,
+				c_req_start_date: new Date($("#editview_req_start_date").val()),
+				c_req_end_date: new Date($("#editview_req_end_date").val()),
+				c_req_total_resource: $("#editview_req_total_resource").val(),
+				c_req_plan_resource: $("#editview_req_plan_resource").val(),
+				c_req_total_time: $("#editview_req_total_time").val(),
+				c_req_plan_time: $("#editview_req_plan_time").val(),
+				c_req_manager: $("#editview_req_manager").select2("data")[0]?.text,
 				c_req_status: "ChangeReq",
 				c_req_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
 			},
 			statusCode: {
 				200: function () {
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
-					getMonitorData($("#selected_pdService").val(), tableName + "/getMonitor.do");
+					getMonitorData($("#selected_pdService").val(), "/" + tableName + "/getMonitor.do");
 				}
 			}
 		});
@@ -1479,40 +1526,72 @@ function click_btn_for_connect_req_jira() {
 	});
 }
 
+function handle_change_date(start, end) {
+	if (isEmpty(start.val()) || isEmpty(end.val())) return;
+
+	if (Date.parse(start.val()) > Date.parse(end.val())) {
+		end.val(start.val());
+	}
+
+	var startDate = new Date(start.val());
+	var endDate = new Date(end.val());
+
+	var diffYear = endDate.getFullYear() - startDate.getFullYear();
+	var diffMonth = endDate.getMonth() - startDate.getMonth();
+	var timeDiff = endDate.getTime() - startDate.getTime();
+	var dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+	return {
+		dayDiff: dayDiff,
+		diffMonth: diffYear * 12 + diffMonth
+	};
+}
+
 function change_input_for_req_date() {
+	var start = $("#editview_req_start_date");
+	var end = $("#editview_req_end_date");
+
+	function handle_change_req_date() {
+		var dateDiff = handle_change_date(start, end);
+
+		if (isEmpty(dateDiff)) return;
+
+		$("#editview_req_total_resource").val(dateDiff.diffMonth);
+		$("#editview_req_plan_resource").val(dateDiff.diffMonth);
+
+		$("#editview_req_total_time").val(dateDiff.dayDiff);
+		$("#editview_req_plan_time").val(dateDiff.dayDiff);
+	}
+
+	start.change(handle_change_req_date);
+	end.change(handle_change_req_date);
+}
+
+function change_input_for_new_req_date() {
 	var start = $("#addview_req_start_date");
 	var end = $("#addview_req_end_date");
 
-	function handle_change_date() {
-		if (isEmpty(start.val()) || isEmpty(end.val())) return;
+	function handle_change_new_req_date() {
+		var dateDiff = handle_change_date(start, end);
 
-		if (Date.parse(start.val()) > Date.parse(end.val())) {
-			end.val(start.val());
-		}
+		if (isEmpty(dateDiff)) return;
 
-		var startDate = new Date(start.val());
-		var endDate = new Date(end.val());
+		$("#addview_req_total_resource").val(dateDiff.diffMonth);
+		$("#addview_req_plan_resource").val(dateDiff.diffMonth);
 
-		var diffYear = endDate.getFullYear() - startDate.getFullYear();
-		var diffMonth = endDate.getMonth() - startDate.getMonth();
-		var timeDiff = endDate.getTime() - startDate.getTime();
-		var dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
-		$("#addview_req_total_resource").val(diffYear * 12 + diffMonth);
-		$("#addview_req_plan_resource").val(diffYear * 12 + diffMonth);
-
-		$("#addview_req_total_time").val(dayDiff);
-		$("#addview_req_plan_time").val(dayDiff);
+		$("#addview_req_total_time").val(dateDiff.dayDiff);
+		$("#addview_req_plan_time").val(dateDiff.dayDiff);
 	}
 
-	start.change(handle_change_date);
-	end.change(handle_change_date);
+	start.change(handle_change_new_req_date);
+	end.change(handle_change_new_req_date);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
+	console.log(data);
 	ganttTasks = data.reduce((acc, cur) => {
 		if (cur.c_parentid < 2) return acc;
 
@@ -1549,6 +1628,7 @@ function setGanttTasks(data) {
 			p_work: cur.c_req_plan_resource,
 			t_period: cur.c_req_total_time,
 			tpp: cur.c_req_plan_time,
+			manager: cur.c_req_manager,
 			result: cur.c_req_output,
 			plan: `${cur.c_req_plan_progress || 0}%`,
 			performance: `${cur.c_req_performance_progress || 0}%`,
@@ -1662,7 +1742,7 @@ function initGantt(data) {
 			{ data: "p_work", title: "계획작업" },
 			{ data: "t_period", title: "총 기간" },
 			{ data: "tpp", title: "계획기간" },
-			{ data: "assignee", title: "담당" },
+			{ data: "manager", title: "담당자" },
 			{ data: "result", title: "산출물" },
 			{ data: "plan", title: "계획" },
 			{ data: "performance", title: "실적" },
