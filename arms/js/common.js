@@ -993,6 +993,7 @@ function ajax_setup() {
 		})
 		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
 			//$(".loader").addClass("hide");
+			Ladda.stopAll();
 		})
 		.ajaxStop(function () {
 			$(".loader").addClass("hide");
@@ -1058,4 +1059,25 @@ function hideDetail_Datagrid() {
 // 페이지 이동 처리
 function goToTemplatePage(pageName) {
 	window.location.href = "template.html?page=" + pageName;
+}
+
+
+function LaddaBtnConfig() {
+	// Bind normal buttons
+	//Ladda.bind( '.button-demo button', { timeout: 2000 } );
+	// Bind progress buttons and simulate loading progress
+	Ladda.bind( '.ladda', {
+		callback: function( instance ) {
+			var progress = 0;
+			var interval = setInterval( function() {
+				progress = Math.min( progress + Math.random() * 0.1, 1 );
+				instance.setProgress( progress );
+
+				if( progress === 1 ) {
+					instance.stop();
+					clearInterval( interval );
+				}
+			}, 200 );
+		}
+	} );
 }
