@@ -121,8 +121,8 @@ function execDocReady() {
 			click_btn_for_search_history();
 			change_tab_action();
 			click_btn_for_connect_req_jira();
-			change_input_for_req_date();
-			change_input_for_new_req_date();
+			change_input_for_req_date("editview_");
+			change_input_for_req_date("addview_");
 
 			$("#progress_status").slimScroll({
 				height: "195px",
@@ -1511,14 +1511,8 @@ function click_btn_for_connect_req_jira() {
 }
 
 function handle_change_date(start, end) {
-	if (isEmpty(start.val()) || isEmpty(end.val())) return;
-
-	if (Date.parse(start.val()) > Date.parse(end.val())) {
-		end.val(start.val());
-	}
-
-	var startDate = new Date(start.val());
-	var endDate = new Date(end.val());
+	var startDate = new Date(start);
+	var endDate = new Date(end);
 
 	var diffYear = endDate.getFullYear() - startDate.getFullYear();
 	var diffMonth = endDate.getMonth() - startDate.getMonth();
@@ -1531,51 +1525,34 @@ function handle_change_date(start, end) {
 	};
 }
 
-function change_input_for_req_date() {
-	var start = $("#editview_req_start_date");
-	var end = $("#editview_req_end_date");
+function change_input_for_req_date(prefix) {
+	var start = $("#" + prefix + "req_start_date");
+	var end = $("#" + prefix + "req_end_date");
 
 	function handle_change_req_date() {
-		var dateDiff = handle_change_date(start, end);
+		if (isEmpty(start.val()) || isEmpty(end.val())) return;
 
-		if (isEmpty(dateDiff)) return;
+		if (Date.parse(start.val()) > Date.parse(end.val())) {
+			end.val(start.val());
+		}
 
-		$("#editview_req_total_resource").val(dateDiff.diffMonth);
-		$("#editview_req_plan_resource").val(dateDiff.diffMonth);
+		var dateDiff = handle_change_date(start.val(), end.val());
 
-		$("#editview_req_total_time").val(dateDiff.dayDiff);
-		$("#editview_req_plan_time").val(dateDiff.dayDiff);
+		$("#" + prefix + "req_total_resource").val(dateDiff.diffMonth);
+		$("#" + prefix + "req_plan_resource").val(dateDiff.diffMonth);
+
+		$("#" + prefix + "req_total_time").val(dateDiff.dayDiff);
+		$("#" + prefix + "req_plan_time").val(dateDiff.dayDiff);
 	}
 
 	start.change(handle_change_req_date);
 	end.change(handle_change_req_date);
 }
 
-function change_input_for_new_req_date() {
-	var start = $("#addview_req_start_date");
-	var end = $("#addview_req_end_date");
-
-	function handle_change_new_req_date() {
-		var dateDiff = handle_change_date(start, end);
-
-		if (isEmpty(dateDiff)) return;
-
-		$("#addview_req_total_resource").val(dateDiff.diffMonth);
-		$("#addview_req_plan_resource").val(dateDiff.diffMonth);
-
-		$("#addview_req_total_time").val(dateDiff.dayDiff);
-		$("#addview_req_plan_time").val(dateDiff.dayDiff);
-	}
-
-	start.change(handle_change_new_req_date);
-	end.change(handle_change_new_req_date);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
 function setGanttTasks(data) {
-	console.log(data);
 	ganttTasks = data.reduce((acc, cur) => {
 		if (cur.c_parentid < 2) return acc;
 
@@ -1695,9 +1672,26 @@ function initGantt(data) {
 			on_date_change: (task, start, end) => {
 				console.log("Update Start Date :: ", start);
 				console.log("Update End Date :: ", end);
+				var dateDiff = handle_change_date(start, end);
+
 				updateNode(
-					{ c_id: task.id, c_req_start_date: start, c_req_end_date: end },
-					{ start: getDate(start), end: getDate(end) }
+					{
+						c_id: task.id,
+						c_req_start_date: start,
+						c_req_end_date: end,
+						c_req_total_resource: dateDiff.diffMonth,
+						c_req_plan_resource: dateDiff.diffMonth,
+						c_req_total_time: dateDiff.dayDiff,
+						c_req_plan_time: dateDiff.dayDiff
+					},
+					{
+						start: getDate(start),
+						end: getDate(end),
+						tmm: dateDiff.diffMonth,
+						p_work: dateDiff.diffMonth,
+						t_period: dateDiff.dayDiff,
+						tpp: dateDiff.dayDiff
+					}
 				);
 			},
 			on_progress_change: (task, progress) => {
