@@ -1831,10 +1831,16 @@ function addNodeModalOpen(parentId) {
 	$("#addview_req_name").val("");
 	$("#addview_req_writer").val("[" + userName + "]" + " - " + userID);
 	$("#addview_req_reviewers").val(null).trigger("change");
-	$("#addview_req_manager").val(null).trigger("change");
 
 	$("#addview_req_start_date").datetimepicker(datepickerOption);
 	$("#addview_req_end_date").datetimepicker(datepickerOption);
+
+	$("#addview_req_total_resource").val(null);
+	$("#addview_req_plan_resource").val(null);
+	$("#addview_req_total_time").val(null);
+	$("#addview_req_plan_time").val(null);
+
+	$("#addview_req_manager").val(null).trigger("change");
 
 	CKEDITOR.instances.add_tabmodal_editor.setData($("<p />").text("요구사항 내용을 기록합니다."));
 
