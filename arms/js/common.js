@@ -993,7 +993,7 @@ function ajax_setup() {
 		})
 		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
 			//$(".loader").addClass("hide");
-			Ladda.stopAll();
+			//Ladda.stopAll();
 		})
 		.ajaxStop(function () {
 			$(".loader").addClass("hide");
