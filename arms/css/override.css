@@ -2902,7 +2902,7 @@ table tbody tr td {
 	}
 
 	.navi-wrap a {
-		margin: 0 0 20px 0 !important;
+		margin: 30px 0 20px 0 !important;
 	}
 
 	.navi-toggle {
@@ -3093,7 +3093,7 @@ table tbody tr td {
 
 .board-title {
 	text-align: center;
-	font-size: 1.35em;
+	font-size: 1em;
 	font-weight: 700;
 	color: #15235b;
 }
