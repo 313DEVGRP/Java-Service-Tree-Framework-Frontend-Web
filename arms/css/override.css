@@ -2416,6 +2416,18 @@ blockquote {
 	background-color: rgba(51, 51, 51, 0.4);
 }
 
+@media (max-width: 1048px) {
+	.carousel-landing {
+		height: 300px;
+	}
+}
+
+@media (max-width: 992px){
+	.carousel-section, #concept, #features {
+		padding-bottom: 0px;
+	}
+}
+
 /* 데이터테이블 커스텀 */
 
 table thead tr th {
@@ -2918,7 +2930,7 @@ table tbody tr td {
 	.carousel-section,
 	#concept,
 	#features {
-		padding-bottom: 60px;
+		padding-bottom: 0px;
 	}
 	#concept {
 		padding-top: 60px;
