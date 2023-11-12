@@ -16,9 +16,10 @@ function execDocReady() {
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
             "../reference/light-blue/lib/jquery.iframe-transport.js",
             // chart Colors
-            "./js/dashboard/chart/colorPalette.js",
+            // "./js/dashboard/chart/colorPalette.js",
             // 2번째 박스 d3 게이지 차트
-            "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
+
+            // "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
             "../reference/jquery-plugins/c3/c3.min.css",
             "../reference/jquery-plugins/c3/c3-custom.css",
             "../reference/jquery-plugins/c3/c3.min.js",
@@ -31,23 +32,23 @@ function execDocReady() {
             // d3.v2와 d3.v4 버전차이 오류생김...
             "../reference/light-blue/lib/nvd3/lib/d3.v2.js",
             "../reference/light-blue/lib/nvd3/nv.d3.custom.js",
+            // "../reference/light-blue/lib/nvd3/src/core.js",
             "../reference/light-blue/lib/nvd3/src/models/pieChartTotal.js",
             "../reference/light-blue/lib/nvd3/src/models/pie.js",
             "../reference/light-blue/lib/nvd3/src/models/legend.js",
             "../reference/light-blue/lib/nvd3/src/models/multiBar.js",
             "../reference/light-blue/lib/nvd3/src/models/multiBarChart.js",
-            "../reference/light-blue/js/stats.js",
+            "./js/analysisTime/stats.js",
             "../reference/light-blue/lib/nvd3/src/models/axis.js",
-            "../reference/light-blue/lib/nvd3/src/utils.js",
-            "../reference/light-blue/lib/nvd3/stream_layers.js",
-            // echarts
-            // "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
-            // "./js/dashboard/chart/barChartOnPolar.js",
+            // "../reference/light-blue/lib/nvd3/src/utils.js",
+            // "../reference/light-blue/lib/nvd3/stream_layers.js",
+            // 3번째 박스 차트
+            "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
+            "./js/analysisTime/index.js",
             // 5번째 박스 heatmap
             "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
             "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
-
-            // timeline
+            // 6번째 박스 timeline
             // "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/timeline.js",
             // "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/demo.js",
             // 7번째 박스
@@ -946,7 +947,7 @@ function drawVersionProgress(data) {
     needle.animateOn(chart, startDDay / totalDate);
 }
 
-// heatmap
+// heatmap -------------------------------
 if (!String.prototype.formatString) {
     String.prototype.formatString = function () {
         var args = arguments;
@@ -1035,6 +1036,7 @@ function heatMapReady() {
     });
 }
 
+// heatMap ---------------------------------------------
 /*
 function getRandomData(ordinal = false) {
 
