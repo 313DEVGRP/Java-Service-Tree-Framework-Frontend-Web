@@ -432,7 +432,10 @@ function dataTableLoad(selectId, endPointUrl) {
 				} else {
 					var _render =
 						'<div style=\'white-space: nowrap; color: #a4c6ff\'>' + data +
-						'<button data-target="#my_modal2" data-toggle="modal" style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_issue_key(\''+data+'\')"><i class="fa fa-list-alt"></i>' + "</button>"+
+						'<button data-target="#my_modal2" data-toggle="modal" style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_issue_key('
+						+ '\'' + row.c_jira_server_link + '\','
+						+ '\'' + row.c_issue_key + '\','
+						+ '\'' + row.c_pds_version_link + '\')"><i class="fa fa-list-alt"></i></button>'+
 						"</div>";
 					return _render;
 				}
@@ -601,18 +604,7 @@ function dataTableLoad(selectId, endPointUrl) {
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
-	console.log(selectedData);
 	selectedIssue = selectedData;
-
-	if(selectedIssueKey !== "") {
-		var endPointUrl2 = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val()
-			+ "/getIssueAndSubLinks.do?serverId="+selectedIssue.c_jira_server_link
-			+ "&issueKey="+selectedIssue.c_issue_key
-		    + "&versionId="+selectedIssue.c_pds_version_link;
-		console.log("endPointUrl2 ====> " + endPointUrl2);
-		getLinkedIssueAndSubtask("not Use this parameter",endPointUrl2); // 데이터테이블 그리기
-
-	}
 }
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
@@ -659,12 +651,18 @@ $("#pdfchecker").on("click", function () {
 	reqStatusDataTable.button(".buttons-pdf").trigger();
 });
 
-function click_issue_key(name) {
+function click_issue_key(c_jira_server_link, c_issue_key, c_pds_version_link) {
 	selectedIssueKey = "";
 	console.log("clicked_issue_name ==> " + name);
 	if (name !== "" || name !== undefined) {
 		selectedIssueKey = name;
 	}
+
+	var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val()
+		+ "/getIssueAndSubLinks.do?serverId=" + c_jira_server_link
+		+ "&issueKey=" + c_issue_key
+		+ "&versionId=" + c_pds_version_link;
+	getLinkedIssueAndSubtask("not Use this parameter",endPointUrl); // 데이터테이블 그리기
 }
 
 function getLinkedIssueAndSubtask(notUse, endPointUrl) {
