@@ -3072,6 +3072,19 @@ table tbody tr td {
 	padding-bottom: 75.2631578947%;
 }
 
+
+.board-thumb.back-img-1 {
+	background-image: url("../img/index/backimg1.png");
+}
+
+.board-thumb.back-img-2 {
+	background-image: url("../img/index/backimg2.png");
+}
+
+.board-thumb.back-img-3 {
+	background-image: url("../img/index/backimg3.png");
+}
+
 .board-thumb.img-1 {
 	background-image: url("../img/landing/board_img_1.jpg");
 }
