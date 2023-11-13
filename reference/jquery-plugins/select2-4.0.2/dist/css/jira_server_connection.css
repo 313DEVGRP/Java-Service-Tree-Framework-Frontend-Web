@@ -225,6 +225,9 @@
     /* border-right: 1px solid;*/
     border-color: #e5603b;
 }
+.card.clicked {
+    background-color: rgba(50, 50, 50, 0.65);
+}
 .card-body {
     background: rgba(51,51,51,.3);
     padding: 1rem;

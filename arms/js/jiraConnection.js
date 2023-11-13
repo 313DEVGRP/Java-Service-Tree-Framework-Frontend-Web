@@ -171,7 +171,7 @@ function draw_card_deck(cardInfo) {
 
             data +=
             `
-            <div class="card mb-2 ribbon-box ribbon-fill right" onclick="jiraServerCardClick(${cardList[i].c_id})">
+            <div class="card mb-2 ribbon-box ribbon-fill right" id="card-${cardList[i].c_id}" onclick="jiraServerCardClick(${cardList[i].c_id})">
                 <!-- 리본표시 -->                           
                 <div class="ribbon-${i}">${drawRibbon(cardList[i].c_id,cardList[i].c_jira_server_type, i)}</div>                                
                 <!--카드내용1-->
@@ -234,6 +234,9 @@ function jiraServerCardClick(c_id) {
         dataType: "json", // 서버에서 보내줄 데이터의 타입
         beforeSend: function () {
             $(".loader").removeClass("hide");
+            let cardId = "#card-"+c_id;
+            $(".card").removeClass("clicked");
+            $(cardId).addClass("clicked");
         }
     })
         // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
