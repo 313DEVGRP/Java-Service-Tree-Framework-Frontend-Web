@@ -2416,6 +2416,18 @@ blockquote {
 	background-color: rgba(51, 51, 51, 0.4);
 }
 
+@media (max-width: 1048px) {
+	.carousel-landing {
+		height: 300px;
+	}
+}
+
+@media (max-width: 992px){
+	.carousel-section, #concept, #features {
+		padding-bottom: 0px;
+	}
+}
+
 /* 데이터테이블 커스텀 */
 
 table thead tr th {
@@ -2890,7 +2902,7 @@ table tbody tr td {
 	}
 
 	.navi-wrap a {
-		margin: 0 0 20px 0 !important;
+		margin: 30px 0 20px 0 !important;
 	}
 
 	.navi-toggle {
@@ -2918,7 +2930,7 @@ table tbody tr td {
 	.carousel-section,
 	#concept,
 	#features {
-		padding-bottom: 60px;
+		padding-bottom: 0px;
 	}
 	#concept {
 		padding-top: 60px;
@@ -3060,6 +3072,19 @@ table tbody tr td {
 	padding-bottom: 75.2631578947%;
 }
 
+
+.board-thumb.back-img-1 {
+	background-image: url("../img/index/backimg1.png");
+}
+
+.board-thumb.back-img-2 {
+	background-image: url("../img/index/backimg2.png");
+}
+
+.board-thumb.back-img-3 {
+	background-image: url("../img/index/backimg3.png");
+}
+
 .board-thumb.img-1 {
 	background-image: url("../img/landing/board_img_1.jpg");
 }
@@ -3081,7 +3106,7 @@ table tbody tr td {
 
 .board-title {
 	text-align: center;
-	font-size: 1.35em;
+	font-size: 1em;
 	font-weight: 700;
 	color: #15235b;
 }
