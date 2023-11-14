@@ -165,7 +165,7 @@
 
             // Fixed size with width= 721 and height = 110
             var wire_html =
-                '<svg width="721" height="110">' +
+                '<svg width="721" <!--height="140" --> style="min-height: 140px;">' +
                 '<g transform="translate(25, 20)">' +
                 loop_html +
                 '</g>' + '"Your browser does not support inline SVG."' +
