@@ -1,17 +1,558 @@
 <div class="row">
-    <div class="col-md-12">
+    <!-- 첫번째 박스   -->
+    <div class="col-lg-12 col-layer">
         <section class="widget">
             <header>
-                <h4 style="font-size: 13px !important; font-weight: 300 !important;">
-                    <img src="./img/leaf.gif"
-                         style="width: 25px; vertical-align: unset;">
-                    Java Service Tree Framework DevTools
+                <h4>
+				<span   class="font13"
+                        style="font-weight: bold">
+					<i class="fa fa-home"></i>
+					리소스 분석
+				</span>
                 </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
             </header>
             <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    선택한 제품(서비스)와 버전의 Time별 요구사항 현황
+                    <div style="float: right;">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
+                                onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
+                            Help
+                            <i  class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
+                <div class="row">
+                    <div class="col-md-3">
+                        <section class="widget dashboard-top-section">
+                            <header style="margin-bottom: 20px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-asterisk"></i>
+										제품(서비스) - 버전 선택
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                            </header>
+                            <div class="body">
+                                <div class="column">
+                                    <span>1. Product<sup>service</sup> 를 선택해 주세요</span>
+                                    <div    class="control-group"
+                                            class="darkBack"
+                                            style="padding-top: 10px; padding-bottom: 15px; border: 0">
+                                        <div    class="controls form-group"
+                                                class="darkBack"
+                                                style="margin-bottom: 5px !important">
+                                            <select id="selected_pdService"
+                                                    required="required"
+                                                    data-placeholder="Select Product(Service)"
+                                                    class="select-block-level chzn-select darkBack"
+                                                    tabindex="-1"
+                                                    name="selected_pdService"
+                                                    style="width: 100% !important">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <blockquote class="font12">
+                                        <strong>2. Product<sup>service</sup>의 버전을 선택해 주세요</strong>
+                                    </blockquote>
+                                    <div    class="control-group"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group"
+                                                style="margin-bottom: 5px !important">
+                                            <select multiple="multiple"
+                                                    id="multiversion"
+                                                    class="multiple-select btn-block darkBack"
+                                                    placeholder="&nbsp;&nbsp;Select Version">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
 
-                개발중
+                    <div class="col-md-4">
+                        <section class="widget dashboard-top-section">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-clock-o"></i>
+										요구사항 및 연결이슈 통계
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                            </header>
+                            <div class="body">
+                                <div    class="control-group"
+                                        class="darkBack"
+                                        style="padding-bottom: 10px; border: 0">
+                                    <div    class="controls form-group darkBack col-md-6"
+                                            style="margin-bottom: 5px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>요구사항 수 <br/><a id="#" style="font-weight: bold;">-</a> 개</span><br>
+                                    </div>
+                                    <div    class="controls form-group darkBack col-md-6"
+                                            style="margin-bottom: 5px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>연결이슈 수 <br/><a id="#" style="font-weight: bold;">-</a> 개</span><br>
+                                    </div>
+                            </div>
+                        </section>
+                    </div>
 
+                    <div class="col-md-5">
+                        <section class="widget dashboard-top-section">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-calendar-o"></i>
+										작업자 현황 통계
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                            </header>
+                            <div class="body">
+                                <div    class="control-group"
+                                        style="padding-bottom: 10px; border: 0">
+                                    <div    class="controls form-group darkBack col-md-12"
+                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>총 작업자 수 : <a id="#" style="font-weight: bold;">-</a> 개</span><br>
+                                    </div>
+                                    <div    class="controls form-group darkBack col-md-12"
+                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>투입 작업자 수 : <a id="#" style="font-weight: bold;">-</a> 개</span><br>
+                                    </div>
+                                    <div    class="controls form-group darkBack col-md-12"
+                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+                                        <span>작업자 평균 요구사항 수 : <a id="#" style="font-weight: bold;">-</a> 개</span><br>
+                                    </div>
+                                    <div    class="controls form-group darkBack col-md-12"
+                                            style="margin-bottom: 5px !important; padding: 8px 0px; !important; text-align: center">
+                                        <span>작업자 평균 연결이슈 수 : <a id="#" style="font-weight: bold;">-</a> 개</span><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+<!--                    <div class="col-md-3">
+                        <section class="widget dashboard-top-section">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-dollar"></i>
+										Extra section
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                            </header>
+                        </section>
+                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 두번째 박스   -->
+    <div class="col-lg-12 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+                    <span   class="font13"
+                            style="font-weight: bold">
+                        <i class="fa fa-sort-amount-asc"></i>
+                        두번째 박스
+                    </span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body maxwidget">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 10px; margin-bottom: 15px"></div>
+                <div class="row" style="height: 280px">
+                    <div class="col-md-4 color-legend-widget">
+                        <section class="widget" style="margin-bottom: 2px; height: 243px;">
+                            <header>
+                                <h4>
+                                    <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-clock-o"></i>
+                                        샌키
+                                    </span>
+                                </h4>
+                            </header>
+                            <div
+                                    class="body"
+                                    id="project-progress-wrapper">
+                                <div class="gradient_middle_border" style="width: 100%; margin-bottom: 10px;"></div>
+                                <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
+                                    <div
+                                            id="project-start"
+                                            class="box col-sm-6 fade-in-box"
+                                            style="display: none; margin-bottom: 0px; margin-right: 10px;">
+                                        <span>시작일로부터</span>
+                                        <br />
+                                        <span
+                                                class="project-date"
+                                                id="fastestStartDate"></span>
+                                        <div
+                                                class="day-progress"
+                                                id="startDDay"></div>
+                                    </div>
+                                    <div
+                                            id="project-end"
+                                            class="box col-sm-6 fade-in-box"
+                                            style="display: none;margin-bottom: 0px; padding-bottom: 30px;">
+                                        <span>종료일까지</span>
+                                        <br />
+                                        <span
+                                                class="project-date"
+                                                id="latestEndDate"></span>
+                                        <div
+                                                class="day-progress"
+                                                id="endDDay"></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
+                                    <div class="col-sm-12 fade-in-box" id="versionGaugeChart" style="height: 120px"></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-md-8 color-legend-widget">
+                        <section class="widget">
+                            <header>
+                                <h4>
+                                    <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-tasks"></i>
+                                        트리맵
+                                    </span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 63px;"></div>
+                            </header>
+                            <div
+                                    class="body"
+                                    id="version-timeline-wrapper"  style="height: 150px;">
+                                <div id="version-timeline-bar" class="time_element" style="display: none;"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 세번째 박스   -->
+    <div class="col-lg-12 col-layer">
+        <section class="widget ">
+            <header>
+                <h4>
+                    <span   class="font13"
+                            style="font-weight: bold">
+                        <i class="fa fa-calendar-o"></i>
+                        세번째 박스
+                    </span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <div class="row">
+                    <div class="col-md-4 color-legend-widget">
+                        <section class="widget">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-asterisk"></i>
+										전체 어플리케이션 진행 현황 컬러표
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                            </header>
+                            <div class="body">
+                                <ul class="color-labels">
+                                    <div>
+                                        <li>
+                                            <i class="fa fa-circle" style="color: #2f3238"></i>
+                                            <span class="label-name font12">전환전</span>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-circle" style="color: #e46700"></i>
+                                            <span class="label-name font12">진행중</span>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-circle" style="color: #138808"></i>
+                                            <span class="label-name font12">전환완료</span>
+                                        </li>
+                                    </div>
+                                    <div></div>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-8 color-legend-widget">
+                        <section class="widget" style="margin-bottom: 0px!important;">
+                            <header>
+                                <h4>
+                                    제품(서비스) 버전별
+                                    <small>
+                                        요구사항 상태
+                                    </small>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="widget-controls">
+                                    <!--                                    <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-plus"></i></a>-->
+                                    <!--                                    <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-minus"></i></a>-->
+                                    <!--                                    <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>-->
+                                </div>
+                            </header>
+                            <div class="widget-table-overflow">
+
+                                <table class="table table-striped table-lg mt-sm mb-0 sources-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="source-col-header">Source</th>
+                                        <th>Amount</th>
+                                        <th>Change</th>
+                                        <th class="hidden-xs">Percent.,%</th>
+                                        <th>Target</th>
+                                        <th class="chart-col-header hidden-sm hidden-xs">Trend</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><span class="label label-important">Direct</span></td>
+                                        <td>713</td>
+                                        <td><strong class="color-green">+53</strong></td>
+                                        <td class="hidden-xs">+12</td>
+                                        <td>900</td>
+                                        <td class="chart-cell hidden-sm hidden-xs">
+                                            <div id="direct_trend"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label label-warning">Refer</span></td>
+                                        <td>562</td>
+                                        <td><strong>+84</strong></td>
+                                        <td class="hidden-xs">+64</td>
+                                        <td>500</td>
+                                        <td class="chart-cell hidden-sm hidden-xs">
+                                            <div id="refer_trend"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label label-success">Social</span></td>
+                                        <td>148</td>
+                                        <td><strong class="color-red">-12</strong></td>
+                                        <td class="hidden-xs">+3</td>
+                                        <td>180</td>
+                                        <td class="chart-cell hidden-sm hidden-xs">
+                                            <div id="social_trend"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label label-info">Search</span></td>
+                                        <td>653</td>
+                                        <td><strong class="color-green">+23</strong></td>
+                                        <td class="hidden-xs">+43</td>
+                                        <td>876</td>
+                                        <td class="chart-cell hidden-sm hidden-xs">
+                                            <div id="search_trend"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label label-inverse">Internal</span></td>
+                                        <td>976</td>
+                                        <td><strong>+101</strong></td>
+                                        <td class="hidden-xs">-7</td>
+                                        <td>844</td>
+                                        <td class="chart-cell hidden-sm hidden-xs">
+                                            <div id="internal_trend"></div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 네번째 박스   -->
+    <div class="col-lg-12 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+                    <span   class="font13"
+                            style="font-weight: bold">
+                        <i class="fa fa-calendar-o"></i>
+                        네번째 박스
+                    </span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <div class="row">
+                    <div class="col-lg-4" style="padding-right: 4px !important;">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-pie-chart"></i> 이슈 상태 현황 </h4>
+                            </header>
+                            <div class="body" id="donut-chart"></div>
+                        </section>
+                    </div>
+                    <div class="col-lg-8">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-bar-chart"></i> 요구사항 및 이슈 상태 누적 현황 </h4>
+                            </header>
+                            <div class="body" id="combination-chart"></div>
+                        </section>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
