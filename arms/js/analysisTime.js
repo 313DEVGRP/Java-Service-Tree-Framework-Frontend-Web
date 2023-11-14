@@ -29,6 +29,8 @@ function execDocReady() {
             "../reference/jquery-plugins/info-chart-v1/js/D.js",
             "./js/dashboard/chart/timeline_custom.js",
             "./js/dashboard/chart/infographic_custom.css",
+            // 3번째 박스 Radar
+            "../reference/jquery-plugins/Chart.js-3.9.1/dist/chart.min.js",
             // 네번째 박스 차트
             // d3.v2와 d3.v4 버전차이 오류생김...
             // "../reference/light-blue/lib/nvd3/lib/d3.v2.js",
@@ -109,7 +111,7 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-
+            new Chart(ctx, config);
 
             // sevenTimeline();
 
@@ -1490,3 +1492,56 @@ function sevenTimeline() {
         .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
         .data(myData);
 }*/
+
+const data = {
+    labels: [
+        'Eating',
+        'Drinking',
+        'Sleeping',
+        'Designing',
+        'Coding',
+        'Cycling',
+        'Running'
+    ],
+    datasets: [{
+        label: 'My First Dataset',
+        data: [12, 3, 12, 12, 5, 1, 5],
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgb(255, 99, 132)',
+        pointBackgroundColor: 'rgb(255, 99, 132)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(255, 99, 132)'
+    }, {
+        label: 'My Second Dataset',
+        data: [18, 18, 10, 29, 30, 10],
+        fill: true,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgb(54, 162, 235)',
+        pointBackgroundColor: 'rgb(54, 162, 235)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(54, 162, 235)'
+    }]
+};
+
+const config = {
+    type: 'radar',
+    data: data,
+    options: {
+        responsive: false,
+        scale: {
+            beginAtZero: true,
+            max: 100,
+            stepSize: 10,
+        },
+        elements: {
+            line: {
+                borderWidth: 3
+            }
+        }
+    },
+};
+
+const ctx = document.getElementById('radar-chart');
