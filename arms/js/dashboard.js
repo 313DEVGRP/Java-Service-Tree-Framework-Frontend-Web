@@ -175,19 +175,10 @@ function makePdServiceSelectBox() {
 			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		}
 
-		//이슈리스트 진행 상황
-		//getIssueStatus($("#selected_pdService").val(), endPointUrl);
-		//통계로드
-		//statisticsLoad($("#selected_pdService").val(), null);
 		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
 
-		statisticsMonitor($("#selected_pdService").val()); //ES모으는중 by YHS
+		statisticsMonitor($("#selected_pdService").val());
 
-		//타임라인
-		// $("#notifyNoVersion2").hide();
-
-		// 투입 인력별 요구사항 차트
-		// dataTableLoad($("#selected_pdService").val(), endPointUrl);
 	});
 } // end makePdServiceSelectBox()
 
@@ -445,7 +436,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 	getReqAndLinkedIssueTop5(pdservice_id); // 우하단 수평바
 	getIssueResponsibleStatusTop5(pdservice_id); // 우하단 폴라바
-	// 우하단 폴라바
 
 	setTimeout(function () {
 		//Scope - (2) 요구사항에 연결된 이슈 총 개수
