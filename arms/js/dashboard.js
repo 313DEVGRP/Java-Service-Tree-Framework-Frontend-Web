@@ -1612,10 +1612,12 @@ function getReqAndLinkedIssueTop5(pdservice_id) {
 			200: function (data) {
 				console.log("우하단 수평 바 조회 ==========");
 				top5ReqLinkedIssue = []; // 초기화
-				var issueCount = 0;
-				var relatedIssueCount =0;
 
 				for(let i =0; i<5; i++) {
+
+					var issueCount = 0;
+					var relatedIssueCount =0;
+
 					if (data[i] !== undefined) {
 						var 아이디 = getIdFromMail(data[i].필드명);
 						var groupByIsReq = data[i].하위검색결과.group_by_isReq;
