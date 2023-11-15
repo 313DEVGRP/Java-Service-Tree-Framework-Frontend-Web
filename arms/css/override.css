@@ -2534,6 +2534,16 @@ table tbody tr td {
 --------------------------------------------------------------*/
 .section-title h2 {
 	color: #f8f8f8;
+	font-size: 32px;
+	font-weight: bold;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	position: relative;
+}
+
+.section-title {
+	text-align: center;
+	padding-bottom: 30px;
 }
 
 .section-title p {
