@@ -1,6 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
+var selectedPdServiceId; // 제품(서비스) 아이디
+var reqStatusDataTable;
+var dataTableRef;
+var selectedVersionId; // 선택된 버전 아이디
+var dashboardColor;
+var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 function execDocReady() {
 
     var pluginGroups = [
@@ -11,7 +17,13 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.iframe-transport.js",
             "../reference/light-blue/lib/jquery.fileupload.js",
             "../reference/light-blue/lib/jquery.fileupload-fp.js",
-            "../reference/light-blue/lib/jquery.fileupload-ui.js"],
+            "../reference/light-blue/lib/jquery.fileupload-ui.js",
+            //d3
+            "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
+            // "./js/common/colorPalette.js",
+            //chart Colors
+            "./js/dashboard/chart/colorPalette.js"
+        ],
 
         [	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
@@ -25,7 +37,13 @@ function execDocReady() {
             "../reference/light-blue/lib/bootstrap-datepicker.js",
             "../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
             "../reference/lightblue4/docs/lib/widgster/widgster.js",
-            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"],
+            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+            // 투입 인력별 요구사항 관여 차트
+            "../reference/jquery-plugins/Jit-2.0.1/jit.js",
+            "../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
+            // 제품-버전-투입인력 차트
+            "../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js",
+        ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -38,7 +56,11 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
+            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
+            "../arms/css/analysis/analysis.css",
+            "../arms/js/analysis/resource/sankey.js",
+            "../arms/js/analysis/resource/treemap.js"
+        ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
 
@@ -47,6 +69,8 @@ function execDocReady() {
             // 사이드 메뉴 색상 설정
             $('.widget').widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_resource");
+
+            dashboardColor = dashboardPalette.dashboardPalette01;
 
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();
@@ -132,10 +156,8 @@ function makeVersionMultiSelectBox() {
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
             selectedVersionId = versionTag.join(',');
-
-            donutChart($("#selected_pdService").val(), selectedVersionId);
-            combinationChart($("#selected_pdService").val(), selectedVersionId);
-
+            drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
+            drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
             if (checked) {
                 endPointUrl =
                     "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
@@ -159,14 +181,16 @@ function bind_VersionData_By_PdService() {
         statusCode: {
             200: function (data) {
                 //////////////////////////////////////////////////////////
+                var pdServiceVersionIds = [];
                 for (var k in data.response) {
                     var obj = data.response[k];
-                    var $opt = $("<option />", {
-                        value: obj.c_id,
-                        text: obj.c_title
-                    });
-                    $(".multiple-select").append($opt);
+                    pdServiceVersionIds.push(obj.c_id);
+                    var newOption = new Option(obj.c_title, obj.c_id, true, false);
+                    $(".multiple-select").append(newOption);
                 }
+                selectedVersionId = pdServiceVersionIds.join(',');
+                drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
+                drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
                 if (data.length > 0) {
                     console.log("display 재설정.");

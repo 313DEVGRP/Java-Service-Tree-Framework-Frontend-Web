@@ -237,61 +237,9 @@
                     </a>
                 </div>
             </header>
-            <div class="body maxwidget">
-                <div class="gradient_middle_border" style="width: 100%; margin-top: 10px; margin-bottom: 15px"></div>
-                <div class="row" style="height: 280px">
-                    <div class="col-md-4 color-legend-widget">
-                        <section class="widget" style="margin-bottom: 2px; height: 243px;">
-                            <header>
-                                <h4>
-                                    <span
-                                            class="font13"
-                                            style="font-weight: bold">
-                                        <i class="fa fa-clock-o"></i>
-                                        샌키
-                                    </span>
-                                </h4>
-                            </header>
-                            <div
-                                    class="body"
-                                    id="project-progress-wrapper">
-                                <div class="gradient_middle_border" style="width: 100%; margin-bottom: 10px;"></div>
-                                <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
-                                    <div
-                                            id="project-start"
-                                            class="box col-sm-6 fade-in-box"
-                                            style="display: none; margin-bottom: 0px; margin-right: 10px;">
-                                        <span>시작일로부터</span>
-                                        <br />
-                                        <span
-                                                class="project-date"
-                                                id="fastestStartDate"></span>
-                                        <div
-                                                class="day-progress"
-                                                id="startDDay"></div>
-                                    </div>
-                                    <div
-                                            id="project-end"
-                                            class="box col-sm-6 fade-in-box"
-                                            style="display: none;margin-bottom: 0px; padding-bottom: 30px;">
-                                        <span>종료일까지</span>
-                                        <br />
-                                        <span
-                                                class="project-date"
-                                                id="latestEndDate"></span>
-                                        <div
-                                                class="day-progress"
-                                                id="endDDay"></div>
-                                    </div>
-                                </div>
-                                <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
-                                    <div class="col-sm-12 fade-in-box" id="versionGaugeChart" style="height: 120px"></div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <div class="col-md-8 color-legend-widget">
+            <div class="body">
+                <div class="row">
+                    <div class="col-md-6" style="padding-right: 4px !important;">
                         <section class="widget">
                             <header>
                                 <h4>
@@ -299,15 +247,27 @@
                                             class="font13"
                                             style="font-weight: bold">
                                         <i class="fa fa-tasks"></i>
-                                        트리맵
+                                        제품 버전 별 작업자
                                     </span>
                                 </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 63px;"></div>
                             </header>
-                            <div
-                                    class="body"
-                                    id="version-timeline-wrapper"  style="height: 150px;">
-                                <div id="version-timeline-bar" class="time_element" style="display: none;"></div>
+                            <div class="body" id="chart-product-manpower" style="height: 286px">
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section class="widget">
+                            <header>
+                                <h4>
+                                    <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-tasks"></i>
+                                        작업자 별 요구사항 관여도
+                                    </span>
+                                </h4>
+                            </header>
+                            <div class="body" id="chart-manpower-requirement" style="height: 286px">
                             </div>
                         </section>
                     </div>
