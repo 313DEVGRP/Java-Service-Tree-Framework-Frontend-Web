@@ -1,0 +1,9 @@
+#demo svg text {
+    fill: black;
+}
+
+#reload {
+    padding:.5em 1em;
+    margin-top:2em;
+    color: black;
+}

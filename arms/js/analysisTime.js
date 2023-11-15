@@ -52,8 +52,12 @@ function execDocReady() {
             "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
             "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
             // 6번째 박스 timeline
-            // "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/timeline.js",
-            // "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/demo.js",
+            //"https://code.jquery.com/jquery-3.2.1.slim.min.js",
+            //"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js",
+            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/css/newtimeline.css",
+            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/raphael.min.js",
+            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/timeline.js",
+            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
             // 7번째 박스
             // "../reference/jquery-plugins/timelines-chart-2.11.8/src/timeline-chart.js",
             // "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
