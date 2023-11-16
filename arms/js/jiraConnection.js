@@ -726,7 +726,8 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈유형', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             class="btn btn-success btn-sm mr-1"
+                             style="width:77%">
                             이슈유형 갱신
                      </button>`;
     }
@@ -734,7 +735,8 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈상태', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             class="btn btn-success btn-sm mr-1"
+                             style="width:77%">
                             이슈상태 갱신
                      </button>`;
     }
@@ -1016,8 +1018,6 @@ function projectIssueTypeDataTable() {
     var selectList = {};
     var orderList = [[1, "asc"]];
     var buttonList = [];
-
-    console.log("issue_type selectProjectId => " + selectProjectId);
 
     var jquerySelector = "#issue_type_table"; //
     var ajaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueType.do?c_id=" + selectProjectId; // 사용 예정

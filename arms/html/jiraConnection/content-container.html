@@ -943,24 +943,31 @@
                         </li>
                     </div>
                 </div>
-                <div style="float: right"
-                     class="hidden"
-                     id="jira_renew_button_div_3rd_grid">
-                    <button type="button"
-                            id="jira_renew_btn"
-                            onClick="jira_renew('project')"
-                            class="btn btn-success btn-sm mr-1">
-                        항목 갱신
+                <div  style="float: right;"  class="btn-group">
+                    <button class="btn btn-sm dropdown-toggle btn-success" data-toggle="dropdown">
+                        &nbsp; 갱신 / 기본설정 &nbsp;
+                        <i class="fa fa-caret-down"></i>
                     </button>
-                </div>
-                <div style="float: right"
-                     id="jira_server_details_popup_div">
-                    <button type="button"
-                            id="default_update"
-                            name="default_update"
-                            class="btn btn-success btn-sm mr-1">
-                        기본 설정 저장
-                    </button>
+                    <ul class="dropdown-menu"
+                        style="background: transparent !important; border: none; box-shadow: none;">
+                        <li id="jira_renew_button_div_3rd_grid">
+                            <button type="button"
+                                    id="jira_renew_btn"
+                                    onClick="jira_renew('project')"
+                                    class="btn btn-success btn-sm mr-1">
+                            항목 갱신
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button"
+                                    id="default_update"
+                                    name="default_update"
+                                    class="btn btn-success btn-sm mr-1"
+                                    style="width:77%; margin-top: 2px;">
+                            기본 설정 저장
+                            </button>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="row">
