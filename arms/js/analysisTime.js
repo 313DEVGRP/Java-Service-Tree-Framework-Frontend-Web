@@ -45,12 +45,6 @@ function execDocReady() {
             // "../reference/light-blue/lib/nvd3/src/models/axis.js",
             // "../reference/light-blue/lib/nvd3/src/utils.js",
             // "../reference/light-blue/lib/nvd3/stream_layers.js",
-            // 3번째 박스 차트
-            "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
-            "./js/analysisTime/index.js",
-            // 5번째 박스 heatmap
-            "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
-            "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
             // 6번째 박스 timeline
             //"https://code.jquery.com/jquery-3.2.1.slim.min.js",
             //"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js",
@@ -58,6 +52,16 @@ function execDocReady() {
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/raphael.min.js",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/timeline.js",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
+            // 3번째 박스 차트
+            "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
+            "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
+            /*"../reference/jquery-plugins/echarts-5.4.3/test/lib/simpleRequire.js",
+            "../reference/jquery-plugins/echarts-5.4.3/test/lib/config.js",*/
+            "./js/analysisTime/index.js",
+            // 5번째 박스 heatmap
+            "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
+            "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
+
             // 7번째 박스
             // "../reference/jquery-plugins/timelines-chart-2.11.8/src/timeline-chart.js",
             // "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
@@ -115,7 +119,7 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            new Chart(ctx, config);
+            radarChart();
 
             // sevenTimeline();
 
@@ -1068,6 +1072,101 @@ function drawVersionProgress(data) {
     needle.animateOn(chart, startDDay / totalDate);
 }
 
+////////////////////
+// 세번째 박스
+////////////////////
+function radarChart() {
+    var chart = echarts.init(document.getElementById('radar-chart-main'));
+
+    chart.setOption({
+        dataZoom: [
+            { // The first dataZoom component
+                radiusAxisIndex: [0, 2] // Indicates that this dataZoom component
+                // controls the first and the third radiusAxis
+            }
+        ],
+        aria: {
+            show: true
+        },
+        tooltip: {},
+        legend: {
+            data: [{
+                icon: 'circle',
+                name: '요구사항'
+            }],
+            textStyle: {
+                color: 'white', // 원하는 텍스트 색상으로 변경합니다.
+                fontSize: 14
+            }
+        },
+        radar: {
+            radius: [0, '60%'],
+            triggerEvent: true,
+            // shape: 'circle',
+            indicator: [
+                { text: 'BaseVersion', max: 100},
+                { text: '1.0.0BaseVersion', max: 100},
+                { text: '1.0.1BaseVersion', max: 100},
+                { text: '1.0.2BaseVersion', max: 100},
+                { text: '1.0.3BaseVersion', max: 100},
+                { text: '1.0.4BaseVersion', max: 100},
+                { text: '2.0.0BaseVersion', max: 100},
+                { text: '2.0.1BaseVersion', max: 100},
+                { text: '2.0.2BaseVersion', max: 100},
+                { text: '2.0.3BaseVersion', max: 100},
+                { text: '2.0.4BaseVersion', max: 100}
+            ],
+            name: {
+                rotate: 45, // 텍스트를 45도로 회전시킵니다.
+                position: 'outside', // 텍스트를 레이더 영역 내부에 위치시킵니다.
+                color: '#ffffff',
+                formatter:'【{value}】'
+            }
+        },
+        series: [{
+            name: '',
+            type: 'radar',
+            label: {
+                normal: {
+                    show: true,
+                    textStyle: {
+                        color: 'white' // 원하는 텍스트 색상으로 변경합니다.
+                    }
+                }
+            },
+            itemStyle: {
+                borderWidth: 2,
+                borderColor: '#fff'
+            },
+            // areaStyle: {normal: {}},
+            data : [
+                {
+                    value: ['-', 80, 20, 40, 10, 100, 80, 20, 40, 10, 30],
+                    name: '요구사항'
+                }
+            ],
+            symbol: 'circle',
+            symbolSize: 7,
+            symbolRotate: function(value, params) {
+                return ~~(360 * Math.random());
+            }
+        }
+        ]
+    });
+    var theIndex = 2;
+    chart.on('click', function (params) {
+        console.log(params);
+        if (theIndex < 0) {
+            theIndex = 2;
+        }
+        chart.dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            dataIndex: theIndex
+        });
+        theIndex--;
+    });
+}
 
 ////////////////////
 // 네번째 박스
@@ -1389,13 +1488,13 @@ function heatMapReady(pdServiceLink, pdServiceVersionLinks) {
                     return_object[display_date] = {};
                     return_object[display_date].items = [];
 
-                    var random_elements = randomInt(1,3);
+/*                    var random_elements = randomInt(1,3);
                     for (var j=0; j < random_elements; j++) {
                         var random_item = items[randomInt(0,items.length-1)];
                         if (!return_object[display_date].items.includes(random_item)) {
                             return_object[display_date].items.push(random_item);
                         }
-                    }
+                    }*/
 
 
                 });
@@ -1496,56 +1595,3 @@ function sevenTimeline() {
         .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
         .data(myData);
 }*/
-
-const data = {
-    labels: [
-        'Eating',
-        'Drinking',
-        'Sleeping',
-        'Designing',
-        'Coding',
-        'Cycling',
-        'Running'
-    ],
-    datasets: [{
-        label: 'My First Dataset',
-        data: [12, 3, 12, 12, 5, 1, 5],
-        fill: true,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgb(255, 99, 132)',
-        pointBackgroundColor: 'rgb(255, 99, 132)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(255, 99, 132)'
-    }, {
-        label: 'My Second Dataset',
-        data: [18, 18, 10, 29, 30, 10],
-        fill: true,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgb(54, 162, 235)',
-        pointBackgroundColor: 'rgb(54, 162, 235)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(54, 162, 235)'
-    }]
-};
-
-const config = {
-    type: 'radar',
-    data: data,
-    options: {
-        responsive: false,
-        scale: {
-            beginAtZero: true,
-            max: 100,
-            stepSize: 10,
-        },
-        elements: {
-            line: {
-                borderWidth: 3
-            }
-        }
-    },
-};
-
-const ctx = document.getElementById('radar-chart');

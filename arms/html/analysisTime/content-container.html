@@ -492,7 +492,10 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <canvas id="radar-chart" width="300" height="300"></canvas>
+                                <div style="height: 300px;">
+                                    <div id="radar-chart-main"></div>
+                                </div>
+<!--                                <canvas id="radar-chart" width="300" height="300"></canvas>-->
                             </div>
                         </section>
                     </div>
@@ -717,23 +720,8 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <ul class="color-labels">
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #2f3238"></i>
-                                            <span class="label-name font12">전환전</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #e46700"></i>
-                                            <span class="label-name font12">진행중</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #138808"></i>
-                                            <span class="label-name font12">전환완료</span>
-                                        </li>
-                                    </div>
-                                    <div></div>
-                                </ul>
+<!--                                <div class="tooltip"></div>-->
+                                <div id="forces"></div>
                             </div>
                         </section>
                     </div>
@@ -945,15 +933,70 @@
         color: white;
     }
 
-    // 패널 내부 패딩 값왜 적용 안되지
-/*    @media (min-width: 1200px) {
-        .col-md-4 {
-            width: 33.3333333333%!important;
-        }
-        .col-md-8 {
-            width: 66.6666666667%!important;
-        }
-    }*/
+    /* 레이더 차트 */
+    svg:not(:root) {
+        overflow: visible
+    }
+
+    .radar-chart {
+        width: auto; /* 원하는 너비로 설정 */
+        height: auto; /* 원하는 높이로 설정 */
+        margin: auto;
+    }
+
+    .radar-chart .area {
+        fill-opacity: 0.7;
+    }
+    .radar-chart.focus .area {
+        fill-opacity: 0.3;
+    }
+    .radar-chart.focus .area.focused {
+        fill-opacity: 0.9;
+    }
+    .area.germany, .germany .circle {
+        fill: #FFD700;
+        stroke: none;
+    }
+    .area.argentina, .argentina .circle {
+        fill: #ADD8E6;
+        stroke: none;
+    }
+
+    #radar-chart-main {
+        height: 300px;
+    }
+
+    canvas {
+        margin: auto;
+    }
+
+    /* 네트워크 차트 */
+    svg circle.node {
+        fill: #3b5998;
+        stroke: #1b3978;
+        stroke-width: 1.5px;
+    }
+
+    svg line.link {
+        stroke: #222;
+        stroke-opacity: .6;
+        stroke-width: 2px;
+    }
+
+    div.tooltip {
+        position: absolute;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        width: 80px;
+        height: 28px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: #8fb3de;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
 
     @media (max-width: 992px) {
         .maxwidget {
