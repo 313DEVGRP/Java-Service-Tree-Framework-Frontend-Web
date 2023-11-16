@@ -29,8 +29,6 @@ function execDocReady() {
             "../reference/jquery-plugins/info-chart-v1/js/D.js",
             "./js/dashboard/chart/timeline_custom.js",
             "./js/dashboard/chart/infographic_custom.css",
-            // 3번째 박스 Radar
-            "../reference/jquery-plugins/Chart.js-3.9.1/dist/chart.min.js",
             // 네번째 박스 차트
             // d3.v2와 d3.v4 버전차이 오류생김...
             // "../reference/light-blue/lib/nvd3/lib/d3.v2.js",
@@ -45,6 +43,9 @@ function execDocReady() {
             // "../reference/light-blue/lib/nvd3/src/models/axis.js",
             // "../reference/light-blue/lib/nvd3/src/utils.js",
             // "../reference/light-blue/lib/nvd3/stream_layers.js",
+            // 5번째 박스 heatmap
+            "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
+            "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
             // 6번째 박스 timeline
             //"https://code.jquery.com/jquery-3.2.1.slim.min.js",
             //"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js",
@@ -61,11 +62,9 @@ function execDocReady() {
             // 5번째 박스 heatmap
             "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
             "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
-
             // 7번째 박스
-            // "../reference/jquery-plugins/timelines-chart-2.11.8/src/timeline-chart.js",
-            // "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
-            // "https://unpkg.com/timelines-chart@2.12.1/dist/timelines-chart.min.js",
+            "../reference/jquery-plugins/timelines-chart-2.11.8/src/show-time-marker.js",
+            "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js"
         ],
 
         [	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
@@ -121,7 +120,7 @@ function execDocReady() {
 
             radarChart();
 
-            // sevenTimeline();
+            sevenTimeline();
 
             dashboardColor = dashboardPalette.dashboardPalette01;
             console.log(dashboardColor);
@@ -1436,7 +1435,7 @@ function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function getRandomData(min, max, items) {
+function getRandoHeatMapData(min, max, items) {
     var return_object = {};
 
     var entries = randomInt(min, max);
@@ -1502,9 +1501,11 @@ function heatMapReady(pdServiceLink, pdServiceVersionLinks) {
         }
     });
 
+    var heatMapData = getRandoHeatMapData(10, 40, ["banana", "apple", "orange", "pear"]);
+
     $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
         //data: '{"2020-08-01": {"items": ["banana", "apple"]}, "2020-05-05": {"items": ["apple"]}, "2020-05-01": {"items": ["banana"]}, "2020-05-03": {"items": ["banana", "apple", "orange"]}, "2020-05-22": {"items": ["banana", "apple", "orange", "pear"]}}',
-        data: getRandomData(10, 40, ["banana", "apple", "orange", "pear"]),
+        data: heatMapData,
         start_monday: true,
         always_show_tooltip: true,
         month_names: ['jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
@@ -1585,13 +1586,16 @@ function getRandomData(ordinal = false) {
         }
     }
 }
-
+*/
 function sevenTimeline() {
+    var chatWidth = document.querySelector("#sevenTimeLine").offsetWidth;
+
     const myData = getRandomData(true);
 
     TimelinesChart()('#sevenTimeLine')
         .zScaleLabel('My Scale Units')
+        .width(chatWidth)
         .zQualitative(true)
         .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
         .data(myData);
-}*/
+}

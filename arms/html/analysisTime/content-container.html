@@ -880,7 +880,7 @@
                                 </h4>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
-                            <div class="body">
+                            <div class="body" style="overflow:scroll;">
                                 <div id="sevenTimeLine"></div>
                             </div>
                         </section>
@@ -893,6 +893,15 @@
 </div>
 
 <style>
+    #sevenTimeLine svg {
+        height: auto;
+        width: auto;
+        display: initial;
+    }
+    .timelines-chart .axises .y-axis text,.timelines-chart .axises .grp-axis text {
+         fill: white;
+    }
+
     .timeline:before {
         left: 0px !important;
         background: none;
