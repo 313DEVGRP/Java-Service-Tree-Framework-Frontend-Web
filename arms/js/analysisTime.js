@@ -59,9 +59,8 @@ function execDocReady() {
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/timeline.js",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
             // 7번째 박스
-            // "../reference/jquery-plugins/timelines-chart-2.11.8/src/timeline-chart.js",
-            // "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
-            // "https://unpkg.com/timelines-chart@2.12.1/dist/timelines-chart.min.js",
+             "../reference/jquery-plugins/timelines-chart-2.11.8/src/show-time-marker.js",
+             "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js"
         ],
 
         [	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
@@ -117,7 +116,7 @@ function execDocReady() {
 
             new Chart(ctx, config);
 
-            // sevenTimeline();
+            sevenTimeline();
 
             dashboardColor = dashboardPalette.dashboardPalette01;
             console.log(dashboardColor);
@@ -1486,16 +1485,19 @@ function getRandomData(ordinal = false) {
         }
     }
 }
-
+*/
 function sevenTimeline() {
+    var chatWidth = document.querySelector("#sevenTimeLine").offsetWidth;
+
     const myData = getRandomData(true);
 
     TimelinesChart()('#sevenTimeLine')
         .zScaleLabel('My Scale Units')
+        .width(chatWidth)
         .zQualitative(true)
         .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
         .data(myData);
-}*/
+}
 
 const data = {
     labels: [
