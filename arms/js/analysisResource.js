@@ -151,22 +151,18 @@ function makeVersionMultiSelectBox() {
         filter: true,
         onClose: function () {
             console.log("onOpen event fire!\n");
-
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
             selectedVersionId = versionTag.join(',');
+
+            // 요구사항 및 연결이슈 통계
+            getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, true);
+            getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, false);
+
             drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
-            if (checked) {
-                endPointUrl =
-                    "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-                //dataTableLoad($("#selected_pdService").val(), endPointUrl);
-            } else {
-                endPointUrl =
-                    "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-                //dataTableLoad($("#selected_pdService").val(), endPointUrl);
-            }
+
         }
     });
 }
@@ -189,6 +185,10 @@ function bind_VersionData_By_PdService() {
                     $(".multiple-select").append(newOption);
                 }
                 selectedVersionId = pdServiceVersionIds.join(',');
+                // 요구사항 및 연결이슈 통계
+                getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, true);
+                getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, false);
+
                 drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
                 drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
@@ -221,6 +221,35 @@ function dataTableDrawCallback(tableInfo) {
         .columns.adjust()
         .responsive.recalc();*/
 }
+
+function getReqLinkedIssueData(pdservice_id, pdServiceVersionLinks, isReq) {
+    var _url = "/auth-user/api/arms/analysis/resource/normal-version/"+pdservice_id;
+    $.ajax({
+        url: _url,
+        type: "GET",
+        data: { "서비스아이디" : pdservice_id,
+                "메인그룹필드" : "pdServiceVersion",
+                "isReq" : isReq,
+                "컨텐츠보기여부" : true,
+                "크기" : 1000,
+                "pdServiceVersionLinks" : pdServiceVersionLinks},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                if(isReq == true) {
+                    console.log("요구사항");
+                    $("#req_count").text(data["전체합계"]);
+                } else {
+                    console.log("연결이슈");
+                    $("#linkedIssue_subtask_count").text(data["전체합계"]);
+                }
+            }
+        }
+    });
+}
+
 
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function dataTableLoad(selectId, endPointUrl) {
