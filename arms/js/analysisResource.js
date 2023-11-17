@@ -279,7 +279,7 @@ function dataTableLoad() {
         },
         {
             name: "requirements",
-            title: "요구사항 수",
+            title: "요구사항",
             data: "requirements",
             className: "dt-body-right",
             defaultContent: "-",
@@ -293,7 +293,7 @@ function dataTableLoad() {
         },
         {
             name: "issues",
-            title: "처리한 이슈 수",
+            title: "담당 이슈",
             data: "issues",
             className: "dt-body-right",
             defaultContent: "-",
