@@ -122,6 +122,7 @@ function makePdServiceSelectBox() {
 
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function (e) {
+        selectedPdServiceId = $("#selected_pdService").val();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
         //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
@@ -162,7 +163,7 @@ function makeVersionMultiSelectBox() {
 
             drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
-
+            dataTableLoad();
         }
     });
 }
@@ -198,6 +199,7 @@ function bind_VersionData_By_PdService() {
                 //$('#multiversion').multipleSelect('refresh');
                 //$('#edit_multi_version').multipleSelect('refresh');
                 $(".multiple-select").multipleSelect("refresh");
+                dataTableLoad();
                 //////////////////////////////////////////////////////////
             }
         }
@@ -252,246 +254,142 @@ function getReqLinkedIssueData(pdservice_id, pdServiceVersionLinks, isReq) {
 
 
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function dataTableLoad(selectId, endPointUrl) {
+function dataTableLoad() {
+    if (!selectedVersionId || !selectedPdServiceId) {
+        if ( $.fn.DataTable.isDataTable( '#analysis_resource_assignee_table' ) ) {
+            var table = $('#analysis_resource_assignee_table').DataTable();
+            table.clear().draw();
+        }
+        return;
+    }
     var columnList = [
-        { name: "c_pdservice_link", title: "제품(서비스) 아이디", data: "c_pdservice_link", visible: false },
         {
-            name: "c_pdservice_name",
-            title: "제품(서비스)",
-            data: "c_pdservice_name",
+            name: "displayName",
+            title: "담당자 이름",
+            data: "displayName",
+            className: "dt-body-left",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + data + "</label>";
                 }
                 return data;
             },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_pds_version_link", title: "제품(서비스) 버전 아이디", data: "c_pds_version_link", visible: false },
-        {
-            name: "c_pds_version_name",
-            title: "제품(서비스) 버전",
-            data: "c_pds_version_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
-        { name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
-        {
-            name: "c_req_name",
-            title: "요구사항",
-            data: "c_req_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_jira_server_link", title: "지라 서버 아이디", data: "c_jira_server_link", visible: false },
-        { name: "c_jira_server_url", title: "지라 서버 주소", data: "c_jira_server_url", visible: false },
-        {
-            name: "c_jira_server_name",
-            title: "JIRA 서버명",
-            data: "c_jira_project_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_jira_project_link", title: "지라 프로젝트 아이디", data: "c_jira_project_link", visible: false },
-        { name: "c_jira_project_url", title: "지라 프로젝트 주소", data: "c_jira_project_url", visible: false },
-        {
-            name: "c_jira_project_name",
-            title: "JIRA 프로젝트명",
-            data: "c_jira_project_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
         },
         {
-            name: "c_jira_project_key",
-            title: "JIRA 프로젝트키",
-            data: "c_jira_project_key",
+            name: "requirements",
+            title: "요구사항 수",
+            data: "requirements",
+            className: "dt-body-right",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + data + "</label>";
                 }
                 return data;
             },
-            className: "dt-body-left",
-            visible: true
         },
         {
-            name: "c_issue_key",
-            title: "요구사항 이슈 키",
-            data: "c_issue_key",
+            name: "issues",
+            title: "처리한 이슈 수",
+            data: "issues",
+            className: "dt-body-right",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    var _render =
-                        '<div style=\'white-space: nowrap; color: #a4c6ff\'>' + data +
-                        '<button data-target="#my_modal2" data-toggle="modal" style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_issue_key(\''+data+'\')"><i class="fa fa-list-alt"></i>' + "</button>"+
-                        "</div>";
-                    return _render;
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + data + "</label>";
                 }
                 return data;
             },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_issue_priority_link", title: "요구사항 이슈 우선순위 아이디", data: "c_issue_priority_link", visible: false },
-        {
-            name: "c_issue_priority_name",
-            title: "요구사항 이슈 우선순위",
-            data: "c_issue_priority_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_issue_status_link", title: "요구사항 이슈 상태 아이디", data: "c_issue_status_link", visible: false },
-        {
-            name: "c_issue_status_name",
-            title: "요구사항 이슈 상태",
-            data: "c_issue_status_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
-        },
-        { name: "c_issue_resolution_link", title: "요구사항 이슈 해결책 아이디", data: "c_issue_resolution_link", visible: false },
-        {
-            name: "c_issue_resolution_name",
-            title: "요구사항 이슈 해결책",
-            data: "c_issue_resolution_name",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-body-left",
-            visible: true
         },
         {
-            name: "c_issue_reporter",
-            title: "요구사항 이슈 보고자",
-            data: "c_issue_reporter",
+            name: "issueTypes",
+            title: "이슈 유형",
+            data: "issueTypes",
+            className: "dt-body-right",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                const priorities = Object.entries(data)
+                    .map(function([key, value]) {
+                        return key + ' - ' + value;
+                    })
+                    .join('<br>');
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + priorities + "</label>";
                 }
-                return data;
+                return priorities;
             },
-            className: "dt-body-left",
-            visible: true
         },
         {
-            name: "c_issue_assignee",
-            title: "요구사항 이슈 할당자",
-            data: "c_issue_assignee",
+            name: "priorities",
+            title: "이슈 우선 순위",
+            data: "priorities",
+            className: "dt-body-right",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                const priorities = Object.entries(data)
+                    .map(function([key, value]) {
+                        return key + ' - ' + value;
+                    })
+                    .join('<br>');
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + priorities + "</label>";
                 }
-                return data;
+                return priorities;
             },
-            className: "dt-body-left",
-            visible: true
         },
         {
-            name: "c_issue_create_date",
-            title: "요구사항 이슈 생성일자",
-            data: "c_issue_create_date",
+            name: "statuses",
+            title: "이슈 상태",
+            data: "statuses",
+            className: "dt-body-right",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+                const statuses = Object.entries(data)
+                    .map(function([key, value]) {
+                        return key + ' - ' + value;
+                    })
+                    .join('<br>');
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + statuses + "</label>";
                 }
-                return data;
+                return statuses;
             },
-            className: "dt-body-left",
-            visible: true
         },
         {
-            name: "c_issue_update_date",
-            title: "요구사항 이슈 최근 업데이트 일자",
-            data: "c_issue_update_date",
+            name: "resolutions",
+            title: "이슈 해결책",
+            data: "resolutions",
+            className: "dt-body-right",
+            defaultContent: "-",
+            visible: true,
             render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+                const resolutions = Object.entries(data)
+                    .map(function([key, value]) {
+                        return key + ' - ' + value;
+                    })
+                    .join('<br>');
+                if (type === "display") {
+                    return '<label style="color: #a4c6ff">' + resolutions + "</label>";
                 }
-                return data;
+                return resolutions;
             },
-            className: "dt-body-left",
-            visible: true
-        }
+        },
     ];
-    var rowsGroupList = [1,3,6];
-    var columnDefList = [
-        {
-            orderable: false,
-            className: "select-checkbox",
-            targets: 0
-        }
-    ];
-    var orderList = [[1, "asc"]];
-    var jquerySelector = "#reqstatustable";
-    var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var selectList = {};
+    var orderList = [[2, "asc"]];
+    var jquerySelector = "#analysis_resource_assignee_table";
+    var ajaxUrl = "/auth-user/api/arms/analysis/resource/tasks?pdServiceLink=" + selectedPdServiceId + "&pdServiceVersionLinks=" + selectedVersionId;
     var jsonRoot = "";
+    var isServerSide = false;
     var buttonList = [
         "copy",
         "excel",
@@ -511,10 +409,9 @@ function dataTableLoad(selectId, endPointUrl) {
             pageSize: "LEGAL"
         }
     ];
-    var selectList = {};
-    var isServerSide = false;
 
-    reqStatusDataTable = dataTable_build(
+
+    dataTableRef = dataTable_build(
         jquerySelector,
         ajaxUrl,
         jsonRoot,
@@ -526,5 +423,21 @@ function dataTableLoad(selectId, endPointUrl) {
         buttonList,
         isServerSide
     );
+    $("#copychecker").on("click", function () {
+        dataTableRef.button(".buttons-copy").trigger();
+    });
+    $("#printchecker").on("click", function () {
+        dataTableRef.button(".buttons-print").trigger();
+    });
+    $("#csvchecker").on("click", function () {
+        dataTableRef.button(".buttons-csv").trigger();
+    });
+    $("#excelchecker").on("click", function () {
+        dataTableRef.button(".buttons-excel").trigger();
+    });
+    $("#pdfchecker").on("click", function () {
+        dataTableRef.button(".buttons-pdf").trigger();
+    });
 }
+
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
