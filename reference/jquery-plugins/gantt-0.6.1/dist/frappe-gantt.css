@@ -36,6 +36,17 @@
   table-layout: fixed;
   border-spacing: 0;
 }
+.table-container table .table-header tr th,
+.table-container table .table-body tr td {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  padding: 0 7px;
+  box-sizing: border-box;
+}
 .table-container table .table-body tr:first-child {
   height: 37px !important;
 }
@@ -49,52 +60,52 @@
 .table-container table .table-body tr.selected {
   background-color: rgba(229, 96, 59, 0.2);
 }
-.table-container table .table-header tr th,
-.table-container table .table-body tr td {
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  padding: 9px 7px;
-  box-sizing: border-box;
-}
 .table-container table .table-body tr td {
   border-right: 2px solid #515256;
 }
-.table-container table .table-body tr td .expand_btn {
-  width: 0;
-  height: 0;
-  margin: 0 6px;
+.table-container table .table-body tr td ins {
+  display: inline-block;
+  text-decoration: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
   padding: 0;
-  background: none;
-  outline: none;
-  border: none;
-  border-top: 8px solid transparent;
-  border-left: 8px solid #b0b0b2;
 }
-.table-container table .table-body tr td .expand_btn.collapse-list {
-  border-top: 8px solid #b0b0b2;
-  border-left: 8px solid transparent;
+.table-container table .table-body tr td:first-child {
+  background-image: url(313devgrp.png);
+  background-color: transparent;
+  background-position: -90px 0;
+  background-repeat: repeat-y;
+}
+.table-container table .table-body tr td:first-child ins {
+  background-image: url(313devgrp.png);
+  background-position: -36px 0;
+  background-repeat: no-repeat;
+  background-color: transparent;
 }
 .table-container table .table-body tr td.indent-1 {
-  padding-left: 20px;
-}
-.table-container table .table-body tr td.indent-1:has(.expand_btn) {
   padding-left: 0px;
 }
 .table-container table .table-body tr td.indent-2 {
-  padding-left: 40px;
-}
-.table-container table .table-body tr td.indent-2:has(.expand_btn) {
-  padding-left: 20px;
+  padding-left: 18px;
 }
 .table-container table .table-body tr td.indent-3 {
-  padding-left: 60px;
+  padding-left: 36px;
 }
-.table-container table .table-body tr td.indent-3:has(.expand_btn) {
-  padding-left: 40px;
+.table-container table .table-body tr td.indent-4 {
+  padding-left: 54px;
+}
+.table-container table .table-body tr td.indent-5 {
+  padding-left: 72px;
+}
+.table-container table .table-body tr td[rel=folder].opened > ins {
+  background-position: -72px 0;
+}
+.table-container table .table-body tr td[rel=folder].closed > ins {
+  background-position: -54px 0;
+}
+.table-container table .table-body tr:last-child td:first-child {
+  background: transparent;
 }
 
 .split-bar {
