@@ -61,14 +61,16 @@ export default class Table {
                 const { data, render } = column;
 
                 if (data === 'name' && task.level > 1) {
-                    if (task.has_children) {
-                        const expand_btn = document.createElement('button');
-                        expand_btn.className = 'expand_btn';
+                    const $ins = document.createElement('ins');
 
-                        $td.append(expand_btn);
-                    }
-
+                    $ins.textContent = ' ';
+                    $td.append($ins);
+                    $td.setAttribute('rel', task.type);
                     $td.className = `indent-${task.level - 1}`;
+
+                    if (task.type !== 'default') {
+                        $td.classList.add(task.closed ? 'closed' : 'opened');
+                    }
                 }
 
                 if (render) {

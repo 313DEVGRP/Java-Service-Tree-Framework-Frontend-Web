@@ -1019,14 +1019,16 @@ var Gantt = (function () {
                     const { data, render } = column;
 
                     if (data === 'name' && task.level > 1) {
-                        if (task.has_children) {
-                            const expand_btn = document.createElement('button');
-                            expand_btn.className = 'expand_btn';
+                        const $ins = document.createElement('ins');
 
-                            $td.append(expand_btn);
-                        }
-
+                        $ins.textContent = ' ';
+                        $td.append($ins);
+                        $td.setAttribute('rel', task.type);
                         $td.className = `indent-${task.level - 1}`;
+
+                        if (task.type !== 'default') {
+                            $td.classList.add(task.closed ? 'closed' : 'opened');
+                        }
                     }
 
                     if (render) {
@@ -1518,7 +1520,7 @@ var Gantt = (function () {
                 .appendChild($table_body);
 
             $table_body.addEventListener('click', (event) =>
-                this.bind_table_event(event, $table_body)
+                this.bind_table_event(event)
             );
         }
 
@@ -1630,62 +1632,44 @@ var Gantt = (function () {
             this.make_table();
         }
 
-        bind_table_event(event, $table_body) {
+        bind_table_event(event) {
             const $tr = event.target.closest('tr');
             const id = $tr.dataset.id;
+            const $target = event.target.closest('td');
 
-            if (event.target.classList.contains('expand_btn')) {
+            if (
+                $target.getAttribute('rel') === 'folder' ||
+                $target.getAttribute('rel') === 'drive'
+            ) {
                 let tasks = [...this.tasks];
 
-                if (event.target.classList.contains('collapse-list')) {
+                if ($target.classList.contains('closed')) {
                     this.originTasks.forEach((task) => {
-                        if (task.dependencies.includes(id)) {
-                            const table_row = $table_body.querySelector(
-                                `[data-id='${task.id}']`
-                            );
-
-                            table_row
-                                .querySelector('.collapse-list')
-                                ?.classList.remove('collapse-list');
-                            table_row.classList.remove('hide');
-                            tasks.splice(task._index, 0, task);
+                        if (task.id === id) {
+                            delete task.closed;
+                            return tasks.splice(task._index, 1, task);
                         }
-                    });
 
-                    event.target.classList.remove('collapse-list');
+                        if (task.dependencies.includes(id))
+                            tasks.splice(task._index, 0, task);
+                    });
                 } else {
-                    const { update_list, remove_list } = this.tasks.reduce(
-                        (acc, task) => {
-                            if (!task.dependencies.includes(id)) {
-                                return {
-                                    update_list: [...acc.update_list, task],
-                                    remove_list: acc.remove_list,
-                                };
-                            }
+                    tasks = this.tasks.reduce((acc, task) => {
+                        if (task.id === id) {
+                            return [...acc, { ...task, closed: true }];
+                        }
 
-                            return {
-                                update_list: acc.update_list,
-                                remove_list: [...acc.remove_list, task],
-                            };
-                        },
-                        { update_list: [], remove_list: [] }
-                    );
+                        if (!task.dependencies.includes(id)) {
+                            return [...acc, task];
+                        }
 
-                    remove_list.forEach((task) => {
-                        const table_row = $table_body.querySelector(
-                            `[data-id='${task.id}']`
-                        );
-
-                        table_row.classList.remove('selected');
-                        table_row.classList.add('hide');
-                    });
-
-                    tasks = update_list;
-                    event.target.classList.add('collapse-list');
+                        return acc;
+                    }, []);
                 }
 
                 this.setup_tasks(tasks);
                 this.render();
+                this.rerender_table();
 
                 return;
             }
@@ -1701,23 +1685,14 @@ var Gantt = (function () {
 
             $table_container.className = 'table-container';
 
-            const table_data = [...this.tasks];
-            table_data.forEach((task) => {
-                task.dependencies.forEach((task_id) => {
-                    const dependency = this.get_task(task_id);
-                    if (!dependency) return;
-                    table_data[dependency._index].has_children = true;
-                });
-            });
-
             const $table_header = this.table.draw_table_header();
-            const $table_body = this.table.draw_table_body(table_data);
+            const $table_body = this.table.draw_table_body(this.tasks);
 
             $table.append($table_header);
             $table.append($table_body);
 
             $table_body.addEventListener('click', (event) =>
-                this.bind_table_event(event, $table_body)
+                this.bind_table_event(event)
             );
 
             $table_container.append($table);
