@@ -160,6 +160,8 @@ function makeVersionMultiSelectBox() {
             // 요구사항 및 연결이슈 통계
             getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, true);
             getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, false);
+            // 작업자별 상태
+            getWorkStatus($("#selected_pdService").val(), selectedVersionId);
 
             drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
@@ -189,6 +191,8 @@ function bind_VersionData_By_PdService() {
                 // 요구사항 및 연결이슈 통계
                 getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, true);
                 getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, false);
+                // 작업자별 상태
+                getWorkStatus($("#selected_pdService").val(), selectedVersionId);
 
                 drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
                 drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
@@ -225,6 +229,7 @@ function dataTableDrawCallback(tableInfo) {
 }
 
 function getReqLinkedIssueData(pdservice_id, pdServiceVersionLinks, isReq) {
+    console.log(pdServiceVersionLinks);
     var _url = "/auth-user/api/arms/analysis/resource/normal-version/"+pdservice_id;
     $.ajax({
         url: _url,
@@ -441,3 +446,29 @@ function dataTableLoad() {
 }
 
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
+
+
+function getWorkStatus(pdservice_id, pdServiceVersionLinks) {
+    var _url = "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id;
+    $.ajax({
+        url: _url,
+        type: "GET",
+        data: { "서비스아이디" : pdservice_id,
+                "메인그룹필드" : "assignee.assignee_displayName.keyword",
+                "하위그룹필드들": "isReq,status.status_name.keyword",
+                "컨텐츠보기여부" : true,
+                "크기" : 1000,
+                "하위크기": 1000,
+                "pdServiceVersionLinks" : pdServiceVersionLinks},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                console.log("=== === === 작업자 상태 집계 시작=== === ===")
+                console.log(data);
+                console.log("=== === === 작업자 상태 집계 종료=== === ===")
+            }
+        }
+    });
+}
