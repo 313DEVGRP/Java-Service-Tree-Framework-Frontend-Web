@@ -152,10 +152,10 @@
                             <div class="body">
                                 <div    class="control-group"
                                         style="padding-bottom: 10px; border: 0">
-                                    <div    class="controls form-group darkBack col-md-12"
+<!--                                    <div    class="controls form-group darkBack col-md-12"
                                             style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
                                         <span>총 작업자 수 : <a id="resource_total" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>
+                                    </div>-->
                                     <div    class="controls form-group darkBack col-md-12"
                                             style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
                                         <span>투입 작업자 수 : <a id="resource_count" style="font-weight: bold;">-</a> 개</span><br>
@@ -348,11 +348,12 @@
         <section class="widget ">
             <header>
                 <h4>
-                    <span   class="font13"
-                            style="font-weight: bold">
-                        <i class="fa fa-calendar-o"></i>
-                        세번째 박스
-                    </span>
+                <span   class="font13"
+                        style="font-weight: bold">
+                        <i  class="fa fa-sort-amount-asc"
+                            style="vertical-align: middle;font-size: 14px;"></i>
+                         담당자 별 업무 처리 현황 - YHS
+                </span>
                 </h4>
                 <div class="widget-controls">
                     <a  data-widgster="toleft"
@@ -390,124 +391,35 @@
                 </div>
             </header>
             <div class="body">
-                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
-                <div class="row">
-                    <div class="col-md-4 color-legend-widget">
-                        <section class="widget">
-                            <header style="margin-bottom: 15px">
-                                <h4>
-									<span class="font13" style="font-weight: bold">
-										<i class="fa fa-asterisk"></i>
-										전체 어플리케이션 진행 현황 컬러표
-									</span>
-                                </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                            </header>
-                            <div class="body">
-                                <ul class="color-labels">
-                                    <div>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #2f3238"></i>
-                                            <span class="label-name font12">전환전</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #e46700"></i>
-                                            <span class="label-name font12">진행중</span>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-circle" style="color: #138808"></i>
-                                            <span class="label-name font12">전환완료</span>
-                                        </li>
-                                    </div>
-                                    <div></div>
-                                </ul>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-md-8 color-legend-widget">
-                        <section class="widget" style="margin-bottom: 0px!important;">
-                            <header>
-                                <h4>
-                                    제품(서비스) 버전별
-                                    <small>
-                                        요구사항 상태
-                                    </small>
-                                </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                                <div class="widget-controls">
-                                    <!--                                    <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-plus"></i></a>-->
-                                    <!--                                    <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-minus"></i></a>-->
-                                    <!--                                    <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>-->
-                                </div>
-                            </header>
-                            <div class="widget-table-overflow">
+                <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
 
-                                <table class="table table-striped table-lg mt-sm mb-0 sources-table">
-                                    <thead>
-                                    <tr>
-                                        <th class="source-col-header">Source</th>
-                                        <th>Amount</th>
-                                        <th>Change</th>
-                                        <th class="hidden-xs">Percent.,%</th>
-                                        <th>Target</th>
-                                        <th class="chart-col-header hidden-sm hidden-xs">Trend</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><span class="label label-important">Direct</span></td>
-                                        <td>713</td>
-                                        <td><strong class="color-green">+53</strong></td>
-                                        <td class="hidden-xs">+12</td>
-                                        <td>900</td>
-                                        <td class="chart-cell hidden-sm hidden-xs">
-                                            <div id="direct_trend"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="label label-warning">Refer</span></td>
-                                        <td>562</td>
-                                        <td><strong>+84</strong></td>
-                                        <td class="hidden-xs">+64</td>
-                                        <td>500</td>
-                                        <td class="chart-cell hidden-sm hidden-xs">
-                                            <div id="refer_trend"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="label label-success">Social</span></td>
-                                        <td>148</td>
-                                        <td><strong class="color-red">-12</strong></td>
-                                        <td class="hidden-xs">+3</td>
-                                        <td>180</td>
-                                        <td class="chart-cell hidden-sm hidden-xs">
-                                            <div id="social_trend"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="label label-info">Search</span></td>
-                                        <td>653</td>
-                                        <td><strong class="color-green">+23</strong></td>
-                                        <td class="hidden-xs">+43</td>
-                                        <td>876</td>
-                                        <td class="chart-cell hidden-sm hidden-xs">
-                                            <div id="search_trend"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="label label-inverse">Internal</span></td>
-                                        <td>976</td>
-                                        <td><strong>+101</strong></td>
-                                        <td class="hidden-xs">-7</td>
-                                        <td>844</td>
-                                        <td class="chart-cell hidden-sm hidden-xs">
-                                            <div id="internal_trend"></div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
+<!--                <div class="clearfix"
+                     style="margin-bottom: 10px; margin-top: 10px;">
+                    <div style="float: left">
+                        <div  style="float: left;"  class="btn-group">
+                            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                &nbsp; Export &nbsp;
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu"
+                                style="background: rgba(51, 51, 51, 0.9) !important;">
+                                <li><a id="copychecker" style="color: white;">Copy</a></li>
+                                <li><a id="csvchecker" style="color: white;">CSV</a></li>
+                                <li><a id="excelchecker" style="color: white;">Excel</a></li>
+                                <li><a id="printchecker" style="color: white;">Print</a></li>
+                                <li><a id="pdfchecker" style="color: white;">PDF</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>-->
+                <div    class="box box-primary"
+                        style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+                    <div    class="box-body">
+                        <table  class="display"
+                                style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"
+                                id="analysis_worker_status_table">
+                        </table>
                     </div>
                 </div>
             </div>
