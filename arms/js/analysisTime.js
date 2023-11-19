@@ -4,6 +4,7 @@
 var dashboardColor;
 var selectedVersionId;
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
+var jiraIssue = {};
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -120,10 +121,6 @@ function execDocReady() {
             radarChart();
 
             sevenTimeline();
-
-            // $.getScript("./js/analysisTime/d3.v5.min.js").done(function (script, textStatus) {
-                networkChart();
-            // });
 
             dashboardColor = dashboardPalette.dashboardPalette01;
             console.log(dashboardColor);
@@ -274,13 +271,22 @@ function makeVersionMultiSelectBox() {
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
-            console.log(versionTag);
+
+            if (versionTag === null || versionTag == "") {
+                alert("버전이 선택되지 않았습니다.");
+                return;
+            }
+
             selectedVersionId = versionTag.join(',');
 
             statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
             donutChart($("#selected_pdService").val(), selectedVersionId);
             combinationChart($("#selected_pdService").val(), selectedVersionId);
-            heatMapReady($("#selected_pdService").val(), selectedVersionId);
+
+            getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+            console.log(jiraIssue);
+            heatMapReady();
+            networkChart();
 
             if (checked) {
                 endPointUrl =
@@ -295,6 +301,38 @@ function makeVersionMultiSelectBox() {
     });
 }
 
+function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
+    $.ajax({
+        url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
+        type: "GET",
+        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersions},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        async: false,
+        statusCode: {
+            200: function (data) {
+
+                jiraIssue = data;
+
+                data.forEach(issues => {
+                    console.log(issues);
+                    var display_date = formatDate(new Date(issues.updated));
+                    console.log(display_date);
+
+                    /*                    var random_elements = randomInt(1,3);
+                                        for (var j=0; j < random_elements; j++) {
+                                            var random_item = items[randomInt(0,items.length-1)];
+                                            if (!return_object[display_date].items.includes(random_item)) {
+                                                return_object[display_date].items.push(random_item);
+                                            }
+                                        }*/
+                });
+            }
+        }
+    });
+
+}
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
     console.log("선택된 서비스 ===> " + pdservice_id);
     console.log("선택된 버전 리스트 ===> " + pdservice_version_id);
@@ -812,7 +850,6 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 ////////////////////
 // 두번째 박스
 ////////////////////
-
 function drawVersionProgress(data) {
     var Needle,
         arc,
@@ -1407,213 +1444,38 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
     });
 }
 
-
-
 ////////////////////
 // 다섯번째 박스
 ////////////////////
-if (!String.prototype.formatString) {
-    String.prototype.formatString = function () {
-        var args = arguments;
-        return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] !== 'undefined'
-                ? args[number]
-                : match
-                ;
-        });
-    };
-}
-// If the number less than 10, add a zero before it
-var prettyNumber = function (number) {
-    return number < 10 ? '0' + number.toString() : number = number.toString();
-};
-
-var getDisplayDate = function (date_obj) {
-    var pretty_month = prettyNumber(date_obj.getMonth() + 1);
-    var pretty_date = prettyNumber(date_obj.getDate());
-    return "{0}-{1}-{2}".formatString(date_obj.getFullYear(), pretty_month, pretty_date);
-};
-
-function formatDate(date) {
-    var year = date.getFullYear();
-    var month = (1 + date.getMonth()).toString().padStart(2, '0');
-    var day = date.getDate().toString().padStart(2, '0');
-
-    return year + '-' + month + '-' + day;
-}
-
-// Generate random number between min and max
-function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function getRandoHeatMapData(min, max, items) {
-    var return_object = {};
-
-    var entries = randomInt(min, max);
-    console.log("entires : "+ entries);
-
-    for (var i = 0; i < entries; i++) {
-        var day = new Date();
-
-        var previous_date = randomInt(0, 365);
-        day.setDate(day.getDate() - previous_date);
-
-        var display_date = getDisplayDate(day);
-        return_object[display_date] = {};
-        return_object[display_date].items = [];
-        var random_elements = randomInt(1,3);
-        for (var j=0; j < random_elements; j++) {
-            var random_item = items[randomInt(0,items.length-1)];
-            if (!return_object[display_date].items.includes(random_item)) {
-                return_object[display_date].items.push(random_item);
-            }
-        }
-
-    }
-    console.log(return_object);
-    return JSON.stringify(return_object);
-
-}
-
-function heatMapReady(pdServiceLink, pdServiceVersionLinks) {
-
-    var return_object = {};
-
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
-        type: "GET",
-        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersionLinks},
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-
-
-                data.forEach(issues => {
-                    console.log(issues);
-                    var display_date = formatDate(new Date(issues.updated));
-                    console.log(display_date);
-
-                    return_object[display_date] = {};
-                    return_object[display_date].items = [];
-
-                    /*                    var random_elements = randomInt(1,3);
-                                        for (var j=0; j < random_elements; j++) {
-                                            var random_item = items[randomInt(0,items.length-1)];
-                                            if (!return_object[display_date].items.includes(random_item)) {
-                                                return_object[display_date].items.push(random_item);
-                                            }
-                                        }*/
-
-
-                });
-            }
-        }
-    });
-
-    var heatMapData = getRandoHeatMapData(10, 40, ["banana", "apple", "orange", "pear"]);
-
-    $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
-        //data: '{"2020-08-01": {"items": ["banana", "apple"]}, "2020-05-05": {"items": ["apple"]}, "2020-05-01": {"items": ["banana"]}, "2020-05-03": {"items": ["banana", "apple", "orange"]}, "2020-05-22": {"items": ["banana", "apple", "orange", "pear"]}}',
-        data: heatMapData,
-        start_monday: true,
-        always_show_tooltip: true,
-        month_names: ['jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
-        day_names: ['ma', 'wo', 'vr', 'zo'],
-        colors: {
-            'default': '#eeeeee', // Default color
-            'apple': 'green',
-            'banana': 'yellow',
-            'orange': 'orange',
-            'pear': 'lightgreen'
-        }
-    });
-
-    // $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
-    //     data: getRandomData(20, 80, ["rain", "sunshine", "fog", "thunder", "hail"]),
-    //     start_monday: false,
-    //     always_show_tooltip: false,
-    //     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-    //     day_names: ['mo', 'wed', 'fri'],
-    //     colors: {
-    //         'default': '#eeeeee', // Default color
-    //         'rain': 'lightblue',
-    //         'sunshine': 'lightyellow',
-    //         'fog': 'gray',
-    //         'thunder': 'brown',
-    //         'hail': 'white'
-    //     }
-    // });
-}
-
-/*
-function getRandomData(ordinal = false) {
-
-    const NGROUPS = 6,
-        MAXLINES = 15,
-        MAXSEGMENTS = 20,
-        MAXCATEGORIES = 20,
-        MINTIME = new Date(2013,2,21);
-
-    const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),
-        categoryLabels = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-
-    return [...Array(NGROUPS).keys()].map(i => ({
-        group: 'group' + (i+1),
-        data: getGroupData()
-    }));
-
-    //
-
-    function getGroupData() {
-
-        return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({
-            label: 'label' + (i+1),
-            data: getSegmentsData()
-        }));
-
-        //
-
-        function getSegmentsData() {
-            const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),
-                segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);
-            let runLength = MINTIME;
-
-            return [...Array(nSegments).keys()].map(i => {
-                const tDivide = [Math.random(), Math.random()].sort(),
-                    start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),
-                    end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);
-
-                runLength = new Date(runLength.getTime() + segMaxLength);
-
-                return {
-                    timeRange: [start, end],
-                    val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()
-                    //labelVal: is optional - only displayed in the labels
-                };
-            });
-
-        }
-    }
-}
-*/
-function sevenTimeline() {
-    var chatWidth = document.querySelector("#sevenTimeLine").offsetWidth;
-
-    const myData = getRandomData(true);
-
-    TimelinesChart()('#sevenTimeLine')
-        .zScaleLabel('My Scale Units')
-        .width(chatWidth)
-        .zQualitative(true)
-        .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
-        .data(myData);
-}
 
 function networkChart() {
+    d3.select("#NETWORK_GRAPH").selectAll("*").remove();
+
     var NETWORK_DATA = {
+        "nodes": [],
+        "links": []
+    };
+
+    NETWORK_DATA.nodes = jiraIssue;
+    var index = {};
+
+    jiraIssue.forEach(function(item) {
+        index[item.key] = item;
+    });
+
+    jiraIssue.forEach(function(item) {
+        var parentItem = index[item.parentReqKey];
+        if (parentItem) {
+            var link = {
+                source: item.id,
+                target: parentItem.id
+            };
+            NETWORK_DATA.links.push(link);
+        }
+    });
+
+    console.log(NETWORK_DATA);
+    /*var NETWORK_DATA = {
         "nodes": [
             {
                 "id": "청소년",
@@ -2043,31 +1905,38 @@ function networkChart() {
                 "value": 1
             }
         ]
-    };
+    };*/
 
     /********network graph********/
     var networkGraph = {
         createGraph : function(){
             var links = NETWORK_DATA.links.map(function(d){
-                return Object.create(d)
+                return Object.create(d);
             });
             var nodes = NETWORK_DATA.nodes.map(function(d){
-                return Object.create(d)
+                return Object.create(d);
             });
-            var color = function(d){
-                var scale = d3.scaleOrdinal(d3.schemeCategory10);
-                return (scale(d.group));
-            };
             var fillCircle = function(g){
-                if(g == "bad"){
+                if (g === true) {
                     return "#ff3c00";
-                }else if(g=="act"){
+                } else if (g === false) {
                     return "#386cff";
-                }else if(g=="media"){
-                    return "#6fbc5b";
-                }else{
+                } else {
                     return "#c67cff";
                 }
+            };
+            var reqName = function(g) {
+                var name = '';
+
+                if (g.isReq === true) {
+                    name = '요구사항';
+                } else if (g.isReq === false) {
+                    name = '연결된 이슈';
+                } else {
+                    name = null;
+                }
+
+                return "[" + name + "]";
             };
 
             var width = 500;
@@ -2076,25 +1945,41 @@ function networkChart() {
             var simulation = d3.forceSimulation(nodes)
                 .force("link", d3.forceLink(links).id( function(d){ return d.id }))
                 .force("charge", d3.forceManyBody().strength(-100))
-                .force("center", d3.forceCenter(width / 2, height / 2))
-                .force("collide",d3.forceCollide().radius( function(d){ return d.value*8}) );
+                .force("center", d3.forceCenter(width / 2, height / 2));
+                // .force("collide",d3.forceCollide().radius( function(d){ return d.value*8}) );
 
             //simulation.stop(); // stop 필요한가?
-
 
             var svg = d3.select("#NETWORK_GRAPH")
                 .attr("viewBox", [0, 0, width, height]);
 
+            var initScale;
+
+            if (NETWORK_DATA.nodes.length < 50) {
+                initScale = 0.7;
+            } else if (NETWORK_DATA.nodes.length < 200) {
+                initScale = 0.2;
+            } else {
+                initScale = 0.1;
+            }
+
+            var initialTransform = d3.zoomIdentity
+                .translate(width / 3, height / 3)  // 초기 위치 설정
+                .scale(initScale);  // 초기 줌 레벨 설정
+
             var zoom = d3.zoom()
-                .scaleExtent([0.5, 10]) // 확대/축소 범위 설정
-                .on("zoom", zoomed); // 확대/축소 이벤트 핸들러 함수
+                .scaleExtent([0.1, 5])  // 줌 가능한 최소/최대 줌 레벨 설정
+                .on("zoom", zoomed);  // 줌 이벤트 핸들러 설정
 
             // SVG에 확대/축소 기능 적용
             svg.call(zoom);
 
+            // 초기 줌 설정
+            svg.transition().duration(500).call(zoom.transform, initialTransform);
 
             var gHolder = svg.append("g")
                 .attr("class", "g-holder");
+
             var link = gHolder.append("g")
                 .attr("fill", "none")
                 .attr("stroke", "gray")
@@ -2118,7 +2003,6 @@ function networkChart() {
               .text(function(d){ return d.id })
               .style("font-size", "12px") */
 
-
             var node = gHolder.append("g")
                 .attr("class", "circle-node-holder")
                 .attr("stroke", "white")
@@ -2131,7 +2015,7 @@ function networkChart() {
                     d3.select(this)
                         .append("circle")
                         .attr("r", 10)
-                        .attr("fill", fillCircle(d.group));
+                        .attr("fill", fillCircle(d.isReq));
                     /*d3.select(this)
                         .append("text").text(d.id)
                         .attr("dy",6)
@@ -2143,11 +2027,11 @@ function networkChart() {
                 .attr("x", 11)
                 .attr("dy", ".31em")
                 .style("font-size", "9px")
-                .style("fill", (d) => fillCircle(d.group))
+                .style("fill", (d) => fillCircle(d.isReq))
                 .style("font-weight", "5")
                 .attr("stroke", "white")
                 .attr("stroke-width", "0.3")
-                .text(function(d) { return "[" + d.group + "]"; });
+                .text((d) => reqName(d));
 
             node.append("text")
                 .attr("x", 12)
@@ -2155,7 +2039,7 @@ function networkChart() {
                 .style("font-family", "Arial")
                 .style("font-size", "10px")
                 .style("font-weight", "10")
-                .text(function(d) { return d.id; });
+                .text(function(d) { return d.key; });
 
             simulation.on("tick", function(){
                 link.attr("x1", function(d){ return d.source.x; })
@@ -2217,4 +2101,176 @@ function networkChart() {
     /********network graph********/
     networkGraph.createGraph();
 }
+
+if (!String.prototype.formatString) {
+    String.prototype.formatString = function () {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function (match, number) {
+            return typeof args[number] !== 'undefined'
+                ? args[number]
+                : match
+                ;
+        });
+    };
+}
+// If the number less than 10, add a zero before it
+var prettyNumber = function (number) {
+    return number < 10 ? '0' + number.toString() : number = number.toString();
+};
+
+var getDisplayDate = function (date_obj) {
+    var pretty_month = prettyNumber(date_obj.getMonth() + 1);
+    var pretty_date = prettyNumber(date_obj.getDate());
+    return "{0}-{1}-{2}".formatString(date_obj.getFullYear(), pretty_month, pretty_date);
+};
+
+function formatDate(date) {
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString().padStart(2, '0');
+    var day = date.getDate().toString().padStart(2, '0');
+
+    return year + '-' + month + '-' + day;
+}
+
+// Generate random number between min and max
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRandoHeatMapData(min, max, items) {
+    var return_object = {};
+
+    var entries = randomInt(min, max);
+    console.log("entires : "+ entries);
+
+    for (var i = 0; i < entries; i++) {
+        var day = new Date();
+
+        var previous_date = randomInt(0, 365);
+        day.setDate(day.getDate() - previous_date);
+
+        var display_date = getDisplayDate(day);
+        return_object[display_date] = {};
+        return_object[display_date].items = [];
+        var random_elements = randomInt(1,3);
+        for (var j=0; j < random_elements; j++) {
+            var random_item = items[randomInt(0,items.length-1)];
+            if (!return_object[display_date].items.includes(random_item)) {
+                return_object[display_date].items.push(random_item);
+            }
+        }
+
+    }
+    console.log(return_object);
+    return JSON.stringify(return_object);
+
+}
+
+function heatMapReady() {
+
+    $('#calendar_yearview_blocks_chart_1').removeData();
+    $('#calendar_yearview_blocks_chart_2').removeData();
+
+    var return_object = {};
+
+    var heatMapData = getRandoHeatMapData(10, 40, ["banana", "apple", "orange", "pear"]);
+
+    $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
+        //data: '{"2020-08-01": {"items": ["banana", "apple"]}, "2020-05-05": {"items": ["apple"]}, "2020-05-01": {"items": ["banana"]}, "2020-05-03": {"items": ["banana", "apple", "orange"]}, "2020-05-22": {"items": ["banana", "apple", "orange", "pear"]}}',
+        data: heatMapData,
+        start_monday: true,
+        always_show_tooltip: true,
+        month_names: ['jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
+        day_names: ['mo', 'wed', 'fri', 'sun'],
+        colors: {
+            'default': '#eeeeee', // Default color
+            'apple': 'green',
+            'banana': 'yellow',
+            'orange': 'orange',
+            'pear': 'lightgreen'
+        }
+    });
+
+    $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
+        data: getRandoHeatMapData(20, 80, ["rain", "sunshine", "fog", "thunder", "hail"]),
+        start_monday: true,
+        always_show_tooltip: true,
+        month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+        day_names: ['mo', 'wed', 'fri', 'sun'],
+        colors: {
+            'default': '#eeeeee', // Default color
+            'rain': 'lightblue',
+            'sunshine': 'lightyellow',
+            'fog': 'gray',
+            'thunder': 'brown',
+            'hail': 'white'
+        }
+    });
+}
+
+/*
+function getRandomData(ordinal = false) {
+
+    const NGROUPS = 6,
+        MAXLINES = 15,
+        MAXSEGMENTS = 20,
+        MAXCATEGORIES = 20,
+        MINTIME = new Date(2013,2,21);
+
+    const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),
+        categoryLabels = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+    return [...Array(NGROUPS).keys()].map(i => ({
+        group: 'group' + (i+1),
+        data: getGroupData()
+    }));
+
+    //
+
+    function getGroupData() {
+
+        return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({
+            label: 'label' + (i+1),
+            data: getSegmentsData()
+        }));
+
+        //
+
+        function getSegmentsData() {
+            const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),
+                segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);
+            let runLength = MINTIME;
+
+            return [...Array(nSegments).keys()].map(i => {
+                const tDivide = [Math.random(), Math.random()].sort(),
+                    start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),
+                    end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);
+
+                runLength = new Date(runLength.getTime() + segMaxLength);
+
+                return {
+                    timeRange: [start, end],
+                    val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()
+                    //labelVal: is optional - only displayed in the labels
+                };
+            });
+
+        }
+    }
+}
+*/
+
+function sevenTimeline() {
+    var chatWidth = document.querySelector("#sevenTimeLine").offsetWidth;
+
+    const myData = getRandomData(true);
+
+    TimelinesChart()('#sevenTimeLine')
+        .zScaleLabel('My Scale Units')
+        .width(chatWidth)
+        .zQualitative(true)
+        .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
+        .data(myData);
+}
+
 
