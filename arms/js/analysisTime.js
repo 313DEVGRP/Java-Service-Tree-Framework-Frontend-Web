@@ -271,7 +271,12 @@ function makeVersionMultiSelectBox() {
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
-            console.log(versionTag);
+
+            if (versionTag === null || versionTag == "") {
+                alert("버전이 선택되지 않았습니다.");
+                return;
+            }
+
             selectedVersionId = versionTag.join(',');
 
             statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
@@ -1920,16 +1925,14 @@ function networkChart() {
                     return "#c67cff";
                 }
             };
-            var reqName = function(g){
+            var reqName = function(g) {
                 var name = '';
 
                 if (g.isReq === true) {
                     name = '요구사항';
-                }
-                else if (g.isReq === false) {
+                } else if (g.isReq === false) {
                     name = '연결된 이슈';
-                }
-                else {
+                } else {
                     name = null;
                 }
 
@@ -1942,23 +1945,41 @@ function networkChart() {
             var simulation = d3.forceSimulation(nodes)
                 .force("link", d3.forceLink(links).id( function(d){ return d.id }))
                 .force("charge", d3.forceManyBody().strength(-100))
-                .force("center", d3.forceCenter(width / 2, height / 2))
-                .force("collide",d3.forceCollide().radius( function(d){ return d.value*8}) );
+                .force("center", d3.forceCenter(width / 2, height / 2));
+                // .force("collide",d3.forceCollide().radius( function(d){ return d.value*8}) );
 
             //simulation.stop(); // stop 필요한가?
 
             var svg = d3.select("#NETWORK_GRAPH")
                 .attr("viewBox", [0, 0, width, height]);
 
+            var initScale;
+
+            if (NETWORK_DATA.nodes.length < 50) {
+                initScale = 0.7;
+            } else if (NETWORK_DATA.nodes.length < 200) {
+                initScale = 0.2;
+            } else {
+                initScale = 0.1;
+            }
+
+            var initialTransform = d3.zoomIdentity
+                .translate(width / 3, height / 3)  // 초기 위치 설정
+                .scale(initScale);  // 초기 줌 레벨 설정
+
             var zoom = d3.zoom()
-                .scaleExtent([0.1, 5]) // 확대/축소 범위 설정
-                .on("zoom", zoomed); // 확대/축소 이벤트 핸들러 함수
+                .scaleExtent([0.1, 5])  // 줌 가능한 최소/최대 줌 레벨 설정
+                .on("zoom", zoomed);  // 줌 이벤트 핸들러 설정
 
             // SVG에 확대/축소 기능 적용
             svg.call(zoom);
 
+            // 초기 줌 설정
+            svg.transition().duration(500).call(zoom.transform, initialTransform);
+
             var gHolder = svg.append("g")
                 .attr("class", "g-holder");
+
             var link = gHolder.append("g")
                 .attr("fill", "none")
                 .attr("stroke", "gray")
