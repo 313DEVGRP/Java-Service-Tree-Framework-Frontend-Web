@@ -4,7 +4,7 @@
 var dashboardColor;
 var selectedVersionId;
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
-var jiraIssue = {};
+var globalJiraIssue = {};
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -117,8 +117,6 @@ function execDocReady() {
 
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
-
-            radarChart();
 
             sevenTimeline();
 
@@ -284,9 +282,9 @@ function makeVersionMultiSelectBox() {
             combinationChart($("#selected_pdService").val(), selectedVersionId);
 
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
-            console.log(jiraIssue);
+
             heatMapReady();
-            networkChart();
+
 
             if (checked) {
                 endPointUrl =
@@ -309,16 +307,13 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
-        async: false,
+        async: true,
         statusCode: {
             200: function (data) {
-
-                jiraIssue = data;
-
                 data.forEach(issues => {
                     console.log(issues);
                     var display_date = formatDate(new Date(issues.updated));
-                    console.log(display_date);
+                    // console.log(display_date);
 
                     /*                    var random_elements = randomInt(1,3);
                                         for (var j=0; j < random_elements; j++) {
@@ -327,7 +322,11 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
                                                 return_object[display_date].items.push(random_item);
                                             }
                                         }*/
+
                 });
+
+                networkChart(data);
+                globalJiraIssue = data;
             }
         }
     });
@@ -400,6 +399,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
                         $("#version-timeline-bar").show();
                         Timeline.init($("#version-timeline-bar"), versionTimeline);
+                        radarChart(pdservice_id, versionData);
 
                     }
                 }
@@ -1123,10 +1123,62 @@ function drawVersionProgress(data) {
 ////////////////////
 // 세번째 박스
 ////////////////////
-function radarChart() {
+function radarChart(pdServiceId, pdServiceVersionList) {
+
+    var maxCount;
+    var versionList = {};
+
+    var versionText = [];
+    var reqCount = [];
+
+    var _url = "/auth-user/api/arms/dashboard/normal/"+pdServiceId;
+    $.ajax({
+        url: _url,
+        type: "GET",
+        data: { "서비스아이디" : pdServiceId,
+            "메인그룹필드" : "pdServiceVersion",
+            "isReq" : true,
+            "컨텐츠보기여부" : false,
+            "크기" : 1000
+        },
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        async: false,
+        statusCode: {
+            200: function (data) {
+                maxCount = data.전체합계;
+                var result = data.검색결과.group_by_pdServiceVersion;
+
+                versionList = pdServiceVersionList.reduce((obj, item) => {
+                    obj[item.c_id] = item;
+                    return obj;
+                }, {});
+
+                result.forEach(item => {
+                    if (versionList[item.필드명]) {
+                        versionList[item.필드명].개수 = item.개수;
+                    }
+                });
+
+                console.log(Object.values(versionList));
+
+                Object.values(versionList).forEach(item => {
+                    var version = {};
+                    version.text = item.c_title;
+                    version.max = maxCount;
+
+                    versionText.push(version);
+                    reqCount.push(item.개수);
+                });
+            }
+        }
+    });
+
     var chart = echarts.init(document.getElementById('radar-chart-main'));
 
     chart.setOption({
+        color: ['#E49400'],
         dataZoom: [
             { // The first dataZoom component
                 radiusAxisIndex: [0, 2] // Indicates that this dataZoom component
@@ -1134,7 +1186,7 @@ function radarChart() {
             }
         ],
         aria: {
-            show: true
+            show: false
         },
         tooltip: {},
         legend: {
@@ -1148,27 +1200,26 @@ function radarChart() {
             }
         },
         radar: {
-            radius: [0, '60%'],
+            radius: [0, '50%'],
             triggerEvent: true,
             // shape: 'circle',
-            indicator: [
-                { text: 'BaseVersion', max: 100},
-                { text: '1.0.0BaseVersion', max: 100},
-                { text: '1.0.1BaseVersion', max: 100},
-                { text: '1.0.2BaseVersion', max: 100},
-                { text: '1.0.3BaseVersion', max: 100},
-                { text: '1.0.4BaseVersion', max: 100},
-                { text: '2.0.0BaseVersion', max: 100},
-                { text: '2.0.1BaseVersion', max: 100},
-                { text: '2.0.2BaseVersion', max: 100},
-                { text: '2.0.3BaseVersion', max: 100},
-                { text: '2.0.4BaseVersion', max: 100}
-            ],
+            indicator: versionText,
             name: {
                 rotate: 45, // 텍스트를 45도로 회전시킵니다.
                 position: 'outside', // 텍스트를 레이더 영역 내부에 위치시킵니다.
                 color: '#ffffff',
-                formatter:'【{value}】'
+                formatter: function(text) {
+                    // 줄바꿈을 위해 '\n' 문자를 삽입합니다.
+                    var wrappedValue = text.replace(/(.{12})/g, '$1\n');  // 10자마다 줄바꿈
+                    return '[' + wrappedValue + ']';
+                },
+                rich: {
+                    value: {
+                        align: 'left',
+                        color: '#ffffff',
+                        lineHeight: 10  // 줄 간격을 설정합니다.
+                    }
+                }
             }
         },
         series: [{
@@ -1189,7 +1240,7 @@ function radarChart() {
             // areaStyle: {normal: {}},
             data : [
                 {
-                    value: ['-', 80, 20, 40, 10, 100, 80, 20, 40, 10, 30],
+                    value: reqCount,
                     name: '요구사항'
                 }
             ],
@@ -1201,18 +1252,8 @@ function radarChart() {
         }
         ]
     });
-    var theIndex = 2;
-    chart.on('click', function (params) {
-        console.log(params);
-        if (theIndex < 0) {
-            theIndex = 2;
-        }
-        chart.dispatchAction({
-            type: 'showTip',
-            seriesIndex: 0,
-            dataIndex: theIndex
-        });
-        theIndex--;
+    window.addEventListener('resize', function () {
+        chart.resize();
     });
 }
 
@@ -1448,7 +1489,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 // 다섯번째 박스
 ////////////////////
 
-function networkChart() {
+function networkChart(jiraIssueData) {
     d3.select("#NETWORK_GRAPH").selectAll("*").remove();
 
     var NETWORK_DATA = {
@@ -1456,14 +1497,14 @@ function networkChart() {
         "links": []
     };
 
-    NETWORK_DATA.nodes = jiraIssue;
+    NETWORK_DATA.nodes = jiraIssueData;
     var index = {};
 
-    jiraIssue.forEach(function(item) {
+    jiraIssueData.forEach(function(item) {
         index[item.key] = item;
     });
 
-    jiraIssue.forEach(function(item) {
+    jiraIssueData.forEach(function(item) {
         var parentItem = index[item.parentReqKey];
         if (parentItem) {
             var link = {
