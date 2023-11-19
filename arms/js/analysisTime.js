@@ -20,7 +20,7 @@ function execDocReady() {
             // chart Colors
             // "./js/dashboard/chart/colorPalette.js",
             // 2번째 박스 d3 게이지 차트
-            "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
+            // "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
             "../reference/jquery-plugins/c3/c3.min.css",
             "../reference/jquery-plugins/c3/c3-custom.css",
             "../reference/jquery-plugins/c3/c3.min.js",
@@ -121,7 +121,9 @@ function execDocReady() {
 
             sevenTimeline();
 
-            networkChart();
+            // $.getScript("./js/analysisTime/d3.v5.min.js").done(function (script, textStatus) {
+                networkChart();
+            // });
 
             dashboardColor = dashboardPalette.dashboardPalette01;
             console.log(dashboardColor);
@@ -304,56 +306,65 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
     //1. 좌상 게이지 차트 및 타임라인
     //2. Time ( 작업일정 ) - 버전 개수 삽입
-    d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
+    $.ajax({
+        url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (json) {
+                let versionData = json.pdServiceVersionEntities;
 
-        let versionData = json.pdServiceVersionEntities;
+                let version_count = versionData.length;
+                tot_ver_count = version_count;
 
-        let version_count = versionData.length;
-        tot_ver_count = version_count;
+                console.log("등록된 버전 개수 = " + version_count);
+                if(version_count !== undefined) {
+                    $('#version_count').text(version_count);
 
-        console.log("등록된 버전 개수 = " + version_count);
-        if(version_count !== undefined) {
-            $('#version_count').text(version_count);
+                    if (version_count >= 0) {
+                        let today = new Date(); // console.log(today);
+                        let plusDate = new Date();
 
-            if (version_count >= 0) {
-                let today = new Date(); // console.log(today);
-                let plusDate = new Date();
+                        $("#notifyNoVersion").slideUp();
+                        $("#project-start").show();
+                        $("#project-end").show();
 
-                $("#notifyNoVersion").slideUp();
-                $("#project-start").show();
-                $("#project-end").show();
+                        $("#versionGaugeChart").html(""); //게이지 차트 초기화
+                        var versionGauge = [];
+                        var versionTimeline = [];
+                        versionData.forEach(function (versionElement, idx) {
+                            //console.log(idx); console.log(versionElement);
+                            if (pdservice_version_id.includes(versionElement.c_id)) {
+                                var gaugeElement = {
+                                    "current_date": today.toString(),
+                                    "version_name": versionElement.c_title,
+                                    "version_id": versionElement.c_id,
+                                    "start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
+                                    "end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+                                    //"end_date": (versionElement.c_pds_version_end_date == "end" ? plusDate.setMonth(plusDate.getMonth()+1) : versionElement.c_pds_version_end_date)
+                                }
+                                versionGauge.push(gaugeElement);
+                            }
 
-                $("#versionGaugeChart").html(""); //게이지 차트 초기화
-                var versionGauge = [];
-                var versionTimeline = [];
-                versionData.forEach(function (versionElement, idx) {
-                    //console.log(idx); console.log(versionElement);
-                    if (pdservice_version_id.includes(versionElement.c_id)) {
-                        var gaugeElement = {
-                            "current_date": today.toString(),
-                            "version_name": versionElement.c_title,
-                            "version_id": versionElement.c_id,
-                            "start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
-                            "end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
-                            //"end_date": (versionElement.c_pds_version_end_date == "end" ? plusDate.setMonth(plusDate.getMonth()+1) : versionElement.c_pds_version_end_date)
-                        }
-                        versionGauge.push(gaugeElement);
+                            var timelineElement = {
+                                "title" : "버전: "+versionElement.c_title,
+                                "startDate" : (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
+                                "endDate" : (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+                                //"endDate" : (versionElement.c_pds_version_end_date == "end" ? plusDate : versionElement.c_pds_version_end_date)
+                            };
+                            versionTimeline.push(timelineElement);
+                        });
+
+                        console.log("여기는?");
+                        drawVersionProgress(versionGauge); // 버전 게이지
+
+                        $("#version-timeline-bar").show();
+                        Timeline.init($("#version-timeline-bar"), versionTimeline);
+
                     }
-
-                    var timelineElement = {
-                        "title" : "버전: "+versionElement.c_title,
-                        "startDate" : (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
-                        "endDate" : (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
-                        //"endDate" : (versionElement.c_pds_version_end_date == "end" ? plusDate : versionElement.c_pds_version_end_date)
-                    };
-                    versionTimeline.push(timelineElement);
-                });
-
-                drawVersionProgress(versionGauge); // 버전 게이지
-
-                $("#version-timeline-bar").show();
-                Timeline.init($("#version-timeline-bar"), versionTimeline);
-
+                }
             }
         }
     });
