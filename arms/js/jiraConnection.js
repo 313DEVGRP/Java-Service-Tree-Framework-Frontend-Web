@@ -681,7 +681,8 @@ function set_renew_btn(selectedTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('프로젝트', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1">
                             프로젝트 갱신
                      </button>`;
     }
@@ -689,7 +690,8 @@ function set_renew_btn(selectedTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈해결책', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1">
                             이슈해결책 갱신
                      </button>`;
     }
@@ -697,7 +699,8 @@ function set_renew_btn(selectedTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈우선순위', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1">
                             이슈우선순위 갱신
                      </button>`;
     }
@@ -705,7 +708,8 @@ function set_renew_btn(selectedTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈유형', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1">
                             이슈유형 갱신
                      </button>`;
     }
@@ -713,11 +717,13 @@ function set_renew_btn(selectedTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈상태', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1">
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1">
                             이슈상태 갱신
                      </button>`;
     }
     $("#jira_renew_button_div").html(renewHtml);
+    laddaBtnSetting();
 }
 function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
     $("#jira_renew_button_div_3rd_grid").html("");
@@ -726,7 +732,8 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈유형', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1"
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1"
                              style="width:77%">
                             이슈유형 갱신
                      </button>`;
@@ -735,12 +742,14 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
         renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈상태', ${selectServerId})"
-                             class="btn btn-success btn-sm mr-1"
+                             data-style="contract"
+                             class="ladda btn btn-success btn-sm mr-1"
                              style="width:77%">
                             이슈상태 갱신
                      </button>`;
     }
     $("#jira_renew_button_div_3rd_grid").html(renewHtml);
+    laddaBtnSetting();
 }
 function tab_click_event() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
