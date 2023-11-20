@@ -5,6 +5,7 @@ var dashboardColor;
 var selectedVersionId;
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
 var globalJiraIssue = {};
+var versionList;
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +119,8 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            sevenTimeline();
+
+
 
             dashboardColor = dashboardPalette.dashboardPalette01;
             console.log(dashboardColor);
@@ -326,8 +328,9 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 
                 networkChart(data);
                 calendarHeatMap(data);
-
+                sevenTimeline(data);
                 globalJiraIssue = data;
+
             }
         }
     });
@@ -1127,7 +1130,7 @@ function drawVersionProgress(data) {
 function radarChart(pdServiceId, pdServiceVersionList) {
 
     var maxCount;
-    var versionList = {};
+    //var versionList = {};
 
     var versionText = [];
     var reqCount = [];
@@ -2292,17 +2295,99 @@ function getRandomData(ordinal = false) {
 }
 */
 
-function sevenTimeline() {
-    var chatWidth = document.querySelector("#sevenTimeLine").offsetWidth;
+function sevenTimeline(data) {
+    var sevenTimeLineDiv = document.getElementById("sevenTimeLine");
+    sevenTimeLineDiv.innerHTML = "";
 
-    const myData = getRandomData(true);
+    var groupedData = groupDataByPdServiceVersion(data);
+
+    var myData = []
+    for (const version in groupedData) {
+        console.log("버전 정보: " + version);
+        console.log(groupedData[version]);
+    }
+
+    var myData = dataFormattingForSevenTimeLine(groupedData);
+    //var myData = Data();
 
     TimelinesChart()('#sevenTimeLine')
-        .zScaleLabel('My Scale Units')
-        .width(chatWidth)
+        .width(1228)
         .zQualitative(true)
-        .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000) // Add a marker 1y ago
-        .data(myData);
+        .data(myData)
+        .refresh();
 }
+//  필요한 데이터만 추출
+function extractData(data){
+    var extractedData = [];
+    data.forEach(obj => {
+        var extractedObj = {
+          issueKey: obj.key,
+          isReq: obj.isReq,
+          parentReqKey: obj.parentReqKey,
+          createdDate: new Date(Date.parse(obj.created)),
+          resolutionDate: obj.resolutiondate ? obj.resolutiondate : new Date(),
+          version: obj.pdServiceVersion
+        };
+        extractedData.push(extractedObj);
+     });
+     return extractedData;
+}
+// 버전 별 그룹화 하기
+function groupDataByPdServiceVersion(data) {
+  var extractedData = extractData(data);
+  var groupedData = extractedData.reduce((result, obj) => {
+      var pdServiceVersion = obj.version;
+      if (!result[pdServiceVersion]) {
+          result[pdServiceVersion] = [];
+      }
+      result[pdServiceVersion].push(obj);
+      return result;
+  }, {});
+  return groupedData;
+}
+// 차트에 맞게 데이터 변환 하기
+function dataFormattingForSevenTimeLine(groupedByVersionData) {
+    var formattedData = [];
 
+    for (var version in groupedByVersionData) {
+        var reqIssueData = groupedByVersionData[version].filter(data => data.isReq === true);
 
+        reqIssueData.forEach(reqIssue => {
+            console.log("reqIssue.issueKey   "+reqIssue.issueKey);
+            console.log("reqIssue.version   "+reqIssue.version);
+            var groupByReqIssueData = {
+                group: reqIssue.issueKey,
+                data: []
+            };
+
+            var childData = groupedByVersionData[version].filter(issue => issue.parentReqKey === groupByReqIssueData.group);
+            groupByReqIssueData.data.push({
+                label: reqIssue.issueKey,
+                data: [{
+                    timeRange: [reqIssue.createdDate, reqIssue.resolutionDate],
+                    val: convertVersionIdToTile(reqIssue.version)
+                }]
+            });
+            childData.forEach(child => {
+                groupByReqIssueData.data.push({
+                    label: child.issueKey,
+                    data: [{
+                        timeRange: [child.createdDate, child.resolutionDate],
+                        val: convertVersionIdToTile(child.version)
+                        }]
+                    });
+                });
+            formattedData.push(groupByReqIssueData);
+        });
+    }
+
+    return formattedData;
+}
+//
+function convertVersionIdToTile(versionId) {
+  if (versionList.hasOwnProperty(versionId)) {
+    var version = versionList[versionId];
+    console.log("version.c_title: " + version.c_title);
+    return version.c_title;
+  }
+}
