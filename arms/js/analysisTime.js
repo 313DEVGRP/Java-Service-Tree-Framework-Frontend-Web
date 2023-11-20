@@ -283,7 +283,6 @@ function makeVersionMultiSelectBox() {
 
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
-            heatMapReady();
 
 
             if (checked) {
@@ -326,6 +325,8 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
                 });
 
                 networkChart(data);
+                calendarHeatMap(data);
+
                 globalJiraIssue = data;
             }
         }
@@ -2143,28 +2144,6 @@ function networkChart(jiraIssueData) {
     networkGraph.createGraph();
 }
 
-if (!String.prototype.formatString) {
-    String.prototype.formatString = function () {
-        var args = arguments;
-        return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] !== 'undefined'
-                ? args[number]
-                : match
-                ;
-        });
-    };
-}
-// If the number less than 10, add a zero before it
-var prettyNumber = function (number) {
-    return number < 10 ? '0' + number.toString() : number = number.toString();
-};
-
-var getDisplayDate = function (date_obj) {
-    var pretty_month = prettyNumber(date_obj.getMonth() + 1);
-    var pretty_date = prettyNumber(date_obj.getDate());
-    return "{0}-{1}-{2}".formatString(date_obj.getFullYear(), pretty_month, pretty_date);
-};
-
 function formatDate(date) {
     var year = date.getFullYear();
     var month = (1 + date.getMonth()).toString().padStart(2, '0');
@@ -2173,80 +2152,81 @@ function formatDate(date) {
     return year + '-' + month + '-' + day;
 }
 
-// Generate random number between min and max
-function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
+function calendarHeatMap(jiraIssueData) {
 
-function getRandoHeatMapData(min, max, items) {
+    $("#heatmap-bar").show();
+
+    $('#calendar_yearview_blocks_chart_1 svg').remove();
+    $('#calendar_yearview_blocks_chart_2 svg').remove();
+
     var return_object = {};
+    var uniqueItems = [];
 
-    var entries = randomInt(min, max);
-    console.log("entires : "+ entries);
+    jiraIssueData.forEach(item => {
+        var display_date = formatDate(new Date(item.updated));
 
-    for (var i = 0; i < entries; i++) {
-        var day = new Date();
-
-        var previous_date = randomInt(0, 365);
-        day.setDate(day.getDate() - previous_date);
-
-        var display_date = getDisplayDate(day);
-        return_object[display_date] = {};
-        return_object[display_date].items = [];
-        var random_elements = randomInt(1,3);
-        for (var j=0; j < random_elements; j++) {
-            var random_item = items[randomInt(0,items.length-1)];
-            if (!return_object[display_date].items.includes(random_item)) {
-                return_object[display_date].items.push(random_item);
-            }
+        if (return_object[display_date] === undefined) {
+            return_object[display_date] = {};
+            return_object[display_date].items = [];
         }
 
+        return_object[display_date].items.push(item.summary);
+        uniqueItems.push(item.summary);
+    });
+
+    console.log(JSON.stringify(return_object));
+
+    var heatMapData = JSON.stringify(return_object);
+    var colors = {
+        'default': '#eeeeee' // 'default' 항목에는 고정된 색상 할당
+    };
+
+    uniqueItems.forEach((item, index) => {
+        if (item !== 'default') {
+            var randomColor = getRandomColor(); // 랜덤한 색상 생성
+            colors[item] = randomColor;
+        }
+    });
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
-    console.log(return_object);
-    return JSON.stringify(return_object);
-
-}
-
-function heatMapReady() {
-
-    $('#calendar_yearview_blocks_chart_1').removeData();
-    $('#calendar_yearview_blocks_chart_2').removeData();
-
-    var return_object = {};
-
-    var heatMapData = getRandoHeatMapData(10, 40, ["banana", "apple", "orange", "pear"]);
+    console.log(heatMapData);
+    console.log(colors);
 
     $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
-        //data: '{"2020-08-01": {"items": ["banana", "apple"]}, "2020-05-05": {"items": ["apple"]}, "2020-05-01": {"items": ["banana"]}, "2020-05-03": {"items": ["banana", "apple", "orange"]}, "2020-05-22": {"items": ["banana", "apple", "orange", "pear"]}}',
         data: heatMapData,
         start_monday: true,
         always_show_tooltip: true,
-        month_names: ['jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
+        month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'],
         day_names: ['mo', 'wed', 'fri', 'sun'],
-        colors: {
-            'default': '#eeeeee', // Default color
-            'apple': 'green',
-            'banana': 'yellow',
-            'orange': 'orange',
-            'pear': 'lightgreen'
-        }
+        colors: colors
     });
 
-    $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
-        data: getRandoHeatMapData(20, 80, ["rain", "sunshine", "fog", "thunder", "hail"]),
-        start_monday: true,
-        always_show_tooltip: true,
-        month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-        day_names: ['mo', 'wed', 'fri', 'sun'],
-        colors: {
-            'default': '#eeeeee', // Default color
-            'rain': 'lightblue',
-            'sunshine': 'lightyellow',
-            'fog': 'gray',
-            'thunder': 'brown',
-            'hail': 'white'
-        }
-    });
+    /*var heatMapBarHtml = `<div id="heatmap-bar" className="time_element"></div>`;
+    $('#calendar_yearview_blocks_chart_1').append(heatMapBarHtml);*/
+
+    // $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
+    //     data: getRandoHeatMapData(20, 80, ["rain", "sunshine", "fog", "thunder", "hail"]),
+    //     start_monday: true,
+    //     always_show_tooltip: true,
+    //     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+    //     day_names: ['mo', 'wed', 'fri', 'sun'],
+    //     colors: {
+    //         'default': '#eeeeee', // Default color
+    //         'rain': 'lightblue',
+    //         'sunshine': 'lightyellow',
+    //         'fog': 'gray',
+    //         'thunder': 'brown',
+    //         'hail': 'white'
+    //     }
+    // });
+
 }
 
 /*
