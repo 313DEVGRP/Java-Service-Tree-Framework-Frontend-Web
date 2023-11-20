@@ -1283,16 +1283,27 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
         return;
     }
 
+
+    const baseUrl = `/auth-user/api/arms/dashboard/jira-issue-statuses`;
+    const queryParams = new URLSearchParams({
+        pdServiceLink: pdServiceLink,
+        pdServiceVersionLinks: pdServiceVersionLinks,
+        하위그룹필드들: "",
+        메인그룹필드: "status.status_name.keyword",
+        크기: 1000,
+        하위크기: 1000,
+        컨텐츠보기여부: true
+    }).toString();
+    const url = `${baseUrl}?${queryParams}`;
     $.ajax({
-        url: "/auth-user/api/arms/dashboard/jira-issue-statuses",
+        url: url,
         type: "GET",
-        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersionLinks},
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
         statusCode: {
             200: function (data) {
-                console.log(data);
+                let 검색결과 = data.검색결과['group_by_status.status_name.keyword'];
                 if ((Array.isArray(data) && data.length === 0) ||
                     (typeof data === 'object' && Object.keys(data).length === 0) ||
                     (typeof data === 'string' && data === "{}")) {
@@ -1302,11 +1313,11 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 
                 const columnsData = [];
 
-                data.forEach(status => {
-                    columnsData.push([status.key, status.docCount]);
+                검색결과.forEach(status => {
+                    columnsData.push([status.필드명, status.개수]);
                 });
 
-                let totalDocCount = columnsData.reduce((sum, [_, count]) => sum + count, 0);
+                let totalDocCount = data.전체합계;
 
                 const chart = c3.generate({
                     bindto: '#donut-chart',
@@ -1334,9 +1345,9 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
                     const isHidden = $(this).hasClass('c3-legend-item-hidden');
                     let docCount = 0;
 
-                    for (const status of data) {
-                        if (status.key === id) {
-                            docCount = status.docCount;
+                    for (const status of 검색결과) {
+                        if (status.필드명 === id) {
+                            docCount = status.개수;
                             break;
                         }
                     }
