@@ -43,6 +43,7 @@ function runScript() {
 			$.getScript("js/" + page + ".js", function () {
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
+				laddaBtnSetting();
 				dwr_login(userName, userName);
 			});
 		}
@@ -998,10 +999,10 @@ function ajax_setup() {
 		})
 		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
 			//$(".loader").addClass("hide");
-			//Ladda.stopAll();
 		})
 		.ajaxStop(function () {
 			$(".loader").addClass("hide");
+			Ladda.stopAll();
 		});
 
 	return true;
@@ -1067,9 +1068,10 @@ function goToTemplatePage(pageName) {
 }
 
 
-function LaddaBtnConfig() {
-	// Bind normal buttons
-	//Ladda.bind( '.button-demo button', { timeout: 2000 } );
+function laddaBtnSetting() {
+	// add css
+	$('.ladda').addClass('ladda-button');
+
 	// Bind progress buttons and simulate loading progress
 	Ladda.bind( '.ladda', {
 		callback: function( instance ) {
