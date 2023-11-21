@@ -71,52 +71,52 @@ body::-webkit-scrollbar-track {
 
 /* Font */
 .jstree-default-context {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 12px;
 	color: #f8f8f8;
 }
 .font10 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 10px;
 	color: #f8f8f8;
 }
 .font11 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 11px;
 	color: #f8f8f8;
 }
 .font12 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 12px;
 	color: #f8f8f8;
 }
 .font13 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 13px;
 	color: #f8f8f8;
 }
 .font14 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 14px;
 	color: #f8f8f8;
 }
 .font15 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 15px;
 	color: #f8f8f8;
 }
 .font16 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 16px;
 	color: #f8f8f8;
 }
 .font17 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 17px;
 	color: #f8f8f8;
 }
 .font18 {
-	font-family: "Nanum Gothic";
+	font-family: "Nanum Gothic" !important;
 	font-size: 18px;
 	color: #f8f8f8;
 }
@@ -2065,8 +2065,7 @@ body[data-v-35dc3539] {
 	font-weight: 400;
 	line-height: 20px;
 	color: #f8f8f8;
-	font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, Helvetica Neue, Segoe UI,
-		Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, sans-serif;
+	font-family: "Nanum Gothic" !important;
 	background: radial-gradient(
 			farthest-side ellipse at 10% 0,
 			rgba(40, 40, 40, 0.9),
