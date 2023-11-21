@@ -2,7 +2,12 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function () {
-	authUserCheck();
+	var str = window.location.href;
+	if (str.indexOf("php") > 0) {
+		console.table("313DEVGRP 커뮤니티에 오신것을 환영합니다.");
+	} else {
+		authUserCheck();
+	}
 });
 
 function runScript() {
