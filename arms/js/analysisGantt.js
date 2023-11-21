@@ -1552,54 +1552,68 @@ function change_input_for_req_date(prefix) {
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
+function setWBS(data, result, item) {
+	let wbs = result;
+	wbs.push(item.c_id);
+	if (item.c_parentid <= 2) return wbs.join();
+
+	const parent = data.find((task) => task.c_id === item.c_parentid);
+	wbs.unshift(parent.c_id);
+
+	if (parent.c_parentid === 2) return wbs.join("-");
+	else return setWBS(data, wbs, parent.c_id);
+}
 function setGanttTasks(data) {
-	ganttTasks = data.reduce((acc, cur) => {
-		if (cur.c_parentid < 2) return acc;
+	ganttTasks = data
+		.sort((a, b) => a.c_parentid - b.c_parentid)
+		.reduce((acc, cur) => {
+			if (cur.c_parentid < 2) return acc;
 
-		let dependencies = "";
+			let dependencies = "";
 
-		if (cur.c_parentid !== 2) {
-			function setDependencies(parentId, parents) {
-				const node = data.find((task) => task.c_id === parentId);
+			if (cur.c_parentid !== 2) {
+				function setDependencies(parentId, parents) {
+					const node = data.find((task) => task.c_id === parentId);
 
-				if (node.c_parentid <= 2) {
-					return parents;
+					if (node.c_parentid <= 2) {
+						return parents;
+					}
+
+					return setDependencies(node.c_parentid, parents.concat(`${node.c_parentid}`));
 				}
 
-				return setDependencies(node.c_parentid, parents.concat(`${node.c_parentid}`));
+				dependencies = setDependencies(cur.c_parentid, [`${cur.c_parentid}`]);
 			}
 
-			dependencies = setDependencies(cur.c_parentid, [`${cur.c_parentid}`]);
-		}
+			acc.push({
+				id: `${cur.c_id}`,
+				wbs: setWBS(data, [], cur),
+				assignee: cur.c_req_owner,
+				reporter: cur.c_req_writer,
+				name: cur.c_title,
+				start: getDate(cur.c_req_start_date),
+				end: getDate(cur.c_req_end_date),
+				progress: cur.c_req_plan_progress || 0,
+				dependencies: dependencies,
+				priority: cur.state,
+				custom_class: cur.status, // optional
+				type: cur.c_type,
+				etc: cur.c_req_etc,
+				tmm: cur.c_req_total_resource,
+				p_work: cur.c_req_plan_resource,
+				t_period: cur.c_req_total_time,
+				tpp: cur.c_req_plan_time,
+				manager: cur.c_req_manager,
+				result: cur.c_req_output,
+				plan: `${cur.c_req_plan_progress || 0}%`,
+				performance: `${cur.c_req_performance_progress || 0}%`,
+				level: cur.c_level,
+				parentId: cur.c_parentid,
+				position: cur.c_position
+			});
 
-		acc.push({
-			id: `${cur.c_id}`,
-			assignee: cur.c_req_owner,
-			reporter: cur.c_req_writer,
-			name: cur.c_title,
-			start: getDate(cur.c_req_start_date),
-			end: getDate(cur.c_req_end_date),
-			progress: cur.c_req_plan_progress || 0,
-			dependencies: dependencies,
-			priority: cur.state,
-			custom_class: cur.status, // optional
-			type: cur.c_type,
-			etc: cur.c_req_etc,
-			tmm: cur.c_req_total_resource,
-			p_work: cur.c_req_plan_resource,
-			t_period: cur.c_req_total_time,
-			tpp: cur.c_req_plan_time,
-			manager: cur.c_req_manager,
-			result: cur.c_req_output,
-			plan: `${cur.c_req_plan_progress || 0}%`,
-			performance: `${cur.c_req_performance_progress || 0}%`,
-			level: cur.c_level,
-			parentId: cur.c_parentid,
-			position: cur.c_position
-		});
-
-		return acc;
-	}, []);
+			return acc;
+		}, []);
 
 	return ganttTasks;
 }
@@ -1712,6 +1726,7 @@ function initGantt(data) {
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},
 		[
+			{ data: "wbs", title: "WBS" },
 			{ data: "name", title: "작업" },
 			{ data: "etc", title: "비고" },
 			{ data: "start", title: "시작일" },

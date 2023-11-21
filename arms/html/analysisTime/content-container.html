@@ -719,7 +719,7 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <div class="netwrok-graph">
+                                <div class="network-graph">
                                     <svg id="NETWORK_GRAPH">
                                     </svg>
                                 </div>
@@ -737,11 +737,17 @@
                                 </h4>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
-                            <div class="body">
-                                <div id="calendar_yearview_blocks_chart_1"></div>
-                                <div class="seperate"></div>
-                                <div id="calendar_yearview_blocks_chart_2"></div>
-                                <div class="seperate"></div>
+                            <div class="body" id="heatmap-body" style="height: 415px;">
+                                <div style="width: 721px;">
+                                    <blockquote class="font12 update-title" style="display: none;">
+                                        <strong>요구사항 업데이트 현황</strong>
+                                    </blockquote>
+                                    <div id="calendar_yearview_blocks_chart_1"></div>
+                                    <blockquote class="font12 update-title" style="display: none;">
+                                        <strong>연결된 이슈 업데이트 현황</strong>
+                                    </blockquote>
+                                    <div id="calendar_yearview_blocks_chart_2"></div>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -962,6 +968,13 @@
         }
     }
 
+    .network-graph {
+        height: 415px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     #NETWORK_GRAPH {
         overflow: hidden!important;
     }
@@ -974,10 +987,6 @@
         stroke-width: 1.5px;
         paint-order: stroke fill;
         text-anchor: middle;
-    }
-
-    #calendar_yearview_blocks_chart_1, #calendar_yearview_blocks_chart_2 {
-        overflow-x: scroll;
     }
 
 </style>
