@@ -71,13 +71,13 @@
   margin: 0;
   padding: 0;
 }
-.table-container table .table-body tr td:first-child {
+.table-container table .table-body tr td.work-name {
   background-image: url(313devgrp.png);
   background-color: transparent;
   background-position: -90px 0;
   background-repeat: repeat-y;
 }
-.table-container table .table-body tr td:first-child ins {
+.table-container table .table-body tr td.work-name ins {
   background-image: url(313devgrp.png);
   background-position: -36px 0;
   background-repeat: no-repeat;

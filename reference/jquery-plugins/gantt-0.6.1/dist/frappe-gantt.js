@@ -1024,7 +1024,7 @@ var Gantt = (function () {
                         $ins.textContent = ' ';
                         $td.append($ins);
                         $td.setAttribute('rel', task.type);
-                        $td.className = `indent-${task.level - 1}`;
+                        $td.className = `work-name indent-${task.level - 1}`;
 
                         if (task.type !== 'default') {
                             $td.classList.add(task.closed ? 'closed' : 'opened');
