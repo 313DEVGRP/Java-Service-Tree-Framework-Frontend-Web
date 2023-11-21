@@ -192,7 +192,6 @@
 
         // Handle mouseEnter event when entering into rect element
         var mouseEnter = function (evt) {
-
             var target_offset = $(evt.target).offset();
             var items = $(evt.target).attr('data-items');
             var legend = $(evt.target).attr('data-legend');
@@ -205,12 +204,12 @@
                 var svg_tip = $('.svg-tip').show();
                 svg_tip.html(text);
                 var svg_width = Math.round(svg_tip.width() / 2 + 5);
-                var svg_height = svg_tip.height() * 2 + 10;
-
+                /*var svg_height = svg_tip.height() * 2 + 10;
                 svg_tip.css({top: target_offset.top - svg_height - 5});
-                svg_tip.css({left: target_offset.left - svg_width});
+                svg_tip.css({left: target_offset.left - svg_width});*/
+                var top = target_offset.top + $(evt.target).outerHeight() + 20;
+                svg_tip.css({top: top, left: target_offset.left - svg_width});
             }
-
         };
 
         // Append tooltip to display when the mouse enters the rect element
