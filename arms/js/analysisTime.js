@@ -119,9 +119,6 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-
-
-
             dashboardColor = dashboardPalette.dashboardPalette01;
             console.log(dashboardColor);
 
@@ -136,64 +133,6 @@ function execDocReady() {
 ///////////////////////
 //제품 서비스 셀렉트 박스
 //////////////////////
-/*
-function makePdServiceSelectBox() {
-    //제품 서비스 셀렉트 박스 이니시에이터
-    $(".chzn-select").each(function () {
-        $(this).select2($(this).data());
-    });
-
-    //제품 서비스 셀렉트 박스 데이터 바인딩
-    $.ajax({
-        url: "/auth-user/api/arms/pdService/getPdServiceMonitor.do",
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-
-                for (var k in data.response) {
-                    var obj = data.response[k];
-                    var newOption = new Option(obj.c_title, obj.c_id, false, false);
-                    $("#selected_pdService").append(newOption).trigger("change");
-                }
-
-            }
-        }
-    });
-
-    $("#selected_pdService").on("select2:open", function () {
-        //슬림스크롤
-        makeSlimScroll(".select2-results__options");
-    });
-
-    // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
-    $("#selected_pdService").on("select2:select", function (e) {
-        // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
-        // 디폴트는 base version 을 선택하게 하고 ( select all )
-        //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
-        bind_VersionData_By_PdService();
-
-        var checked = $("#checkbox1").is(":checked");
-        var endPointUrl = "";
-
-        // if (checked) {
-        //     endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
-        // } else {
-        //     endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
-        // }
-
-        //이슈리스트 데이터테이블
-        //dataTableLoad($("#selected_pdService").val(), endPointUrl);
-        //통계로드
-        //statisticsLoad($("#selected_pdService").val(), null);
-        //진행상태 가져오기
-        //progressLoad($("#selected_pdService").val(), null);
-
-    });
-} // end makePdServiceSelectBox()
-*/
 function makePdServiceSelectBox() {
     //제품 서비스 셀렉트 박스 이니시에이터
     $(".chzn-select").each(function () {
@@ -257,7 +196,6 @@ function makePdServiceSelectBox() {
     });
 } // end makePdServiceSelectBox()
 
-
 ////////////////////
 //버전 멀티 셀렉트 박스
 ////////////////////
@@ -311,21 +249,8 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
         async: true,
         statusCode: {
             200: function (data) {
-                data.forEach(issues => {
-                    console.log(issues);
-                    var display_date = formatDate(new Date(issues.updated));
-                    // console.log(display_date);
 
-                    /*                    var random_elements = randomInt(1,3);
-                                        for (var j=0; j < random_elements; j++) {
-                                            var random_item = items[randomInt(0,items.length-1)];
-                                            if (!return_object[display_date].items.includes(random_item)) {
-                                                return_object[display_date].items.push(random_item);
-                                            }
-                                        }*/
-
-                });
-
+                // 버전 선택 시 데이터 파싱
                 networkChart(data);
                 calendarHeatMap(data);
                 sevenTimeline(data);
@@ -398,7 +323,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                             versionTimeline.push(timelineElement);
                         });
 
-                        console.log("여기는?");
                         drawVersionProgress(versionGauge); // 버전 게이지
 
                         $("#version-timeline-bar").show();
@@ -770,7 +694,6 @@ function getReqCount(pdservice_id, pdServiceVersionLinks) {
                 console.log(data);
                 for (var key in data) {
                     var value = data[key];
-                    console.log(key + "=" + value);
                 }
                 //해당 제품의 총 요구사항 수 (by db)
                 active_ver_count = data["version"];
@@ -1130,8 +1053,6 @@ function drawVersionProgress(data) {
 function radarChart(pdServiceId, pdServiceVersionList) {
 
     var maxCount;
-    //var versionList = {};
-
     var versionText = [];
     var reqCount = [];
 
@@ -1164,8 +1085,6 @@ function radarChart(pdServiceId, pdServiceVersionList) {
                         versionList[item.필드명].개수 = item.개수;
                     }
                 });
-
-                console.log(Object.values(versionList));
 
                 Object.values(versionList).forEach(item => {
                     var version = {};
@@ -1285,7 +1204,6 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
         donutChartNoData();
         return;
     }
-
 
     const baseUrl = `/auth-user/api/arms/dashboard/jira-issue-statuses`;
     const queryParams = new URLSearchParams({
@@ -1505,7 +1423,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 ////////////////////
 
 function networkChart(jiraIssueData) {
-    d3.select("#NETWORK_GRAPH").selectAll("*").remove();
+    d3.select(".network-graph").selectAll("*").remove();
 
     var NETWORK_DATA = {
         "nodes": [],
@@ -1529,8 +1447,6 @@ function networkChart(jiraIssueData) {
             NETWORK_DATA.links.push(link);
         }
     });
-
-    console.log(NETWORK_DATA);
     /*var NETWORK_DATA = {
         "nodes": [
             {
@@ -1963,7 +1879,15 @@ function networkChart(jiraIssueData) {
         ]
     };*/
 
-    /********network graph********/
+    if (NETWORK_DATA.nodes.length === 0) { // 데이터가 없는 경우를 체크
+        d3.select("#NETWORK_GRAPH").remove();
+        d3.select(".network-graph").append("p").text('데이터가 없습니다.');
+        return;
+    }
+
+    d3.select(".network-graph").append("svg").attr("id","NETWORK_GRAPH");
+
+    /******** network graph config ********/
     var networkGraph = {
         createGraph : function(){
             var links = NETWORK_DATA.links.map(function(d){
@@ -2154,7 +2078,8 @@ function networkChart(jiraIssueData) {
                 .on("end", dragended);
         }
     }
-    /********network graph********/
+
+    /******** network graph create ********/
     networkGraph.createGraph();
 }
 
@@ -2168,80 +2093,91 @@ function formatDate(date) {
 
 function calendarHeatMap(jiraIssueData) {
 
-    $("#heatmap-bar").show();
+    console.table(jiraIssueData);
+
+    d3.select("#heatmap-body").style("overflow-x","scroll");
 
     $('#calendar_yearview_blocks_chart_1 svg').remove();
     $('#calendar_yearview_blocks_chart_2 svg').remove();
 
-    var return_object = {};
-    var uniqueItems = [];
+    var requirement = {};
+    var relation_issue = {};
+    var requirement_colors = [];
+    var relation_issue_colors = [];
 
     jiraIssueData.forEach(item => {
         var display_date = formatDate(new Date(item.updated));
 
+        if(item.isReq === true) {
+            heatmapDataParsing(requirement, item, requirement_colors);
+        }
+        else {
+            heatmapDataParsing(relation_issue, item, relation_issue_colors);
+        }
+    });
+
+    function heatmapDataParsing(return_object, item, return_colors) {
+        var display_date = formatDate(new Date(item.updated));
         if (return_object[display_date] === undefined) {
             return_object[display_date] = {};
             return_object[display_date].items = [];
         }
 
         return_object[display_date].items.push(item.summary);
-        uniqueItems.push(item.summary);
-    });
+        return_colors.push(item.summary);
+    }
 
-    console.log(JSON.stringify(return_object));
+    var requirementHeatMapData = JSON.stringify(requirement);
+    var relationIssuetHeatMapData = JSON.stringify(relation_issue);
 
-    var heatMapData = JSON.stringify(return_object);
-    var colors = {
-        'default': '#eeeeee' // 'default' 항목에는 고정된 색상 할당
+    var req_colors = {
+        'default': '#eeeeee'
     };
 
-    uniqueItems.forEach((item, index) => {
-        if (item !== 'default') {
-            var randomColor = getRandomColor(); // 랜덤한 색상 생성
-            colors[item] = randomColor;
-        }
-    });
+    var issue_colors = {
+        'default': '#eeeeee'
+    };
+
+    assignColors(requirement_colors, req_colors);
+    assignColors(relation_issue_colors, issue_colors);
+
+    function assignColors(colorsArray, colorsObj) {
+        colorsArray.forEach((item) => {
+            if (item !== 'default') {
+                colorsObj[item] = getRandomColor();
+            }
+        });
+    }
 
     function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+        return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
     }
-    console.log(heatMapData);
-    console.log(colors);
+
+    $(".update-title").show();
 
     $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
-        data: heatMapData,
+        data: requirementHeatMapData,
         start_monday: true,
         always_show_tooltip: true,
         month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'],
         day_names: ['mo', 'wed', 'fri', 'sun'],
-        colors: colors
+        colors: req_colors
     });
 
     /*var heatMapBarHtml = `<div id="heatmap-bar" className="time_element"></div>`;
     $('#calendar_yearview_blocks_chart_1').append(heatMapBarHtml);*/
 
-    // $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
-    //     data: getRandoHeatMapData(20, 80, ["rain", "sunshine", "fog", "thunder", "hail"]),
-    //     start_monday: true,
-    //     always_show_tooltip: true,
-    //     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-    //     day_names: ['mo', 'wed', 'fri', 'sun'],
-    //     colors: {
-    //         'default': '#eeeeee', // Default color
-    //         'rain': 'lightblue',
-    //         'sunshine': 'lightyellow',
-    //         'fog': 'gray',
-    //         'thunder': 'brown',
-    //         'hail': 'white'
-    //     }
-    // });
-
+    $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
+        data: relationIssuetHeatMapData,
+        start_monday: true,
+        always_show_tooltip: true,
+        month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+        day_names: ['mo', 'wed', 'fri', 'sun'],
+        colors: issue_colors
+    });
 }
+
+
 
 /*
 function getRandomData(ordinal = false) {
