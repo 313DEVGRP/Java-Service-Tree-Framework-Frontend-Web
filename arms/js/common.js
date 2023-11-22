@@ -1092,3 +1092,27 @@ function laddaBtnSetting() {
 		}
 	} );
 }
+
+
+
+class UrlBuilder {
+	constructor() {
+		this.baseUrl = '';
+		this.queryParams = {};
+	}
+
+	setBaseUrl(url) {
+		this.baseUrl = url;
+		return this;
+	}
+
+	addQueryParam(key, value) {
+		this.queryParams[key] = value;
+		return this;
+	}
+
+	build() {
+		const queryString = new URLSearchParams(this.queryParams).toString();
+		return `${this.baseUrl}?${queryString}`;
+	}
+}
