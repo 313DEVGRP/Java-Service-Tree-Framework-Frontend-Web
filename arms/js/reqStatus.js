@@ -476,22 +476,6 @@ function dataTableLoad(selectId, endPointUrl) {
 			className: "dt-body-left",
 			visible: true
 		},
-		{ name: "c_issue_resolution_link", title: "요구사항 이슈 해결책 아이디", data: "c_issue_resolution_link", visible: false },
-		{
-			name: "c_issue_resolution_name",
-			title: "요구사항 이슈 해결책",
-			data: "c_issue_resolution_name",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
 		{
 			name: "c_issue_reporter",
 			title: "요구사항 이슈 보고자",
