@@ -137,8 +137,6 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
     var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
 
-    var _categories = (categories === undefined ? ["데이터 없음"] : categories);
-
     var option = {
         angleAxis: {
             type: 'category',
@@ -155,9 +153,7 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
             }
         }
     };
-    myChart.setOption(option);
+    myChart.setOption(option,true);
 
-    window.onresize = function() {
-        myChart.resize();
-    };
+    return myChart;
 }

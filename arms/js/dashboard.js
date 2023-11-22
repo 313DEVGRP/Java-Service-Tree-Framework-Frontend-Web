@@ -1505,7 +1505,6 @@ function dataTableDrawCallback(tableInfo) {
 }
 
 function getIssueResponsibleStatusTop5(pdservice_id) {
-	$("#polar_bar").html("");
 
 	var _url = "/auth-user/api/arms/dashboard/normal/issue-responsible-status-top5/"+pdservice_id;
 	$.ajax({
@@ -1523,11 +1522,10 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("인력별 퍼포먼스 조회 ==========");
 				//console.log(data); //console.log(data.검색결과);
 				var cat_persons = Object.keys(data);
 				console.log(cat_persons);
-				const persion_size = cat_persons.length;
+				let persion_size = cat_persons.length;
 				//console.log(data[cat_persons[0]]["group_by_status.status_name.keyword"]);
 
 				let set = new Set();
@@ -1544,7 +1542,7 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 				var legend_arr = []; //레전드 리스트
 				set.forEach((element) => {legend_arr.push(element);}); // Set to List
 
-				const legend_size = legend_arr.length;
+				let legend_size = legend_arr.length;
 
 				var arr2di = new Array(legend_size); // Status의 종류의 수
 				for ( var i =0; i<arr2di.length; i++) {
@@ -1585,7 +1583,6 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 					_temp.name = legend_arr[i];
 					arrSeries[i] = _temp;
 				}
-				console.log(arrSeries);
 
 				drawBarOnPolar("polar_bar", cat_persons, legend_arr, arrSeries);
 			}
@@ -1611,7 +1608,6 @@ function getReqAndLinkedIssueTop5(pdservice_id) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("우하단 수평 바 조회 ==========");
 				top5ReqLinkedIssue = []; // 초기화
 
 				for(let i =0; i<5; i++) {
