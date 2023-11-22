@@ -132,12 +132,26 @@ function includeLayout(page) {
 		console.log("[ common :: authUserCheck ] page = " + url);
 
 		if (url.indexOf("content-header") !== -1) {
-			url = "html/" + page + "/content-header.html";
+
+			var str = window.location.href;
+			if (str.indexOf("php") > 0) {
+				url = "html/" + page + "/content-header.php";
+			} else {
+				url = "html/" + page + "/content-header.html";
+			}
+
 			self.load(url, function () {
 				self.removeAttr("data-include");
 			});
 		} else if (url.indexOf("content-container") !== -1) {
-			url = "html/" + page + "/content-container.html";
+
+			var str = window.location.href;
+			if (str.indexOf("php") > 0) {
+				url = "html/" + page + "/content-container.php";
+			} else {
+				url = "html/" + page + "/content-container.html";
+			}
+
 			self.load(url, function () {
 				self.removeAttr("data-include");
 			});
