@@ -808,10 +808,6 @@ function dataTable_build(
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg, "");
 
-	if ( isEmpty(scrollY) ){
-		scrollY = 700;
-	}
-
 	var responsiveRender = {
 		details: {
 			renderer: function (api, rowIdx, columns) {
@@ -869,7 +865,6 @@ function dataTable_build(
 		buttons: buttonList,
 		scrollX: true,
 		scrollY: scrollY,
-		scroller: true,
 		language: {
 			processing: "",
 			loadingRecords:

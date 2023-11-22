@@ -581,7 +581,8 @@ function dataTableLoad(selectId, endPointUrl) {
 		selectList,
 		orderList,
 		buttonList,
-		isServerSide
+		isServerSide,
+		700
 	);
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
