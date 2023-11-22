@@ -50,8 +50,8 @@ function execDocReady() {
             //"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/css/newtimeline.css",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/raphael.min.js",
-            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/timeline.js",
-            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
+            "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/newtimeline.js",
+            //"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
             // 3번째 박스 데이터 테이블 내 차트
             "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
             "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
@@ -253,6 +253,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
                 // 버전 선택 시 데이터 파싱
                 networkChart(data);
                 calendarHeatMap(data);
+                statusTimeline(data);
                 sevenTimeline(data);
                 globalJiraIssue = data;
 
@@ -2230,6 +2231,151 @@ function getRandomData(ordinal = false) {
     }
 }
 */
+
+////////////////////
+// 여섯번째 박스
+////////////////////
+
+function statusTimeline(data) {
+
+    // 필요한 데이터만 추출
+    var extractedData = extractDataForStatusTimeline(data);
+    
+    // 버전 별로 그룹화
+    var groupedDataByVersion = groupingByVersionForStatusTimeline(extractedData);
+
+    // 데이터 포맷팅
+    var relatedIssues = dataFormattingForStatusTimeline(groupedDataByVersion);
+
+    // 요소 호버
+    $(".reqNode").hover(
+        function() {
+
+            $(this).find('title').text('');
+            var classValue = $(this).attr('class');
+            //console.log(classValue);
+            var key = classValue.split(" ").pop(); // 요구사항 이슈 키
+
+            $("." + key).css("opacity", "0.7");
+
+            var tooltip = $('<div id="stlTooltip"></div>');
+            tooltip.html(`
+                <table class="stltable">
+                    <tr>
+                        <th>하위 이슈</th>
+                        <th>상태</th>
+                    </tr>
+                    ${relatedIssues[key] ? relatedIssues[key] : '<tr><td colspan="2">데이터가 없습니다</td></tr>'}
+                </table>
+            `);
+
+            tooltip.css({
+                "visibility": "visible",
+                "opacity": "1",
+                "position": "absolute",
+                "left": event.pageX + 10,
+                "top": event.pageY + 10,
+            });
+
+            $("body").append(tooltip);
+
+        }, function() {
+            $(".reqNode").css("opacity", "1");
+            $("#stlTooltip").remove();
+
+        }
+    );
+}
+
+function extractDataForStatusTimeline(data){
+
+    var extractedData = [];
+
+    data.forEach(item => {
+        var extractedItem = {
+            version: item.pdServiceVersion,
+            issueKey: item.key,
+            isReq: item.isReq,
+            parentReqKey: item.parentReqKey,
+            createdDate: new Date(Date.parse(item.created)),
+            summary: item.summary,
+            status: item.status.status_name
+        };
+        extractedData.push(extractedItem);
+    });
+
+    return extractedData;
+}
+
+function groupingByVersionForStatusTimeline(data) {
+
+    var groupedData = data.reduce((result, item) => {
+        var pdServiceVersion = item.version;
+        if (!result[pdServiceVersion]) {
+            result[pdServiceVersion] = [];
+        }
+        result[pdServiceVersion].push(item);
+        return result;
+    }, {});
+    
+    return groupedData;
+}
+
+function dataFormattingForStatusTimeline(data) {
+
+    var statusTimelineData = {};
+    var formattedData = [];
+    var relatedIssues = {};
+
+    for (const version in data) {
+
+        var reqIssue = data[version].filter(item => item.isReq === true); // 요구사항 이슈만 필터링
+        var versionData = convertVersionIdToTile(version); // text (버전)
+
+        var reqIssues = []; // children 전체
+
+        reqIssue.forEach(reqIssue => {
+
+            // children 요소 중 하나
+            var req = {
+                text: reqIssue.summary + " | " + reqIssue.status,
+                id: reqIssue.issueKey
+            };
+
+            reqIssues.push(req);
+
+            // 호버 시 하위 이슈 볼 수 있도록 데이터 포맷팅
+            var relatedIssue = data[version].filter(item => item.parentReqKey === reqIssue.issueKey);
+            console.log("연관 이슈: ", relatedIssue);
+
+            relatedIssue.forEach(relatedIssue => {
+
+                if (!relatedIssues[relatedIssue.parentReqKey]) {
+                    relatedIssues[relatedIssue.parentReqKey] = '';
+                }
+
+                relatedIssues[relatedIssue.parentReqKey] += "<tr><td>" +
+                    relatedIssue.summary +
+                    "</td><td>" +
+                    relatedIssue.status +
+                    "</td></tr>";
+            });
+        });
+
+        var totalData = {
+            text: versionData,
+            children: reqIssues
+        };
+
+        formattedData.push(totalData);
+    }
+    statusTimelineData.data = formattedData;
+
+    $("#demo").timeline(statusTimelineData);
+    console.log("연관 이슈 전체: ", relatedIssues);
+
+    return relatedIssues;
+}
 
 function sevenTimeline(data) {
     var sevenTimeLineDiv = document.getElementById("sevenTimeLine");

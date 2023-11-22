@@ -2,8 +2,45 @@
     fill: black;
 }
 
-#reload {
-    padding:.5em 1em;
-    margin-top:2em;
+.statusTimeline tspan {
+    cursor: default;
+}
+
+/* 툴팁 테이블 */
+.stltable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.stltable th:first-child {
+    border-top-left-radius: 3px;
+}
+
+.stltable th:last-child {
+    border-top-right-radius: 3px;
+}
+
+.stltable tr:last-child td:first-child {
+    border-bottom-left-radius: 3px;
+}
+
+.stltable tr:last-child td:last-child {
+    border-bottom-right-radius: 3px;
+}
+
+.stltable th, .stltable td {
+    border: 1px solid #ddd;
+    padding: 3px;
+    text-align: left;
     color: black;
+}
+
+.stltable th {
+    text-align: center;
+    background-color: rgba(69, 80, 91, 0.29);
+}
+
+.stltable tr {
+    background-color: rgba(242, 242, 242, 0.8);
 }
