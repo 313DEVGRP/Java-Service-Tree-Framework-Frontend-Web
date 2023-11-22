@@ -1206,17 +1206,17 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
         return;
     }
 
-    const baseUrl = `/auth-user/api/arms/dashboard/jira-issue-statuses`;
-    const queryParams = new URLSearchParams({
-        pdServiceLink: pdServiceLink,
-        pdServiceVersionLinks: pdServiceVersionLinks,
-        하위그룹필드들: "",
-        메인그룹필드: "status.status_name.keyword",
-        크기: 1000,
-        하위크기: 1000,
-        컨텐츠보기여부: true
-    }).toString();
-    const url = `${baseUrl}?${queryParams}`;
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/dashboard/jira-issue-statuses')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('메인그룹필드', "status.status_name.keyword")
+        .addQueryParam('하위그룹필드들', "")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
     $.ajax({
         url: url,
         type: "GET",
