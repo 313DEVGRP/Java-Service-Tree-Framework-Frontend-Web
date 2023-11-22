@@ -809,7 +809,7 @@ function dataTable_build(
 	var jQueryElementStr = jQueryElementID.replace(reg, "");
 
 	if ( isEmpty(scrollY) ){
-		scrollY = 800;
+		scrollY = 700;
 	}
 
 	var responsiveRender = {
