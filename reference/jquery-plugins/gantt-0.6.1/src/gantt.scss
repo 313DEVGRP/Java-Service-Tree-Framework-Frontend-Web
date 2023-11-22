@@ -89,6 +89,10 @@ $selected: rgba(229, 96, 59, 0.2) !default;
                 td {
                     border-right: 2px solid $border-right-color;
 
+                    &:first-child {
+                        border-right: none;
+                    }
+
                     ins {
                         display: inline-block;
                         text-decoration: none;
