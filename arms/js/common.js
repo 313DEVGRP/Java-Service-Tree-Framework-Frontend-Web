@@ -5,6 +5,7 @@ $(function () {
 	var str = window.location.href;
 	if (str.indexOf("php") > 0) {
 		console.table("313DEVGRP 커뮤니티에 오신것을 환영합니다.");
+		runScript();
 	} else {
 		authUserCheck();
 	}
@@ -39,6 +40,9 @@ function runScript() {
 		$(".loader").removeClass("hide");
 
 		var page = urlParams.get("page");
+		if ( isEmpty(page) ){
+			page = "index";
+		}
 		if (includeLayout(page)) {
 			$.getScript("js/" + page + ".js", function () {
 				/* 로그인 인증 여부 체크 함수 */
