@@ -2,14 +2,20 @@
 // 투입 인력별 요구사항 관여 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
 function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/dashboard/assignees-requirements-involvements')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('메인그룹필드', "pdServiceVersion")
+        .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('크기', 0)
+        .addQueryParam('하위크기', 0)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
     $.ajax({
-        url: "/auth-user/api/arms/dashboard/assignees-requirements-involvements",
+        url: url,
         type: "GET",
-        data: {
-            "pdServiceLink": pdServiceLink,
-            "pdServiceVersionLinks": pdServiceVersionLinks,
-            "maxResults": 0
-        },
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,

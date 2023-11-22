@@ -1306,10 +1306,21 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
         return;
     }
 
+
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/dashboard/requirements-jira-issue-statuses')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('메인그룹필드', "pdServiceVersion")
+        .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
     $.ajax({
-        url: "/auth-user/api/arms/dashboard/requirements-jira-issue-statuses",
+        url: url,
         type: "GET",
-        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersionLinks},
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
