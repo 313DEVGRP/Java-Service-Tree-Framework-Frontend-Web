@@ -887,7 +887,9 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body" style="overflow:scroll;">
-                                <div id="sevenTimeLine"></div>
+                                <div id="sevenTimeLine">
+                                    <p>제품 및 서비스 선택 전</p>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -899,6 +901,16 @@
 </div>
 
 <style>
+    .timelines-chart .reset-zoom-btn {
+        fill: white;
+    }
+
+    #sevenTimeLine {
+        min-height: 340px; position: relative; top: 50%;
+    }
+     #sevenTimeLine p{
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+     }
     #sevenTimeLine svg {
         height: auto;
         width: auto;
