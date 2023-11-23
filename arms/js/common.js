@@ -47,7 +47,6 @@ function runScript() {
 			$.getScript("js/" + page + ".js", function () {
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
-				laddaBtnSetting();
 				dwr_login(userName, userName);
 			});
 		}
@@ -117,7 +116,10 @@ function loadPluginGroupsParallelAndSequential(groups) {
 	var promises = groups.map(function (group) {
 		return loadPluginGroupSequentially(group);
 	});
-	return Promise.all(promises);
+	return Promise.all(promises).then(function () {
+		laddaBtnSetting();
+		loadTourGuide();
+	});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1081,10 +1083,10 @@ function laddaBtnSetting() {
 		callback: function( instance ) {
 			var progress = 0;
 			var interval = setInterval( function() {
-				progress = Math.min( progress + Math.random() * 0.1, 1 );
+				progress = Math.min( progress + 0.1, 1.5 );
 				instance.setProgress( progress );
 
-				if( progress === 1 ) {
+				if( progress === 1.5 ) {
 					instance.stop();
 					clearInterval( interval );
 				}
@@ -1114,5 +1116,50 @@ class UrlBuilder {
 	build() {
 		const queryString = new URLSearchParams(this.queryParams).toString();
 		return `${this.baseUrl}?${queryString}`;
+	}
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	console.log(decodedCookie);
+	var ca = decodedCookie.split(';');
+	for(var i = 0; i <ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
+
+function setTourGuide(tourGuide) {
+	console.log("common.js :: setTourGuide");
+	document.cookie = "gta=" + tourGuide;
+	if (tourGuide === "on") {
+		//tourGuide 동작
+		GtaApi.startTour(getPageName(this.location.search));
+	}
+}
+
+function getPageName(str) {
+	if (str !== "") {
+		let idxOfPageParam = str.indexOf('page'); // page param의 위치
+		return str.substring(idxOfPageParam+5);
+	}
+	return "페이지 이름 없음"; //페이지 이름이 없을 경우.
+}
+function loadTourGuide() {
+	console.log("common.js :: loadTourGuide");
+	//guided-tour-arrow 플러그인
+	const tourGuide = getCookie("gta");
+	if (tourGuide) {
+		setTourGuide(tourGuide);
+	} else {
+		//지정된 투어가이드(gta) 의 설정이 없을 때, on으로 설정
+		setTourGuide("on");
 	}
 }
