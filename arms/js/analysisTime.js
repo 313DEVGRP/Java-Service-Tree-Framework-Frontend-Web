@@ -5,7 +5,7 @@ var dashboardColor;
 var selectedVersionId;
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
 var globalJiraIssue = {};
-var versionList;
+var versionListData;
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -361,6 +361,11 @@ function bind_VersionData_By_PdService() {
             200: function (data) {
                 //////////////////////////////////////////////////////////
                 console.log(data.response);
+
+                versionListData = data.response.reduce((obj, item) => {
+                                    obj[item.c_id] = item;
+                                    return obj;
+                 }, {});
 
                 for (var k in data.response) {
                     var obj = data.response[k];
@@ -1459,437 +1464,6 @@ function networkChart(jiraIssueData) {
             NETWORK_DATA.links.push(link);
         }
     });
-    /*var NETWORK_DATA = {
-        "nodes": [
-            {
-                "id": "청소년",
-                "value": 3,
-                "group": null
-            },
-            {
-                "id": "장면",
-                "value": 3,
-                "group": "media"
-            },
-            {
-                "id": "드라마",
-                "value": 3,
-                "group": "media"
-            },
-            {
-                "id": "캐릭터",
-                "value": 4,
-                "group": null
-            },
-            {
-                "id": "미디어",
-                "value": 4,
-                "group": "media"
-            },
-            {
-                "id": "대중",
-                "value": 4,
-                "group": "media"
-            },
-            {
-                "id": "영향",
-                "value": 2,
-                "group": null
-            },
-            {
-                "id": "모습",
-                "value": 3,
-                "group": null
-            },
-            {
-                "id": "티비",
-                "value": 4,
-                "group": "media"
-            },
-            {
-                "id": "영화",
-                "value": 2,
-                "group": "media"
-            },
-            {
-                "id": "매체",
-                "value": 6,
-                "group": "media"
-            },
-            {
-                "id": "그리다",
-                "value": 5,
-                "group": "act"
-            },
-            {
-                "id": "소비",
-                "value": 5,
-                "group": "act"
-            },
-            {
-                "id": "이미지",
-                "value": 3,
-                "group": null
-            },
-            {
-                "id": "방송",
-                "value": 5,
-                "group": "media"
-            },
-            {
-                "id": "비행",
-                "value": 2,
-                "group": "bad"
-            },
-            {
-                "id": "주인공",
-                "value": 4,
-                "group": null
-            },
-            {
-                "id": "이야기",
-                "value": 5,
-                "group": null
-            },
-            {
-                "id": "실제표현",
-                "value": 5,
-                "group": null
-            },
-            {
-                "id": "가난",
-                "value": 2,
-                "group": "bad"
-            },
-            {
-                "id": "폭력",
-                "value": 3,
-                "group": "bad"
-            },
-            {
-                "id": "씌우다",
-                "value": 4,
-                "group": "act"
-            },
-            {
-                "id": "묘사",
-                "value": 3,
-                "group": "act"
-            },
-            {
-                "id": "불행",
-                "value": 3,
-                "group": "bad"
-            },
-            {
-                "id": "부정",
-                "value": 2,
-                "group": "bad"
-            },
-            {
-                "id": "인식",
-                "value": 1,
-                "group": null
-            },
-            {
-                "id": "불량",
-                "value": 4,
-                "group": "bad"
-            }
-        ],
-        "links": [
-            {
-                "source": "청소년",
-                "target": "장면",
-                "value": 2
-            },
-            {
-                "source": "청소년",
-                "target": "비행",
-                "value": 8
-            },
-            {
-                "source": "청소년",
-                "target": "티비",
-                "value": 4
-            },
-            {
-                "source": "청소년",
-                "target": "모습",
-                "value": 10
-            },
-            {
-                "source": "드라마",
-                "target": "캐릭터",
-                "value": 4
-            },
-            {
-                "source": "드라마",
-                "target": "미디어",
-                "value": 3
-            },
-            {
-                "source": "드라마",
-                "target": "주인공",
-                "value": 2
-            },
-            {
-                "source": "드라마",
-                "target": "매체",
-                "value": 1
-            },
-            {
-                "source": "드라마",
-                "target": "그리다",
-                "value": 4
-            },
-            {
-                "source": "장면",
-                "target": "비행",
-                "value": 5
-            },
-            {
-                "source": "장면",
-                "target": "주인공",
-                "value": 1
-            },
-            {
-                "source": "이야기",
-                "target": "실제표현",
-                "value": 6
-            },
-            {
-                "source": "미디어",
-                "target": "캐릭터",
-                "value": 2
-            },
-            {
-                "source": "미디어",
-                "target": "매체",
-                "value": 8
-            },
-            {
-                "source": "미디어",
-                "target": "티비",
-                "value": 4
-            },
-            {
-                "source": "미디어",
-                "target": "영화",
-                "value": 10
-            },
-            {
-                "source": "미디어",
-                "target": "실제표현",
-                "value": 4
-            },
-            {
-                "source": "영향",
-                "target": "소비",
-                "value": 3
-            },
-            {
-                "source": "영향",
-                "target": "청소년",
-                "value": 2
-            },
-            {
-                "source": "영향",
-                "target": "대중",
-                "value": 1
-            },
-            {
-                "source": "영향",
-                "target": "미디어",
-                "value": 4
-            },
-            {
-                "source": "영향",
-                "target": "매체",
-                "value": 5
-            },
-            {
-                "source": "영향",
-                "target": "장면",
-                "value": 1
-            },
-            {
-                "source": "비행",
-                "target": "주인공",
-                "value": 6
-            },
-            {
-                "source": "비행",
-                "target": "불량",
-                "value": 2
-            },
-            {
-                "source": "비행",
-                "target": "실제표현",
-                "value": 8
-            },
-            {
-                "source": "가난",
-                "target": "비행",
-                "value": 4
-            },
-            {
-                "source": "가난",
-                "target": "주인공",
-                "value": 10
-            },
-            {
-                "source": "가난",
-                "target": "폭력",
-                "value": 4
-            },
-            {
-                "source": "가난",
-                "target": "이야기",
-                "value": 3
-            },
-            {
-                "source": "폭력",
-                "target": "가난",
-                "value": 2
-            },
-            {
-                "source": "폭력",
-                "target": "실제표현",
-                "value": 1
-            },
-            {
-                "source": "씌우다",
-                "target": "폭력",
-                "value": 4
-            },
-            {
-                "source": "씌우다",
-                "target": "영향",
-                "value": 5
-            },
-            {
-                "source": "씌우다",
-                "target": "소비",
-                "value": 1
-            },
-            {
-                "source": "씌우다",
-                "target": "주인공",
-                "value": 6
-            },
-            {
-                "source": "씌우다",
-                "target": "미디어",
-                "value": 2
-            },
-            {
-                "source": "씌우다",
-                "target": "캐릭터",
-                "value": 8
-            },
-            {
-                "source": "묘사",
-                "target": "씌우다",
-                "value": 4
-            },
-            {
-                "source": "묘사",
-                "target": "불행",
-                "value": 10
-            },
-            {
-                "source": "묘사",
-                "target": "방송",
-                "value": 4
-            },
-            {
-                "source": "묘사",
-                "target": "매체",
-                "value": 3
-            },
-            {
-                "source": "소비",
-                "target": "이미지",
-                "value": 2
-            },
-            {
-                "source": "소비",
-                "target": "그리다",
-                "value": 1
-            },
-            {
-                "source": "소비",
-                "target": "미디어",
-                "value": 4
-            },
-            {
-                "source": "소비",
-                "target": "폭력",
-                "value": 5
-            },
-            {
-                "source": "매체",
-                "target": "대중",
-                "value": 1
-            },
-            {
-                "source": "매체",
-                "target": "영향",
-                "value": 6
-            },
-            {
-                "source": "매체",
-                "target": "모습",
-                "value": 2
-            },
-            {
-                "source": "매체",
-                "target": "이야기",
-                "value": 3
-            },
-            {
-                "source": "매체",
-                "target": "실제표현",
-                "value": 10
-            },
-            {
-                "source": "부정",
-                "target": "인식",
-                "value": 10
-            },
-            {
-                "source": "부정",
-                "target": "이미지",
-                "value": 3
-            },
-            {
-                "source": "부정",
-                "target": "소비",
-                "value": 2
-            },
-            {
-                "source": "부정",
-                "target": "불행",
-                "value": 1
-            },
-            {
-                "source": "부정",
-                "target": "묘사",
-                "value": 4
-            },
-            {
-                "source": "부정",
-                "target": "씌우다",
-                "value": 5
-            },
-            {
-                "source": "부정",
-                "target": "이야기",
-                "value": 1
-            }
-        ]
-    };*/
 
     if (NETWORK_DATA.nodes.length === 0) { // 데이터가 없는 경우를 체크
         d3.select("#NETWORK_GRAPH").remove();
@@ -2190,59 +1764,6 @@ function calendarHeatMap(jiraIssueData) {
 }
 
 
-
-/*
-function getRandomData(ordinal = false) {
-
-    const NGROUPS = 6,
-        MAXLINES = 15,
-        MAXSEGMENTS = 20,
-        MAXCATEGORIES = 20,
-        MINTIME = new Date(2013,2,21);
-
-    const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),
-        categoryLabels = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-
-    return [...Array(NGROUPS).keys()].map(i => ({
-        group: 'group' + (i+1),
-        data: getGroupData()
-    }));
-
-    //
-
-    function getGroupData() {
-
-        return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({
-            label: 'label' + (i+1),
-            data: getSegmentsData()
-        }));
-
-        //
-
-        function getSegmentsData() {
-            const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),
-                segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);
-            let runLength = MINTIME;
-
-            return [...Array(nSegments).keys()].map(i => {
-                const tDivide = [Math.random(), Math.random()].sort(),
-                    start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),
-                    end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);
-
-                runLength = new Date(runLength.getTime() + segMaxLength);
-
-                return {
-                    timeRange: [start, end],
-                    val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()
-                    //labelVal: is optional - only displayed in the labels
-                };
-            });
-
-        }
-    }
-}
-*/
-
 ////////////////////
 // 여섯번째 박스
 ////////////////////
@@ -2341,8 +1862,7 @@ function dataFormattingForStatusTimeline(data) {
     for (const version in data) {
 
         var reqIssue = data[version].filter(item => item.isReq === true); // 요구사항 이슈만 필터링
-        var versionData = convertVersionIdToTile(version); // text (버전)
-
+        var versionData = convertVersionIdToTitle(version); // text (버전)
         var reqIssues = []; // children 전체
 
         reqIssue.forEach(reqIssue => {
@@ -2392,25 +1912,23 @@ function sevenTimeline(data) {
     var sevenTimeLineDiv = document.getElementById("sevenTimeLine");
     sevenTimeLineDiv.innerHTML = "";
 
-    var groupedData = groupDataByPdServiceVersion(data);
-
-    var myData = []
-    for (const version in groupedData) {
-        console.log("버전 정보: " + version);
-        console.log(groupedData[version]);
-    }
-
-    var myData = dataFormattingForSevenTimeLine(groupedData);
-    //var myData = Data();
-
-    TimelinesChart()('#sevenTimeLine')
-        .width(1228)
+    if (typeof data === 'object' && Object.keys(data).length > 0) {
+        var groupedData = groupDataByPdServiceVersion(data);
+        var myData = [];
+        var myData = dataFormattingForSevenTimeLine(groupedData);
+        TimelinesChart()('#sevenTimeLine')
+        .width(1440)
         .zQualitative(true)
         .data(myData)
         .refresh();
+    } else {
+        var pElement = document.createElement("p");
+        pElement.textContent = "데이터가 없습니다.";
+        sevenTimeLineDiv.appendChild(pElement);
+    }
 }
 //  필요한 데이터만 추출
-function extractData(data){
+function extractDataForSevenTimeline(data){
     var extractedData = [];
     data.forEach(obj => {
         var extractedObj = {
@@ -2427,7 +1945,7 @@ function extractData(data){
 }
 // 버전 별 그룹화 하기
 function groupDataByPdServiceVersion(data) {
-  var extractedData = extractData(data);
+  var extractedData = extractDataForSevenTimeline(data);
   var groupedData = extractedData.reduce((result, obj) => {
       var pdServiceVersion = obj.version;
       if (!result[pdServiceVersion]) {
@@ -2455,10 +1973,10 @@ function dataFormattingForSevenTimeLine(groupedByVersionData) {
 
             var childData = groupedByVersionData[version].filter(issue => issue.parentReqKey === groupByReqIssueData.group);
             groupByReqIssueData.data.push({
-                label: reqIssue.issueKey,
+                label: "요구사항 이슈",
                 data: [{
                     timeRange: [reqIssue.createdDate, reqIssue.resolutionDate],
-                    val: convertVersionIdToTile(reqIssue.version)
+                    val: convertVersionIdToTitle(reqIssue.version)
                 }]
             });
             childData.forEach(child => {
@@ -2466,7 +1984,7 @@ function dataFormattingForSevenTimeLine(groupedByVersionData) {
                     label: child.issueKey,
                     data: [{
                         timeRange: [child.createdDate, child.resolutionDate],
-                        val: convertVersionIdToTile(child.version)
+                        val: convertVersionIdToTitle(child.version)
                         }]
                     });
                 });
@@ -2477,9 +1995,9 @@ function dataFormattingForSevenTimeLine(groupedByVersionData) {
     return formattedData;
 }
 //
-function convertVersionIdToTile(versionId) {
-  if (versionList.hasOwnProperty(versionId)) {
-    var version = versionList[versionId];
+function convertVersionIdToTitle(versionId) {
+  if (versionListData.hasOwnProperty(versionId)) {
+    var version = versionListData[versionId];
     console.log("version.c_title: " + version.c_title);
     return version.c_title;
   }
