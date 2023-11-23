@@ -23,7 +23,9 @@ function execDocReady() {
             "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
             // "./js/common/colorPalette.js",
             //chart Colors
-            "./js/dashboard/chart/colorPalette.js"
+            "./js/dashboard/chart/colorPalette.js",
+            // Apache Echarts
+            "../reference/jquery-plugins/apache-echarts/echarts.js"
         ],
 
         [	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -84,10 +86,189 @@ function execDocReady() {
 
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
+
+            // 담당자 별 이슈 상태 차트(mock)
+            // https://echarts.apache.org/en/option.html#tooltip.formatter
+            echartExample();
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
         });
+
+}
+
+function echartExample(){
+    var myChart = echarts.init(document.getElementById('apache-echarts-stacked-horizontal-bar'));
+    var option;
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow' // 'line' or 'shadow'. 기본값은 'shadow'
+            },
+            formatter: function (params) {
+                const tooltip = params.reduce((acc, param) => {
+                    const { marker, seriesName, value } = param;
+                    acc += `${marker}${seriesName}: ${value}<br/>`;
+                    return acc;
+                }, '');
+
+                const totalCount = params.reduce((acc, param) => acc + param.value, 0);
+                const totalTooltip = `Total: ${totalCount}<br/>`;
+
+                return totalTooltip + tooltip;
+            }
+        },
+
+        legend: {
+            data: ['완료', 'Done', 'In Progress', 'Resolved', 'Backlog', '진행 중', '해야 할 일', '열기', '완료됨', 'Open'],
+            textStyle: {
+                color: 'white'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            data: ['dumbbelloper', '김찬호', 'admin', '최수현', 'hsyang', 'gkfn185'] // 담당자 이록
+        },
+
+        series: [
+            {
+                name: '완료', // 이슈 상태
+                type: 'bar',
+                stack: 'total',
+                itemStyle: {
+                    // color: '#FF0000'
+                },
+                label: {
+                    show: true,
+                    // position: 'top'
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [320, 302, 301, 334, 390, 330]
+            },
+            {
+                name: 'Done',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [120, 132, 101, 134, 90, 230]
+            },
+            {
+                name: 'In Progress',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [220, 182, 191, 234, 290, 330]
+            },
+            {
+                name: 'Resolved',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [150, 212, 201, 154, 190, 330]
+            },
+            {
+                name: 'Backlog',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 832, 901, 934, 1290, 1330]
+            },
+
+            {
+                name: '진행 중',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 832, 901, 934, 1290, 1330]
+            },
+            {
+                name: '해야 할 일',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 832, 901, 934, 1290, 1330]
+            },
+            {
+                name: '열기',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 832, 901, 934, 1290, 1330]
+            },
+            {
+                name: '완료됨',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 832, 901, 934, 1290, 1330]
+            },{
+                name: 'Open',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [119, 832, 901, 934, 1290, 1330]
+            },
+        ]
+    };
+
+    option && myChart.setOption(option);
 
 }
 
