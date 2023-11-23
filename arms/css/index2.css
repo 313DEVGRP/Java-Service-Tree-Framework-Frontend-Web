@@ -1,5 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap');
+@font-face {
+    font-family: "Nanum Gothic";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot"); /* IE9 Compat Modes */
+    src: local("NanumGothic"),
+    url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot?#iefix")
+    format("embedded-opentype"),
+        /* IE6-IE8 */ url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff2")
+    format("woff2"),
+        /* Super Modern Browsers */
+    url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff") format("woff"),
+        /* Modern Browsers */
+    url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.ttf")
+    format("truetype"),
+        /* Safari, Android, iOS */
+    url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.svg#NanumGothic")
+    format("svg"); /* Legacy iOS */
+}
 * {
     box-sizing: border-box;
     user-select: none;
@@ -16,7 +33,7 @@ body {
     height: 100vh;
     color: white;
     background: black;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: "Nanum Gothic" !important;
     text-transform: uppercase;
 }
 
@@ -40,7 +57,7 @@ header {
     width: 100%;
     z-index: 3;
     height: 7em;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Nanum Gothic" !important;
     font-size: clamp(0.66rem, 2vw, 1rem);
     letter-spacing: 0.5em;
 }
@@ -162,4 +179,161 @@ h2 * {
 
 .list li.active > .btn {
     background-color: rgba(229, 96, 59, 0.5);
+}
+
+/*--------------------------------------------------------------
+# 버튼 에니메이션
+--------------------------------------------------------------*/
+.more {
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    letter-spacing: 0;
+    z-index: 1;
+    position: relative;
+    margin-top: 10px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.animated-button1 {
+    display: inline-block;
+    -webkit-transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
+    overflow: hidden;
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.animated-button1::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #8593ad;
+    opacity: 0;
+    -webkit-transition: 0.2s opacity ease-in-out;
+    transition: 0.2s opacity ease-in-out;
+}
+
+.animated-button1 span {
+    position: absolute;
+}
+
+@keyframes animateTop {
+    0% {
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+
+    100% {
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+}
+
+.animated-button1 span:nth-child(1) {
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 1px;
+    background: -webkit-gradient(
+            linear,
+            right top,
+            left top,
+            from(rgba(43, 8, 8, 0)),
+            to(#fff)
+    );
+    background: linear-gradient(to left, rgba(43, 8, 8, 0), #fff);
+    -webkit-animation: 2s animateTop linear infinite;
+    animation: 2s animateTop linear infinite;
+}
+
+@keyframes animateRight {
+    0% {
+        -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+    }
+
+    100% {
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+}
+
+.animated-button1 span:nth-child(2) {
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 1px;
+    background: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            from(rgba(43, 8, 8, 0)),
+            to(#fff)
+    );
+    background: linear-gradient(to top, rgba(43, 8, 8, 0), #fff);
+    -webkit-animation: 2s animateRight linear -1s infinite;
+    animation: 2s animateRight linear -1s infinite;
+}
+
+@keyframes animateBottom {
+    0% {
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+
+    100% {
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+}
+
+.animated-button1 span:nth-child(3) {
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 1px;
+    background: -webkit-gradient(
+            linear,
+            left top,
+            right top,
+            from(rgba(43, 8, 8, 0)),
+            to(#fff)
+    );
+    background: linear-gradient(to right, rgba(43, 8, 8, 0), #fff);
+    -webkit-animation: 2s animateBottom linear infinite;
+    animation: 2s animateBottom linear infinite;
+}
+
+@keyframes animateLeft {
+    0% {
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+
+    100% {
+        -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+    }
+}
+
+.animated-button1 span:nth-child(4) {
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 1px;
+    background: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            from(rgba(43, 8, 8, 0)),
+            to(#fff)
+    );
+    background: linear-gradient(to bottom, rgba(43, 8, 8, 0), #fff);
+    -webkit-animation: 2s animateLeft linear -1s infinite;
+    animation: 2s animateLeft linear -1s infinite;
 }
