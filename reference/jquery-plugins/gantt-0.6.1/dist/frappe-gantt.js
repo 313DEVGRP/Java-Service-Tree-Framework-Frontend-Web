@@ -990,8 +990,28 @@ var Gantt = (function () {
             return $thead;
         }
 
+        setGroupPosition(data) {
+            return data.reduce((acc, cur) => {
+                const group = data.filter((t) => t.parentId === cur.parentId);
+
+                if (group[0].id === cur.id) {
+                    cur.groupPosition.push('first');
+                }
+                if (group[group.length - 1].id === cur.id) {
+                    cur.groupPosition.push('last');
+                }
+                if (!cur.groupPosition.length) {
+                    cur.groupPosition.push('middle');
+                }
+
+                acc.push(cur);
+                return acc;
+            }, []);
+        }
+
         draw_table_body(tasks) {
-            this.tasks = tasks;
+            this.tasks = this.setGroupPosition(tasks);
+
             const $tbody = document.createElement('tbody');
             $tbody.classList.add('table-body');
 
@@ -1002,8 +1022,15 @@ var Gantt = (function () {
             return $tbody;
         }
 
+        isRowLine(id) {
+            if (id <= 2) return false;
+            const target = this.tasks.find((t) => t.id === `${id}`);
+
+            return !target.groupPosition.includes('last');
+        }
+
         make_table_row() {
-            return this.tasks.map((task) => {
+            return this.tasks.map((task, index) => {
                 const $tr = document.createElement('tr');
                 $tr.setAttribute('draggable', 'true');
                 $tr.setAttribute('data-id', task.id);
@@ -1019,15 +1046,38 @@ var Gantt = (function () {
                     const { data, render } = column;
 
                     if (data === 'name' && task.level > 1) {
-                        const $ins = document.createElement('ins');
+                        const deps = task.level - 1;
 
-                        $ins.textContent = ' ';
-                        $td.append($ins);
                         $td.setAttribute('rel', task.type);
-                        $td.className = `work-name indent-${task.level - 1}`;
+                        $td.className = `work-name indent-${deps} indent-${deps}-${task.groupPosition[0]}`;
+
+                        if (task.groupPosition[1]) {
+                            $td.classList.add(
+                                `indent-${deps}-${task.groupPosition[1]}`
+                            );
+                        }
 
                         if (task.type !== 'default') {
                             $td.classList.add(task.closed ? 'closed' : 'opened');
+                        }
+
+                        for (let i = 0; i < deps; i++) {
+                            const $ins = document.createElement('ins');
+                            $ins.textContent = '';
+
+                            this.isRowLine(task.parentId) &&
+                                $ins.classList.add('row-line');
+
+                            if (deps === 1 || i === deps - 2) {
+                                $ins.classList.add('marker');
+
+                                deps > 1 && $ins.classList.add('row-line');
+
+                                $td.append($ins);
+                                break;
+                            }
+
+                            $td.append($ins);
                         }
                     }
 

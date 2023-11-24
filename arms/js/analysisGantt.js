@@ -1552,13 +1552,13 @@ function change_input_for_req_date(prefix) {
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
-function setWBS(data, result, item) {
-	if (item.c_parentid <= 2) return `${item.c_id}`;
+function setWBS(data, result, task) {
+	if (task.c_parentid <= 2) return `${task.c_id}`;
 
 	let wbs = result;
-	!result.includes(item.c_id) && wbs.push(item.c_id);
+	!result.includes(task.c_id) && wbs.push(task.c_id);
 
-	const parent = data.find((task) => task.c_id === item.c_parentid);
+	const parent = data.find((t) => t.c_id === task.c_parentid);
 	wbs.unshift(parent.c_id);
 
 	if (parent.c_parentid === 2) return wbs.join("-");
@@ -1610,7 +1610,8 @@ function setGanttTasks(data) {
 				performance: `${cur.c_req_performance_progress || 0}%`,
 				level: cur.c_level,
 				parentId: cur.c_parentid,
-				position: cur.c_position
+				position: cur.c_position,
+				groupPosition: []
 			});
 
 			return acc;

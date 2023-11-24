@@ -93,37 +93,73 @@ $selected: rgba(229, 96, 59, 0.2) !default;
                         border-right: none;
                     }
 
-                    ins {
-                        display: inline-block;
-                        text-decoration: none;
-                        width: 18px;
-                        height: 18px;
-                        margin: 0;
-                        padding: 0;
-                    }
-
                     &.work-name {
-                        background-image: url(313devgrp.png);
-                        background-color: transparent;
-                        background-position: -90px 0;
-                        background-repeat: repeat-y;
+                        position: relative;
+                        //background-image: url(313devgrp.png);
+                        //background-color: transparent;
+                        //background-position: -90px 0;
+                        //background-repeat: repeat-y;
+
+                        &:before,
+                        .row-line:before {
+                            content: '';
+                            position: absolute;
+                            left: 8px;
+                            top: 0;
+                            bottom: 0;
+                            border-left: 1px dotted rgba(153, 153, 153, 1);
+                        }
 
                         ins {
-                            background-image: url(313devgrp.png);
-                            background-position: -36px 0;
-                            background-repeat: no-repeat;
-                            background-color: transparent;
+                            display: inline-block;
+                            text-decoration: none;
+                            height: 100%;
+                            margin: 0;
+                            padding: 0;
+
+                            &:nth-child(1):before {
+                                left: 28px;
+                            }
+
+                            &:nth-child(2):before {
+                                left: 48px;
+                            }
+
+                            &:nth-child(3):before {
+                                left: 68px;
+                            }
+
+                            &.marker {
+                                width: 18px;
+                                height: 18px;
+                                background-image: url(313devgrp.png);
+                                background-position: -36px 2px;
+                                background-repeat: no-repeat;
+                                background-color: transparent;
+                            }
+                        }
+
+                        &.indent-1-first:before {
+                            top: 50%;
+                        }
+
+                        &.indent-1-last:before,
+                        &.indent-2-last ins:before,
+                        &.indent-3-last ins:before,
+                        &.indent-4-last ins:before,
+                        &.indent-5-last ins:before {
+                            bottom: 50%;
                         }
                     }
 
                     @for $i from 1 through 5 {
                         &.indent-#{$i} {
-                            padding-left: 18px * ($i - 1);
+                            padding-left: 20px * ($i - 1);
                         }
                     }
 
                     &[rel='folder'].opened > ins {
-                        background-position: -72px 0;
+                        background-position: -72px 2px;
                     }
 
                     &[rel='folder'].closed > ins {
