@@ -678,35 +678,20 @@ function dataTableLoad(selectId, endPointUrl) {
 // 첫번째 박스
 ////////////////////
 
+function calculateDateDiff(date1, date2) {
+    return Math.floor((new Date(date1) - new Date(date2)) / (1000 * 60 * 60 * 24));
+}
+
 function progressShow(today, start_date, end_date) {
-    $('.isExceed').text("").css("text-decoration", "none");
-    $('#remaining_days').css("color", "");
-    $('#version_progress').css("color", "");
+    var totalDate = calculateDateDiff(end_date, start_date);
+    var remainingDate = calculateDateDiff(end_date, today);
+    var isExceeded = remainingDate < 0;
+    var absoluteRemainingDate = isExceeded ? Math.abs(remainingDate) : Math.abs(remainingDate) + 1;
+    var progress = ((absoluteRemainingDate / totalDate) * 100).toFixed(2);
 
-    var totalDate =  Math.floor(
-        (new Date(end_date) - new Date(start_date)) / (1000 * 60 * 60 * 24)
-    );
-    console.log(totalDate);
-
-    var end = Math.floor(
-        ((new Date(end_date) - new Date(today))/ (1000 * 60 * 60 * 24))
-    );
-
-    if (end < 0) {
-        end = (end) * -1;
-        $('#remaining_days').text(end).css("color", "#FF4D4D");
-        $('.isExceed').text(" 초과").css("color", "#FF4D4D");
-
-        $('#version_progress').text((((end) / totalDate) * 100).toFixed(2)).css("color", "#FF4D4D");
-    }
-    else {
-        $('#remaining_days').text(end+1);
-        $('#version_progress').text((((end+1) / totalDate) * 100).toFixed(2));
-    }
-
-
-
-
+    $('.isExceed').text(isExceeded ? " 초과" : "").css("color", isExceeded ? "#FF4D4D" : "none");
+    $('#remaining_days').text(absoluteRemainingDate).css("color", isExceeded ? "#FF4D4D" : "");
+    $('#version_progress').text(progress).css("color", isExceeded ? "#FF4D4D" : "");
 }
 
 function getReqLinkedIssueCountAndRate(pdservice_id, pdServiceVersionLinks, isReq) {
@@ -1209,7 +1194,7 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
         progress: true,
         statusCode: {
             200: function (data) {
-                let 검색결과 = data.검색결과['group_by_status.status_name.keyword'];
+                let 검색결과 = data["검색결과"]["group_by_status.status_name.keyword"];
                 if ((Array.isArray(data) && data.length === 0) ||
                     (typeof data === 'object' && Object.keys(data).length === 0) ||
                     (typeof data === 'string' && data === "{}")) {
