@@ -1553,15 +1553,16 @@ function change_input_for_req_date(prefix) {
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
 function setWBS(data, result, item) {
+	if (item.c_parentid <= 2) return `${item.c_id}`;
+
 	let wbs = result;
-	wbs.push(item.c_id);
-	if (item.c_parentid <= 2) return wbs.join();
+	!result.includes(item.c_id) && wbs.push(item.c_id);
 
 	const parent = data.find((task) => task.c_id === item.c_parentid);
 	wbs.unshift(parent.c_id);
 
 	if (parent.c_parentid === 2) return wbs.join("-");
-	else return setWBS(data, wbs, parent.c_id);
+	else return setWBS(data, wbs, parent);
 }
 function setGanttTasks(data) {
 	ganttTasks = data
