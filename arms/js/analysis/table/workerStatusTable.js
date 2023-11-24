@@ -60,9 +60,11 @@
                 visible: true,
                 render: function (data, type, row, meta) {
                     if (type === "display" && data["group_by_isReq"].length !== 0) {
-                        if(data["group_by_isReq"][0]["필드명"] === "true") {
+                        if (data["group_by_isReq"][0]["필드명"] === "true") {
                             return '<label style="color: #a4c6ff">' + data["group_by_isReq"][0]["개수"] + "</label>";
-                        } else {
+                        } else if (data["group_by_isReq"].length === 2 && data["group_by_isReq"][1]["필드명"] === "true") {
+                            return '<label style="color: #a4c6ff">' + data["group_by_isReq"][1]["개수"] + "</label>";
+                        }else {
                             return '<label style="color: #a4c6ff">' + "-" + "</label>";
                         }
                     }
