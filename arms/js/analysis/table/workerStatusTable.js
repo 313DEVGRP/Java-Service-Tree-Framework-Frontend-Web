@@ -108,6 +108,14 @@
                                 return_status += '<br>';
                             })
                             return '<label style="color: #a4c6ff">' + return_status + "</label>";
+                        } else if (data["group_by_isReq"].length === 2 && data["group_by_isReq"][1]["필드명"] === "true") { // 요구사항 연결이슈 둘다 있고, 2번째 컬럼일 경우
+                            let status = data["group_by_isReq"][1]["하위검색결과"]["group_by_status.status_name.keyword"];
+                            let return_status = "";
+                            status.forEach((data, index) => {
+                                return_status += data["필드명"] + " - " + data["개수"]
+                                return_status += '<br>';
+                            })
+                            return '<label style="color: #a4c6ff">' + return_status + "</label>";
                         } else {
                             return '<label style="color: #a4c6ff">' + "-" + "</label>";
                         }
