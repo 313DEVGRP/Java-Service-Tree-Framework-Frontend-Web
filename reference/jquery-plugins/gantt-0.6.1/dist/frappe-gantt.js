@@ -1531,34 +1531,33 @@ var Gantt = (function () {
         }
 
         sort_tasks(tasks) {
-            return tasks
-                .sort((a, b) => a.parentId - b.parentId || a.position - b.position)
-                .reduce((acc, cur) => {
-                    if (cur.parentId === 2) acc.push([cur]);
-                    else this.set_task_array(acc, cur);
-                    return acc;
-                }, [])
-                .flat(Infinity);
-        }
+            const sorted_tasks = [...tasks];
+            const children_idx_info = {};
 
-        set_task_array(root, cur) {
-            const arr = this.get_target_array(root, cur);
+            sorted_tasks
+                .sort((a, b) => a.level - b.level || a.position - b.position)
+                .forEach((task, taskIdx) => {
+                    if (task.parentId !== 2) {
+                        if (children_idx_info.hasOwnProperty(task.parentId)) {
+                            children_idx_info[task.parentId].push(taskIdx);
+                        } else {
+                            children_idx_info[task.parentId] = [taskIdx];
+                        }
 
-            !!arr && arr.push(cur.type === 'default' ? cur : [cur]);
-        }
-        get_target_array(root, cur) {
-            const rootArr = root.find((arr) =>
-                arr.flat(Infinity).some((t) => Number(t.id) === cur.parentId)
-            );
+                        const parentIdx = sorted_tasks.findIndex(
+                            (item) => +item.id === task.parentId
+                        );
 
-            if (rootArr.some((t) => Number(t.id) === cur.parentId)) {
-                return rootArr;
-            }
+                        sorted_tasks.splice(taskIdx, 1);
+                        sorted_tasks.splice(
+                            parentIdx + children_idx_info[task.parentId].length,
+                            0,
+                            task
+                        );
+                    }
+                }, []);
 
-            return this.get_target_array(
-                rootArr.filter((r) => Array.isArray(r)),
-                cur
-            );
+            return sorted_tasks;
         }
 
         update_origin_tasks(item) {
