@@ -3,7 +3,6 @@
 ///////////////////
 var dashboardColor;
 var selectedVersionId;
-var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
 var globalJiraIssue = {};
 var versionListData;
 // 필요시 작성
@@ -263,11 +262,6 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
     console.log("선택된 서비스 ===> " + pdservice_id);
     console.log("선택된 버전 리스트 ===> " + pdservice_version_id);
-    tot_ver_count = 0;
-    active_ver_count = 0;
-    req_count = 0;
-    subtask_count = 0;
-    resource_count = 0;
 
     //1. 좌상 게이지 차트 및 타임라인
     //2. Time ( 작업일정 ) - 버전 개수 삽입
@@ -282,7 +276,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                 let versionData = json.pdServiceVersionEntities;
 
                 let version_count = versionData.length;
-                tot_ver_count = version_count;
 
                 console.log("등록된 버전 개수 = " + version_count);
                 if(version_count !== undefined) {
@@ -335,7 +328,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
     setTimeout(function () {
         //Scope - (2) 요구사항에 연결된 이슈 총 개수
-        // $('#inactive_version_count').text( tot_ver_count - active_ver_count );
     },1000);
 
 }
@@ -686,8 +678,8 @@ function progressShow(today, start_date, end_date) {
     var totalDate = calculateDateDiff(end_date, start_date);
     var remainingDate = calculateDateDiff(end_date, today);
     var isExceeded = remainingDate < 0;
-    var absoluteRemainingDate = isExceeded ? Math.abs(remainingDate) : Math.abs(remainingDate) + 1;
-    var progress = ((absoluteRemainingDate / totalDate) * 100).toFixed(2);
+    var absoluteRemainingDate = isExceeded ? Math.abs(remainingDate) : Math.abs(remainingDate);
+    var progress = totalDate === 0 ? 0 : ((absoluteRemainingDate / totalDate) * 100).toFixed(2);
 
     $('.isExceed').text(isExceeded ? " 초과" : "").css("color", isExceeded ? "#FF4D4D" : "none");
     $('#remaining_days').text(absoluteRemainingDate).css("color", isExceeded ? "#FF4D4D" : "");
@@ -714,37 +706,34 @@ function getReqLinkedIssueCountAndRate(pdservice_id, pdServiceVersionLinks, isRe
         statusCode: {
             200: function (data) {
                 if(isReq == true) {
-                    var reqTotalCount = data["전체합계"];
-                    var reqResult = data["검색결과"]["group_by_resolution.resolution_name.keyword"];
-
-                    var completedReqCount = 0;
-                    reqResult.forEach((requirement) => {
-                        var count = requirement["개수"];
-                        completedReqCount += count;
-                    });
-
-                    $("#completed_req_count").text(completedReqCount);
-                    $("#total_req_count").text(reqTotalCount);
-                    var req_completion = ((completedReqCount/reqTotalCount) * 100).toFixed(2);
-                    $("#req_completion").text(req_completion);
+                    calculateCompletion(data, "completed_req_count", "total_req_count", "req_completion_rate");
                 } else {
-                    var linkedIssueTotalCount = data["전체합계"];
-                    var linkedIssueResult = data["검색결과"]["group_by_resolution.resolution_name.keyword"];
-
-                    var completedLinkedIssueCount = 0;
-                    linkedIssueResult.forEach((linkedIssue) => {
-                        var count = linkedIssue["개수"];
-                        completedLinkedIssueCount += count;
-                    });
-
-                    $("#completed_linked_issue_count").text(completedLinkedIssueCount);
-                    $("#total_linked_issue_count").text(linkedIssueTotalCount);
-                    var linked_issue_completion = ((completedLinkedIssueCount/linkedIssueTotalCount) * 100).toFixed(2);
-                    $("#linked_issue_completion").text(linked_issue_completion);
+                    calculateCompletion(data, "completed_linked_issue_count", "total_linked_issue_count", "linked_issue_completion_rate");
                 }
             }
         }
     });
+}
+
+function calculateCompletion(data, completedId, totalId, rateId) {
+    var totalCount = data["전체합계"];
+    var result = data["검색결과"]["group_by_resolution.resolution_name.keyword"];
+
+    var completedCount = 0;
+    result.forEach((item) => {
+        var count = item["개수"];
+        completedCount += count;
+    });
+
+    $("#" + completedId).text(completedCount + " 개");
+    $("#" + totalId).text(totalCount);
+
+    var completion = 0;
+    if (totalCount !== 0 ) {
+        completion = ((completedCount/totalCount) * 100).toFixed(0);
+    }
+
+    $("#" + rateId).text(completion + "%").css("width", completion +"%");
 }
 
 ////////////////////
@@ -780,7 +769,7 @@ function drawVersionProgress(data) {
         versionName,
         waveName;
 
-    percent = 0.55;
+    // percent = 0.55;
     barWidth = 25;
     padRad = 0;
     chartInset = 11;
@@ -869,17 +858,51 @@ function drawVersionProgress(data) {
     $("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
     $("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
 
-    startDDay = Math.floor(
-        Math.abs((new Date(data[0].current_date) - new Date(fastestStartDate)) / (1000 * 60 * 60 * 24))
-    );
-    endDDay = Math.floor(
-        Math.abs((new Date(latestEndDate) - new Date(data[0].current_date)) / (1000 * 60 * 60 * 24)) + 1
-    );
-    $("#startDDay").text("+ " + startDDay);
+    const today = new Date(data[0].current_date);
+    today.setHours(0,0,0,0); //시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
 
-    $("#endDDay").text("- " + endDDay);
+// 시작일과 종료일은 'YYYY-MM-DD' 형식의 문자열로 가정하였습니다.
+    const startDate = new Date(fastestStartDate);
+    startDate.setHours(0,0,0,0); //시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
 
-    totalDate = startDDay + endDDay;
+    const endDate = new Date(latestEndDate);
+    endDate.setHours(0,0,0,0); //시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
+
+    var  diffStart = (today - startDate) / (1000 * 60 * 60 * 24); // 오늘 날짜와 시작일 사이의 차이를 일 단위로 계산
+    console.log(diffStart);
+    var diffEnd = (today - endDate) / (1000 * 60 * 60 * 24); // 오늘 날짜와 종료일 사이의 차이를 일 단위로 계산
+    console.log(diffEnd);
+
+    $("#startDDay").css("color", "");
+    $("#endDDay").css("color", "");
+
+    if(diffStart > 0) {
+        console.log("시작일은 오늘보다 이전입니다.");
+        $("#startDDay").text("D + " + diffStart);
+    } else if(diffStart === 0) {
+        console.log("오늘은 시작일입니다.");
+        $("#startDDay").text("D - day");
+    } else {
+        console.log("시작일은 오늘보다 이후입니다.");
+        diffStart *= -1;
+        $("#startDDay").text("D - " + diffStart);
+    }
+
+    if(diffEnd > 0) {
+        console.log("종료일은 오늘보다 이전입니다.");
+        $("#endDDay").css("color", "#FF4D4D").css("font-weight", "bold").text("D + " + (diffEnd)).append(" 초과");
+    } else if(diffEnd === 0) {
+        console.log("오늘은 종료일입니다.");
+        $("#endDDay").text("D - day");
+    } else {
+        console.log("종료일은 오늘보다 이후입니다.");
+        diffEnd *= (-1);
+        $("#endDDay").text("D - " + diffEnd);
+    }
+
+    totalDate = Math.floor(
+        Math.abs((new Date(latestEndDate) - new Date(fastestStartDate)) / (1000 * 60 * 60 * 24)) + 1
+    );
 
     var mouseover = function (d) {
         var subgroupId = d.version_id;
@@ -1017,9 +1040,18 @@ function drawVersionProgress(data) {
 
     needle.drawOn(chart, 0);
 
-    needle.animateOn(chart, startDDay / totalDate);
+    var needleAngle = (diffStart+1) / totalDate;
 
-    progressShow(data[0].current_date, fastestStartDate, latestEndDate);
+    if (needleAngle > 1) {
+        needleAngle = 1;
+    }
+    else if (needleAngle < 0) {
+        needleAngle = 0;
+    }
+
+    needle.animateOn(chart, needleAngle);
+
+    progressShow(today, startDate, endDate);
 }
 
 ////////////////////

@@ -153,21 +153,24 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <div    class="control-group"
-                                        style="padding-bottom: 10px; border: 0">
-                                    <div    class="controls form-group darkBack col-md-6"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>완료된 요구사항<br/><a id="completed_req_count" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>
-                                    <div    class="controls form-group darkBack col-md-6"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>총 요구사항<br/><a id="total_req_count" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>
-                                    <div    class="controls form-group darkBack col-md-12"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>요구사항 완료율<br/><a id="req_completion" style="font-weight: bold;">-</a> %</span><br>
+                                <div class="box">
+                                    <div class="big-text" id="total_req_count"></div>
+                                    <div class="description">
+                                        <i class="fa fa-bullhorn"></i>
+                                        총 요구사항
                                     </div>
                                 </div>
+                                <ul class="server-stats">
+                                    <li>
+                                        <div class="key pull-right" id="completed_req_count"></div>
+                                        <div class="stat">
+                                            <div class="info">완료</div>
+                                            <div class="progress progress-small" style="height: 20px;">
+                                                <div class="progress-bar progress-bar-warning" id="req_completion_rate" style="width: 0%;"></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </section>
                     </div>
@@ -184,21 +187,24 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <div    class="control-group"
-                                        style="padding-bottom: 10px; border: 0">
-                                    <div    class="controls form-group darkBack col-md-6"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>완료된 연결이슈<br/><a id="completed_linked_issue_count" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>
-                                    <div    class="controls form-group darkBack col-md-6"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>총 연결이슈<br/><a id="total_linked_issue_count" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>
-                                    <div    class="controls form-group darkBack col-md-12"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>연결이슈 완료율<br/><a id="linked_issue_completion" style="font-weight: bold;">-</a> %</span><br>
+                                <div class="box">
+                                    <div class="big-text" id="total_linked_issue_count"></div>
+                                    <div class="description">
+                                        <i class="fa fa-sitemap"></i>
+                                        총 연결이슈
                                     </div>
                                 </div>
+                                <ul class="server-stats">
+                                    <li>
+                                        <div class="key pull-right" id="completed_linked_issue_count"></div>
+                                        <div class="stat">
+                                            <div class="info">완료</div>
+                                            <div class="progress progress-small" style="height: 20px;">
+                                                <div class="progress-bar progress-bar-info" id="linked_issue_completion_rate" style="width: 0%;"></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </section>
                     </div>
@@ -257,7 +263,7 @@
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 10px; margin-bottom: 15px"></div>
                 <div class="row" style="min-height: 280px">
                     <div class="col-lg-4 color-legend-widget">
-                        <section class="widget" style="/*margin-bottom: 2px; */ height: 243px;">
+                        <section class="widget" style="/*margin-bottom: 2px; */ min-height: 317.5px;">
                             <header>
                                 <h4>
                                     <span
@@ -371,7 +377,7 @@
                             </header>
                             <div
                                     class="body"
-                                    id="version-timeline-wrapper"  style="height: 150px;">
+                                    id="version-timeline-wrapper">
                                 <div id="version-timeline-bar" class="time_element" style="display: none;"></div>
                             </div>
                         </section>
@@ -950,4 +956,11 @@
         text-anchor: middle;
     }
 
+    .graph {
+        height: 150px!important;
+    }
+
+    #versionGaugeChart svg {
+        height: 185px;
+    }
 </style>
