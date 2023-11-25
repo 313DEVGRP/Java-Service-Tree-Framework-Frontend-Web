@@ -218,6 +218,7 @@ function stackedHorizontalBar(){
         .addQueryParam('크기', 1000)
         .addQueryParam('하위크기', 1000)
         .addQueryParam('컨텐츠보기여부', true)
+        .addQueryParam("isReqType", "ISSUE")
         .build();
 
 
