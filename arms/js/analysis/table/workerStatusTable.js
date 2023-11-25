@@ -168,7 +168,10 @@
                     } else {
                         var _render =
                         '<div style=\'white-space: nowrap; color: #a4c6ff\'>' +
-                            '<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="">'
+                            '<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="'
+                            + 'getDetailCharts(selectedPdServiceId,selectedVersionId,'
+                            + '\'' + row["필드명"] +'\''
+                            +')">'
                         +   '<i class="fa fa-list-alt"></i></button></div>';
                         return _render;
                     }

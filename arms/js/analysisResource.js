@@ -52,6 +52,7 @@ function execDocReady() {
             "js/analysis/api/resourceApi.js",
             "js/analysis/table/workerStatusTable.js",
             //"js/analysis/table/workerDetailInfoTable.js"
+            "js/analysis/resource/chart/horizontalBarChart.js"
         ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -558,4 +559,124 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) { //버전으로 �
             }
         }
     });
+}
+function refreshDetailChart() { // 차트8개 초기화
+    let req_targets = ["req-priority-bar","req-status-bar","req-issuetype-bar","req-resolution-bar"];
+    let sub_targets = ["subtask-priority-bar","subtask-status-bar","subtask-issuetype-bar","subtask-resolution-bar"];
+    req_targets.forEach((targetId) => { $("#"+targetId).html(""); });
+    sub_targets.forEach((targetId) => { $("#"+targetId).html(""); });
+}
+
+function getDetailCharts(pdservice_id, pdServiceVersionLinks, mailAddressList) {
+    let facDic = [
+        { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
+        { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
+        { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
+        { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
+    ];
+
+    facDic.forEach(
+        (target, index) => {
+            drawChartsPerPersion(pdservice_id,pdServiceVersionLinks,mailAddressList, target["field"], target["reqId"], target["subId"]);
+        }
+    )
+}
+
+function drawChartsPerPersion(pdservice_id, pdServiceVersionLinks, mailAddressList, targetField, targetReqId, targetSubtaskId) {
+    let _url = "/auth-user/api/arms/analysis/resource/normal-versionAndMail-filter/"+pdservice_id;
+    console.log('isReq,'+targetField);
+    $.ajax({
+        url: _url,
+        type: "GET",
+        data: { "서비스아이디" : pdservice_id,
+            "mailAddressList" : mailAddressList,
+            "메인그룹필드" : 'assignee.assignee_emailAddress.keyword',
+            "하위그룹필드들": 'isReq,'+targetField,
+            "컨텐츠보기여부" : true,
+            "크기" : 1000,
+            "하위크기": 1000,
+            "pdServiceVersionLinks" : pdServiceVersionLinks},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                console.log("=== === === getReqAndIssueDetailPerPersion 시작=== === ===")
+                console.log(data);
+                let set1 =  new Set();
+                let set2 =  new Set();
+
+                let yAxisDataArr_req =[];
+                let yAxisDataArr_subtask = [];
+
+                let seriesArr_req = [];
+                let seriesArr_subtask = [];
+                let dic_1 = {
+                    name: "",
+                    type: "bar",
+                    data: []
+                };
+                let searchDepth1 = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
+                if (searchDepth1.length !== 0) {
+                    for (let i = 0; i<searchDepth1.length; i++) { //사람별 분류 0번째(첫번재 사람) 1 (두번째 사람)
+                        let depth1Cnt = searchDepth1[i]["개수"];     // 총 개수(요구사항 + 연결이슈)
+                        let depth1filed = searchDepth1[i]["필드명"]; // emailAddress
+                        let seriesDic_req = {
+                            name: getIdFromMail(depth1filed),
+                            type: "bar",
+                            data: []
+                        }
+                        let seriesDic_subtask = {
+                            name: getIdFromMail(depth1filed),
+                            type: "bar",
+                            data: []
+                        }
+
+                        let searchDepth1_sub = searchDepth1[i]["하위검색결과"]["group_by_isReq"];
+                        if (searchDepth1_sub.length !== 0) {
+                            for (let j =0; j<searchDepth1_sub.length; j++) {
+                                if (searchDepth1_sub[j]["필드명"] === "true") { //요구사항
+                                    let reqCnt = searchDepth1_sub[j]["개수"];   // 요구사항 개수
+                                    if (reqCnt !== 0) {
+                                        console.log("group_by_"+targetField);
+                                        let priorityArr = searchDepth1_sub[j]["하위검색결과"]["group_by_"+targetField];
+                                        priorityArr.forEach((target, index) => {
+                                            set1.add(target["필드명"]);
+                                            seriesDic_req["data"].push(target["개수"]);
+                                        });
+                                    }
+                                }
+                                if (searchDepth1_sub[j]["필드명"] === "false") { //연결이슈
+                                    let subTaskCnt = searchDepth1_sub[j]["개수"]; // 연결이슈 개수
+                                    if (subTaskCnt !== 0) {
+                                        let priorityArr = searchDepth1_sub[j]["하위검색결과"]["group_by_"+targetField];
+                                        priorityArr.forEach((target, index) => {
+                                            set2.add(target["필드명"]);
+                                            seriesDic_subtask["data"].push(target["개수"]);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        seriesArr_req.push(seriesDic_req);
+                        seriesArr_subtask.push(seriesDic_subtask);
+                    }
+
+                }
+                //setToList
+                set1.forEach((e)=>{yAxisDataArr_req.push(e)});
+                set2.forEach((e)=>{yAxisDataArr_subtask.push(e)});
+                //drawChart
+                drawHorizontalBarChart(targetReqId,yAxisDataArr_req,seriesArr_req);
+                drawHorizontalBarChart(targetSubtaskId,yAxisDataArr_subtask,seriesArr_subtask);
+
+            }
+        }
+    });
+}
+
+function getIdFromMail (param) {
+    var full_str = param;
+    var indexOfAt = full_str.indexOf('@');
+    return full_str.substring(0,indexOfAt);
 }

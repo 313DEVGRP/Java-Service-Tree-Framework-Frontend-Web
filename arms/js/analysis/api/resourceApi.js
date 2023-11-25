@@ -60,7 +60,6 @@ var ResourceApi = (function () {
             url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
             type: "GET",
             data: { "서비스아이디" : pdservice_id,
-                //"메인그룹필드" : "assignee.assignee_displayName.keyword",
                 "메인그룹필드" : "assignee.assignee_emailAddress.keyword",
                 "하위그룹필드들": "isReq,status.status_name.keyword",
                 "컨텐츠보기여부" : true,
@@ -74,9 +73,7 @@ var ResourceApi = (function () {
                 200: function (data) {
                     console.log("=== === === 작업자 상태 집계 시작=== === ===")
                     console.log(data);
-                    let search_keys1 = data["검색결과"]["group_by_assignee.assignee_displayName.keyword"];
                     let search_keys2 = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-                    console.log(search_keys1);
                     console.log("=== === === 작업자 상태 집계 종료=== === ===")
 
                     //fetchedResourceData = data["검색결과"]["group_by_assignee.assignee_displayName.keyword"];

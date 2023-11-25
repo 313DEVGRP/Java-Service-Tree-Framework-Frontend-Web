@@ -168,7 +168,7 @@
                                     </div>-->
                                     <div    class="controls form-group darkBack col-md-12"
                                             style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>투입 작업자 수 : <a id="resource_count" style="font-weight: bold;">-</a> 개</span><br>
+                                        <span>투입 작업자 수 : <a id="resource_count" style="font-weight: bold;">-</a> 명</span><br>
                                     </div>
                                     <div    class="controls form-group darkBack col-md-12"
                                             style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
@@ -355,89 +355,6 @@
         </section>
     </div>
 
-    <!-- 세번째 박스   -->
-<!--    <div class="col-lg-12 col-layer">
-        <section class="widget ">
-            <header>
-                <h4>
-                <span   class="font13"
-                        style="font-weight: bold">
-                        <i  class="fa fa-sort-amount-asc"
-                            style="vertical-align: middle;font-size: 14px;"></i>
-                         담당자 별 업무 처리 현황 - YHS
-                </span>
-                </h4>
-                <div class="widget-controls">
-                    <a  data-widgster="toleft"
-                        title="change width to left"
-                        href="#">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </a>
-                    <a  data-widgster="expand"
-                        title="Expand"
-                        href="#">
-                        <i class="glyphicon glyphicon-chevron-up"></i>
-                    </a>
-                    <a  data-widgster="collapse"
-                        title="Collapse"
-                        href="#">
-                        <i class="glyphicon glyphicon-chevron-down"></i>
-                    </a>
-                    <a  data-widgster="toright"
-                        title="change width to right"
-                        href="#">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </a>
-                    <a  data-widgster="restore"
-                        title="Restore"
-                        href="#">
-                        <span class="glyphicon glyphicon-repeat"></span>
-                    </a>
-                    <a  data-widgster="fullscreen"
-                        title="Fullscreen"
-                        href="#">
-                        <i class="glyphicon glyphicon-fullscreen"
-                           style="font-size: 11px">
-                        </i>
-                    </a>
-                </div>
-            </header>
-            <div class="body">
-                <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-
-&lt;!&ndash;                <div class="clearfix"
-                     style="margin-bottom: 10px; margin-top: 10px;">
-                    <div style="float: left">
-                        <div  style="float: left;"  class="btn-group">
-                            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                &nbsp; Export &nbsp;
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                            <ul class="dropdown-menu"
-                                style="background: rgba(51, 51, 51, 0.9) !important;">
-                                <li><a id="copychecker" style="color: white;">Copy</a></li>
-                                <li><a id="csvchecker" style="color: white;">CSV</a></li>
-                                <li><a id="excelchecker" style="color: white;">Excel</a></li>
-                                <li><a id="printchecker" style="color: white;">Print</a></li>
-                                <li><a id="pdfchecker" style="color: white;">PDF</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>&ndash;&gt;
-                <div    class="box box-primary"
-                        style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
-                    <div    class="box-body">
-                        <table  class="display"
-                                style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"
-                                id="analysis_worker_status_table">
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>-->
-
     <!-- 네번째 박스   -->
     <div class="col-lg-12 col-layer">
         <section class="widget">
@@ -447,6 +364,7 @@
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
                         네번째 박스
+<!--                        <button onclick="refreshDetailChart()">refresh</button>-->
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -487,20 +405,70 @@
             <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
                 <div class="row">
-                    <div class="col-lg-4" style="padding-right: 4px !important;">
+                    <div class="col-lg-3" style="padding-right: 4px !important;">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-pie-chart"></i> 이슈 상태 현황 </h4>
+                                <h4><i class="fa fa-pie-chart"></i> 요구사항 - Priority </h4>
                             </header>
-                            <div class="body" id="donut-chart"></div>
+                            <div class="body" id="req-priority-bar"></div>
                         </section>
                     </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-bar-chart"></i> 요구사항 및 이슈 상태 누적 현황 </h4>
+                                <h4><i class="fa fa-bar-chart"></i> 요구사항 - Status </h4>
                             </header>
-                            <div class="body" id="combination-chart"></div>
+                            <div class="body" id="req-status-bar"></div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3" style="padding-right: 4px !important;">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-pie-chart"></i> 요구사항 - Type </h4>
+                            </header>
+                            <div class="body" id="req-issuetype-bar"></div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-bar-chart"></i> 요구사항 - Resolution </h4>
+                            </header>
+                            <div class="body" id="req-resolution-bar"></div>
+                        </section>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 4px !important;">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-pie-chart"></i> 연결이슈 - Priority </h4>
+                            </header>
+                            <div class="body" id="subtask-priority-bar"></div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-bar-chart"></i> 연결이슈 - Status </h4>
+                            </header>
+                            <div class="body" id="subtask-status-bar"></div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3" style="padding-right: 4px !important;">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-pie-chart"></i> 연결이슈 - Type </h4>
+                            </header>
+                            <div class="body" id="subtask-issuetype-bar"></div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3">
+                        <section class="widget large">
+                            <header>
+                                <h4><i class="fa fa-bar-chart"></i> 연결이슈 - Resolution </h4>
+                            </header>
+                            <div class="body" id="subtask-resolution-bar"></div>
                         </section>
                     </div>
                 </div>
