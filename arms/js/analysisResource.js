@@ -109,7 +109,7 @@ function stackedHorizontalBar(){
     }
 
     // 0 or ""
-    const defaultValue = "";
+    const defaultValue = 0;
 
     function getStatusCounts(data, statusTypes) {
         let statusCounts = {};
