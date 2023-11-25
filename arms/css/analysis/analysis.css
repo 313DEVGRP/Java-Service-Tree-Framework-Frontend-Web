@@ -189,7 +189,7 @@ button {
 }
 
 
-#chart-product-manpower svg {
+#chart-product-manpower {
     position: relative;
     height: 780px;
 }
