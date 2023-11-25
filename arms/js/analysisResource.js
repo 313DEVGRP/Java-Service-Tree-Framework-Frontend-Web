@@ -8,6 +8,9 @@ var selectedVersionId; // 선택된 버전 아이디
 var dashboardColor;
 var req_count, linkedIssue_subtask_count, resource_count;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
+var resourceSet = new Set(); // 담당자 set
+var chartInstance = []; // 차트인스턴스를 담을 배열;
+
 function execDocReady() {
 
     var pluginGroups = [
@@ -451,36 +454,6 @@ function getReqLinkedIssueData(pdservice_id, pdServiceVersionLinks, isReq) {
     });
 }
 
-function getWorkStatus(pdservice_id, pdServiceVersionLinks) {
-    var _url = "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id;
-    $.ajax({
-        url: _url,
-        type: "GET",
-        data: { "서비스아이디" : pdservice_id,
-                "메인그룹필드" : "assignee.assignee_displayName.keyword",
-                "하위그룹필드들": "isReq,status.status_name.keyword",
-                "컨텐츠보기여부" : true,
-                "크기" : 1000,
-                "하위크기": 1000,
-                "pdServiceVersionLinks" : pdServiceVersionLinks},
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                console.log("=== === === 작업자 상태 집계 시작=== === ===")
-                console.log(data);
-                let search_keys1 = data["검색결과"]["group_by_assignee.assignee_displayName.keyword"];
-                console.log(search_keys1);
-                console.log(data['검색결과']['group_by_assignee.assignee_displayName.keyword']['필드명'])
-                console.log("=== === === 작업자 상태 집계 종료=== === ===")
-
-
-            }
-        }
-    });
-}
-
 var drawResource = function (pdservice_id, pdServiceVersionLinks) {
     var deferred = $.Deferred();
     var pdId = pdservice_id; console.log("pdId=" + pdId);
@@ -561,30 +534,46 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) { //버전으로 �
     });
 }
 function refreshDetailChart() { // 차트8개 초기화
-    let req_targets = ["req-priority-bar","req-status-bar","req-issuetype-bar","req-resolution-bar"];
-    let sub_targets = ["subtask-priority-bar","subtask-status-bar","subtask-issuetype-bar","subtask-resolution-bar"];
-    req_targets.forEach((targetId) => { $("#"+targetId).html(""); });
-    sub_targets.forEach((targetId) => { $("#"+targetId).html(""); });
+    chartInstance.forEach((chart) => chart.dispose());
+    chartInstance =[];
+    resourceSet.clear();
 }
 
+
 function getDetailCharts(pdservice_id, pdServiceVersionLinks, mailAddressList) {
-    let facDic = [
+    let mailList = [];
+    let mailStr ="";
+    let searchMap = [
         { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
         { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
         { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
         { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
     ];
+    resourceSet.add(mailAddressList);
 
-    facDic.forEach(
+    resourceSet.forEach((e)=>{mailList.push(e)});
+    if(mailList.length == 1) {
+        mailStr = mailList[0];
+    } else {
+        for (let cnt = 0; cnt < mailList.length; cnt++) {
+            if(cnt !== mailList.length-1) {
+                mailStr += mailList +",";
+            } else {
+                mailStr += mailList;
+            }
+
+        }
+    }
+    searchMap.forEach(
         (target, index) => {
-            drawChartsPerPersion(pdservice_id,pdServiceVersionLinks,mailAddressList, target["field"], target["reqId"], target["subId"]);
+            drawChartsPerPerson(pdservice_id,pdServiceVersionLinks,mailStr, target["field"], target["reqId"], target["subId"]);
         }
     )
 }
 
-function drawChartsPerPersion(pdservice_id, pdServiceVersionLinks, mailAddressList, targetField, targetReqId, targetSubtaskId) {
+
+function drawChartsPerPerson(pdservice_id, pdServiceVersionLinks, mailAddressList, targetField, targetReqId, targetSubtaskId) {
     let _url = "/auth-user/api/arms/analysis/resource/normal-versionAndMail-filter/"+pdservice_id;
-    console.log('isReq,'+targetField);
     $.ajax({
         url: _url,
         type: "GET",
@@ -601,74 +590,108 @@ function drawChartsPerPersion(pdservice_id, pdServiceVersionLinks, mailAddressLi
         progress: true,
         statusCode: {
             200: function (data) {
-                console.log("=== === === getReqAndIssueDetailPerPersion 시작=== === ===")
-                console.log(data);
-                let set1 =  new Set();
-                let set2 =  new Set();
+                let set_req =  new Set();
+                let set_subtask =  new Set();
 
+                //y축 좌표
                 let yAxisDataArr_req =[];
                 let yAxisDataArr_subtask = [];
-
+                //담당자 데이터 - 담당자별 name,type,data -> map 이 들어있는 배열
                 let seriesArr_req = [];
                 let seriesArr_subtask = [];
-                let dic_1 = {
-                    name: "",
-                    type: "bar",
-                    data: []
-                };
+
+                let totalMap_req = []; //담당자별 이슈항목의 필드(k)-개수(v) map 이 들어있는 배열
+                let totalMap_subtask = [];
+
                 let searchDepth1 = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
                 if (searchDepth1.length !== 0) {
                     for (let i = 0; i<searchDepth1.length; i++) { //사람별 분류 0번째(첫번재 사람) 1 (두번째 사람)
                         let depth1Cnt = searchDepth1[i]["개수"];     // 총 개수(요구사항 + 연결이슈)
                         let depth1filed = searchDepth1[i]["필드명"]; // emailAddress
-                        let seriesDic_req = {
+                        let seriesMap_req = {
                             name: getIdFromMail(depth1filed),
                             type: "bar",
                             data: []
                         }
-                        let seriesDic_subtask = {
+                        let seriesMap_subtask = {
                             name: getIdFromMail(depth1filed),
                             type: "bar",
                             data: []
                         }
+                        let map_req = new Map();
+                        let map_subtask = new Map();
 
                         let searchDepth1_sub = searchDepth1[i]["하위검색결과"]["group_by_isReq"];
                         if (searchDepth1_sub.length !== 0) {
                             for (let j =0; j<searchDepth1_sub.length; j++) {
                                 if (searchDepth1_sub[j]["필드명"] === "true") { //요구사항
                                     let reqCnt = searchDepth1_sub[j]["개수"];   // 요구사항 개수
+
                                     if (reqCnt !== 0) {
-                                        console.log("group_by_"+targetField);
-                                        let priorityArr = searchDepth1_sub[j]["하위검색결과"]["group_by_"+targetField];
-                                        priorityArr.forEach((target, index) => {
-                                            set1.add(target["필드명"]);
-                                            seriesDic_req["data"].push(target["개수"]);
+                                        let searchDepth2 = searchDepth1_sub[j]["하위검색결과"]["group_by_"+targetField];
+                                        searchDepth2.forEach((target, index) => {
+                                            set_req.add(target["필드명"]);
+                                            map_req.set(target["필드명"],target["개수"]);
                                         });
                                     }
                                 }
+
                                 if (searchDepth1_sub[j]["필드명"] === "false") { //연결이슈
                                     let subTaskCnt = searchDepth1_sub[j]["개수"]; // 연결이슈 개수
                                     if (subTaskCnt !== 0) {
                                         let priorityArr = searchDepth1_sub[j]["하위검색결과"]["group_by_"+targetField];
                                         priorityArr.forEach((target, index) => {
-                                            set2.add(target["필드명"]);
-                                            seriesDic_subtask["data"].push(target["개수"]);
+                                            set_subtask.add(target["필드명"]);
+                                            map_subtask.set(target["필드명"],target["개수"]);
                                         });
                                     }
                                 }
                             }
                         }
-                        seriesArr_req.push(seriesDic_req);
-                        seriesArr_subtask.push(seriesDic_subtask);
-                    }
+                        seriesArr_req.push(seriesMap_req);
+                        seriesArr_subtask.push(seriesMap_subtask);
+                        totalMap_req.push(map_req);
+                        totalMap_subtask.push(map_subtask);
+                    }//per Person
 
                 }
-                //setToList
-                set1.forEach((e)=>{yAxisDataArr_req.push(e)});
-                set2.forEach((e)=>{yAxisDataArr_subtask.push(e)});
+                //setToList - 담당자별 이슈항목 필드의 중복제거 배열
+                set_req.forEach((e)=>{yAxisDataArr_req.push(e)});
+                set_subtask.forEach((e)=>{yAxisDataArr_subtask.push(e)});
+
+                //totalMap_req;
+                //seriesArr_req;    // 담당자별 name,type,data -> map 이 들어있는 배열
+
+                // 차트에 넣을 담당자별 data 를 넣어주기 위해 사용.
+                for (var idx1 = 0; idx1 < totalMap_req.length; idx1++) {
+                    let refinedDataFromYAxis_req = new Array(yAxisDataArr_req.length); // yAxis의 수로 배열만듦.
+                    let refinedDataFromYAxis_subtask = new Array(yAxisDataArr_subtask.length); // yAxis의 수로 배열만듦.
+
+                    let personMap_req = totalMap_req[idx1];
+                    let personMap_subtask = totalMap_subtask[idx1];
+
+                    for(let idx2 = 0; idx2<yAxisDataArr_req.length; idx2++ ) {
+                        if(personMap_req.has(yAxisDataArr_req[idx2])) { //0번째
+                            refinedDataFromYAxis_req[idx2] = personMap_req.get(yAxisDataArr_req[idx2]);
+                        } else {
+                            refinedDataFromYAxis_req[idx2] = 0;
+                        }
+                    }
+                    for(let idx3=0; idx3<yAxisDataArr_subtask.length; idx3++) {
+                        if(personMap_subtask.has(yAxisDataArr_subtask[idx3])) { //0번째
+                            refinedDataFromYAxis_subtask[idx3] = personMap_subtask.get(yAxisDataArr_subtask[idx3]);
+                        } else {
+                            refinedDataFromYAxis_subtask[idx3] = 0;
+                        }
+                    }
+                    //정제된 데이터를 해당 담당자의 data 항목에 삽입
+                    seriesArr_req[idx1]["data"]= refinedDataFromYAxis_req;
+                    seriesArr_subtask[idx1]["data"] = refinedDataFromYAxis_subtask;
+                }
+
                 //drawChart
-                drawHorizontalBarChart(targetReqId,yAxisDataArr_req,seriesArr_req);
-                drawHorizontalBarChart(targetSubtaskId,yAxisDataArr_subtask,seriesArr_subtask);
+                chartInstance.push(drawHorizontalBarChart(targetReqId,    yAxisDataArr_req,    seriesArr_req));
+                chartInstance.push(drawHorizontalBarChart(targetSubtaskId,yAxisDataArr_subtask,seriesArr_subtask));
 
             }
         }

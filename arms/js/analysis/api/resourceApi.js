@@ -21,7 +21,6 @@ var ResourceApi = (function () {
             url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
             type: "GET",
             data: { "서비스아이디" : pdservice_id,
-                //"메인그룹필드" : "assignee.assignee_displayName.keyword",
                 "메인그룹필드" : "assignee.assignee_emailAddress.keyword",
                 "하위그룹필드들": "isReq,status.status_name.keyword",
                 "컨텐츠보기여부" : true,

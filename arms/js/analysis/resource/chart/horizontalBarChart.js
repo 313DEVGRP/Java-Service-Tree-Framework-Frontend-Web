@@ -68,7 +68,13 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
                 type: 'shadow'
             }
         },
-        legend: {},
+        legend: {
+            textStyle: {
+                color: 'white',
+                fontWeight: "bold",
+                fontSize: "13"
+            }
+        },
         grid: {
             left: '3%',
             right: '4%',
@@ -77,16 +83,30 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
         },
         xAxis: {
             type: 'value',
-            boundaryGap: [0, 0.03]
+            boundaryGap: [0, 0.03],
+            axisLabel: {
+                textStyle: {
+                    color: 'white',
+                    fontWeight: "bold",
+                    fontSize: "12"
+                }
+            }
         },
         yAxis: {
             type: 'category',
-            data: yAxisDataArr
+            data: yAxisDataArr,
+            axisLabel: {
+                textStyle: {
+                    color: 'white',
+                    fontWeight: "bold",
+                    fontSize: "13"
+                }
+            }
         },
         series: seriesArr
     };
 
-    myChart.setOption(option);
+    option && myChart.setOption(option,true);
 
     return myChart;
 }
