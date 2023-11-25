@@ -91,9 +91,6 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            // 담당자 별 이슈 상태 차트(mock)
-            // https://echarts.apache.org/en/option.html#tooltip.formatter
-            echartExample();
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -101,181 +98,142 @@ function execDocReady() {
 
 }
 
-function echartExample(){
-    var myChart = echarts.init(document.getElementById('apache-echarts-stacked-horizontal-bar'));
-    var option;
-    option = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow' // 'line' or 'shadow'. 기본값은 'shadow'
-            },
-            formatter: function (params) {
-                const tooltip = params.reduce((acc, param) => {
-                    const { marker, seriesName, value } = param;
-                    acc += `${marker}${seriesName}: ${value}<br/>`;
-                    return acc;
-                }, '');
 
-                const totalCount = params.reduce((acc, param) => acc + param.value, 0);
-                const totalTooltip = `Total: ${totalCount}<br/>`;
 
-                return totalTooltip + tooltip;
+
+function stackedHorizontalBar(){
+    if (!selectedPdServiceId || !selectedVersionId) {
+        alert('제품(서비스)와 버전을 선택해주세요.');
+        document.getElementById('apache-echarts-stacked-horizontal-bar').innerHTML = '';
+        return;
+    }
+
+    // 0 or ""
+    const defaultValue = "";
+
+    function getStatusCounts(data, statusTypes) {
+        let statusCounts = {};
+
+        data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"].forEach(item => {
+            let itemStatusCounts = {};
+            if (item["하위검색결과"]["group_by_status.status_name.keyword"]) {
+                item["하위검색결과"]["group_by_status.status_name.keyword"].forEach(status => {
+                    itemStatusCounts[status["필드명"]] = status["개수"];
+                });
             }
-        },
 
-        legend: {
-            data: ['완료', 'Done', 'In Progress', 'Resolved', 'Backlog', '진행 중', '해야 할 일', '열기', '완료됨', 'Open'],
-            textStyle: {
-                color: 'white'
+            statusTypes.forEach(statusType => {
+                if (!itemStatusCounts[statusType]) {
+                    itemStatusCounts[statusType] = defaultValue;
+                }
+            });
+
+            statusCounts[item["필드명"]] = itemStatusCounts;
+        });
+
+        return statusCounts;
+    }
+    function stackedBarChartInit(data) {
+        const sortedData = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"].sort((a, b) => a.개수 - b.개수);
+
+        const jiraIssueStatuses = sortedData.reduce((acc, item) => {
+            if (item["하위검색결과"]["group_by_status.status_name.keyword"]) {
+                item["하위검색결과"]["group_by_status.status_name.keyword"].forEach(status => {
+                    acc.add(status["필드명"]);
+                });
             }
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'value'
-        },
-        yAxis: {
-            type: 'category',
-            data: ['dumbbelloper', '김찬호', 'admin', '최수현', 'hsyang', 'gkfn185'] // 담당자 이록
-        },
+            return acc;
+        }, new Set());
 
-        series: [
-            {
-                name: '완료', // 이슈 상태
-                type: 'bar',
-                stack: 'total',
-                itemStyle: {
-                    // color: '#FF0000'
-                },
-                label: {
-                    show: true,
-                    // position: 'top'
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [320, 302, 301, 334, 390, 330]
-            },
-            {
-                name: 'Done',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [120, 132, 101, 134, 90, 230]
-            },
-            {
-                name: 'In Progress',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [220, 182, 191, 234, 290, 330]
-            },
-            {
-                name: 'Resolved',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [150, 212, 201, 154, 190, 330]
-            },
-            {
-                name: 'Backlog',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [820, 832, 901, 934, 1290, 1330]
-            },
+        const statusTypes = Array.from(jiraIssueStatuses);
 
-            {
-                name: '진행 중',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [820, 832, 901, 934, 1290, 1330]
-            },
-            {
-                name: '해야 할 일',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [820, 832, 901, 934, 1290, 1330]
-            },
-            {
-                name: '열기',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [820, 832, 901, 934, 1290, 1330]
-            },
-            {
-                name: '완료됨',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [820, 832, 901, 934, 1290, 1330]
-            },{
-                name: 'Open',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [119, 832, 901, 934, 1290, 1330]
-            },
-        ]
-    };
+        const statusCounts = getStatusCounts(data, statusTypes);
 
-    option && myChart.setOption(option);
+        const myChart = echarts.init(document.getElementById('apache-echarts-stacked-horizontal-bar'));
 
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow' // 'line' or 'shadow'. 기본값은 'shadow'
+                },
+                formatter: function (params) {
+                    const tooltip = params.reduce((acc, param) => {
+                        const { marker, seriesName, value } = param;
+                        acc += `${marker}${seriesName}: ${value}<br/>`;
+                        return acc;
+                    }, '');
+
+                    const totalCount = params.reduce((acc, param) => acc + param.value, 0);
+                    const totalTooltip = `Total: ${totalCount}<br/>`;
+
+                    return totalTooltip + tooltip;
+                }
+            },
+            legend: {
+                data: statusTypes,
+                textStyle: {
+                    color: 'white'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value'
+            },
+            yAxis: {
+                type: 'category',
+                data: sortedData.map(function(item) {return item["필드명"];})
+            },
+            series: statusTypes.map(statusType => {
+                const data = Object.values(statusCounts).map(statusCount => statusCount[statusType] || defaultValue);
+                return {
+                    name: statusType,
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: data
+                };
+            })
+        };
+
+        option && myChart.setOption(option);
+    }
+
+    const url = new UrlBuilder()
+        .setBaseUrl(`/auth-user/api/arms/dashboard/aggregation/flat`)
+        .addQueryParam('pdServiceLink', selectedPdServiceId)
+        .addQueryParam('pdServiceVersionLinks', selectedVersionId)
+        .addQueryParam('메인그룹필드', "assignee.assignee_emailAddress.keyword")
+        .addQueryParam('하위그룹필드들', "status.status_name.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (response) {
+                stackedBarChartInit(response);
+            }
+        }
+    });
 }
-
 
 ///////////////////////
 //제품 서비스 셀렉트 박스
@@ -359,6 +317,7 @@ function makeVersionMultiSelectBox() {
 
             drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
+            stackedHorizontalBar();
         }
     });
 }
@@ -390,7 +349,7 @@ function bind_VersionData_By_PdService() {
 
                 drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
                 drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
-
+                stackedHorizontalBar();
                 if (data.length > 0) {
                     console.log("display 재설정.");
                 }
