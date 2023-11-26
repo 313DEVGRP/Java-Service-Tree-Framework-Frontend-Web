@@ -54,8 +54,8 @@ function execDocReady() {
             "js/common/table.js",
             "js/analysis/api/resourceApi.js",
             "js/analysis/table/workerStatusTable.js",
-            //"js/analysis/table/workerDetailInfoTable.js"
-            "js/analysis/resource/chart/horizontalBarChart.js"
+            "js/analysis/resource/chart/horizontalBarChart.js",
+            "js/analysis/resource/chart/simplePie.js"
         ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -187,7 +187,14 @@ function stackedHorizontalBar(){
             },
             yAxis: {
                 type: 'category',
-                data: sortedData.map(function(item) {return item["필드명"];})
+                data: sortedData.map(function(item) {return getIdFromMail(item["필드명"]);}),
+                axisLabel: {
+                    textStyle: {
+                        color: 'white',
+                        fontWeight: "bold",
+                        fontSize: "13"
+                    }
+                }
             },
             series: statusTypes.map(statusType => {
                 const data = Object.values(statusCounts).map(statusCount => statusCount[statusType] || defaultValue);
@@ -196,7 +203,7 @@ function stackedHorizontalBar(){
                     type: 'bar',
                     stack: 'total',
                     label: {
-                        show: true
+                        show: true,
                     },
                     emphasis: {
                         focus: 'series'
@@ -407,18 +414,29 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                 //담당자 미지정 요구사항,연결이슈
                 let no_assigned_req_count = 0;
                 let no_assigned_linkedIssue_subtask_count =0;
+
+                //요구사항,연결이슈 파이차트용 데이터배열
+                let reqDataMapForPie = [];
+                let subtaskDataMapForPie = [];
+
                 let isReqGrpArr = data["검색결과"]["group_by_isReq"];
                 isReqGrpArr.forEach((elementArr,index) => {
                     if(elementArr["필드명"] == "true") {
                         all_req_count = elementArr["개수"];
                         let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-                        tempArrReq.forEach(e => { assignedReqSum+=e["개수"]});
+                        tempArrReq.forEach(e => {
+                            assignedReqSum+=e["개수"];
+                            reqDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                        });
                         no_assigned_req_count = all_req_count - assignedReqSum;
                     }
                     if(elementArr["필드명"] == "false") {
                         all_linkedIssue_subtask_count = elementArr["개수"];
                         let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-                        tempArrReq.forEach(e => { assignedSubtaskSum+=e["개수"]});
+                        tempArrReq.forEach(e => {
+                            assignedSubtaskSum+=e["개수"];
+                            subtaskDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                        });
                         no_assigned_linkedIssue_subtask_count = all_linkedIssue_subtask_count - assignedSubtaskSum;
                     }
                 })
@@ -432,8 +450,12 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                 $('#no_assigned_req_count').text(no_assigned_req_count);
                 $('#no_assigned_linkedIssue_subtask_count').text(no_assigned_linkedIssue_subtask_count);
 
-                // 작업자수 및 평균계산 - 수정예정
+                // 작업자수 및 평균계산
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
+                
+                // 요구사항 및 연결이슈 파이차트
+                drawSimplePieChart("req_pie","요구사항",reqDataMapForPie)
+                drawSimplePieChart("linkedIssue_subtask_pie","연결이슈 및 하위작업",subtaskDataMapForPie)
             },
             error: function (e) {
                 jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
