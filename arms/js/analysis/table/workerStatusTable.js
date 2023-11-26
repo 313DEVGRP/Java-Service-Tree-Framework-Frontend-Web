@@ -10,7 +10,7 @@
         this.columns = [
             {
                 name: "필드명",
-                title: "담당자 이름",
+                title: "작업자 이름",
                 data: "필드명",
                 className: "dt-body-center",
                 defaultContent: "-",
@@ -24,7 +24,7 @@
             },
             {
                 name: "필드명",
-                title: "담당자 메일",
+                title: "작업자 메일",
                 data: "필드명",
                 className: "dt-body-center",
                 defaultContent: "-",
