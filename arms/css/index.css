@@ -34,7 +34,6 @@ body {
     color: white;
     background: black;
     font-family: "Nanum Gothic" !important;
-    text-transform: uppercase;
 }
 
 h2 {
@@ -56,7 +55,7 @@ header {
     padding: 0 5%;
     width: 100%;
     z-index: 3;
-    height: 7em;
+    height: 10em;
     font-family: "Nanum Gothic" !important;
     font-size: clamp(0.66rem, 2vw, 1rem);
     letter-spacing: 0.5em;
@@ -169,7 +168,7 @@ h2 * {
     flex-direction: column;
     position: fixed;
     top: 50%;
-    right: 30px;
+    left: 5px;
     background-color: rgba(51, 51, 51, 0.5);
     border-radius: 35px;
     padding: 0.6rem;
