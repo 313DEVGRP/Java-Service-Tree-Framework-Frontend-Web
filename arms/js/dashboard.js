@@ -1295,7 +1295,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 		.build();
 
 	$.ajax({
-		url: "/auth-user/api/arms/dashboard/requirements-jira-issue-statuses",
+		url: url,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",

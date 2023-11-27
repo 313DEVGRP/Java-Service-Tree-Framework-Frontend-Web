@@ -180,3 +180,24 @@ button {
     stroke: white;
     stroke-width: 0.5px;
 }
+
+@media (max-width: 768px) {
+    #chart-product-manpower {
+        /*height: 60vh;*/
+        max-height: 500px;
+    }
+}
+
+
+#chart-product-manpower {
+    position: relative;
+    height: 780px;
+}
+
+
+#chart-product-manpower svg {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
