@@ -3098,6 +3098,12 @@ table tbody tr td {
 
 .board-thumb.back-str {
 	background-image: url("../img/index/str.png");
+	width: 400px;
+}
+
+.board-thumb.back-about {
+	background-image: url("../img/index/about.png");
+	width: 600px;
 }
 
 .board-thumb.img-1 {
