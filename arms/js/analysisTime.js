@@ -4,6 +4,7 @@
 var dashboardColor;
 var selectedVersionId;
 var globalJiraIssue = {};
+var pdServiceData;
 var versionListData;
 // 필요시 작성
 
@@ -214,9 +215,9 @@ function makeVersionMultiSelectBox() {
 
             selectedVersionId = versionTag.join(',');
 
-            statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
             donutChart($("#selected_pdService").val(), selectedVersionId);
             combinationChart($("#selected_pdService").val(), selectedVersionId);
+            statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
 
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
@@ -248,10 +249,15 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
             200: function (data) {
 
                 // 버전 선택 시 데이터 파싱
-                networkChart(data);
+
                 calendarHeatMap(data);
                 statusTimeline(data);
                 sevenTimeline(data);
+
+                setTimeout(function () {
+                    networkChart(pdServiceVersions, data);
+                },1000);
+
                 globalJiraIssue = data;
 
             }
@@ -273,6 +279,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
         progress: true,
         statusCode: {
             200: function (json) {
+                pdServiceData = json;
                 let versionData = json.pdServiceVersionEntities;
 
                 let version_count = versionData.length;
@@ -319,16 +326,15 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                         $("#version-timeline-bar").show();
                         Timeline.init($("#version-timeline-bar"), versionTimeline);
 
-                        radarChart(pdservice_id, versionData);
+
+                        // radarChart(pdservice_id, versionData);
                     }
                 }
             }
         }
     });
 
-    setTimeout(function () {
-        //Scope - (2) 요구사항에 연결된 이슈 총 개수
-    },1000);
+
 
 }
 
@@ -349,14 +355,23 @@ function bind_VersionData_By_PdService() {
                     return obj;
                 }, {});
 
+                var pdServiceVersionIds = [];
                 for (var k in data.response) {
                     var obj = data.response[k];
-                    var $opt = $("<option />", {
-                        value: obj.c_id,
-                        text: obj.c_title
-                    });
-                    $("#multiversion").append($opt);
+                    pdServiceVersionIds.push(obj.c_id);
+                    var newOption = new Option(obj.c_title, obj.c_id, true, false);
+                    $(".multiple-select").append(newOption);
                 }
+
+                selectedVersionId = pdServiceVersionIds.join(',');
+
+                statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
+                donutChart($("#selected_pdService").val(), selectedVersionId);
+                combinationChart($("#selected_pdService").val(), selectedVersionId);
+
+                getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
+                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -1057,6 +1072,7 @@ function drawVersionProgress(data) {
 ////////////////////
 // 세번째 박스
 ////////////////////
+/*
 function radarChart(pdServiceId, pdServiceVersionList) {
 
     var maxCount;
@@ -1181,6 +1197,7 @@ function radarChart(pdServiceId, pdServiceVersionList) {
         chart.resize();
     });
 }
+*/
 
 ////////////////////
 // 네번째 박스
@@ -1435,7 +1452,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 // 다섯번째 박스
 ////////////////////
 
-function networkChart(jiraIssueData) {
+function networkChart(pdServiceVersions, jiraIssueData) {
     d3.select(".network-graph").selectAll("*").remove();
 
     var NETWORK_DATA = {
@@ -1443,15 +1460,47 @@ function networkChart(jiraIssueData) {
         "links": []
     };
 
-    NETWORK_DATA.nodes = jiraIssueData;
+    pdServiceData.id = pdServiceData.c_id;
+    pdServiceData.type = "pdService";
+    NETWORK_DATA.nodes.push(pdServiceData);
+
+    var targetIds = pdServiceVersions.split(',').map(Number);
+    var versionList = pdServiceData.pdServiceVersionEntities;
+
+    versionList.forEach((item)=> {
+        if (targetIds.includes(item.c_id)) {
+            item.id = item.c_id;
+            item.type = "version";
+            NETWORK_DATA.nodes.push(item);
+
+            console.log(typeof item.id);
+            var link = {
+                source: item.id,
+                target: pdServiceData.c_id
+            };
+            NETWORK_DATA.links.push(link);
+        }
+    });
+
     var index = {};
 
     jiraIssueData.forEach(function(item) {
+        NETWORK_DATA.nodes.push(item);
         index[item.key] = item;
     });
 
     jiraIssueData.forEach(function(item) {
+        if (item.isReq === true) {
+            var versionLink = {
+                source: item.id,
+                target: item.pdServiceVersion
+            };
+
+            NETWORK_DATA.links.push(versionLink);
+        }
+
         var parentItem = index[item.parentReqKey];
+
         if (parentItem) {
             var link = {
                 source: item.id,
@@ -1460,6 +1509,8 @@ function networkChart(jiraIssueData) {
             NETWORK_DATA.links.push(link);
         }
     });
+
+    console.log(NETWORK_DATA);
 
     if (NETWORK_DATA.nodes.length === 0) { // 데이터가 없는 경우를 체크
         d3.select("#NETWORK_GRAPH").remove();
@@ -1479,26 +1530,45 @@ function networkChart(jiraIssueData) {
                 return Object.create(d);
             });
             var fillCircle = function(g){
-                if (g === true) {
-                    return "#ff3c00";
-                } else if (g === false) {
-                    return "#386cff";
-                } else {
+                if (g.type === "pdService") {
                     return "#c67cff";
+                } else if (g.type === "version") {
+                    return "rgb(255,127,14)";
+                } else if (g.isReq === true) {
+                    return "rgb(214,39,40)";
+                } else if (g.isReq === false) {
+                    return "rgb(31,119,180)";
+                } else {
+                    return "rgb(44,160,44)";
                 }
             };
-            var reqName = function(g) {
+
+            var typeBinding = function(g) {
                 var name = '';
 
-                if (g.isReq === true) {
+                if (g.type === "pdService") {
+                    name = '제품(서비스)';
+                } else if (g.type === "version") {
+                    name = '버전';
+                } else if (g.isReq === true) {
                     name = '요구사항';
                 } else if (g.isReq === false) {
                     name = '연결된 이슈';
-                } else {
-                    name = null;
                 }
 
                 return "[" + name + "]";
+            };
+
+            var nameBinding = function(g) {
+                var name = '';
+
+                if (g.type === "pdService") {
+                    return g.c_title;
+                } else if (g.type === "version") {
+                    return g.c_title;
+                } else {
+                    return g.key;
+                }
             };
 
             var width = 500;
@@ -1517,12 +1587,12 @@ function networkChart(jiraIssueData) {
 
             var initScale;
 
-            if (NETWORK_DATA.nodes.length < 50) {
-                initScale = 0.7;
-            } else if (NETWORK_DATA.nodes.length < 200) {
+            if (NETWORK_DATA.nodes.length > 200) {
                 initScale = 0.2;
+            } else if (NETWORK_DATA.nodes.length > 90) {
+                initScale = 0.4;
             } else {
-                initScale = 0.1;
+                initScale = 1;
             }
 
             var initialTransform = d3.zoomIdentity
@@ -1577,7 +1647,7 @@ function networkChart(jiraIssueData) {
                     d3.select(this)
                         .append("circle")
                         .attr("r", 10)
-                        .attr("fill", fillCircle(d.isReq));
+                        .attr("fill", fillCircle(d));
                     /*d3.select(this)
                         .append("text").text(d.id)
                         .attr("dy",6)
@@ -1589,11 +1659,11 @@ function networkChart(jiraIssueData) {
                 .attr("x", 11)
                 .attr("dy", ".31em")
                 .style("font-size", "9px")
-                .style("fill", (d) => fillCircle(d.isReq))
+                .style("fill", (d) => fillCircle(d))
                 .style("font-weight", "5")
                 .attr("stroke", "white")
                 .attr("stroke-width", "0.3")
-                .text((d) => reqName(d));
+                .text((d) => typeBinding(d));
 
             node.append("text")
                 .attr("x", 12)
@@ -1601,7 +1671,7 @@ function networkChart(jiraIssueData) {
                 .style("font-family", "Arial")
                 .style("font-size", "10px")
                 .style("font-weight", "10")
-                .text(function(d) { return d.key; });
+                .text((d) => nameBinding(d));
 
             simulation.on("tick", function(){
                 link.attr("x1", function(d){ return d.source.x; })
