@@ -3131,7 +3131,7 @@ table tbody tr td {
 
 .board-text {
 	font-weight: 300;
-	color: #666666;
+	color: rgba(255,255,255,.7);
 	text-align: center;
 	word-break: keep-all;
 }
