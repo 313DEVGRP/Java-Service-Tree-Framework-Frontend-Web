@@ -1077,13 +1077,13 @@
 
         var str = window.location.href;
         console.table(str);
-        if (str.indexOf("313.co.kr:9999") > 0) {
+        if (str.indexOf("313.co.kr:9999") > 0 || str.indexOf("a-rms.net:9999") > 0) {
             $(".animated-button1").prop('href', "/arms/template.html?page=pdService")
-        } else if (str.indexOf("a-rms.net:9999") > 0) {
-            $(".animated-button1").prop('href', "/arms/template.html?page=pdService")
-        } else {
+        } else if (str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0) {
             alert("개발에 참여해 주셔서 감사합니다.\n기필코 그대의 노고를 잊지않고, 최대한의 보상을 약속하겠습니다.\n이동민 드림.");
             $(".animated-button1").prop('href', "/arms/template.html?page=pdService")
+        } else {
+            $(".animated-button1").prop('href', "/php/gnuboard5/index.php")
         }
     };
     //]]>
