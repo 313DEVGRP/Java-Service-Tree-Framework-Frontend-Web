@@ -3082,16 +3082,16 @@ table tbody tr td {
 }
 
 
-.board-thumb.back-img-1 {
-	background-image: url("../img/index/backimg1.png");
+.board-thumb.back-wemade {
+	background-image: url("../img/index/wemade.png");
 }
 
-.board-thumb.back-img-2 {
-	background-image: url("../img/index/backimg2.png");
+.board-thumb.back-nc {
+	background-image: url("../img/index/nc.png");
 }
 
-.board-thumb.back-img-3 {
-	background-image: url("../img/index/backimg3.png");
+.board-thumb.back-kakao {
+	background-image: url("../img/index/kakao.png");
 }
 
 .board-thumb.img-1 {
