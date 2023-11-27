@@ -54,8 +54,8 @@ function execDocReady() {
             "js/common/table.js",
             "js/analysis/api/resourceApi.js",
             "js/analysis/table/workerStatusTable.js",
-            //"js/analysis/table/workerDetailInfoTable.js"
-            "js/analysis/resource/chart/horizontalBarChart.js"
+            "js/analysis/resource/chart/horizontalBarChart.js",
+            "js/analysis/resource/chart/simplePie.js"
         ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -187,7 +187,14 @@ function stackedHorizontalBar(){
             },
             yAxis: {
                 type: 'category',
-                data: sortedData.map(function(item) {return item["필드명"];})
+                data: sortedData.map(function(item) {return getIdFromMail(item["필드명"]);}),
+                axisLabel: {
+                    textStyle: {
+                        color: 'white',
+                        fontWeight: "bold",
+                        fontSize: "13"
+                    }
+                }
             },
             series: statusTypes.map(statusType => {
                 const data = Object.values(statusCounts).map(statusCount => statusCount[statusType] || defaultValue);
@@ -196,7 +203,7 @@ function stackedHorizontalBar(){
                     type: 'bar',
                     stack: 'total',
                     label: {
-                        show: true
+                        show: true,
                     },
                     emphasis: {
                         focus: 'series'
@@ -275,6 +282,7 @@ function makePdServiceSelectBox() {
     $("#selected_pdService").on("select2:select", function (e) {
         selectedPdServiceId = $("#selected_pdService").val();
         initTable();
+        refreshDetailChart();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
         //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
@@ -310,9 +318,10 @@ function makeVersionMultiSelectBox() {
             var versionTag = $(".multiple-select").val();
             selectedVersionId = versionTag.join(',');
 
+            refreshDetailChart();
+
             // 요구사항 및 연결이슈 통계
-            getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, true);
-            getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, false);
+            getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
             // 작업자별 상태
             drawResource($("#selected_pdService").val(), selectedVersionId);
 
@@ -340,11 +349,10 @@ function bind_VersionData_By_PdService() {
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
                 }
+                refreshDetailChart();
                 selectedVersionId = pdServiceVersionIds.join(',');
-                // 요구사항 및 연결이슈 통계 - 리펙토링예정
-                getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, true);
-                getReqLinkedIssueData($("#selected_pdService").val(), selectedVersionId, false);
-
+                // 요구사항 및 연결이슈 통계
+                getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
                 // 작업자별 상태
                 drawResource($("#selected_pdService").val(), selectedVersionId);
 
@@ -381,36 +389,78 @@ function dataTableDrawCallback(tableInfo) {
         .responsive.recalc();*/
 }
 
-function getReqLinkedIssueData(pdservice_id, pdServiceVersionLinks, isReq) {
-    console.log(pdServiceVersionLinks);
-    var _url = "/auth-user/api/arms/analysis/resource/normal-version/"+pdservice_id;
+function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
     $.ajax({
-        url: _url,
+        url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
         type: "GET",
         data: { "서비스아이디" : pdservice_id,
-                "메인그룹필드" : "pdServiceVersion",
-                "isReq" : isReq,
-                "컨텐츠보기여부" : true,
-                "크기" : 1000,
-                "pdServiceVersionLinks" : pdServiceVersionLinks},
+            "pdServiceVersionLinks" : pdServiceVersionLinks,
+            "메인그룹필드" : "isReq",
+            "하위그룹필드들": "assignee.assignee_emailAddress.keyword",
+            "컨텐츠보기여부" : true,
+            "크기" : 1000},
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
         statusCode: {
             200: function (data) {
-                if(isReq == true) {
-                    console.log("요구사항");
-                    req_count = data["전체합계"];
-                    $("#req_count").text(data["전체합계"]);
-                } else {
-                    console.log("연결이슈");
-                    linkedIssue_subtask_count = data["전체합계"];
-                    $("#linkedIssue_subtask_count").text(data["전체합계"]);
-                }
-                // 작업자수 및 평균계산 - 수정예정
+                console.log(data);
+                //전체 요구사항, 연결이슈
+                let all_req_count = 0;
+                let all_linkedIssue_subtask_count = 0;
+                //담당자존재 요구사항, 연결이슈
+                let assignedReqSum = 0;
+                let assignedSubtaskSum = 0;
+                //담당자 미지정 요구사항,연결이슈
+                let no_assigned_req_count = 0;
+                let no_assigned_linkedIssue_subtask_count =0;
+
+                //요구사항,연결이슈 파이차트용 데이터배열
+                let reqDataMapForPie = [];
+                let subtaskDataMapForPie = [];
+
+                let isReqGrpArr = data["검색결과"]["group_by_isReq"];
+                isReqGrpArr.forEach((elementArr,index) => {
+                    if(elementArr["필드명"] == "true") {
+                        all_req_count = elementArr["개수"];
+                        let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
+                        tempArrReq.forEach(e => {
+                            assignedReqSum+=e["개수"];
+                            reqDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                        });
+                        no_assigned_req_count = all_req_count - assignedReqSum;
+                    }
+                    if(elementArr["필드명"] == "false") {
+                        all_linkedIssue_subtask_count = elementArr["개수"];
+                        let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
+                        tempArrReq.forEach(e => {
+                            assignedSubtaskSum+=e["개수"];
+                            subtaskDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                        });
+                        no_assigned_linkedIssue_subtask_count = all_linkedIssue_subtask_count - assignedSubtaskSum;
+                    }
+                })
+                //요구사항 및 연결이슈 수
+                $('#total_req_count').text(all_req_count);
+                $('#total_linkedIssue_subtask_count').text(all_linkedIssue_subtask_count);
+                req_count = assignedReqSum;
+                $('#req_count').text(assignedReqSum);
+                linkedIssue_subtask_count = assignedSubtaskSum;
+                $('#linkedIssue_subtask_count').text(assignedSubtaskSum);
+                $('#no_assigned_req_count').text(no_assigned_req_count);
+                $('#no_assigned_linkedIssue_subtask_count').text(no_assigned_linkedIssue_subtask_count);
+
+                // 작업자수 및 평균계산
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
+                
+                // 요구사항 및 연결이슈 파이차트
+                drawSimplePieChart("req_pie","요구사항",reqDataMapForPie)
+                drawSimplePieChart("linkedIssue_subtask_pie","연결이슈 및 하위작업",subtaskDataMapForPie)
+            },
+            error: function (e) {
+                jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
             }
-        },
+        }
     });
 }
 
@@ -463,32 +513,43 @@ var initTable = function () {
     //var workerDetailInfoTable = new $.fn.WorkerDetailInfoTable("#analysis_worker_detail_table"); //작업예정
 };
 
-function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) { //버전으로 추가해야함.
+function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
     $.ajax({
-        url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
-        type: "get",
-        data: {"pdServiceId" : pdservice_id},
+        url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
+        type: "GET",
+        data: { "서비스아이디" : pdservice_id,
+                "pdServiceVersionLinks" : pdServiceVersionLinks,
+                "메인그룹필드" : "assignee.assignee_emailAddress.keyword",
+                "컨텐츠보기여부" : true,
+                "크기" : 1000},
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
         statusCode: {
             200: function (data) {
-                //담당자 미지정 이슈 수
-                $('#no_assigned_issue_count').text(data["담당자 미지정"]);
-                if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
-                    //제품(서비스)에 투입된 총 인원수
-                    resource_count = +Object.keys(data).length-1;
-                    $('#resource_count').text(resource_count);
-                    if (resource_count == 0) {
-                        $('#avg_req_count').text("-");
-                        $('#avg_linkedIssue_count').text("-");
-                    } else {
-                        $('#avg_req_count').text((req_count/resource_count).toFixed(1));
-                        $('#avg_linkedIssue_count').text((linkedIssue_subtask_count/resource_count).toFixed(1));
-                    }
+                console.log(data);
+                let assigneesArr = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
+                let mailAddressList = [];
+                //제품(서비스)에 투입된 총 인원수
+                resource_count = assigneesArr.length;
+                if (data["전체합계"] === 0) { //담당자(작업자) 없음.
+                    $('#resource_count').text("-");
+                    $('#avg_req_count').text("-");
+                    $('#avg_linkedIssue_count').text("-");
+                    refreshDetailChart(); //상세 바차트 초기화
                 } else {
-                    $('#resource_count').text("n/a");
+                    assigneesArr.forEach((element,idx) =>{
+                        mailAddressList.push(element["필드명"]);
+                    });
+                    $('#resource_count').text(resource_count);
+                    $('#avg_req_count').text((req_count/resource_count).toFixed(1));
+                    $('#avg_linkedIssue_count').text((linkedIssue_subtask_count/resource_count).toFixed(1));
                 }
+
+                drawDetailChartForAll(pdservice_id, pdServiceVersionLinks,mailAddressList);
+            },
+            error: function (e) {
+                jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
             }
         }
     });
@@ -499,6 +560,35 @@ function refreshDetailChart() { // 차트8개 초기화
     resourceSet.clear();
 }
 
+//공통코드-extract필요
+function drawDetailChartForAll(pdservice_id, pdServiceVersionLinks, mailAddressList) {
+    let mailList = [];
+    mailList = mailAddressList;
+    let mailStr ="";
+    let searchMap = [
+        { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
+        { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
+        { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
+        { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
+    ];
+
+    if(mailList.length == 1) {
+        mailStr = mailList[0];
+    } else {
+        for (let cnt = 0; cnt < mailList.length; cnt++) {
+            if(cnt !== mailList.length-1) {
+                mailStr += mailList +",";
+            } else {
+                mailStr += mailList;
+            }
+        }
+    }
+    searchMap.forEach(
+        (target, index) => {
+            drawChartsPerPerson(pdservice_id,pdServiceVersionLinks,mailStr, target["field"], target["reqId"], target["subId"]);
+        }
+    )
+}
 
 function getDetailCharts(pdservice_id, pdServiceVersionLinks, mailAddressList) {
     let mailList = [];

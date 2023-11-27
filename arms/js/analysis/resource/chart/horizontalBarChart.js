@@ -69,9 +69,10 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
             }
         },
         legend: {
+            left: 'left',
             textStyle: {
                 color: 'white',
-                fontWeight: "bold",
+                fontWeight: "",
                 fontSize: "13"
             }
         },
@@ -87,7 +88,7 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
             axisLabel: {
                 textStyle: {
                     color: 'white',
-                    fontWeight: "bold",
+                    fontWeight: "",
                     fontSize: "12"
                 }
             }
