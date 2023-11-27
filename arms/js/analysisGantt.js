@@ -1552,18 +1552,6 @@ function change_input_for_req_date(prefix) {
 ///////////////////////////////////////////////////////////////////////////////
 // Gantt Chart
 ///////////////////////////////////////////////////////////////////////////////
-function setWBS(data, result, task) {
-	if (task.c_parentid <= 2) return `${task.c_id}`;
-
-	let wbs = result;
-	!result.includes(task.c_id) && wbs.push(task.c_id);
-
-	const parent = data.find((t) => t.c_id === task.c_parentid);
-	wbs.unshift(parent.c_id);
-
-	if (parent.c_parentid === 2) return wbs.join("-");
-	else return setWBS(data, wbs, parent);
-}
 function setGanttTasks(data) {
 	ganttTasks = data
 		.sort((a, b) => a.c_parentid - b.c_parentid)
@@ -1588,7 +1576,7 @@ function setGanttTasks(data) {
 
 			acc.push({
 				id: `${cur.c_id}`,
-				wbs: setWBS(data, [], cur),
+				wbs: Array.isArray(dependencies) ? `${dependencies.reverse().join("-")}-${cur.c_id}` : `${cur.c_id}`,
 				assignee: cur.c_req_owner,
 				reporter: cur.c_req_writer,
 				name: cur.c_title,
