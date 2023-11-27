@@ -83,5 +83,11 @@ Observer.create({
 
 gotoSection(0, 1);
 
+$(function () {
+	// 사이드 메뉴 색상 설정
+	$('.widget').widgster();
+});
+
+
 // original: https://codepen.io/BrianCross/pen/PoWapLP
 // horizontal version: https://codepen.io/GreenSock/pen/xxWdeMK
