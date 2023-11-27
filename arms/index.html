@@ -779,7 +779,7 @@
                                     <i  class="fa fa-sort-amount-asc"
                                         style="vertical-align: middle;font-size: 14px;"></i>
                                     문제
-                                    <small  style="font-size:12px; font-weight: normal; color: rgba(255,255,255,.7);">정의</small>
+                                    <small  style="font-size:12px; font-weight: normal; color: rgba(255,255,255,.7);">해결</small>
                                 </span>
                             <img    src="./img/top-right.png"
                                     width="150px">
@@ -788,8 +788,8 @@
                         <div    class="widgetheader"
                                 style="visibility: visible !important;">
                             <h3 class="page-title font14">
-                                <strong>그보다 더 큰 위기는 뭔지 아십니까?</strong>
-                                <small>위기인 걸 알면서도 정의할려고 하지 않는것이 더 큰 위기입니다.</small>
+                                <strong>마지막. 가장 큰 위기는 뭔지 아십니까?</strong>
+                                <small>위기인 걸 알면서도 아무 것도 하지 않는 것이 바로 가장 큰 위기입니다.</small>
                                 <ol class="breadcrumb pull-right hidden-xs font12">
                                     <li>
                                         <a href="#">
@@ -1076,10 +1076,11 @@
         console.log("The URL of this page is: " + window.location.href);
 
         var str = window.location.href;
-        if (str.indexOf("313.co.kr") > 0) {
-            $(".animated-button1").prop('href', "http://www.313.co.kr:9999/arms/template.html?page=pdService")
-        } else if (str.indexOf("a-rms.net") > 0) {
-            $(".animated-button1").prop('href', "http://www.a-rms.net:9999/arms/template.html?page=pdService")
+        console.table(str);
+        if (str.indexOf("313.co.kr:9999") > 0) {
+            $(".animated-button1").prop('href', "/arms/template.html?page=pdService")
+        } else if (str.indexOf("a-rms.net:9999") > 0) {
+            $(".animated-button1").prop('href', "/arms/template.html?page=pdService")
         } else {
             alert("개발에 참여해 주셔서 감사합니다.\n기필코 그대의 노고를 잊지않고, 최대한의 보상을 약속하겠습니다.\n이동민 드림.");
             $(".animated-button1").prop('href', "/arms/template.html?page=pdService")
