@@ -3097,13 +3097,38 @@ table tbody tr td {
 }
 
 .board-thumb.back-str {
-	background-image: url("../img/index/str.png");
-	width: 400px;
+	background-image: url("../img/index/vs.png");
+	height: 274px;
 }
 
 .board-thumb.back-about {
 	background-image: url("../img/index/about.png");
-	width: 600px;
+	width: 385px;
+}
+
+.board-thumb.back-buy-1 {
+	background-image: url("../img/index/design/CUT_01.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-2 {
+	background-image: url("../img/index/design/CUT_02.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-3 {
+	background-image: url("../img/index/design/CUT_03.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-4 {
+	background-image: url("../img/index/design/CUT_04.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-5 {
+	background-image: url("../img/index/design/CUT_05.png");
+	height: 274px;
 }
 
 .board-thumb.img-1 {
