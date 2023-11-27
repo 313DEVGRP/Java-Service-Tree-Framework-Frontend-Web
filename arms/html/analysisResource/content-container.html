@@ -178,10 +178,6 @@
                             <div class="body">
                                 <div    class="control-group"
                                         style="padding-bottom: 10px; border: 0">
-<!--                                    <div    class="controls form-group darkBack col-md-12"
-                                            style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>총 작업자 수 : <a id="resource_total" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>-->
                                     <div    class="controls form-group darkBack col-md-12"
                                             style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
                                         <span>투입 작업자 수 : <a id="resource_count" style="font-weight: bold;">-</a> 명</span><br>
@@ -263,6 +259,7 @@
                                     </span>
                                 </h4>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="chart-product-manpower">
                             </div>
                         </section>
@@ -280,6 +277,7 @@
                                         </span>
                                     </h4>
                                 </header>
+                                <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                                 <div class="body" id="chart-manpower-requirement" style="height: 286px">
                                 </div>
                             </section>
@@ -338,26 +336,6 @@
                                             복수 선택 시, 선택한 작업자를 함께 확인하실 수 있습니다.
                                         </p>
                                     </blockquote>
-                                    <!--                <div class="clearfix"
-                                                         style="margin-bottom: 10px; margin-top: 10px;">
-                                                        <div style="float: left">
-                                                            <div  style="float: left;"  class="btn-group">
-                                                                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                                    &nbsp; Export &nbsp;
-                                                                    <i class="fa fa-caret-down"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu"
-                                                                    style="background: rgba(51, 51, 51, 0.9) !important;">
-                                                                    <li><a id="copychecker" style="color: white;">Copy</a></li>
-                                                                    <li><a id="csvchecker" style="color: white;">CSV</a></li>
-                                                                    <li><a id="excelchecker" style="color: white;">Excel</a></li>
-                                                                    <li><a id="printchecker" style="color: white;">Print</a></li>
-                                                                    <li><a id="pdfchecker" style="color: white;">PDF</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>-->
                                     <div    class="box box-primary"
                                             style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
                                         <div    class="box-body">
@@ -435,8 +413,9 @@
                     <div class="col-lg-3" style="padding-right: 4px !important;">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 요구사항 - Priority </h5>
+                                <h5><i class="fa fa-bar-chart"></i> 요구사항 - Priority </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="req-priority-bar"></div>
                         </section>
                     </div>
@@ -445,14 +424,16 @@
                             <header>
                                 <h5><i class="fa fa-bar-chart"></i> 요구사항 - Status </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="req-status-bar"></div>
                         </section>
                     </div>
                     <div class="col-lg-3" style="padding-right: 4px !important;">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 요구사항 - Type </h5>
+                                <h5><i class="fa fa-bar-chart"></i> 요구사항 - Type </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="req-issuetype-bar"></div>
                         </section>
                     </div>
@@ -461,6 +442,7 @@
                             <header>
                                 <h5><i class="fa fa-bar-chart"></i> 요구사항 - Resolution </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="req-resolution-bar"></div>
                         </section>
                     </div>
@@ -469,32 +451,36 @@
                     <div class="col-lg-3" style="padding-right: 4px !important;">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 연결이슈 - Priority </h5>
+                                <h5><i class="fa fa-bar-chart-o"></i> 연결이슈 - Priority </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="subtask-priority-bar"></div>
                         </section>
                     </div>
                     <div class="col-lg-3">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-bar-chart"></i> 연결이슈 - Status </h5>
+                                <h5><i class="fa fa-bar-chart-o"></i> 연결이슈 - Status </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="subtask-status-bar"></div>
                         </section>
                     </div>
                     <div class="col-lg-3" style="padding-right: 4px !important;">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 연결이슈 - Type </h5>
+                                <h5><i class="fa fa-bar-chart-o"></i> 연결이슈 - Type </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="subtask-issuetype-bar"></div>
                         </section>
                     </div>
                     <div class="col-lg-3">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-bar-chart"></i> 연결이슈 - Resolution </h5>
+                                <h5><i class="fa fa-bar-chart-o"></i> 연결이슈 - Resolution </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="subtask-resolution-bar"></div>
                         </section>
                     </div>
@@ -511,7 +497,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        다섯번째 박스
+                        작업자별 요구사항 및 연결이슈 비율 종합
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -557,6 +543,7 @@
                             <header>
                                 <h5><i class="fa fa-pie-chart"></i> 작업자별 요구사항 비율 </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="req_pie"></div>
                         </section>
                     </div>
@@ -565,14 +552,16 @@
                             <header>
                                 <h5><i class="fa fa-pie-chart"></i> 작업자별 연결이슈 비율 </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="linkedIssue_subtask_pie"></div>
                         </section>
                     </div>
                     <div class="col-lg-6" style="padding-right: 4px !important;">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 담당자 별 이슈 상태 현황 </h5>
+                                <h5><i class="fa fa-bar-chart"></i> 담당자 별 이슈 상태 현황 </h5>
                             </header>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="body" id="apache-echarts-stacked-horizontal-bar"></div>
                         </section>
                     </div>

@@ -9,7 +9,13 @@ var dashboardColor;
 var req_count, linkedIssue_subtask_count, resource_count;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var resourceSet = new Set(); // 담당자 set
-var chartInstance = []; // 차트인스턴스를 담을 배열;
+var searchMap = [
+    { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
+    { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
+    { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
+    { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
+];
+var table;
 
 function execDocReady() {
 
@@ -82,7 +88,6 @@ function execDocReady() {
             // 사이드 메뉴 색상 설정
             $('.widget').widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_resource");
-
             dashboardColor = dashboardPalette.dashboardPalette01;
 
             //제품(서비스) 셀렉트 박스 이니시에이터
@@ -90,7 +95,9 @@ function execDocReady() {
 
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
-
+            
+            //데이터테이블초기화
+            table = initTable();
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -168,9 +175,11 @@ function stackedHorizontalBar(){
                 }
             },
             legend: {
+                left: 'left',
                 data: statusTypes,
                 textStyle: {
-                    color: 'white'
+                    color: 'white',
+                    fontSize: 11
                 }
             },
             grid: {
@@ -180,11 +189,33 @@ function stackedHorizontalBar(){
                 containLabel: true
             },
             xAxis: {
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    textStyle: {
+                        color: 'white',
+                        fontWeight: "",
+                        fontSize: "11"
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed',
+                        color: 'white',
+                        width: 0.5,
+                        opacity: 0.5
+                    }
+                }
             },
             yAxis: {
                 type: 'category',
-                data: sortedData.map(function(item) {return item["필드명"];})
+                data: sortedData.map(function(item) {return getIdFromMail(item["필드명"]);}),
+                axisLabel: {
+                    textStyle: {
+                        color: 'white',
+                        fontWeight: "",
+                        fontSize: "11"
+                    }
+                }
             },
             series: statusTypes.map(statusType => {
                 const data = Object.values(statusCounts).map(statusCount => statusCount[statusType] || defaultValue);
@@ -270,7 +301,6 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function (e) {
         selectedPdServiceId = $("#selected_pdService").val();
-        initTable();
         refreshDetailChart();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
@@ -443,8 +473,8 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
 
                 // 요구사항 및 연결이슈 파이차트
-                drawSimplePieChart("req_pie","요구사항",reqDataMapForPie)
-                drawSimplePieChart("linkedIssue_subtask_pie","연결이슈 및 하위작업",subtaskDataMapForPie)
+                drawSimplePieChart("req_pie","요구사항",reqDataMapForPie);
+                drawSimplePieChart("linkedIssue_subtask_pie","연결이슈 및 하위작업",subtaskDataMapForPie);
             },
             error: function (e) {
                 jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
@@ -453,53 +483,47 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
     });
 }
 
+var initTable = function () {
+    var workerStatusTable = new $.fn.WorkerStatusTable("#analysis_worker_status_table");
+
+    workerStatusTable.dataTableBuild({
+        rowGroup: [0],
+        isAddCheckbox: true
+    });
+
+    workerStatusTable.onDataTableClick = function (selectedData) {
+        disposeDetailChartInstance();
+        resourceSet.add(selectedData["필드명"]);
+        getDetailCharts(selectedPdServiceId, selectedVersionId);
+    };
+
+    workerStatusTable.onDeselect = function (selectedData) {
+        disposeDetailChartInstance();
+        resourceSet.delete(selectedData["필드명"]);
+        getDetailCharts(selectedPdServiceId, selectedVersionId);
+    };
+
+    return {
+        redrawTable: workerStatusTable.reDraw.bind(workerStatusTable)
+    };
+};
+
 var drawResource = function (pdservice_id, pdServiceVersionLinks) {
     var deferred = $.Deferred();
-    var pdId = pdservice_id; console.log("pdId=" + pdId);
-    var verLinks = pdServiceVersionLinks; console.log("verLinks=" + verLinks);
+    var pdId = pdservice_id;
+    var verLinks = pdServiceVersionLinks;
 
     ResourceApi.fetchResourceData(pdId, verLinks)
         .done( function() {
             var fetchedReousrceData = ResourceApi.getFetchedResourceData();
-            var workerStatusTable = new $.fn.WorkerStatusTable("#analysis_worker_status_table");
 
-            workerStatusTable.dataTableBuild({
-                rowGroup: [0],
-                data: fetchedReousrceData
-            });
+            table.redrawTable(fetchedReousrceData);
 
             deferred.resolve();
         }
     );
 
     return deferred.promise();
-}
-    
-//개발중
-var drawResourceDetail = function () {
-    var deferred = $.Deferred();
-    var pdId = pdservice_id; console.log("pdId=" + pdId);
-    var verLinks = pdServiceVersionLinks; console.log("verLinks=" + verLinks);
-
-    ResourceApi.fetchResourceData(pdId, verLinks)
-        .done( function() {
-                var fetchedReousrceData = ResourceApi.fetchResourceDetailInfo();
-                var workerDetailInfoTable = new $.fn.WorkerDetailInfoTable("#analysis_worker_detail_table");
-
-                workerStatusTable.dataTableBuild({
-                    rowGroup: [0],
-                    data: fetchedReousrceData
-                });
-
-                deferred.resolve();
-            }
-        );
-
-    return deferred.promise();
-}
-var initTable = function () {
-    var workerStatusTable = new $.fn.WorkerStatusTable("#analysis_worker_status_table");
-    //var workerDetailInfoTable = new $.fn.WorkerDetailInfoTable("#analysis_worker_detail_table"); //작업예정
 };
 
 function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
@@ -516,7 +540,6 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
         progress: true,
         statusCode: {
             200: function (data) {
-
                 let assigneesArr = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
                 let mailAddressList = [];
                 //제품(서비스)에 투입된 총 인원수
@@ -534,7 +557,7 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
                     $('#avg_req_count').text((req_count/resource_count).toFixed(1));
                     $('#avg_linkedIssue_count').text((linkedIssue_subtask_count/resource_count).toFixed(1));
                 }
-
+                //모든작업자 - 상세차트
                 drawDetailChartForAll(pdservice_id, pdServiceVersionLinks,mailAddressList);
             },
             error: function (e) {
@@ -544,24 +567,24 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
     });
 }
 function refreshDetailChart() { // 차트8개 초기화
-    chartInstance.forEach((chart) => chart.dispose());
-    chartInstance =[];
+    disposeDetailChartInstance();
     resourceSet.clear();
+}
+function disposeDetailChartInstance() {
+    searchMap.forEach((target) => {
+        let reqChartInstance = echarts.getInstanceByDom(document.getElementById(target["reqId"]));
+        let subtaskChartInstance = echarts.getInstanceByDom(document.getElementById(target["subId"]));
+        if(reqChartInstance) { reqChartInstance.dispose(); };
+        if(subtaskChartInstance) { subtaskChartInstance.dispose(); };
+    });
 }
 
 //공통코드-extract필요
 function drawDetailChartForAll(pdservice_id, pdServiceVersionLinks, mailAddressList) {
-    let mailList = [];
-    mailList = mailAddressList;
+    let mailList = mailAddressList;
     let mailStr ="";
-    let searchMap = [
-        { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
-        { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
-        { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
-        { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
-    ];
 
-    if(mailList.length == 1) {
+    if (mailAddressList.length === 1) {
         mailStr = mailList[0];
     } else {
         for (let cnt = 0; cnt < mailList.length; cnt++) {
@@ -579,19 +602,12 @@ function drawDetailChartForAll(pdservice_id, pdServiceVersionLinks, mailAddressL
     )
 }
 
-function getDetailCharts(pdservice_id, pdServiceVersionLinks, mailAddressList) {
+function getDetailCharts(pdservice_id, pdServiceVersionLinks) {
     let mailList = [];
     let mailStr ="";
-    let searchMap = [
-        { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
-        { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
-        { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
-        { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
-    ];
-    resourceSet.add(mailAddressList);
 
     resourceSet.forEach((e)=>{mailList.push(e)});
-    if(mailList.length == 1) {
+    if (mailList.length === 1) {
         mailStr = mailList[0];
     } else {
         for (let cnt = 0; cnt < mailList.length; cnt++) {
@@ -729,9 +745,8 @@ function drawChartsPerPerson(pdservice_id, pdServiceVersionLinks, mailAddressLis
                 }
 
                 //drawChart
-                chartInstance.push(drawHorizontalBarChart(targetReqId,    yAxisDataArr_req,    seriesArr_req));
-                chartInstance.push(drawHorizontalBarChart(targetSubtaskId,yAxisDataArr_subtask,seriesArr_subtask));
-
+                drawHorizontalBarChart(targetReqId,    yAxisDataArr_req,    seriesArr_req);
+                drawHorizontalBarChart(targetSubtaskId,yAxisDataArr_subtask,seriesArr_subtask);
             }
         }
     });
