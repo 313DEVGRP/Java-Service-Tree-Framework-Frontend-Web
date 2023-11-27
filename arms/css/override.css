@@ -3074,6 +3074,7 @@ table tbody tr td {
 	background-position: center;
 	background-size: cover;
 	border-radius: 10px;
+	background-size: contain;
 }
 
 .board-thumb::after {
@@ -3093,6 +3094,10 @@ table tbody tr td {
 
 .board-thumb.back-kakao {
 	background-image: url("../img/index/kakao.png");
+}
+
+.board-thumb.back-str {
+	background-image: url("../img/index/str.png");
 }
 
 .board-thumb.img-1 {
