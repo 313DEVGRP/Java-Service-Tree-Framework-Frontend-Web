@@ -1,7 +1,7 @@
 
 function exampleHorizontalBarChart() {
     var chartDom = document.getElementById('main');
-    var myChart = echarts.init(chartDom);
+    var myChartEx = echarts.init(chartDom);
     var option;
 
     option = {
@@ -50,7 +50,7 @@ function exampleHorizontalBarChart() {
         ]
     };
 
-    option && myChart.setOption(option);
+    option && myChartEx.setOption(option);
 }
 
 function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
@@ -91,11 +91,25 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
                     fontWeight: "",
                     fontSize: "11"
                 }
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: 'white',
+                    width: 0.5,
+                    opacity: 0.5
+                }
             }
         },
         yAxis: {
             type: 'category',
             data: yAxisDataArr,
+            axisLine: {
+                lineStyle: {
+                    width: 1,
+                    color: 'gray'
+                }
+            },
             axisLabel: {
                 textStyle: {
                     color: 'white',
