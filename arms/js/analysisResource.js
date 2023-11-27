@@ -98,9 +98,6 @@ function execDocReady() {
 
 }
 
-
-
-
 function stackedHorizontalBar(){
     if (!selectedPdServiceId || !selectedVersionId) {
         alert('제품(서비스)와 버전을 선택해주세요.');
@@ -173,8 +170,7 @@ function stackedHorizontalBar(){
             legend: {
                 data: statusTypes,
                 textStyle: {
-                    color: 'white',
-                    fontSize: "11"
+                    color: 'white'
                 }
             },
             grid: {
@@ -188,14 +184,7 @@ function stackedHorizontalBar(){
             },
             yAxis: {
                 type: 'category',
-                data: sortedData.map(function(item) {return getIdFromMail(item["필드명"]);}),
-                axisLabel: {
-                    textStyle: {
-                        color: 'white',
-                        fontWeight: "",
-                        fontSize: "11"
-                    }
-                }
+                data: sortedData.map(function(item) {return item["필드명"];})
             },
             series: statusTypes.map(statusType => {
                 const data = Object.values(statusCounts).map(statusCount => statusCount[statusType] || defaultValue);
@@ -204,7 +193,7 @@ function stackedHorizontalBar(){
                     type: 'bar',
                     stack: 'total',
                     label: {
-                        show: true,
+                        show: true
                     },
                     emphasis: {
                         focus: 'series'
@@ -243,7 +232,6 @@ function stackedHorizontalBar(){
         }
     });
 }
-
 ///////////////////////
 //제품 서비스 셀렉트 박스
 //////////////////////
@@ -453,7 +441,7 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
 
                 // 작업자수 및 평균계산
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
-                
+
                 // 요구사항 및 연결이슈 파이차트
                 drawSimplePieChart("req_pie","요구사항",reqDataMapForPie)
                 drawSimplePieChart("linkedIssue_subtask_pie","연결이슈 및 하위작업",subtaskDataMapForPie)
