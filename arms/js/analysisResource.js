@@ -6,7 +6,7 @@ var reqStatusDataTable;
 var dataTableRef;
 var selectedVersionId; // 선택된 버전 아이디
 var dashboardColor;
-var req_count, linkedIssue_subtask_count, resource_count;
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var resourceSet = new Set(); // 담당자 set
 var searchMap = [
@@ -201,7 +201,7 @@ function stackedHorizontalBar(){
                     lineStyle: {
                         type: 'dashed',
                         color: 'white',
-                        width: 0.5,
+                        width: 0.2,
                         opacity: 0.5
                     }
                 }
@@ -557,6 +557,7 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
                     $('#avg_req_count').text((req_count/resource_count).toFixed(1));
                     $('#avg_linkedIssue_count').text((linkedIssue_subtask_count/resource_count).toFixed(1));
                 }
+                getReqInActionCount(pdservice_id,pdServiceVersionLinks);
                 //모든작업자 - 상세차트
                 drawDetailChartForAll(pdservice_id, pdServiceVersionLinks,mailAddressList);
             },
@@ -566,6 +567,36 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
         }
     });
 }
+
+function getReqInActionCount(pdService_id, pdServiceVersionLinks) {
+    $.ajax({
+        url: "/auth-user/api/arms/analysis/resource/reqInAction/"+pdService_id,
+        type: "GET",
+        data: { "서비스아이디" : pdService_id,
+            "pdServiceVersionLinks" : pdServiceVersionLinks,
+            "메인그룹필드" : "parentReqKey",
+            "컨텐츠보기여부" : true,
+            "크기" : 1000},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                req_in_action = data["parentReqCount"];
+                let req_in_wait_count = req_count-req_in_action;
+                $("#req_in_action_count").text(req_in_action);
+                $("#req_in_action_avg").text((req_in_action/resource_count).toFixed(1));
+                $("#req_in_wait_count").text(req_in_wait_count);
+                $("#req_in_wait_avg").text((req_in_wait_count/resource_count).toFixed(1));
+                $('#linkedIssue_subtask_count_per_req_in_action').text((linkedIssue_subtask_count/req_in_action).toFixed(1));
+            },
+            error: function (e) {
+                jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
+            }
+        }
+    });
+}
+
 function refreshDetailChart() { // 차트8개 초기화
     disposeDetailChartInstance();
     resourceSet.clear();
