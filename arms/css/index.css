@@ -75,10 +75,6 @@ section .inner {
     overflow-y: auto;
 }
 section .bg {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -92,6 +88,24 @@ section .bg h2 {
 }
 section .bg .clip-text {
     overflow: hidden;
+}
+
+section .heading-img {
+    width: 150px;
+}
+
+@media (max-width: 500px) {
+    section .heading-img {
+        width: 100px;
+    }
+    
+}
+
+@media (max-width: 330px) {
+    section .heading-img {
+        width: 75px;
+    }
+    
 }
 
 .first .bg {
