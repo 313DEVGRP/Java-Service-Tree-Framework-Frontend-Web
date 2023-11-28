@@ -160,7 +160,17 @@
                                         총 요구사항
                                     </div>
                                 </div>
-                                <ul class="server-stats">
+                                <div class="column">
+                                    <div    class="control-group"
+                                            class="darkBack"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack"
+                                                id="progress_req_status"
+                                                style="margin-bottom: 5px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <ul class="server-stats">
                                     <li>
                                         <div class="key pull-right" id="completed_req_count"></div>
                                         <div class="stat">
@@ -170,7 +180,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul>-->
                             </div>
                         </section>
                     </div>
@@ -194,7 +204,17 @@
                                         총 연결이슈
                                     </div>
                                 </div>
-                                <ul class="server-stats">
+                                <div class="column">
+                                    <div    class="control-group"
+                                            class="darkBack"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack"
+                                                id="progress_linked_issue_status"
+                                                style="margin-bottom: 5px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <ul class="server-stats">
                                     <li>
                                         <div class="key pull-right" id="completed_linked_issue_count"></div>
                                         <div class="stat">
@@ -204,7 +224,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul>-->
                             </div>
                         </section>
                     </div>
@@ -552,7 +572,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        네번째 박스
+                        이슈 상태
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -604,7 +624,7 @@
                     <div class="col-lg-8">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-bar-chart"></i> 요구사항 및 이슈 상태 누적 현황 </h4>
+                                <h4><i class="fa fa-bar-chart"></i> 일자별 이슈 업데이트 현황 </h4>
                             </header>
                             <div class="body" id="combination-chart"></div>
                         </section>
@@ -622,7 +642,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        다섯번째 박스
+                        요구사항 및 연결된 이슈
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -720,7 +740,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        여섯번째 박스
+                        버전별 요구사항 현황
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -767,7 +787,7 @@
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
-										차수별 진행 현황 컬러표
+										버전별 타임라인
 									</span>
                                 </h4>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
@@ -790,7 +810,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        일곱번째 박스
+                        요구사항 및 연결된 이슈 타임라인
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -837,7 +857,7 @@
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
-										차수별 진행 현황 컬러표
+										타임라인
 									</span>
                                 </h4>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
@@ -904,7 +924,7 @@
     }
 
     .dashboard-top-section {
-        min-height: 230px;
+        min-height: 250px;
     }
 
     .infographic.basic .timeline .month {

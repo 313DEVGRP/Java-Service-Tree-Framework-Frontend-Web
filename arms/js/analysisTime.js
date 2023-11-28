@@ -121,7 +121,25 @@ function execDocReady() {
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
+            $("#progress_req_status").slimScroll({
+                height: "190px",
+                railVisible: true,
+                railColor: "#222",
+                railOpacity: 0.3,
+                wheelStep: 10,
+                allowPageScroll: false,
+                disableFadeOut: false
+            });
 
+            $("#progress_linked_issue_status").slimScroll({
+                height: "190px",
+                railVisible: true,
+                railColor: "#222",
+                railOpacity: 0.3,
+                wheelStep: 10,
+                allowPageScroll: false,
+                disableFadeOut: false
+            });
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -709,7 +727,7 @@ function getReqLinkedIssueCountAndRate(pdservice_id, pdServiceVersionLinks, isRe
         type: "GET",
         data: {
             "서비스아이디" : pdservice_id,
-            "메인그룹필드" : "resolution.resolution_name.keyword",
+            "메인그룹필드" : "status.status_name.keyword",
             "isReq" : isReq,
             "컨텐츠보기여부" : false,
             "크기" : 1000,
@@ -720,35 +738,49 @@ function getReqLinkedIssueCountAndRate(pdservice_id, pdServiceVersionLinks, isRe
         progress: true,
         statusCode: {
             200: function (data) {
-                if(isReq == true) {
-                    calculateCompletion(data, "completed_req_count", "total_req_count", "req_completion_rate");
+                if(isReq === true) {
+                    calculateCompletion(data, "completed_req_count", "total_req_count", "req_completion_rate", "progress_req_status");
+
                 } else {
-                    calculateCompletion(data, "completed_linked_issue_count", "total_linked_issue_count", "linked_issue_completion_rate");
+                    calculateCompletion(data, "completed_linked_issue_count", "total_linked_issue_count", "linked_issue_completion_rate", "progress_linked_issue_status");
                 }
             }
         }
     });
 }
 
-function calculateCompletion(data, completedId, totalId, rateId) {
+function calculateCompletion(data, completedId, totalId, rateId, progressId) {
+    $('#' + progressId).empty();
     var totalCount = data["전체합계"];
-    var result = data["검색결과"]["group_by_resolution.resolution_name.keyword"];
-
+    var result = data["검색결과"]["group_by_status.status_name.keyword"];
+    console.log(progressId);
     var completedCount = 0;
     result.forEach((item) => {
         var count = item["개수"];
         completedCount += count;
-    });
 
-    $("#" + completedId).text(completedCount + " 개");
+        var key = item["필드명"];
+        var value = count;
+
+        var html_piece = 	"<div	class=\"controls form-group darkBack\"\n" +
+            "		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
+            "<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
+            "</div>";
+        console.log(html_piece);
+        $("#" + progressId).append(html_piece);
+    });
     $("#" + totalId).text(totalCount);
+
+    /*$("#" + completedId).text(completedCount + " 개");
+
 
     var completion = 0;
     if (totalCount !== 0 ) {
         completion = ((completedCount/totalCount) * 100).toFixed(0);
     }
 
-    $("#" + rateId).text(completion + "%").css("width", completion +"%");
+    $("#" + rateId).text(completion + "%").css("width", completion +"%");*/
+
 }
 
 ////////////////////
@@ -1510,8 +1542,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
         }
     });
 
-    console.log(NETWORK_DATA);
-
     if (NETWORK_DATA.nodes.length === 0) { // 데이터가 없는 경우를 체크
         d3.select("#NETWORK_GRAPH").remove();
         d3.select(".network-graph").append("p").text('데이터가 없습니다.');
@@ -1575,9 +1605,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
             var height = 500;
 
             var simulation = d3.forceSimulation(nodes)
-                .force("link", d3.forceLink(links).id( function(d){ return d.id }))
+                .force("link", d3.forceLink(links).id( function(d){ return d.id; }))
                 .force("charge", d3.forceManyBody().strength(-100))
-                .force("center", d3.forceCenter(width / 2, height / 2));
+                .force("center", d3.forceCenter(width / 3, height / 3));
             // .force("collide",d3.forceCollide().radius( function(d){ return d.value*8}) );
 
             //simulation.stop(); // stop 필요한가?
