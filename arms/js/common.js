@@ -48,10 +48,13 @@ function runScript() {
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
 				dwr_login(userName, userName);
-				laddaBtnSetting();
 			});
 		}
 	}
+}
+
+function 로드_완료_이후_실행_함수() {
+	laddaBtnSetting();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +121,7 @@ function loadPluginGroupsParallelAndSequential(groups) {
 		return loadPluginGroupSequentially(group);
 	});
 	return Promise.all(promises).then(function () {
-		// 향후 꼭 필요할 때만 쓰도록 합니다.
+		로드_완료_이후_실행_함수();
 	});
 }
 
