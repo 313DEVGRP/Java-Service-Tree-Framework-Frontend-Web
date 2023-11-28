@@ -195,14 +195,14 @@ h2 * {
     padding-right: 0;
 }
 
-.btn {
+.section-scroll-dots-navigation .list .dot > .dot-btn {
     border: none;
     padding: 5px;
     border-radius: 50%;
     background-color: rgba(51, 51, 51, 0.5);
 }
 
-.list li.active > .btn {
+.section-scroll-dots-navigation .list .dot.active > .dot-btn {
     background-color: rgba(229, 96, 59, 0.5);
 }
 
