@@ -192,11 +192,11 @@ function makePdServiceSelectBox() {
         var checked = $("#checkbox1").is(":checked");
         var endPointUrl = "";
 
-        if (checked) {
-            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
-        } else {
-            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
-        }
+//        if (checked) {
+//            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
+//        } else {
+//            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
+//        }
 
         //이슈리스트 진행 상황
         //getIssueStatus($("#selected_pdService").val(), endPointUrl);
@@ -299,7 +299,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
             200: function (json) {
                 pdServiceData = json;
                 let versionData = json.pdServiceVersionEntities;
-
+                versionData.sort((a, b) => a.c_id - b.c_id);
                 let version_count = versionData.length;
 
                 console.log("등록된 버전 개수 = " + version_count);
@@ -1868,7 +1868,7 @@ function statusTimeline(data) {
     var extractedData = extractDataForStatusTimeline(data);
 
     // 버전 별로 그룹화
-    var groupedDataByVersion = groupingByVersionForStatusTimeline(extractedData);
+    var groupedDataByVersion = groupingByVersion(extractedData);
 
     // 데이터 포맷팅
     var relatedIssues = dataFormattingForStatusTimeline(groupedDataByVersion);
@@ -1932,7 +1932,7 @@ function extractDataForStatusTimeline(data){
     return extractedData;
 }
 
-function groupingByVersionForStatusTimeline(data) {
+function groupingByVersion(data) {
 
     var groupedData = data.reduce((result, item) => {
         var pdServiceVersion = item.version;
@@ -2000,12 +2000,19 @@ function dataFormattingForStatusTimeline(data) {
     return relatedIssues;
 }
 
+////////////////////
+// 일곱번째 박스
+////////////////////
+
 function sevenTimeline(data) {
     var sevenTimeLineDiv = document.getElementById("sevenTimeLine");
     sevenTimeLineDiv.innerHTML = "";
 
     if (typeof data === 'object' && Object.keys(data).length > 0) {
-        var groupedData = groupDataByPdServiceVersion(data);
+        //필요한 데이터만 추출
+        var extractedData = extractDataForSevenTimeline(data);
+        // 버전 별 그룹화
+        var groupedData = groupingByVersion(extractedData);
         var myData = [];
         var myData = dataFormattingForSevenTimeLine(groupedData);
         TimelinesChart()('#sevenTimeLine')
