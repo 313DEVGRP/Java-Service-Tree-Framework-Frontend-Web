@@ -499,7 +499,7 @@ function connect_pdservice_jira(){
 /* --------------------------- multi select & slim scroll ---------------------------------- */
 function setdata_for_multiSelect() {
 	$.ajax({
-		url: "/auth-user/api/arms/jiraServer/getChildNode.do?c_id=2",
+		url: "/auth-user/api/arms/jiraServerProjectPure/getChildNode.do?c_id=2",
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
@@ -511,8 +511,8 @@ function setdata_for_multiSelect() {
 				var obj = data[k];
 				var server_name = obj.c_jira_server_name;
 				var server_type = obj.c_jira_server_type;
-				for(var p in data[k].jiraProjectEntities) {
-					var obj2 = data[k].jiraProjectEntities[p];
+				for(var p in data[k].jiraProjectPureEntities) {
+					var obj2 = data[k].jiraProjectPureEntities[p];
 					var jira_name = obj2.c_jira_name;
 					var jira_idx = obj2.c_id;
 					optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
