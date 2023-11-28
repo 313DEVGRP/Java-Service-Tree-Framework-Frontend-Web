@@ -96,7 +96,7 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
                 lineStyle: {
                     type: 'dashed',
                     color: 'white',
-                    width: 0.5,
+                    width: 0.2,
                     opacity: 0.5
                 }
             }
