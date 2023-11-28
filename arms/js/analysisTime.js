@@ -233,13 +233,15 @@ function makeVersionMultiSelectBox() {
 
             selectedVersionId = versionTag.join(',');
 
-            donutChart($("#selected_pdService").val(), selectedVersionId);
-            combinationChart($("#selected_pdService").val(), selectedVersionId);
-            statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
+            statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 
-            getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
+
+            donutChart($("#selected_pdService").val(), selectedVersionId);
+            combinationChart($("#selected_pdService").val(), selectedVersionId);
+
+            getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
             if (checked) {
                 endPointUrl =
@@ -383,13 +385,16 @@ function bind_VersionData_By_PdService() {
 
                 selectedVersionId = pdServiceVersionIds.join(',');
 
-                statisticsMonitor($("#selected_pdService").val(), selectedVersionId); //ES모으는중 by YHS
+                statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
+
+                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
+                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
+
                 donutChart($("#selected_pdService").val(), selectedVersionId);
                 combinationChart($("#selected_pdService").val(), selectedVersionId);
 
                 getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
-                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
-                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
+
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
