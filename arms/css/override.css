@@ -3101,12 +3101,12 @@ table tbody tr td {
 
 .board-thumb.disconnection {
 	background-image: url("../img/index/disconnection.png");
-	height: 274px;
+	height: 200px;
 }
 
 .board-thumb.disconnect-detail {
 	background-image: url("../img/index/disconnect_detail.png");
-	height: 274px;
+	height: 200px;
 }
 
 .board-thumb.solution {
