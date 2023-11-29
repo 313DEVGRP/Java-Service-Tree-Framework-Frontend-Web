@@ -64,7 +64,7 @@ function loadPlugin(url) {
 	return new Promise(function (resolve, reject) {
 		if (isJavaScriptFile(url)) {
 			$(".spinner").html(
-				'<i class="fa fa-spinner fa-spin"></i> ' + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다..."
+				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다..."
 			);
 			$.ajax({
 				url: url,
