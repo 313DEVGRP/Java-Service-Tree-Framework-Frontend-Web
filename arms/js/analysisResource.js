@@ -34,7 +34,7 @@ function execDocReady() {
             //chart Colors
             "./js/dashboard/chart/colorPalette.js",
             // Apache Echarts
-            "../reference/jquery-plugins/apache-echarts/echarts.js"
+            "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
         ],
 
         [	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
