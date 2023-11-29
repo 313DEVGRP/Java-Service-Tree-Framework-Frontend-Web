@@ -1693,7 +1693,7 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 			"isReq" : false,
 			"컨텐츠보기여부" : false,
 			"크기" : 1000,
-			"하위그룹필드들" : "parentReqKey.keyword"},
+			"하위그룹필드들" : "parentReqKey"},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
