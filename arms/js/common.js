@@ -64,7 +64,7 @@ function loadPlugin(url) {
 	return new Promise(function (resolve, reject) {
 		if (isJavaScriptFile(url)) {
 			$(".spinner").html(
-				'<i class="fa fa-spinner fa-spin"></i> ' + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다..."
+				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다..."
 			);
 			$.ajax({
 				url: url,
@@ -84,7 +84,7 @@ function loadPlugin(url) {
 			});
 		} else {
 			$(".spinner").html(
-				'<i class="fa fa fa-circle-o-notch fa-spin"></i> ' +
+				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
 					getFileNameFromURL(url) +
 					" 스타일시트를 다운로드 중입니다..."
 			);
@@ -408,7 +408,7 @@ function setSideMenu(categoryName, listName, collapse) {
 			$(`#${listName}`).css({ "font-weight": "900" });
 		}
 		$(".spinner").html(
-			"<img src=\"./img/loading.gif\" width='25px' height='25px'/> 어플리케이션 API Data를 가져오는 중입니다..."
+			"<img src=\"./img/loading.gif\" width='20px' height='20px' style='margin-bottom: 5px;'/> 어플리케이션 API Data를 가져오는 중입니다..."
 		);
 	}, 1000);
 }
