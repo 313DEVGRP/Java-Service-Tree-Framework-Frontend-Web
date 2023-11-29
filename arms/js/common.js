@@ -408,7 +408,7 @@ function setSideMenu(categoryName, listName, collapse) {
 			$(`#${listName}`).css({ "font-weight": "900" });
 		}
 		$(".spinner").html(
-			"<img src=\"./img/loading.gif\" width='20px' height='20px' style='margin-bottom: 5px;'/> 어플리케이션 API Data를 가져오는 중입니다..."
+			"<img src=\"./img/loading.gif\" width='20px' height='20px' style='margin-bottom: 3px;'/> 어플리케이션 API Data를 가져오는 중입니다..."
 		);
 	}, 1000);
 }
