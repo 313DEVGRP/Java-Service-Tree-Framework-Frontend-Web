@@ -1693,14 +1693,12 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 			"isReq" : false,
 			"컨텐츠보기여부" : false,
 			"크기" : 1000,
-			"하위그룹필드들" : "parentReqKey"},
+			"하위그룹필드들" : "parentReqKey.keyword"},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				//console.log("연결이슈 서브테스크 조회 ==========");
-				//console.log(data); //console.log(data.검색결과);
 				subtask_count = data.전체합계;
 				$('#linkedIssue_subtask_count').text(subtask_count);
 				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
