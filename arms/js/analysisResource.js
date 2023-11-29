@@ -408,6 +408,7 @@ function dataTableDrawCallback(tableInfo) {
         .responsive.recalc();*/
 }
 
+
 function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
     $.ajax({
         url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
@@ -437,38 +438,45 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                 //요구사항,연결이슈 파이차트용 데이터배열
                 let reqDataMapForPie = [];
                 let subtaskDataMapForPie = [];
+                console.log(data);
+                if (data["전체합계"] === 0) {
+                    alert("작업자 업무 처리현황 데이터가 없습니다.");
+                } else {
+                    let isReqGrpArr = data["검색결과"]["group_by_isReq"];
+                    isReqGrpArr.forEach((elementArr,index) => {
+                        if(elementArr["필드명"] == "true") {
+                            all_req_count = elementArr["개수"];
+                            let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
+                            tempArrReq.forEach(e => {
+                                assignedReqSum+=e["개수"];
+                                reqDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                            });
+                            no_assigned_req_count = all_req_count - assignedReqSum;
+                        }
+                        if(elementArr["필드명"] == "false") {
+                            all_linkedIssue_subtask_count = elementArr["개수"];
+                            let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
+                            tempArrReq.forEach(e => {
+                                assignedSubtaskSum+=e["개수"];
+                                subtaskDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                            });
+                            no_assigned_linkedIssue_subtask_count = all_linkedIssue_subtask_count - assignedSubtaskSum;
+                        }
+                    });
+                    // 총 요구사항 및 연결이슈 수
+                    $('#total_req_count').text(all_req_count);
+                    $('#total_linkedIssue_subtask_count').text(all_linkedIssue_subtask_count);
 
-                let isReqGrpArr = data["검색결과"]["group_by_isReq"];
-                isReqGrpArr.forEach((elementArr,index) => {
-                    if(elementArr["필드명"] == "true") {
-                        all_req_count = elementArr["개수"];
-                        let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-                        tempArrReq.forEach(e => {
-                            assignedReqSum+=e["개수"];
-                            reqDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
-                        });
-                        no_assigned_req_count = all_req_count - assignedReqSum;
-                    }
-                    if(elementArr["필드명"] == "false") {
-                        all_linkedIssue_subtask_count = elementArr["개수"];
-                        let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-                        tempArrReq.forEach(e => {
-                            assignedSubtaskSum+=e["개수"];
-                            subtaskDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
-                        });
-                        no_assigned_linkedIssue_subtask_count = all_linkedIssue_subtask_count - assignedSubtaskSum;
-                    }
-                })
-                //요구사항 및 연결이슈 수
-                $('#total_req_count').text(all_req_count);
-                $('#total_linkedIssue_subtask_count').text(all_linkedIssue_subtask_count);
-                req_count = assignedReqSum;
-                $('#req_count').text(assignedReqSum);
-                linkedIssue_subtask_count = assignedSubtaskSum;
-                $('#linkedIssue_subtask_count').text(assignedSubtaskSum);
-                $('#no_assigned_req_count').text(no_assigned_req_count);
-                $('#no_assigned_linkedIssue_subtask_count').text(no_assigned_linkedIssue_subtask_count);
+                    // 담당자 지정 - 요구사항 및 연결이슈
+                    req_count = assignedReqSum;
+                    $('#req_count').text(assignedReqSum);
+                    linkedIssue_subtask_count = assignedSubtaskSum;
+                    $('#linkedIssue_subtask_count').text(assignedSubtaskSum);
 
+                    // 담당자 미지정 - 요구사항 및 연결이슈
+                    $('#no_assigned_req_count').text(no_assigned_req_count);
+                    $('#no_assigned_linkedIssue_subtask_count').text(no_assigned_linkedIssue_subtask_count);
+                }
                 // 작업자수 및 평균계산
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
 
@@ -575,7 +583,7 @@ function getReqInActionCount(pdService_id, pdServiceVersionLinks) {
         data: { "서비스아이디" : pdService_id,
             "pdServiceVersionLinks" : pdServiceVersionLinks,
             "isReq" : false,
-            "메인그룹필드" : "parentReqKey.keyword",
+            "메인그룹필드" : "parentReqKey",
             "컨텐츠보기여부" : true,
             "크기" : 1000},
         contentType: "application/json;charset=UTF-8",
@@ -585,11 +593,21 @@ function getReqInActionCount(pdService_id, pdServiceVersionLinks) {
             200: function (data) {
                 req_in_action = data["parentReqCount"];
                 let req_in_wait_count = req_count-req_in_action;
-                $("#req_in_action_count").text(req_in_action);
-                $("#req_in_action_avg").text((req_in_action/resource_count).toFixed(1));
-                $("#req_in_wait_count").text(req_in_wait_count);
-                $("#req_in_wait_avg").text((req_in_wait_count/resource_count).toFixed(1));
-                $('#linkedIssue_subtask_count_per_req_in_action').text((linkedIssue_subtask_count/req_in_action).toFixed(1));
+                if (req_in_action === "") {
+                    $("#req_in_action_count").text("-");
+                    $('#linkedIssue_subtask_count_per_req_in_action').text("-");
+                } else {
+                    if(req_in_action === 0) {
+                        $('#linkedIssue_subtask_count_per_req_in_action').text("-");
+                    } else {
+                        $("#req_in_action_count").text(req_in_action);   //진행중 요구사항
+                        $("#req_in_action_avg").text((resource_count !== 0 ? (req_in_action/resource_count).toFixed(1) : "-"));
+                        $("#req_in_wait_count").text(req_in_wait_count); //작업대기 요구사항
+                        $("#req_in_wait_avg").text((resource_count !== 0 ? (req_in_wait_count/resource_count).toFixed(1) : "-"));
+                        $('#linkedIssue_subtask_count_per_req_in_action').text((linkedIssue_subtask_count/req_in_action).toFixed(1));
+                    }
+                }
+
             },
             error: function (e) {
                 jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
@@ -713,7 +731,6 @@ function drawChartsPerPerson(pdservice_id, pdServiceVersionLinks, mailAddressLis
                             for (let j =0; j<searchDepth1_sub.length; j++) {
                                 if (searchDepth1_sub[j]["필드명"] === "true") { //요구사항
                                     let reqCnt = searchDepth1_sub[j]["개수"];   // 요구사항 개수
-
                                     if (reqCnt !== 0) {
                                         let searchDepth2 = searchDepth1_sub[j]["하위검색결과"]["group_by_"+targetField];
                                         searchDepth2.forEach((target, index) => {
