@@ -65,20 +65,22 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
     let titleText = "";
     let titleColor = "white";
     let progress = "";
-    if (objectiveArr[1] !== "" || objectiveArr[1] !== 0) {
-        progress = (currentProgressArr[1]*100/objectiveArr[1]).toFixed(1);
-        titleText+= "진행률: " + progress + "%, ";
-    }
-    let dateDiff = Math.abs(objectiveArr[2] - currentProgressArr[2]).toFixed(0);
+    if(objectiveArr.length !== 0) {
+        if (objectiveArr[1] !== "" || objectiveArr[1] !== 0) {
+            progress = (currentProgressArr[1]*100/objectiveArr[1]).toFixed(1);
+            titleText+= "진행률: " + progress + "%, ";
+        }
+        let dateDiff = Math.abs(objectiveArr[2] - currentProgressArr[2]).toFixed(0);
 
-    if (objectiveArr[2] >= currentProgressArr[2]) {
-        scheduleMax = objectiveArr[2];
-        titleText += "일정: " + dateDiff +"일 남음";
-        titleColor = 'rgb(164,198,255)';
-    } else {
-        scheduleMax = currentProgressArr[2];
-        titleText += "일정: " + dateDiff +"일 초과";
-        titleColor = 'rgb(219,42,52)';
+        if (objectiveArr[2] >= currentProgressArr[2]) {
+            scheduleMax = objectiveArr[2];
+            titleText += "일정: " + dateDiff +"일 남음";
+            titleColor = 'rgb(164,198,255)';
+        } else {
+            scheduleMax = currentProgressArr[2];
+            titleText += "일정: " + dateDiff +"일 초과";
+            titleColor = 'rgb(219,42,52)';
+        }
     }
 
     let titleOption = {text: titleText, top: 25,
@@ -94,7 +96,7 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
             trigger: 'axis'
         },
         legend: {
-            data: ['제품(서비스) 기준목표','현재 진행상황'], //
+            data: ['제품(서비스) 설정기준','현재 진행상황'], //
             left: "left",
             textStyle: {
                 color: 'white', // 이름의 텍스트 색상 설정
@@ -139,7 +141,7 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
                 data: [
                     {
                         value: objectiveArr,
-                        name: '제품(서비스) 기준목표',
+                        name: '제품(서비스) 설정기준',
                         areaStyle: {
                             opacity: 0.3
                         }

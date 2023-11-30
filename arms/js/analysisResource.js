@@ -302,7 +302,7 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function (e) {
         selectedPdServiceId = $("#selected_pdService").val();
-        refreshDetailChart();
+        refreshDetailChart(); 변수값_초기화();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
         //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
@@ -321,14 +321,14 @@ function makeVersionMultiSelectBox() {
     $(".multiple-select").multipleSelect({
         filter: true,
         onClose: function () {
-            req_count = 0; linkedIssue_subtask_count = 0;
+
             console.log("onOpen event fire!\n");
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
             selectedVersionId = versionTag.join(',');
 
-            refreshDetailChart();
+            refreshDetailChart(); 변수값_초기화();
 
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
@@ -359,7 +359,7 @@ function bind_VersionData_By_PdService() {
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
                 }
-                refreshDetailChart();
+                refreshDetailChart(); 변수값_초기화();
                 selectedVersionId = pdServiceVersionIds.join(',');
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
@@ -883,4 +883,28 @@ const getDateDiff = (d1, d2) => {
 
     return Math.abs(diffDate / (1000 * 60 * 60 * 24)).toFixed(1); // 밀리세컨 * 초 * 분 * 시 = 일
 
+}
+
+function 변수값_초기화() {
+    req_count =0
+    linkedIssue_subtask_count =0
+    resource_count =0;
+    req_in_action =0;
+    $("#total_req_count").text("-");       // 총 요구사항 수(미할당포함)
+    $("#no_assigned_req_count").text("-"); // 미할당 요구사항 수
+    $("#req_count").text("-");             // 작업 대상 요구사항 수
+    $("#req_in_action_count").text("-");   // 작업중 요구사항
+
+    $("#total_linkedIssue_subtask_count").text("-");       //연결이슈 수
+    $("#no_assigned_linkedIssue_subtask_count").text("-"); //미할당 연결이슈 수
+    $("#linkedIssue_subtask_count_per_req_in_action").text("-"); // 작업중 요구사항에 대한 연결이슈 평균
+
+    $("#resource_count").text("-");        // 작업자수
+    $("#req_in_action_avg").text("-");     // 작업중 요구사항 평균
+    $("#avg_linkedIssue_count").text("-"); // 연결이슈 평균
+
+    let radarChart = echarts.getInstanceByDom(document.getElementById("radarPart"));
+    if(radarChart) { radarChart.dispose(); }
+    let stackBarChart = echarts.getInstanceByDom(document.getElementById("apache-echarts-stacked-horizontal-bar"));
+    if(stackBarChart) { stackBarChart.dispose(); }
 }
