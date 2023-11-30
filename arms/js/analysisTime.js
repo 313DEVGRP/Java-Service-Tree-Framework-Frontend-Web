@@ -29,7 +29,8 @@ function execDocReady() {
             "./js/common/colorPalette.js",
             // 2번째 박스 timeline
             "../reference/jquery-plugins/info-chart-v1/js/D.js",
-            "./js/dashboard/chart/timeline_custom.js",
+            "../reference/jquery-plugins/info-chart-v1/js/timeline_analysisTime.js",
+            //"./js/dashboard/chart/timeline_custom.js",
             "./js/dashboard/chart/infographic_custom.css",
             // 네번째 박스 차트
             // d3.v2와 d3.v4 버전차이 오류생김...
@@ -336,6 +337,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                             }
 
                             var timelineElement = {
+                                "id" : "timelineData",
                                 "title" : "버전: "+versionElement.c_title,
                                 "startDate" : (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
                                 "endDate" : (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
@@ -345,10 +347,40 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                         });
 
                         drawVersionProgress(versionGauge); // 버전 게이지
+                        // 이번 달의 첫째 날 구하기
+                        var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+                        // 이번 달의 마지막 날 구하기
+                        var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                        console.log("lastDay :"+lastDay);
+                        // 이번달 일수 구하기
+                        var daysCount  = lastDay.getDate();
+                        console.log("daysCount :"+daysCount);
+                        // 오늘 일자 구하기
+                        var day = today.getDate();
+                        console.log("day :"+day);
+                          var today_flag = {
+                            "title" : "오늘",
+                            "startDate" : formatDate(firstDay),
+                            "endDate" : formatDate(lastDay),
+                            "id" : "today_flag"
+                          };
+                          versionTimeline.push(today_flag);
 
                         $("#version-timeline-bar").show();
                         Timeline.init($("#version-timeline-bar"), versionTimeline);
 
+                        var basePosition = $("#today_flag").css("left");
+                        var baseWidth = $("#today_flag").css("width");
+                        var calFlagPosition = parseFloat(baseWidth)/daysCount*day;
+                        var flagPosition = parseFloat(basePosition)+calFlagPosition+"px";
+
+                        $("#today_flag").css("border-top-width", "150px");
+                        $("#today_flag").css("width", "3px");
+                        $("#today_flag").css("border-top-color", "rgba(255, 0, 0,0.78)");
+                        $("#today_flag span").remove();
+                        $("#timelineData .label").css("text-align", "left");
+                        $("#today_flag").css("left", flagPosition);
 
                         // radarChart(pdservice_id, versionData);
                     }
@@ -359,6 +391,12 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 
 
+}
+function formatDate(date) {
+  var year = date.getFullYear();
+  var month = (date.getMonth() + 1).toString().padStart(2, "0");
+  var day = date.getDate().toString().padStart(2, "0");
+  return year + "-" + month + "-" + day;
 }
 
 function bind_VersionData_By_PdService() {
