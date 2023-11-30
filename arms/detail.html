@@ -95,946 +95,183 @@
     <link rel="icon" href="./img/313_logo.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="./img/313_logo.ico" type="image/x-icon" />
 
-	<!-- common libraries. required for every page-->
-	<script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
+    <link href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css" rel="stylesheet" type="text/css" media="screen" />
 
-	<script type="text/javascript" src="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js" charset="utf-8"></script>
-	<link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css" media="screen" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="../reference/jquery-plugins/html5shiv.js"></script>
+    <script src="../reference/jquery-plugins/respond.js"></script>
+    <![endif]-->
 
-	<!-- page js -->
-	<script type="text/javascript" src="../arms/js/common.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../arms/js/common/dwrChat.js" charset="utf-8"></script>
-	<script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger.min.js" charset="utf-8"></script>
+    <link href="../reference/lightblue4/docs/css/application.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="./css/override.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <!-- common libraries. required for every page-->
+    <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js" charset="utf-8"></script>
+
+    <script type="text/javascript" src="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css" media="screen" />
 
     <!-- Ladda -->
     <script type="text/javascript" src="../reference/jquery-plugins/Ladda-jQuery-0.6.0/dist/spin.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../reference/jquery-plugins/Ladda-jQuery-0.6.0/js/ladda.js" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/Ladda-jQuery-0.6.0/dist/ladda.min.css" media="screen" />
 
-	<!-- page interaction -->
-	<script type="text/javascript" src="../reference/jquery-plugins/topbar.js" charset="utf-8"></script>
+    <!-- Tour-Guide -->
+    <script type="text/javascript" src="../reference/jquery-plugins/guided-tour-arrow/dist/guides.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/common/guidedTour/gtaApi.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/common/guidedTour/gtaGroup.js" charset="utf-8"></script>
 
-	<!-- page specific -->
-	<script src="./js/detail.js"></script>
+    <!-- notification popup -->
+    <script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger.min.js" charset="utf-8"></script>
+    <script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger-theme-flat.js" charset="utf-8"></script>
 
-	<!-- Vendor CSS Files -->
-	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/aos/aos.css" rel="stylesheet">
-	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-	<link href="../arms/html/armsDetailExceptTemplate/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <!-- ckeditor4 성능 이슈로 인한 주석 처리. -->
+    <script type="text/javascript" src="../reference/jquery-plugins/ckeditor4-4.22.1/ckeditor.js" charset="utf-8"></script>
 
-	<!-- Template Main CSS File -->
-	<link href="../arms/html/armsDetailExceptTemplate/assets/css/style.css" rel="stylesheet">
-	<link href="./html/armsDetailExceptTemplate/assets/css/detail.css" rel="stylesheet">
+    <script type="text/javascript" src="../reference/lightblue4/docs/js/app.js" charset="utf-8"></script>
 
+    <!-- page interaction -->
+    <script type="text/javascript" src="../reference/jquery-plugins/topbar.js" charset="utf-8"></script>
+
+    <!-- page js -->
+    <script type="text/javascript" src="../arms/js/common.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../arms/js/common/dwrChat.js" charset="utf-8"></script>
 
 </head>
-<body>
 
-<!-- ======= Mobile nav toggle button ======= -->
-<i class="bi bi-list mobile-nav-toggle mobile-nav-toggle-none"></i>
-<!-- ======= Side Header ======= -->
-<header id="header" class="d-flex flex-column justify-content-center">
-	<nav id="navbar" class="navbar nav-menu">
-		<ul>
-			<!-- ======= Header ======= -->
-			<li><a href="#home" class="nav-link scrollto active"><i class="bx bi-house-door"></i> <span>홈</span></a></li>
-			<li><a href="#stats" id="get_stats" class="nav-link scrollto active"><i class="bx bi-clipboard-data"></i> <span>통계정보</span></a></li>
-			<li><a href="#detail" id="get_req_detail" class="nav-link scrollto"><i class="bx bi-info-lg"></i> <span>요구사항 상세정보</span></a></li>
-			<li><a href="#version" id="get_version_list" class="nav-link scrollto"><i class="bx bi-tags"></i> <span>버전별 상세정보</span></a></li>
-			<li><a href="#allreq" id="get_req_list" class="nav-link scrollto"><i class="bx bi-list-ul"></i> <span>요구사항 목록</span></a></li>
-			<li><a href="#files" id="get_file_list" class="nav-link scrollto"><i class="bx bi-images"></i> <span>제품 기획서</span></a></li>
-			<li><a href="#question" id="get_req_comment_list" class="nav-link scrollto"><i style="font-weight: bolder;" class="bx bx-question-mark"></i> <span>Q&A</span></a></li>
-		</ul>
-	</nav><!-- .nav-menu -->
-</header><!-- End Header -->
-
-<!-- 헤더 -->
-<header class="account-info">
-	<h3>
-		<a href="index.html">
-			<img src="./img/313_logo.png" width="170px">
-		</a>
-	</h3>
-	<div class="profile">
-		<div id="user-name"></div>
-		<div class="detail">
-			<h6 id="user-name-detail" class="no-margin"></h6>
-			<div>
-				<abbr class="email" title="email">e-mail:</abbr>
-				<a id="user-email" href="mailto:#">-</a>
-			</div>
-		</div>
-	</div>
-</header>
-
-<!-- Modal -->
-<div class="modal fade" id="viewDetailReqModal"  tabindex="-1" aria-labelledby="viewDetailReqModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered modal-dialog-scrollable modal-lg" >
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="viewDetailReqModalLabel">요구사항 상세 보기</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body" id="req_detail_contents">
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="viewAllReqModal" tabindex="-1" aria-labelledby="viewAllReqModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered modal-dialog-scrollable modal-lg" >
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="viewAllReqModalLabel">요구사항 상세 보기</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body" id="req_all_detail_contents">
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="viewVersionReqModal" tabindex="-1" aria-labelledby="viewVersionReqModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered modal-dialog-scrollable modal-lg" >
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="viewVersionReqModalLabel">버전 내용 상세 보기</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body" id="req_version_detail_contents">
-			</div>
-		</div>
-	</div>
+<body   style="overflow-x: hidden">
+<div    class="logo"
+        data-include="html/template/page-logo.html"
+        style="left: 35px !important; position: absolute !important">
 </div>
 
-<!-- ======= 타이틀 페이지 ======= -->
-<section id="home" class="d-flex flex-column justify-content-center">
-	<div class="container" data-aos="zoom-in" data-aos-delay="100">
-		<h1>요구사항 조회 시스템</h1>
-		<p>Requirement <span class="typed" data-typed-items="Management, Collection, Statistics"></span></p>
-	</div>
-</section><!-- End Title -->
+<nav    id="sidebar"
+        class="sidebar nav-collapse collapse"
+        data-include="html/detail/page-sidebar.html">
+</nav>
 
-<main id="main">
-	<!-- ======= 통계 정보 ======= -->
-	<section id="stats" class="stats">
-		<div class="container" data-aos="fade-up">
+<div    class="wrap">
+    <header class="page-header"
+            data-include="html/template/page-header.html">
+    </header>
 
-			<div class="section-title">
-				<h2>통계 정보</h2>
-				<p>담당하고 있는 요구사항 개발 현황을 확인할 수 있습니다.</p>
-			</div>
-			<!-- progress bar -->
-			<div class="row">
-				<div class="col-md-6" style="overflow: hidden">
-					<section class="stats-widget shadow-box">
-						<header>
-                        <span style="font-weight: bold">
-                           <blockquote class="font13"
-									   style="margin-top: 5px;">
-                              <span class="pdServiceName"></span>
-                           </blockquote>
-                        </span>
-						</header>
-						<div class="body">
-							<div class=" box-primary" style=" margin-bottom: 5px !important">
-								<div  class="box-body">
-									<div class="col-lg-12 pt-4 pt-lg-0 content">
-										<div class="detail-item">
-											<div class="body">
+    <div    class="content container">
+        <section    class="widgetheader"
+                    data-include="html/template/content-header.html">
+        </section>
 
-												                                          <div class="stats-box">
-												                                             <div class="stats-big-text" id="product-all-req"></div>
-												                                             <div class="stats-desc">
-												                                                전체 요구사항 개수
-												                                             </div>
-												                                          </div>
-												<ul class="requirement-stats">
-													<li>
-														<div class="key pull-right" id="product-my-req"></div>
-														<div class="stat">
-															<div class="info font13 pb-2">담당 이슈</div>
-															<div class="progress progress-small progress-striped active">
-																<div class="progress-bar" id="product-my-req-display"></div>
-															</div>
-														</div>
-													</li>
-												</ul>
+        <div    class="row"
+                data-include="html/template/content-container.html">
+        </div>
 
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-				<div class="col-md-6" style="overflow: hidden">
-					<section class="stats-widget shadow-box">
-						<header>
-                        <span style="font-weight: bold">
-                           <blockquote class="font13"
-									   style="margin-top: 5px;">
-                             <span class="requirementName"></span>
-                           </blockquote>
-                        </span>
-						</header>
-						<div class="body">
-							<div class=" box-primary" style=" margin-bottom: 5px !important">
-								<div  class="box-body">
-									<div class="col-lg-12 pt-4 pt-lg-0 content">
-										<div class="detail-item">
-											<div class="body">
-
-												<div class="stats-box">
-                                                               <div class="stats-big-text" id="req-all-req"></div>
-                                                               <div class="stats-desc">
-                                                                  해당 요구사항 개수
-                                                               </div>
-                                                            </div>
-
-												<ul class="requirement-stats">
-													<li>
-														<div class="key pull-right" id="req-my-req"></div>
-														<div class="stat">
-															<div class="info font13 pb-2">담당 이슈</div>
-															<div class="progress progress-small progress-striped active">
-																<div class="progress-bar" id="req-my-req-display"></div>
-															</div>
-														</div>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-			</div>
-			<!-- chart -->
-			<div class="row">
-				<div class="col-md-6" >
-					<section class="stats-widget large shadow-box">
-						<header>
-                        <span style="font-weight: bold">
-                           <blockquote class="font13"
-									   style="margin-top: 5px;">
-                              <span class="pdServiceName"></span> - 담당 이슈 현황
-                           </blockquote>
-                        </span>
-						</header>
-						<div class="body">
-							<div id="product-chart-pie" class="chart pie-chart">
-								<svg></svg>
-							</div>
-						</div>
-						<footer id="product-chart-footer" class="pie-chart-footer">
-						</footer>
-					</section>
-				</div>
-				<div class="col-md-6" >
-					<section class="stats-widget large shadow-box">
-						<header>
-                        <span style="font-weight: bold">
-                           <blockquote class="font13"
-									   style="margin-top: 5px;">
-                              <span class="requirementName"></span> - 담당 이슈 현황
-                           </blockquote>
-                        </span>
-						</header>
-						<div class="body">
-							<div id="requirement-chart-pie" class="chart pie-chart">
-								<svg></svg>
-							</div>
-						</div>
-						<footer id="requirement-chart-footer" class="pie-chart-footer">
-						</footer>
-					</section>
-				</div>
-			</div>
-		</div>
-	</section><!-- End Stats -->
-
-	<!-- ======= 요구사항 상세 ======= -->
-	<section id="detail" class="about">
-		<div class="container" data-aos="fade-up">
-
-			<div class="section-title">
-				<h2>요구사항 상세정보</h2>
-				<p>요구사항의 상세정보를 확인할 수 있습니다.</p>
-			</div>
-			<div class="col-lg-12 col-layer shadow-box">
-				<section class="widget">
-					<header>
-                        <span class="font14" style="font-weight: bold">
-                           <i  class="bi bi-journal-text"></i>
-                           요구사항 상세정보
-                        </span>
-					</header>
-					<div class="body">
-						<div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-<!--						<blockquote class="font13"
-									style="margin-top: 5px;">
-							<span class="requirementName"></span> 세부 내용
-						</blockquote>-->
-						<div class="clearfix" style="margin-bottom: 10px; margin-top: 10px;"></div>
-						<div class=" box-primary" style=" margin-bottom: 5px !important">
-							<div  class="box-body">
-								<div class="col-lg-12 pt-4 pt-lg-0 content">
-									<div class="detail-item">
-										<div class="row">
-											<!--좌측 영역-->
-											<div class="col-lg-6">
-												<ul>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end  align-items-center  p-2">
-															<strong class="detailview_title font13 ">제품(서비스) : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-box-seam"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_pdservice_name" readonly="true" placeholder="Proejct (Service) Name" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center  p-2">
-															<strong class="detailview_title font13">요구사항 아이디 : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-key"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_id" readonly="true" placeholder="Requirement ID" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<strong class="detailview_title font13">요구사항 제목 : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-bookmark"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_name" readonly="true" placeholder="Requirement Title" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<strong class="detailview_title font13">요구사항 연관 버전 : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-tag"></i></div>
-																<input class="form-control text-truncate font13" id="detailview_req_pdservice_version" readonly="true" placeholder="Proejct (Service) Version" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<strong class="detailview_title font13">요구사항 작성일 : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bx bx-calendar"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_write_date" readonly="true" placeholder="Requirement Last Created Date" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<strong class="detailview_title font13">요구사항 작성자 : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-person"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_writer" readonly="true" placeholder="Requirement Author" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<strong class="detailview_title font13">제품(서비스) 리뷰어 : </strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-person-check"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_reviewer01" readonly="true" placeholder="Product (Service) Reviewer" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<!--<p class="detailview_title "><I>INFO: 공동 책임자 : </I></p>-->
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_reviewer02" readonly="true" placeholder="Product (Service) Reviewer" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<!--<p class="detailview_title"><I>INFO: 공동 책임자 : </I></p>-->
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_reviewer03" readonly="true" placeholder="Product (Service) Reviewer" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<!--<p class="detailview_title"><I>INFO: 공동 책임자 : </I></p>-->
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_reviewer04" readonly="true" placeholder="Product (Service) Reviewer" />
-															</div>
-														</div>
-													</li>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-															<!--<p class="detailview_title"><I>INFO: 공동 책임자 : </I></p>-->
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																<input class="form-control font13 text-truncate" id="detailview_req_reviewer05" readonly="true" placeholder="Product (Service) Reviewer" />
-															</div>
-														</div>
-													</li>
-												</ul>
-
-											</div>
-											<!--우측 영역-->
-											<div class="col-lg-6 ">
-												<ul>
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex align-items-center">
-															<strong class="detailview_title font13">요구사항 내용</strong>
-														</div>
-													</li>
-												</ul>
-												<div class="col-lg-12 form-control font13" style="position: relative;">
-													<div id="detailview_req_contents" class="overflow-auto"></div>
-
-													<button class="view-btn" data-bs-toggle="modal" data-bs-target="#viewDetailReqModal" >
-														<!--<i class="bi bi-arrows-fullscreen"style="font-size: 24px;"></i>-->
-														<i class="bi bi-search" style="font-size: 24px;"></i>
-													</button>
-
-
-												</div>
-
-											</div>
-										</div>
-									</div>
-									<p>
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
-		</div>
-	</section>
-
-	<!-- ======= 제품(서비스) 버전별 상세정보 ======= -->
-	<section id="version" class="version">
-		<div class="container" data-aos="fade-up">
-
-			<div class="section-title">
-				<h2>버전별 상세정보</h2>
-				<p>제품(서비스)의 버전별 상세 정보를 확인할 수 있습니다.</p>
-			</div>
-
-			<div class="row">
-				<!--<div class="col-lg-5">
-                       <h3 class="version-title">버전 목록</h3>
-                       <div class="version-item shadow-box">
-                          <div class="version-subtitle">
-                             <i class="bi bi-chevron-right"></i> <strong>제품(서비스) :&nbsp;</strong>
-                             <strong id="version-product-name"></strong>
-                          </div>
-                                  <div class="version-scroll">
-                                      <div class="version-list">
-                                          <div id="version-accordion"></div>
-                                      </div>
-                                  </div>
-                       </div>
-                    </div>-->
-				<div class="col-lg-5 about ">
-					<div class="shadow-box">
-						<section class="widget">
-							<header>
-                           <span class="font14" style="font-weight: bold">
-                              <i  class="fa fa-tags" style="vertical-align: middle;"></i>
-                              버전 목록
-                           </span>
-							</header>
-							<div class="body">
-								<div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-								<blockquote class="font13" style="margin-top: 5px;">
-									<strong>제품(서비스) :&nbsp;</strong><strong id="version-product-name"></strong>
-								</blockquote>
-								<div class="clearfix" style="margin-bottom: 10px; margin-top: 10px;"></div>
-								<div class=" box-primary" style=" margin-bottom: 5px !important">
-									<div  class="box-body">
-										<div class="detail-item">
-											<div class="version-scroll">
-												<div class="version-list">
-													<div id="version-accordion"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-					</div>
-				</div>
-
-				<!--<div class="col-lg-7">
-                       <h3 class="version-title">버전 상세정보</h3>
-                       <div class="version-item shadow-box">
-                          <div class="version-subtitle">
-                             <i class="bi bi-chevron-right"></i> <strong>선택한 버전 :&nbsp;</strong>
-                             <strong id="version-name"></strong>
-                          </div>
-                          <div class="version-content">
-                             <ul>
-                                &lt;!&ndash;시작 날짜&ndash;&gt;
-                                <li class="col-lg-12 row">
-                                   <div class="col-lg-4">
-                                      <i class="bi bi-chevron-right"></i> <strong class="version-content-title">버전 구현 시작일</strong>
-                                   </div>
-                                   <div class="col-lg-8">
-                                      <div class="input-group">
-                                         <div class="input-group-text"><i class="bi bi-calendar"></i></div>
-                                         <div id="version-start-date" class="form-control"></div>
-                                      </div>
-                                   </div>
-                                </li>
-                                &lt;!&ndash; 종료 날짜 &ndash;&gt;
-                                <li class="col-lg-12 row">
-                                   <div class="col-lg-4">
-                                      <i class="bi bi-chevron-right"></i> <strong class="version-content-title">버전 구현 종료일</strong>
-                                   </div>
-                                   <div class="col-lg-8">
-                                      <div class="input-group">
-                                         <div class="input-group-text"><i class="bi bi-calendar"></i></div>
-                                         <div id="version-end-date" class="form-control"></div>
-                                      </div>
-                                   </div>
-                                </li>
-                                &lt;!&ndash; 버전 내용 &ndash;&gt;
-                                <li class="col-lg-12 row">
-                                   <div class="col-lg-4">
-                                      <i class="bi bi-chevron-right"></i> <strong class="version-content-title">버전 내용</strong>
-                                   </div>
-                                </li>
-                                <li class="col-lg-12 row">
-                                   <div class="col-lg-12 version-scroll">
-                                      <div id="version-desc" class="form-control version-content-desc"></div>
-                                   </div>
-                                </li>
-                             </ul>
-                          </div>
-                       </div>
-                    </div>-->
-
-				<div class="col-lg-7 about min-mt-30">
-					<div class="shadow-box">
-						<section class="widget">
-							<header>
-                           <span class="font14" style="font-weight: bold">
-                              <i  class="fa fa-tag" style="vertical-align: middle;"></i>
-                              버전 상세정보
-                           </span>
-							</header>
-							<div class="body">
-								<div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-								<blockquote class="font13" style="margin-top: 5px;">
-									<strong>선택한 버전 :&nbsp;</strong><strong id="version-name"></strong>
-								</blockquote>
-								<div class="clearfix" style="margin-bottom: 10px; margin-top: 10px;">
-								</div>
-								<div class=" box-primary" style=" margin-bottom: 5px !important">
-									<div  class="box-body">
-										<div class="detail-item">
-											<div class="version-content">
-												<ul>
-													<!--시작 날짜-->
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end  align-items-center  p-2">
-															<strong class="version-content-title font13 ">버전 구현 시작일 :</strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bx bx-calendar"></i></div>
-																<input id="version-start-date" class="form-control text-truncate font13" readonly="true"></input>
-															</div>
-														</div>
-													</li>
-													<!-- 종료 날짜 -->
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 d-flex justify-content-md-end  align-items-center  p-2">
-															<strong class="version-content-title font13">버전 구현 종료일 :</strong>
-														</div>
-														<div class="col-lg-8">
-															<div class="input-group">
-																<div class="input-group-text"><i class="bx bx-calendar"></i></div>
-																<input id="version-end-date" class="form-control text-truncate font13" readonly="true"></input>
-															</div>
-														</div>
-													</li>
-													<!-- 버전 내용 -->
-													<li class="col-lg-12 row">
-														<div class="col-lg-4 pb-2">
-															<strong class="version-content-title font13">버전 내용</strong>
-														</div>
-														<div class="col-lg-12 version-scroll" style="position: relative;">
-															<div id="version-desc" class="form-control version-content-desc">
-
-															</div>
-															<button class="view-btn" data-bs-toggle="modal" data-bs-target="#viewVersionReqModal" id="view_version_req_btn">
-																<i class="bi bi-search" style="font-size: 24px;"></i>
-															</button>
-														</div>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Version Section -->
-
-	<!-- Start 요구사항 전체 목록 Section -->
-	<section id="allreq" class="resume">
-		<div class="container" data-aos="fade-up">
-			<div class="section-title">
-				<h2>요구사항 전체 목록</h2>
-				<p>제품(서비스)의 요구사항 전체 목록을 확인할 수 있습니다.</p>
-			</div>
-
-			<div class="row content pt-4 pt-lg-0">
-				<!-- 요구사항 목록 트리 시작 -->
-				<div class="col-lg-5 about ">
-					<div class="shadow-box">
-						<section class="widget">
-							<header>
-								<span class="font14" style="font-weight: bold">
-								  <i  class="fa fa-sitemap" style="vertical-align: middle;"></i>
-								  <span class="pdServiceName"></span> 요구사항 전체 목록
-							   	</span>
-							</header>
-							<div class="body">
-								<div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-<!--								<blockquote class="font13" style="margin-top: 5px;">
-									<strong>제품(서비스) :&nbsp;</strong><strong id="allreq_pdservice_name"></strong>
-								</blockquote>-->
-								<div class="clearfix" style="margin-bottom: 10px; margin-top: 10px;"></div>
-								<div class=" box-primary" style=" margin-bottom: 5px !important">
-									<div  class="box-body">
-										<div class="detail-item">
-											<div id="req_tree"
-												 style="padding-top: 5px; overflow: hidden; height:712px"
-												 class="border">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-					</div>
-				</div>
-				<!-- 요구사항 목록 트리 끝 -->
-
-				<div class="col-lg-7 about min-mt-30">
-					<div class="shadow-box">
-						<section class="widget">
-							<header>
-                           <span class="font14" style="font-weight: bold">
-                              <i  class="fa fa-info-circle" style="vertical-align: middle;"></i>
-                              선택한 요구사항 상세정보
-                        </span>
-							</header>
-							<div class="body">
-								<div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-<!--								<blockquote class="font13" style="margin-top: 5px;">
-									<strong>최신 버전 :&nbsp;</strong><strong id="allreq_pdservice_version"></strong>
-								</blockquote>-->
-								<div class="clearfix" style="margin-bottom: 10px; margin-top: 10px;">
-								</div>
-								<div class=" box-primary" style=" margin-bottom: 5px !important">
-									<div  class="box-body">
-										<div class="col-lg-12 pt-lg-0 content">
-											<div class="detail-item">
-												<div class="content">
-													<ul style="margin-bottom: 0px;">
-														<!--요구사항 연관 버전-->
-														<li class="col-lg-12 row">
-															<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-																<strong class="detailview_title font13">요구사항 연관 버전 : </strong>
-															</div>
-															<div class="col-lg-8">
-																<div class="input-group">
-																	<div class="input-group-text"><i class="bi bi-tag"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_version_list" readonly="true" placeholder="Proejct (Service) Version" />
-																</div>
-															</div>
-														</li>
-														<!--요구사항 아이디-->
-														<li class="col-lg-12 row">
-															<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-																<strong class="detailview_title font13">요구사항 아이디 : </strong>
-															</div>
-															<div class="col-lg-8">
-																<div class="input-group">
-																	<div class="input-group-text"><i class="bi bi-key"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_id" readonly="true" placeholder="Requirement ID" />
-																</div>
-															</div>
-														</li>
-														<li class="col-lg-12 row">
-															<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-																<strong class="detailview_title font13">요구사항 제목 : </strong>
-															</div>
-															<div class="col-lg-8">
-																<div class="input-group">
-																	<div class="input-group-text"><i class="bi bi-bookmark"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_title" readonly="true" placeholder="Requirement Title" />
-																</div>
-															</div>
-														</li>
-														<li class="col-lg-12 row">
-															<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-																<strong class="detailview_title font13">요구사항 작성자 : </strong>
-															</div>
-															<div class="col-lg-8">
-																<div class="input-group">
-																	<div class="input-group-text"><i class="bi bi-person"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_writer" readonly="true" placeholder="Requirement Author" />
-																</div>
-															</div>
-														</li>
-														<li class="col-lg-12 row">
-															<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-																<strong class="detailview_title font13">요구사항 최근 작성일 : </strong>
-															</div>
-															<div class="col-lg-8">
-																<div class="input-group">
-																	<div class="input-group-text"><i class="bx bx-calendar"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_date" readonly="true" placeholder="Requirement Last Created Date" />
-																</div>
-															</div>
-														</li>
-														<li class="col-lg-12 row toggle-content " style="cursor:pointer;">
-															<div class="col-lg-4 d-flex justify-content-md-end align-items-center p-2">
-																<strong class="detailview_title font13">제품(서비스) 리뷰어 : </strong>
-															</div>
-															<div class="col-lg-8">
-																<div class="input-group">
-																	<div class="input-group-text"><i class="bi bi-person-check"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_reviewer01" readonly="true" placeholder="Product (Service) Reviewer" />
-																</div>
-															</div>
-														</li>
-														<!--<li class='col-lg-12 row' id='additional-item2'>-->
-														<li class='col-lg-12 row d-none' id='additional-item2'>
-															<div class='col-lg-4 d-flex align-items-center'>
-															</div>
-															<div class='col-lg-8'>
-																<div class='input-group'>
-																	<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_reviewer02" readonly="true" placeholder="Product (Service) Reviewer" />
-																</div>
-															</div>
-														</li>
-														<!--<li class='col-lg-12 row' id='additional-item3'>-->
-														<li class='col-lg-12 row d-none' id='additional-item3'>
-															<div class='col-lg-4 d-flex align-items-center'>
-															</div>
-															<div class='col-lg-8'>
-																<div class='input-group'>
-																	<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_reviewer03" readonly="true" placeholder="Product (Service) Reviewer" />
-																</div>
-															</div>
-														</li>
-														<!--<li class='col-lg-12 row' id='additional-item4'>-->
-														<li class='col-lg-12 row d-none' id='additional-item4'>
-															<div class='col-lg-4 d-flex align-items-center'>
-															</div>
-															<div class='col-lg-8'>
-																<div class='input-group'>
-																	<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_reviewer04" readonly="true" placeholder="Product (Service) Reviewer" />
-																</div>
-															</div>
-														</li>
-														<!--<li  class='col-lg-12 row' id='additional-item5'>-->
-														<li  id='additional-item5' class='col-lg-12 row d-none' id='additional-item5'>
-															<div class='col-lg-4 d-flex align-items-center'>
-															</div>
-															<div class='col-lg-8'>
-																<div class='input-group'>
-																	<div class="input-group-text"><i class="bi bi-person-plus"></i></div>
-																	<input class="form-control text-truncate font13" id="allreq_pdservice_reviewer05" readonly="true" placeholder="Product (Service) Reviewer" />
-																</div>
-															</div>
-														</li>
-
-
-														<li class="col-lg-12 row" style="margin: auto; padding :20px 25px 0px 25px;">
-															<div class="col-lg-4 d-flex  align-items-center pb-2" style="padding-left: 0px;">
-																<strong  class="detailview_title font13">요구사항 내용</strong>
-															</div>
-															<div class="col-lg-12 form-control" style="position: relative;">
-																<div id="allreq_pdservice_content" class="overflow-auto"></div>
-
-																<button class="view-btn" data-bs-toggle="modal" data-bs-target="#viewAllReqModal" id="view_allreq_btn">
-																	<!--<i class="bi bi-arrows-fullscreen"></i>-->
-																	<i class="bi bi-search"></i>
-																</button>
-
-															</div>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End 요구사항 전체 목록 Section -->
-
-	<!-- ======= 파일 목록 ======= -->
-	<section id="files" class="portfolio section-bg">
-		<div id="files-container" class="container" data-aos="fade-up">
-
-			<div class="section-title">
-				<h2>제품 기획서</h2>
-				<p>제품(서비스)관련 이미지, 문서, 기타 파일 등을 확인할 수 있습니다.</p>
-			</div>
-
-			<div class="row mt-3">
-				<div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
-					<ul id="portfolio-flters">
-						<li data-filter="*" class="filter-active">All</li>
-						<li data-filter=".filter-image">Image</li>
-						<li data-filter=".filter-doc">Document</li>
-						<li data-filter=".filter-etc">Etc</li>
-					</ul>
-				</div>
-			</div>
-
-			<div id="filter-files" class="row-cols-3 portfolio-container" data-aos="fade-up" data-aos-delay="200">
-			</div>
-
-		</div>
-	</section><!-- End Portfolio Section -->
-
-	<!-- ======= Q&A ======= -->
-	<section id="question" class="contact">
-		<div class="container" data-aos="fade-up">
-			<div class="section-title">
-				<h2>Q & A</h2>
-				<p>제품(서비스)에 대한 질문 및 답변을 확인할 수 있습니다.</p>
-			</div>
-			<div class="widget large shadow-box box">
-				<div class="box-header">
-					<header>
-                  <span  class="font14" style="font-weight: bold">
-                     <i  class="fa fa-comments-o" style="vertical-align: middle;"></i>
-                     질문 목록
-                  </span>
-					</header>
-				</div>
-				<div class="body">
-					<div class="gradient_middle_border pb-2 pt-2" style="width: 100%; height: 2px"></div>
-					<div class="clearfix pb-2 pt-2" style="margin-bottom: 10px; margin-top: 10px;">
-					</div>
-					<div id="chat" class="chat"><!-- 채팅 -->
-						<div id="chat_messages" class="chat-messages"></div>
-						<div class="gradient_middle_border pb-2 pt-2" style="width: 100%; height: 2px"></div>
-						<div class="pagination-container pb-2">
-							<ul class="pagination">
-							</ul>
-						</div>
-
-						<div class="chat-container pt-2">
-							<div class="chat-input">
-								<textarea id="comment-contents" placeholder="Type your message..."></textarea>
-								<button id="req_comment_save_btn" style="height:40px;">
-									<i class="bi bi-chat-dots" ></i>
-								</button>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-		</div>
-	</section>
-</main><!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<footer id="footer">
-	<div class="container">
-		<div class="copyright">
-			&copy; Copyright <strong><span>MyResume</span></strong>. All Rights Reserved
-		</div>
-		<div class="credits">
-			<!-- All the links in the footer should remain intact. -->
-			<!-- You can delete the links only if you purchased the pro version. -->
-			<!-- Licensing information: [license-url] -->
-			<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-html-bootstrap-template-my-resume/ -->
-			Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-		</div>
-	</div>
-</footer><!-- End Footer -->
-
-<div id="preloader"></div>
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-<div class="loader animated fadeIn darkBack hide"
-	 style="z-index: 999999">
-         <span   class="spinner"
-				 style="font-size: 13px !important">
-            <i  class="fa fa-empire fa-spin"></i>
-            어플리케이션 API Data를 가져오는 중입니다...
-         </span>
+        <footer class="content-footer pull-right"
+                data-include="html/template/content-footer.html">
+        </footer>
+    </div>
 </div>
 
-<!-- Vendor JS Files -->
-<script src="./html/armsDetailExceptTemplate/assets/vendor/aos/aos.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="./html/armsDetailExceptTemplate/assets/vendor/typed.js/typed.min.js"></script>
+<div    class="loader animated fadeIn darkBack hide"
+        style="z-index: 999999">
+			<span   class="spinner"
+                    style="font-size: 13px !important">
+				<img    src="./img/circleloading.gif"
+                        alt="로딩"
+                        style="width: 16px;">
+				어플리케이션 API Data를 가져오는 중입니다...
+			</span>
+</div>
 
-<!-- Template Main JS File -->
-<script src="./js/index.js"></script>
+<div    id="topicon"
+        style="opacity: 1">
+    <img    src="./img/topicon.gif"
+            alt="맨위로" />
+</div>
+
+<!-- upload template -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td class="preview"><span class="fade"></span></td>
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        {% if (file.error) { %}
+        <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+        <td>
+            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="bar" style="width:0%;"></div>
+            </div>
+        </td>
+        <td>{% if (!o.options.autoUpload) { %}
+            <button class="btn btn-primary btn-sm start">
+                <i class="fa fa-upload"></i>
+                <span>Start</span>
+            </button>
+            {% } %}</td>
+        {% } else { %}
+        <td colspan="2"></td>
+        {% } %}
+        <td>{% if (!i) { %}
+            <button class="btn btn-warning btn-sm cancel">
+                <i class="fa fa-ban"></i>
+                <span>Cancel</span>
+            </button>
+            {% } %}</td>
+    </tr>
+    {% } %}
+</script>
+
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        {% if (file.error) { %}
+        <td></td>
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else { %}
+        <td class="preview">{% if (file.thumbnailUrl) { %}
+            <a href="{%=file.url%}" title="{%=file.fileName%}" data-gallery="gallery" download="{%=file.fileName%}">
+            <img src="{%=file.iconFileName%}" width="80" height="80" class="thumbnail">
+            {% } %}</td>
+        <td class="name" style="vertical-align: middle;">
+            <a href="{%=file.url%}" title="{%=file.fileName%}" data-gallery="{%=file.thumbnailUrl&&'gallery'%}" download="{%=file.fileName%}">{%=file.fileName%}</a>
+        </td>
+        <td class="size" style="vertical-align: middle;"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td colspan="2"></td>
+        {% } %}
+        <td style="vertical-align: middle;">
+            <button class="btn btn-danger btn-sm delete file-delete-btn" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+            <i class="fa fa-trash"></i>
+            <span>Delete</span>
+            </button>
+        </td>
+    </tr>
+    {% } %}
+</script>
+<!-- Piwik -->
+<script type="text/javascript">
+    var _paq = _paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="//313.co.kr/php/piwik/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', '1']);var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+</script>
+<noscript>
+    <p>
+        <img src="//313.co.kr/php/piwik/piwik.php?idsite=1" style="border:0;" alt="" />
+    </p>
+</noscript>
+<!-- End Piwik Code -->
 </body>
 </html>
