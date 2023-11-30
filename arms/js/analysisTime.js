@@ -53,11 +53,11 @@ function execDocReady() {
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/newtimeline.js",
             //"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
             // 3번째 박스 데이터 테이블 내 차트
-            "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
-            "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
+            // "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
+            // "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
             /*"../reference/jquery-plugins/echarts-5.4.3/test/lib/simpleRequire.js",
             "../reference/jquery-plugins/echarts-5.4.3/test/lib/config.js",*/
-            "./js/analysisTime/index.js",
+            // "./js/analysisTime/index.js",
             // 5번째 박스 network chart
             "./js/analysisTime/d3.v5.min.js",
             // 5번째 박스 heatmap
@@ -121,25 +121,6 @@ function execDocReady() {
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
-            $("#progress_req_status").slimScroll({
-                height: "190px",
-                railVisible: true,
-                railColor: "#222",
-                railOpacity: 0.3,
-                wheelStep: 10,
-                allowPageScroll: false,
-                disableFadeOut: false
-            });
-
-            $("#progress_linked_issue_status").slimScroll({
-                height: "190px",
-                railVisible: true,
-                railColor: "#222",
-                railOpacity: 0.3,
-                wheelStep: 10,
-                allowPageScroll: false,
-                disableFadeOut: false
-            });
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -235,6 +216,7 @@ function makeVersionMultiSelectBox() {
 
             statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 
+            showStatusesCountBox();
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
 
@@ -256,6 +238,27 @@ function makeVersionMultiSelectBox() {
     });
 }
 
+function showStatusesCountBox() {
+    $("#progress_req_status").slimScroll({
+        height: "190px",
+        railVisible: true,
+        railColor: "#222",
+        railOpacity: 0.3,
+        wheelStep: 10,
+        allowPageScroll: false,
+        disableFadeOut: false
+    });
+
+    $("#progress_linked_issue_status").slimScroll({
+        height: "190px",
+        railVisible: true,
+        railColor: "#222",
+        railOpacity: 0.3,
+        wheelStep: 10,
+        allowPageScroll: false,
+        disableFadeOut: false
+    });
+}
 function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
     $.ajax({
         url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
@@ -387,6 +390,7 @@ function bind_VersionData_By_PdService() {
 
                 statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 
+                showStatusesCountBox();
                 getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
                 getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
 
@@ -1780,8 +1784,6 @@ function formatDate(date) {
 
 function calendarHeatMap(jiraIssueData) {
 
-    d3.select("#heatmap-body").style("overflow-x","scroll");
-
     $('#calendar_yearview_blocks_chart_1 svg').remove();
     $('#calendar_yearview_blocks_chart_2 svg').remove();
 
@@ -1860,6 +1862,8 @@ function calendarHeatMap(jiraIssueData) {
         day_names: ['mo', 'wed', 'fri', 'sun'],
         colors: issue_colors
     });
+
+    d3.select("#heatmap-body").style("overflow-x","scroll");
 }
 
 

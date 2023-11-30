@@ -3111,12 +3111,12 @@ table tbody tr td {
 
 .board-thumb.solution {
 	background-image: url("../img/index/solution.png");
-	height: 274px;
+	height: 200px;
 }
 
 .board-thumb.connect {
-	background-image: url("../img/index/connect.png");
-	height: 274px;
+	background-image: url("../img/index/connect_effect.png");
+	height: 200px;
 }
 
 .board-thumb.arms-about {
