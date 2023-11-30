@@ -3115,7 +3115,7 @@ table tbody tr td {
 }
 
 .board-thumb.connect {
-	background-image: url("../img/index/connect.png");
+	background-image: url("../img/index/connect_effect.png");
 	height: 200px;
 }
 
