@@ -1266,7 +1266,7 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
     }
 
     const url = new UrlBuilder()
-        .setBaseUrl('/auth-user/api/arms/dashboard/jira-issue-statuses')
+        .setBaseUrl('/auth-user/api/arms/dashboard/aggregation/flat')
         .addQueryParam('pdServiceLink', pdServiceLink)
         .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
         .addQueryParam('메인그룹필드', "status.status_name.keyword")
