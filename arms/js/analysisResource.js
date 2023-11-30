@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////
 //Document Ready
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////
 var selectedPdServiceId; // 제품(서비스) 아이디
-var reqStatusDataTable;
+var selectedVersionId;   // 선택된 버전 아이디
 var dataTableRef;
-var selectedVersionId; // 선택된 버전 아이디
+var mailAddressList;
 var dashboardColor;
 var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
@@ -61,7 +61,8 @@ function execDocReady() {
             "js/analysis/api/resourceApi.js",
             "js/analysis/table/workerStatusTable.js",
             "js/analysis/resource/chart/horizontalBarChart.js",
-            "js/analysis/resource/chart/simplePie.js"
+            "js/analysis/resource/chart/simplePie.js",
+            "js/analysis/resource/chart/basicRadar.js"
         ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -301,22 +302,12 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function (e) {
         selectedPdServiceId = $("#selected_pdService").val();
-        refreshDetailChart();
+        refreshDetailChart(); 변수값_초기화();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
         //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
         bind_VersionData_By_PdService();
 
-        var checked = $("#checkbox1").is(":checked");
-        var endPointUrl = "";
-
-        if (checked) {
-            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
-        } else {
-            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
-        }
-
-        //statisticsMonitor($("#selected_pdService").val()); //ES모으는중 by YHS
 
 
     });
@@ -330,19 +321,19 @@ function makeVersionMultiSelectBox() {
     $(".multiple-select").multipleSelect({
         filter: true,
         onClose: function () {
-            req_count = 0; linkedIssue_subtask_count = 0;
+
             console.log("onOpen event fire!\n");
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
             selectedVersionId = versionTag.join(',');
 
-            refreshDetailChart();
+            refreshDetailChart(); 변수값_초기화();
 
             // 요구사항 및 연결이슈 통계
-            getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
+            getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
             // 작업자별 상태
-            drawResource($("#selected_pdService").val(), selectedVersionId);
+            drawResource(selectedPdServiceId, selectedVersionId);
 
             drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
@@ -368,16 +359,18 @@ function bind_VersionData_By_PdService() {
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
                 }
-                refreshDetailChart();
+                refreshDetailChart(); 변수값_초기화();
                 selectedVersionId = pdServiceVersionIds.join(',');
                 // 요구사항 및 연결이슈 통계
-                getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
-                // 작업자별 상태
-                drawResource($("#selected_pdService").val(), selectedVersionId);
+                getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+                // 작업자별 상태 - dataTable
+                drawResource(selectedPdServiceId, selectedVersionId);
 
-                drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
-                drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
+                drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId);
+                drawManRequirementTreeMapChart(selectedPdServiceId, selectedVersionId);
                 stackedHorizontalBar();
+                
+
                 if (data.length > 0) {
                     console.log("display 재설정.");
                 }
@@ -476,6 +469,7 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                     // 담당자 미지정 - 요구사항 및 연결이슈
                     $('#no_assigned_req_count').text(no_assigned_req_count);
                     $('#no_assigned_linkedIssue_subtask_count').text(no_assigned_linkedIssue_subtask_count);
+
                 }
                 // 작업자수 및 평균계산
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
@@ -535,6 +529,7 @@ var drawResource = function (pdservice_id, pdServiceVersionLinks) {
 };
 
 function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
+    mailAddressList = [];
     $.ajax({
         url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
         type: "GET",
@@ -549,7 +544,7 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
         statusCode: {
             200: function (data) {
                 let assigneesArr = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-                let mailAddressList = [];
+
                 //제품(서비스)에 투입된 총 인원수
                 resource_count = assigneesArr.length;
                 if (data["전체합계"] === 0) { //담당자(작업자) 없음.
@@ -607,7 +602,8 @@ function getReqInActionCount(pdService_id, pdServiceVersionLinks) {
                         $('#linkedIssue_subtask_count_per_req_in_action').text((linkedIssue_subtask_count/req_in_action).toFixed(1));
                     }
                 }
-
+                // 리소스-요구사항-일정 레이더차트
+                getScheduleToDrawRadarChart(pdService_id,pdServiceVersionLinks);
             },
             error: function (e) {
                 jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
@@ -629,6 +625,27 @@ function disposeDetailChartInstance() {
     });
 }
 
+function drawDetailOverallChart() {
+    let mailList = mailAddressList;
+    let mailStr ="";
+
+    if (mailAddressList.length === 1) {
+        mailStr = mailList[0];
+    } else {
+        for (let cnt = 0; cnt < mailList.length; cnt++) {
+            if(cnt !== mailList.length-1) {
+                mailStr += mailList[cnt] +",";
+            } else {
+                mailStr += mailList[cnt];
+            }
+        }
+    }
+    searchMap.forEach(
+        (target, index) => {
+            drawChartsPerPerson(selectedPdServiceId,selectedVersionId,mailStr, target["field"], target["reqId"], target["subId"]);
+        }
+    )
+}
 //공통코드-extract필요
 function drawDetailChartForAll(pdservice_id, pdServiceVersionLinks, mailAddressList) {
     let mailList = mailAddressList;
@@ -801,8 +818,93 @@ function drawChartsPerPerson(pdservice_id, pdServiceVersionLinks, mailAddressLis
     });
 }
 
+//email에서 ID 만 가져오기
 function getIdFromMail (param) {
     var full_str = param;
     var indexOfAt = full_str.indexOf('@');
     return full_str.substring(0,indexOfAt);
+}
+
+function getScheduleToDrawRadarChart(pdservice_id, pdServiceVersionLinks) {
+
+    let 선택한_버전_세트 = new Set();
+    pdServiceVersionLinks.split(",").forEach( e => 선택한_버전_세트.add({c_id:e}));
+
+    if(선택한_버전_세트.size !== 0) {
+        $.ajax({
+            url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do",
+            data: {
+                c_id: pdservice_id,
+                pdServiceVersionEntities: 선택한_버전_세트
+            },
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (json) {
+                    let 버전_세트 = json.pdServiceVersionEntities;
+                    let earliestStartDate; let lastEndDate;
+                    let versionArray= [];
+                    버전_세트.forEach(e => versionArray.push(e));
+
+                    if(versionArray !== 0) {
+                        for (let i=0; i<versionArray.length; i++) {
+                            if (i === 0) {
+                                earliestStartDate = versionArray[i].c_pds_version_start_date;
+                                lastEndDate = versionArray[i].c_pds_version_end_date;
+                            } else {
+                                if(versionArray[i]["c_pds_version_start_date"] < earliestStartDate) {
+                                    earliestStartDate = versionArray[i]["c_pds_version_start_date"];
+                                }
+                                if(versionArray[i]["c_pds_version_end_date"] > lastEndDate) {
+                                    lastEndDate = versionArray[i]["c_pds_version_end_date"];
+                                }
+                            }
+                        }
+                    }
+
+                    let 목표데이터_배열 = [resource_count, req_count, getDateDiff(earliestStartDate, lastEndDate)];
+                    let 현재진행데이터_배열 = [resource_count, req_in_action, getDateDiff(earliestStartDate, new Date())];
+
+                    drawBasicRadar("radarPart",목표데이터_배열, 현재진행데이터_배열);
+                }
+            }
+        });
+    }
+
+}
+
+const getDateDiff = (d1, d2) => {
+    const date1 = new Date(d1);
+    const date2 = new Date(d2);
+
+    const diffDate = date1.getTime() - date2.getTime();
+
+    return Math.abs(diffDate / (1000 * 60 * 60 * 24)).toFixed(1); // 밀리세컨 * 초 * 분 * 시 = 일
+
+}
+
+function 변수값_초기화() {
+    req_count =0
+    linkedIssue_subtask_count =0
+    resource_count =0;
+    req_in_action =0;
+    $("#total_req_count").text("-");       // 총 요구사항 수(미할당포함)
+    $("#no_assigned_req_count").text("-"); // 미할당 요구사항 수
+    $("#req_count").text("-");             // 작업 대상 요구사항 수
+    $("#req_in_action_count").text("-");   // 작업중 요구사항
+
+    $("#total_linkedIssue_subtask_count").text("-");       //연결이슈 수
+    $("#no_assigned_linkedIssue_subtask_count").text("-"); //미할당 연결이슈 수
+    $("#linkedIssue_subtask_count_per_req_in_action").text("-"); // 작업중 요구사항에 대한 연결이슈 평균
+
+    $("#resource_count").text("-");        // 작업자수
+    $("#req_in_action_avg").text("-");     // 작업중 요구사항 평균
+    $("#avg_linkedIssue_count").text("-"); // 연결이슈 평균
+
+    let radarChart = echarts.getInstanceByDom(document.getElementById("radarPart"));
+    if(radarChart) { radarChart.dispose(); }
+    let stackBarChart = echarts.getInstanceByDom(document.getElementById("apache-echarts-stacked-horizontal-bar"));
+    if(stackBarChart) { stackBarChart.dispose(); }
 }
