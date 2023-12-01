@@ -1755,3 +1755,8 @@ function click_btn_for_connect_req_jira() {
 			.always(function () {});
 	});
 }
+
+$('#text').on('input', function() {
+	var searchString = $(this).val();
+	$('#req_tree').jstree('search', searchString);
+});

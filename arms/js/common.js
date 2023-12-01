@@ -568,6 +568,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			search: {
 				// As this has been a common question - async search
 				// Same as above - the `ajax` config option is actually jQuery's AJAX object
+
+				/**
+				 * v1 : 검색 버튼 클릭 시 API 호출 후 응답 데이터를 jstree 에 바인딩
 				ajax: {
 					url: serviceNameForURL + "/searchNode.do",
 					// You get the search string as a parameter
@@ -579,6 +582,15 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					success: function (n) {
 						jSuccess("search data complete");
 					}
+				}
+				*/
+
+				/**
+				 * v2 : 검색 버튼 클릭 시 jstree 노드 필터링을 통해 검색
+				 */
+				show_only_matches: true,
+				search_callback: function(str, node) {
+					return node.data().search(str);
 				}
 			},
 			// Using types - most of the time this is an overkill
