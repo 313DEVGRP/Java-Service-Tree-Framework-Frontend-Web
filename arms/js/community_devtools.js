@@ -26,13 +26,3 @@ function execDocReady() {
 		});
 
 }
-
-function middleProxy(){
-	$.cookie('cookie', 'middle-proxy');
-	location.href = '/swagger-ui/index.html';
-}
-
-function backendCore(){
-	$.cookie('cookie', 'backend-core');
-	location.href = '/swagger-ui.html';
-}
