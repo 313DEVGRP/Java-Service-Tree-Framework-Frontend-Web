@@ -133,14 +133,13 @@
     <!-- ckeditor4 성능 이슈로 인한 주석 처리. -->
     <script type="text/javascript" src="../reference/jquery-plugins/ckeditor4-4.22.1/ckeditor.js" charset="utf-8"></script>
 
-    <script type="text/javascript" src="../reference/lightblue4/docs/js/app.js" charset="utf-8"></script>
-
     <!-- page interaction -->
     <script type="text/javascript" src="../reference/jquery-plugins/topbar.js" charset="utf-8"></script>
 
     <!-- page js -->
     <script type="text/javascript" src="../arms/js/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="../arms/js/common/dwrChat.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../reference/lightblue4/docs/js/app.js" charset="utf-8"></script>
 
 </head>
 
@@ -191,6 +190,25 @@
     <img    src="./img/topicon.gif"
             alt="맨위로" />
 </div>
+
+<!-- config icon template -->
+<script type="text/template" id="settings-template">
+    <div class="setting clearfix">
+        <div>Mode (NewTab)</div>
+        <div class="pull-left btn-group">
+            <button type="button" class="btn btn-sm btn-default">Adm</button>
+            <button type="button" class="btn btn-sm btn-default">User</button>
+        </div>
+    </div>
+    <div class="setting clearfix">
+        <div>Sidebar</div>
+        <div id="display-sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
+            <% display = displaySidebar%>
+            <button type="button" data-value="true" class="btn btn-sm btn-default <%= display? 'active' : '' %>">Show</button>
+            <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
+        </div>
+    </div>
+</script>
 
 <!-- upload template -->
 <script id="template-upload" type="text/x-tmpl">
