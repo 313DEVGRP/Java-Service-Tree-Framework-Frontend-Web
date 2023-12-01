@@ -7770,7 +7770,9 @@
                     return n.segmentTooltipContent(e);
                 var r = n.zColorScale.domain()[n.zColorScale.domain().length - 1] - n.zColorScale.domain()[0]
                   , i = (n.useUtc ? we : be)("".concat(n.timeFormat).concat(n.useUtc ? " (UTC)" : ""));
-                return "<strong>" + e.labelVal + " </strong>" + n.zDataLabel + (r ? " (<strong>" + Math.round((e.val - n.zColorScale.domain()[0]) / r * 100 * 100) / 100 + "%</strong>)" : "") + "<br><strong>From: </strong>" + i(e.timeRange[0]) + "<br><strong>To: </strong>" + i(e.timeRange[1])
+
+                console.log(e);
+                return "<strong>" + e.label+ " </strong>" + n.zDataLabel + (r ? " (<strong>" + Math.round((e.val - n.zColorScale.domain()[0]) / r * 100 * 100) / 100 + "%</strong>)" : "") + "<br><strong>From: </strong>" + i(e.timeRange[0]) + "<br><strong>To: </strong>" + i(e.timeRange[1])
             }
             )),
             n.svg.call(n.segmentTooltip),
@@ -7828,7 +7830,7 @@
                 }
             }
             )),
-            n.resetBtn = n.svg.append("text").attr("class", "reset-zoom-btn").text("Reset Zoom").style("text-anchor", "end").on("mouseup", (function() {
+            n.resetBtn = n.svg.append("text").attr("class", "reset-zoom-btn").text("확대 초기화").style("text-anchor", "end").on("mouseup", (function() {
                 n.svg.dispatch("resetZoom")
             }
             )).on("mouseover", (function() {

@@ -2110,6 +2110,8 @@ function sevenTimeline(data) {
         var myData = dataFormattingForSevenTimeLine(groupedData);
         TimelinesChart()('#sevenTimeLine')
             .width(1440)
+            .maxHeight(3000)
+            .maxLineHeight(30)
             .zQualitative(true)
             .data(myData)
             .refresh();
