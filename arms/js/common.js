@@ -561,6 +561,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					},
 					success: function (n) {
 						jSuccess("Product(service) Data Load Complete");
+						$(jQueryElementID).jstree('search', $('#text').val());
 					}
 				}
 			},
