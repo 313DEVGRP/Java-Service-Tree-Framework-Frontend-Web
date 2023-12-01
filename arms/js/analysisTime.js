@@ -274,7 +274,6 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 
                 // 버전 선택 시 데이터 파싱
 
-                calendarHeatMap(data);
                 statusTimeline(data);
                 sevenTimeline(data);
 
@@ -352,13 +351,10 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
                         // 이번 달의 마지막 날 구하기
                         var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                        console.log("lastDay :"+lastDay);
                         // 이번달 일수 구하기
                         var daysCount  = lastDay.getDate();
-                        console.log("daysCount :"+daysCount);
                         // 오늘 일자 구하기
                         var day = today.getDate();
-                        console.log("day :"+day);
                           var today_flag = {
                             "title" : "오늘",
                             "startDate" : formatDate(firstDay),
@@ -436,7 +432,8 @@ function bind_VersionData_By_PdService() {
                 combinationChart($("#selected_pdService").val(), selectedVersionId);
 
                 getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
-
+                calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
+                // calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -813,7 +810,7 @@ function calculateCompletion(data, completedId, totalId, rateId, progressId) {
             "		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
             "<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
             "</div>";
-        console.log(html_piece);
+       // console.log(html_piece);
         $("#" + progressId).append(html_piece);
     });
     $("#" + totalId).text(totalCount);
@@ -892,7 +889,7 @@ function drawVersionProgress(data) {
     degToRad = function (deg) {
         return (deg * Math.PI) / 180;
     };
-    //
+
     svg = d3
         .select("#versionGaugeChart")
         .append("svg")
@@ -955,17 +952,15 @@ function drawVersionProgress(data) {
     const today = new Date(data[0].current_date);
     today.setHours(0,0,0,0); //시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
 
-// 시작일과 종료일은 'YYYY-MM-DD' 형식의 문자열로 가정하였습니다.
+    // 시작일과 종료일은 'YYYY-MM-DD' 형식의 문자열로 가정
     const startDate = new Date(fastestStartDate);
     startDate.setHours(0,0,0,0); //시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
 
     const endDate = new Date(latestEndDate);
     endDate.setHours(0,0,0,0); //시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
 
-    var  diffStart = (today - startDate) / (1000 * 60 * 60 * 24); // 오늘 날짜와 시작일 사이의 차이를 일 단위로 계산
-    console.log(diffStart);
+    var diffStart = (today - startDate) / (1000 * 60 * 60 * 24); // 오늘 날짜와 시작일 사이의 차이를 일 단위로 계산
     var diffEnd = (today - endDate) / (1000 * 60 * 60 * 24); // 오늘 날짜와 종료일 사이의 차이를 일 단위로 계산
-    console.log(diffEnd);
 
     $("#startDDay").css("color", "");
     $("#endDDay").css("color", "");
@@ -1820,7 +1815,54 @@ function formatDate(date) {
     return year + '-' + month + '-' + day;
 }
 
-function calendarHeatMap(jiraIssueData) {
+function calendarHeatMap(pdServiceLink, pdServiceVersions) {
+
+    $('#calendar_yearview_blocks_chart_1 svg').remove();
+    $('#calendar_yearview_blocks_chart_2 svg').remove();
+
+    $.ajax({
+        url: "/auth-user/api/arms/analysis/time/heatmap",
+        type: "GET",
+        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersions},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        async: true,
+        statusCode: {
+            200: function (data) {
+                $(".update-title").show();
+
+                $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
+                    data: JSON.stringify(data.requirement),
+                    start_monday: true,
+                    always_show_tooltip: true,
+                    month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'],
+                    day_names: ['mo', 'wed', 'fri', 'sun'],
+                    colors: data.requirementColors
+                });
+
+                /*var heatMapBarHtml = `<div id="heatmap-bar" className="time_element"></div>`;
+                $('#calendar_yearview_blocks_chart_1').append(heatMapBarHtml);*/
+
+                $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
+                    data: JSON.stringify(data.relationIssue),
+                    start_monday: true,
+                    always_show_tooltip: true,
+                    month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+                    day_names: ['mo', 'wed', 'fri', 'sun'],
+                    colors: data.relationIssueColors
+                });
+
+                d3.select("#heatmap-body").style("overflow-x","scroll");
+            }
+        }
+    });
+
+}
+
+/*function calendarHeatMap(jiraIssueData, pdServiceLink, pdServiceVersions) {
+
+    var jiraIssueBackupData;
 
     $('#calendar_yearview_blocks_chart_1 svg').remove();
     $('#calendar_yearview_blocks_chart_2 svg').remove();
@@ -1831,8 +1873,7 @@ function calendarHeatMap(jiraIssueData) {
     var relation_issue_colors = [];
 
     jiraIssueData.forEach(item => {
-        var display_date = formatDate(new Date(item.updated));
-
+        console.log(item.summary);
         if(item.isReq === true) {
             heatmapDataParsing(requirement, item, requirement_colors);
         }
@@ -1843,18 +1884,23 @@ function calendarHeatMap(jiraIssueData) {
 
     function heatmapDataParsing(return_object, item, return_colors) {
         var display_date = formatDate(new Date(item.updated));
+        console.log(display_date + " : " +item.updated);
+        console.log(item.summary);
         if (return_object[display_date] === undefined) {
             return_object[display_date] = {};
             return_object[display_date].items = [];
         }
 
-        return_object[display_date].items.push(item.summary);
-        return_colors.push(item.summary);
+        if (!return_object[display_date].items.includes(item.summary)) {
+            return_object[display_date].items.push(item.summary);
+            return_colors.push(item.summary);
+        }
     }
 
     var requirementHeatMapData = JSON.stringify(requirement);
     var relationIssuetHeatMapData = JSON.stringify(relation_issue);
 
+    console.log(requirementHeatMapData);
     var req_colors = {
         'default': '#eeeeee'
     };
@@ -1889,8 +1935,8 @@ function calendarHeatMap(jiraIssueData) {
         colors: req_colors
     });
 
-    /*var heatMapBarHtml = `<div id="heatmap-bar" className="time_element"></div>`;
-    $('#calendar_yearview_blocks_chart_1').append(heatMapBarHtml);*/
+    /!*var heatMapBarHtml = `<div id="heatmap-bar" className="time_element"></div>`;
+    $('#calendar_yearview_blocks_chart_1').append(heatMapBarHtml);*!/
 
     $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
         data: relationIssuetHeatMapData,
@@ -1902,7 +1948,7 @@ function calendarHeatMap(jiraIssueData) {
     });
 
     d3.select("#heatmap-body").style("overflow-x","scroll");
-}
+}*/
 
 
 ////////////////////
