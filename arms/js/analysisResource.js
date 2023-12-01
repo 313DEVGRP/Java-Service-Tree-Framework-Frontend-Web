@@ -881,7 +881,7 @@ const getDateDiff = (d1, d2) => {
 
     const diffDate = date1.getTime() - date2.getTime();
 
-    return Math.abs(diffDate / (1000 * 60 * 60 * 24)).toFixed(1); // 밀리세컨 * 초 * 분 * 시 = 일
+    return Math.abs(diffDate / (1000 * 60 * 60 * 24)).toFixed(0); // 밀리세컨 * 초 * 분 * 시 = 일
 
 }
 

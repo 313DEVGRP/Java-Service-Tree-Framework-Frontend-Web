@@ -92,9 +92,9 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
 
     option = {
         title: titleOption,
-        tooltip: {
+        /*tooltip: {
             trigger: 'axis'
-        },
+        },*/
         legend: {
             data: ['제품(서비스) 설정기준','현재 진행상황'], //
             left: "left",
@@ -107,9 +107,9 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
         radar: {
             // shape: 'circle',
             indicator: [
-                { name: '작업자수 (명)', max: objectiveArr[0] },
-                { name: '요구사항 (개)', max: objectiveArr[1] },
-                { name: '일정 (일)',    max: scheduleMax }
+                { name: '작업자수: ' + objectiveArr[0]+'명', max: objectiveArr[0] },
+                { name: '요구사항: ' + objectiveArr[1]+'개', max: objectiveArr[1] },
+                { name: '일정: ' + objectiveArr[2]+'일',    max: scheduleMax }
             ],
             name: {
                 textStyle: {
@@ -117,8 +117,9 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
                     fontSize: 11 // 데이터 전체의 이름 폰트 크기 설정
                 }
             },
+            nameGap: 30,
             center: ["50%","65%"],
-            radius: 100,
+            radius: "60%",
             axisLine: {
                 lineStyle: {
                     color: 'rgba(244, 244, 244, 0.5)'
@@ -142,6 +143,8 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
                     {
                         value: objectiveArr,
                         name: '제품(서비스) 설정기준',
+                        symbol:'triangle',
+                        symbolSize: 10,
                         areaStyle: {
                             opacity: 0.3
                         }
@@ -149,6 +152,21 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
                     {
                         value: currentProgressArr,
                         name: '현재 진행상황',
+                        symbol:'roundRect', // circle, rect, roundRect, triangle, diamond, pin, arrow
+                        symbolSize: 10,
+                        label: {
+                            show: true,
+                            textStyle: {
+                                color: 'rgb(162,198,255)',
+                                fontsize: 12,
+                                backgroundColor: 'rgba(51,51,51,0.8)',
+                                padding: [3, 5],
+                                borderRadius: 3,
+                            },
+                            formatter: function (params) {
+                                return params.value;
+                            }
+                        },
                         areaStyle: {
                             opacity: 0.6
                         }
