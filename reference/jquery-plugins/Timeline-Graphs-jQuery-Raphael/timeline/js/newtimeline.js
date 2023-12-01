@@ -518,6 +518,81 @@
                 //设置ViewBox偏移量
                 ViewBoxY = Math.abs(endY * 2) / 2 + legendHeight;
                 paper.setViewBox(-ViewBoxX, -ViewBoxY, pagerWidth, pagerHeight, false);
+
+                // 타임라인 차트 zoom and mouse drag and drop
+                var zoomLevel = 1;
+
+                let svg = document.querySelector('#demo svg');
+                let isMouseDown = false;
+                let startViewBoxX, startViewBoxY;
+
+                let viewBox = { x: ViewBoxX, y: -ViewBoxY, width: svg.viewBox.baseVal.width, height: svg.viewBox.baseVal.height };
+                let xMin = -svg.viewBox.baseVal.width/2;
+                let xMax = svg.viewBox.baseVal.width/2;
+                let yMin = -svg.viewBox.baseVal.height/2;
+                let yMax = svg.viewBox.baseVal.height/2;
+
+                svg.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    isMouseDown = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startViewBoxX = viewBox.x;
+                    startViewBoxY = viewBox.y;
+                });
+
+                svg.addEventListener('mousemove', (e) => {
+                    if(isMouseDown){
+                        let dx = e.clientX - startX;
+                        let dy = e.clientY - startY;
+                        let potentialViewBoxX = startViewBoxX - dx;
+                        let potentialViewBoxY = startViewBoxY - dy;
+
+                        // x축 제한 설정
+                        if(potentialViewBoxX > xMin && potentialViewBoxX < xMax) {
+                            viewBox.x = potentialViewBoxX;
+                        }
+
+                        // y축 제한 설정
+                        if(potentialViewBoxY > yMin && potentialViewBoxY < yMax) {
+                            viewBox.y = potentialViewBoxY;
+                        }
+
+                        svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.width  * zoomLevel} ${viewBox.height  * zoomLevel}`);
+                    }
+                    // if(isMouseDown){
+                    //     let dx = e.clientX - startX;
+                    //     let dy = e.clientY - startY;
+                    //     viewBox.x = startViewBoxX - dx;
+                    //     viewBox.y = startViewBoxY - dy;
+                    //     svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.width  * zoomLevel} ${viewBox.height  * zoomLevel}`);
+                    // }
+                });
+
+                svg.addEventListener('mouseup', () => {
+                    isMouseDown = false;
+                });
+
+                svg.addEventListener('mouseleave', () => {
+                    isMouseDown = false;
+                });
+
+                svg.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+
+                    if(e.deltaY < 0) {
+                        zoomLevel /= 1.1;
+                    } else {
+                        let potentialZoom = zoomLevel * 1.1;
+                        if (potentialZoom > 1) {
+                            zoomLevel = 1;
+                        } else {
+                            zoomLevel = potentialZoom;
+                        }
+                    }
+
+                    svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.width  * zoomLevel} ${viewBox.height  * zoomLevel}`);
+                });
             }
 
             container.addClass("statusTimeline");
