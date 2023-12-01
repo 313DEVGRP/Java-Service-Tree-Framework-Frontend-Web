@@ -1248,6 +1248,9 @@ function 톱니바퀴_초기설정() {
 		animation: false,
 		placement: 'bottom',
 		content: function(){
+			if(typeof _ === 'undefined'){
+				return "미지원";
+			}
 			return _.template($('#settings-template').html())(settingsState);
 		}
 	}).click(function(e){
