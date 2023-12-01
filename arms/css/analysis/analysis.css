@@ -184,7 +184,12 @@ button {
 @media (max-width: 768px) {
     #chart-product-manpower {
         /*height: 60vh;*/
-        max-height: 500px;
+        /*max-height: 500px;*/
+    }
+
+    #chart-product-manpower svg {
+        position: absolute;
+        top: 100%;
     }
 }
 
