@@ -120,8 +120,6 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            scatterChart();
-
             dashboardColor = dashboardPalette.dashboardPalette01;
 
         })
@@ -279,6 +277,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
                 statusTimeline(data);
                 sevenTimeline(data);
 
+                scatterChart(data);
                 // setTimeout(function () {
                 //     networkChart(pdServiceVersions, data);
                 // },1000);
@@ -1724,6 +1723,8 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
         async: true,
         statusCode: {
             200: function (data) {
+                // scatterChart(data);
+
                 $(".update-title").show();
 
                 $('#calendar_yearview_blocks_chart_1').calendar_yearview_blocks({
@@ -2080,7 +2081,7 @@ function dataFormattingForSevenTimeLine(groupedByVersionData) {
 
     return formattedData;
 }
-//
+
 function convertVersionIdToTitle(versionId) {
     if (versionListData.hasOwnProperty(versionId)) {
         var version = versionListData[versionId];
@@ -2088,8 +2089,44 @@ function convertVersionIdToTitle(versionId) {
     }
 }
 
-function scatterChart() {
+function scatterChart(data) {
+    console.log(data);
+    var requirementDataCount = {};
+    var relationIssueDataCount = {};
+
+    data.forEach(jiraissue => {
+        if(jiraissue.updated === null || jiraissue.updated === undefined) {
+            return;
+        }
+
+        var updatedDate = jiraissue.updated.split('T')[0];
+
+        if (jiraissue.isReq === true) {
+            if (!requirementDataCount[updatedDate]) {
+                requirementDataCount[updatedDate] = 0;
+            }
+            requirementDataCount[updatedDate]++;
+        } else {
+            if (!relationIssueDataCount[updatedDate]) {
+                relationIssueDataCount[updatedDate] = 0;
+            }
+            relationIssueDataCount[updatedDate]++;
+        }
+    });
+
+    var requirementData = Object.keys(requirementDataCount).map(key => {
+        var dateObj = new Date(key+'T00:00:00');
+        return [dateObj, requirementDataCount[key]];
+    });
+
+    var relationIssueData = Object.keys(relationIssueDataCount).map(key => {
+        var dateObj = new Date(key+'T00:00:00');
+        return [dateObj, relationIssueDataCount[key]];
+    });
+
+
     var dom = document.getElementById('scatter-chart-container');
+
     var myChart = echarts.init(dom, 'dark', {
         renderer: 'canvas',
         useDirtyRect: false
@@ -2098,50 +2135,111 @@ function scatterChart() {
 
     var option;
 
-    option = {
-        xAxis: {
-            type: 'time',
-            splitLine: {
-                show: false
+    if ((requirementData && requirementData.length > 0) || (relationIssueData && relationIssueData.length > 0) ) {
+
+        option = {
+            aria: {
+                show: true
+            },
+            legend: {
+                data: ['요구사항' , '연결된 이슈'] // 여기에 실제 데이터 종류를 적어주세요
+            },
+    /*        toolbox: {
+                left: 'left',
+                feature: {
+                    dataView: {},
+                    saveAsImage: {},
+                    dataZoom: {}
+                }
+            },*/
+            xAxis: {
+                type: 'time',
+                splitLine: {
+                    show: true
+                }
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {
+                    show: true
+                }
+            },
+            series: [
+                {
+                    name: '요구사항',
+                    data: requirementData,
+                    type: 'scatter',
+                    symbol: 'diamond',
+                    label: {
+                        emphasis: {
+                            show: true,
+                            color: '#FFFFFF'
+                        }
+                    },
+                    symbolSize: function (val) {
+                        var sbSize = 10;
+                        if (val[1] > 10) {
+                            sbSize = val[1] * 1.1;
+                        }
+                        return sbSize;
+                    },
+                },
+                {
+                    name: '연결된 이슈',
+                    data: relationIssueData,
+                    type: 'scatter',
+                    label: {
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    symbolSize: function (val) {
+                        var sbSize = 10;
+                        if (val[1] > 10) {
+                            sbSize = val[1] * 1.1;
+                        }
+                        return sbSize;
+                    },
+                    itemStyle: {
+                        color: '#13de57'
+                    },
+                }
+            ],
+            tooltip: {
+                trigger: 'axis',
+                position: 'top',
+                borderWidth: 1,
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            backgroundColor: 'rgba(255,255,255,0)',
+            animationDelay: function (idx) {
+                return idx * 20;
+            },
+            animationDelayUpdate: function (idx) {
+                return idx * 20;
             }
-        },
-        yAxis: {
-            type: 'value',
-            splitLine: {
-                show: false
-            }
-        },
-        series: [
-            {
-                symbolSize: 10,
-                data: [
-                    [new Date('2023-01-04'), 15],
-                    [new Date('2023-02-25'), 30],
-                    [new Date('2023-09-01'), 100],
-                    [new Date('2023-10-01'), 105],
-                    [new Date('2023-04-01'), 30],
-                    [new Date('2023-06-01'), 22],
-                    [new Date('2023-04-07'), 3],
-                    [new Date('2023-06-25'), 10],
-                    [new Date('2023-09-16'), 100],
-                    [new Date('2023-12-01'), 45],
-                    [new Date('2023-08-24'), 10],
-                    [new Date('2023-11-11'), 33]
-                ],
-                type: 'scatter'
-            }
-        ],
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross'
-            }
-        },
-        backgroundColor: 'rgba(255,255,255,0)'
-    };
+        };
+
+        myChart.on('click', function (params) {
+            console.log(params.data);
+        });
+
+    }
+    else {
+        option = {
+            title: {
+                text: '데이터가 없습니다',
+                left: 'center',
+                top: 'middle'
+            },
+            backgroundColor: 'rgba(255,255,255,0)',
+        };
+    }
 
     if (option && typeof option === 'object') {
-        myChart.setOption(option);
+        myChart.setOption(option, true);
     }
 
     window.addEventListener('resize', myChart.resize);
