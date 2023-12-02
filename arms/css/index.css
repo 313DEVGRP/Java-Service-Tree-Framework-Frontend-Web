@@ -404,3 +404,13 @@ h2 * {
         padding-bottom: 20px;
     }
 }
+
+.landing .icon {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    font-size: 40px;
+    line-height: 60px;
+    vertical-align: middle;
+    border-radius: 50%;
+}
