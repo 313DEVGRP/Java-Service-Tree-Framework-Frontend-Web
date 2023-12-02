@@ -14,9 +14,13 @@ function execDocReady() {
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
             "../reference/light-blue/lib/jquery.iframe-transport.js",
-            "./js/common/colorPalette.js",
             // network chart
             "./js/analysisTime/d3.v5.min.js",
+            // donut chart
+            "../reference/jquery-plugins/c3/c3.min.css",
+            "../reference/jquery-plugins/c3/c3-custom.css",
+            "../reference/jquery-plugins/c3/c3.min.js",
+            "./js/common/colorPalette.js",
         ],
 
         [	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
@@ -148,6 +152,10 @@ function makeVersionMultiSelectBox() {
             selectedVersionId = versionTag.join(',');
 
             statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
+
+            donutChart($("#selected_pdService").val(), selectedVersionId);
+            combinationChart($("#selected_pdService").val(), selectedVersionId);
+
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
             if (checked) {
@@ -163,29 +171,6 @@ function makeVersionMultiSelectBox() {
     });
 }
 
-function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
-        type: "GET",
-        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersions},
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        async: true,
-        statusCode: {
-            200: function (data) {
-
-                // 버전 선택 시 데이터 파싱
-
-                setTimeout(function () {
-                    networkChart(pdServiceVersions, data);
-                },1000);
-
-            }
-        }
-    });
-
-}
 
 function bind_VersionData_By_PdService() {
     $(".multiple-select option").remove();
@@ -229,6 +214,254 @@ function bind_VersionData_By_PdService() {
     });
 }
 
+
+// 도넛차트
+function donutChart(pdServiceLink, pdServiceVersionLinks) {
+
+    console.log("pdServiceId : " + pdServiceLink);
+    console.log("pdService Version : " + pdServiceVersionLinks);
+    function donutChartNoData() {
+        c3.generate({
+            bindto: '#donut-chart',
+            data: {
+                columns: [],
+                type: 'donut',
+            },
+            donut: {
+                title: "Total : 0"
+            },
+        });
+    }
+
+    if(pdServiceLink === "" || pdServiceVersionLinks === "") {
+        donutChartNoData();
+        return;
+    }
+
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/dashboard/aggregation/flat')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('메인그룹필드', "status.status_name.keyword")
+        .addQueryParam('하위그룹필드들', "")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                let 검색결과 = data["검색결과"]["group_by_status.status_name.keyword"];
+                if ((Array.isArray(data) && data.length === 0) ||
+                    (typeof data === 'object' && Object.keys(data).length === 0) ||
+                    (typeof data === 'string' && data === "{}")) {
+                    donutChartNoData();
+                    return;
+                }
+
+                const columnsData = [];
+
+                검색결과.forEach(status => {
+                    columnsData.push([status.필드명, status.개수]);
+                });
+
+                let totalDocCount = data.전체합계;
+
+                const chart = c3.generate({
+                    bindto: '#donut-chart',
+                    data: {
+                        columns: columnsData,
+                        type: 'donut',
+                    },
+                    donut: {
+                        title: "Total : " + totalDocCount
+                    },
+                    color: {
+                        pattern: dashboardColor.issueStatusColor
+                    },
+                    tooltip: {
+                        format: {
+                            value: function (value, ratio, id, index) {
+                                return value;
+                            }
+                        },
+                    },
+                });
+
+                $(document).on('click', '#donut-chart .c3-legend-item', function () {
+                    const id = $(this).text();
+                    const isHidden = $(this).hasClass('c3-legend-item-hidden');
+                    let docCount = 0;
+
+                    for (const status of 검색결과) {
+                        if (status.필드명 === id) {
+                            docCount = status.개수;
+                            break;
+                        }
+                    }
+                    if (docCount) {
+                        if (isHidden) {
+                            totalDocCount -= docCount;
+                        } else {
+                            totalDocCount += docCount;
+                        }
+                    }
+                    $('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
+                });
+            }
+        }
+    });
+}
+
+// 바차트
+function combinationChart(pdServiceLink, pdServiceVersionLinks) {
+    function combinationChartNoData() {
+        c3.generate({
+            bindto: '#combination-chart',
+            data: {
+                x: 'x',
+                columns: [],
+                type: 'bar',
+                types: {},
+            },
+        });
+    }
+
+    if(pdServiceLink === "" || pdServiceVersionLinks === "") {
+        combinationChartNoData();
+        return;
+    }
+
+
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/dashboard/requirements-jira-issue-statuses')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('메인그룹필드', "pdServiceVersion")
+        .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                if ((Array.isArray(data) && data.length === 0) ||
+                    (typeof data === 'object' && Object.keys(data).length === 0) ||
+                    (typeof data === 'string' && data === "{}")) {
+                    combinationChartNoData();
+                    return;
+                }
+
+                const issueStatusTypesSet = new Set();
+                for (const month in data) {
+                    for (const status in data[month].statuses) {
+                        issueStatusTypesSet.add(status);
+                    }
+                }
+                const issueStatusTypes = [...issueStatusTypesSet];
+
+                let columnsData = [];
+
+                issueStatusTypes.forEach((status) => {
+                    const columnData = [status];
+                    for (const month in data) {
+                        const count = data[month].statuses[status] || 0;
+                        columnData.push(count);
+                    }
+                    columnsData.push(columnData);
+                });
+
+                const requirementCounts = ['요구사항'];
+                for (const month in data) {
+                    requirementCounts.push(data[month].totalRequirements);
+                }
+                columnsData.push(requirementCounts);
+
+                let monthlyTotals = {};
+
+                for (const month in data) {
+                    monthlyTotals[month] = data[month].totalIssues + data[month].totalRequirements;
+                }
+
+
+                const chart = c3.generate({
+                    bindto: '#combination-chart',
+                    data: {
+                        x: 'x',
+                        columns: [
+                            ['x', ...Object.keys(data)],
+                            ...columnsData,
+                        ],
+                        type: 'bar',
+                        types: {
+                            '요구사항': 'area',
+                        },
+                        groups: [issueStatusTypes]
+                    },
+                    color: {
+                        pattern: dashboardColor.accumulatedIssueStatusColor,
+                    },
+                    onrendered: function() {
+                        d3.selectAll('.c3-line, .c3-bar, .c3-arc')
+                            .style('stroke', 'white')
+                            .style('stroke-width', '0.3px');
+                    },
+                    axis: {
+                        x: {
+                            type: 'category',
+                        },
+                    },
+                    tooltip: {
+                        format: {
+                            title: function (index) {
+                                const month = Object.keys(data)[index];
+                                const total = monthlyTotals[month];
+                                return `${month} | Total : ${total}`;
+                            },
+                        },
+                    }
+                });
+
+                $(document).on('click', '#combination-chart .c3-legend-item', function () {
+                    const id = $(this).text();
+                    const isHidden = $(this).hasClass('c3-legend-item-hidden');
+                    let docCount = 0;
+
+                    for (const month in data) {
+                        if (data[month].statuses.hasOwnProperty(id)) {
+                            docCount = data[month].statuses[id];
+                        } else if (id === '요구사항') {
+                            docCount = data[month].totalRequirements;
+                        }
+                    }
+
+                    // 월별 통계 값 업데이트
+                    for (const month in data) {
+                        if (isHidden) {
+                            monthlyTotals[month] -= docCount;
+                        } else {
+                            monthlyTotals[month] += docCount;
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
     console.log("선택된 서비스 ===> " + pdservice_id);
     console.log("선택된 버전 리스트 ===> " + pdservice_version_id);
@@ -252,6 +485,30 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
             }
         }
     });
+}
+
+function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
+    $.ajax({
+        url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
+        type: "GET",
+        data: {"pdServiceLink": pdServiceLink, "pdServiceVersionLinks": pdServiceVersions},
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        async: true,
+        statusCode: {
+            200: function (data) {
+
+                // 버전 선택 시 데이터 파싱
+
+                setTimeout(function () {
+                    networkChart(pdServiceVersions, data);
+                },1000);
+
+            }
+        }
+    });
+
 }
 
 function networkChart(pdServiceVersions, jiraIssueData) {

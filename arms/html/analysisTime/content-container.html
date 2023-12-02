@@ -613,15 +613,16 @@
             <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
                 <div class="row">
-                    <div class="col-lg-4" style="/*padding-right: 4px !important;*/">
+                    <div class="col-lg-6" style="/*padding-right: 4px !important;*/">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-pie-chart"></i> 이슈 상태 현황 </h4>
+                                <h4><i class="fa fa-pie-chart"></i> 일자별 이슈 분포 </h4>
                             </header>
-                            <div class="body" id="donut-chart"></div>
+                            <div class="body" id="scatter-chart-container">
+                            </div>
                         </section>
                     </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <section class="widget large">
                             <header>
                                 <h4><i class="fa fa-bar-chart"></i> 일자별 이슈 업데이트 현황 </h4>
@@ -982,5 +983,11 @@
 
     #versionGaugeChart svg {
         height: 185px;
+    }
+
+    #scatter-chart-container {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
     }
 </style>

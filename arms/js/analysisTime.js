@@ -55,7 +55,7 @@ function execDocReady() {
             //"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/js/newdemo.js",
             // 3번째 박스 데이터 테이블 내 차트
             // "../reference/light-blue/lib/sparkline/jquery.sparkline.js",
-            // "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
+            "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
             /*"../reference/jquery-plugins/echarts-5.4.3/test/lib/simpleRequire.js",
             "../reference/jquery-plugins/echarts-5.4.3/test/lib/config.js",*/
             // "./js/analysisTime/index.js",
@@ -119,6 +119,8 @@ function execDocReady() {
 
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
+
+            scatterChart();
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
@@ -221,10 +223,10 @@ function makeVersionMultiSelectBox() {
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
             getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
 
-            donutChart($("#selected_pdService").val(), selectedVersionId);
             combinationChart($("#selected_pdService").val(), selectedVersionId);
 
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+            calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
 
             if (checked) {
                 endPointUrl =
@@ -277,9 +279,9 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
                 statusTimeline(data);
                 sevenTimeline(data);
 
-                setTimeout(function () {
-                    networkChart(pdServiceVersions, data);
-                },1000);
+                // setTimeout(function () {
+                //     networkChart(pdServiceVersions, data);
+                // },1000);
 
                 globalJiraIssue = data;
 
@@ -428,12 +430,10 @@ function bind_VersionData_By_PdService() {
                 getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
                 getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
 
-                donutChart($("#selected_pdService").val(), selectedVersionId);
                 combinationChart($("#selected_pdService").val(), selectedVersionId);
 
                 getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
                 calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
-                // calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -1273,111 +1273,6 @@ function radarChart(pdServiceId, pdServiceVersionList) {
 }
 */
 
-////////////////////
-// 네번째 박스
-////////////////////
-function donutChart(pdServiceLink, pdServiceVersionLinks) {
-
-    console.log("pdServiceId : " + pdServiceLink);
-    console.log("pdService Version : " + pdServiceVersionLinks)
-    function donutChartNoData() {
-        c3.generate({
-            bindto: '#donut-chart',
-            data: {
-                columns: [],
-                type: 'donut',
-            },
-            donut: {
-                title: "Total : 0"
-            },
-        });
-    }
-
-    if(pdServiceLink === "" || pdServiceVersionLinks === "") {
-        donutChartNoData();
-        return;
-    }
-
-    const url = new UrlBuilder()
-        .setBaseUrl('/auth-user/api/arms/dashboard/aggregation/flat')
-        .addQueryParam('pdServiceLink', pdServiceLink)
-        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-        .addQueryParam('메인그룹필드', "status.status_name.keyword")
-        .addQueryParam('하위그룹필드들', "")
-        .addQueryParam('크기', 1000)
-        .addQueryParam('하위크기', 1000)
-        .addQueryParam('컨텐츠보기여부', true)
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                let 검색결과 = data["검색결과"]["group_by_status.status_name.keyword"];
-                if ((Array.isArray(data) && data.length === 0) ||
-                    (typeof data === 'object' && Object.keys(data).length === 0) ||
-                    (typeof data === 'string' && data === "{}")) {
-                    donutChartNoData();
-                    return;
-                }
-
-                const columnsData = [];
-
-                검색결과.forEach(status => {
-                    columnsData.push([status.필드명, status.개수]);
-                });
-
-                let totalDocCount = data.전체합계;
-
-                const chart = c3.generate({
-                    bindto: '#donut-chart',
-                    data: {
-                        columns: columnsData,
-                        type: 'donut',
-                    },
-                    donut: {
-                        title: "Total : " + totalDocCount
-                    },
-                    color: {
-                        pattern: dashboardColor.issueStatusColor
-                    },
-                    tooltip: {
-                        format: {
-                            value: function (value, ratio, id, index) {
-                                return value;
-                            }
-                        },
-                    },
-                });
-
-                $(document).on('click', '#donut-chart .c3-legend-item', function () {
-                    const id = $(this).text();
-                    const isHidden = $(this).hasClass('c3-legend-item-hidden');
-                    let docCount = 0;
-
-                    for (const status of 검색결과) {
-                        if (status.필드명 === id) {
-                            docCount = status.개수;
-                            break;
-                        }
-                    }
-                    if (docCount) {
-                        if (isHidden) {
-                            totalDocCount -= docCount;
-                        } else {
-                            totalDocCount += docCount;
-                        }
-                    }
-                    $('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
-                });
-            }
-        }
-    });
-}
 
 // 바차트
 function combinationChart(pdServiceLink, pdServiceVersionLinks) {
@@ -1525,8 +1420,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 ////////////////////
 // 다섯번째 박스
 ////////////////////
-
-function networkChart(pdServiceVersions, jiraIssueData) {
+/*function networkChart(pdServiceVersions, jiraIssueData) {
     d3.select(".network-graph").selectAll("*").remove();
 
     var NETWORK_DATA = {
@@ -1592,7 +1486,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
     d3.select(".network-graph").append("svg").attr("id","NETWORK_GRAPH");
 
-    /******** network graph config ********/
+    /!******** network graph config ********!/
     var networkGraph = {
         createGraph : function(){
             var links = NETWORK_DATA.links.map(function(d){
@@ -1693,7 +1587,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
                 .join("path")
                 .attr("stroke-width", 1.5);
 
-            /*
+            /!*
             var node = svg.append("g")
                         .selectAll("circle")
                             .data(nodes)
@@ -1705,7 +1599,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
             node.append("text")
               .text(function(d){ return d.id })
-              .style("font-size", "12px") */
+              .style("font-size", "12px") *!/
 
             var node = gHolder.append("g")
                 .attr("class", "circle-node-holder")
@@ -1720,11 +1614,11 @@ function networkChart(pdServiceVersions, jiraIssueData) {
                         .append("circle")
                         .attr("r", 10)
                         .attr("fill", fillCircle(d));
-                    /*d3.select(this)
+                    /!*d3.select(this)
                         .append("text").text(d.id)
                         .attr("dy",6)
                         .style("text-anchor","middle")
-                        .attr("class", "node-label");*/
+                        .attr("class", "node-label");*!/
                 }).call(networkGraph.drag(simulation));
 
             node.append("text")
@@ -1751,9 +1645,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
                     .attr("x2", function(d){ return d.target.x; })
                     .attr("y2", function(d){ return d.target.y; });
 
-                /*node
+                /!*node
                     .attr("cx", function(d){ return d.x; })
-                    .attr("cy", function(d){ return d.y; });*/
+                    .attr("cy", function(d){ return d.y; });*!/
 
                 //circle 노드에서 g 노드로 변경
                 node.attr("transform", function(d) { return "translate("+d.x+","+ d.y+")"; });
@@ -1803,9 +1697,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
         }
     }
 
-    /******** network graph create ********/
+    /!******** network graph create ********!/
     networkGraph.createGraph();
-}
+}*/
 
 function formatDate(date) {
     var year = date.getFullYear();
@@ -2192,4 +2086,63 @@ function convertVersionIdToTitle(versionId) {
         var version = versionListData[versionId];
         return version.c_title;
     }
+}
+
+function scatterChart() {
+    var dom = document.getElementById('scatter-chart-container');
+    var myChart = echarts.init(dom, 'dark', {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        xAxis: {
+            type: 'time',
+            splitLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: {
+                show: false
+            }
+        },
+        series: [
+            {
+                symbolSize: 10,
+                data: [
+                    [new Date('2023-01-04'), 15],
+                    [new Date('2023-02-25'), 30],
+                    [new Date('2023-09-01'), 100],
+                    [new Date('2023-10-01'), 105],
+                    [new Date('2023-04-01'), 30],
+                    [new Date('2023-06-01'), 22],
+                    [new Date('2023-04-07'), 3],
+                    [new Date('2023-06-25'), 10],
+                    [new Date('2023-09-16'), 100],
+                    [new Date('2023-12-01'), 45],
+                    [new Date('2023-08-24'), 10],
+                    [new Date('2023-11-11'), 33]
+                ],
+                type: 'scatter'
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        backgroundColor: 'rgba(255,255,255,0)'
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
