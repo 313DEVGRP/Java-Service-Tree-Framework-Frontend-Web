@@ -111,53 +111,22 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-md-3">
-                        <section class="widget dashboard-top-section" style="overflow: auto">
-                            <header style="margin-bottom: 15px">
-                                <h4>
-									<span class="font13" style="font-weight: bold">
-										<i class="fa fa-briefcase"></i>
-										작업자 현황
-									</span>
-                                </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                    <div class="col-lg-3" style="padding-right: 4px !important;">
+                        <section class="widget large">
+                            <header>
+                                <h5><i class="fa fa-pencil-square-o"></i> 종합 진행 현황 </h5>
                             </header>
-                            <div class="body">
-                                <div class="box" style="margin-bottom: 10px">
-                                    <div class="big-text" id="resource_count" style="color: #a4c6ff" > - </div>
-                                    <div class="description">
-                                        <i class="fa fa-users"></i>
-                                        투입 작업자 수
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div    class="control-group"
-                                            style="padding-bottom: 10px; border: 0">
-                                        <div    class="controls form-group darkBack col-md-12"
-                                                style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                            <span>작업 중 요구사항 평균 : <a id="req_in_action_avg" style="font-weight: bold;">-</a> 개</span><br>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div    class="control-group"
-                                            style="padding-bottom: 10px; border: 0">
-                                        <div    class="controls form-group darkBack col-md-12"
-                                                style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                            <span>생성한 연결이슈 평균 : <a id="avg_linkedIssue_count" style="font-weight: bold;">-</a> 개</span><br>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
+                            <div class="body" id="radarPart"></div>
                         </section>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <section class="widget dashboard-top-section" style="overflow: auto">
                             <header style="margin-bottom: 15px">
                                 <h4>
 									<span class="font13" style="font-weight: bold">
 										<i class="fa fa-pencil-square"></i>
-										요구사항 및 연결이슈 현황
+										범위(Scope) 현황
 									</span>
                                 </h4>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
@@ -203,10 +172,10 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-lg-3" style="padding-right: 4px !important;">
+                    <div class="col-lg-2" style="padding-right: 4px !important;">
                         <section class="widget">
                             <header>
-                                <h5><i class="fa fa-clock-o"></i> 작업 일정 현황 </h5>
+                                <h5><i class="fa fa-clock-o"></i> 일정(Time) 현황 </h5>
                             </header>
                             <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
                             <div class="box" style="display: flex; justify-content: space-evenly; margin-bottom: 10px">
@@ -226,13 +195,44 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-lg-3" style="padding-right: 4px !important;">
-                        <section class="widget large">
-                            <header>
-                                <h5><i class="fa fa-pencil-square-o"></i> 종합 진행 현황 </h5>
+                    <div class="col-md-2">
+                        <section class="widget dashboard-top-section" style="overflow: auto">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-briefcase"></i>
+										자원(Resource) 현황
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
-                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
-                            <div class="body" id="radarPart"></div>
+                            <div class="body">
+                                <div class="box" style="margin-bottom: 10px">
+                                    <div class="big-text" id="resource_count" style="color: #a4c6ff" > - </div>
+                                    <div class="description">
+                                        <i class="fa fa-users"></i>
+                                        투입 작업자 수
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div    class="control-group"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack col-md-12"
+                                                style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+                                            <span>작업 중 요구사항 평균 : <a id="req_in_action_avg" style="font-weight: bold;">-</a> 개</span><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div    class="control-group"
+                                            style="padding-bottom: 10px; border: 0">
+                                        <div    class="controls form-group darkBack col-md-12"
+                                                style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+                                            <span>생성한 연결이슈 평균 : <a id="avg_linkedIssue_count" style="font-weight: bold;">-</a> 개</span><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
                     </div>
                 </div>
