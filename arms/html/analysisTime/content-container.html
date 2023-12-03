@@ -572,7 +572,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        이슈 상태
+                        업데이트 현황
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -616,16 +616,15 @@
                     <div class="col-lg-6" style="/*padding-right: 4px !important;*/">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-pie-chart"></i> 일자별 이슈 분포 </h4>
+                                <h4><i class="fa fa-pie-chart"></i> 일자별 이슈 업데이트 분포 </h4>
                             </header>
-                            <div class="body" id="scatter-chart-container">
-                            </div>
+                            <div class="body" id="scatter-chart-container"></div>
                         </section>
                     </div>
                     <div class="col-lg-6">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-bar-chart"></i> 일자별 이슈 업데이트 현황 </h4>
+                                <h4><i class="fa fa-bar-chart"></i> 일자별 이슈 상태 </h4>
                             </header>
                             <div class="body" id="combination-chart"></div>
                         </section>
@@ -987,7 +986,8 @@
 
     #scatter-chart-container {
         position: relative;
-        height: 300px;
-        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
     }
 </style>
