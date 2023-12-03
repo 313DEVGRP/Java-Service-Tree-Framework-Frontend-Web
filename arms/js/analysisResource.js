@@ -107,12 +107,6 @@ function execDocReady() {
 }
 
 function stackedHorizontalBar(){
-    if (!selectedPdServiceId || !selectedVersionId) {
-        alert('제품(서비스)와 버전을 선택해주세요.');
-        document.getElementById('apache-echarts-stacked-horizontal-bar').innerHTML = '';
-        return;
-    }
-
     // 0 or ""
     const defaultValue = 0;
 
@@ -139,6 +133,12 @@ function stackedHorizontalBar(){
         return statusCounts;
     }
     function stackedBarChartInit(data) {
+        let validate = apiResponseValidate("apache-echarts-stacked-horizontal-bar", data);
+
+        if(!validate) {
+            return false;
+        }
+
         const sortedData = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"].sort((a, b) => a.개수 - b.개수);
 
         const jiraIssueStatuses = sortedData.reduce((acc, item) => {
