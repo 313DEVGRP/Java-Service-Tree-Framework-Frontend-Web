@@ -863,13 +863,18 @@ function getScheduleToDrawRadarChart(pdservice_id, pdServiceVersionLinks) {
                             }
                         }
                     }
+
+                    if(earliestStartDate ==="start") { earliestStartDate = new Date(); }
+                    if(lastEndDate ==="end") {lastEndDate = new Date(); }
                     let objectiveDateDiff = getDateDiff(earliestStartDate, lastEndDate);
                     let currentDateDiff = getDateDiff(earliestStartDate, new Date());
+                    console.log(objectiveDateDiff);
+                    console.log(currentDateDiff);
                     let 목표데이터_배열 = [resource_count, req_count, objectiveDateDiff];
                     let 현재진행데이터_배열 = [resource_count, req_in_action, currentDateDiff];
                     let dateDiff = Math.abs(objectiveDateDiff - currentDateDiff).toFixed(0);
 
-                    $("#progressDateRate").text((currentDateDiff*100/objectiveDateDiff).toFixed(0)+"%");
+                    $("#progressDateRate").text((currentDateDiff*100/(objectiveDateDiff === 0 ? 1 : objectiveDateDiff)).toFixed(0)+"%");
                     if(objectiveDateDiff>= currentDateDiff) {
                         $("#remaining_days").text("D-"+dateDiff);
                     } else {
@@ -877,6 +882,7 @@ function getScheduleToDrawRadarChart(pdservice_id, pdServiceVersionLinks) {
                         $("#remaining_days").css("color", "rgb(219,42,52)");
                     }
                     drawBasicRadar("radarPart",목표데이터_배열, 현재진행데이터_배열);
+
                 }
             }
         });
