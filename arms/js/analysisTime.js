@@ -259,10 +259,10 @@ function makeVersionMultiSelectBox() {
 }
 
 function formatDate(date) {
-  var year = date.getFullYear();
-  var month = (date.getMonth() + 1).toString().padStart(2, "0");
-  var day = date.getDate().toString().padStart(2, "0");
-  return year + "-" + month + "-" + day;
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1).toString().padStart(2, "0");
+    var day = date.getDate().toString().padStart(2, "0");
+    return year + "-" + month + "-" + day;
 }
 
 ////////////////////
@@ -451,7 +451,7 @@ function calculateCompletion(data, completedId, totalId, rateId, progressId) {
             "		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
             "<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
             "</div>";
-       // console.log(html_piece);
+        // console.log(html_piece);
         $("#" + progressId).append(html_piece);
     });
     $("#" + totalId).text(totalCount);
@@ -835,7 +835,7 @@ function scatterChart(data) {
             xAxis: {
                 type: 'time',
                 splitLine: {
-                    show: true,
+                    show: false,
                     lineStyle: {
                         color: 'rgba(255,255,255,0.2)', // 라인 색상을 빨간색으로 변경
                         width: 1, // 라인 너비를 2로 변경
@@ -852,6 +852,9 @@ function scatterChart(data) {
                         width: 1, // 라인 너비를 2로 변경
                         type: 'solid' // 라인 유형을 실선으로 변경
                     }
+                },
+                tooltip: {
+                    show: false
                 }
             },
             series: [
@@ -866,6 +869,9 @@ function scatterChart(data) {
                             show: true,
                             color: '#FFFFFF'
                         }
+                    },
+                    axisPointer: {
+                        type: 'shadow'
                     },
                     symbolSize: function (val) {
                         var sbSize = 10;
@@ -885,6 +891,9 @@ function scatterChart(data) {
                             show: true
                         }
                     },
+                    axisPointer: {
+                        type: 'line'
+                    },
                     symbolSize: function (val) {
                         var sbSize = 10;
                         if (val[1] > 10) {
@@ -902,7 +911,12 @@ function scatterChart(data) {
                 position: 'top',
                 borderWidth: 1,
                 axisPointer: {
-                    type: 'cross'
+                    type: 'shadow',
+                    label: {
+                        formatter: function(params) {
+                            return formatDate(new Date(params.value));
+                        }
+                    }
                 }
             },
             backgroundColor: 'rgba(255,255,255,0)',
