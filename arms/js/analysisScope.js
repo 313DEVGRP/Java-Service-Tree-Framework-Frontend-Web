@@ -14,13 +14,14 @@ function execDocReady() {
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
             "../reference/light-blue/lib/jquery.iframe-transport.js",
-            // network chart
-            "./js/analysisTime/d3.v5.min.js",
+            "./js/common/colorPalette.js",
             // donut chart
             "../reference/jquery-plugins/c3/c3.min.css",
             "../reference/jquery-plugins/c3/c3-custom.css",
             "../reference/jquery-plugins/c3/c3.min.js",
-            "./js/common/colorPalette.js",
+            // network chart
+            "./js/analysisTime/d3.v5.min.js",
+
         ],
 
         [	"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
@@ -200,6 +201,10 @@ function bind_VersionData_By_PdService() {
                 selectedVersionId = pdServiceVersionIds.join(',');
 
                 statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
+
+                donutChart($("#selected_pdService").val(), selectedVersionId);
+                combinationChart($("#selected_pdService").val(), selectedVersionId);
+
                 getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
                 if (data.length > 0) {
