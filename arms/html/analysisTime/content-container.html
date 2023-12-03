@@ -624,9 +624,19 @@
                     <div class="col-lg-6">
                         <section class="widget large">
                             <header>
-                                <h4><i class="fa fa-bar-chart"></i> 일자별 이슈 상태 </h4>
+                                <h4 style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                    ">
+                                    <div>
+                                        <i class="fa fa-bar-chart"></i> 일자별 이슈 상태
+                                    </div>
+                                    <button id="status-chart-button" type="button" class="btn btn-default btn-sm ml-1">그룹화 적용</button>
+                                </h4>
                             </header>
-                            <div class="body" id="combination-chart"></div>
+                            <div id="status-chart-container">
+                                <div class="body" id="status-chart"></div>
+                            </div>
                         </section>
                     </div>
                 </div>

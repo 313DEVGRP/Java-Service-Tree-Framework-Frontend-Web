@@ -1276,15 +1276,22 @@ function radarChart(pdServiceId, pdServiceVersionList) {
 // 바차트
 function combinationChart(pdServiceLink, pdServiceVersionLinks) {
     function combinationChartNoData() {
-        c3.generate({
-            bindto: '#combination-chart',
-            data: {
-                x: 'x',
-                columns: [],
-                type: 'bar',
-                types: {},
-            },
+
+        $('#status-chart').html('데이터가 없습니다').css({
+            'display': 'flex',
+            'justify-content': 'center',
+            'align-items': 'center'
         });
+
+        // c3.generate({
+        //     bindto: '#combination-chart',
+        //     data: {
+        //         x: 'x',
+        //         columns: [],
+        //         type: 'bar',
+        //         types: {},
+        //     },
+        // });
     }
 
     if(pdServiceLink === "" || pdServiceVersionLinks === "") {
@@ -1292,9 +1299,8 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
         return;
     }
 
-
     const url = new UrlBuilder()
-        .setBaseUrl('/auth-user/api/arms/dashboard/requirements-jira-issue-statuses')
+        .setBaseUrl('/auth-user/api/arms/analysis/time/daily-requirements-jira-issue-statuses')
         .addQueryParam('pdServiceLink', pdServiceLink)
         .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
         .addQueryParam('메인그룹필드', "pdServiceVersion")
@@ -1320,50 +1326,48 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
                 }
 
                 const issueStatusTypesSet = new Set();
-                for (const month in data) {
-                    for (const status in data[month].statuses) {
+                for (const day in data) {
+                    for (const status in data[day].statuses) {
+                        //console.log('status ', status);
                         issueStatusTypesSet.add(status);
                     }
                 }
                 const issueStatusTypes = [...issueStatusTypesSet];
 
                 let columnsData = [];
+                let dayTotal = {};
 
                 issueStatusTypes.forEach((status) => {
                     const columnData = [status];
-                    for (const month in data) {
-                        const count = data[month].statuses[status] || 0;
+                    for (const day in data) {
+                        const count = data[day].statuses[status] || 0;
                         columnData.push(count);
+                        dayTotal[day] = (dayTotal[day] || 0) + count;
+
+                        //console.log(`Day: ${day}, Status: ${status}, Count: ${count}, dayTotal: ${dayTotal[day]}`);
                     }
                     columnsData.push(columnData);
                 });
 
-                const requirementCounts = ['요구사항'];
-                for (const month in data) {
-                    requirementCounts.push(data[month].totalRequirements);
-                }
-                columnsData.push(requirementCounts);
-
-                let monthlyTotals = {};
-
-                for (const month in data) {
-                    monthlyTotals[month] = data[month].totalIssues + data[month].totalRequirements;
-                }
-
+                // 차트 x축 날짜값 포맷팅
+                let keys = Object.keys(data).map(key => {
+                    let [year, month, day] = key.split('-');
+                    return `${month}/${day}`;
+                });
 
                 const chart = c3.generate({
-                    bindto: '#combination-chart',
+                    bindto: '#status-chart',
                     data: {
                         x: 'x',
                         columns: [
-                            ['x', ...Object.keys(data)],
+                            ['x', ...keys],
                             ...columnsData,
+                            ['전체이슈', ...Object.keys(dayTotal).map(day => dayTotal[day])],
                         ],
                         type: 'bar',
                         types: {
-                            '요구사항': 'area',
+                            '전체이슈': 'area',
                         },
-                        groups: [issueStatusTypes]
                     },
                     color: {
                         pattern: dashboardColor.accumulatedIssueStatusColor,
@@ -1381,35 +1385,56 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
                     tooltip: {
                         format: {
                             title: function (index) {
-                                const month = Object.keys(data)[index];
-                                const total = monthlyTotals[month];
-                                return `${month} | Total : ${total}`;
+                                const day = Object.keys(data)[index];
+                                const total = dayTotal[day];
+                                return `${day} | Total : ${total}`;
                             },
                         },
+                        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+                            // 기본 툴팁 생성
+                            let tooltipHtml = this.getTooltipContent.apply(this, arguments);
+                            // 툴팁 HTML 파싱
+                            let parsedHtml = $.parseHTML(`<div>${tooltipHtml}</div>`);
+                            // '전체이슈' 행 제거
+                            $(parsedHtml).find('tr').each(function() {
+                                if ($(this).find('td').first().text() === '전체이슈') {
+                                    $(this).remove();
+                                }
+                            });
+                            // 다시 HTML 문자열로 변환
+                            return $(parsedHtml).html();
+                        }
                     }
                 });
 
-                $(document).on('click', '#combination-chart .c3-legend-item', function () {
+                $(document).on('click', '#status-chart .c3-legend-item', function () {
                     const id = $(this).text();
                     const isHidden = $(this).hasClass('c3-legend-item-hidden');
-                    let docCount = 0;
 
-                    for (const month in data) {
-                        if (data[month].statuses.hasOwnProperty(id)) {
-                            docCount = data[month].statuses[id];
-                        } else if (id === '요구사항') {
-                            docCount = data[month].totalRequirements;
-                        }
-                    }
+                    for (const day in data) {
+                        const docCount = data[day].statuses[id] || 0;
 
-                    // 월별 통계 값 업데이트
-                    for (const month in data) {
                         if (isHidden) {
-                            monthlyTotals[month] -= docCount;
+                            dayTotal[day] -= docCount;
                         } else {
-                            monthlyTotals[month] += docCount;
+                            dayTotal[day] += docCount;
                         }
                     }
+                });
+
+                let isGrouped = false; // 차트 그룹화 여부
+
+                $('#status-chart-button').on('click', function() {
+                    if (isGrouped) {
+                        // 그룹화 해제
+                        chart.groups([]);
+                        $(this).text('그룹화 적용');
+                    } else {
+                        // 그룹화
+                        chart.groups([issueStatusTypes]);
+                        $(this).text('그룹화 해제');
+                    }
+                    isGrouped = !isGrouped;
                 });
             }
         }
