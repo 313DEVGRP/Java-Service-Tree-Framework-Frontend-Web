@@ -56,6 +56,7 @@ function runScript() {
 function 로드_완료_이후_실행_함수() {
 	laddaBtnSetting();
 	톱니바퀴_초기설정();
+	checkTourGuideMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1153,12 +1154,28 @@ function getCookie(cname) {
 	return "";
 }
 
-function setTourGuide(tourGuide) {
-	console.log("common.js :: setTourGuide");
-	document.cookie = "gta=" + tourGuide;
-	if (tourGuide === "on") {
-		//tourGuide 동작
-		GtaApi.startTour(getPageName(this.location.search));
+function getTourGuideMode() {
+	let tgm = JSON.parse(localStorage.getItem("settings-state"));
+	return tgm['tourGuideState'];
+}
+
+function tourGuideStart() {
+	console.log('Tour guide mode is ON. Performing tour...');
+	let pageName = getPageName(this.location.search);
+	let tg = TourGuideApi.makeInstance(pageName);
+	tg.start();
+}
+
+function checkTourGuideMode() {
+	let tourGuideMode = getTourGuideMode();
+	if(tourGuideMode ==="off") {
+		console.log("tourGuideMode is Off");
+	} else { //mode 가 없거나 on 일때
+		console.log("tourGuideMode is On");
+		var tgm = setInterval(function(){
+			tourGuideStart();
+			clearInterval(tgm);
+		}, 1000);
 	}
 }
 
@@ -1168,17 +1185,6 @@ function getPageName(str) {
 		return str.substring(idxOfPageParam+5);
 	}
 	return "페이지 이름 없음"; //페이지 이름이 없을 경우.
-}
-function loadTourGuide() {
-	console.log("common.js :: loadTourGuide");
-	//guided-tour-arrow 플러그인
-	const tourGuide = getCookie("gta");
-	if (tourGuide) {
-		setTourGuide(tourGuide);
-	} else {
-		//지정된 투어가이드(gta) 의 설정이 없을 때, on으로 설정
-		setTourGuide("on");
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1191,7 +1197,8 @@ function 톱니바퀴_초기설정() {
 		settingsState = JSON.parse(localStorage.getItem("settings-state")) || {
 			sidebar: 'left',
 			sidebarState: 'auto',
-			displaySidebar: true
+			displaySidebar: true,
+			tourGuideState: 'on'
 		},
 		$pageHeader = $(".page-header"),
 		$body = $("body"),
@@ -1231,6 +1238,7 @@ function 톱니바퀴_초기설정() {
 
 		},
 		displaySidebar = function(display, triggerResize){
+			console.log("displaySidebar function");
 			triggerResize = triggerResize == undefined ? true : false;
 			if (display == true){
 				$body.removeClass("sidebar-hidden")
@@ -1240,11 +1248,23 @@ function 톱니바퀴_초기설정() {
 			if (triggerResize){
 				triggerChartsResize();
 			}
+		},
+		tourGuideState = function(mode) {
+			if(mode ==="off") {
+				console.log("turn-off tourGuide");
+				console.log($("#tour-guide-mode button:last-child"));
+				$("#tour-guide-mode button:last-child").addClass("active");
+			} else {
+				console.log("turn-on tourGuide");
+				console.log($("#tour-guide-mode button:first-child"));
+				$("#tour-guide-mode button:first-child").addClass("active");
+			}
 		};
 
 	sidebarSide(settingsState.sidebar);
 	sidebarState(settingsState.sidebarState, false);
 	displaySidebar(settingsState.displaySidebar, false);
+	tourGuideState(settingsState.tourGuideState);
 
 	if (!$settings[0]){
 		return;
@@ -1279,6 +1299,18 @@ function 톱니바퀴_초기설정() {
 		popoverReallyHide()
 		$(document).off("click", popoverClose);
 	});
+
+	//tourGuide on/off
+	$pageHeader.on("click", ".popover #tour-guide-mode .btn", function(){
+		var $this = $(this),
+			mode = $this.data("value");
+		console.log(mode);
+		tourGuideState(mode);
+		settingsState.tourGuideState = mode;
+		localStorage.setItem("settings-state", JSON.stringify(settingsState));
+		console.log()
+	});
+
 	//sidevar left/right
 	$pageHeader.on("click", ".popover #sidebar-toggle .btn", function(){
 		var $this = $(this),
@@ -1292,6 +1324,7 @@ function 톱니바퀴_초기설정() {
 	$pageHeader.on("click", ".popover #display-sidebar-toggle .btn", function(){
 		var $this = $(this),
 			display = $this.data("value");
+		console.log("displaySidebar");
 		displaySidebar(display);
 		settingsState.displaySidebar = display;
 		localStorage.setItem("settings-state", JSON.stringify(settingsState));
