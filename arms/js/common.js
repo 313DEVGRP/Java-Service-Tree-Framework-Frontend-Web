@@ -1155,8 +1155,17 @@ function getCookie(cname) {
 }
 
 function getTourGuideMode() {
-	let tgm = JSON.parse(localStorage.getItem("settings-state"));
-	return tgm['tourGuideState'];
+	let settingsState = JSON.parse(localStorage.getItem("settings-state"));
+	if(settingsState === null) { // 최초세팅
+		let tourGuideSettings = { tourGuideState: 'on' }
+		localStorage.setItem("settings-state",JSON.stringify(tourGuideSettings));
+		let getSettingsState = JSON.parse(localStorage.getItem("settings-state"));
+
+		return getSettingsState['tourGuideState'];
+	} else {
+		return settingsState['tourGuideState'];
+	}
+
 }
 
 function tourGuideStart() {
