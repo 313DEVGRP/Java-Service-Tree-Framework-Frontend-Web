@@ -1190,11 +1190,14 @@ function getPageName(str) {
 // 헤더 :: 톱니바퀴 대응함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function 톱니바퀴_초기설정() {
-
 	//settings
 	var $settings = $("#settings"),
 		$sidebarSettings = $("#sidebar-settings"),
-		settingsState = JSON.parse(localStorage.getItem("settings-state")),
+		settingsState = JSON.parse(localStorage.getItem("settings-state")) || {
+			sidebar: 'left',
+			sidebarState: 'auto',
+			displaySidebar: true
+		},
 		$pageHeader = $(".page-header"),
 		$body = $("body"),
 		popoverReallyHide = function(){
@@ -1233,7 +1236,6 @@ function 톱니바퀴_초기설정() {
 
 		},
 		displaySidebar = function(display, triggerResize){
-			console.log("displaySidebar function");
 			triggerResize = triggerResize == undefined ? true : false;
 			if (display == true){
 				$body.removeClass("sidebar-hidden")
@@ -1243,34 +1245,11 @@ function 톱니바퀴_초기설정() {
 			if (triggerResize){
 				triggerChartsResize();
 			}
-		},
-		tourGuideState = function(mode) {
-			if(mode ==="off") {
-				console.log("turn-off tourGuide");
-				console.log($("#tour-guide-mode button:last-child"));
-				$("#tour-guide-mode button:last-child").addClass("active");
-			} else {
-				console.log("turn-on tourGuide");
-				console.log($("#tour-guide-mode button:first-child"));
-				$("#tour-guide-mode button:first-child").addClass("active");
-			}
 		};
-
-	if (settingsState === null) {
-		settingsState = {
-			sidebar: 'left',
-			sidebarState: 'auto',
-			displaySidebar: true,
-			tourGuideState: 'on'
-		};
-
-		localStorage.setItem('settings-state', JSON.stringify(settingsState));
-	}
 
 	sidebarSide(settingsState.sidebar);
 	sidebarState(settingsState.sidebarState, false);
 	displaySidebar(settingsState.displaySidebar, false);
-	tourGuideState(settingsState.tourGuideState);
 
 	if (!$settings[0]){
 		return;
@@ -1305,17 +1284,6 @@ function 톱니바퀴_초기설정() {
 		popoverReallyHide()
 		$(document).off("click", popoverClose);
 	});
-
-	//tourGuide on/off
-	$pageHeader.on("click", ".popover #tour-guide-mode .btn", function(){
-		var $this = $(this),
-			mode = $this.data("value");
-		console.log(mode);
-		tourGuideState(mode);
-		settingsState.tourGuideState = mode;
-		localStorage.setItem("settings-state", JSON.stringify(settingsState));
-	});
-
 	//sidevar left/right
 	$pageHeader.on("click", ".popover #sidebar-toggle .btn", function(){
 		var $this = $(this),
@@ -1329,7 +1297,6 @@ function 톱니바퀴_초기설정() {
 	$pageHeader.on("click", ".popover #display-sidebar-toggle .btn", function(){
 		var $this = $(this),
 			display = $this.data("value");
-		console.log("displaySidebar");
 		displaySidebar(display);
 		settingsState.displaySidebar = display;
 		localStorage.setItem("settings-state", JSON.stringify(settingsState));
