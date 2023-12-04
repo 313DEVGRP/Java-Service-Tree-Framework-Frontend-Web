@@ -123,5 +123,9 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
 
     option && myChart.setOption(option,true);
 
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
+
     return myChart;
 }
