@@ -1090,32 +1090,3 @@ function reloadDataWithSameOrdering(cTitle) {
 		});
 	});
 }
-
-/*const steps = [{
-	content: "This is a short guide to get you set up and show you where things are",
-	title: "Welcome aboard",
-	target: "#firstStep"
-	},
-	{
-	content: "Register New Product(or Service) that you want to manage",
-	title: "Register Product(or Service) Button",
-	target: "#modal_popup_id"
-	}
-];*/
-
-/*
-function drawDatatable() {
-	console.log("데이터테이블 그리기");
-	return new Promise(function(resolve,reject) {
-		console.log("로드");
-		dataTableLoad()
-		resolve(1);
-	})
-}
-
-function initTg() {
-	const tg = new tourguide.TourGuideClient({
-		exitOnClickOutside: false,
-		steps: steps
-	});
-}*/
