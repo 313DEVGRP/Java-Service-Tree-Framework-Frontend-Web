@@ -614,7 +614,7 @@
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
                 <div class="row">
                     <div class="col-lg-6" style="/*padding-right: 4px !important;*/">
-                        <section class="widget large">
+                        <section class="widget large"  style="height: 460px;">
                             <header>
                                 <h4><i class="fa fa-pie-chart"></i> 일자별 이슈 업데이트 분포 </h4>
                             </header>
@@ -622,20 +622,27 @@
                         </section>
                     </div>
                     <div class="col-lg-6">
-                        <section class="widget large">
-                            <header>
-                                <h4 style="
-                                        display: flex;
-                                        justify-content: space-between;
-                                    ">
-                                    <div>
-                                        <i class="fa fa-bar-chart"></i> 일자별 이슈 상태
-                                    </div>
-                                    <button id="status-chart-button" type="button" class="btn btn-default btn-sm ml-1">그룹화 적용</button>
+                        <section class="widget">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-asterisk"></i>
+										일자별 누적 업데이트 현황
+									</span>
                                 </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
-                            <div id="status-chart-container">
-                                <div class="body" id="status-chart"></div>
+                            <div class="body" id="heatmap-body" style="height: 415px;">
+                                <div style="width: 721px;">
+                                    <blockquote class="font12 update-title" style="display: none;">
+                                        <strong>요구사항 누적 업데이트 현황</strong>
+                                    </blockquote>
+                                    <div id="calendar_yearview_blocks_chart_1"></div>
+                                    <blockquote class="font12 update-title" style="display: none;">
+                                        <strong>연결된 이슈 누적 업데이트 현황</strong>
+                                    </blockquote>
+                                    <div id="calendar_yearview_blocks_chart_2"></div>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -644,7 +651,6 @@
         </section>
     </div>
 
-    <!-- 다섯번째 박스   -->
     <div class="col-lg-12 col-layer">
         <section class="widget">
             <header>
@@ -693,8 +699,149 @@
             <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
                 <div class="row">
+                    <div class="col-lg-12 color-legend-widget">
+                        <section class="widget large" style="height: 500px;">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span class="font13" style="font-weight: bold">
+										<i class="fa fa-asterisk"></i>
+										일자별 개수 및 업데이트 상태 현황
+									</span>
+                                </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                            </header>
+                            <div class="body" style="height: 500px;">
+                                <div id="multi-chart-container"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-12 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+                    <span   class="font13"
+                            style="font-weight: bold">
+                        <i class="fa fa-calendar-o"></i>
+                        요구사항 및 연결된 이슈
+                    </span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <div class="row">
+                    <div class="col-lg-12 color-legend-widget">
+                        <section class="widget large">
+                            <header>
+                                <h4 style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                    ">
+                                    <div>
+                                        <i class="fa fa-bar-chart"></i> 일자별 이슈 상태
+                                    </div>
+                                    <button id="status-chart-button" type="button" class="btn btn-default btn-sm ml-1">그룹화 적용</button>
+                                </h4>
+                            </header>
+                            <div id="status-chart-container">
+                                <div class="body" id="status-chart"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 다섯번째 박스   -->
+    <div class="col-lg-12 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+                    <span class="font13"
+                            style="font-weight: bold">
+                        <i class="fa fa-calendar-o"></i>
+                        요구사항 및 연결된 이슈
+                    </span>
+                </h4>
+                <div class="widget-controls">
+                    <a  data-widgster="toleft"
+                        title="change width to left"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a  data-widgster="expand"
+                        title="Expand"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a  data-widgster="collapse"
+                        title="Collapse"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a  data-widgster="toright"
+                        title="change width to right"
+                        href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a  data-widgster="restore"
+                        title="Restore"
+                        href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a  data-widgster="fullscreen"
+                        title="Fullscreen"
+                        href="#">
+                        <i class="glyphicon glyphicon-fullscreen"
+                           style="font-size: 11px">
+                        </i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <div class="row">
                     <div class="col-lg-6 color-legend-widget">
-                        <section class="widget large" style="height: 460px;">
+                        <section class="widget large">
                             <header style="margin-bottom: 15px">
                                 <h4>
 									<span class="font13" style="font-weight: bold">
@@ -708,29 +855,22 @@
                         </section>
                     </div>
                     <div class="col-lg-6 color-legend-widget">
-                        <section class="widget">
-                            <header style="margin-bottom: 15px">
-                                <h4>
-									<span class="font13" style="font-weight: bold">
-										<i class="fa fa-asterisk"></i>
-										일자별 누적 업데이트 현황
-									</span>
+<!--                        <section class="widget large">
+                            <header>
+                                <h4 style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                    ">
+                                    <div>
+                                        <i class="fa fa-bar-chart"></i> 일자별 이슈 상태
+                                    </div>
+                                    <button id="status-chart-button" type="button" class="btn btn-default btn-sm ml-1">그룹화 적용</button>
                                 </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
-                            <div class="body" id="heatmap-body" style="height: 415px;">
-                                <div style="width: 721px;">
-                                    <blockquote class="font12 update-title" style="display: none;">
-                                        <strong>요구사항 누적 업데이트 현황</strong>
-                                    </blockquote>
-                                    <div id="calendar_yearview_blocks_chart_1"></div>
-                                    <blockquote class="font12 update-title" style="display: none;">
-                                        <strong>연결된 이슈 누적 업데이트 현황</strong>
-                                    </blockquote>
-                                    <div id="calendar_yearview_blocks_chart_2"></div>
-                                </div>
+                            <div id="status-chart-container">
+                                <div class="body" id="status-chart"></div>
                             </div>
-                        </section>
+                        </section>-->
                     </div>
                 </div>
             </div>
@@ -1002,4 +1142,12 @@
         height: 100%;
         overflow: visible;
     }
+
+    #multi-chart-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
 </style>

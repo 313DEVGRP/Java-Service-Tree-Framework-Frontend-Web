@@ -193,6 +193,8 @@ function bind_VersionData_By_PdService() {
 
                 statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 
+                calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
+
                 showStatusesCountBox();
                 getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
                 getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
@@ -200,7 +202,8 @@ function bind_VersionData_By_PdService() {
                 combinationChart($("#selected_pdService").val(), selectedVersionId);
 
                 getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
-                calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
+
+
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -245,6 +248,8 @@ function makeVersionMultiSelectBox() {
 
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
             calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
+
+
 
             if (checked) {
                 endPointUrl =
@@ -876,25 +881,6 @@ function scatterChart(data) {
                         }
                         return sbSize;
                     },
-                    // 마감일 표현
-                    markLine : {
-                        silent: true,
-                        symbol: 'none',
-                        data : [{
-                            xAxis : deadline // x축 날짜 지정
-                        }],
-                        lineStyle: {
-                            color: 'red',
-                            width: 2,
-                            type: 'dashed'
-                        },
-                        label: {
-                            formatter: '마감일 : {c}',
-                            color: 'white',
-                            fontSize: 14,
-                            fontWeight: 'bold'
-                        }
-                    }
                 },
                 {
                     name: '연결된 이슈',
@@ -917,7 +903,14 @@ function scatterChart(data) {
                     itemStyle: {
                         color: '#13de57'
                     },
-                    // 마감일 표현
+                },
+                {
+                    name: '마감일',
+                    type: 'line',
+                    data: [[deadline, 0], [deadline, 1]], // y축 전체에 걸쳐 라인을 그립니다.
+                    tooltip: {
+                        show: false // 데드라인 시리즈의 툴팁을 끕니다.
+                    },
                     markLine : {
                         silent: true,
                         symbol: 'none',
@@ -935,7 +928,12 @@ function scatterChart(data) {
                             fontSize: 14,
                             fontWeight: 'bold'
                         }
-                    }
+                    },
+                    lineStyle: {
+                        color: 'red',
+                        type: 'dashed'
+                    },
+                    symbol: 'none'
                 }
             ],
             tooltip: {
@@ -1154,7 +1152,6 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 ////////////////////
 // 네번째 박스
 ////////////////////
-
 function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
     $.ajax({
         url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
@@ -1169,7 +1166,12 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
                 console.log(data);
                 statusTimeline(data);
                 sevenTimeline(data);
-                scatterChart(data);
+
+                setTimeout(function () {
+                    //Scope - (2) 요구사항에 연결된 이슈 총 개수
+                    scatterChart(data);
+                    multiChart(data);
+                },1000);
 
                 globalJiraIssue = data;
 
@@ -1225,7 +1227,6 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 ////////////////////
 // 다섯번째 박스
 ////////////////////
-
 function statusTimeline(data) {
 
     // 필요한 데이터만 추출
@@ -1393,6 +1394,7 @@ function sevenTimeline(data) {
         sevenTimeLineDiv.appendChild(pElement);
     }
 }
+
 //  필요한 데이터만 추출
 function extractDataForSevenTimeline(data){
     var extractedData = [];
@@ -1409,6 +1411,7 @@ function extractDataForSevenTimeline(data){
     });
     return extractedData;
 }
+
 // 버전 별 그룹화 하기
 function groupDataByPdServiceVersion(data) {
     var extractedData = extractDataForSevenTimeline(data);
@@ -1422,6 +1425,7 @@ function groupDataByPdServiceVersion(data) {
     }, {});
     return groupedData;
 }
+
 // 차트에 맞게 데이터 변환 하기
 function dataFormattingForSevenTimeLine(groupedByVersionData) {
     var formattedData = [];
@@ -1509,6 +1513,314 @@ function candleStickChart() {
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+
+////////////////
+// 멀티 차트
+///////////////
+function multiChart(jiraIssueData) {
+    console.log(jiraIssueData);
+    var dom = document.getElementById('multi-chart-container');
+    var myChart = echarts.init(dom, 'dark', {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    /*const posList = [
+      'left',
+      'right',
+      'top',
+      'bottom',
+      'inside',
+      'insideTop',
+      'insideLeft',
+      'insideRight',
+      'insideBottom',
+      'insideTopLeft',
+      'insideTopRight',
+      'insideBottomLeft',
+      'insideBottomRight'
+    ];
+    app.configParameters = {
+      rotate: {
+        min: -90,
+        max: 90
+      },
+      align: {
+        options: {
+          left: 'left',
+          center: 'center',
+          right: 'right'
+        }
+      },
+      verticalAlign: {
+        options: {
+          top: 'top',
+          middle: 'middle',
+          bottom: 'bottom'
+        }
+      },
+      position: {
+        options: posList.reduce(function (map, pos) {
+          map[pos] = pos;
+          return map;
+        }, {})
+      },
+      distance: {
+        min: 0,
+        max: 100
+      }
+    };
+    app.config = {
+      rotate: 90,
+      align: 'left',
+      verticalAlign: 'middle',
+      position: 'insideBottom',
+      distance: 15,
+      onChange: function () {
+        const labelOption = {
+          rotate: app.config.rotate,
+          align: app.config.align,
+          verticalAlign: app.config.verticalAlign,
+          position: app.config.position,
+          distance: app.config.distance
+        };
+        myChart.setOption({
+          series: [
+            {
+              label: labelOption
+            },
+            {
+              label: labelOption
+            },
+            {
+              label: labelOption
+            },
+            {
+              label: labelOption
+            }
+          ]
+        });
+      }
+    };*/
+
+    var legendData = ['Forest', 'Steppe', 'Desert', 'Wetland', 'Line 1', 'Line 2'];
+    var xAiasData = ['2023-11-15', '2023-11-16', '2023-11-18', '2023-11-19', '2023-11-21', '2023-11-125', '2023-11-29', deadline, '2023-12-01', '2023-12-02', '2023-12-04'];
+
+    var labelOption = {
+        show: false,
+        position: 'top',
+        distance: 0,
+        align: 'center',
+        verticalAlign: 'top',
+        rotate: 0,
+        formatter: '{c}',
+        fontSize: 14,
+        rich: {
+            name: {}
+        }
+    };
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: legendData
+        },
+        toolbox: {
+            show: true,
+            orient: 'vertical',
+            left: 'left',
+            top: 'left',
+            feature: {
+                mark: { show: true },
+                // dataView: { show: true, readOnly: false },
+                magicType: { show: true, type: ['stack'],
+                    seriesIndex: {
+                        stack: [0, 1, 2, 3] // stack 모드를 적용할 시리즈의 인덱스를 선택
+                    }
+                },
+                dataZoom: {
+                    show: true
+                }
+                // restore: { show: true },
+                //saveAsImage: { show: true }
+                // myTool: {
+                //       show: true,
+                //       title: '상태 그룹화',
+                //       icon: 'image://http://echarts.baidu.com/images/favicon.png',
+                //       onclick: toggleStack
+                // },
+            }
+        },
+        xAxis: [
+            {
+                type: 'category',
+                axisTick: { show: false },
+                data: xAiasData
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            },
+            {
+                type: 'value',
+                position: 'right'
+            }
+        ],
+        series: [
+            {
+                name: 'Forest',
+                type: 'bar',
+                barGap: 0,
+                label: labelOption,
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [320, 332, 301, 334, 390, 220, 182, 0, 191, 234, 290]
+            },
+            {
+                name: 'Steppe',
+                type: 'bar',
+                label: labelOption,
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [220, 182, 191, 234, 290, 150, 232, 340, 201, 154, 190]
+            },
+            {
+                name: 'Desert',
+                type: 'bar',
+                label: labelOption,
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [150, 232, 201, 154, 190, 98, 77, 0, 101, 99, 40]
+            },
+            {
+                name: 'Wetland',
+                type: 'bar',
+                label: labelOption,
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [98, 77, 101, 99, 40, 100, 120, 200, 130, 140, 150]
+            },
+            // 라인 차트 추가
+            {
+                name: 'Line 1',
+                type: 'line',
+                yAxisIndex: 1,
+                data: [100, 120, 130, 140, 150, 200, 220, 0, 230, 240, 250],
+                emphasis: {
+                    focus: 'series'
+                },
+                symbolSize: 10
+            },
+            {
+                name: 'Line 2',
+                type: 'line',
+                yAxisIndex: 1,
+                data: [200, 220, 230, 240, 250, 320, 332, 100, 301, 334, 390],
+                emphasis: {
+                    focus: 'series'
+                },
+                symbolSize: 10,
+            },
+            {
+                name: '마감일',
+                type: 'line',
+                data: [[deadline, 0], [deadline, 1]],
+                tooltip: {
+                    show: false
+                },
+                markLine : {
+                    silent: true,
+                    symbol: 'none',
+                    data : [{
+                        xAxis : deadline
+                    }],
+                    lineStyle: {
+                        color: 'red',
+                        width: 4,
+                        type: 'dashed'
+                    },
+                    label: {
+                        formatter: '마감일 : {c}',
+                        color: 'white',
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    }
+                },
+                lineStyle: {
+                    color: 'red',
+                    type: 'dashed'
+                },
+                symbol: 'none'
+            }
+        ],
+        backgroundColor: 'rgba(255,255,255,0)',
+        animationDelay: function (idx) {
+            return idx * 20;
+        },
+        animationDelayUpdate: function (idx) {
+            return idx * 20;
+        }
+    };
+
+    function toggleStack() {
+        var option = myChart.getOption();  // 현재 차트의 옵션 가져오기
+
+        option.series.forEach(function(series) {
+            if (series.type === 'bar') {
+                series.stack = series.stack ? null : 'stack';
+            }
+        });
+
+        myChart.setOption(option);  // 옵션 변경 후 재설정
+    }
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', function() {
+        myChart.resize();
+
+        // width에 따라 글씨 크기 조절
+        // var chartWidth = myChart.getWidth();
+        // var fontSize = chartWidth * 0.01;
+        //
+        // var option = myChart.getOption();
+        // option.series.forEach(function(series) {
+        //     series.label.fontSize = fontSize;
+        // });
+
+        myChart.setOption(option);
+    });
+
+    myChart.on('mouseover', function (params) {
+        // if (params.seriesType === 'line') {
+            var option = myChart.getOption();
+            option.series[params.seriesIndex].label.show = true;
+            myChart.setOption(option);
+        // }
+    });
+
+    myChart.on('mouseout', function (params) {
+        // if (params.seriesType === 'line') {
+            var option = myChart.getOption();
+            option.series[params.seriesIndex].label.show = false;
+            myChart.setOption(option);
+        // }
+    });
 }
 
 ////////////////////
