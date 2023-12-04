@@ -10,7 +10,7 @@ var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
-var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;
+var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;// , req_in_action;
 var top5ReqLinkedIssue = [];
 function execDocReady() {
 
@@ -92,7 +92,6 @@ function execDocReady() {
 
 			// 컬러 테스트 by 장지윤
 			dashboardColor = dashboardPalette.dashboardPalette01;
-			console.log(dashboardColor);
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
@@ -182,29 +181,6 @@ function makePdServiceSelectBox() {
 	});
 } // end makePdServiceSelectBox()
 
-function statisticsLoad(pdservice_id, pdservice_version_id){
-
-	//제품 서비스 셀렉트 박스 데이터 바인딩
-	$.ajax({
-		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-				}
-
-				$('#req_count').text(data["req"]);
-			}
-		}
-	});
-
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -258,38 +234,6 @@ function bind_VersionData_By_PdService() {
 				}
 
 				$(".multiple-select").multipleSelect("refresh");
-				//////////////////////////////////////////////////////////
-			}
-		}
-	});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-//이슈 리스트 진행 상황
-////////////////////////////////////////////////////////////////////////////////////////
-function getIssueStatus(selectId, endPointUrl) {
-	$.ajax({
-		url: "/auth-user/api/arms/reqStatus" + endPointUrl,
-		type: "GET",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				//////////////////////////////////////////////////////////
-				var resolvedCount = 0;
-				var closedCount = 0;
-				for (var k in data) {
-					var obj = data[k];
-					if (obj.state === "resolve") {
-						resolvedCount++;
-					} else if (obj.state === "closed") {
-						closedCount++;
-					}
-				}
-				$("#resolved_count").text(resolvedCount);
-				$("#closed_count").text(closedCount);
-
-				drawReqTimeSeries(data)
 				//////////////////////////////////////////////////////////
 			}
 		}
@@ -369,6 +313,7 @@ function drawReqTimeSeries(data) {
 
 	update(data1)
 }
+
 // 1. 제품서비스로만 볼 경우
 // 2. 버전만 따로 선택해서 보고싶은 경우(미완)
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
@@ -392,8 +337,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 			$('#version_count').text(version_count);
 
 			if (version_count >= 0) {
-				let today = new Date(); // console.log(today);
-				let plusDate = new Date();
+				let today = new Date();
 
 				$("#notifyNoVersion").slideUp();
 				$("#project-start").show();
@@ -403,21 +347,19 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				var versionGauge = [];
 				var versionTimeline = [];
 				versionData.forEach(function (versionElement, idx) {
-					//console.log(idx); console.log(versionElement);
+
 					var gaugeElement = {
 						"current_date": today.toString(),
 						"version_name": versionElement.c_title,
 						"version_id": versionElement.c_id,
 						"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
 						"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
-						//"end_date": (versionElement.c_pds_version_end_date == "end" ? plusDate.setMonth(plusDate.getMonth()+1) : versionElement.c_pds_version_end_date)
 					}
 					versionGauge.push(gaugeElement);
 					var timelineElement = {
 						"title" : "버전: "+versionElement.c_title,
 						"startDate" : (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
 						"endDate" : (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
-						//"endDate" : (versionElement.c_pds_version_end_date == "end" ? plusDate : versionElement.c_pds_version_end_date)
 					};
 					versionTimeline.push(timelineElement);
 				});
@@ -434,8 +376,10 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	// 제품서비스별 담당자 통계
 	getAssigneeInfo(pdservice_id, "");
 
-	getReqAndLinkedIssueTop5(pdservice_id); // 우하단 수평바
-	getIssueResponsibleStatusTop5(pdservice_id); // 우하단 폴라바
+	// 상위 5명 - 요구사항 및 연결이슈
+	getReqAndLinkedIssueTop5(pdservice_id);
+	// 상위 5명 - 이슈상태 누적
+	getIssueResponsibleStatusTop5(pdservice_id);
 
 	setTimeout(function () {
 		//Scope - (2) 요구사항에 연결된 이슈 총 개수
@@ -1642,19 +1586,19 @@ function getReqAndLinkedIssueTop5(pdservice_id) {
 						var groupByIsReq = data[i].하위검색결과.group_by_isReq;
 
 						if(groupByIsReq[0] !== undefined) {
-							if(groupByIsReq[0].필드명 === "true") {
-								issueCount = groupByIsReq[0].개수; // 요구사항 갯수
+							if(groupByIsReq[0]["필드명"] === "true") {
+								issueCount = groupByIsReq[0]["개수"]; // 요구사항 갯수
 							}
-							if(groupByIsReq[0].필드명 ==="false") {
-								relatedIssueCount = groupByIsReq[0].개수; // 연결이슈 갯수
+							if(groupByIsReq[0]["필드명"] ==="false") {
+								relatedIssueCount = groupByIsReq[0]["개수"]; // 연결이슈 갯수
 							}
 						}
 						if(groupByIsReq[1] !== undefined) {
-							if(groupByIsReq[1].필드명 === "true") {
-								issueCount = groupByIsReq[1].개수; // 요구사항 갯수
+							if(groupByIsReq[1]["필드명"] === "true") {
+								issueCount = groupByIsReq[1]["개수"]; // 요구사항 갯수
 							}
-							if(groupByIsReq[1].필드명 ==="false") {
-								relatedIssueCount = groupByIsReq[1].개수; // 연결이슈 갯수
+							if(groupByIsReq[1]["필드명"] ==="false") {
+								relatedIssueCount = groupByIsReq[1]["개수"]; // 연결이슈 갯수
 							}
 						}
 						var performance = {
@@ -1720,7 +1664,6 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 
 function getReqCount(pdservice_id, pdServiceVersionLinks) {
 	$.ajax({
-		//url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdservice_version_id,
 		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdServiceVersionLinks,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
@@ -1888,7 +1831,6 @@ function drawIssuePerManPower(data) {
 	var typeRects = chart
 		.append("g")
 		.attr("class", function (d) {
-			console.log(d);
 			return "myType type-"+ d.data.manpowerId;
 		})
 		.on("mouseover", mouseover)
