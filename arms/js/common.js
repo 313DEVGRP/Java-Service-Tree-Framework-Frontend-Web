@@ -1022,11 +1022,10 @@ function ajax_setup() {
 			}
 		})
 		.ajaxComplete(function (event, jqXHR, ajaxOptions) {
-			//$(".loader").addClass("hide");
+			Ladda.stopAll();
 		})
 		.ajaxStop(function () {
 			$(".loader").addClass("hide");
-			Ladda.stopAll();
 		});
 
 	return true;
@@ -1156,16 +1155,7 @@ function getCookie(cname) {
 
 function getTourGuideMode() {
 	let settingsState = JSON.parse(localStorage.getItem("settings-state"));
-	if(settingsState === null) { // 최초세팅
-		let tourGuideSettings = { tourGuideState: 'on' }
-		localStorage.setItem("settings-state",JSON.stringify(tourGuideSettings));
-		let getSettingsState = JSON.parse(localStorage.getItem("settings-state"));
-
-		return getSettingsState['tourGuideState'];
-	} else {
-		return settingsState['tourGuideState'];
-	}
-
+	return settingsState['tourGuideState'];
 }
 
 function tourGuideStart() {
@@ -1181,10 +1171,10 @@ function checkTourGuideMode() {
 		console.log("tourGuideMode is Off");
 	} else { //mode 가 없거나 on 일때
 		console.log("tourGuideMode is On");
-		var tgm = setInterval(function(){
+		let tgm = setInterval(function(){
 			tourGuideStart();
 			clearInterval(tgm);
-		}, 1000);
+		}, 1200);
 	}
 }
 
@@ -1200,15 +1190,11 @@ function getPageName(str) {
 // 헤더 :: 톱니바퀴 대응함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function 톱니바퀴_초기설정() {
+
 	//settings
 	var $settings = $("#settings"),
 		$sidebarSettings = $("#sidebar-settings"),
-		settingsState = JSON.parse(localStorage.getItem("settings-state")) || {
-			sidebar: 'left',
-			sidebarState: 'auto',
-			displaySidebar: true,
-			tourGuideState: 'on'
-		},
+		settingsState = JSON.parse(localStorage.getItem("settings-state")),
 		$pageHeader = $(".page-header"),
 		$body = $("body"),
 		popoverReallyHide = function(){
@@ -1270,6 +1256,17 @@ function 톱니바퀴_초기설정() {
 			}
 		};
 
+	if (settingsState === null) {
+		settingsState = {
+			sidebar: 'left',
+			sidebarState: 'auto',
+			displaySidebar: true,
+			tourGuideState: 'on'
+		};
+
+		localStorage.setItem('settings-state', JSON.stringify(settingsState));
+	}
+
 	sidebarSide(settingsState.sidebar);
 	sidebarState(settingsState.sidebarState, false);
 	displaySidebar(settingsState.displaySidebar, false);
@@ -1317,7 +1314,6 @@ function 톱니바퀴_초기설정() {
 		tourGuideState(mode);
 		settingsState.tourGuideState = mode;
 		localStorage.setItem("settings-state", JSON.stringify(settingsState));
-		console.log()
 	});
 
 	//sidevar left/right
