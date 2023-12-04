@@ -302,7 +302,7 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function (e) {
         selectedPdServiceId = $("#selected_pdService").val();
-        refreshDetailChart(); 변수값_초기화();
+        refreshDetailChart(); 수치_초기화();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
         //~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
@@ -328,7 +328,7 @@ function makeVersionMultiSelectBox() {
             var versionTag = $(".multiple-select").val();
             selectedVersionId = versionTag.join(',');
 
-            refreshDetailChart(); 변수값_초기화();
+            refreshDetailChart(); 수치_초기화();
 
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
@@ -359,7 +359,7 @@ function bind_VersionData_By_PdService() {
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
                 }
-                refreshDetailChart(); 변수값_초기화();
+                refreshDetailChart(); 수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(',');
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
@@ -434,6 +434,7 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                 console.log(data);
                 if (data["전체합계"] === 0) {
                     alert("작업자 업무 처리현황 데이터가 없습니다.");
+                    수치_초기화();
                 } else {
                     let isReqGrpArr = data["검색결과"]["group_by_isReq"];
                     isReqGrpArr.forEach((elementArr,index) => {
@@ -832,44 +833,39 @@ function getScheduleToDrawRadarChart(pdservice_id, pdServiceVersionLinks) {
 
     if(선택한_버전_세트.size !== 0) {
         $.ajax({
-            url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do",
-            data: {
-                c_id: pdservice_id,
-                pdServiceVersionEntities: 선택한_버전_세트
-            },
+            url: "/auth-user/api/arms/pdServiceVersion/getVersionListBy.do",
+            data: { c_ids: pdServiceVersionLinks},
             type: "GET",
             contentType: "application/json;charset=UTF-8",
             dataType: "json",
             progress: true,
             statusCode: {
                 200: function (json) {
-                    let 버전_세트 = json.pdServiceVersionEntities;
-                    let earliestStartDate; let lastEndDate;
-                    let versionArray= [];
-                    버전_세트.forEach(e => versionArray.push(e));
 
-                    if(versionArray !== 0) {
-                        for (let i=0; i<versionArray.length; i++) {
+                    let 버전목록 = json;
+                    let 가장이른시작날짜;
+                    let 가장늦은종료날짜;
+                    if(버전목록.length !== 0) {
+                        for (let i=0; i<버전목록.length; i++) {
                             if (i === 0) {
-                                earliestStartDate = versionArray[i].c_pds_version_start_date;
-                                lastEndDate = versionArray[i].c_pds_version_end_date;
+                                가장이른시작날짜 = 버전목록[i].c_pds_version_start_date;
+                                가장늦은종료날짜 = 버전목록[i].c_pds_version_end_date;
                             } else {
-                                if(versionArray[i]["c_pds_version_start_date"] < earliestStartDate) {
-                                    earliestStartDate = versionArray[i]["c_pds_version_start_date"];
+                                if(버전목록[i]["c_pds_version_start_date"] < 가장이른시작날짜) {
+                                    가장이른시작날짜 = 버전목록[i]["c_pds_version_start_date"];
                                 }
-                                if(versionArray[i]["c_pds_version_end_date"] > lastEndDate) {
-                                    lastEndDate = versionArray[i]["c_pds_version_end_date"];
+                                if(버전목록[i]["c_pds_version_end_date"] > 가장늦은종료날짜) {
+                                    가장늦은종료날짜 = 버전목록[i]["c_pds_version_end_date"];
                                 }
                             }
                         }
                     }
 
-                    if(earliestStartDate ==="start") { earliestStartDate = new Date(); }
-                    if(lastEndDate ==="end") {lastEndDate = new Date(); }
-                    let objectiveDateDiff = getDateDiff(earliestStartDate, lastEndDate);
-                    let currentDateDiff = getDateDiff(earliestStartDate, new Date());
-                    console.log(objectiveDateDiff);
-                    console.log(currentDateDiff);
+                    if(가장이른시작날짜 ==="start") { 가장이른시작날짜 = new Date(); }
+                    if(가장늦은종료날짜 ==="end") {가장늦은종료날짜 = new Date(); }
+                    let objectiveDateDiff = getDateDiff(가장이른시작날짜, 가장늦은종료날짜);
+                    let currentDateDiff = getDateDiff(가장이른시작날짜, new Date());
+
                     let 목표데이터_배열 = [resource_count, req_count, objectiveDateDiff];
                     let 현재진행데이터_배열 = [resource_count, req_in_action, currentDateDiff];
                     let dateDiff = Math.abs(objectiveDateDiff - currentDateDiff).toFixed(0);
@@ -900,7 +896,7 @@ const getDateDiff = (d1, d2) => {
 
 }
 
-function 변수값_초기화() {
+function 수치_초기화() {
     req_count =0
     linkedIssue_subtask_count =0
     resource_count =0;
