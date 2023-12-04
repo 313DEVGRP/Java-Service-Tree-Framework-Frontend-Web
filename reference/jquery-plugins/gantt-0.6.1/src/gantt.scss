@@ -95,10 +95,6 @@ $selected: rgba(229, 96, 59, 0.2) !default;
 
                     &.work-name {
                         position: relative;
-                        //background-image: url(313devgrp.png);
-                        //background-color: transparent;
-                        //background-position: -90px 0;
-                        //background-repeat: repeat-y;
 
                         &:before,
                         .row-line:before {
@@ -143,11 +139,11 @@ $selected: rgba(229, 96, 59, 0.2) !default;
                             top: 50%;
                         }
 
-                        &.indent-1-last:before,
-                        &.indent-2-last ins:before,
-                        &.indent-3-last ins:before,
-                        &.indent-4-last ins:before,
-                        &.indent-5-last ins:before {
+                        &.indent-1-last::before,
+                        &.indent-2-last ins:last-child::before,
+                        &.indent-3-last ins:last-child::before,
+                        &.indent-4-last ins:last-child::before,
+                        &.indent-5-last ins:last-child::before {
                             bottom: 50%;
                         }
                     }

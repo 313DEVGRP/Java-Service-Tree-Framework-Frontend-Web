@@ -105,7 +105,7 @@
 .table-container table .table-body tr td.work-name.indent-1-first:before {
   top: 50%;
 }
-.table-container table .table-body tr td.work-name.indent-1-last:before, .table-container table .table-body tr td.work-name.indent-2-last ins:before, .table-container table .table-body tr td.work-name.indent-3-last ins:before, .table-container table .table-body tr td.work-name.indent-4-last ins:before, .table-container table .table-body tr td.work-name.indent-5-last ins:before {
+.table-container table .table-body tr td.work-name.indent-1-last::before, .table-container table .table-body tr td.work-name.indent-2-last ins:last-child::before, .table-container table .table-body tr td.work-name.indent-3-last ins:last-child::before, .table-container table .table-body tr td.work-name.indent-4-last ins:last-child::before, .table-container table .table-body tr td.work-name.indent-5-last ins:last-child::before {
   bottom: 50%;
 }
 .table-container table .table-body tr td.indent-1 {
