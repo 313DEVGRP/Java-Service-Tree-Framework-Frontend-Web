@@ -12,8 +12,7 @@ var resourceSet = new Set(); // 담당자 set
 var searchMap = [
     { "field" : "priority.priority_name.keyword",     "reqId" : "req-priority-bar",  "subId" :"subtask-priority-bar"},
     { "field" : "status.status_name.keyword",         "reqId" : "req-status-bar",    "subId" :"subtask-status-bar"},
-    { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"},
-    { "field" : "resolution.resolution_name.keyword", "reqId" : "req-resolution-bar", "subId" :"subtask-resolution-bar"}
+    { "field" : "issuetype.issuetype_name.keyword",   "reqId" : "req-issuetype-bar", "subId" :"subtask-issuetype-bar"}
 ];
 var table;
 
@@ -236,6 +235,10 @@ function stackedHorizontalBar(){
         };
 
         option && myChart.setOption(option);
+
+        window.addEventListener('resize', function () {
+            myChart.resize();
+        });
     }
 
     const url = new UrlBuilder()

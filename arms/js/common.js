@@ -1449,7 +1449,7 @@ function triggerChartsResize(){
 }
 
 function apiResponseValidate(id, data) {
-	if (data.전체합계 <= 0) {
+		if (data.전체합계 <= 0 || data.length == 0) {
 		let chartContainer = document.getElementById(id);
 		chartContainer.innerHTML = '<div class="message">No Data</div>';
 		return false;
