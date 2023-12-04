@@ -65,8 +65,9 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
     let titleText = "";
     let titleColor = "white";
     let progress = "";
+
     if(objectiveArr.length !== 0) {
-        if (objectiveArr[1] !== "" || objectiveArr[1] !== 0) {
+        if (objectiveArr[1] !== "" && objectiveArr[1] !== 0) {
             progress = (currentProgressArr[1]*100/objectiveArr[1]).toFixed(1);
             titleText+= "진행률: " + progress + "%, ";
         }
