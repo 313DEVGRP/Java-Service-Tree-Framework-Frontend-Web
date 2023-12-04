@@ -1193,7 +1193,7 @@ function 톱니바퀴_초기설정() {
 	//settings
 	var $settings = $("#settings"),
 		$sidebarSettings = $("#sidebar-settings"),
-		settingsState = JSON.parse(localStorage.getItem("settings-state")) || {
+		settingsState = {
 			sidebar: 'left',
 			sidebarState: 'auto',
 			displaySidebar: true
