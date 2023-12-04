@@ -24,7 +24,9 @@ $selected: rgba(229, 96, 59, 0.2) !default;
 
 .table-container {
     flex: 1;
-    overflow: auto;
+    overflow-x: auto;
+    position: relative;
+
     &::-webkit-scrollbar {
         height: 10px;
     }
@@ -52,8 +54,14 @@ $selected: rgba(229, 96, 59, 0.2) !default;
         font-weight: 400;
         font-size: 12px;
         border-collapse: collapse;
-        table-layout: fixed;
         border-spacing: 0;
+
+        .table-header tr th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: #404246;
+        }
 
         .table-header tr th,
         .table-body tr td {
