@@ -13,7 +13,7 @@ function execDocReady() {
 
             console.log('모든 플러그인 로드 완료');
             //좌측 메뉴
-            setSideMenu("sidebar_menu_license", "");
+            setSideMenu("sidebar_menu_community", "sidebar_menu_community_license");
             // 스크립트 실행 로직을 이곳에 추가합니다.
 
         })

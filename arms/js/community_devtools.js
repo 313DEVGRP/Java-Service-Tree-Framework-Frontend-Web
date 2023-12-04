@@ -17,7 +17,7 @@ function execDocReady() {
 
 			//좌측 메뉴
 			$('.widget').widgster();
-			setSideMenu("sidebar_menu_dashboard", "");
+			setSideMenu("sidebar_menu_community", "sidebar_menu_community_devtools");
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 		})
