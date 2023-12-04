@@ -1,0 +1,13 @@
+.step-title {
+    font-weight: 700;
+}
+
+.step-title,
+.step-content {
+    font-size: 13px;
+    word-break: keep-all;
+}
+
+.tg-dialog .tg-dialog-footer button.tg-dialog-btn{
+    font-size: 12px;
+}

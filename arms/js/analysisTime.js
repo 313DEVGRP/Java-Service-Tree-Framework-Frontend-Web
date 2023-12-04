@@ -6,6 +6,7 @@ var selectedVersionId;
 var globalJiraIssue = {};
 var pdServiceData;
 var versionListData;
+var deadline;
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -573,7 +574,8 @@ function drawVersionProgress(data) {
             }
         }
     }
-
+    deadline = formatDate(new Date(latestEndDate));
+    console.log(deadline);
     $("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
     $("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
 
@@ -852,9 +854,6 @@ function scatterChart(data) {
                         width: 1, // 라인 너비를 2로 변경
                         type: 'solid' // 라인 유형을 실선으로 변경
                     }
-                },
-                tooltip: {
-                    show: false
                 }
             },
             series: [
@@ -870,9 +869,6 @@ function scatterChart(data) {
                             color: '#FFFFFF'
                         }
                     },
-                    axisPointer: {
-                        type: 'shadow'
-                    },
                     symbolSize: function (val) {
                         var sbSize = 10;
                         if (val[1] > 10) {
@@ -880,6 +876,25 @@ function scatterChart(data) {
                         }
                         return sbSize;
                     },
+                    // 마감일 표현
+                    markLine : {
+                        silent: true,
+                        symbol: 'none',
+                        data : [{
+                            xAxis : deadline // x축 날짜 지정
+                        }],
+                        lineStyle: {
+                            color: 'red',
+                            width: 2,
+                            type: 'dashed'
+                        },
+                        label: {
+                            formatter: '마감일 : {c}',
+                            color: 'white',
+                            fontSize: 14,
+                            fontWeight: 'bold'
+                        }
+                    }
                 },
                 {
                     name: '연결된 이슈',
@@ -888,11 +903,9 @@ function scatterChart(data) {
                     clip: false,  // clip 옵션 추가
                     label: {
                         emphasis: {
-                            show: true
+                            show: true,
+                            color: '#FFFFFF'
                         }
-                    },
-                    axisPointer: {
-                        type: 'line'
                     },
                     symbolSize: function (val) {
                         var sbSize = 10;
@@ -904,6 +917,25 @@ function scatterChart(data) {
                     itemStyle: {
                         color: '#13de57'
                     },
+                    // 마감일 표현
+                    markLine : {
+                        silent: true,
+                        symbol: 'none',
+                        data : [{
+                            xAxis : deadline // x축 날짜 지정
+                        }],
+                        lineStyle: {
+                            color: 'red',
+                            width: 2,
+                            type: 'dashed'
+                        },
+                        label: {
+                            formatter: '마감일 : {c}',
+                            color: 'white',
+                            fontSize: 14,
+                            fontWeight: 'bold'
+                        }
+                    }
                 }
             ],
             tooltip: {
@@ -911,7 +943,7 @@ function scatterChart(data) {
                 position: 'top',
                 borderWidth: 1,
                 axisPointer: {
-                    type: 'shadow',
+                    type: 'line',
                     label: {
                         formatter: function(params) {
                             return formatDate(new Date(params.value));

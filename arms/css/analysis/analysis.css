@@ -206,3 +206,17 @@ button {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.echart-no-data {
+    position: relative;
+}
+
+
+.echart-no-data .message {
+    position: absolute;
+    transform: translateY(-50%);
+    text-align: center;
+    width: 100%;
+    top: 50%;
+    left: 0;
+}

@@ -122,9 +122,11 @@
     <link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/Ladda-jQuery-0.6.0/dist/ladda.min.css" media="screen" />
 
     <!-- Tour-Guide -->
-    <script type="text/javascript" src="../reference/jquery-plugins/guided-tour-arrow/dist/guides.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/common/guidedTour/gtaApi.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/common/guidedTour/gtaGroup.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../reference/jquery-plugins/tourguide-js-main/dist/tour.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../reference/jquery-plugins/tourguide-js-main/dist/css/tour.min.css" media="screen" />
+    <script type="text/javascript" src="../arms/js/common/tourGuide/tgApi.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../arms/js/common/tourGuide/tgGroup.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../arms/css/tourGuide/tourGuideCustom.css" media="screen"/>
 
     <!-- notification popup -->
     <script src="../reference/lightblue4/docs/lib/messenger/build/js/messenger.min.js" charset="utf-8"></script>
@@ -206,6 +208,14 @@
             <% display = displaySidebar%>
             <button type="button" data-value="true" class="btn btn-sm btn-default <%= display? 'active' : '' %>">Show</button>
             <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
+        </div>
+    </div>
+    <div>
+        <div>TourGuide</div>
+        <div id="tour-guide-mode" class="pull-left btn-group" data-toggle="buttons-radio">
+            <% tgs = tourGuideState%>
+            <button type="button" data-value="on" class="btn btn-sm btn-default <%= tgs=='on' ? 'active' : '' %>">On</button>
+            <button type="button" data-value="off" class="btn btn-sm btn-default <%= tgs=='on'? '' : 'active' %>">Off</button>
         </div>
     </div>
 </script>

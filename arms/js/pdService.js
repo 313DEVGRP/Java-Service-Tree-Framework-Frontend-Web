@@ -115,7 +115,6 @@ function execDocReady() {
 			update_btn_click();
 
 			popup_update_btn_click();
-
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			//editorReadOnly();
 		})
@@ -640,8 +639,6 @@ function dataTableClick(tempDataTable, selectedData) {
 
 //데이터 테이블 ajax load 이후 콜백.
 function dataTableCallBack(settings, json) {
-
-
 }
 
 function dataTableDrawCallback(tableInfo) {
@@ -1093,3 +1090,32 @@ function reloadDataWithSameOrdering(cTitle) {
 		});
 	});
 }
+
+/*const steps = [{
+	content: "This is a short guide to get you set up and show you where things are",
+	title: "Welcome aboard",
+	target: "#firstStep"
+	},
+	{
+	content: "Register New Product(or Service) that you want to manage",
+	title: "Register Product(or Service) Button",
+	target: "#modal_popup_id"
+	}
+];*/
+
+/*
+function drawDatatable() {
+	console.log("데이터테이블 그리기");
+	return new Promise(function(resolve,reject) {
+		console.log("로드");
+		dataTableLoad()
+		resolve(1);
+	})
+}
+
+function initTg() {
+	const tg = new tourguide.TourGuideClient({
+		exitOnClickOutside: false,
+		steps: steps
+	});
+}*/
