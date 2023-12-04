@@ -5975,7 +5975,7 @@
                 return n * (e + .5)
             }
             )).attr("y", .5 * t.height).style("fill", (function(n) {
-                return Ru(t.scale(n)).isLight() ? "#333" : "#DDD"
+                return Ru(t.scale(n)).isLight() ? "#fff" : "#fff"
             }
             )).each((function(e) {
                 So().bbox({
@@ -7830,16 +7830,39 @@
                 }
             }
             )),
-            n.resetBtn = n.svg.append("text").attr("class", "reset-zoom-btn").text("확대 초기화").style("text-anchor", "end").on("mouseup", (function() {
-                n.svg.dispatch("resetZoom")
-            }
-            )).on("mouseover", (function() {
+
+//            n.resetBtn = n.svg.append("rect")
+//                .attr("class", "reset-zoom-btn")
+//                .text("버튼").style("text-anchor", "end")
+            n.resetBtn = n.svg.append("rect")
+                .attr("class", "reset-zoom-btn")
+                .attr("width", 80) // 버튼의 너비
+                .attr("height", 25) // 버튼의 높이
+                .attr("rx", 5) // 가로 방향 모서리 반지름
+                .attr("ry", 5) // 세로 방향 모서리 반지름
+                .attr("x", 1257) // 텍스트의 x좌표
+                .attr("y", 2) // 텍스트의 y좌표
+                .style("fill", "#666") // 버튼 배경색
+
+                .on("mouseup", (function() {
+                    n.svg.dispatch("resetZoom")
+                }))
+                .on("mouseover", (function() {
                 ea(this).style("opacity", 1)
             }
             )).on("mouseout", (function() {
                 ea(this).style("opacity", .6)
             }
             )),
+            n.svg.append("text")
+                .attr("class", "reset-zoom-btn-text")
+                .attr("x", 1297) // 텍스트의 x좌표
+                .attr("y", 15) // 텍스트의 y좌표
+                .style("text-anchor", "middle") // 텍스트의 가운데 정렬
+                .style("dominant-baseline", "central") // 텍스트의 가운데 정렬
+                .style("font-size", "12px") // 텍스트의 가운데 정렬
+                    .style("pointer-events", "none") // 추가: 텍스트 요소는 마우스 이벤트를 무시
+                    .text("확대 초기화");
             n.svg.on("zoom", (function(t) {
                 var e = t.detail
                   , r = e.zoomX
@@ -8099,7 +8122,7 @@
             }(),
             n.svg.select(".legendG").transition().duration(n.transDuration).attr("transform", "translate(".concat(n.leftMargin + .05 * n.graphW, ",2)")),
             n.colorLegend.width(Math.max(120, n.graphW / 3 * (n.zQualitative ? 2 : 1))).height(.6 * n.topMargin).scale(n.zColorScale).label(n.zScaleLabel),
-            n.resetBtn.transition().duration(n.transDuration).attr("x", n.leftMargin + .99 * n.graphW).attr("y", .8 * n.topMargin),
+            n.resetBtn.transition().duration(n.transDuration),
             So().bbox({
                 width: .4 * n.graphW,
                 height: Math.min(13, .8 * n.topMargin)

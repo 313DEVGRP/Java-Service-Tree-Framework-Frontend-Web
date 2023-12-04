@@ -1381,10 +1381,12 @@ function sevenTimeline(data) {
         TimelinesChart()('#sevenTimeLine')
             .width(1440)
             .maxHeight(3000)
-            .maxLineHeight(30)
+            .maxLineHeight(40)
+            .topMargin(40)
             .zQualitative(true)
             .data(myData)
             .refresh();
+        $('#sevenTimeLineBody').css("overflow","scroll");
     } else {
         var pElement = document.createElement("p");
         pElement.textContent = "데이터가 없습니다.";
