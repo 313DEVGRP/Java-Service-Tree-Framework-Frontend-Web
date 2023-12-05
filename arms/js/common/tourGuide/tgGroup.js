@@ -1,4 +1,20 @@
 var TgGroup = ( function () {
+        var sampleStep = function (pageName) {
+            const steps = [
+                {
+                    title: '<div class="step-title"> 선택한 페이지 - '+pageName+'</div>',
+                    content: '<div class="step-content"> 페이지명과 범주를 확인할 수 있습니다. </div>',
+                    target: ".widgetheader"
+                },
+                {
+                    title: '<div class="step-title">투어가이드 설정 On/Off</div>',
+                    content: '<div class="step-content"> 페이지가 새로 로드 될 때마다 실행됩니다.<br/>' +
+                        '가이드를 끄시려면 TourGuide <b>Off</b>로 설정해주세요.</div>',
+                    target: "#settings"
+                }
+            ];
+            return steps;
+        };
         var tg_dashboard = function () {
             const steps = [{
                 content: "This is a short guide to get you set up and show you where things are",
@@ -37,7 +53,7 @@ var TgGroup = ( function () {
                 {
                     title: '<div class="step-title">투어가이드 설정 On/Off</div>',
                     content: '<div class="step-content"> 페이지가 새로 로드 될 때마다 실행됩니다.<br/>' +
-                        '모드를 끄시려면 TourGuide <b>Off</b>로 설정해주세요.</div>',
+                        '가이드를 끄시려면 <b>TourGuide</b>를 <b>Off</b>로 설정해주세요.</div>',
                     target: "#settings"
                 }
             ];
@@ -95,7 +111,9 @@ var TgGroup = ( function () {
             tg_analysisTime : tg_analysisTime,
             tg_analysisScope : tg_analysisScope,
             tg_analysisResource : tg_analysisResource,
-            tg_analysisCost : tg_analysisCost
+            tg_analysisCost : tg_analysisCost,
+
+            sampleStep : sampleStep
         }; // 내부함수 key : value
     }
 )();

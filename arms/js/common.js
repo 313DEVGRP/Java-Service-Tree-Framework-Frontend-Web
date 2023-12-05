@@ -56,7 +56,8 @@ function runScript() {
 function 로드_완료_이후_실행_함수() {
 	laddaBtnSetting();
 	톱니바퀴_초기설정();
-	//checkTourGuideMode();
+	checkTourGuideMode();
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1138,7 +1139,6 @@ class UrlBuilder {
 function getCookie(cname) {
 	var name = cname + "=";
 	var decodedCookie = decodeURIComponent(document.cookie);
-	console.log(decodedCookie);
 	var ca = decodedCookie.split(";");
 	for (var i = 0; i < ca.length; i++) {
 		var c = ca[i];
@@ -1152,10 +1152,24 @@ function getCookie(cname) {
 	return "";
 }
 
+//투어가이드모드 쿠키 - 가져오기
 function getTourGuideMode() {
-	let settingsState = JSON.parse(localStorage.getItem("settings-state"));
-	return settingsState["tourGuideState"];
+	let tourGuideMode = getCookie("tourGuideMode");
+	if (tourGuideMode) {
+		return tourGuideMode;
+	} else { //쿠키가 없을 때, "on"으로 체크
+		setTourGuideMode("on");
+		return getCookie("tourGuideMode");
+	}
 }
+
+
+function setTourGuideMode(mode) {
+	console.log("setTourGuideMode ==> " + mode);
+	document.cookie = "tourGuideMode=" + mode;
+	return mode;
+}
+
 
 function tourGuideStart() {
 	console.log("Tour guide mode is ON. Performing tour...");
@@ -1168,14 +1182,36 @@ function checkTourGuideMode() {
 	let tourGuideMode = getTourGuideMode();
 	if (tourGuideMode === "off") {
 		console.log("tourGuideMode is Off");
-	} else {
-		//mode 가 없거나 on 일때
+	} else {//mode 가 없거나 on 일때
 		console.log("tourGuideMode is On");
+		setTourGuideMode("on");
 		let tgm = setInterval(function () {
 			tourGuideStart();
 			clearInterval(tgm);
 		}, 1200);
 	}
+}
+
+//톱니바퀴(config) 투어가이드 이벤트리스너
+function tourGuideEventListener() {
+	console.log("tourGuideEventListener 시작 ");
+	let tgm = getCookie("tourGuideMode");
+	if (tgm === "off") {
+		$("#tourGuideButtons #tour_guide_off").addClass("active");
+	} else {
+		$("#tourGuideButtons #tour_guide_on").addClass("active");
+	}
+
+	$("#tourGuideButtons button").click(function() {
+		console.log("버튼이 눌렸습니다.");
+		let $active_label = $(this).text().toLowerCase();
+		console.log($active_label);
+		if ($active_label === "on") {
+			setTourGuideMode("on");
+		} else {
+			setTourGuideMode("off");
+		}
+	});
 }
 
 function getPageName(str) {
@@ -1279,6 +1315,7 @@ function 톱니바퀴_초기설정() {
 			// need to remove popover on anywhere-click
 			$(document).on("click", popoverClose);
 			$(this).focus();
+			tourGuideEventListener(); // 투어가이드 이벤트리스너 설정.
 			return false;
 		});
 
