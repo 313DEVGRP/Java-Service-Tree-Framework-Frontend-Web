@@ -1185,9 +1185,8 @@ function checkTourGuideMode() {
 	} else {//mode 가 없거나 on 일때
 		console.log("tourGuideMode is On");
 		setTourGuideMode("on");
-		let tgm = setInterval(function () {
+		setTimeout(function () {
 			tourGuideStart();
-			clearInterval(tgm);
 		}, 1200);
 	}
 }
