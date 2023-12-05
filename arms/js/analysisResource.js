@@ -49,9 +49,6 @@ function execDocReady() {
             "../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
             "../reference/lightblue4/docs/lib/widgster/widgster.js",
             "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
-            // 투입 인력별 요구사항 관여 차트
-            "../reference/jquery-plugins/Jit-2.0.1/jit.js",
-            "../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
             // 제품-버전-투입인력 차트
             "../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js",
         ],
@@ -78,7 +75,6 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
             "../arms/css/analysis/analysis.css",
             "../arms/js/analysis/resource/sankey.js",
-            "../arms/js/analysis/resource/treemap.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -132,11 +128,9 @@ function stackedHorizontalBar(){
         return statusCounts;
     }
     function stackedBarChartInit(data) {
-        let validate = apiResponseValidate("apache-echarts-stacked-horizontal-bar", data);
+        let chartDom = document.getElementById('apache-echarts-stacked-horizontal-bar');
 
-        if(!validate) {
-            return false;
-        }
+        let myChart = echarts.init(chartDom);
 
         const sortedData = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"].sort((a, b) => a.개수 - b.개수);
 
@@ -152,8 +146,6 @@ function stackedHorizontalBar(){
         const statusTypes = Array.from(jiraIssueStatuses);
 
         const statusCounts = getStatusCounts(data, statusTypes);
-
-        const myChart = echarts.init(document.getElementById('apache-echarts-stacked-horizontal-bar'));
 
         const option = {
             tooltip: {
@@ -921,4 +913,135 @@ function 수치_초기화() {
     if(radarChart) { radarChart.dispose(); }
     let stackBarChart = echarts.getInstanceByDom(document.getElementById("apache-echarts-stacked-horizontal-bar"));
     if(stackBarChart) { stackBarChart.dispose(); }
+}
+
+function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
+    console.log("drawManRequirementTreeMapChart");
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/dashboard/assignees-requirements-involvements')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('메인그룹필드', "pdServiceVersion")
+        .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('크기', 0)
+        .addQueryParam('하위크기', 0)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                let chartDom = document.getElementById('chart-manpower-requirement');
+                let myChart = echarts.init(chartDom);
+                // let validate = apiResponseValidate(myChart, data);
+                //
+                // if(!validate) {
+                //     return false;
+                // }
+                let option;
+
+                myChart.showLoading();
+                myChart.hideLoading();
+
+                function getLevelOption() {
+                    return [
+                        {
+                            itemStyle: {
+                                borderColor: '#777',
+                                borderWidth: 0,
+                                gapWidth: 1
+                            },
+                            upperLabel: {
+                                show: false
+                            }
+                        },
+                        {
+                            itemStyle: {
+                                borderColor: '#555',
+                                borderWidth: 5,
+                                gapWidth: 1
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    borderColor: '#ddd'
+                                }
+                            }
+                        },
+                        {
+                            colorSaturation: [0.35, 0.5],
+                            itemStyle: {
+                                borderWidth: 5,
+                                gapWidth: 1,
+                                borderColorSaturation: 0.6
+                            }
+                        }
+                    ];
+                }
+
+                myChart.setOption(
+                    (option = {
+                        // title: {
+                        //     text: '작업자 별 요구사항 관여 트리맵',
+                        //     left: 'center',
+                        //     textStyle: {
+                        //         color: '#ffffff'
+                        //     }
+                        // },
+                        tooltip: {
+                            formatter: function (info) {
+                                var value = info.value;
+                                var treePathInfo = info.treePathInfo;
+                                var treePath = [];
+                                for (var i = 1; i < treePathInfo.length; i++) {
+                                    treePath.push(treePathInfo[i].name);
+                                }
+                                return [
+                                    '<div class="tooltip-title">' +
+                                    echarts.format.encodeHTML(treePath.join('/')) +
+                                    '</div>',
+                                    '관여한 횟수: ' + echarts.format.addCommas(value)
+                                ].join('');
+                            }
+                        },
+                        series: [
+                            {
+                                name: '작업자 별 요구사항 관여 트리맵',
+                                type: 'treemap',
+                                breadcrumb: {
+                                    itemStyle: {
+                                        // color: '#90ee90'
+                                        // color: '#add8e6'
+                                    }
+                                },
+                                visibleMin: 300,
+                                label: {
+                                    show: true,
+                                    formatter: '{b}'
+                                },
+                                upperLabel: {
+                                    show: true,
+                                    height: 30
+                                },
+                                itemStyle: {
+                                    borderColor: '#fff',
+
+                                },
+                                levels: getLevelOption(),
+                                data: data
+                            }
+                        ]
+                    })
+                );
+                option && myChart.setOption(option);
+                window.addEventListener('resize', function () {
+                    myChart.resize();
+                });
+            }
+        }
+    });
 }

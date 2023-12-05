@@ -3398,3 +3398,18 @@ table tbody tr td {
 	-webkit-animation: 2s animateLeft linear -1s infinite;
 	animation: 2s animateLeft linear -1s infinite;
 }
+
+
+.echart-no-data {
+	position: relative;
+}
+
+
+.echart-no-data .message {
+	position: absolute;
+	transform: translateY(-50%);
+	text-align: center;
+	width: 100%;
+	top: 50%;
+	left: 0;
+}

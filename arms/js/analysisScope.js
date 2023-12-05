@@ -69,8 +69,7 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
             "../arms/css/analysis/analysis.css",
-            "../arms/js/analysis/resource/sankey.js",
-            "../arms/js/analysis/resource/treemap.js"
+            "../arms/js/analysis/resource/sankey.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
