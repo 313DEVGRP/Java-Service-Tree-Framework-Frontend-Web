@@ -1,6 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Page 전역 변수
 ////////////////////////////////////////////////////////////////////////////////////////
+var urlParams;
+var selectedPdService;
+var selectedPdServiceVersion;
+var selectedJiraServer;
+var selectedJiraProject;
+var selectedJsTreeId; // 요구사항 아이디
 var selectId; // 제품 아이디
 var selectName; // 제품 이름
 var selectedIndex; // 데이터테이블 선택한 인덱스
@@ -28,72 +34,49 @@ function execDocReady() {
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"
-		],
-
-		[
-			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
-			"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
-			//vfs_fonts 파일이 커서 defer 처리 함.
-			setTimeout(function () {
-				var script = document.createElement("script");
-				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
-				script.defer = true; // defer 속성 설정
-				document.head.appendChild(script);
-			}, 3000); // 2초 후에 실행됩니다.
-			console.log("모든 플러그인 로드 완료");
-
+			setUrlParams();
 			//사이드 메뉴 처리
 			$(".widget").widgster();
-			setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
+			setSideMenu("sidebar_menu_product", "sidebar_menu_per_version");
 
 			// 스크립트 실행 로직을 이곳에 추가합니다.
-
 			init_versionList();
-			dataLoad(22, "313 SOFT - 요구사항 관리 시스템 - ALM RMS");
+			dataLoad();
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
 		});
 }
 
+function setUrlParams() {
+	urlParams = new URL(location.href).searchParams;
+	selectedPdService = urlParams.get("pdService");
+	selectedPdServiceVersion = urlParams.get("pdServiceVersion");
+	selectedJsTreeId = urlParams.get("reqAdd");
+	selectedJiraServer = urlParams.get("jiraServer");
+	selectedJiraProject = urlParams.get("jiraProject");
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 리스트를 재로드하는 함수 ( 버전 추가, 갱신, 삭제 시 호출 )
 ////////////////////////////////////////////////////////////////////////////////////////
-function dataLoad(getSelectedText, selectedText) {
+function dataLoad() {
 	// ajax 처리 후 에디터 바인딩.
-	console.log("dataLoad :: getSelectedID → " + getSelectedText);
-	$.ajax("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + getSelectedText).done(function (
+	console.log("dataLoad :: getSelectedID → " + selectedPdService);
+	$.ajax("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + selectedPdService).done(function (
 		json
 	) {
 		console.log("dataLoad :: success → ", json);
 		$("#version_accordion").jsonMenu("set", json.pdServiceVersionEntities, { speed: 5000 });
 		//version text setting
 
-		$("#select_Service").text(selectedText); // sender 이름 바인딩
-
-		if (!isEmpty(json.pdServiceVersionEntities)) {
-			// 상세보기
-			selectVersion = json.pdServiceVersionEntities[0].c_id;
-			$("#version_start_date").val(json.pdServiceVersionEntities[0].c_start_date);
-			$("#version_end_date").val(json.pdServiceVersionEntities[0].c_end_date);
-			$("#version_contents").html(json.pdServiceVersionEntities[0].c_contents);
-		}
+		$("#select_Service").text(json.c_title); // sender 이름 바인딩
 	});
 }
 

@@ -80,7 +80,7 @@
 										class="font13"
 										style="font-weight: bold">
 										<i class="fa fa-calendar-o"></i>
-										313 SOFT - 요구사항 관리 시스템 - ALM RMS
+										<span class="pdServiceName"></span>
 									</span>
 								</h4>
 								<div
@@ -96,7 +96,7 @@
 										style="margin-bottom: 30px !important; padding: 10px 0px !important; text-align: center">
 										<span>
 											<a
-												id="resource_count"
+												id="product-all-req"
 												style="font-weight: bold; font-size: 36px">
 												-
 											</a>
@@ -107,13 +107,15 @@
 									</div>
 									<ul class="server-stats">
 										<li>
-											<div class="key pull-right">0 개</div>
+											<div
+												class="key pull-right"
+												id="product-my-req"></div>
 											<div class="stat">
 												<div class="info">담당 이슈</div>
 												<div class="progress progress-small">
 													<div
-														class="progress-bar progress-bar-inverse"
-														style="width: 48%"></div>
+														id="product-my-req-display"
+														class="progress-bar progress-bar-inverse"></div>
 												</div>
 											</div>
 										</li>
@@ -131,7 +133,7 @@
 										class="font13"
 										style="font-weight: bold">
 										<i class="fa fa-calendar-o"></i>
-										[개선] 버전관리 - Validation 처리 추가검토
+										<span class="requirementName"></span>
 									</span>
 								</h4>
 								<div
@@ -147,9 +149,9 @@
 										style="margin-bottom: 30px !important; padding: 10px 0px !important; text-align: center">
 										<span>
 											<a
-												id="resource_count"
+												id="req-all-req"
 												style="font-weight: bold; font-size: 36px">
-												2
+												-
 											</a>
 											<br />
 											해당 요구사항 개수
@@ -158,13 +160,15 @@
 									</div>
 									<ul class="server-stats">
 										<li>
-											<div class="key pull-right">0 개</div>
+											<div
+												class="key pull-right"
+												id="req-my-req"></div>
 											<div class="stat">
 												<div class="info">담당 이슈</div>
 												<div class="progress progress-small">
 													<div
-														class="progress-bar progress-bar-inverse"
-														style="width: 48%"></div>
+														id="req-my-req-display"
+														class="progress-bar progress-bar-inverse"></div>
 												</div>
 											</div>
 										</li>
@@ -188,7 +192,8 @@
 						class="font13"
 						style="font-weight: bold">
 						<i class="fa fa-calendar-o"></i>
-						이슈 진행 현황
+						<span class="pdServiceName"></span>
+						- 담당 이슈 현황
 					</span>
 				</h4>
 				<div class="widget-controls">
@@ -239,15 +244,16 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<section class="widget large">
-							<header>
-								<h4>
-									<i class="fa fa-pie-chart"></i>
-									이슈 상태 현황
-								</h4>
-							</header>
-							<div
-								class="body"
-								id="donut-chart"></div>
+							<div class="body">
+								<div
+									id="product-chart-pie"
+									class="chart pie-chart">
+									<svg></svg>
+								</div>
+							</div>
+							<footer
+								id="product-chart-footer"
+								class="pie-chart-footer"></footer>
 						</section>
 					</div>
 				</div>
@@ -262,7 +268,8 @@
 						class="font13"
 						style="font-weight: bold">
 						<i class="fa fa-calendar-o"></i>
-						이슈 진행 현황
+						<span class="requirementName"></span>
+						- 담당 이슈 현황
 					</span>
 				</h4>
 				<div class="widget-controls">
@@ -313,15 +320,16 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<section class="widget large">
-							<header>
-								<h4>
-									<i class="fa fa-pie-chart"></i>
-									이슈 상태 현황
-								</h4>
-							</header>
-							<div
-								class="body"
-								id="donut-chart"></div>
+							<div class="body">
+								<div
+									id="requirement-chart-pie"
+									class="chart pie-chart">
+									<svg></svg>
+								</div>
+							</div>
+							<footer
+								id="requirement-chart-footer"
+								class="pie-chart-footer"></footer>
 						</section>
 					</div>
 				</div>
