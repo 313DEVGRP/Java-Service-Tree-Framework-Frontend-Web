@@ -40,7 +40,7 @@ function runScript() {
 		$(".loader").removeClass("hide");
 
 		var page = urlParams.get("page");
-		if ( isEmpty(page) ){
+		if (isEmpty(page)) {
 			page = "index";
 		}
 		if (includeLayout(page)) {
@@ -66,7 +66,9 @@ function loadPlugin(url) {
 	return new Promise(function (resolve, reject) {
 		if (isJavaScriptFile(url)) {
 			$(".spinner").html(
-				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' + getFileNameFromURL(url) + " 자바스크립트를 다운로드 중입니다..."
+				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+					getFileNameFromURL(url) +
+					" 자바스크립트를 다운로드 중입니다..."
 			);
 			$.ajax({
 				url: url,
@@ -562,7 +564,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 					},
 					success: function (n) {
 						jSuccess("Product(service) Data Load Complete");
-						$(jQueryElementID).jstree('search', $('#text').val());
+						$(jQueryElementID).jstree("search", $("#text").val());
 					}
 				}
 			},
@@ -591,7 +593,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				 * v2 : 검색 버튼 클릭 시 jstree 노드 필터링을 통해 검색
 				 */
 				show_only_matches: true,
-				search_callback: function(str, node) {
+				search_callback: function (str, node) {
 					return node.data().search(str);
 				}
 			},
@@ -1090,33 +1092,30 @@ function goToTemplatePage(pageName) {
 	window.location.href = "template.html?page=" + pageName;
 }
 
-
 function laddaBtnSetting() {
 	// add css
-	$('.ladda').addClass('ladda-button');
+	$(".ladda").addClass("ladda-button");
 
 	// Bind progress buttons and simulate loading progress
-	Ladda.bind( '.ladda', {
-		callback: function( instance ) {
+	Ladda.bind(".ladda", {
+		callback: function (instance) {
 			var progress = 0;
-			var interval = setInterval( function() {
-				progress = Math.min( progress + 0.1, 1.5 );
-				instance.setProgress( progress );
+			var interval = setInterval(function () {
+				progress = Math.min(progress + 0.1, 1.5);
+				instance.setProgress(progress);
 
-				if( progress === 1.5 ) {
+				if (progress === 1.5) {
 					instance.stop();
-					clearInterval( interval );
+					clearInterval(interval);
 				}
-			}, 200 );
+			}, 200);
 		}
-	} );
+	});
 }
-
-
 
 class UrlBuilder {
 	constructor() {
-		this.baseUrl = '';
+		this.baseUrl = "";
 		this.queryParams = {};
 	}
 
@@ -1140,10 +1139,10 @@ function getCookie(cname) {
 	var name = cname + "=";
 	var decodedCookie = decodeURIComponent(document.cookie);
 	console.log(decodedCookie);
-	var ca = decodedCookie.split(';');
-	for(var i = 0; i <ca.length; i++) {
+	var ca = decodedCookie.split(";");
+	for (var i = 0; i < ca.length; i++) {
 		var c = ca[i];
-		while (c.charAt(0) == ' ') {
+		while (c.charAt(0) == " ") {
 			c = c.substring(1);
 		}
 		if (c.indexOf(name) == 0) {
@@ -1155,11 +1154,11 @@ function getCookie(cname) {
 
 function getTourGuideMode() {
 	let settingsState = JSON.parse(localStorage.getItem("settings-state"));
-	return settingsState['tourGuideState'];
+	return settingsState["tourGuideState"];
 }
 
 function tourGuideStart() {
-	console.log('Tour guide mode is ON. Performing tour...');
+	console.log("Tour guide mode is ON. Performing tour...");
 	let pageName = getPageName(this.location.search);
 	let tg = TourGuideApi.makeInstance(pageName);
 	tg.start();
@@ -1167,11 +1166,12 @@ function tourGuideStart() {
 
 function checkTourGuideMode() {
 	let tourGuideMode = getTourGuideMode();
-	if(tourGuideMode ==="off") {
+	if (tourGuideMode === "off") {
 		console.log("tourGuideMode is Off");
-	} else { //mode 가 없거나 on 일때
+	} else {
+		//mode 가 없거나 on 일때
 		console.log("tourGuideMode is On");
-		let tgm = setInterval(function(){
+		let tgm = setInterval(function () {
 			tourGuideStart();
 			clearInterval(tgm);
 		}, 1200);
@@ -1180,8 +1180,8 @@ function checkTourGuideMode() {
 
 function getPageName(str) {
 	if (str !== "") {
-		let idxOfPageParam = str.indexOf('page'); // page param의 위치
-		return str.substring(idxOfPageParam+5);
+		let idxOfPageParam = str.indexOf("page"); // page param의 위치
+		return str.substring(idxOfPageParam + 5);
 	}
 	return "페이지 이름 없음"; //페이지 이름이 없을 경우.
 }
@@ -1194,55 +1194,54 @@ function 톱니바퀴_초기설정() {
 	var $settings = $("#settings"),
 		$sidebarSettings = $("#sidebar-settings"),
 		settingsState = {
-			sidebar: 'left',
-			sidebarState: 'auto',
+			sidebar: "left",
+			sidebarState: "auto",
 			displaySidebar: true
 		},
 		$pageHeader = $(".page-header"),
 		$body = $("body"),
-		popoverReallyHide = function(){
-			$settings.data('bs.popover').hoverState = 'out'; //yeah. cool BS3 fix. popover programmatic APi works only on HOVER
-			$settings.popover('hide');
+		popoverReallyHide = function () {
+			$settings.data("bs.popover").hoverState = "out"; //yeah. cool BS3 fix. popover programmatic APi works only on HOVER
+			$settings.popover("hide");
 		},
-		popoverClose = function(e){
+		popoverClose = function (e) {
 			var $popover = $settings.siblings(".popover");
-			if($popover.length && !$.contains($popover[0], e.target)){
+			if ($popover.length && !$.contains($popover[0], e.target)) {
 				popoverReallyHide();
 				$(document).off("click", popoverClose);
 			}
 		},
-		sidebarSide = function(side){
-			if (side == "right"){
-				$body.addClass("sidebar-on-right")
+		sidebarSide = function (side) {
+			if (side == "right") {
+				$body.addClass("sidebar-on-right");
 			} else {
-				$body.removeClass("sidebar-on-right")
+				$body.removeClass("sidebar-on-right");
 			}
 		},
-		sidebarState = function(state, triggerResize){
-			var $template = $('#sidebar-settings-template');
+		sidebarState = function (state, triggerResize) {
+			var $template = $("#sidebar-settings-template");
 			triggerResize = triggerResize == undefined ? true : false;
-			if (!$template[0]){
+			if (!$template[0]) {
 				return;
 			}
-			$sidebarSettings.html(_.template($template.html())({sidebarState: state}));
-			if (state == "auto"){
+			$sidebarSettings.html(_.template($template.html())({ sidebarState: state }));
+			if (state == "auto") {
 				$(".sidebar, .side-nav, .wrap, .logo").removeClass("sidebar-icons");
 			} else {
 				$(".sidebar, .side-nav, .wrap, .logo").addClass("sidebar-icons");
 			}
-			if (triggerResize){
+			if (triggerResize) {
 				triggerChartsResize();
 			}
-
 		},
-		displaySidebar = function(display, triggerResize){
+		displaySidebar = function (display, triggerResize) {
 			triggerResize = triggerResize == undefined ? true : false;
-			if (display == true){
-				$body.removeClass("sidebar-hidden")
+			if (display == true) {
+				$body.removeClass("sidebar-hidden");
 			} else {
-				$body.addClass("sidebar-hidden")
+				$body.addClass("sidebar-hidden");
 			}
-			if (triggerResize){
+			if (triggerResize) {
 				triggerChartsResize();
 			}
 		};
@@ -1251,41 +1250,44 @@ function 톱니바퀴_초기설정() {
 	sidebarState(settingsState.sidebarState, false);
 	displaySidebar(settingsState.displaySidebar, false);
 
-	if (!$settings[0]){
+	if (!$settings[0]) {
 		return;
 	}
 
-	$settings.popover({
-		template: '<div class="popover settings-popover">' +
-			'<div class="arrow"></div>' +
-			'<div class="popover-inner">' +
-			'<div class="popover-content"></div>' +
-			'</div>' +
-			'</div>',
-		html: true,
-		animation: false,
-		placement: 'bottom',
-		content: function(){
-			if(typeof _ === 'undefined'){
-				return "미지원";
+	$settings
+		.popover({
+			template:
+				'<div class="popover settings-popover">' +
+				'<div class="arrow"></div>' +
+				'<div class="popover-inner">' +
+				'<div class="popover-content"></div>' +
+				"</div>" +
+				"</div>",
+			html: true,
+			animation: false,
+			placement: "bottom",
+			content: function () {
+				if (typeof _ === "undefined") {
+					return "미지원";
+				}
+				return _.template($("#settings-template").html())(settingsState);
 			}
-			return _.template($('#settings-template').html())(settingsState);
-		}
-	}).click(function(e){
-		//close all open dropdowns
-		$('.page-header .dropdown.open .dropdown-toggle').dropdown('toggle');
-		// need to remove popover on anywhere-click
-		$(document).on("click", popoverClose);
-		$(this).focus();
-		return false;
-	});
+		})
+		.click(function (e) {
+			//close all open dropdowns
+			$(".page-header .dropdown.open .dropdown-toggle").dropdown("toggle");
+			// need to remove popover on anywhere-click
+			$(document).on("click", popoverClose);
+			$(this).focus();
+			return false;
+		});
 
-	$(".page-header .dropdown-toggle").click(function(){
-		popoverReallyHide()
+	$(".page-header .dropdown-toggle").click(function () {
+		popoverReallyHide();
 		$(document).off("click", popoverClose);
 	});
 	//sidevar left/right
-	$pageHeader.on("click", ".popover #sidebar-toggle .btn", function(){
+	$pageHeader.on("click", ".popover #sidebar-toggle .btn", function () {
 		var $this = $(this),
 			side = $this.data("value");
 		sidebarSide(side);
@@ -1294,7 +1296,7 @@ function 톱니바퀴_초기설정() {
 	});
 
 	//sidebar visibility
-	$pageHeader.on("click", ".popover #display-sidebar-toggle .btn", function(){
+	$pageHeader.on("click", ".popover #display-sidebar-toggle .btn", function () {
 		var $this = $(this),
 			display = $this.data("value");
 		displaySidebar(display);
@@ -1303,10 +1305,10 @@ function 톱니바퀴_초기설정() {
 	});
 
 	//sidebar state {active, icons}
-	$sidebarSettings.on("click", ".btn", function(){
+	$sidebarSettings.on("click", ".btn", function () {
 		var $this = $(this),
 			state = $this.data("value");
-		if (state == 'icons'){
+		if (state == "icons") {
 			closeNavigation();
 		}
 		sidebarState(state);
@@ -1315,18 +1317,18 @@ function 톱니바퀴_초기설정() {
 	});
 
 	//close navigation if sidebar in icons state
-	if (($("#sidebar").is(".sidebar-icons") || $(window).width() < 1049) && $(window).width() > 767){
+	if (($("#sidebar").is(".sidebar-icons") || $(window).width() < 1049) && $(window).width() > 767) {
 		closeNavigation();
 	}
 
 	//imitate buttons radio behavior
-	$pageHeader.on("click", ".popover [data-toggle='buttons-radio'] .btn:not(.active)", function(){
+	$pageHeader.on("click", ".popover [data-toggle='buttons-radio'] .btn:not(.active)", function () {
 		var $this = $(this),
-			$buttons = $this.parent().find('.btn');
-		$buttons.removeClass('active');
-		setTimeout(function(){
-			$this.addClass('active');
-		}, 0)
+			$buttons = $this.parent().find(".btn");
+		$buttons.removeClass("active");
+		setTimeout(function () {
+			$this.addClass("active");
+		}, 0);
 	});
 }
 
@@ -1336,123 +1338,131 @@ function 톱니바퀴_초기설정() {
  */
 window.LightBlue = {
 	screens: {
-		'xs-max': 767,
-		'sm-min': 768,
-		'sm-max': 991,
-		'md-min': 992,
-		'md-max': 1199,
-		'lg-min': 1200
+		"xs-max": 767,
+		"sm-min": 768,
+		"sm-max": 991,
+		"md-min": 992,
+		"md-max": 1199,
+		"lg-min": 1200
 	},
 
-	isScreen: function(size){
+	isScreen: function (size) {
 		var screenPx = window.innerWidth;
-		return (screenPx >= this.screens[size + '-min'] || size == 'xs') && (screenPx <= this.screens[size + '-max'] || size == 'lg');
+		return (
+			(screenPx >= this.screens[size + "-min"] || size == "xs") &&
+			(screenPx <= this.screens[size + "-max"] || size == "lg")
+		);
 	},
 
-	getScreenSize: function(){
+	getScreenSize: function () {
 		var screenPx = window.innerWidth;
-		if (screenPx <= this.screens['xs-max']) return 'xs';
-		if ((screenPx >= this.screens['sm-min']) && (screenPx <= this.screens['sm-max'])) return 'sm';
-		if ((screenPx >= this.screens['md-min']) && (screenPx <= this.screens['md-max'])) return 'md';
-		if (screenPx >= this.screens['lg-min']) return 'lg';
+		if (screenPx <= this.screens["xs-max"]) return "xs";
+		if (screenPx >= this.screens["sm-min"] && screenPx <= this.screens["sm-max"]) return "sm";
+		if (screenPx >= this.screens["md-min"] && screenPx <= this.screens["md-max"]) return "md";
+		if (screenPx >= this.screens["lg-min"]) return "lg";
 	},
 
 	//credit http://stackoverflow.com/questions/1507931/generate-lighter-darker-color-in-css-using-javascript
-	changeColor: function(color, ratio, darker) {
-		var pad = function(num, totalChars) {
-			var pad = '0';
-			num = num + '';
+	changeColor: function (color, ratio, darker) {
+		var pad = function (num, totalChars) {
+			var pad = "0";
+			num = num + "";
 			while (num.length < totalChars) {
 				num = pad + num;
 			}
 			return num;
 		};
 		// Trim trailing/leading whitespace
-		color = color.replace(/^\s*|\s*$/, '');
+		color = color.replace(/^\s*|\s*$/, "");
 
 		// Expand three-digit hex
-		color = color.replace(
-			/^#?([a-f0-9])([a-f0-9])([a-f0-9])$/i,
-			'#$1$1$2$2$3$3'
-		);
+		color = color.replace(/^#?([a-f0-9])([a-f0-9])([a-f0-9])$/i, "#$1$1$2$2$3$3");
 
 		// Calculate ratio
 		var difference = Math.round(ratio * 256) * (darker ? -1 : 1),
 			// Determine if input is RGB(A)
-			rgb = color.match(new RegExp('^rgba?\\(\\s*' +
-				'(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
-				'\\s*,\\s*' +
-				'(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
-				'\\s*,\\s*' +
-				'(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
-				'(?:\\s*,\\s*' +
-				'(0|1|0?\\.\\d+))?' +
-				'\\s*\\)$'
-				, 'i')),
+			rgb = color.match(
+				new RegExp(
+					"^rgba?\\(\\s*" +
+						"(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])" +
+						"\\s*,\\s*" +
+						"(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])" +
+						"\\s*,\\s*" +
+						"(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])" +
+						"(?:\\s*,\\s*" +
+						"(0|1|0?\\.\\d+))?" +
+						"\\s*\\)$",
+					"i"
+				)
+			),
 			alpha = !!rgb && rgb[4] != null ? rgb[4] : null,
-
 			// Convert hex to decimal
-			decimal = !!rgb? [rgb[1], rgb[2], rgb[3]] : color.replace(
-				/^#?([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
-				function() {
-					return parseInt(arguments[1], 16) + ',' +
-						parseInt(arguments[2], 16) + ',' +
-						parseInt(arguments[3], 16);
-				}
-			).split(/,/),
+			decimal = !!rgb
+				? [rgb[1], rgb[2], rgb[3]]
+				: color
+						.replace(/^#?([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i, function () {
+							return parseInt(arguments[1], 16) + "," + parseInt(arguments[2], 16) + "," + parseInt(arguments[3], 16);
+						})
+						.split(/,/),
 			returnValue;
 
 		// Return RGB(A)
-		return !!rgb ?
-			'rgb' + (alpha !== null ? 'a' : '') + '(' +
-			Math[darker ? 'max' : 'min'](
-				parseInt(decimal[0], 10) + difference, darker ? 0 : 255
-			) + ', ' +
-			Math[darker ? 'max' : 'min'](
-				parseInt(decimal[1], 10) + difference, darker ? 0 : 255
-			) + ', ' +
-			Math[darker ? 'max' : 'min'](
-				parseInt(decimal[2], 10) + difference, darker ? 0 : 255
-			) +
-			(alpha !== null ? ', ' + alpha : '') +
-			')' :
-			// Return hex
-			[
-				'#',
-				pad(Math[darker ? 'max' : 'min'](
-					parseInt(decimal[0], 10) + difference, darker ? 0 : 255
-				).toString(16), 2),
-				pad(Math[darker ? 'max' : 'min'](
-					parseInt(decimal[1], 10) + difference, darker ? 0 : 255
-				).toString(16), 2),
-				pad(Math[darker ? 'max' : 'min'](
-					parseInt(decimal[2], 10) + difference, darker ? 0 : 255
-				).toString(16), 2)
-			].join('');
+		return !!rgb
+			? "rgb" +
+					(alpha !== null ? "a" : "") +
+					"(" +
+					Math[darker ? "max" : "min"](parseInt(decimal[0], 10) + difference, darker ? 0 : 255) +
+					", " +
+					Math[darker ? "max" : "min"](parseInt(decimal[1], 10) + difference, darker ? 0 : 255) +
+					", " +
+					Math[darker ? "max" : "min"](parseInt(decimal[2], 10) + difference, darker ? 0 : 255) +
+					(alpha !== null ? ", " + alpha : "") +
+					")"
+			: // Return hex
+			  [
+					"#",
+					pad(Math[darker ? "max" : "min"](parseInt(decimal[0], 10) + difference, darker ? 0 : 255).toString(16), 2),
+					pad(Math[darker ? "max" : "min"](parseInt(decimal[1], 10) + difference, darker ? 0 : 255).toString(16), 2),
+					pad(Math[darker ? "max" : "min"](parseInt(decimal[2], 10) + difference, darker ? 0 : 255).toString(16), 2)
+			  ].join("");
 	},
-	lighten: function(color, ratio) {
+	lighten: function (color, ratio) {
 		return this.changeColor(color, ratio, false);
 	},
-	darken: function(color, ratio) {
+	darken: function (color, ratio) {
 		return this.changeColor(color, ratio, true);
 	}
-}
-function triggerChartsResize(){
+};
+function triggerChartsResize() {
 	try {
-		if (window.onresize){
+		if (window.onresize) {
 			window.onresize();
 		}
-	} catch (e){
+	} catch (e) {
 		//just swallow it
 	}
-	$(window).trigger('resize');
+	$(window).trigger("resize");
 }
 
 function apiResponseValidate(id, data) {
-		if (data.전체합계 <= 0 || data.length == 0) {
+	if (data.전체합계 <= 0 || data.length == 0) {
 		let chartContainer = document.getElementById(id);
 		chartContainer.innerHTML = '<div class="message">No Data</div>';
 		return false;
 	}
 	return true;
+}
+
+function targetLink(path) {
+	const params = {};
+
+	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
+		if (key === "page") {
+			params[key] = path;
+		} else {
+			params[key] = value;
+		}
+	});
+
+	location.href = `detail.html?${new URLSearchParams(params).toString()}`;
 }
