@@ -1447,11 +1447,16 @@ function chk_issue_type_whether_issue_can_be_created(list) {
 	}
 }
 
+//////////////////////////////////////////////////////////////////////
 // 서버가 가진 이슈유형 "arms-requirement" 확인해서 리본 그리기
+//////////////////////////////////////////////////////////////////////
 function drawRibbon(jiraServerId, jiraServerType, index) {
 	var resultList = [];
 	var chk_result = "";
 	var cardIndex = "";
+
+
+
 	if (jiraServerType === "온프레미스") {
 		$.ajax({
 			url: "/auth-user/api/arms/jiraServer/getJiraIssueType.do",
