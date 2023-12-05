@@ -983,9 +983,7 @@ var Gantt = (function () {
             $thead.appendChild($tr);
             $thead.classList.add('table-header');
 
-            $.style($tr, {
-                height: this.gantt.options.header_height + 9 + 'px',
-            });
+            $.style($tr, 'height', this.gantt.options.header_height + 9 + 'px');
 
             return $thead;
         }
@@ -1253,14 +1251,15 @@ var Gantt = (function () {
 
             // initialize with default view mode
             this.change_view_mode();
-            this.bind_events();
-
             this.setup_split_bar();
             this.setup_table(contents);
+
+            this.bind_events();
         }
 
         setup_wrapper(element) {
-            let svg_element, wrapper_element;
+            let svg_element;
+            let wrapper_element;
 
             // CSS Selector is passed
             if (typeof element === 'string') {
@@ -1544,12 +1543,14 @@ var Gantt = (function () {
         bind_events() {
             this.bind_grid_click();
             this.bind_bar_events();
+            this.bind_scroll_event();
         }
 
         render() {
             this.clear();
             this.setup_layers();
             this.make_grid();
+            this.make_grid_header();
             this.make_dates();
             this.make_bars();
             this.make_arrows();
@@ -1662,7 +1663,15 @@ var Gantt = (function () {
 
         setup_layers() {
             this.layers = {};
-            const layers = ['grid', 'date', 'arrow', 'progress', 'bar', 'details'];
+            const layers = [
+                'grid',
+                'arrow',
+                'progress',
+                'bar',
+                'details',
+                'header',
+                'date',
+            ];
             // make group layers
             for (let layer of layers) {
                 this.layers[layer] = createSVG('g', {
@@ -1752,7 +1761,6 @@ var Gantt = (function () {
         make_grid() {
             this.make_grid_background();
             this.make_grid_rows();
-            this.make_grid_header();
             this.make_grid_ticks();
             this.make_grid_highlights();
         }
@@ -1831,13 +1839,24 @@ var Gantt = (function () {
         make_grid_header() {
             const header_width = this.dates.length * this.options.column_width;
             const header_height = this.options.header_height + 10;
+
+            const pageScroll = window.scrollY;
+            const originOffset =
+                pageScroll + this.$wrapper.getBoundingClientRect().top;
+
+            if (originOffset <= pageScroll) {
+                this.layers.header.style.transform = `translate(0px, ${Math.floor(
+                window.scrollY - originOffset
+            )}px)`;
+            }
+
             createSVG('rect', {
                 x: 0,
                 y: 0,
                 width: header_width,
                 height: header_height,
                 class: 'grid-header',
-                append_to: this.layers.grid,
+                append_to: this.layers.header,
             });
         }
 
@@ -1912,6 +1931,16 @@ var Gantt = (function () {
         }
 
         make_dates() {
+            const pageScroll = window.scrollY;
+            const originOffset =
+                pageScroll + this.$wrapper.getBoundingClientRect().top;
+
+            if (originOffset <= pageScroll) {
+                this.layers.date.style.transform = `translate(0px, ${Math.floor(
+                window.scrollY - originOffset
+            )}px)`;
+            }
+
             for (let date of this.get_dates_to_draw()) {
                 createSVG('text', {
                     x: date.lower_x,
@@ -2104,6 +2133,47 @@ var Gantt = (function () {
                 this.options.column_width;
 
             parent_element.scrollLeft = scroll_pos;
+        }
+
+        bind_scroll_event() {
+            const originOffset =
+                window.scrollY + this.$wrapper.getBoundingClientRect().top;
+            const $table_header = $('.table-header');
+            let ticking = false;
+
+            $.bind(
+                window,
+                'scroll',
+                () => {
+                    const pageScroll = window.scrollY;
+
+                    if (ticking) return;
+
+                    ticking = true;
+                    window.requestAnimationFrame(() => {
+                        if (originOffset <= pageScroll) {
+                            $table_header.style.top = `${Math.floor(
+                            pageScroll - originOffset
+                        )}px`;
+                            this.layers.header.style.transform = `translate(0px, ${Math.floor(
+                            pageScroll - originOffset
+                        )}px)`;
+                            this.layers.date.style.transform = `translate(0px, ${Math.floor(
+                            pageScroll - originOffset
+                        )}px)`;
+                        } else {
+                            $table_header.style.top = '0px';
+                            this.layers.header.style.transform =
+                                'translate(0px, 0px)';
+                            this.layers.date.style.transform =
+                                'translate(0px, 0px)';
+                        }
+
+                        ticking = false;
+                    });
+                },
+                { passive: true }
+            );
         }
 
         bind_grid_click() {

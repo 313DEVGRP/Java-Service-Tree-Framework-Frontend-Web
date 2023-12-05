@@ -25,9 +25,7 @@ export default class Table {
         $thead.appendChild($tr);
         $thead.classList.add('table-header');
 
-        $.style($tr, {
-            height: this.gantt.options.header_height + 9 + 'px',
-        });
+        $.style($tr, 'height', this.gantt.options.header_height + 9 + 'px');
 
         return $thead;
     }

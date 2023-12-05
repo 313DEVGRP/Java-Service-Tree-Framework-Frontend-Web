@@ -18,14 +18,13 @@ $selected: rgba(229, 96, 59, 0.2) !default;
 
 .wrapper {
     display: flex;
-    position: relative;
     border-top: 1px solid $border-right-color;
+    position: relative;
 }
 
 .table-container {
     flex: 1;
     overflow-x: auto;
-    position: relative;
 
     &::-webkit-scrollbar {
         height: 10px;
@@ -56,15 +55,15 @@ $selected: rgba(229, 96, 59, 0.2) !default;
         border-collapse: collapse;
         border-spacing: 0;
 
-        .table-header tr th {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            background-color: #404246;
+        .table-header {
+            position: relative;
+            background: #41434a;
+            z-index: 9;
         }
 
         .table-header tr th,
         .table-body tr td {
+            min-width: 25px;
             max-width: 300px;
             white-space: nowrap;
             overflow: hidden;
@@ -201,7 +200,7 @@ $selected: rgba(229, 96, 59, 0.2) !default;
         fill: transparent;
     }
     .grid-header {
-        fill: transparent;
+        fill: #41434a;
     }
     .grid-row {
         fill: transparent;
@@ -319,7 +318,6 @@ $selected: rgba(229, 96, 59, 0.2) !default;
 
 .gantt-container {
     flex: 1;
-    position: relative;
     overflow: auto;
     font-size: 12px;
 
@@ -371,8 +369,4 @@ $selected: rgba(229, 96, 59, 0.2) !default;
             border-top-color: rgba(0, 0, 0, 0.8);
         }
     }
-}
-
-.hide {
-    display: none;
 }
