@@ -1298,7 +1298,6 @@ function default_setting_event() {
 			sourceCid = selectServerId;
 			ajax_url = "jiraServer/"+ selectedTab+"/makeDefault.do/"+selectRadioId;
 		}
-		console.log("ajax_url ====> " + ajax_url);
 
 		$.ajax({
 			url: "/auth-user/api/arms/" + ajax_url,

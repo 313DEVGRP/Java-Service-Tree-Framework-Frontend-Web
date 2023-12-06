@@ -1165,8 +1165,7 @@ function getTourGuideMode() {
 
 
 function setTourGuideMode(mode) {
-	console.log("setTourGuideMode ==> " + mode);
-	document.cookie = "tourGuideMode=" + mode;
+	$.cookie("tourGuideMode",mode,{ expires: 7});
 	return mode;
 }
 
@@ -1191,9 +1190,11 @@ function checkTourGuideMode() {
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
 //톱니바퀴(config) 투어가이드 이벤트리스너
+////////////////////////////////////////////////////////////////////////////////////////
 function tourGuideEventListener() {
-	console.log("tourGuideEventListener 시작 ");
+	console.log("common :: tourGuideEventListener : tourGuideEventListener 시작");
 	let tgm = getCookie("tourGuideMode");
 	if (tgm === "off") {
 		$("#tourGuideButtons #tour_guide_off").addClass("active");
@@ -1202,7 +1203,6 @@ function tourGuideEventListener() {
 	}
 
 	$("#tourGuideButtons button").click(function() {
-		console.log("버튼이 눌렸습니다.");
 		let $active_label = $(this).text().toLowerCase();
 		console.log($active_label);
 		if ($active_label === "on") {
