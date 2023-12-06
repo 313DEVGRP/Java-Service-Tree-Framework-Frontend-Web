@@ -178,6 +178,10 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
     };
 
     option && myChart.setOption(option,true);
+
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
 }
 
 function drawBasicRadarForDashBoard(target,objectiveArr,currentProgressArr) {
@@ -301,3 +305,4 @@ function drawBasicRadarForDashBoard(target,objectiveArr,currentProgressArr) {
 
     option && myChart.setOption(option,true);
 }
+
