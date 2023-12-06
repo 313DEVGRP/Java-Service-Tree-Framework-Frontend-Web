@@ -115,6 +115,9 @@
 						button.appendChild( progressElement );
 					}
 
+					console.log("[ladda :: setProgress :: button.offsetWidth -> " + button.offsetWidth);
+					console.log(button);
+
 					progressElement.style.width = ( ( progress || 0 ) * button.offsetWidth ) + 'px';
 				}
 

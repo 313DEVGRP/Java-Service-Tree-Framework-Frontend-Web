@@ -54,7 +54,7 @@ function runScript() {
 }
 
 function 로드_완료_이후_실행_함수() {
-	laddaBtnSetting();
+
 	톱니바퀴_초기설정();
 	checkTourGuideMode();
 
@@ -804,6 +804,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 ////////////////////////////////////////////////////////////////////////////////////////
 var isEmpty = function (value) {
 	if (
+		typeof value === "undefined" ||
 		value == "" ||
 		value == null ||
 		value == undefined ||
@@ -1093,25 +1094,30 @@ function goToTemplatePage(pageName) {
 	window.location.href = "template.html?page=" + pageName;
 }
 
-function laddaBtnSetting() {
-	// add css
-	$(".ladda").addClass("ladda-button");
+function laddaBtnSetting(라따적용_클래스이름_배열) {
 
-	// Bind progress buttons and simulate loading progress
-	Ladda.bind(".ladda", {
-		callback: function (instance) {
-			var progress = 0;
-			var interval = setInterval(function () {
-				progress = Math.min(progress + 0.1, 1.5);
-				instance.setProgress(progress);
+	for (i = 0; i < 라따적용_클래스이름_배열.length; i++) {
 
-				if (progress === 1.5) {
-					instance.stop();
-					clearInterval(interval);
-				}
-			}, 200);
-		}
-	});
+		// add css
+		$(라따적용_클래스이름_배열[i]).addClass("ladda-button");
+
+		// Bind progress buttons and simulate loading progress
+		Ladda.bind(라따적용_클래스이름_배열[i], {
+			callback: function (instance) {
+				var progress = 0;
+				var interval = setInterval(function () {
+
+					progress = Math.min(progress + 0.1, 1);
+					instance.setProgress(progress);
+
+					if (progress === 1) {
+						instance.stop();
+						clearInterval(interval);
+					}
+				}, 250);
+			}
+		});
+	}
 }
 
 class UrlBuilder {
@@ -1180,9 +1186,9 @@ function tourGuideStart() {
 function checkTourGuideMode() {
 	let tourGuideMode = getTourGuideMode();
 	if (tourGuideMode === "off") {
-		console.log("tourGuideMode is Off");
+		console.log("common :: checkTourGuideMode : tourGuideMode is Off");
 	} else {//mode 가 없거나 on 일때
-		console.log("tourGuideMode is On");
+		console.log("common :: checkTourGuideMode : tourGuideMode is On");
 		setTourGuideMode("on");
 		setTimeout(function () {
 			tourGuideStart();

@@ -315,23 +315,12 @@
                     </div>
                 </div>
                 <div style="float: right"
-                     id="jira_server_details_popup_div">
-                    <button type="button"
-                            data-target="#my_modal2"
-                            data-toggle="modal"
-                            id="extend_modal_readOnly"
-                            class="btn btn-warning btn-sm"
-                            onClick="modalPopup('modal_popup_readonly')">
-                        새 창으로 지라 정보 보기
-                    </button>
-                </div>
-                <div style="float: right"
                      class="hidden"
                      id="jira_default_update_div">
                     <button type="button"
                             name="default_update"
                             data-style="contract"
-                            class="ladda btn btn-success btn-sm mr-1">
+                            class="default_update btn btn-success btn-sm mr-1">
                         기본 설정 저장
                     </button>
                 </div>
@@ -959,7 +948,7 @@
                             <button type="button"
                                     id="jira_renew_btn"
                                     onClick="jira_renew('project')"
-                                    class="btn btn-success btn-sm mr-1">
+                                    class="btn btn-success btn-sm mr-1 jira_renew_btn">
                             항목 갱신
                             </button>
                         </li>

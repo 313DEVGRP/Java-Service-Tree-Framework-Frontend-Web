@@ -112,6 +112,9 @@ function execDocReady() {
 
 			autoSlide();
 
+			var 라따적용_클래스이름_배열 = ['.default_update', '.jira_renew_btn'];
+			laddaBtnSetting(라따적용_클래스이름_배열);
+
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
@@ -418,8 +421,8 @@ function dataTableDrawCallback(tableInfo) {
 	}
 	var tableData = tableInfo.aoData;
 	if(!isEmpty(tableData)) {
-		tableData.forEach(function (rowInfo, index) { console.log("forEach");
-			if(rowInfo._aData !== undefined) {
+		tableData.forEach(function (rowInfo, index) {
+			if( !isEmpty(rowInfo._aData) ) {
 				var tableRowData = rowInfo._aData;
 				var rowIsDefault = tableRowData.c_check;
 				var rowNameClass = "." + className + "-data" + index;
@@ -674,6 +677,7 @@ function delete_btn_click() { // TreeAbstractController 에 이미 있음.
 		}
 	});
 }
+
 function set_renew_btn(selectedTab, selectServerId) {
 	$("#jira_renew_button_div").html("");
 	var renewHtml = ``;
@@ -682,7 +686,7 @@ function set_renew_btn(selectedTab, selectServerId) {
                              id="jira_renew_btn"
                              onClick="jira_renew('프로젝트', ${selectServerId})"
                              data-style="contract"
-                             class="ladda btn btn-success btn-sm mr-1">
+                             class="jira_renew_btn btn btn-success btn-sm mr-1">
                             프로젝트 갱신
                      </button>`;
 	}
@@ -723,8 +727,8 @@ function set_renew_btn(selectedTab, selectServerId) {
                      </button>`;
 	}
 	$("#jira_renew_button_div").html(renewHtml);
-	laddaBtnSetting();
 }
+
 function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
 	$("#jira_renew_button_div_3rd_grid").html("");
 	var renewHtml = ``;
@@ -749,8 +753,8 @@ function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
                      </button>`;
 	}
 	$("#jira_renew_button_div_3rd_grid").html(renewHtml);
-	laddaBtnSetting();
 }
+
 function tab_click_event() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
@@ -758,7 +762,6 @@ function tab_click_event() {
 
 		if (target === "#dropdown1") { // 삭제하기
 			$("#jira_default_update_div").addClass("hidden");
-			$("#jira_server_details_popup_div").addClass("hidden");
 			$("#jira_server_update_div").addClass("hidden");
 			$("#jira_server_delete_div").removeClass("hidden");
 			$("#jira_renew_button_div").addClass("hidden");
@@ -770,7 +773,6 @@ function tab_click_event() {
 			}
 		} else if (target === "#report") { // 편집하기
 			$("#jira_default_update_div").addClass("hidden");
-			$("#jira_server_details_popup_div").addClass("hidden");
 			$("#jira_server_update_div").removeClass("hidden");
 			$("#jira_server_delete_div").addClass("hidden");
 			$("#jira_renew_button_div").addClass("hidden");
@@ -779,7 +781,6 @@ function tab_click_event() {
 			set_renew_btn(selectedTab, selectServerId);
 			$("#jira_renew_button_div").removeClass("hidden");
 			$("#jira_default_update_div").addClass("hidden");
-			$("#jira_server_details_popup_div").addClass("hidden");
 			$("#jira_server_update_div").addClass("hidden");
 			$("#jira_server_delete_div").addClass("hidden");
 
@@ -790,7 +791,6 @@ function tab_click_event() {
 
 		} else if(target ==="#stats") { // 상세보기, 처음화면
 			$("#jira_default_update_div").addClass("hidden");
-			$("#jira_server_details_popup_div").removeClass("hidden");
 			$("#jira_server_update_div").addClass("hidden");
 			$("#jira_server_delete_div").addClass("hidden");
 			$("#jira_renew_button_div").addClass("hidden");
@@ -1287,6 +1287,11 @@ function default_setting_event() {
 	$("button[name='default_update']").click( function (){
 		console.log("selectServerType in default_setting_event ===> " + selectServerType);
 
+		if( isEmpty(selectRadioId) ){
+			jError("설정된 값이 없거나, 변경된 데이터가 없습니다.");
+			return;
+		}
+
 		if (selectedTab === "이슈유형" && selectServerType === "클라우드") {
 			sourceCid = selectProjectId;
 			ajax_url = "jiraProject/"+ selectedTab+"/makeDefault.do/"+selectRadioId;
@@ -1309,7 +1314,6 @@ function default_setting_event() {
 					jSuccess("기본 설정("+selectedTab+")이 변경되었습니다.");
 					//데이터 테이블 데이터 재 로드
 					display_set_wide_projectTable(); // 다시 wide 설정으로.
-					$("#nav_stats>a").click();
 				}
 			}
 		});
