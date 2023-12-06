@@ -686,47 +686,38 @@ function set_renew_btn(selectedTab, selectServerId) {
                              id="jira_renew_btn"
                              onClick="jira_renew('프로젝트', ${selectServerId})"
                              data-style="contract"
-                             class="jira_renew_btn btn btn-success btn-sm mr-1">
+                             class="jira_project_renew_btn btn btn-success btn-sm mr-1">
                             프로젝트 갱신
                      </button>`;
-	}
-	if(selectedTab == "이슈해결책") {
-		renewHtml += `<button type="button"
-                             id="jira_renew_btn"
-                             onClick="jira_renew('이슈해결책', ${selectServerId})"
-                             data-style="contract"
-                             class="ladda btn btn-success btn-sm mr-1">
-                            이슈해결책 갱신
-                     </button>`;
-	}
-	if(selectedTab == "이슈우선순위") {
+	}else if(selectedTab == "이슈우선순위") {
 		renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈우선순위', ${selectServerId})"
                              data-style="contract"
-                             class="ladda btn btn-success btn-sm mr-1">
+                             class="jira_priority_renew_btn btn btn-success btn-sm mr-1">
                             이슈우선순위 갱신
                      </button>`;
-	}
-	if(selectedTab == "이슈유형") {
+	}else if(selectedTab == "이슈유형") {
 		renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈유형', ${selectServerId})"
                              data-style="contract"
-                             class="ladda btn btn-success btn-sm mr-1">
+                             class="jira_type_renew_btn btn btn-success btn-sm mr-1">
                             이슈유형 갱신
                      </button>`;
-	}
-	if(selectedTab == "이슈상태") {
+	}else if(selectedTab == "이슈상태") {
 		renewHtml += `<button type="button"
                              id="jira_renew_btn"
                              onClick="jira_renew('이슈상태', ${selectServerId})"
                              data-style="contract"
-                             class="ladda btn btn-success btn-sm mr-1">
+                             class="jira_status_renew_btn btn btn-success btn-sm mr-1">
                             이슈상태 갱신
                      </button>`;
 	}
 	$("#jira_renew_button_div").html(renewHtml);
+
+	var 라따적용_클래스이름_배열 = ['.jira_project_renew_btn', '.jira_priority_renew_btn', '.jira_type_renew_btn', '.jira_status_renew_btn'];
+	laddaBtnSetting(라따적용_클래스이름_배열);
 }
 
 function set_renew_btn_3rd_grid(selectdTab, selectServerId) {
