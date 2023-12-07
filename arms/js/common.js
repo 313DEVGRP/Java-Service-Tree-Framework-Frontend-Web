@@ -1158,7 +1158,9 @@ function getCookie(cname) {
 	return "";
 }
 
+/////////////////////////////////
 //투어가이드모드 쿠키 - 가져오기
+/////////////////////////////////
 function getTourGuideMode() {
 	let tourGuideMode = getCookie("tourGuideMode");
 	if (tourGuideMode) {
@@ -1169,30 +1171,36 @@ function getTourGuideMode() {
 	}
 }
 
-
+/////////////////////////////////
+//투어가이드 쿠키 저장/수정
+/////////////////////////////////
 function setTourGuideMode(mode) {
+	console.log("[ common :: setTourGuideMode ] :: mode → " + mode);
 	$.cookie("tourGuideMode",mode,{ expires: 7});
 	return mode;
 }
 
 
 function tourGuideStart() {
-	console.log("Tour guide mode is ON. Performing tour...");
 	let pageName = getPageName(this.location.search);
+	console.log("[ common :: tourGuideStart ] :: pageName → " +pageName);
 	let tg = TourGuideApi.makeInstance(pageName);
 	tg.start();
 }
 
 function checkTourGuideMode() {
 	let tourGuideMode = getTourGuideMode();
-	if (tourGuideMode === "off") {
-		console.log("common :: checkTourGuideMode : tourGuideMode is Off");
-	} else {//mode 가 없거나 on 일때
-		console.log("common :: checkTourGuideMode : tourGuideMode is On");
-		setTourGuideMode("on");
-		setTimeout(function () {
-			tourGuideStart();
-		}, 1200);
+
+	if (!checkMobileDevice()) {
+		if (tourGuideMode === "off") {
+			console.log("common :: checkTourGuideMode : tourGuideMode is Off");
+		} else {//mode 가 없거나 on 일때
+			console.log("common :: checkTourGuideMode : tourGuideMode is On");
+			setTourGuideMode("on");
+			setTimeout(function () {
+				tourGuideStart();
+			}, 1200);
+		}
 	}
 }
 
@@ -1226,6 +1234,17 @@ function getPageName(str) {
 	}
 	return "페이지 이름 없음"; //페이지 이름이 없을 경우.
 }
+
+////////////////////////////////////////////////////////////////////////
+// 모바일 디바이스인지 확인
+////////////////////////////////////////////////////////////////////////
+function checkMobileDevice() {
+	// 모바일 기기에서 접근했는지 확인
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	console.log("[ common :: checkMobileDevice] isMobile → " + isMobile);
+	return isMobile;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 헤더 :: 톱니바퀴 대응함수
