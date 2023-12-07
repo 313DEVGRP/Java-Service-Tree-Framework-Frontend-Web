@@ -916,7 +916,6 @@ function 수치_초기화() {
 }
 
 function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
-    console.log("drawManRequirementTreeMapChart");
     const url = new UrlBuilder()
         .setBaseUrl('/auth-user/api/arms/dashboard/assignees-requirements-involvements')
         .addQueryParam('pdServiceLink', pdServiceLink)
@@ -938,15 +937,8 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
             200: function (data) {
                 let chartDom = document.getElementById('chart-manpower-requirement');
                 let myChart = echarts.init(chartDom);
-                // let validate = apiResponseValidate(myChart, data);
-                //
-                // if(!validate) {
-                //     return false;
-                // }
-                let option;
 
-                myChart.showLoading();
-                myChart.hideLoading();
+                let option;
 
                 function getLevelOption() {
                     return [
@@ -984,14 +976,14 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
                 }
 
                 myChart.setOption(
-                    (option = {
-                        // title: {
-                        //     text: '작업자 별 요구사항 관여 트리맵',
-                        //     left: 'center',
-                        //     textStyle: {
-                        //         color: '#ffffff'
-                        //     }
-                        // },
+                    ({
+                        title: {
+                            text: '',
+                            left: 'center',
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                        },
                         tooltip: {
                             formatter: function (info) {
                                 var value = info.value;
@@ -1010,26 +1002,29 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
                         },
                         series: [
                             {
-                                name: '작업자 별 요구사항 관여 트리맵',
+                                name: "ROOT",
                                 type: 'treemap',
                                 breadcrumb: {
+                                    show: true,
                                     itemStyle: {
-                                        // color: '#90ee90'
-                                        // color: '#add8e6'
+                                        color: 'grey'
                                     }
                                 },
                                 visibleMin: 300,
                                 label: {
                                     show: true,
-                                    formatter: '{b}'
+                                    formatter: '{b}',
+                                    color: 'white',
+                                    borderWidth: 0,
                                 },
                                 upperLabel: {
                                     show: true,
-                                    height: 30
+                                    height: 30,
+                                    color: 'white',
+                                    borderWidth: 0,
                                 },
                                 itemStyle: {
                                     borderColor: '#fff',
-
                                 },
                                 levels: getLevelOption(),
                                 data: data

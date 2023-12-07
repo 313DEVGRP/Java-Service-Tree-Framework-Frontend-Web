@@ -726,14 +726,14 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 				}
 
 				myChart.setOption(
-					(option = {
-						// title: {
-						// 	text: '작업자 별 요구사항 관여 트리맵',
-						// 	left: 'center',
-						// 	textStyle: {
-						// 		color: '#ffffff'
-						// 	}
-						// },
+					({
+						title: {
+							text: '',
+							left: 'center',
+							textStyle: {
+								color: '#ffffff'
+							}
+						},
 						tooltip: {
 							formatter: function (info) {
 								var value = info.value;
@@ -752,28 +752,32 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 						},
 						series: [
 							{
-								name: '작업자 별 요구사항 관여 트리맵',
+								name: "ROOT",
 								type: 'treemap',
 								breadcrumb: {
+									show: true,
 									itemStyle: {
-										// color: '#90ee90'
-										// color: '#add8e6'
+										color: 'grey'
 									}
 								},
 								visibleMin: 300,
 								label: {
 									show: true,
-									formatter: '{b}'
+									formatter: '{b}',
+									color: 'white',
+									borderWidth: 0,
 								},
 								upperLabel: {
 									show: true,
-									height: 30
+									height: 30,
+									color: 'white',
+									borderWidth: 0,
 								},
 								itemStyle: {
-									borderColor: '#fff'
+									borderColor: '#fff',
 								},
 								levels: getLevelOption(),
-								data: data
+								data: data.slice(0, 3) // 담당 이슈 개수 기준 Top 3
 							}
 						]
 					})
