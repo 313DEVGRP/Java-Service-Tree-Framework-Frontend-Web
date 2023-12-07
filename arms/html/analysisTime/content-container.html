@@ -49,7 +49,7 @@
                 <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
                 <blockquote class="font13"
                             style="margin-top: 5px;">
-                    선택한 제품(서비스)와 버전의 Scope 관점 요구사항 현황
+                    선택한 제품(서비스)와 버전의 Time 관점 요구사항 현황
                     <div style="float: right;">
                         <button class="btn btn-transparent btn-xs"
                                 style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
@@ -870,15 +870,19 @@
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body" id="heatmap-body" style="height: 415px;">
-                                <div style="width: 721px;">
+                                <div style="width: 100%;">
                                     <blockquote class="font12 update-title" style="display: none;">
                                         <strong>요구사항 누적 업데이트 현황</strong>
                                     </blockquote>
-                                    <div id="calendar_yearview_blocks_chart_1"></div>
+                                    <div>
+                                        <div id="calendar_yearview_blocks_chart_1"></div>
+                                    </div>
                                     <blockquote class="font12 update-title" style="display: none;">
                                         <strong>연결된 이슈 누적 업데이트 현황</strong>
                                     </blockquote>
-                                    <div id="calendar_yearview_blocks_chart_2"></div>
+                                    <div>
+                                        <div id="calendar_yearview_blocks_chart_2"></div>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -1387,4 +1391,14 @@
         overflow: visible;
     }
 
+    #calendar_yearview_blocks_chart_1, #calendar_yearview_blocks_chart_2{
+        max-width: 100%; /* 부모 컨테이너의 최대 너비 설정 */
+    }
+
+/*    .day {
+        width: 1vw; !* 상대적인 너비 값 *!
+        height: 1vw; !* 상대적인 높이 값 *!
+        margin: 1px;
+        !* 다른 스타일링 속성들 추가 *!
+    }*/
 </style>

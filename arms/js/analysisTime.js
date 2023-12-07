@@ -1332,7 +1332,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
                     start_monday: true,
                     always_show_tooltip: true,
                     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'],
-                    day_names: ['mo', 'wed', 'fri', 'sun'],
+                    day_names: ['mon', 'wed', 'fri', 'sun'],
                     colors: data.requirementColors
                 });
 
@@ -1341,11 +1341,11 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
                     start_monday: true,
                     always_show_tooltip: true,
                     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-                    day_names: ['mo', 'wed', 'fri', 'sun'],
+                    day_names: ['mon', 'wed', 'fri', 'sun'],
                     colors: data.relationIssueColors
                 });
 
-                d3.select("#heatmap-body").style("overflow-x","scroll");
+                // d3.select("#heatmap-body").style("overflow-x","scroll");
             }
         }
     });
