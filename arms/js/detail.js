@@ -39,42 +39,21 @@ function execDocReady() {
 			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
 			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
 			"../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-		],
-		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-		[
-			// Chart
-			"../reference/light-blue/lib/nvd3/lib/d3.v2.js",
-			"../reference/light-blue/lib/nvd3/nv.d3.custom.js",
-			"../reference/light-blue/lib/nvd3/src/utils.js",
-			"../reference/light-blue/lib/nvd3/src/models/legend.js",
-			"../reference/light-blue/lib/nvd3/src/models/pie.js",
-			"./html/armsDetailExceptTemplate/assets/js/pieChartTotal.js",
-			"../reference/light-blue/lib/nvd3/stream_layers.js",
-			"./html/armsDetailExceptTemplate/assets/js/stats.js",
-			"./html/armsDetailExceptTemplate/assets/vendor/bootstrap/js/bootstrap.min.js"
 		]
+		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
+			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
+
 			setUrlParams();
-
-			setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
-
-			bindStatsTab();
+			getDetailViewTab();
 		})
 		.catch(function (errorMessage) {
 			console.error(errorMessage);
 			console.error("플러그인 로드 중 오류 발생");
 		});
-}
-
-function setPdServiceName(pdServiceName) {
-	$(".pdServiceName").text(pdServiceName);
-}
-
-function setRequirementName(requirementName) {
-	$(".requirementName").text(requirementName);
 }
 
 // ------------------ api 호출 여부 확인(여러번 발생시키지 않기 위하여) ------------------ //
@@ -96,92 +75,105 @@ function setUrlParams() {
 	selectedJiraProject = urlParams.get("jiraProject");
 }
 
-// ------------------ 통계정보 ------------------ //
-function bindStatsTab() {
-	if (callAPI("statsAPI")) {
+function getDetailViewTab() {
+	if (callAPI("detailAPI")) {
 		return;
 	}
 
-	console.log("Stats Tab ::::");
+	console.log("Detail Tab ::::");
+	var tableName = "T_ARMS_REQADD_";
 
-	// api 호출 및 데이터 바인딩
 	$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
 	$.ajax({
 		url:
-			"/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" +
+			"/auth-user/api/arms/reqAdd/" +
+			tableName +
+			"/getDetail.do" +
+			"?jiraProject=" +
+			selectedJiraProject +
+			"&jiraServer=" +
+			selectedJiraServer +
+			"&pdService=" +
 			selectedPdService +
-			"/getPdReqStats.do" +
-			"?assigneeEmail=" +
-			userEmail,
+			"&pdServiceVersion=" +
+			selectedPdServiceVersion +
+			"&reqAdd=" +
+			selectedJsTreeId,
 		type: "GET",
-		async: false,
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
 		statusCode: {
-			200: function (json) {
-				console.log("::제품 요구사항 통계::");
-				console.log(json);
+			200: function (data) {
+				//////////////////////////////////////////////////////////
+				console.log(data);
+				console.table(data);
 
-				$("#product-all-req").text(json.allReq);
-				$("#product-my-req").text(json.myReq + " 개");
-				$("#product-my-req-display").css("width", ((json.myReq / json.allReq) * 100).toFixed(2) + "%");
-
-				var excludeKey = ["allReq", "myReq"];
-				var newJson = Object.assign({}, json);
-				for (var key in excludeKey) {
-					delete newJson[excludeKey[key]];
-				}
-
-				console.log("newJson: " + JSON.stringify(newJson));
-				loadChart("#product-chart-pie svg", "#product-chart-footer", newJson);
-
-				jSuccess("통계 정보 조회가 완료 되었습니다.");
+				// ------------------ 상세보기 ------------------ //
+				bindDataDetailTab(data);
+				//////////////////////////////////////////////////////////
+				jSuccess("요구사항 조회가 완료 되었습니다.");
+				calledAPIs["detailAPI"] = true;
 			}
 		},
 		beforeSend: function () {},
 		complete: function () {},
 		error: function (e) {
-			jError("통계 자료를 불러오는 중 에러가 발생했습니다.");
+			jError("요구사항 조회 중 에러가 발생했습니다.");
 		}
 	});
+}
 
-	$.ajax({
-		url:
-			"/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" +
-			selectedPdService +
-			"/getPdRelatedReqStats.do" +
-			"?assigneeEmail=" +
-			userEmail,
-		type: "GET",
-		data: {
-			c_jira_server_link: selectedJiraServer,
-			c_req_link: selectedReq
-		},
-		async: false,
-		statusCode: {
-			200: function (json) {
-				console.log("::해당 요구사항 통계::");
-				console.log(json);
+function bindDataDetailTab(ajaxData) {
+	console.log(ajaxData);
+	//제품(서비스) 데이터 바인딩
+	var selectedPdServiceText = ajaxData.pdService_c_title;
 
-				$("#req-all-req").text(json.allReq);
-				$("#req-my-req").text(json.myReq + " 개");
-				$("#req-my-req-display").css("width", ((json.myReq / json.allReq) * 100).toFixed(2) + "%");
+	if (isEmpty(selectedPdServiceText)) {
+		$("#detailview_req_pdservice_name").val("");
+	} else {
+		$("#detailview_req_pdservice_name").val(selectedPdServiceText);
+	}
 
-				var excludeKey = ["allReq", "myReq"];
-				var newJson = Object.assign({}, json);
-				for (var key in excludeKey) {
-					delete newJson[excludeKey[key]];
-				}
-				console.log("newJson: " + JSON.stringify(newJson));
-				loadChart("#requirement-chart-pie svg", "#requirement-chart-footer", newJson);
+	$("#detailview_req_id").val(selectedJsTreeId);
+	$("#detailview_req_name").val(ajaxData.reqAdd_c_title);
 
-				jSuccess("통계 정보 조회가 완료 되었습니다.");
-			}
-		},
-		beforeSend: function () {},
-		complete: function () {},
-		error: function (e) {
-			jError("통계 자료를 불러오는 중 에러가 발생했습니다.");
-		}
-	});
+	//Version 데이터 바인딩
+	if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
+		$("#detailview_req_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
+	} else {
+		$("#detailview_req_pdservice_version").val(ajaxData.pdServiceVersion_c_title);
+	}
 
-	calledAPIs["statsAPI"] = true;
+	$("#detailview_req_writer").val(ajaxData.reqAdd_c_req_writer);
+	$("#detailview_req_write_date").val(new Date(ajaxData.reqAdd_c_req_create_date).toLocaleString());
+
+	if (ajaxData.reqAdd_c_req_reviewer01 == null || ajaxData.reqAdd_c_req_reviewer01 == "none") {
+		$("#detailview_req_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
+	} else {
+		$("#detailview_req_reviewer01").val(ajaxData.reqAdd_c_req_reviewer01);
+	}
+	if (ajaxData.reqAdd_c_req_reviewer02 == null || ajaxData.reqAdd_c_req_reviewer02 == "none") {
+		$("#detailview_req_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_req_reviewer02").val(ajaxData.reqAdd_c_req_reviewer02);
+	}
+	if (ajaxData.reqAdd_c_req_reviewer03 == null || ajaxData.reqAdd_c_req_reviewer03 == "none") {
+		$("#detailview_req_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_req_reviewer03").val(ajaxData.reqAdd_c_req_reviewer03);
+	}
+	if (ajaxData.reqAdd_c_req_reviewer04 == null || ajaxData.reqAdd_c_req_reviewer04 == "none") {
+		$("#detailview_req_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_req_reviewer04").val(ajaxData.reqAdd_c_req_reviewer04);
+	}
+	if (ajaxData.reqAdd_c_req_reviewer05 == null || ajaxData.reqAdd_c_req_reviewer05 == "none") {
+		$("#detailview_req_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
+	} else {
+		$("#detailview_req_reviewer05").val(ajaxData.reqAdd_c_req_reviewer05);
+	}
+
+	$("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
+	$("#req_detail_contents").html(ajaxData.reqAdd_c_req_contents);
 }
