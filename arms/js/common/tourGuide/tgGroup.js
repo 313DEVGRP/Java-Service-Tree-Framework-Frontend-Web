@@ -7,7 +7,7 @@ var TgGroup = ( function () {
                     target: ".widgetheader"
                 },
                 {
-                    title: '<div class="step-title">투어가이드 설정 On/Off</div>',
+                    title: '<div class="step-title tgOnOff">투어가이드 설정 On/Off</div>',
                     content: '<div class="step-content"> 페이지가 새로 로드 될 때마다 실행됩니다.<br/>' +
                         '가이드를 끄시려면 TourGuide <b>Off</b>로 설정해주세요.</div>',
                     target: "#settings"
@@ -51,7 +51,7 @@ var TgGroup = ( function () {
                     target: "#secondSection"
                 },
                 {
-                    title: '<div class="step-title">투어가이드 설정 On/Off</div>',
+                    title: '<div class="step-title tgOnOff">투어가이드 설정 On/Off</div>',
                     content: '<div class="step-content"> 페이지가 새로 로드 될 때마다 실행됩니다.<br/>' +
                         '가이드를 끄시려면 <b>TourGuide</b>를 <b>Off</b>로 설정해주세요.</div>',
                     target: "#settings"
