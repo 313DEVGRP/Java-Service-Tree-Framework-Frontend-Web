@@ -2374,9 +2374,6 @@ blockquote {
 	border-radius: 3px;
 	position: relative;
 }
-.chat-message .chat-message-body.on-left {
-	border-right: 2px solid #e5603b;
-}
 
 .chat-message-body.on-left .arrow {
 	border-left: 5px solid #e5603b;
@@ -2397,6 +2394,11 @@ blockquote {
 
 .detail_qna .chat-message .chat-message-body {
 	margin-left: 63px !important;
+}
+
+.detail_qna .chat-message .chat-message-body.on-left {
+	margin-left: 0px !important;
+	border-right: 2px solid #e5603b;
 }
 
 /*.chat-message.detail_qna .chat-message-body.arrow:before {*/
