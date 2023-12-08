@@ -278,8 +278,21 @@
                 </div>
             </header>
             <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote
+                        class="font13"
+                        style="margin-top: 5px">
+                    선택한 제품(서비스)와 버전에 투입된 작업자들의 분포 및 관여도를 확인할 수 있습니다.
+                    <div style="float: right">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
+                            Help
+                            <i class="fa fa-question" style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
                 <div class="row">
-                    <div class="col-md-4" style="padding-right: 4px !important;">
+                    <div class="col-md-4">
                         <section class="widget">
                             <header>
                                 <h4>
@@ -291,7 +304,14 @@
                                     </span>
                                 </h4>
                             </header>
-                            <div class="body echart-no-data" id="chart-product-manpower">
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <blockquote
+                                        class="font13"
+                                        style="margin-top: 5px">
+                                    제품 및 버전에 투입된 작업자 관계도
+                                </blockquote>
+                                <div class="body echart-no-data" id="chart-product-manpower"></div>
                             </div>
                         </section>
                     </div>
@@ -304,11 +324,18 @@
                                                 class="font13"
                                                 style="font-weight: bold">
                                             <i class="fa fa-tasks"></i>
-                                            작업자 별 요구사항 관여도
+                                            작업자별 요구사항 관여도
                                         </span>
                                     </h4>
                                 </header>
-                                <div class="body echart-no-data" id="chart-manpower-requirement" style="height: 400px">
+                                <div class="body">
+                                    <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                    <blockquote
+                                            class="font13"
+                                            style="margin-top: 5px">
+                                        요구사항 관여도 트리맵
+                                    </blockquote>
+                                    <div class="body echart-no-data" id="chart-manpower-requirement" style="height: 400px"></div>
                                 </div>
                             </section>
                         </div>
@@ -320,7 +347,7 @@
                                                 style="font-weight: bold">
                                                 <i  class="fa fa-sort-amount-asc"
                                                     style="vertical-align: middle;font-size: 14px;"></i>
-                                                 작업자 별 업무 처리 현황
+                                                 작업자별 업무 처리 현황
                                         </span>
                                     </h4>
                                     <div class="widget-controls">
@@ -360,7 +387,17 @@
                                 </header>
                                 <div class="body">
                                     <blockquote class="font13" style="margin-top: 5px;">
-                                        <p id="cloudIssueTypeInfo" style="margin-top: 5px !important;">
+                                        <div style="float: right">
+                                            <button
+                                                    class="btn btn-transparent btn-xs"
+                                                    style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
+                                                Help
+                                                <i
+                                                        class="fa fa-question"
+                                                        style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                                            </button>
+                                        </div>
+                                        <p style="margin-top: 5px !important;">
                                             <i class="fa fa-info-circle"></i> 작업자별 업무 상세는 아래 체크박스<i class="fa  fa-check-square"></i>를 클릭하세요. <br/>
                                             복수 선택 시, 선택한 작업자를 함께 확인하실 수 있습니다.
                                         </p>
@@ -394,14 +431,14 @@
                         작업자별 요구사항 및 연결이슈 항목별 상세
                     </span>
                     <button type="button"
-                            class="btn btn-default btn-sm ml-1"
+                            class="btn btn-default btn-sm ml-1 hidden"
                             style="margin-top: 0; vertical-align: baseline"
                             onclick="refreshDetailChart()">
                         <span class="glyphicon glyphicon-repeat"></span>
                         refresh
                     </button>
                     <button type="button"
-                            class="btn btn-default btn-sm ml-1"
+                            class="btn btn-default btn-sm ml-1 hidden"
                             style="margin-top: 0; vertical-align: baseline"
                             onclick="drawDetailOverallChart()">
                         <span class="glyphicon glyphicon-repeat"></span>
@@ -409,7 +446,8 @@
                     </button>
                 </h4>
                 <div class="widget-controls">
-                    <a  data-widgster="toleft"
+                    <a  class="hidden"
+                        data-widgster="toleft"
                         title="change width to left"
                         href="#">
                         <i class="glyphicon glyphicon-chevron-left"></i>
@@ -424,7 +462,8 @@
                         href="#">
                         <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
-                    <a  data-widgster="toright"
+                    <a  class="hidden"
+                        data-widgster="toright"
                         title="change width to right"
                         href="#">
                         <i class="glyphicon glyphicon-chevron-right"></i>
@@ -444,71 +483,428 @@
                 </div>
             </header>
             <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote
+                        class="font13"
+                        style="margin-top: 5px">
+                    작업자들의 항목별 상세 차트입니다. 종합 비율, 각 항목별 상세를 확인할 수 있습니다.
+                    <div style="float: right">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
+                            Help
+                            <i class="fa fa-question" style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
                 <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-12" style="padding-right: 4px !important;">
+                    <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 작업자별 요구사항 비율 </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-pie-chart"></i>
+                                        작업자별 요구사항 비율
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="req_pie"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="req_pie"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
                                 <h5><i class="fa fa-bar-chart"></i> 요구사항 - Priority </h5>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="req-priority-bar"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="req-priority-bar"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
                                 <h5><i class="fa fa-bar-chart"></i> 요구사항 - Status </h5>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="req-status-bar"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="req-status-bar"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
                                 <h5><i class="fa fa-bar-chart"></i> 요구사항 - Type </h5>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="req-issuetype-bar"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="req-issuetype-bar"></div>
+                            </div>
                         </section>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-12" style="padding-right: 4px !important;">
+                    <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 작업자별 연결이슈 비율 </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-pie-chart"></i>
+                                        작업자별 연결이슈 비율
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="linkedIssue_subtask_pie"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="linkedIssue_subtask_pie"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-align-left"></i> 연결이슈 - Priority </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-align-left"></i>
+                                        연결이슈 - Priority
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="subtask-priority-bar"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="subtask-priority-bar"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-align-left"></i> 연결이슈 - Status </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-align-left"></i>
+                                        연결이슈 - Status
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="subtask-status-bar"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                                <div class="body echart-no-data" id="subtask-status-bar"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-align-left"></i> 연결이슈 - Type </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-align-left"></i>
+                                        연결이슈 - Type
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="subtask-issuetype-bar"></div>
+                            <div class="body">
+                                <div class="column">
+                                    <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                    <div class="body echart-no-data" id="subtask-issuetype-bar"></div>
+                                </div>
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -528,7 +924,8 @@
                     </span>
                 </h4>
                 <div class="widget-controls">
-                    <a  data-widgster="toleft"
+                    <a  class="hidden"
+                        data-widgster="toleft"
                         title="change width to left"
                         href="#">
                         <i class="glyphicon glyphicon-chevron-left"></i>
@@ -543,7 +940,8 @@
                         href="#">
                         <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
-                    <a  data-widgster="toright"
+                    <a  class="hidden"
+                        data-widgster="toright"
                         title="change width to right"
                         href="#">
                         <i class="glyphicon glyphicon-chevron-right"></i>
@@ -563,21 +961,124 @@
                 </div>
             </header>
             <div class="body">
+                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote
+                        class="font13"
+                        style="margin-top: 5px">
+                    투입된 작업자들의 관여도 태그 클라우드와 이슈상태 종합 누적 정보를 확인할 수 있습니다.
+                    <div style="float: right">
+                        <button class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
+                            Help
+                            <i class="fa fa-question" style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
                 <div class="row">
-                    <div class="col-lg-6 col-md-12 col-sm-12" style="padding-right: 4px !important;">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-pie-chart"></i> 태그 클라우드 </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-cloud"></i>
+                                        태그 클라우드
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id=""></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id=""></div>
+                            </div>
                         </section>
                     </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12" style="padding-right: 4px !important;">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
                         <section class="widget large">
                             <header>
-                                <h5><i class="fa fa-bar-chart"></i> 작업자 별 이슈 상태 현황 </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-bar-chart"></i>
+                                        작업자 별 이슈 상태 현황
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a  class="hidden"
+                                        data-widgster="toleft"
+                                        title="change width to left"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a  data-widgster="expand"
+                                        title="Expand"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a  data-widgster="collapse"
+                                        title="Collapse"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a  class="hidden"
+                                        data-widgster="toright"
+                                        title="change width to right"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a  data-widgster="restore"
+                                        title="Restore"
+                                        href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a  data-widgster="fullscreen"
+                                        title="Fullscreen"
+                                        href="#">
+                                        <i class="glyphicon glyphicon-fullscreen"
+                                           style="font-size: 11px">
+                                        </i>
+                                    </a>
+                                </div>
                             </header>
-                            <div class="body echart-no-data" id="apache-echarts-stacked-horizontal-bar"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="body echart-no-data" id="apache-echarts-stacked-horizontal-bar"></div>
+                            </div>
                         </section>
                     </div>
                 </div>
