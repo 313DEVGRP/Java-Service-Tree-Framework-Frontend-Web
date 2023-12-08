@@ -828,51 +828,7 @@ function scatterChart(data) {
         }
     });
 
-    var chartStart = categories.reduce((earliest, date) => date < earliest ? date : earliest, categories[0]);
-    var chartEnd = categories.reduce((latest, date) => date > latest ? date : latest, categories[0]);
-
-    chartStart = new Date(chartStart);
-    chartEnd = new Date(chartEnd);
-
-    var deadlineSeries = [];
-
-    if (new Date(deadline) >= chartStart && new Date(deadline) <= chartEnd) {
-        // 데이터 추가
-        var vs =  {
-            name: '마감일',
-            type: 'line',
-            data: [[deadline, 0], [deadline, 1]], // y축 전체에 걸쳐 라인을 그립니다.
-            tooltip: {
-                show: false // 데드라인 시리즈의 툴팁을 끕니다.
-            },
-            markLine : {
-                silent: true,
-                symbol: 'none',
-                data : [{
-                    xAxis : deadline // x축 날짜 지정
-                }],
-                lineStyle: {
-                    color: 'red',
-                    width: 2,
-                    type: 'dashed'
-                },
-                label: {
-                    formatter: '마감일 : {c}',
-                    color: 'white',
-                    fontSize: 14,
-                    fontWeight: 'bold'
-                }
-            },
-            lineStyle: {
-                color: 'red',
-                type: 'dashed'
-            },
-            symbol: 'none'
-        };
-
-        deadlineSeries.push(vs);
-    }
-
+    var deadlineSeries = createDeadlineSeries(categories, deadline, 2);
     console.log(deadlineSeries);
 
     var requirementData = Object.keys(requirementDataCount).map(key => {
@@ -1191,6 +1147,9 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 
                     let stackIndex = statusKeys.map((value, index) => index);
 
+                    var deadlineSeries = createDeadlineSeries(dates, deadline, 4);
+                    console.log(deadlineSeries);
+
                     statusKeys.push("요구사항");
                     statusKeys.push("연결된 이슈");
 
@@ -1204,7 +1163,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                                 focus: 'series'
                             },
                             symbolSize: 10,
-                            data: totalIssues
+                            data: totalRequirements
                         },
                         {
                             name: '연결된 이슈',
@@ -1214,39 +1173,9 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                                 focus: 'series'
                             },
                             symbolSize: 10,
-                            data: totalRequirements
+                            data: totalIssues
                         },
-                        {
-                            name: '마감일',
-                            type: 'line',
-                            data: [[deadline, 0], [deadline, 1]],
-                            tooltip: {
-                                show: false
-                            },
-                            markLine: {
-                                silent: true,
-                                symbol: 'none',
-                                data: [{
-                                    xAxis: deadline
-                                }],
-                                lineStyle: {
-                                    color: 'red',
-                                    width: 4,
-                                    type: 'dashed'
-                                },
-                                label: {
-                                    formatter: '마감일 : {c}',
-                                    color: 'white',
-                                    fontSize: 14,
-                                    fontWeight: 'bold'
-                                }
-                            },
-                            lineStyle: {
-                                color: 'red',
-                                type: 'dashed'
-                            },
-                            symbol: 'none'
-                        }
+                        ...deadlineSeries,
                     ];
 
                     var legendData = statusKeys;
@@ -1381,8 +1310,6 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                     // option.series.forEach(function(series) {
                     //     series.label.fontSize = fontSize;
                     // });
-
-                    myChart.setOption(option);
                 });
 
                 myChart.on('mouseover', function (params) {
@@ -1403,6 +1330,57 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
             }
         }
     });
+}
+
+
+// 마감일 함수
+function createDeadlineSeries(categories, deadline, lineWidth) {
+    var chartStart = categories.reduce((earliest, date) => date < earliest ? date : earliest, categories[0]);
+    var chartEnd = categories.reduce((latest, date) => date > latest ? date : latest, categories[0]);
+
+    chartStart = new Date(chartStart);
+    chartEnd = new Date(chartEnd);
+
+    var deadlineSeries = [];
+
+    if (new Date(deadline) >= chartStart && new Date(deadline) <= chartEnd) {
+        // 데이터 추가
+        var vs =  {
+            name: '마감일',
+            type: 'line',
+            data: [[deadline, 0], [deadline, 1]], // y축 전체에 걸쳐 라인을 그립니다.
+            tooltip: {
+                show: false // 데드라인 시리즈의 툴팁을 끕니다.
+            },
+            markLine : {
+                silent: true,
+                symbol: 'none',
+                data : [{
+                    xAxis : deadline // x축 날짜 지정
+                }],
+                lineStyle: {
+                    color: 'red',
+                    width: lineWidth,
+                    type: 'dashed'
+                },
+                label: {
+                    formatter: '마감일 : {c}',
+                    color: 'white',
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                }
+            },
+            lineStyle: {
+                color: 'red',
+                type: 'dashed'
+            },
+            symbol: 'none'
+        };
+
+        deadlineSeries.push(vs);
+    }
+
+    return deadlineSeries;
 }
 
 ////////////////////

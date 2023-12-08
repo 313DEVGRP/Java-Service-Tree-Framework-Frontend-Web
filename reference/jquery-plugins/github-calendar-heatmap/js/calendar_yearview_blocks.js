@@ -34,7 +34,6 @@
             var gap = 2;
             var rectWidth = (containerWidth - gap * 51) / 52; // 52는 주의 개수, 간격을 고려하여 사각형의 너비를 계산
             var rectHeight = rectWidth; // 7은 요일의 개수, 동적으로 조절할 수 있습니다.
-            console.log("containerWidth : " + containerWidth);
 
             var end_date = new Date(settings.final_date);
             var current_date = new Date();
@@ -162,7 +161,6 @@
             for (var i = 0; i < settings.day_names.length; i++) {
                 var dx = calculateWdayDx(i, settings.start_monday);
                 var dy = calculateWdayDy(i, settings.start_monday, rectHeight);
-                console.log(dy);
                 wday_html += '<text text-anchor="middle" class="wday" dx="' + dx + '" dy="' + dy + '">' + settings.day_names[i] + '</text>';
             }
             loop_html += wday_html;
@@ -193,7 +191,6 @@
         };
 
         function calculateWdayDy(index, startMonday, rectHeight) {
-            console.log(rectHeight);
             return rectHeight * 2.1 * index +rectHeight;
         }
 
