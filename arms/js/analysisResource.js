@@ -73,8 +73,10 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
+            "../reference/jquery-plugins/jQCloud/dist/jqcloud.js",
+            "../reference/jquery-plugins/jQCloud/dist/jqcloud.css",
             "../arms/css/analysis/analysis.css",
-            "../arms/js/analysis/resource/sankey.js",
+            "../arms/js/analysis/resource/sankey.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -339,8 +341,46 @@ function makeVersionMultiSelectBox() {
             drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
             stackedHorizontalBar();
+            wordCloud();
         }
     });
+}
+
+function wordCloud() {
+    $('#tag-cloud').jQCloud('destroy');
+
+    const url = new UrlBuilder()
+        .setBaseUrl(`/auth-user/api/arms/dashboard/aggregation/flat`)
+        .addQueryParam('pdServiceLink', selectedPdServiceId)
+        .addQueryParam('pdServiceVersionLinks', selectedVersionId)
+        .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
+        .addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .addQueryParam("isReqType", "ISSUE")
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                let words = data['검색결과']["group_by_assignee.assignee_accountId.keyword"].map(item => ({
+                    text: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["필드명"],
+                    weight: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["개수"]
+                }));
+
+                $('#tag-cloud').jQCloud(words);
+            }
+        }
+    });
+
+
+
 }
 
 function bind_VersionData_By_PdService() {
@@ -370,6 +410,7 @@ function bind_VersionData_By_PdService() {
                 drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId);
                 drawManRequirementTreeMapChart(selectedPdServiceId, selectedVersionId);
                 stackedHorizontalBar();
+                wordCloud();
                 
 
                 if (data.length > 0) {
