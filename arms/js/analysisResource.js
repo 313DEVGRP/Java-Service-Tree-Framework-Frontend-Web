@@ -321,6 +321,12 @@ function makeVersionMultiSelectBox() {
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
+
+            if (versionTag === null || versionTag == "") {
+                alert("버전이 선택되지 않았습니다.");
+                return;
+            }
+
             selectedVersionId = versionTag.join(',');
 
             refreshDetailChart(); 수치_초기화();

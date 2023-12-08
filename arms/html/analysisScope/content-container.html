@@ -114,10 +114,18 @@
                     <div class="col-md-3">
                         <section class="widget large" style="margin-bottom: 15px; height:290px">
                             <header>
-                                <h5><i class="fa fa-pencil-square-o"></i> 종합 진행 현황 </h5>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                        종합 진행 현황
+                                    </span>
+                                </h4>
                             </header>
-                            <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
-                            <div class="body" id="radarPart"></div>
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
+                                <div class="body" id="radarPart"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-md-2">
@@ -129,10 +137,10 @@
 										범위(Scope) 현황
 									</span>
                                 </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <div class="box" style="display: flex; justify-content: space-evenly; margin-bottom: 10px">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="box" style="display: flex; justify-content: space-evenly; margin: 10px 0;">
                                     <div>
                                         <div id="req_in_action_count" style="color: #a4c6ff; margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700;"> - </div>
                                         <div class="description">
@@ -151,20 +159,17 @@
                                     <div    class="control-group"
                                             style="padding-bottom: 10px; border: 0">
                                         <div    class="controls form-group darkBack col-md-12"
-                                                style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
+                                                style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
                                             <span>요구사항(<i class="fa fa-wrench"></i>) 연결이슈 평균: <a id="linkedIssue_subtask_count_per_req_in_action" style="font-weight: bold;">-</a>개</span><br>
                                         </div>
-                                    </div>
-                                </div>
-                                <div    class="control-group"
-                                        style="padding-bottom: 10px; border: 0">
-                                    <div    class="controls form-group darkBack col-md-6"
-                                            style="margin-bottom: 5px !important; padding: 10px 0; !important; text-align: center">
-                                        <span>총 요구사항 <br/><small>(미할당)</small><br/><a id="total_req_count" style="font-weight: bold;">-</a> 개 (<span id="no_assigned_req_count">-</span>)</span><br>
-                                    </div>
-                                    <div    class="controls form-group darkBack col-md-6"
-                                            style="margin-bottom: 5px !important; padding: 10px 0; !important; text-align: center">
-                                        <span>총 연결이슈 <br/><small>(미할당)</small><br/><a id="total_linkedIssue_subtask_count" style="font-weight: bold;">-</a> 개 (<span id="no_assigned_linkedIssue_subtask_count">-</span>)</span><br>
+                                        <div    class="controls form-group darkBack col-md-6"
+                                                style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+                                            <span>총 요구사항 <br/><small>(미할당)</small><br/><a id="total_req_count" style="font-weight: bold;">-</a> 개 (<span id="no_assigned_req_count">-</span>)</span><br>
+                                        </div>
+                                        <div    class="controls form-group darkBack col-md-6"
+                                                style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+                                            <span>총 연결이슈 <br/><small>(미할당)</small><br/><a id="total_linkedIssue_subtask_count" style="font-weight: bold;">-</a> 개 (<span id="no_assigned_linkedIssue_subtask_count">-</span>)</span><br>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -173,21 +178,29 @@
                     <div class="col-md-2">
                         <section class="widget">
                             <header style="margin-bottom: 15px;">
-                                <h5><i class="fa fa-clock-o"></i> 일정(Time) 현황 </h5>
-                                <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
+                                <h4>
+                                    <span   class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-clock-o"></i>
+                                        일정(Time) 현황
+                                    </span>
+                                </h4>
                             </header>
-                            <div class="box" style="display: flex; justify-content: space-evenly; margin-bottom: 10px">
-                                <div>
-                                    <div id="remaining_days" style="color: #a4c6ff; margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700;" > - </div>
-                                    <div class="description">
-                                        【 일정 】
+                            <div class="body">
+                                <div class="gradient_middle_border" style="width: 100%; height: 2px; margin-top: 5px;"></div>
+                                <div class="box" style="display: flex; justify-content: space-evenly; margin: 10px 0;">
+                                    <div>
+                                        <div id="remaining_days" style="color: #a4c6ff; margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700;" > - </div>
+                                        <div class="description">
+                                            【 일정 】
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px;">|</div>
-                                <div>
-                                    <div id="progressDateRate" style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700;"> - </div>
-                                    <div class="description">
-                                        【 경과 】
+                                    <div style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px;">|</div>
+                                    <div>
+                                        <div id="progressDateRate" style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700;"> - </div>
+                                        <div class="description">
+                                            【 경과 】
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -202,10 +215,10 @@
 										자원(Resource) 현황
 									</span>
                                 </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body">
-                                <div class="box" style="margin-bottom: 10px">
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <div class="box" style="margin: 10px 0;">
                                     <div id="resource_count" style="color: #a4c6ff; margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700;"> - </div>
                                     <div class="description">
                                         <i class="fa fa-users"></i>
@@ -219,11 +232,6 @@
                                                 style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
                                             <span>작업 중 요구사항 평균 : <a id="req_in_action_avg" style="font-weight: bold;">-</a> 개</span><br>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div    class="control-group"
-                                            style="padding-bottom: 10px; border: 0">
                                         <div    class="controls form-group darkBack col-md-12"
                                                 style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
                                             <span>생성한 연결이슈 평균 : <a id="avg_linkedIssue_count" style="font-weight: bold;">-</a> 개</span><br>
@@ -479,15 +487,13 @@
                                 </div>
                             </header>
                             <div class="body">
-                                <div class="column">
-                                    <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                                    <blockquote class="font12">
-                                        <strong>
-                                           제품<sup>서비스</sup>에 몇개의 버전이 있는지, 버전 하위로 몇개의 요구사항이 있는지
-                                        </strong>
-                                    </blockquote>
-                                    <div class="body" id="polar_bar"></div>
-                                </div>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    <strong>
+                                       제품<sup>서비스</sup>에 몇개의 버전이 있는지, 버전 하위로 몇개의 요구사항이 있는지
+                                    </strong>
+                                </blockquote>
+                                <div class="body" id="polar_bar"></div>
                             </div>
                         </section>
                     </div>
@@ -539,15 +545,13 @@
                                 </div>
                             </header>
                             <div class="body">
-                                <div class="column">
-                                    <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                                    <blockquote class="font12">
-                                        <strong>
-                                            버전별로 요구사항 이슈의 업데이트 분포
-                                        </strong>
-                                    </blockquote>
-                                    <div class="body" id="box_plot"></div>
-                                </div>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    <strong>
+                                        버전별로 요구사항 이슈의 업데이트 분포
+                                    </strong>
+                                </blockquote>
+                                <div class="body" id="box_plot"></div>
                             </div>
                         </section>
                     </div>
@@ -600,14 +604,12 @@
                             </header>
                             <div class="body">
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                                <div class="column">
-                                    <blockquote class="font12">
-                                        <strong>
-                                            요구사항이 다른 버전으로 옮겨간 이력이 있는지 분포
-                                        </strong>
-                                    </blockquote>
-                                    <div class="body" id="circular_sankey"></div>
-                                </div>
+                                <blockquote class="font12">
+                                    <strong>
+                                        요구사항이 다른 버전으로 옮겨간 이력이 있는지 분포
+                                    </strong>
+                                </blockquote>
+                                <div class="body" id="circular_sankey"></div>
                             </div>
                         </section>
                     </div>
@@ -661,15 +663,13 @@
                                 </div>
                             </header>
                             <div class="body">
-                                <div class="column">
-                                    <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                                    <blockquote class="font12">
-                                        <strong>
-                                            하나의 요구사항에 몇명의 개입이 있었는지
-                                        </strong>
-                                    </blockquote>
-                                    <div class="body" id="tree"></div>
-                                </div>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    <strong>
+                                        하나의 요구사항에 몇명의 개입이 있었는지
+                                    </strong>
+                                </blockquote>
+                                <div class="body" id="tree"></div>
                             </div>
                         </section>
                     </div>
@@ -721,17 +721,15 @@
                                 </div>
                             </header>
                             <div class="body">
-                                <div class="column">
-                                    <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
-                                    <blockquote class="font12">
-                                        <strong>
-                                            이번 버전에 처리한 요구사항은 어떤것이고, 이번 버전에 처리하지 못한 요구사항은 어떤것인지
-                                            (Text 색으로 표시) <br/>
-                                            버블 하나당 연관된 사람 수가 많을 수록 크게.
-                                        </strong>
-                                    </blockquote>
-                                    <div class="body" id="box_plot"></div>
-                                </div>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    <strong>
+                                        이번 버전에 처리한 요구사항은 어떤것이고, 이번 버전에 처리하지 못한 요구사항은 어떤것인지
+                                        (Text 색으로 표시) <br/>
+                                        버블 하나당 연관된 사람 수가 많을 수록 크게.
+                                    </strong>
+                                </blockquote>
+                                <div class="body" id="box_plot"></div>
                             </div>
                         </section>
                     </div>

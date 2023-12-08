@@ -6,6 +6,11 @@ var selectedType;
 var parentIdOfSelected;
 
 var selectedPdServiceId; // 제품(서비스) 아이디
+var selectedVersionId;   // 선택된 버전 아이디
+var mailAddressList; // 투입 작업자 메일
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
+var dashboardColor;
+
 var reqStatusDataTable;
 var dataTableRef;
 
@@ -64,14 +69,23 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		],
-		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 		[
 			"../reference/jquery-plugins/gantt-0.6.1/dist/frappe-gantt.js",
 			"../reference/jquery-plugins/gantt-0.6.1/dist/frappe-gantt.css",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js"
-		]
+		],
+		[
+			//colors
+			"./js/dashboard/chart/colorPalette.js",
+			// Apache Echarts
+			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
+			//topMenu
+			"js/analysis/topmenu/basicRadar.js",
+			"js/analysis/topmenu/topMenu.js"
+
+		]// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -109,6 +123,8 @@ function execDocReady() {
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			dashboardColor = dashboardPalette.dashboardPalette01;
 
 			popup_size_setting();
 
@@ -176,6 +192,7 @@ function makePdServiceSelectBox() {
 
 	// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
 	$("#selected_pdService").on("select2:select", function (e) {
+		selectedPdServiceId = $("#selected_pdService").val();
 		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 		// 선택된 제품(서비스) 데이터 바인딩
@@ -283,6 +300,16 @@ function makeVersionMultiSelectBox() {
 			var endPointUrl = "";
 			var versionTag = $(".multiple-select").val();
 
+			if (versionTag === null || versionTag == "") {
+				alert("버전이 선택되지 않았습니다.");
+				return;
+			}
+
+			수치_초기화();
+			selectedVersionId = versionTag.join(',');
+			// 요구사항 및 연결이슈 통계
+			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+
 			if (checked) {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" +
@@ -312,18 +339,23 @@ function bind_VersionData_By_PdService() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
+				var pdServiceVersionIds = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
-					var $opt = $("<option />", {
-						value: obj.c_id,
-						text: obj.c_title
-					});
-					$(".multiple-select").append($opt);
+					pdServiceVersionIds.push(obj.c_id);
+					var newOption = new Option(obj.c_title, obj.c_id, true, false);
+					$(".multiple-select").append(newOption);
 				}
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
+
+				수치_초기화();
+				selectedVersionId = pdServiceVersionIds.join(',');
+				// 요구사항 및 연결이슈 통계
+				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
