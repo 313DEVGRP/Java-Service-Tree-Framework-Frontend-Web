@@ -101,7 +101,7 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            // candleStickChart();
+            candleStickChart();
             dashboardColor = dashboardPalette.dashboardPalette01;
 
         })
@@ -1132,6 +1132,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                     let statusSeries = statusKeys.map(key => ({
                         name: key,
                         type: 'bar',
+                        stack: 'total',
                         label: labelOption,
                         emphasis: {
                             focus: 'series'
@@ -1207,7 +1208,8 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                                 mark: {show: true},
                                 // dataView: {show: true, readOnly: true},
                                 magicType: {
-                                    show: true, type: ['stack'],
+                                    show: true,
+                                    type: ['stack'],  // 스택과 일반 사이 전환 기능 추가
                                     seriesIndex: {
                                         stack: stackIndex // stack 모드를 적용할 시리즈의 인덱스
                                     }
