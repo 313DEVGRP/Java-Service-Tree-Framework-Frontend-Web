@@ -7,11 +7,6 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var selectId; // 제품 아이디
-var selectName; // 제품 이름
-var selectedIndex; // 데이터테이블 선택한 인덱스
-var selectedPage; // 데이터테이블 선택한 인덱스
-var selectVersion; // 선택한 버전 아이디
 
 function execDocReady() {
 	var pluginGroups = [

@@ -7,34 +7,13 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var selectId; // 제품 아이디
-var selectName; // 제품 이름
-var selectedIndex; // 데이터테이블 선택한 인덱스
-var selectedPage; // 데이터테이블 선택한 인덱스
-var selectVersion; // 선택한 버전 아이디
-var dataTableRef; // 데이터테이블 참조 변수
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
 	var pluginGroups = [
-		[
-			"../reference/light-blue/lib/bootstrap-datepicker.js",
-			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
-			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js"
-		],
-
-		[
-			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
-			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
-			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"
-		]
+		["../reference/lightblue4/docs/lib/widgster/widgster.js"]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 

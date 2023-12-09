@@ -8,20 +8,9 @@ var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
 var calledAPIs = {};
-var totalReqCommentCount;
 /* 요구사항 전체목록 전역변수 */
-var reqTreeList;
-var visibilityStatus = {
-	"#stats": false,
-	"#detail": false,
-	"#version": false,
-	"#allreq": false,
-	"#files": false,
-	"#question": false
-};
 
 var getFiles = [];
-
 var prefix = "./img/winTypeFileIcons/";
 var iconsMap = {
 	"application/vnd.ms-htmlhelp": prefix + "CHM.File.png",
