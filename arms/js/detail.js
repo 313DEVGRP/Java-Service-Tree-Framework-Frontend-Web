@@ -45,9 +45,9 @@ function execDocReady() {
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
-			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
-
 			setUrlParams();
+			$(".widget").widgster();
+			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
 			getDetailViewTab();
 		})
 		.catch(function (errorMessage) {

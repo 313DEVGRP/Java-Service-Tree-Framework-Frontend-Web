@@ -7,31 +7,19 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var calledAPIs = {};
-var totalReqCommentCount;
-/* 요구사항 전체목록 전역변수 */
-var reqTreeList;
-var visibilityStatus = {
-	"#stats": false,
-	"#detail": false,
-	"#version": false,
-	"#allreq": false,
-	"#files": false,
-	"#question": false
-};
-
-var prefix = "./img/winTypeFileIcons/";
 
 function execDocReady() {
 	var pluginGroups = [
+		["../reference/lightblue4/docs/lib/widgster/widgster.js"],
+
 		[
 			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
 			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js",
-			"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
+			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"
 		],
 
 		[
@@ -45,9 +33,12 @@ function execDocReady() {
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
+			setUrlParams();
+
+			$(".widget").widgster();
+
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_reqadd");
 
-			setUrlParams();
 			build_ReqData_By_PdService();
 		})
 		.catch(function () {

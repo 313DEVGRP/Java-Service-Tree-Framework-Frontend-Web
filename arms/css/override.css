@@ -2392,55 +2392,6 @@ blockquote {
 	border-right: 5px solid #a4c6ff;
 }
 
-.detail_qna .chat-message .chat-message-body {
-	margin-left: 63px !important;
-}
-
-.detail_qna .chat-message .chat-message-body.on-left {
-	margin-left: 0px !important;
-	border-right: 2px solid #e5603b;
-}
-
-/*.chat-message.detail_qna .chat-message-body.arrow:before {*/
-/*	content: "";*/
-/*	display: block;*/
-/*	position: absolute;*/
-/*	top: 21px;*/
-/*	left: -7px;*/
-/*	width: 0;*/
-/*	height: 0;*/
-/*	border-top: 5px solid transparent;*/
-/*	border-bottom: 5px solid transparent;*/
-/*	border-right: 5px solid #a4c6ff;*/
-/*}*/
-
-.widget > .carousel {
-	margin: 0 -12px 5px;
-}
-
-.carousel-control.left,
-.carousel-control.right {
-	background: none;
-}
-.carousel-control i {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	z-index: 5;
-	display: inline-block;
-	width: 20px;
-	height: 45px;
-	margin-left: -10px;
-	margin-top: -10px;
-}
-
-.carousel-indicators.outer {
-	bottom: -20px;
-}
-.carousel-indicators li {
-	background-color: rgba(51, 51, 51, 0.4);
-}
-
 @media (max-width: 1048px) {
 	.carousel-landing {
 		height: 300px;
@@ -3436,4 +3387,188 @@ table tbody tr td {
 	width: 100%;
 	top: 50%;
 	left: 0;
+}
+
+.detail_qna .chat-message .sender {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.detail_qna .chat-message-body .arrow {
+	top: calc(50% - 5px);
+}
+
+.detail_qna .chat-message .chat-message-body {
+	margin-left: 63px !important;
+}
+
+.detail_qna .chat-message .chat-message-body.on-left {
+	margin-left: 0px !important;
+	border-right: 2px solid #e5603b;
+}
+
+.detail_qna .chat-message-body .action-group {
+	margin-top: 15px;
+}
+
+.detail_qna .chat-message-body .action-group button {
+	margin-right: 5px;
+	border: 0;
+	background-color: transparent;
+}
+
+.detail_qna .date-separator {
+	text-align: center;
+	width: 180px;
+	margin: 30px auto;
+	padding: 6px;
+	font-size: 15px;
+	background: rgba(51, 51, 51, 0.3);
+	border-radius: 15px;
+}
+
+.detail_qna .edit-text-area {
+	width: 100%;
+	resize: vertical;
+	background: transparent;
+}
+
+.detail_qna .eidt-comment,
+.detail_qna .edit-group {
+	display: none;
+}
+
+.detail_qna .empty-message {
+	display: flex;
+	height: 550px;
+	justify-content: center;
+	align-items: center;
+}
+
+.widget > .carousel {
+	margin: 0 -12px 5px;
+}
+
+.carousel-control.left,
+.carousel-control.right {
+	background: none;
+}
+.carousel-control i {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 5;
+	display: inline-block;
+	width: 20px;
+	height: 45px;
+	margin-left: -10px;
+	margin-top: -10px;
+}
+
+.carousel-indicators.outer {
+	bottom: -20px;
+}
+.carousel-indicators li {
+	background-color: rgba(51, 51, 51, 0.4);
+}
+
+.service-portfolio .filter-option {
+	position: relative;
+	margin-bottom: 5px;
+	padding-left: 13px;
+	cursor: pointer;
+}
+
+.service-portfolio .filter-active:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 3px;
+	background-color: #e5603b;
+}
+
+.service-portfolio .portfolio-wrap {
+	display: flex;
+}
+
+.service-portfolio .portfolio-item {
+	float: none;
+	margin-bottom: 30px;
+}
+
+.service-portfolio .portfolio-item-wrap {
+	position: relative;
+	height: 0;
+	padding-bottom: 100%;
+}
+
+.service-portfolio .portfolio-item-wrap img {
+	width: 100%;
+}
+
+.service-portfolio .portfolio-info {
+	opacity: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+	z-index: 3;
+	transition: all ease-in-out 0.3s;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow-wrap: anywhere;
+}
+
+.service-portfolio .portfolio-item-wrap:before {
+	content: "";
+	background: rgba(40, 40, 40, 0.5);
+	position: absolute;
+	left: 5px;
+	right: 5px;
+	top: 5px;
+	bottom: 5px;
+	transition: all ease-in-out 0.3s;
+	z-index: 2;
+	opacity: 0;
+}
+
+.service-portfolio .portfolio-info {
+	opacity: 0;
+	transition: all ease-in-out 0.3s;
+}
+
+.service-portfolio .portfolio-info h4,
+.service-portfolio .portfolio-info p {
+	font-size: 12px;
+}
+
+.service-portfolio .portfolio-info .portfolio-links a {
+	color: #fff;
+	margin: 5px 2px 0;
+	font-size: 20px;
+	display: inline-block;
+	transition: 0.3s;
+}
+
+.service-portfolio .portfolio-info .portfolio-links a:hover {
+	color: #148af9;
+}
+
+.service-portfolio .portfolio-item-wrap:hover:before {
+	top: -10px;
+	left: -10px;
+	right: -10px;
+	bottom: -10px;
+	opacity: 1;
+}
+
+.service-portfolio .portfolio-item-wrap:hover .portfolio-info {
+	opacity: 1;
 }

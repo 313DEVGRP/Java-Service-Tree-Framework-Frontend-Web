@@ -41,11 +41,8 @@ function execDocReady() {
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
 			setUrlParams();
-			//사이드 메뉴 처리
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_per_version");
-
-			// 스크립트 실행 로직을 이곳에 추가합니다.
 			init_versionList();
 			dataLoad();
 		})
