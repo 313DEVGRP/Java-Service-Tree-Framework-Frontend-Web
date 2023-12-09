@@ -881,3 +881,10 @@ function versionUpdateIssueScatterChart223() {
         },
         backgroundColor: 'rgba(255,255,255,0)',
     };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}
