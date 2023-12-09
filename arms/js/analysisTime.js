@@ -101,7 +101,7 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            candleStickChart();
+            // candleStickChart();
             dashboardColor = dashboardPalette.dashboardPalette01;
 
         })
@@ -996,7 +996,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
         statusCode: {
             200: function (data) {
                 console.log(data);
-                statusTimeline(data);
+                // statusTimeline(data);
                 sevenTimeline(data);
 
                 setTimeout(function () {
@@ -1639,7 +1639,6 @@ function candleStickChart() {
         renderer: 'canvas',
         useDirtyRect: false
     });
-    var app = {};
 
     var option;
 

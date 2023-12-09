@@ -85,6 +85,7 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
+            versionUpdateIssueScatterChart();
             dashboardColor = dashboardPalette.dashboardPalette01;
         })
         .catch(function() {
@@ -790,3 +791,93 @@ function networkChart(pdServiceVersions, jiraIssueData) {
     networkGraph.createGraph();
 }
 
+function versionUpdateIssueScatterChart() {
+    console.log("boxplot chart");
+    var dom = document.getElementById('boxplot-scatter-chart-container');
+
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+
+    var option = {
+        xAxis: {
+            type: 'category',
+            data: ['v1.0', 'v1.1', 'v1.2', 'v1.3']
+        },
+        yAxis: {
+            type: 'time'
+        },
+        series: [
+            {
+                type: 'boxplot',
+                data: [
+                    ['2023-01-01', '2023-01-10', '2023-01-15', '2023-01-20', '2023-01-30'],
+                    ['2023-02-01', '2023-02-10', '2023-02-15', '2023-02-20', '2023-02-28'],
+                    ['2023-03-01', '2023-03-10', '2023-03-15', '2023-03-20', '2023-03-31'],
+                    ['2023-04-01', '2023-04-10', '2023-04-15', '2023-04-20', '2023-04-30']
+                ],
+                tooltip: {
+                    formatter: function (param) {
+                        return [
+                            'Version: ' + param.name + ': ',
+                            'lower: ' + param.data[0],
+                            'Q1: ' + param.data[1],
+                            'median: ' + param.data[2],
+                            'Q3: ' + param.data[3],
+                            'higher: ' + param.data[4]
+                        ].join('<br/>');
+                    }
+                }
+            },
+            {
+                type: 'scatter',
+                data: [['v1.0', '2023-01-05'], ['v1.1', '2023-02-05'], ['v1.2', '2023-03-05'], ['v1.3', '2023-04-05']]
+            }
+        ],
+        backgroundColor: 'rgba(255,255,255,0)',
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}
+
+function versionUpdateIssueScatterChart223() {
+    console.log("box stick");
+    var dom = document.getElementById('boxplot-scatter-chart-container');
+    var myChart = echarts.init(dom, 'dark', {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+
+    var option;
+
+    option = {
+        xAxis: {
+            data: ['2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27']
+        },
+        yAxis: {},
+        series: [
+            {
+                type: 'candlestick',
+                data: [
+                    [20, 34, 10, 38],
+                    [40, 35, 30, 50],
+                    [31, 38, 33, 44],
+                    [38, 15, 5, 42]
+                ]
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',
+            position: 'top',
+            borderWidth: 1,
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        backgroundColor: 'rgba(255,255,255,0)',
+    };
