@@ -7,11 +7,6 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var selectId; // 제품 아이디
-var selectName; // 제품 이름
-var selectedIndex; // 데이터테이블 선택한 인덱스
-var selectedPage; // 데이터테이블 선택한 인덱스
-var selectVersion; // 선택한 버전 아이디
 
 function execDocReady() {
 	var pluginGroups = [
@@ -27,12 +22,8 @@ function execDocReady() {
 		.then(function () {
 			console.log("모든 플러그인 로드 완료");
 			setUrlParams();
-
-			//좌측 메뉴
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_qna");
-			// 스크립트 실행 로직을 이곳에 추가합니다.
-
 			$(".slimScrollDiv").slimScroll({
 				height: "550px",
 				railVisible: true,
@@ -124,24 +115,13 @@ function getReqCommentList(pageNum) {
 				var $chatMessages = $("#chat_messages");
 				$chatMessages.empty();
 
-				console.log(data.response);
-
 				if (data.response.length === 0) {
 					/* 게시글이 없을 경우 처리 필요 */
 					noReqCommentMessage();
 					return;
 				}
 
-				data.response.forEach((comment) => makeTemplate(comment));
-
-				// data.response.forEach(function (comment) {
-				// 	var result = createReqCommentList(comment, previousDate);
-				// 	var commentHtml = result.$newHtml;
-				// 	previousDate = result.date;
-				// 	$chatMessages.append(commentHtml);
-				// });
-
-				// reqCommentRegisterEventHandlers();
+				makeTemplate(data.response);
 			}
 		},
 		beforeSend: function () {},
@@ -150,6 +130,16 @@ function getReqCommentList(pageNum) {
 			jError("QnA 게시물 조회 중 에러가 발생했습니다.");
 		}
 	});
+}
+
+function noReqCommentMessage() {
+	var $chatMessages = $("#chat_messages");
+	$chatMessages.empty();
+
+	var $noDataHtml = $(`<p class="empty-message">
+                                            등록된 글이 없습니다.
+                                         </p>`);
+	$chatMessages.append($noDataHtml);
 }
 
 function addReqComment() {
@@ -191,8 +181,7 @@ function addReqComment() {
 	});
 }
 
-function makeTemplate(comment) {
-	const wrap = document.getElementById("chat_messages");
+function makeMessageList(wrap, comment) {
 	const message = document.createElement("div");
 	const isSender = comment.c_req_comment_sender === userName;
 
@@ -204,13 +193,130 @@ function makeTemplate(comment) {
 		comment.c_req_comment_sender
 	} profile" />
         </div>
+           <p class="text-align-center">${comment.c_req_comment_sender}</p>
       </div>
       <div class="chat-message-body ${isSender ? "on-left" : ""}">
         <span class="arrow"></span>
-        <div class="sender"><a href="#">${comment.c_req_comment_sender}</a></div>
-        <div class="text">${comment.c_req_comment_contents}</div>
+        <div id="${comment.c_id}-comment" class="text default">${comment.c_req_comment_contents}</div>
+        <div class="text eidt-comment edit"><textarea id="${comment.c_id}-edit" class="edit-text-area">${
+		comment.c_req_comment_contents
+	}</textarea></div>
+        <div class="text action-group">
+        	<span class="handle-group default">
+						<button onclick="handleEditClick($(this), ${comment.c_id}, '${
+		comment.c_req_comment_contents
+	}')"><i style="color:gray;" class="fa fa-edit"></i></button>
+						<button onclick="handleDeleteClick(${comment.c_id})"><i style=" color:gray" class="fa fa-trash-o"></i></button>
+					</span>
+					<span class="edit-group edit">
+						<button onclick="handleModify(${comment.c_id})"><i style="color:gray;" class="fa fa-check"></i></button>
+						<button onclick="handleCancel($(this))"><i style=" color:gray" class="fa fa-times"></i></button>
+					</span>
+					<span style=" color:gray">${dateFormat(comment.c_req_comment_date).split(" - ")[1]}</span>
+				</div>
       </div>
     `;
 
 	wrap.append(message);
+}
+function makeTemplate(comments) {
+	const wrap = document.getElementById("chat_messages");
+	let date = null;
+
+	comments.forEach((comment) => {
+		if (!date && date !== comment.c_req_comment_date) {
+			date = comment.c_req_comment_date;
+			const dateEl = document.createElement("div");
+			dateEl.className = "date-separator";
+			dateEl.innerHTML = `<div class=><i class="bx bx-calendar"></i> ${
+				dateFormat(comment.c_req_comment_date).split(" - ")[0]
+			}</div>`;
+
+			wrap.append(dateEl);
+		}
+
+		makeMessageList(wrap, comment);
+	});
+}
+
+function handleEditClick(e, id, comment) {
+	document.getElementById(`${id}-edit`).value = comment;
+	const messageBody = e.closest(".chat-message-body");
+	messageBody.find(".default").hide();
+	messageBody.find(".edit").show();
+}
+
+function handleDeleteClick(id) {
+	if (confirm("해당 글을 삭제하시겠습니까?")) {
+		console.log("delete : " + c_id);
+		$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
+		$.ajax({
+			url: "/auth-user/api/arms/reqComment/removeNode.do",
+			type: "DELETE",
+			data: {
+				c_id: c_id
+			},
+			statusCode: {
+				200: function () {
+					//모달 팝업 끝내고
+					jSuccess("삭제 되었습니다.");
+					getTotalCount();
+					getReqCommentList(1);
+				}
+			},
+			beforeSend: function () {},
+			complete: function () {},
+			error: function (e) {
+				jError("게시물 삭제 중 에러가 발생했습니다.");
+			}
+		});
+	}
+}
+
+function handleModify(id) {
+	const comment = document.getElementById(`${id}-edit`).value;
+
+	req_comment_edit_btn_click(id, comment);
+}
+
+function handleCancel(e) {
+	const messageBody = e.closest(".chat-message-body");
+	messageBody.find(".default").show();
+	messageBody.find(".edit").hide();
+}
+
+function req_comment_edit_btn_click(c_id, commentText) {
+	if (confirm("해당 글을 수정하시겠습니까?")) {
+		console.log("edit : " + c_id + "\ncontents : " + commentText);
+		console.log("edit : " + c_id);
+
+		var content = commentText;
+		if (content === null || content === "") {
+			alert("질문을 작성 후 수정해주세요.");
+			return;
+		}
+
+		$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
+		$.ajax({
+			url: "/auth-user/api/arms/reqComment/updateNode.do",
+			type: "PUT",
+			data: {
+				c_id: c_id,
+				c_req_comment_contents: commentText
+			},
+			statusCode: {
+				200: function () {
+					//모달 팝업 끝내고
+					jSuccess("수정 되었습니다.");
+					getTotalCount();
+					getReqCommentList(1);
+				}
+			},
+			beforeSend: function () {},
+			complete: function () {},
+			error: function (e) {
+				jError("게시물 수정 중 에러가 발생했습니다.");
+			}
+		});
+	}
 }

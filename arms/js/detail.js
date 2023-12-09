@@ -8,46 +8,18 @@ var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
 var calledAPIs = {};
-var totalReqCommentCount;
-/* 요구사항 전체목록 전역변수 */
-var reqTreeList;
-var visibilityStatus = {
-	"#stats": false,
-	"#detail": false,
-	"#version": false,
-	"#allreq": false,
-	"#files": false,
-	"#question": false
-};
-
-var prefix = "./img/winTypeFileIcons/";
 
 function execDocReady() {
 	var pluginGroups = [
-		[
-			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js",
-			"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
-		],
-
-		[
-			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
-			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
-			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js",
-			"../reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
-		]
+		["../reference/lightblue4/docs/lib/widgster/widgster.js", "../reference/light-blue/lib/vendor/jquery.ui.widget.js"]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
-			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
-
 			setUrlParams();
+			$(".widget").widgster();
+			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
 			getDetailViewTab();
 		})
 		.catch(function (errorMessage) {

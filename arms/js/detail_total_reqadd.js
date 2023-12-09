@@ -7,33 +7,10 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var calledAPIs = {};
-var totalReqCommentCount;
-/* 요구사항 전체목록 전역변수 */
-var reqTreeList;
-var visibilityStatus = {
-	"#stats": false,
-	"#detail": false,
-	"#version": false,
-	"#allreq": false,
-	"#files": false,
-	"#question": false
-};
-
-var prefix = "./img/winTypeFileIcons/";
 
 function execDocReady() {
 	var pluginGroups = [
-		[
-			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
-			"../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js",
-			"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js",
-			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
-		],
-
+		["../reference/lightblue4/docs/lib/widgster/widgster.js"],
 		[
 			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js",
@@ -45,9 +22,12 @@ function execDocReady() {
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
+			setUrlParams();
+
+			$(".widget").widgster();
+
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_reqadd");
 
-			setUrlParams();
 			build_ReqData_By_PdService();
 		})
 		.catch(function () {
@@ -96,132 +76,6 @@ function jsTreeClick(selectedNode) {
 	setDetailAndEditViewTab();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//리스트 :: DataTable
-////////////////////////////////////////////////////////////////////////////////////////
-// --- Root, Drive, Folder 데이터 테이블 설정 --- //
-function dataTableLoad(selectId, selectRel) {
-	console.log("dataTableLoad - selectRel:::" + selectRel);
-	console.log("dataTableLoad - selectId:::" + selectId);
-	// 데이터 테이블 컬럼 및 열그룹 구성
-	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-
-	var c_type = $("#req_tree").jstree("get_selected").attr("rel");
-	console.log("dataTableLoad - c_type:::" + c_type);
-
-	var dataTableRef;
-	if (selectId == 2) {
-		// 데이터 테이블 컬럼 및 열그룹 구성
-		var columnList = [
-			{ data: "c_id", defaultContent: "-" },
-			{ data: "c_left", defaultContent: "-" },
-			{ data: "c_title", defaultContent: "-" }
-		];
-		var rowsGroupList = [];
-		var columnDefList = [];
-		var selectList = {};
-		var orderList = [[1, "asc"]];
-		var buttonList = [];
-
-		var jquerySelector = "#req_table";
-		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getMonitor.do";
-		var jsonRoot = "";
-		var isServerSide = false;
-
-		dataTableRef = dataTable_build(
-			jquerySelector,
-			ajaxUrl,
-			jsonRoot,
-			columnList,
-			rowsGroupList,
-			columnDefList,
-			selectList,
-			orderList,
-			buttonList,
-			isServerSide
-		);
-	} else if (selectRel !== "folder") {
-		//select node 정보를 가져온다.
-		console.log("tableName:: " + tableName);
-		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectId,
-			type: "GET",
-			contentType: "application/json;charset=UTF-8",
-			dataType: "json",
-			progress: true,
-			success: function (data) {
-				// 데이터 테이블 컬럼 및 열그룹 구성
-				var columnList = [
-					{ data: "c_id", defaultContent: "-" },
-					{ data: "c_left", defaultContent: "-" },
-					{ data: "c_title", defaultContent: "-" }
-				];
-				var rowsGroupList = [];
-				var columnDefList = [];
-				var selectList = {};
-				var orderList = [[1, "asc"]];
-				var buttonList = [];
-
-				var jquerySelector = "#req_table";
-				var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do";
-				var jsonRoot = "";
-				var paramUrl = "?c_id=313&c_left=" + data.c_left + "&c_right=" + data.c_right;
-				ajaxUrl = ajaxUrl + paramUrl;
-				var isServerSide = false;
-
-				dataTableRef = dataTable_build(
-					jquerySelector,
-					ajaxUrl,
-					jsonRoot,
-					columnList,
-					rowsGroupList,
-					columnDefList,
-					selectList,
-					orderList,
-					buttonList,
-					isServerSide
-				);
-			}
-		})
-			.done(function (data) {})
-			.fail(function (e) {})
-			.always(function () {});
-	} else {
-		console.log("folder clicked");
-		var columnList = [
-			{ data: "c_id", defaultContent: "-" },
-			{ data: "c_left", defaultContent: "-" },
-			{ data: "c_title", defaultContent: "-" }
-		];
-		var rowsGroupList = [];
-		var columnDefList = [];
-		var selectList = {};
-		var orderList = [];
-		var buttonList = [];
-
-		var jquerySelector = "#req_table";
-		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do?c_id=" + selectId;
-		var jsonRoot = "";
-		var isServerSide = false;
-
-		dataTableRef = dataTable_build(
-			jquerySelector,
-			ajaxUrl,
-			jsonRoot,
-			columnList,
-			rowsGroupList,
-			columnDefList,
-			selectList,
-			orderList,
-			buttonList,
-			isServerSide
-		);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-//상세 보기 탭 & 편집 탭
-////////////////////////////////////////////////////////////////////////////////////////
 function setDetailAndEditViewTab() {
 	console.log("Detail Tab ::::");
 	var tableName = "T_ARMS_REQADD_" + 22;
