@@ -3,11 +3,11 @@
 ///////////////////
 var dashboardColor;
 var selectedVersionId;
-var globalJiraIssue = {};
-var pdServiceData;
 var versionListData;
-var earliestVersionStartDate;
 var deadline;
+// 최상단 메뉴 변수
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
+var mailAddressList;
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -23,10 +23,6 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.iframe-transport.js",
             // chart Colors
             // "./js/dashboard/chart/colorPalette.js",
-            // c3 콤비네이션 차트
-            // "../reference/jquery-plugins/c3/c3.min.css",
-            // "../reference/jquery-plugins/c3/c3-custom.css",
-            // "../reference/jquery-plugins/c3/c3.min.js",
             "./js/common/colorPalette.js",
             // 2번째 박스 timeline
             "../reference/jquery-plugins/info-chart-v1/js/D.js",
@@ -36,7 +32,7 @@ function execDocReady() {
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/css/newtimeline.css",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/raphael.min.js",
             "../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/newtimeline.js",
-            // 3번째 박스 데이터 테이블 내 차트
+            // echarts
             "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
             // 5번째 박스 network chart(현 게이지 차트)
             "./js/analysisTime/d3.v5.min.js",
@@ -46,6 +42,7 @@ function execDocReady() {
             // 7번째 박스
             "../reference/jquery-plugins/timelines-chart-2.11.8/src/show-time-marker.js",
             "../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
+            //  최상단 메뉴
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js"
         ],
@@ -108,7 +105,6 @@ function execDocReady() {
         .catch(function(error) {
             console.error('플러그인 로드 중 오류 발생' + error);
         });
-
 }
 
 ///////////////////////
@@ -135,7 +131,6 @@ function makePdServiceSelectBox() {
                     var newOption = new Option(obj.c_title, obj.c_id, false, false);
                     $("#selected_pdService").append(newOption).trigger("change");
                 }
-                //////////////////////////////////////////////////////////
             }
         }
     });
@@ -176,7 +171,6 @@ function bind_VersionData_By_PdService() {
         progress: true,
         statusCode: {
             200: function (data) {
-                //////////////////////////////////////////////////////////
                 // console.log(data.response); // versionData
 
                 versionListData = data.response.reduce((obj, item) => {
@@ -194,21 +188,17 @@ function bind_VersionData_By_PdService() {
 
                 selectedVersionId = pdServiceVersionIds.join(',');
 
+                // 최상단 메뉴 통계
                 수치_초기화();
-
-                // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
 
+                // 버전 및 게이지차트, 버전 타임라인 차트 초기화
                 statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 
+                // 히트맵 차트 초기화
                 calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
 
-                showStatusesCountBox();
-                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
-                getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
-
-                // combinationChart($("#selected_pdService").val(), selectedVersionId);
-
+                // 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
                 setTimeout(function () {
                     //Scope - (2) 요구사항에 연결된 이슈 총 개수
                     multiCombinationChart($("#selected_pdService").val(), selectedVersionId);
@@ -251,21 +241,17 @@ function makeVersionMultiSelectBox() {
 
             selectedVersionId = versionTag.join(',');
 
+            // 최상단 메뉴 통계
             수치_초기화();
-
-            // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
 
+            // 버전 및 게이지차트, 버전 타임라인 차트 초기화
             statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 
+            // 히트맵 차트 초기화
             calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
 
-            showStatusesCountBox();
-            getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, true);
-            getReqLinkedIssueCountAndRate($("#selected_pdService").val(), selectedVersionId, false);
-
-            // combinationChart($("#selected_pdService").val(), selectedVersionId);
-
+            // 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
             setTimeout(function () {
                 //Scope - (2) 요구사항에 연결된 이슈 총 개수
                 multiCombinationChart($("#selected_pdService").val(), selectedVersionId);
@@ -295,31 +281,6 @@ function formatDate(date) {
     return year + "-" + month + "-" + day;
 }
 
-////////////////////
-// 첫번째 박스
-////////////////////
-function showStatusesCountBox() {
-    $("#progress_req_status").slimScroll({
-        height: "190px",
-        railVisible: true,
-        railColor: "#222",
-        railOpacity: 0.3,
-        wheelStep: 10,
-        allowPageScroll: false,
-        disableFadeOut: false
-    });
-
-    $("#progress_linked_issue_status").slimScroll({
-        height: "190px",
-        railVisible: true,
-        railColor: "#222",
-        railOpacity: 0.3,
-        wheelStep: 10,
-        allowPageScroll: false,
-        disableFadeOut: false
-    });
-}
-
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
     console.log("선택된 서비스 ===> " + pdservice_id);
     console.log("선택된 버전 리스트 ===> " + pdservice_version_id);
@@ -334,7 +295,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
         progress: true,
         statusCode: {
             200: function (json) {
-                pdServiceData = json;
                 let versionData = json.pdServiceVersionEntities;
                 versionData.sort((a, b) => a.c_id - b.c_id);
                 let version_count = versionData.length;
@@ -410,83 +370,13 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                         $("#timelineData .label").css("text-align", "left");
                         $("#today_flag").css("left", flagPosition);
 
-                        // radarChart(pdservice_id, versionData);
+                        // versionTimelineChart(versionCustomTimeline);
                     }
                 }
             }
         }
     });
 }
-
-function calculateDateDiff(date1, date2) {
-    return Math.floor((new Date(date1) - new Date(date2)) / (1000 * 60 * 60 * 24));
-}
-
-function progressShow(today, start_date, end_date) {
-    var totalDate = calculateDateDiff(end_date, start_date);
-    var remainingDate = calculateDateDiff(end_date, today);
-    var isExceeded = remainingDate < 0;
-    var absoluteRemainingDate = isExceeded ? Math.abs(remainingDate) : Math.abs(remainingDate);
-    var progress = totalDate === 0 ? 0 : ((absoluteRemainingDate / totalDate) * 100).toFixed(2);
-
-    $('.isExceed').text(isExceeded ? " 초과" : "").css("color", isExceeded ? "#FF4D4D" : "none");
-    $('#remaining_days').text(absoluteRemainingDate).css("color", isExceeded ? "#FF4D4D" : "");
-    $('#version_progress').text(progress).css("color", isExceeded ? "#FF4D4D" : "");
-}
-
-function getReqLinkedIssueCountAndRate(pdservice_id, pdServiceVersionLinks, isReq) {
-
-    var _url = "/auth-user/api/arms/analysis/time/normal-version/"+pdservice_id;
-    $.ajax({
-        url: _url,
-        type: "GET",
-        data: {
-            "서비스아이디" : pdservice_id,
-            "메인그룹필드" : "status.status_name.keyword",
-            "isReq" : isReq,
-            "컨텐츠보기여부" : false,
-            "크기" : 1000,
-            "pdServiceVersionLinks" : pdServiceVersionLinks
-        },
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                if(isReq === true) {
-                    calculateCompletion(data, "completed_req_count", "total_req_count", "req_completion_rate", "progress_req_status");
-
-                } else {
-                    calculateCompletion(data, "completed_linked_issue_count", "total_linked_issue_count", "linked_issue_completion_rate", "progress_linked_issue_status");
-                }
-            }
-        }
-    });
-}
-
-function calculateCompletion(data, completedId, totalId, rateId, progressId) {
-    $('#' + progressId).empty();
-    var totalCount = data["전체합계"];
-    var result = data["검색결과"]["group_by_status.status_name.keyword"];
-    console.log(progressId);
-    var completedCount = 0;
-    result.forEach((item) => {
-        var count = item["개수"];
-        completedCount += count;
-
-        var key = item["필드명"];
-        var value = count;
-
-        var html_piece = 	"<div	class=\"controls form-group darkBack\"\n" +
-            "		style=\"margin-bottom: 5px !important; padding-top: 5px !important;\">\n" +
-            "<span>✡ " + key + " : <a id=\"alm_server_count\" style=\"font-weight: bold;\"> " + value + "</a> 개</span>\n" +
-            "</div>";
-        // console.log(html_piece);
-        $("#" + progressId).append(html_piece);
-    });
-    $("#" + totalId).text(totalCount);
-}
-
 
 ////////////////////
 // 두번째 박스
@@ -604,9 +494,7 @@ function drawVersionProgress(data) {
             }
         }
     }
-    earliestVersionStartDate = formatDate(new Date(fastestStartDate));
     deadline = formatDate(new Date(latestEndDate));
-    console.log("가장 빠른 버전 시작일" + earliestVersionStartDate +"\n가장 늦은 버전 종료일"+ deadline);
     $("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
     $("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
 
@@ -794,53 +682,43 @@ function drawVersionProgress(data) {
     }
 
     needle.animateOn(chart, needleAngle);
-
-    progressShow(today, startDate, endDate);
 }
 
 ////////////////////
-// 세번째 박스
+// 스캐터 차트
 ////////////////////
 function scatterChart(data) {
     console.log(data);
     var requirementDataCount = {};
     var relationIssueDataCount = {};
 
-    var categories = [];
-    data.forEach(jiraissue => {
-        if(jiraissue.updated === null || jiraissue.updated === undefined) {
-            return;
+    var categories = new Set();
+    for(let jiraissue of data) {
+        if(!jiraissue.updated) {
+            continue;
         }
 
         var updatedDate = jiraissue.updated.split('T')[0];
-        categories.push(updatedDate);
+        categories.add(updatedDate);
 
-        if (jiraissue.isReq === true) {
-            if (!requirementDataCount[updatedDate]) {
-                requirementDataCount[updatedDate] = 0;
-            }
-            requirementDataCount[updatedDate]++;
-        } else {
-            if (!relationIssueDataCount[updatedDate]) {
-                relationIssueDataCount[updatedDate] = 0;
-            }
-            relationIssueDataCount[updatedDate]++;
-        }
+        var dataCount = jiraissue.isReq ? requirementDataCount : relationIssueDataCount;
+        dataCount[updatedDate] = (dataCount[updatedDate] || 0) + 1;
+    }
+
+    var categoriesArray = Array.from(categories);
+    categoriesArray.sort((a, b) => {
+        return new Date(a) - new Date(b);
     });
 
-    var deadlineSeries = createDeadlineSeries(categories, deadline, 2);
-    console.log(deadlineSeries);
+    var deadlineSeries = createDeadlineSeries(categoriesArray, deadline, 2);
 
-    var requirementData = Object.keys(requirementDataCount).map(key => {
-        var dateObj = new Date(key+'T00:00:00');
-        return [dateObj, requirementDataCount[key]];
-    });
+    var requirementData = [];
+    var relationIssueData = [];
 
-    var relationIssueData = Object.keys(relationIssueDataCount).map(key => {
-        var dateObj = new Date(key+'T00:00:00');
-        return [dateObj, relationIssueDataCount[key]];
-    });
-
+    for(let category of categoriesArray) {
+        requirementData.push(requirementDataCount[category] || 0);
+        relationIssueData.push(relationIssueDataCount[category] || 0);
+    }
 
     var dom = document.getElementById('scatter-chart-container');
 
@@ -848,6 +726,7 @@ function scatterChart(data) {
         renderer: 'canvas',
         useDirtyRect: false
     });
+
     var option;
 
     if ((requirementData && requirementData.length > 0) || (relationIssueData && relationIssueData.length > 0) ) {
@@ -857,24 +736,18 @@ function scatterChart(data) {
                 show: true
             },
             legend: {
-                data: ['요구사항' , '연결된 이슈'] // 여기에 실제 데이터 종류를 적어주세요
+                data: ['요구사항' , '연결된 이슈'], // 여기에 실제 데이터 종류를 적어주세요
+                textStyle: {
+                    color: 'white'
+                }
             },
-            /*        toolbox: {
-                        left: 'left',
-                        feature: {
-                            dataView: {},
-                            saveAsImage: {},
-                            dataZoom: {}
-                        }
-                    },*/
             xAxis: {
-                type: 'time',
-                splitLine: {
-                    show: false,
-                    lineStyle: {
-                        color: 'rgba(255,255,255,0.2)', // 라인 색상을 빨간색으로 변경
-                        width: 1, // 라인 너비를 2로 변경
-                        type: 'solid' // 라인 유형을 실선으로 변경
+                type: 'category',
+                axisTick: {show: false},
+                data: categoriesArray,
+                axisLabel: {
+                    textStyle: {
+                        color: 'white'
                     }
                 }
             },
@@ -883,11 +756,16 @@ function scatterChart(data) {
                 splitLine: {
                     show: true,
                     lineStyle: {
-                        color: 'rgba(255,255,255,0.2)', // 라인 색상을 빨간색으로 변경
-                        width: 1, // 라인 너비를 2로 변경
-                        type: 'solid' // 라인 유형을 실선으로 변경
+                        color: 'rgba(255,255,255,0.2)',
+                        width: 1,
+                        type: 'dashed'
                     }
-                }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: 'white'
+                    }
+                },
             },
             series: [
                 {
@@ -904,8 +782,11 @@ function scatterChart(data) {
                     },
                     symbolSize: function (val) {
                         var sbSize = 10;
-                        if (val[1] > 10) {
-                            sbSize = val[1] * 1.1;
+                        if (val > 10) {
+                            sbSize = val * 1.1;
+                        }
+                        else if (val === 0) {
+                            sbSize = 0;
                         }
                         return sbSize;
                     },
@@ -923,8 +804,11 @@ function scatterChart(data) {
                     },
                     symbolSize: function (val) {
                         var sbSize = 10;
-                        if (val[1] > 10) {
-                            sbSize = val[1] * 1.1;
+                        if (val > 10) {
+                            sbSize = val * 1.1;
+                        }
+                        else if (val === 0) {
+                            sbSize = 0;
                         }
                         return sbSize;
                     },
@@ -982,7 +866,7 @@ function scatterChart(data) {
 }
 
 ////////////////////
-// 네번째 박스
+// 스캐터 차트 데이터 호출
 ////////////////////
 function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
     $.ajax({
@@ -996,16 +880,12 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
         statusCode: {
             200: function (data) {
                 console.log(data);
-                // statusTimeline(data);
                 sevenTimeline(data);
 
                 setTimeout(function () {
                     //Scope - (2) 요구사항에 연결된 이슈 총 개수
                     scatterChart(data);
                 },1000);
-
-                globalJiraIssue = data;
-
             }
         }
     });
@@ -1060,9 +940,6 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 ///////////////
 function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 
-    var issueStatusTypes = [];
-    var xKeys = [];
-
     const url = new UrlBuilder()
         .setBaseUrl('/auth-user/api/arms/analysis/time/daily-requirements-count/jira-issue-statuses')
         .addQueryParam('pdServiceLink', pdServiceLink)
@@ -1080,18 +957,34 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
         progress: true,
         statusCode: {
             200: function (data) {
-
+                console.log(data);
+                var accumulateRequirementCount = 0;
+                var accumulateRelationIssueCount = 0;
                 let result = Object.keys(data).reduce((acc, date) => {
-                    if (Object.keys(data[date].statuses).length > 0) {
+                    if ((data[date].requirementStatuses !== null && Object.keys(data[date].requirementStatuses).length > 0) || (data[date].relationIssueStatuses !== null &&Object.keys(data[date].relationIssueStatuses).length > 0)) {
                         acc.dates.push(date);
-                        acc.totalIssues.push(data[date].totalIssues);
-                        acc.totalRequirements.push(data[date].totalRequirements);
 
-                        Object.keys(data[date].statuses).forEach(status => {
-                            if (!acc.statusKeys.includes(status)) {
-                                acc.statusKeys.push(status);
-                            }
-                        });
+                        accumulateRequirementCount += data[date].totalRequirements;
+                        accumulateRelationIssueCount += data[date].totalRelationIssues;
+
+                        acc.totalRequirements.push(accumulateRequirementCount);
+                        acc.totalIssues.push(accumulateRelationIssueCount);
+
+                        if (data[date].requirementStatuses !== null) {
+                            Object.keys(data[date].requirementStatuses).forEach(status => {
+                                if (!acc.statusKeys.includes(status)) {
+                                    acc.statusKeys.push(status);
+                                }
+                            });
+                        }
+
+                        if (data[date].relationIssueStatuses !== null) {
+                            Object.keys(data[date].relationIssueStatuses).forEach(status => {
+                                if (!acc.statusKeys.includes(status)) {
+                                    acc.statusKeys.push(status);
+                                }
+                            });
+                        }
                     }
 
                     return acc;
@@ -1101,6 +994,10 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                     totalRequirements: [],
                     statusKeys: []
                 });
+
+                console.log(result.totalRequirements);
+                console.log(result.totalIssues);
+
 
                 var dom = document.getElementById('multi-chart-container');
                 var myChart = echarts.init(dom, null, {
@@ -1129,22 +1026,50 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                     let totalRequirements = result.totalRequirements;
                     let statusKeys = result.statusKeys;
 
-                    let statusSeries = statusKeys.map(key => ({
-                        name: key,
-                        type: 'bar',
-                        stack: 'total',
-                        label: labelOption,
-                        emphasis: {
-                            focus: 'series'
-                        },
-                        data: dates.map(date => {
-                            if (Object.keys(data[date].statuses).length > 0) {
-                                return data[date].statuses[key] || 0;
-                            } else {
-                                return 0;
-                            }
-                        })
-                    }));
+                    let requirementStatusSeries = statusKeys.map((key, i) => {
+                        let stackType = '요구사항';
+
+                        return {
+                            name: key,
+                            type: 'bar',
+                            stack: stackType,
+                            label: labelOption,
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: dates.map(date => {
+                                if (data[date].requirementStatuses && Object.keys(data[date].requirementStatuses).length > 0) {
+                                    return {value: data[date].requirementStatuses[key] || 0, stackType: stackType};
+                                } else {
+                                    return {value: 0, stackType: stackType};
+                                }
+                            })
+                        };
+                    });
+
+                    let relationIssueStatusSeries = statusKeys.map((key, i) => {
+                        let  stackType = '연결된 이슈';
+
+                        return {
+                            name: key,
+                            type: 'bar',
+                            stack: stackType,
+                            label: labelOption,
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: dates.map(date => {
+                                if (data[date].relationIssueStatuses && Object.keys(data[date].relationIssueStatuses).length > 0) {
+                                    return {value: data[date].relationIssueStatuses[key] || 0, stackType: stackType};
+                                } else {
+                                    return {value: 0, stackType: stackType};
+                                }
+                            })
+                        };
+                    });
+
+                    console.log(requirementStatusSeries);
+                    console.log(relationIssueStatusSeries);
 
                     let stackIndex = statusKeys.map((value, index) => index);
 
@@ -1155,7 +1080,8 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                     statusKeys.push("연결된 이슈");
 
                     let multiCombinationChartSeries = [
-                        ...statusSeries,
+                        ...requirementStatusSeries,
+                        ...relationIssueStatusSeries,
                         {
                             name: '요구사항',
                             type: 'line',
@@ -1163,6 +1089,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                             emphasis: {
                                 focus: 'series'
                             },
+                            // position: 'right',
                             symbolSize: 10,
                             data: totalRequirements
                         },
@@ -1173,6 +1100,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                             emphasis: {
                                 focus: 'series'
                             },
+                            // position: 'right',
                             symbolSize: 10,
                             data: totalIssues
                         },
@@ -1187,12 +1115,31 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                             trigger: 'axis',
                             axisPointer: {
                                 type: 'shadow'
+                            },
+                            formatter: function (params) {
+                                var tooltipText = '';
+                                tooltipText += params[0].axisValue + '<br/>';
+                                params.forEach(function (item) {
+                                    if (item.value !== 0) { // 0인 데이터는 무시
+                                        if (item.seriesType === "bar") {
+                                            var stackType = item.data.stackType; // 추가 정보에 접근
+                                            tooltipText += item.marker + item.seriesName+"[" + stackType + "] : " + '<span style="float: right;">' + item.value + '</span>' + '<br/>';
+                                        }
+                                        else if (item.seriesType === "line") {
+                                            tooltipText += item.marker + item.seriesName + ': ' + '<span style="float: right;">' + item.value + '</span>' + '<br/>';
+                                        }
+                                    }
+                                });
+                                return tooltipText;
                             }
                         },
                         legend: {
                             data: legendData,
                             textStyle: {
                                 color: 'white'
+                            },
+                            tooltip: {
+                                show: true
                             }
                         },
                         grid: {
@@ -1207,13 +1154,13 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                             feature: {
                                 mark: {show: true},
                                 // dataView: {show: true, readOnly: true},
-                                magicType: {
+                                /*magicType: {
                                     show: true,
                                     type: ['stack'],  // 스택과 일반 사이 전환 기능 추가
                                     seriesIndex: {
                                         stack: stackIndex // stack 모드를 적용할 시리즈의 인덱스
                                     }
-                                },
+                                },*/
                                 dataZoom: {
                                     show: true
                                 }
@@ -1248,6 +1195,14 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
                                 axisLabel: {
                                     textStyle: {
                                         color: 'white'
+                                    }
+                                },
+                                splitLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgba(255,255,255,0.2)',
+                                        width: 1,
+                                        type: 'dashed'
                                     }
                                 }
                             },
@@ -1334,7 +1289,6 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
     });
 }
 
-
 // 마감일 함수
 function createDeadlineSeries(categories, deadline, lineWidth) {
     var chartStart = categories.reduce((earliest, date) => date < earliest ? date : earliest, categories[0]);
@@ -1385,150 +1339,6 @@ function createDeadlineSeries(categories, deadline, lineWidth) {
     return deadlineSeries;
 }
 
-////////////////////
-// 다섯번째 박스
-////////////////////
-function statusTimeline(data) {
-
-    // 필요한 데이터만 추출
-    var extractedData = extractDataForStatusTimeline(data);
-
-    // 버전 별로 그룹화
-    var groupedDataByVersion = groupingByVersion(extractedData);
-
-    // 데이터 포맷팅
-    var relatedIssues = dataFormattingForStatusTimeline(groupedDataByVersion);
-
-    // 요소 호버
-    $(".reqNode").hover(
-        function() {
-
-            $(this).find('title').text('');
-            var classValue = $(this).attr('class');
-            var key = classValue.split(" ").pop(); // 요구사항 이슈 키
-
-            $("." + key).css("opacity", "0.7");
-
-            var tooltip = $('<div id="stlTooltip"></div>');
-            tooltip.html(`
-                <table class="stltable">
-                    <tr>
-                        <th>하위 이슈</th>
-                        <th>상태</th>
-                    </tr>
-                    ${relatedIssues[key] ? relatedIssues[key] : '<tr><td colspan="2">데이터가 없습니다</td></tr>'}
-                </table>
-            `);
-
-            tooltip.css({
-                "visibility": "visible",
-                "opacity": "1",
-                "position": "absolute",
-                "left": event.pageX + 10,
-                "top": event.pageY + 10,
-            });
-
-            $("body").append(tooltip);
-
-        }, function() {
-            $(".reqNode").css("opacity", "1");
-            $("#stlTooltip").remove();
-
-        }
-    );
-}
-
-function extractDataForStatusTimeline(data){
-
-    var extractedData = [];
-
-    data.forEach(item => {
-        var extractedItem = {
-            version: item.pdServiceVersion,
-            issueKey: item.key,
-            isReq: item.isReq,
-            parentReqKey: item.parentReqKey,
-            createdDate: new Date(Date.parse(item.created)),
-            summary: item.summary,
-            status: item.status.status_name
-        };
-        extractedData.push(extractedItem);
-    });
-
-    return extractedData;
-}
-
-function groupingByVersion(data) {
-
-    var groupedData = data.reduce((result, item) => {
-        var pdServiceVersion = item.version;
-        if (!result[pdServiceVersion]) {
-            result[pdServiceVersion] = [];
-        }
-        result[pdServiceVersion].push(item);
-        return result;
-    }, {});
-
-    return groupedData;
-}
-
-function dataFormattingForStatusTimeline(data) {
-
-    var statusTimelineData = {};
-    var formattedData = [];
-    var relatedIssues = {};
-
-    for (const version in data) {
-
-        var reqIssue = data[version].filter(item => item.isReq === true); // 요구사항 이슈만 필터링
-        var versionData = convertVersionIdToTitle(version); // text (버전)
-        var reqIssues = []; // children 전체
-
-        reqIssue.forEach(reqIssue => {
-
-            // children 요소 중 하나
-            var req = {
-                text: reqIssue.summary + " | " + reqIssue.status,
-                id: reqIssue.issueKey
-            };
-
-            reqIssues.push(req);
-
-            // 호버 시 하위 이슈 볼 수 있도록 데이터 포맷팅
-            var relatedIssue = data[version].filter(item => item.parentReqKey === reqIssue.issueKey);
-
-            relatedIssue.forEach(relatedIssue => {
-
-                if (!relatedIssues[relatedIssue.parentReqKey]) {
-                    relatedIssues[relatedIssue.parentReqKey] = '';
-                }
-
-                relatedIssues[relatedIssue.parentReqKey] += "<tr><td>" +
-                    relatedIssue.summary +
-                    "</td><td>" +
-                    relatedIssue.status +
-                    "</td></tr>";
-            });
-        });
-
-        var totalData = {
-            text: versionData,
-            children: reqIssues
-        };
-
-        formattedData.push(totalData);
-    }
-    statusTimelineData.data = formattedData;
-
-    $("#demo").timeline(statusTimelineData);
-    console.log("연관 이슈 전체: ", relatedIssues);
-
-    return relatedIssues;
-}
-
-////////////////////
-// 여섯번째 박스
-////////////////////
 function sevenTimeline(data) {
     var sevenTimeLineDiv = document.getElementById("sevenTimeLine");
     sevenTimeLineDiv.innerHTML = "";
@@ -1573,17 +1383,17 @@ function extractDataForSevenTimeline(data){
     return extractedData;
 }
 
-// 버전 별 그룹화 하기
-function groupDataByPdServiceVersion(data) {
-    var extractedData = extractDataForSevenTimeline(data);
-    var groupedData = extractedData.reduce((result, obj) => {
-        var pdServiceVersion = obj.version;
+function groupingByVersion(data) {
+
+    var groupedData = data.reduce((result, item) => {
+        var pdServiceVersion = item.version;
         if (!result[pdServiceVersion]) {
             result[pdServiceVersion] = [];
         }
-        result[pdServiceVersion].push(obj);
+        result[pdServiceVersion].push(item);
         return result;
     }, {});
+
     return groupedData;
 }
 
@@ -1676,298 +1486,80 @@ function candleStickChart() {
     window.addEventListener('resize', myChart.resize);
 }
 
-// 바차트
-function combinationChart(pdServiceLink, pdServiceVersionLinks) {
-    function combinationChartNoData() {
-
-        $('#status-chart').html('데이터가 없습니다').css({
-            'display': 'flex',
-            'justify-content': 'center',
-            'align-items': 'center'
-        });
-
-        // c3.generate({
-        //     bindto: '#combination-chart',
-        //     data: {
-        //         x: 'x',
-        //         columns: [],
-        //         type: 'bar',
-        //         types: {},
-        //     },
-        // });
-    }
-
-    if(pdServiceLink === "" || pdServiceVersionLinks === "") {
-        combinationChartNoData();
-        return;
-    }
-
-    const url = new UrlBuilder()
-        .setBaseUrl('/auth-user/api/arms/analysis/time/daily-requirements-jira-issue-statuses')
-        .addQueryParam('pdServiceLink', pdServiceLink)
-        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-        .addQueryParam('크기', 1000)
-        .addQueryParam('하위크기', 1000)
-        .addQueryParam('컨텐츠보기여부', true)
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                if ((Array.isArray(data) && data.length === 0) ||
-                    (typeof data === 'object' && Object.keys(data).length === 0) ||
-                    (typeof data === 'string' && data === "{}")) {
-                    combinationChartNoData();
-                    return;
-                }
-
-                const issueStatusTypesSet = new Set();
-                for (const day in data) {
-                    for (const status in data[day].statuses) {
-                        //console.log('status ', status);
-                        issueStatusTypesSet.add(status);
-                    }
-                }
-                const issueStatusTypes = [...issueStatusTypesSet];
-
-                let columnsData = [];
-                let dayTotal = {};
-
-                issueStatusTypes.forEach((status) => {
-                    const columnData = [status];
-                    for (const day in data) {
-                        const count = data[day].statuses[status] || 0;
-                        columnData.push(count);
-                        dayTotal[day] = (dayTotal[day] || 0) + count;
-
-                        //console.log(`Day: ${day}, Status: ${status}, Count: ${count}, dayTotal: ${dayTotal[day]}`);
-                    }
-                    columnsData.push(columnData);
-                });
-
-                // 차트 x축 날짜값 포맷팅
-                let keys = Object.keys(data).map(key => {
-                    let [year, month, day] = key.split('-');
-                    return `${month}/${day}`;
-                });
-
-                const chart = c3.generate({
-                    bindto: '#status-chart',
-                    data: {
-                        x: 'x',
-                        columns: [
-                            ['x', ...keys],
-                            ...columnsData,
-                            ['전체이슈', ...Object.keys(dayTotal).map(day => dayTotal[day])],
-                        ],
-                        type: 'bar',
-                        types: {
-                            '전체이슈': 'area',
-                        },
-                    },
-                    color: {
-                        pattern: dashboardColor.accumulatedIssueStatusColor,
-                    },
-                    onrendered: function() {
-                        d3.selectAll('.c3-line, .c3-bar, .c3-arc')
-                            .style('stroke', 'white')
-                            .style('stroke-width', '0.3px');
-                    },
-                    axis: {
-                        x: {
-                            type: 'category',
-                        },
-                    },
-                    tooltip: {
-                        format: {
-                            title: function (index) {
-                                const day = Object.keys(data)[index];
-                                const total = dayTotal[day];
-                                return `${day} | Total : ${total}`;
-                            },
-                        },
-                        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-                            // 기본 툴팁 생성
-                            let tooltipHtml = this.getTooltipContent.apply(this, arguments);
-                            // 툴팁 HTML 파싱
-                            let parsedHtml = $.parseHTML(`<div>${tooltipHtml}</div>`);
-                            // '전체이슈' 행 제거
-                            $(parsedHtml).find('tr').each(function() {
-                                if ($(this).find('td').first().text() === '전체이슈') {
-                                    $(this).remove();
-                                }
-                            });
-                            // 다시 HTML 문자열로 변환
-                            return $(parsedHtml).html();
-                        }
-                    }
-                });
-
-                $(document).on('click', '#status-chart .c3-legend-item', function () {
-                    const id = $(this).text();
-                    const isHidden = $(this).hasClass('c3-legend-item-hidden');
-
-                    for (const day in data) {
-                        const docCount = data[day].statuses[id] || 0;
-
-                        if (isHidden) {
-                            dayTotal[day] -= docCount;
-                        } else {
-                            dayTotal[day] += docCount;
-                        }
-                    }
-                });
-
-                let isGrouped = false; // 차트 그룹화 여부
-
-                $('#status-chart-button').on('click', function() {
-                    if (isGrouped) {
-                        // 그룹화 해제
-                        chart.groups([]);
-                        $(this).text('그룹화 적용');
-                    } else {
-                        // 그룹화
-                        chart.groups([issueStatusTypes]);
-                        $(this).text('그룹화 해제');
-                    }
-                    isGrouped = !isGrouped;
-                });
-            }
-        }
-    });
-}
-
-////////////////////
-// 레이더 차트
-////////////////////
 /*
-function radarChart(pdServiceId, pdServiceVersionList) {
+function versionTimelineChart(versionData) {
 
-    var maxCount;
-    var versionText = [];
-    var reqCount = [];
+    var dom = document.getElementById('version-timeline-chart-container');
 
-    var _url = "/auth-user/api/arms/dashboard/normal/"+pdServiceId;
-    $.ajax({
-        url: _url,
-        type: "GET",
-        data: { "서비스아이디" : pdServiceId,
-            "메인그룹필드" : "pdServiceVersion",
-            "isReq" : true,
-            "컨텐츠보기여부" : false,
-            "크기" : 1000
-        },
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        async: false,
-        statusCode: {
-            200: function (data) {
-                maxCount = data.전체합계;
-                var result = data.검색결과.group_by_pdServiceVersion;
-
-                result.forEach(item => {
-                    if (versionListData[item.필드명]) {
-                        versionListData[item.필드명].totalCount = item.개수;
-                    }
-                });
-
-                Object.values(versionListData).forEach(item => {
-                    var version = {};
-                    version.text = item.c_title;
-                    version.max = maxCount;
-
-                    versionText.push(version);
-                    reqCount.push(item.totalCount);
-                });
-            }
-        }
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
     });
 
-    var chart = echarts.init(document.getElementById('radar-chart-main'));
+    var colorList = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC'];
+    var versionData = ['v1.0', 'v1.1', 'v1.2', 'v1.3', 'v1.4', 'v1.5', 'v1.6'];
+    console.log(colorList);
 
-    chart.setOption({
-        color: ['#E49400'],
-        dataZoom: [
-            { // The first dataZoom component
-                radiusAxisIndex: [0, 2] // Indicates that this dataZoom component
-                // controls the first and the third radiusAxis
-            }
-        ],
-        aria: {
-            show: false
+    var option = {
+        xAxis: {
+            type: 'time',
         },
-        tooltip: {},
-        legend: {
-            data: [{
-                icon: 'circle',
-                name: '요구사항'
-            }],
-            textStyle: {
-                color: 'white', // 원하는 텍스트 색상으로 변경합니다.
-                fontSize: 14
-            }
-        },
-        radar: {
-            radius: [0, '50%'],
-            triggerEvent: true,
-            // shape: 'circle',
-            indicator: versionText,
-            name: {
-                rotate: 45, // 텍스트를 45도로 회전시킵니다.
-                position: 'outside', // 텍스트를 레이더 영역 내부에 위치시킵니다.
-                color: '#ffffff',
-                formatter: function(text) {
-                    // 줄바꿈을 위해 '\n' 문자를 삽입합니다.
-                    var wrappedValue = text.replace(/(.{12})/g, '$1\n');  // 10자마다 줄바꿈
-                    return '[' + wrappedValue + ']';
-                },
-                rich: {
-                    value: {
-                        align: 'left',
-                        color: '#ffffff',
-                        lineHeight: 10  // 줄 간격을 설정합니다.
-                    }
-                }
-            }
+        yAxis: {
+            data: versionData,
+            inverse: true,
         },
         series: [{
-            name: '',
-            type: 'radar',
-            label: {
-                normal: {
-                    show: true,
-                    textStyle: {
-                        color: 'white' // 원하는 텍스트 색상으로 변경합니다.
-                    }
-                }
-            },
+            name: 'Versions',
+            type: 'custom',
             itemStyle: {
-                borderWidth: 2,
-                borderColor: '#fff'
-            },
-            // areaStyle: {normal: {}},
-            data : [
-                {
-                    value: reqCount,
-                    name: '요구사항'
+                color: function(params) {
+                    return colorList[params.dataIndex % colorList.length];
                 }
-            ],
-            symbol: 'circle',
-            symbolSize: 7,
-            symbolRotate: function(value, params) {
-                return ~~(360 * Math.random());
+            },
+            renderItem: function(params, api) {
+                var categoryIndex = api.value(0);
+                var start = api.coord([api.value(1), categoryIndex]);
+                var end = api.coord([api.value(2), categoryIndex]);
+                var height = params.coordSys.height / versionData.length;
+
+                return {
+                    type: 'rect',
+                    shape: {
+                        x: start[0],
+                        y: start[1] - height / 2,
+                        width: end[0] - start[0],
+                        height: height
+                    },
+                    style: api.style(params.dataIndex) // apply color here
+                };
+            },
+            encode: {
+                x: [1, 2],
+                y: 0
+            },
+            data: [
+                ['v1.0', +new Date(2023, 0, 1), +new Date(2023, 0, 15)],
+                ['v1.1', +new Date(2023, 0, 10), +new Date(2023, 0, 25)],
+                ['v1.2', +new Date(2023, 1, 1), +new Date(2023, 1, 15)],
+                ['v1.3', +new Date(2023, 3, 1), +new Date(2023, 4, 15)],
+                ['v1.4', +new Date(2023, 2, 1), +new Date(2023, 3, 15)],
+                ['v1.5', +new Date(2023, 6, 1), +new Date(2023, 6, 15)],
+                ['v1.6', +new Date(2023, 5, 1), +new Date(2023, 11, 15)],
+            ]
+        }],
+        tooltip: {
+            trigger: 'axis',
+            position: 'top',
+            borderWidth: 1,
+            axisPointer: {
+                type: 'cross'
             }
-        }
-        ]
-    });
-    window.addEventListener('resize', function () {
-        chart.resize();
-    });
-}
-*/
+        },
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}*/
