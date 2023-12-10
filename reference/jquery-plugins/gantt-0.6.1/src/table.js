@@ -11,9 +11,22 @@ export default class Table {
         this.columns = columns;
     }
 
+    draw_draggable_col(el) {
+        const $el = document.createElement(el);
+
+        if (el === 'td') {
+            $el.innerHTML = `<i class="fa fa-sort"></i>`;
+            $el.className = 'draggable-item';
+        }
+
+        return $el;
+    }
+
     draw_table_header() {
         const $thead = document.createElement('thead');
         const $tr = document.createElement('tr');
+
+        $tr.appendChild(this.draw_draggable_col('th'));
 
         this.columns.forEach((column) => {
             const $th = document.createElement('th');
@@ -49,6 +62,11 @@ export default class Table {
         }, []);
     }
 
+    get_parentNode(tag, target) {
+        if (target.tagName === tag.toUpperCase()) return target;
+        return this.get_parentNode(tag, target.parentNode);
+    }
+
     draw_table_body(tasks) {
         this.tasks = this.setGroupPosition(tasks);
 
@@ -57,7 +75,12 @@ export default class Table {
 
         this.make_table_row().forEach((row) => $tbody.append(row));
 
-        this.bind_draggable_event($tbody);
+        $tbody.addEventListener('mousedown', (e) => {
+            const $td = this.get_parentNode('td', e.target);
+
+            $td.classList.contains('draggable-item') &&
+                this.bind_draggable_event($tbody);
+        });
 
         return $tbody;
     }
@@ -80,6 +103,8 @@ export default class Table {
                     this.gantt.options.padding +
                     'px',
             });
+
+            $tr.appendChild(this.draw_draggable_col('td'));
 
             this.columns.forEach((column) => {
                 const $td = document.createElement('td');
@@ -132,11 +157,18 @@ export default class Table {
                 $tr.append($td);
             });
 
-            $tr.addEventListener('dragstart', (e) => {
-                e.target.classList.add('dragging');
-            });
-            $tr.addEventListener('dragend', (e) => {
-                e.target.classList.remove('dragging');
+            $tr.addEventListener('mousedown', (e) => {
+                const $td = this.get_parentNode('td', e.target);
+
+                if ($td.classList.contains('draggable-item')) {
+                    $tr.addEventListener('dragstart', (e) => {
+                        e.target.classList.add('dragging');
+                    });
+
+                    $tr.addEventListener('dragend', (e) => {
+                        e.target.classList.remove('dragging');
+                    });
+                }
             });
 
             return $tr;
@@ -180,7 +212,7 @@ export default class Table {
         $tbody.addEventListener('drop', async (e) => {
             e.preventDefault();
             const targetItem = this.find_task_item(
-                e.target.parentNode.getAttribute('data-id')
+                this.get_parentNode('tr', e.target).getAttribute('data-id')
             );
             const dragItem = this.find_task_item(
                 this.draggableEl.getAttribute('data-id')
