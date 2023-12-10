@@ -62,6 +62,8 @@ function execDocReady() {
             //tree chart
 
             //CirclePacking with d3 Chart
+            "js/analysis/resource/chart/circularPackingChart.js",
+            "js/analysis/mockData/circularPackingEx.json"
         ],
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -96,6 +98,7 @@ function execDocReady() {
 
             versionUpdateIssueScatterChart();
             dashboardColor = dashboardPalette.dashboardPalette01;
+            exampleCircularPackingChart(); // circularPackingChart - MockData
         })
         .catch(function() {
             console.error('플러그인 로드 중 오류 발생');
@@ -933,8 +936,6 @@ function getReqAndSubtaskPerVersion(pdService_id, pdServiceVersionLinks, version
             200: function (result) {
                 console.log("[ analysisScope :: getReqAndSubtaskPerVersion ] :: result");
                 console.log(result);
-                console.log(versionListData);
-
 
                 let legend_arr = ["요구사항", "연결이슈"];
                 let verDataArr = [];
