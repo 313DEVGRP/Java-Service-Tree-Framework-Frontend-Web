@@ -181,7 +181,7 @@ function addReqComment() {
 	});
 }
 
-function makeMessageList(wrap, comment) {
+function makeMessageList(wrap, comment, time) {
 	const message = document.createElement("div");
 	const isSender = comment.c_req_comment_sender === userName;
 
@@ -212,7 +212,7 @@ function makeMessageList(wrap, comment) {
 						<button onclick="handleModify(${comment.c_id})"><i style="color:gray;" class="fa fa-check"></i></button>
 						<button onclick="handleCancel($(this))"><i style=" color:gray" class="fa fa-times"></i></button>
 					</span>
-					<span style=" color:gray">${dateFormat(comment.c_req_comment_date).split(" - ")[1]}</span>
+					<span style=" color:gray">${time}</span>
 				</div>
       </div>
     `;
@@ -224,8 +224,10 @@ function makeTemplate(comments) {
 	let date = null;
 
 	comments.forEach((comment) => {
-		if (!date && date !== comment.c_req_comment_date) {
-			date = comment.c_req_comment_date;
+		const fullDate = dateFormat(comment.c_req_comment_date).split(" - ");
+
+		if (!date || date !== fullDate[0]) {
+			date = fullDate[0];
 			const dateEl = document.createElement("div");
 			dateEl.className = "date-separator";
 			dateEl.innerHTML = `<div class=><i class="bx bx-calendar"></i> ${
@@ -235,7 +237,7 @@ function makeTemplate(comments) {
 			wrap.append(dateEl);
 		}
 
-		makeMessageList(wrap, comment);
+		makeMessageList(wrap, comment, fullDate[1]);
 	});
 }
 
