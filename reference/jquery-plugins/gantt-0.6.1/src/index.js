@@ -470,6 +470,18 @@ export default class Gantt {
     bind_table_event(event) {
         const $tr = event.target.closest('tr');
         const id = $tr.dataset.id;
+
+        if (
+            event.target.tagName !== 'INS' &&
+            !event.target.classList.contains('marker')
+        ) {
+            const task = this.get_task(id);
+
+            this.handle_selected(task);
+
+            return;
+        }
+
         const $target = event.target.closest('td');
 
         if (
@@ -505,13 +517,7 @@ export default class Gantt {
             this.setup_tasks(tasks);
             this.render();
             this.rerender_table();
-
-            return;
         }
-
-        const task = this.get_task(id);
-
-        this.handle_selected(task);
     }
 
     make_table() {
