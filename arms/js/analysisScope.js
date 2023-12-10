@@ -52,7 +52,16 @@ function execDocReady() {
         ],
         [   // 생성한 차트 import
             "js/analysis/topmenu/basicRadar.js",
-            "js/analysis/topmenu/topMenu.js"
+            "js/analysis/topmenu/topMenu.js",
+            // stackBarChartOnPolar
+            "js/dashboard/chart/barChartOnPolar.js",
+            // Box-plot chart
+
+            //circular-sankey chart
+
+            //tree chart
+
+            //CirclePacking with d3 Chart
         ],
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -141,9 +150,9 @@ function makePdServiceSelectBox() {
     });
 } // end makePdServiceSelectBox()
 
-////////////////////
+////////////////////////////////////////
 //버전 멀티 셀렉트 박스
-////////////////////
+////////////////////////////////////////
 function makeVersionMultiSelectBox() {
     //버전 선택시 셀렉트 박스 이니시에이터
     $(".multiple-select").multipleSelect({
@@ -154,7 +163,10 @@ function makeVersionMultiSelectBox() {
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
+            console.log("[ analysisScope :: makeVersionMultiSelectBox ] :: versionTag");
+            console.log(versionTag);
             selectedVersionId = versionTag.join(',');
+
             if (versionTag === null || versionTag == "") {
                 alert("버전이 선택되지 않았습니다.");
                 return;
@@ -168,6 +180,9 @@ function makeVersionMultiSelectBox() {
             // 네트워크 차트
             statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
             getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+            
+            // 폴라바(stackedBarOnPolar) 차트
+            getReqAndSubtaskPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
         }
     });
 }
@@ -183,23 +198,29 @@ function  bind_VersionData_By_PdService() {
         statusCode: {
             200: function (data) {
                 //////////////////////////////////////////////////////////
-                // console.log(data.response); // versionData
+                //console.log(data.response);
                 var pdServiceVersionIds = [];
+                versionListData = [];
                 for (var k in data.response) {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
+                    versionListData.push({"c_id" : obj.c_id, "versionTitle" : obj.c_title});
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
                 }
+                var versionTag = $(".multiple-select").val();
+                console.log("[ analysisScope :: bind_VersionData_By_PdService ] :: versionTag");
+                console.log(versionTag);
+
                 수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(',');
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
-
                 // 네트워크 차트
                 statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
                 getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
+                getReqAndSubtaskPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
                 if (data.length > 0) {
                     console.log("display 재설정.");
                 }
@@ -461,8 +482,8 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 }
 
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
-    console.log("선택된 서비스 ===> " + pdservice_id);
-    console.log("선택된 버전 리스트 ===> " + pdservice_version_id);
+    console.log("[ analysisScope :: statisticsMonitor ] :: pdservice_id => " + pdservice_id);
+    console.log("[ analysisScope :: statisticsMonitor ] :: pdservice_version_id => " + pdservice_version_id);
 
     //1. 좌상 게이지 차트 및 타임라인
     //2. Time ( 작업일정 ) - 버전 개수 삽입
@@ -887,4 +908,113 @@ function versionUpdateIssueScatterChart223() {
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// StackBarOnPolar chart - 제품(서비스)의 몇개의 버전 및, 버전 하위로 몇개의 요구사항이 있는지
+/////////////////////////////////////////////////////////////////////////////////////
+function getReqAndSubtaskPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
+    $.ajax({
+        url: "/auth-user/api/arms/analysis/scope/getReqAndSubtaskPerVersion/" + pdService_id,
+        type: "GET",
+        data: {
+            "서비스아이디": pdService_id,
+            "메인그룹필드": 'pdServiceVersion',
+            "하위그룹필드들": 'isReq',
+            "컨텐츠보기여부": true,
+            "pdServiceVersionLinks": pdServiceVersionLinks
+        },
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (result) {
+                console.log("[ analysisScope :: getReqAndSubtaskPerVersion ] :: result");
+                console.log(result);
+                console.log(versionListData);
+
+
+                let legend_arr = ["요구사항", "연결이슈"];
+                let verDataArr = [];
+
+                // 집계 데이터 바탕
+                if (result["전체합계"] !== 0) {
+                    let 버전별집계 = result["검색결과"]["group_by_pdServiceVersion"];
+                    for (let i=0; i<버전별집계.length; i++) {
+                        let mandatoryDataList = {
+                            versionId: "", title: "",
+                            req: "",       subtask: ""
+                        };
+                        mandatoryDataList.versionId = 버전별집계[i]["필드명"];
+                        let isReqArr = 버전별집계[i]["하위검색결과"]["group_by_isReq"];
+                        isReqArr.forEach((target) => {
+                           if(target["필드명"] === "true") {
+                                   mandatoryDataList.req = target["개수"]
+                           } else {mandatoryDataList.subtask = target["개수"]}
+                        });
+                        verDataArr.push(mandatoryDataList);
+                    }
+                }
+
+                //1.선택한 제품서비스의 버전과, ES 조회결과 가져온 버전의 갯수가 다른지 확인
+                //2.없는 버전의 경우, versionId만 넣어주고 나머지는 자료구조만 세팅.
+                let versionIdSet = new Set();
+                versionTag.forEach((e) => versionIdSet.add(e));
+                verDataArr.forEach((e) => {
+                    if (versionIdSet.has((e.versionId))) {
+                        versionIdSet.delete((e.versionId));
+                    }
+                });
+                for ( let value of versionIdSet) {
+                    verDataArr.push( {versionId: value, title: "", req: 0, subtask: 0 })
+                }
+
+                // 만든 버전데이터배열에 버전의 title 매핑.
+                for (let i=0; i<versionListData.length; i++) {
+                    verDataArr.forEach((e) => {
+                        if(e.versionId == versionListData[i]["c_id"]) {
+                            e.title = versionListData[i].versionTitle;
+                        }
+                    });
+                }
+
+                let verNameArr=[], reqArr =[], linkedIssueSubtaskArr=[];
+                verDataArr.forEach(e => {verNameArr.push(e.title); reqArr.push(e.req); linkedIssueSubtaskArr.push(e.subtask)});
+                let colorArr = dashboardColor.productToMan;
+                let seriesReq = {
+                    type: 'bar',
+                    data: reqArr,
+                    itemStyle: {
+                        color: colorArr[0]
+                    },
+                    coordinateSystem: 'polar',
+                    name: "요구사항",
+                    stack: 'a',
+                    emphasis: {
+                        focus: 'series'
+                    }
+                }
+                let seriesSubtask = {
+                    type: 'bar',
+                    data: linkedIssueSubtaskArr,
+                    itemStyle: {
+                        color: colorArr[1]
+                    },
+                    coordinateSystem: 'polar',
+                    name: "연결이슈",
+                    stack: 'a',
+                    emphasis: {
+                        focus: 'series'
+                    }
+                }
+
+                let seriesArr = [];
+                seriesArr.push(seriesReq,seriesSubtask);
+
+                drawBarOnPolarAtScope("reqAndSubtaskPerVersion_polar_bar", verNameArr, legend_arr, seriesArr);
+            }
+        }
+    });
 }
