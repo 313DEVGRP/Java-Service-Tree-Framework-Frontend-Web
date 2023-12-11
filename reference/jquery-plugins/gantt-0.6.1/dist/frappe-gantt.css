@@ -68,7 +68,7 @@
 .table-container table .table-body tr td {
   border-right: 2px solid #515256;
 }
-.table-container table .table-body tr td:first-child {
+.table-container table .table-body tr td:nth-child(2) {
   border-right: none;
 }
 .table-container table .table-body tr td.work-name {
@@ -136,6 +136,9 @@
 }
 .table-container table .table-body tr:last-child td:first-child {
   background: transparent;
+}
+.table-container table .table-body tr.root-last ~ tr .work-name:before {
+  display: none;
 }
 
 .split-bar {

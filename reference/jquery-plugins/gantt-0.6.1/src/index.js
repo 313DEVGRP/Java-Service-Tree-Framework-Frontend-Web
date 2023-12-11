@@ -388,15 +388,52 @@ export default class Gantt {
         return sorted_tasks;
     }
 
+    setGroupPosition(data) {
+        return data.reduce((acc, cur) => {
+            const group = data.filter((t) => t.parentId === cur.parentId);
+
+            cur.groupPosition = [];
+
+            if (group[0].id === cur.id) {
+                cur.groupPosition.push('first');
+            }
+            if (group[group.length - 1].id === cur.id) {
+                cur.groupPosition.push('last');
+            }
+            if (!cur.groupPosition.length) {
+                cur.groupPosition.push('middle');
+            }
+
+            acc.push(cur);
+            return acc;
+        }, []);
+    }
+
+    update_dependecies(id) {
+        if (id === 2) return [];
+
+        const dependencies = this.tasks.find(
+            (task) => task.id === id
+        ).dependencies;
+
+        if (!dependencies.length) return [id];
+        return [...dependencies, id];
+    }
+
     update_origin_tasks(item) {
-        const tasks = this.tasks.reduce((acc, cur) => {
+        let tasks = this.tasks.reduce((acc, cur) => {
             if (cur.id === item.c_id) {
+                const dependencies = this.update_dependecies(item.ref);
+
                 cur = {
                     ...cur,
                     parentId: Number(item.ref),
-                    dependencies: [item.ref],
+                    dependencies,
                     position: item.c_position,
                     level: item.level,
+                    wbs: dependencies.length
+                        ? `${dependencies.join('-')}-${item.c_id}`
+                        : `${item.c_id}`,
                 };
             } else {
                 if (
@@ -433,6 +470,8 @@ export default class Gantt {
             acc.push(cur);
             return acc;
         }, []);
+
+        tasks = this.setGroupPosition(tasks);
 
         this.setup_tasks(tasks);
         this.originTasks = tasks;

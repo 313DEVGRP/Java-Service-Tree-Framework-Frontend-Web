@@ -43,32 +43,13 @@ export default class Table {
         return $thead;
     }
 
-    setGroupPosition(data) {
-        return data.reduce((acc, cur) => {
-            const group = data.filter((t) => t.parentId === cur.parentId);
-
-            if (group[0].id === cur.id) {
-                cur.groupPosition.push('first');
-            }
-            if (group[group.length - 1].id === cur.id) {
-                cur.groupPosition.push('last');
-            }
-            if (!cur.groupPosition.length) {
-                cur.groupPosition.push('middle');
-            }
-
-            acc.push(cur);
-            return acc;
-        }, []);
-    }
-
     get_parentNode(tag, target) {
         if (target.tagName === tag.toUpperCase()) return target;
         return this.get_parentNode(tag, target.parentNode);
     }
 
     draw_table_body(tasks) {
-        this.tasks = this.setGroupPosition(tasks);
+        this.tasks = this.gantt.setGroupPosition(tasks);
 
         const $tbody = document.createElement('tbody');
         $tbody.classList.add('table-body');
@@ -94,6 +75,7 @@ export default class Table {
 
     make_table_row() {
         return this.tasks.map((task, index) => {
+            const deps = task.level - 1;
             const $tr = document.createElement('tr');
             $tr.setAttribute('draggable', 'true');
             $tr.setAttribute('data-id', task.id);
@@ -106,13 +88,15 @@ export default class Table {
 
             $tr.appendChild(this.draw_draggable_col('td'));
 
+            if (deps === 1 && task.groupPosition.includes('last')) {
+                $tr.classList.add('root-last');
+            }
+
             this.columns.forEach((column) => {
                 const $td = document.createElement('td');
                 const { data, render } = column;
 
                 if (data === 'name' && task.level > 1) {
-                    const deps = task.level - 1;
-
                     $td.setAttribute('rel', task.type);
                     $td.className = `work-name indent-${deps} indent-${deps}-${task.groupPosition[0]}`;
 
