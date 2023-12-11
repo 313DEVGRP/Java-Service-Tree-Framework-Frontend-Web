@@ -916,7 +916,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
                     always_show_tooltip: true,
                     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'],
                     day_names: ['mon', 'wed', 'fri', 'sun'],
-                    colors: data.requirementColors
+                    //colors: data.requirementColors
                 });
 
                 $('#calendar_yearview_blocks_chart_2').calendar_yearview_blocks({
@@ -925,7 +925,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
                     always_show_tooltip: true,
                     month_names: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
                     day_names: ['mon', 'wed', 'fri', 'sun'],
-                    colors: data.relationIssueColors
+                    //colors: data.relationIssueColors
                 });
 
                 // d3.select("#heatmap-body").style("overflow-x","scroll");

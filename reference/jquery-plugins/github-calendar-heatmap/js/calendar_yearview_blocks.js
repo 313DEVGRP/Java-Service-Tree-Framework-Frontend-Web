@@ -92,10 +92,12 @@
                     }
 
                     var items = [];
+                    var count = 0;
                     var legend = '', items_str = '';
                     if (obj_timestamp[data_date]) {
                         if (obj_timestamp[data_date].items) {
                             items = obj_timestamp[data_date].items;
+                            count = obj_timestamp[data_date].count;
 							items_str = items.join(", ");
 							items_str = items_str.replaceAll('&', '&amp;');
 							items_str = items_str.replaceAll('"', '&quot;');
@@ -108,9 +110,10 @@
                     }
 
                     var item_name = items[0]?items[0]:false;
-                    var color = settings.colors[item_name]?settings.colors[item_name]:settings.colors['default'];
+                    var color = getColorByCount(count);
 
-                    item_html += '<rect class="day" width="' + rectWidth + '" height="' + rectHeight + '" y="' + y + '" fill="' + color + match_today + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                    item_html += '<rect class="day" width="' + rectWidth + '" height="' + rectHeight + '" y="' + y + '" fill="' + color + match_today + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '" rx="3" ry="3"/>';
+                    /*
                     if (items.length === 2) { // Fill a triangle for the 2nd
                         var item_name_1 = items[1] ? items[1] : false;
                         var color_1 = settings.colors[item_name_1] ? settings.colors[item_name_1] : settings.colors['default'];
@@ -133,7 +136,7 @@
                         item_html += '<polygon points="' + (rectWidth / 2) + ',' + (y + rectHeight - (rectHeight / 4)) + ' ' + 0 + ',' + (y + (rectHeight / 2)) + ' ' + (rectWidth / 4) + ',' + (y + (rectHeight / 2)) + ' ' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 4)) + '" fill="' + color_2 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
                         item_html += '<polygon points="' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 2)) + ' ' + 0 + ',' + (y + (rectHeight / 4)) + ' ' + rectWidth + ',' + (y + (rectHeight / 4)) + ' ' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 2)) + '" fill="' + color_3 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
                     }
-
+                    */
                     // Move on to the next day
                     start_date.setDate(start_date.getDate() + 1);
                 }
@@ -248,6 +251,32 @@
             tooltip_style: 'default', // or 'custom'
             data: []
         }, options);
+
+        function getColorByCount(count) {
+            var colors = {
+                0: 'rgba(235,237,240,0.8)', // 가장 연한 색
+                1: 'rgba(155,233,168,0.8)',
+                2: 'rgba(64,196,99,0.8)',
+                3: 'rgba(48,161,78,0.8)',
+                4: 'rgba(33,110,57,0.8)'  // 가장 짙은 색
+            };
+
+            if (count == 0) {
+                return colors[0];
+            }
+            else if (count <= 5) {
+                return colors[1];
+            }
+            else if (count <= 10) {
+                return colors[2];
+            }
+            else if (count <= 15) {
+                return colors[3];
+            }
+            else {
+                return colors[4];
+            }
+        }
 
         var _this = $(this);
 
