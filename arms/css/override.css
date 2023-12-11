@@ -3581,7 +3581,7 @@ table tbody tr td {
 	margin: 0;
 	list-style: none;
 	position: relative;
-	padding: 1px 40px;
+	padding: 1px 0 0 65px;
 	color: #fff;
 	font-size: 13px;
 }
@@ -3600,7 +3600,6 @@ table tbody tr td {
 	background-color: rgba(255, 255, 255, 0.2);
 	padding: 14px;
 	border-radius: 6px;
-	width: 250px;
 	box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.08);
 }
 
@@ -3617,8 +3616,7 @@ table tbody tr td {
 	position: absolute;
 }
 
-.timeline-container .session > span:before,
-.timeline-container .session > span:after {
+.timeline-container .session > span:before {
 	content: "";
 	width: 10px;
 	height: 10px;
@@ -3634,17 +3632,16 @@ table tbody tr td {
 	height: 100%;
 }
 
-.timeline-container .session .time-range span {
+.timeline-container .session .time-range .date {
 	position: absolute;
 	font-size: 10px;
 	top: 0;
-	left: -35px;
+	left: -65px;
 	font-weight: bold;
 	line-height: normal;
 }
 
-.timeline-container .session > span:after,
-.timeline-container .session .time-range .end {
+.timeline-container .session > span:after {
 	top: calc(100% - 5px);
 }
 

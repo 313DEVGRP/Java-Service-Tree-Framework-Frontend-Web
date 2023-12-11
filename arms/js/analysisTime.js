@@ -384,25 +384,28 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 						makeVerticalTimeline([
 							{
-								title: "Codify",
-								content: `Let's make coolest things in css`,
+								title: "BaseVersion",
+								content: "요구 사항 이슈 1",
 								type: "Presentation",
-								start: "10:00",
-								end: "12:00"
+								date: "2023-11-08"
 							},
 							{
-								title: "Codify",
-								content: `Let's make coolest things in javascript`,
+								title: "",
+								content: "요구 사항 이슈 2",
 								type: "Presentation",
-								start: "13:00",
-								end: "14:00"
+								date: "2023-11-29"
 							},
 							{
-								title: "Codify",
-								content: `Let's make coolest things in css`,
+								title: "1.0",
+								content: "요구 사항 이슈 3",
 								type: "Review",
-								start: "15:00",
-								end: "17:45"
+								date: "2023-12-01"
+							},
+							{
+								title: "1.1",
+								content: "요구 사항 이슈 4",
+								type: "Review",
+								date: "2023-12-11"
 							}
 						]);
 					}
@@ -1625,7 +1628,7 @@ function makeVerticalTimeline(data) {
 	const $container = document.querySelector(".timeline-container");
 	const $ul = document.createElement("ul");
 
-	data.forEach(({ title, content, type, start, end }, index) => {
+	data.forEach(({ title, content, type, date }, index) => {
 		const $li = document.createElement("li");
 		$li.className = "session";
 		$li.innerHTML = `
@@ -1635,8 +1638,7 @@ function makeVerticalTimeline(data) {
           <div class="type">${type}</div>
         </div>
         <span class="time-range">
-          <span class="start">${start}</span>
-          <span class="end">${end}</span>
+          <span class="date">${date}</span>
         </span>
     `;
 
