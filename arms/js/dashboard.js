@@ -754,13 +754,14 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 							{
 								name: "ROOT",
 								type: 'treemap',
+								width: '100%',
+								height: '85%', // breadcrumb를 사용하지 않을 경우, width, height 모두 100%를 주면 됩니다.
 								breadcrumb: {
 									show: true,
 									itemStyle: {
 										color: 'grey'
 									}
 								},
-								visibleMin: 300,
 								label: {
 									show: true,
 									formatter: '{b}',
