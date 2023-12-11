@@ -35,7 +35,7 @@ function execDocReady() {
             // echarts
             "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
             // 5번째 박스 network chart(현 게이지 차트)
-            "./js/analysisTime/d3.v5.min.js",
+            "../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
             // 5번째 박스 heatmap
             "../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
             "../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",

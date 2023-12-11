@@ -23,8 +23,8 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.fileupload.js",
             "../reference/light-blue/lib/jquery.fileupload-fp.js",
             "../reference/light-blue/lib/jquery.fileupload-ui.js",
-            //d3
-            "js/analysisTime/d3.v5.min.js",
+            // d3 network chart
+            "../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
             //chart Colors
             "./js/dashboard/chart/colorPalette.js",
             // Apache Echarts
