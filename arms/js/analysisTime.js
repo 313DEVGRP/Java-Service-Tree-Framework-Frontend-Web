@@ -203,7 +203,6 @@ function bind_VersionData_By_PdService() {
 
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 				setTimeout(function () {
-					//Scope - (2) 요구사항에 연결된 이슈 총 개수
 					multiCombinationChart($("#selected_pdService").val(), selectedVersionId);
 				}, 1000);
 
@@ -254,7 +253,6 @@ function makeVersionMultiSelectBox() {
 
 			// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 			setTimeout(function () {
-				//Scope - (2) 요구사항에 연결된 이슈 총 개수
 				multiCombinationChart($("#selected_pdService").val(), selectedVersionId);
 			}, 1000);
 
@@ -316,36 +314,37 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						$("#project-start").show();
 						$("#project-end").show();
 
-						$("#versionGaugeChart").html(""); //게이지 차트 초기화
-						var versionGauge = [];
-						var versionTimeline = [];
-						versionData.forEach(function (versionElement, idx) {
-							if (pdservice_version_id.includes(versionElement.c_id)) {
-								var gaugeElement = {
-									current_date: today.toString(),
-									version_name: versionElement.c_title,
-									version_id: versionElement.c_id,
-									start_date:
-										versionElement.c_pds_version_start_date == "start"
-											? today
-											: versionElement.c_pds_version_start_date,
-									end_date:
-										versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date
-									//"end_date": (versionElement.c_pds_version_end_date == "end" ? plusDate.setMonth(plusDate.getMonth()+1) : versionElement.c_pds_version_end_date)
-								};
-								versionGauge.push(gaugeElement);
-							}
+                        $("#versionGaugeChart").html(""); //게이지 차트 초기화
+                        var versionGauge = [];
+                        var versionTimeline = [];
+                        var versionCustomTimeline = [];
+                        versionData.forEach(function (versionElement, idx) {
+                            if (pdservice_version_id.includes(versionElement.c_id)) {
+                                var gaugeElement = {
+                                    "current_date": today.toString(),
+                                    "version_name": versionElement.c_title,
+                                    "version_id": versionElement.c_id,
+                                    "start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                                    "end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                                }
+                                versionGauge.push(gaugeElement);
+                            }
 
-							var timelineElement = {
-								id: "timelineData",
-								title: "버전: " + versionElement.c_title,
-								startDate:
-									versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date,
-								endDate: versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date
-								//"endDate" : (versionElement.c_pds_version_end_date == "end" ? plusDate : versionElement.c_pds_version_end_date)
-							};
-							versionTimeline.push(timelineElement);
-						});
+                            var timelineElement = {
+                                "id" : "timelineData",
+                                "title" : "버전: "+versionElement.c_title,
+                                "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                                "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                            };
+
+                            versionTimeline.push(timelineElement);
+                            var versionTimelineCustomData = {
+                                "title" : versionElement.c_title,
+                                "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                                "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                            };
+                            versionCustomTimeline.push(versionTimelineCustomData);
+                        });
 
 						drawVersionProgress(versionGauge); // 버전 게이지
 						// 이번 달의 첫째 날 구하기
@@ -365,8 +364,8 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						};
 						versionTimeline.push(today_flag);
 
-						$("#version-timeline-bar").show();
-						Timeline.init($("#version-timeline-bar"), versionTimeline);
+                        //$("#version-timeline-bar").show();
+                        // Timeline.init($("#version-timeline-bar"), versionTimeline);
 
 						var basePosition = $("#today_flag").css("left");
 						var baseWidth = $("#today_flag").css("width");
@@ -380,7 +379,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						$("#timelineData .label").css("text-align", "left");
 						$("#today_flag").css("left", flagPosition);
 
-						// versionTimelineChart(versionCustomTimeline);
+                        versionTimelineChart(versionCustomTimeline);
 
 						makeVerticalTimeline([
 							{
@@ -408,11 +407,11 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 								date: "2023-12-11"
 							}
 						]);
-					}
-				}
-			}
-		}
-	});
+                    }
+                }
+            }
+        }
+    });
 }
 
 ////////////////////
@@ -577,20 +576,22 @@ function drawVersionProgress(data) {
 
 	totalDate = Math.floor(Math.abs((new Date(latestEndDate) - new Date(fastestStartDate)) / (1000 * 60 * 60 * 24)) + 1);
 
-	var mouseover = function (d) {
-		var subgroupId = d.version_id;
-		var subgroupName = d.version_name;
-		var subgroupValue = new Date(d.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
-		tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
+    var mouseover = function (d) {
+        var hoverData = d.target.__data__;
+        var subgroupId = hoverData.version_id;
+        var subgroupName = hoverData.version_name;
+        var subgroupValue = new Date(hoverData.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
+        tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
 
 		d3.selectAll(".myWave").style("opacity", 0.2);
 		d3.selectAll(".myStr").style("opacity", 0.2);
 		d3.selectAll(".wave-" + subgroupId).style("opacity", 1);
 	};
 
-	var mousemove = function (d) {
-		tooltip.style("left", d3.mouse(this)[0] + 120 + "px").style("top", d3.mouse(this)[1] + 150 + "px");
-	};
+    var mousemove = function (d) {
+        var [x, y] = d3.pointer(d);
+        tooltip.style("left", (x + 120) + "px").style("top", (y + 150) + "px");
+    };
 
 	var mouseleave = function (d) {
 		tooltip.style("opacity", 0);
@@ -750,8 +751,6 @@ function scatterChart(data) {
 		return new Date(a) - new Date(b);
 	});
 
-	var deadlineSeries = createDeadlineSeries(categoriesArray, deadline, 2);
-
 	var requirementData = [];
 	var relationIssueData = [];
 
@@ -770,12 +769,24 @@ function scatterChart(data) {
 	var option;
 
 	if ((requirementData && requirementData.length > 0) || (relationIssueData && relationIssueData.length > 0)) {
+
+		var deadlineSeries = createDeadlineSeries(categoriesArray, deadline, 2);
+
+		if (!categoriesArray.includes(deadline)) {
+			categoriesArray.push(deadline);
+			categoriesArray.sort((a, b) => new Date(a) - new Date(b));
+			let dateIndex = categoriesArray.indexOf(deadline);
+
+			requirementData.splice(dateIndex, 0, 0);
+			relationIssueData.splice(dateIndex, 0, 0);
+		}
+
 		option = {
 			aria: {
 				show: true
 			},
 			legend: {
-				data: ["요구사항", "연결된 이슈"], // 여기에 실제 데이터 종류를 적어주세요
+				data: ["요구사항", "연결된 이슈"],
 				textStyle: {
 					color: "white"
 				}
@@ -812,7 +823,7 @@ function scatterChart(data) {
 					data: requirementData,
 					type: "scatter",
 					symbol: "diamond",
-					clip: false, // clip 옵션 추가
+					clip: false,
 					label: {
 						emphasis: {
 							show: true,
@@ -833,7 +844,7 @@ function scatterChart(data) {
 					name: "연결된 이슈",
 					data: relationIssueData,
 					type: "scatter",
-					clip: false, // clip 옵션 추가
+					clip: false,
 					label: {
 						emphasis: {
 							show: true,
@@ -887,7 +898,7 @@ function scatterChart(data) {
 				left: "center",
 				top: "middle",
 				textStyle: {
-					color: "#fff" // 제목 색상을 검은색으로 변경
+					color: "#fff"
 				}
 			},
 			backgroundColor: "rgba(255,255,255,0)"
@@ -919,7 +930,6 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 				sevenTimeline(data);
 
 				setTimeout(function () {
-					//Scope - (2) 요구사항에 연결된 이슈 총 개수
 					scatterChart(data);
 				}, 1000);
 			}
@@ -1063,6 +1073,23 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 					let totalRequirements = result.totalRequirements;
 					let statusKeys = result.statusKeys;
 
+					var deadlineSeries = createDeadlineSeries(dates, deadline, 4);
+
+					if (!dates.includes(deadline)) {
+						dates.push(deadline);
+						dates.sort((a, b) => new Date(a) - new Date(b));
+						let dateIndex = dates.indexOf(deadline);
+
+						if (dateIndex > 0) {
+							totalRequirements.splice(dateIndex, 0, totalRequirements[dateIndex-1]);
+							totalIssues.splice(dateIndex, 0, totalIssues[dateIndex-1]);
+						}
+						else {
+							totalRequirements.splice(dateIndex, 0, 0);
+							totalIssues.splice(dateIndex, 0, 0);
+						}
+					}
+
 					let requirementStatusSeries = statusKeys.map((key, i) => {
 						let stackType = "요구사항";
 
@@ -1075,7 +1102,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 								focus: "series"
 							},
 							data: dates.map((date) => {
-								if (data[date].requirementStatuses && Object.keys(data[date].requirementStatuses).length > 0) {
+								if (data[date] && data[date].requirementStatuses && Object.keys(data[date].requirementStatuses).length > 0) {
 									return { value: data[date].requirementStatuses[key] || 0, stackType: stackType };
 								} else {
 									return { value: 0, stackType: stackType };
@@ -1096,7 +1123,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 								focus: "series"
 							},
 							data: dates.map((date) => {
-								if (data[date].relationIssueStatuses && Object.keys(data[date].relationIssueStatuses).length > 0) {
+								if (data[date] && data[date].relationIssueStatuses && Object.keys(data[date].relationIssueStatuses).length > 0) {
 									return { value: data[date].relationIssueStatuses[key] || 0, stackType: stackType };
 								} else {
 									return { value: 0, stackType: stackType };
@@ -1110,7 +1137,6 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 
 					let stackIndex = statusKeys.map((value, index) => index);
 
-					var deadlineSeries = createDeadlineSeries(dates, deadline, 4);
 					console.log(deadlineSeries);
 
 					statusKeys.push("요구사항");
@@ -1126,7 +1152,6 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 							emphasis: {
 								focus: "series"
 							},
-							// position: 'right',
 							symbolSize: 10,
 							data: totalRequirements
 						},
@@ -1137,7 +1162,6 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 							emphasis: {
 								focus: "series"
 							},
-							// position: 'right',
 							symbolSize: 10,
 							data: totalIssues
 						},
@@ -1196,8 +1220,8 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 							}
 						},
 						grid: {
-							top: "20%", // 위쪽으로부터 10% 떨어진 위치에 그리드 영역의 위쪽 배치
-							containLabel: false // 그리드 영역이 라벨을 포함하도록 설정
+							top: "20%",
+							containLabel: false
 						},
 						toolbox: {
 							show: true,
@@ -1209,9 +1233,9 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 								// dataView: {show: true, readOnly: true},
 								/*magicType: {
                                     show: true,
-                                    type: ['stack'],  // 스택과 일반 사이 전환 기능 추가
+                                    type: ['stack'],
                                     seriesIndex: {
-                                        stack: stackIndex // stack 모드를 적용할 시리즈의 인덱스
+                                        stack: stackIndex
                                     }
                                 },*/
 								dataZoom: {
@@ -1227,7 +1251,7 @@ function multiCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 								// },
 							},
 							iconStyle: {
-								borderColor: "white" // 아이콘 테두리 색상을 하얗게 변경
+								borderColor: "white"
 							}
 						},
 						xAxis: [
@@ -1351,7 +1375,7 @@ function createDeadlineSeries(categories, deadline, lineWidth) {
 
 	var deadlineSeries = [];
 
-	if (new Date(deadline) >= chartStart && new Date(deadline) <= chartEnd) {
+	if (/*new Date(deadline) >= chartStart && */new Date(deadline) <= chartEnd) {
 		// 데이터 추가
 		var vs = {
 			name: "마감일",
@@ -1359,16 +1383,16 @@ function createDeadlineSeries(categories, deadline, lineWidth) {
 			data: [
 				[deadline, 0],
 				[deadline, 1]
-			], // y축 전체에 걸쳐 라인을 그립니다.
+			],
 			tooltip: {
-				show: false // 데드라인 시리즈의 툴팁을 끕니다.
+				show: false
 			},
 			markLine: {
 				silent: true,
 				symbol: "none",
 				data: [
 					{
-						xAxis: deadline // x축 날짜 지정
+						xAxis: deadline
 					}
 				],
 				lineStyle: {
@@ -1546,8 +1570,21 @@ function candleStickChart() {
 	window.addEventListener("resize", myChart.resize);
 }
 
-/*
 function versionTimelineChart(versionData) {
+
+    console.log("@@@@@@@@@@@@@@@@");
+    console.log(versionData);
+
+    var yVersionData = [];
+    var xVesrionStartEndData = [];
+	var yearData = new Set();
+    versionData.forEach(version => {
+        yVersionData.push(version.title);
+        var arrayData = [version.title, +new Date(version.startDate), +new Date(version.endDate)];
+		yearData.add(new Date(version.startDate).getFullYear());
+		yearData.add(new Date(version.endDate).getFullYear());
+        xVesrionStartEndData.push(arrayData);
+    });
 
     var dom = document.getElementById('version-timeline-chart-container');
 
@@ -1557,64 +1594,148 @@ function versionTimelineChart(versionData) {
     });
 
     var colorList = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC'];
-    var versionData = ['v1.0', 'v1.1', 'v1.2', 'v1.3', 'v1.4', 'v1.5', 'v1.6'];
-    console.log(colorList);
+    var versionData = ['v1.0', 'v1.1', 'v1.2', 'v1.3', 'v1.4', 'v1.5', 'v1.6', 'v1.7', 'v1.8', 'v1.9'];
+    var startEndData= [
+        ['v1.0', +new Date(2023, 0, 1), +new Date(2023, 0, 15)],
+        ['v1.1', +new Date(2023, 0, 10), +new Date(2023, 0, 25)],
+        ['v1.2', +new Date(2023, 1, 1), +new Date(2023, 1, 15)],
+        ['v1.3', +new Date(2023, 3, 1), +new Date(2023, 4, 15)],
+        ['v1.4', +new Date(2023, 2, 1), +new Date(2024, 3, 15)],
+        ['v1.5', +new Date(2023, 6, 1), +new Date(2023, 6, 15)],
+        ['v1.6', +new Date(2023, 5, 1), +new Date(2023, 11, 15)],
+        ['v1.7', +new Date(2024, 2, 1), +new Date(2024, 3, 15)],
+        ['v1.8', +new Date(2024, 5, 1), +new Date(2024, 6, 15)],
+        ['v1.9', +new Date(2024, 1, 1), +new Date(2024, 11, 15)],
+    ];
+
+    var today = new Date()
+    var todayLine =  {
+        name: '오늘',
+        type: 'line',
+        data: [[formatDate(today), 0], [formatDate(today), 1]], // y축 전체에 걸쳐 라인을 그립니다.
+        tooltip: {
+            show: false
+        },
+        markLine : {
+            silent: true,
+            symbol: 'none',
+            data : [{
+                xAxis : formatDate(today)
+            }],
+            lineStyle: {
+                color: 'red',
+                width: 2,
+                type: 'dashed'
+            },
+            label: {
+                formatter: '오늘 : {c}',
+                color: 'white',
+                fontSize: 12,
+                fontWeight: 'bold',
+                position: 'start'
+            }
+        },
+        lineStyle: {
+            color: 'red',
+            type: 'dashed'
+        },
+        symbol: 'none'
+    };
+
+	let yearsArray = Array.from(yearData);
+
+	let minYear = Math.min(...yearsArray);
+	let maxYear = Math.max(...yearsArray);
+
+	if (maxYear.valueOf() < today.getFullYear()) {
+		maxYear = today.getFullYear();
+	}
 
     var option = {
         xAxis: {
             type: 'time',
+			min: minYear + '-01-01',
+			max: maxYear + '-12-31',
+			axisLabel: {
+				textStyle: {
+					color: "white"
+				},
+				rotate: 45
+			},
+			axisTick: { show: false },
+			splitLine: {
+				show: true,
+				lineStyle: {
+					color: "rgba(255,255,255,0.2)",
+					width: 1,
+					type: "dashed"
+				}
+			},
         },
         yAxis: {
-            data: versionData,
+            data: yVersionData,
             inverse: true,
+			axisLabel: {
+				textStyle: {
+					color: "white"
+				}
+			}
         },
-        series: [{
-            name: 'Versions',
-            type: 'custom',
-            itemStyle: {
-                color: function(params) {
-                    return colorList[params.dataIndex % colorList.length];
-                }
-            },
-            renderItem: function(params, api) {
-                var categoryIndex = api.value(0);
-                var start = api.coord([api.value(1), categoryIndex]);
-                var end = api.coord([api.value(2), categoryIndex]);
-                var height = params.coordSys.height / versionData.length;
+        series: [
+            {
+                name: 'Versions',
+                type: 'custom',
+                itemStyle: {
+                    color: function(params) {
+                        return colorList[params.dataIndex % colorList.length];
+                    }
+                },
+                renderItem: function(params, api) {
+                    var categoryIndex = api.value(0);
+                    console.log(categoryIndex);
+                    var start = api.coord([api.value(1), categoryIndex]);
+                    var end = api.coord([api.value(2), categoryIndex]);
+                    var height = params.coordSys.height / yVersionData.length;
 
-                return {
-                    type: 'rect',
-                    shape: {
-                        x: start[0],
-                        y: start[1] - height / 2,
-                        width: end[0] - start[0],
-                        height: height
-                    },
-                    style: api.style(params.dataIndex) // apply color here
-                };
+                    console.log(start);
+
+                    return {
+                        type: 'rect',
+                        shape: {
+                            x: start[0],
+                            y: start[1] - height / 2,
+                            width: end[0] - start[0],
+                            height: height
+                        },
+                        style: api.style(params.dataIndex) // apply color here
+                    };
+                  },
+                encode: {
+                    x: [1, 2],
+                    y: 0
+                },
+                data: xVesrionStartEndData
             },
-            encode: {
-                x: [1, 2],
-                y: 0
-            },
-            data: [
-                ['v1.0', +new Date(2023, 0, 1), +new Date(2023, 0, 15)],
-                ['v1.1', +new Date(2023, 0, 10), +new Date(2023, 0, 25)],
-                ['v1.2', +new Date(2023, 1, 1), +new Date(2023, 1, 15)],
-                ['v1.3', +new Date(2023, 3, 1), +new Date(2023, 4, 15)],
-                ['v1.4', +new Date(2023, 2, 1), +new Date(2023, 3, 15)],
-                ['v1.5', +new Date(2023, 6, 1), +new Date(2023, 6, 15)],
-                ['v1.6', +new Date(2023, 5, 1), +new Date(2023, 11, 15)],
-            ]
-        }],
+            todayLine,
+        ],
         tooltip: {
             trigger: 'axis',
             position: 'top',
             borderWidth: 1,
-            axisPointer: {
-                type: 'cross'
+			axisPointer: {
+				type: 'cross',
+				axis: 'y'
+			},
+            formatter: function (params) {
+                var tooltipText = '';
+                tooltipText += params[0].marker + params[0].data[0] + '<br/><span style="float: right;">' + new Date(params[0].data[1]).toLocaleDateString()+ " ~ " + new Date(params[0].data[2]).toLocaleDateString() + '</span>' + '<br/>';
+                return tooltipText;
             }
         },
+        grid: {
+            left: '15%',
+            containLabel: false
+        }
     };
 
     if (option && typeof option === 'object') {
@@ -1622,7 +1743,7 @@ function versionTimelineChart(versionData) {
     }
 
     window.addEventListener('resize', myChart.resize);
-}*/
+}
 
 function makeVerticalTimeline(data) {
 	const $container = document.querySelector(".timeline-container");
