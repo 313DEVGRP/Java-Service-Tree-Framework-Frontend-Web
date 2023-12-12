@@ -55,8 +55,8 @@ function execDocReady() {
 			// 생성한 차트 import
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js",
-			// stackBarChartOnPolar
-			"js/dashboard/chart/barChartOnPolar.js",
+			// NightingaleRoseChart
+			"js/analysis/resource/chart/nightingaleRosePieChart.js",
 			// Box-plot chart
 
 			//circular-sankey chart
@@ -187,8 +187,8 @@ function makeVersionMultiSelectBox() {
 			statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 			getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
-			// 폴라바(stackedBarOnPolar) 차트
-			getReqAndSubtaskPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+			// 나이팅게일로즈 차트(pie) - 버전별 요구사항
+			getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
 		}
 	});
 }
@@ -225,7 +225,8 @@ function bind_VersionData_By_PdService() {
 				statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
-				getReqAndSubtaskPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+				// 나이팅게일로즈 차트(pie) - 버전별 요구사항
+				getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
@@ -931,12 +932,12 @@ function versionUpdateIssueScatterChart223() {
 	window.addEventListener("resize", myChart.resize);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-// StackBarOnPolar chart - 제품(서비스)의 몇개의 버전 및, 버전 하위로 몇개의 요구사항이 있는지
-/////////////////////////////////////////////////////////////////////////////////////
-function getReqAndSubtaskPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
+/////////////////////////////////////////////////////////
+// Nightingale Rose chart - 제품(서비스)의 버전별 요구사항 수
+/////////////////////////////////////////////////////////
+function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/getReqAndSubtaskPerVersion/" + pdService_id,
+		url: "/auth-user/api/arms/analysis/scope/getReqPerVersion/" + pdService_id,
 		type: "GET",
 		data: {
 			서비스아이디: pdService_id,
@@ -950,11 +951,9 @@ function getReqAndSubtaskPerVersion(pdService_id, pdServiceVersionLinks, version
 		progress: true,
 		statusCode: {
 			200: function (result) {
-				console.log("[ analysisScope :: getReqAndSubtaskPerVersion ] :: result");
+				console.log("[ analysisScope :: getReqPerVersion ] :: result");
 				console.log(result);
-
-				let legend_arr = ["요구사항", "연결이슈"];
-				let verDataArr = [];
+				let reqPerVersionDataArr = [];
 
 				// 집계 데이터 바탕
 				if (result["전체합계"] !== 0) {
@@ -963,19 +962,16 @@ function getReqAndSubtaskPerVersion(pdService_id, pdServiceVersionLinks, version
 						let mandatoryDataList = {
 							versionId: "",
 							title: "",
-							req: "",
-							subtask: ""
+							req: ""
 						};
 						mandatoryDataList.versionId = 버전별집계[i]["필드명"];
 						let isReqArr = 버전별집계[i]["하위검색결과"]["group_by_isReq"];
 						isReqArr.forEach((target) => {
 							if (target["필드명"] === "true") {
 								mandatoryDataList.req = target["개수"];
-							} else {
-								mandatoryDataList.subtask = target["개수"];
 							}
 						});
-						verDataArr.push(mandatoryDataList);
+						reqPerVersionDataArr.push(mandatoryDataList);
 					}
 				}
 
@@ -983,64 +979,34 @@ function getReqAndSubtaskPerVersion(pdService_id, pdServiceVersionLinks, version
 				//2.없는 버전의 경우, versionId만 넣어주고 나머지는 자료구조만 세팅.
 				let versionIdSet = new Set();
 				versionTag.forEach((e) => versionIdSet.add(e));
-				verDataArr.forEach((e) => {
+				reqPerVersionDataArr.forEach((e) => {
 					if (versionIdSet.has(e.versionId)) {
 						versionIdSet.delete(e.versionId);
 					}
 				});
 				for (let value of versionIdSet) {
-					verDataArr.push({ versionId: value, title: "", req: 0, subtask: 0 });
+					reqPerVersionDataArr.push({ versionId: value, title: "", req: 0 });
 				}
 
 				// 만든 버전데이터배열에 버전의 title 매핑.
 				for (let i = 0; i < versionListData.length; i++) {
-					verDataArr.forEach((e) => {
+					reqPerVersionDataArr.forEach((e) => {
 						if (e.versionId == versionListData[i]["c_id"]) {
+							//e.title = (versionListData[i].versionTitle).replaceAll(".","_");
 							e.title = versionListData[i].versionTitle;
 						}
 					});
 				}
 
-				let verNameArr = [],
-					reqArr = [],
-					linkedIssueSubtaskArr = [];
-				verDataArr.forEach((e) => {
-					verNameArr.push(e.title);
-					reqArr.push(e.req);
-					linkedIssueSubtaskArr.push(e.subtask);
+				let chartDataArr = [];
+
+				reqPerVersionDataArr.forEach((e) => {
+					chartDataArr.push({ name: e.title, value: e.req });
 				});
-				let colorArr = dashboardColor.productToMan;
-				let seriesReq = {
-					type: "bar",
-					data: reqArr,
-					itemStyle: {
-						color: colorArr[0]
-					},
-					coordinateSystem: "polar",
-					name: "요구사항",
-					stack: "a",
-					emphasis: {
-						focus: "series"
-					}
-				};
-				let seriesSubtask = {
-					type: "bar",
-					data: linkedIssueSubtaskArr,
-					itemStyle: {
-						color: colorArr[1]
-					},
-					coordinateSystem: "polar",
-					name: "연결이슈",
-					stack: "a",
-					emphasis: {
-						focus: "series"
-					}
-				};
+				let colorArr = dashboardColor.nightingaleRose;
 
-				let seriesArr = [];
-				seriesArr.push(seriesReq, seriesSubtask);
+				drawNightingalePieChart("reqPerVersionRoseChart",chartDataArr,colorArr);
 
-				drawBarOnPolarAtScope("reqAndSubtaskPerVersion_polar_bar", verNameArr, legend_arr, seriesArr);
 			}
 		}
 	});

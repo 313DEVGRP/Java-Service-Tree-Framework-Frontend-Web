@@ -58,6 +58,14 @@ function drawSimplePieChart(target,seriesName,dataArr) {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
+        toolbox:{
+            show: "false",
+            feature: {
+                //mark: { show: true },
+                saveAsImage: { show: true }
+            }
+        },
+        backgroundColor: 'rgba(0,0,0,0)',
         legend: {
             orient: 'horizontal',
             left: 'left',
@@ -93,5 +101,10 @@ function drawSimplePieChart(target,seriesName,dataArr) {
         ]
     };
     option && myChart.setOption(option);
+
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
+
     return myChart;
 }
