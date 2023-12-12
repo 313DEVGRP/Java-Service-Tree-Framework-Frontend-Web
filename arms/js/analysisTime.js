@@ -212,6 +212,9 @@ function bind_VersionData_By_PdService() {
 
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
+				// vertical timeline chart
+				verticalTimeLineChart($("#selected_pdService").val(), selectedVersionId);
+
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
@@ -266,6 +269,9 @@ function makeVersionMultiSelectBox() {
 			}, 1000);
 
 			getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+
+			// vertical timeline chart
+			verticalTimeLineChart($("#selected_pdService").val(), selectedVersionId);
 
 			if (checked) {
 				endPointUrl =
@@ -388,39 +394,12 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						$("#timelineData .label").css("text-align", "left");
 						$("#today_flag").css("left", flagPosition);
 
-                        // versionTimelineChart(versionCustomTimeline);
-
-						makeVerticalTimeline([
-							{
-								title: "BaseVersion",
-								content: "요구 사항 이슈 1",
-								type: "Presentation",
-								date: "2023-11-08"
-							},
-							{
-								title: "",
-								content: "요구 사항 이슈 2",
-								type: "Presentation",
-								date: "2023-11-29"
-							},
-							{
-								title: "1.0",
-								content: "요구 사항 이슈 3",
-								type: "Review",
-								date: "2023-12-01"
-							},
-							{
-								title: "1.1",
-								content: "요구 사항 이슈 4",
-								type: "Review",
-								date: "2023-12-11"
-							}
-						]);
-                    }
-                }
-            }
-        }
-    });
+						// versionTimelineChart(versionCustomTimeline);
+					}
+				}
+			}
+		}
+	});
 }
 
 ////////////////////
@@ -1759,26 +1738,113 @@ function versionTimelineChart(versionData) {
     window.addEventListener('resize', myChart.resize);
 }
 
-function makeVerticalTimeline(data) {
-	const $container = document.querySelector(".timeline-container");
-	const $ul = document.createElement("ul");
+function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
 
-	data.forEach(({ title, content, type, date }, index) => {
-		const $li = document.createElement("li");
-		$li.className = "session";
-		$li.innerHTML = `
-        <div class="session-content">
-          <div class="title">${title}</div>
-          <div class="info">${content}</div>
-          <div class="type">${type}</div>
-        </div>
-        <span class="time-range">
-          <span class="date">${date}</span>
-        </span>
-    `;
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
+		.addQueryParam("pdServiceLink", pdServiceLink)
+		.addQueryParam("pdServiceVersionLinks", pdServiceVersions)
+		.addQueryParam("isReqType", "ISSUE")
+		.addQueryParam("크기", 1000)
+		.addQueryParam("하위크기", 1000)
+		.addQueryParam("baseWeek", 2)
+		.addQueryParam("sortField", "updated")
+		.build();
 
-		$ul.append($li);
+	$.ajax({
+		url: url,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+
+				let contentSet = {}; // 객체로 선언
+
+				let items = Object.values(data).reduce((acc, versionData) => {
+					let filteredItems = versionData.filter(item => {
+						if (!contentSet[item.summary]) { // 객체의 키로 중복 체크
+							contentSet[item.summary] = true; // 중복 체크를 위해 키에 값을 할당
+							return true;
+						}
+						return false;
+					}).map(item => ({ // 중복이 없는 항목들을 새 객체로 변환
+						title: convertVersionIdToTitle(item.pdServiceVersion),
+						content: item.summary,
+						type: "",
+						date: formatDateTime(item.updated)
+					}));
+
+					return [...acc, ...filteredItems]; // 새로운 객체들을 누적값에 추가
+				}, []);
+
+				makeVerticalTimeline(items);
+			}
+		}
 	});
 
-	$container.append($ul);
+	// mock data
+	/*
+	makeVerticalTimeline([
+		{
+			title: "BaseVersion",
+			content: "요구 사항 이슈 1",
+			type: "Presentation",
+			date: "2023-11-08"
+		},
+		{
+			title: "",
+			content: "요구 사항 이슈 2",
+			type: "Presentation",
+			date: "2023-11-29"
+		},
+		{
+			title: "1.0",
+			content: "요구 사항 이슈 3",
+			type: "Review",
+			date: "2023-12-01"
+		},
+		{
+			title: "1.1",
+			content: "요구 사항 이슈 4",
+			type: "Review",
+			date: "2023-12-11"
+		}
+	]);
+	 */
+}
+
+function makeVerticalTimeline(data) {
+	const $container = document.querySelector(".timeline-container");
+
+	if (data.length == 0) {
+		$container.innerHTML = "<p style='text-align: center;'>데이터가 없습니다.</p>";
+	} else {
+		const $ul = document.createElement("ul");
+
+		data.forEach(({ title, content, type, date }, index) => {
+			const $li = document.createElement("li");
+			$li.className = "session";
+			$li.innerHTML = `
+			<div class="session-content">
+			  <div class="title">${title}</div>
+			  <div class="info">${content}</div>
+			  <div class="type">${type}</div>
+			</div>
+			<span class="time-range">
+			  <span class="date">${date}</span>
+			</span>
+		`;
+
+			$ul.append($li);
+		});
+
+		$container.append($ul);
+	}
+}
+
+function formatDateTime(dateTime) {
+	var date = dateTime.split('T')[0];
+	return date;
 }

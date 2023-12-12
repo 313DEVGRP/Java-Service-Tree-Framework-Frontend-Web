@@ -3573,6 +3573,7 @@ table tbody tr td {
 	opacity: 1;
 }
 
+/* vertical timeline chart */
 .timeline-container {
 	margin: 30px 0 50px;
 }
@@ -3581,7 +3582,7 @@ table tbody tr td {
 	margin: 0;
 	list-style: none;
 	position: relative;
-	padding: 1px 0 0 65px;
+	padding: 1px 0 0 75px;
 	color: #fff;
 	font-size: 13px;
 }
@@ -3636,7 +3637,7 @@ table tbody tr td {
 	position: absolute;
 	font-size: 10px;
 	top: 0;
-	left: -65px;
+	left: -74px;
 	font-weight: bold;
 	line-height: normal;
 }
@@ -3646,7 +3647,7 @@ table tbody tr td {
 }
 
 .timeline-container .session-content {
-	margin-left: 10px;
+	/*margin-left: 10px;*/
 }
 
 .timeline-container .session-content .title {
