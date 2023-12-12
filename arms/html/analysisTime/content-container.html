@@ -303,6 +303,10 @@
             </header>
             <div class="body maxwidget">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 10px; margin-bottom: 15px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    선택한 버전의 가장 빠른 시작일과 가장 늦은 종료일 확인 및 경과 시간, 전체 버전의 타임라인을 확인할 수 있습니다.
+                </blockquote>
                 <div class="row" style="min-height: 280px">
                     <div class="col-lg-4 color-legend-widget">
                         <section class="widget" style="/*margin-bottom: 2px; */ min-height: 317.5px;">
@@ -315,11 +319,11 @@
                                         진행 기한
                                     </span>
                                 </h4>
+                                <div class="gradient_middle_border" style="width: 100%; margin-bottom: 10px;"></div>
                             </header>
                             <div
                                     class="body"
                                     id="project-progress-wrapper">
-                                <div class="gradient_middle_border" style="width: 100%; margin-bottom: 10px;"></div>
                                 <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
                                     <div
                                             id="project-start"
@@ -349,7 +353,7 @@
                                     </div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; height: 42%; justify-content: space-between">
-                                    <div class="col-sm-12 fade-in-box" id="versionGaugeChart" style="height: 120px"></div>
+                                    <div class="col-sm-12 fade-in-box" id="versionGaugeChart" style="height: 185px"></div>
                                 </div>
                             </div>
                         </section>
@@ -428,13 +432,20 @@
             </header>
             <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    선택한 제품(서비스)와 버전에 일자별 업데이트된 요구사항과 연결된 이슈 분포 및 업데이트 누적 현황을 확인할 수 있습니다.
+                </blockquote>
                 <div class="row">
                     <div class="col-lg-6" style="/*padding-right: 4px !important;*/">
-                        <section class="widget large"  style="height: 460px;">
+                        <section class="widget large" style="min-height: 460px;">
                             <header>
                                 <h4><i class="fa fa-pie-chart"></i> 일자별 업데이트 분포</h4>
                             </header>
-                            <div class="body" id="scatter-chart-container"></div>
+                            <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                            <div class="body" style="height: 100%;">
+                                <div id="scatter-chart-container"></div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-lg-6">
@@ -478,7 +489,7 @@
                     <span   class="font13"
                             style="font-weight: bold">
                         <i class="fa fa-calendar-o"></i>
-                        일자별 요구사항 및 연결된 이슈
+                        요구사항 및 연결된 이슈 현황
                     </span>
                 </h4>
                 <div class="widget-controls">
@@ -518,9 +529,13 @@
             </header>
             <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    선택한 제품(서비스)와 버전에 요구사항 및 연결된 이슈의 일자별 생성 개수 및 업데이트 현황을 확인할 수 있습니다.
+                </blockquote>
                 <div class="row">
                     <div class="col-lg-12 color-legend-widget">
-                        <section class="widget large" style="height: 500px;">
+                        <section class="widget large" style="min-height: 540px;">
                             <header style="margin-bottom: 15px">
                                 <h4>
 									<span class="font13" style="font-weight: bold">
@@ -530,7 +545,7 @@
                                 </h4>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
-                            <div class="body" style="height: 500px;">
+                            <div class="body" style="height: 100%;">
                                 <div id="multi-chart-container"></div>
                             </div>
                         </section>
@@ -681,9 +696,11 @@
 				</div>
 			</header>
 			<div class="body">
-				<div
-					class="gradient_middle_border"
-					style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+				<div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote class="font13"
+                            style="margin-top: 5px;">
+                    선택한 제품(서비스)와 버전에 최근 7일 이내의 업데이트된 요구사항과 그에 연결된 이슈의 타임라인을 확인할 수 있습니다.
+                </blockquote>
 				<div class="row">
 					<div class="col-lg-4 color-legend-widget">
 						<section

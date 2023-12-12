@@ -29,17 +29,17 @@ function execDocReady() {
 			"../reference/jquery-plugins/info-chart-v1/js/timeline_analysisTime.js",
 			//"./js/dashboard/chart/timeline_custom.js",
 			"./js/dashboard/chart/infographic_custom.css",
-			"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/css/newtimeline.css",
+/*			"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/css/newtimeline.css",
 			"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/raphael.min.js",
-			"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/newtimeline.js",
+			"../reference/jquery-plugins/Timeline-Graphs-jQuery-Raphael/timeline/js/newtimeline.js",*/
 			// echarts
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
-			// 5번째 박스 network chart(현 게이지 차트)
+			// 게이지 차트
 			"../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
-			// 5번째 박스 heatmap
+			// heatmap
 			"../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
 			"../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
-			// 7번째 박스
+			// 요구사항 및 연결된 이슈 타임라인
 			"../reference/jquery-plugins/timelines-chart-2.11.8/src/show-time-marker.js",
 			"../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
 			//  최상단 메뉴
@@ -764,10 +764,13 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 
 				let result = Object.keys(data).reduce(
 					(acc, date) => {
-						acc.dates.push(date);
 
-						acc.totalRequirements.push(data[date].totalRequirements);
-						acc.totalIssues.push(data[date].totalRelationIssues);
+						if (data[date].totalRequirements !== 0 || data[date].totalRelationIssues !== 0) {
+							acc.dates.push(date);
+
+							acc.totalRequirements.push(data[date].totalRequirements);
+							acc.totalIssues.push(data[date].totalRelationIssues);
+						}
 
 						return acc;
 					},
@@ -1001,17 +1004,16 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 				var accumulateRelationIssueCount = 0;
 				let result = Object.keys(data).reduce(
 					(acc, date) => {
-						if (
-							(data[date].requirementStatuses !== null && Object.keys(data[date].requirementStatuses).length > 0) ||
-							(data[date].relationIssueStatuses !== null && Object.keys(data[date].relationIssueStatuses).length > 0)
-						) {
-							acc.dates.push(date);
 
-							accumulateRequirementCount += data[date].totalRequirements;
-							accumulateRelationIssueCount += data[date].totalRelationIssues;
+							if (data[date].totalRequirements !== 0 || data[date].totalRelationIssues !== 0) {
+								acc.dates.push(date);
 
-							acc.totalRequirements.push(accumulateRequirementCount);
-							acc.totalIssues.push(accumulateRelationIssueCount);
+								accumulateRequirementCount += data[date].totalRequirements;
+								accumulateRelationIssueCount += data[date].totalRelationIssues;
+
+								acc.totalRequirements.push(accumulateRequirementCount);
+								acc.totalIssues.push(accumulateRelationIssueCount);
+							}
 
 							if (data[date].requirementStatuses !== null) {
 								Object.keys(data[date].requirementStatuses).forEach((status) => {
@@ -1028,7 +1030,6 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 									}
 								});
 							}
-						}
 
 						return acc;
 					},
