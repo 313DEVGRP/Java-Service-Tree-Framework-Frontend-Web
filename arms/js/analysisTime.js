@@ -160,8 +160,9 @@ function makePdServiceSelectBox() {
 		//        } else {
 		//            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		//        }
+		
+		console.log("[ analysisTime :: makePdServiceSelectBox ] :: 선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
 
-		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
 	});
 } // end makePdServiceSelectBox()
 
@@ -174,7 +175,8 @@ function bind_VersionData_By_PdService() {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				// console.log(data.response); // versionData
+				console.log("[ analysisTime :: bind_VersionData_By_PdService ] :: 선택된 버전 데이터  = ");
+				console.log(data.response); // versionData
 
 				versionListData = data.response.reduce((obj, item) => {
 					obj[item.c_id] = item;
@@ -235,7 +237,7 @@ function makeVersionMultiSelectBox() {
 	$(".multiple-select").multipleSelect({
 		filter: true,
 		onClose: function () {
-			console.log("onOpen event fire!\n");
+			console.log("[ analysisTime :: makeVersionMultiSelectBox ] :: onOpen event fire!\n");
 
 			var checked = $("#checkbox1").is(":checked");
 			var endPointUrl = "";
@@ -300,8 +302,8 @@ function formatDate(date) {
 }
 
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
-	console.log("선택된 서비스 ===> " + pdservice_id);
-	console.log("선택된 버전 리스트 ===> " + pdservice_version_id);
+	console.log("[ analysisTime :: statisticsMonitor ] :: 선택된 서비스 ===> " + pdservice_id);
+	console.log("[ analysisTime :: statisticsMonitor ] :: 선택된 버전 리스트 ===> " + pdservice_version_id);
 
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
@@ -317,7 +319,8 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				versionData.sort((a, b) => a.c_id - b.c_id);
 				let version_count = versionData.length;
 
-				console.log("등록된 버전 개수 = " + version_count);
+				console.log("[ analysisTime :: statisticsMonitor ] :: 등록된 버전 개수 = " + version_count);
+
 				if (version_count !== undefined) {
 					$("#version_prgress").text(version_count);
 
@@ -739,6 +742,7 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
+				console.log("[ analysisTime :: dailyUpdatedStatusScatterChart ] :: 일별 업데이트 상태 스캐터 차트데이터 = ");
 				console.log(data);
 
 				let result = Object.keys(data).reduce(
@@ -885,7 +889,7 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 					};
 
 					myChart.on("click", function (params) {
-						console.log(params.data);
+						// console.log(params.data);
 					});
 				} else {
 					option = {
@@ -925,6 +929,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 		async: true,
 		statusCode: {
 			200: function (data) {
+				console.log("[ analysisTime :: calendarHeatMap ] :: 누적 업데이트 히트맵 차트데이터 = ");
 				console.log(data);
 				$(".update-title").show();
 
@@ -978,9 +983,12 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 		progress: true,
 		statusCode: {
 			200: function (data) {
+				console.log("[ analysisTime :: dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart ] :: 일별 이슈 생성 개수 및 업데이트 현황 데이터 = ");
 				console.log(data);
+
 				var accumulateRequirementCount = 0;
 				var accumulateRelationIssueCount = 0;
+
 				let result = Object.keys(data).reduce(
 					(acc, date) => {
 
@@ -1019,9 +1027,6 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 						statusKeys: []
 					}
 				);
-
-				console.log(result.totalRequirements);
-				console.log(result.totalIssues);
 
 				var dom = document.getElementById("multi-chart-container");
 				var myChart = echarts.init(dom, null, {
@@ -1520,7 +1525,6 @@ function convertVersionIdToTitle(versionId) {
 
 // 주식차트
 function candleStickChart() {
-	console.log("candle stick");
 	var dom = document.getElementById("candlestick-chart-container");
 	var myChart = echarts.init(dom, "dark", {
 		renderer: "canvas",
@@ -1565,8 +1569,6 @@ function candleStickChart() {
 
 function versionTimelineChart(versionData) {
 
-    console.log("@@@@@@@@@@@@@@@@");
-    console.log(versionData);
 
     var yVersionData = [];
     var xVesrionStartEndData = [];
@@ -1685,12 +1687,9 @@ function versionTimelineChart(versionData) {
                 },
                 renderItem: function(params, api) {
                     var categoryIndex = api.value(0);
-                    console.log(categoryIndex);
                     var start = api.coord([api.value(1), categoryIndex]);
                     var end = api.coord([api.value(2), categoryIndex]);
                     var height = params.coordSys.height / yVersionData.length;
-
-                    console.log(start);
 
                     return {
                         type: 'rect',

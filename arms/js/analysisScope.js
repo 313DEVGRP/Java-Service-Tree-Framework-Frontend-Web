@@ -23,8 +23,6 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload.js",
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
-			// d3 network chart
-			"../reference/lightblue4/docs/lib/d3/d3.min.js",
 			//chart Colors
 			"./js/dashboard/chart/colorPalette.js",
 			// Apache Echarts
@@ -52,6 +50,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"
 		],
 		[
+			// d3 network chart
+			"../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
 			// 생성한 차트 import
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js",
@@ -60,9 +60,6 @@ function execDocReady() {
 			// Box-plot chart
 
 			//circular-sankey chart
-
-			//tree chart
-			"../reference/lightblue4/docs/lib/d3/d3.min.js",
 
 			//CirclePacking with d3 Chart
 			"js/analysis/resource/chart/circularPackingChart.js",
@@ -793,9 +790,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				});
 			});
 
-			function zoomed() {
+			function zoomed(event) {
 				// 현재 확대/축소 변환을 얻음
-				var transform = d3.event.transform;
+				var transform = event.transform;
 
 				// 모든 노드 및 링크를 현재 확대/축소 변환으로 이동/확대/축소
 				gHolder.attr("transform", transform);
