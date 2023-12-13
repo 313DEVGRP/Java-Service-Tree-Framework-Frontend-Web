@@ -3912,5 +3912,8 @@ button {
 	transform: translate(-50%, -50%);
 }
 
+.xlarge {
+	height: 500px !important;
+}
 
 /* Analysis 분석 종료 */
