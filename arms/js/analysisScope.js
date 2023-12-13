@@ -1186,6 +1186,13 @@ function makeChart(data) {
 		.join("path")
 		.attr("d", ribbon)
 		.attr("fill", (d) => colors[d.target.index])
+		.attr("opacity", 0.6)
+		.on("mouseenter", function (d) {
+			d3.select(this).transition().attr("opacity", 1);
+		})
+		.on("mouseout", function () {
+			d3.select(this).transition().attr("opacity", 0.6);
+		})
 		.attr("stroke", "white")
 		.append("title")
 		.text(
