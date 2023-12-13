@@ -73,8 +73,8 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
-            "../reference/jquery-plugins/jQCloud/dist/jqcloud.js",
-            "../reference/jquery-plugins/jQCloud/dist/jqcloud.css",
+            "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.js",
+            "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.css",
             "../arms/css/analysis/analysis.css",
             "../arms/js/analysis/resource/sankey.js"
         ]

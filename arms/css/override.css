@@ -3670,3 +3670,247 @@ table tbody tr td {
 .tree-container.widget.large .body {
 	height: auto;
 }
+
+
+/* Dashboard 시작 */
+
+.c3-tooltip {
+	color: black !important;
+}
+
+.c3-chart-arc path {
+	stroke-width: 0.4px;
+}
+
+/* Dashboard 종료 */
+
+/* Analysis 분석 시작 */
+@media (max-width: 1200px) {
+	#quality-img {
+		display: none;
+	}
+}
+
+.card-widget {
+	border: 0;
+	position: relative;
+}
+
+.card {
+	margin-bottom: 1rem;
+}
+
+.card {
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-clip: border-box;
+	border: 0 solid rgba(0, 0, 0, .125);
+	border-radius: 0.25rem;
+}
+
+.widget-user .widget-user-image > img {
+	height: auto;
+	width: 200px;
+}
+
+.widget-user .widget-user-image {
+	left: 50%;
+	margin-left: -100px;
+	position: absolute;
+	top: 300px;
+}
+
+.widget-user .widget-user-header {
+	border-top-left-radius: 0.25rem;
+	border-top-right-radius: 0.25rem;
+	height: 135px;
+	padding: 1rem;
+	text-align: center;
+}
+
+.img-circle {
+	border-radius: 50%;
+}
+
+img {
+	vertical-align: middle;
+	border-style: none;
+}
+
+/*! Light */
+#light {
+	background-color: #000;
+	box-shadow: 0 0 5px rgba(0, 0, 0, .8);
+	overflow: hidden;
+	padding: 0 0 4px;
+	width: 40px;
+	margin-left: 30px;
+	transform: rotate(270deg);
+}
+
+#light span {
+	border-radius: 50px;
+	display: block;
+	height: 30px;
+	margin: 4px auto 0;
+	opacity: .5;
+	width: 30px;
+}
+
+/*! Light colours */
+#red {
+	background-color: red;
+}
+
+#orange {
+	background-color: orange;
+}
+
+#green {
+	background-color: green;
+}
+
+/*! Active states */
+#light span.active {
+	opacity: 1;
+}
+
+#light #red.active {
+	box-shadow: 0 0 10px red;
+}
+
+#light #orange.active {
+	box-shadow: 0 0 10px orange;
+}
+
+#light #green.active {
+	box-shadow: 0 0 10px green;
+}
+
+/*! Toggle button */
+button {
+	margin-top: 10px;
+}
+
+.project-date {
+	font-size: 10px;
+	color: #a4c6ff;
+}
+
+.day-progress {
+	position: absolute;
+	top: 75%;
+	left: 50%;
+	translate: -50% -50%;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.timeline:before {
+	left: 0px !important;
+	background: none;
+}
+
+.time_element {
+	overflow-x: scroll;
+	white-space: nowrap;
+}
+
+.node rect {
+	fill-opacity: 0.9;
+	shape-rendering: crispEdges;
+}
+
+.node text {
+	pointer-events: none;
+	text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+	fill: none;
+	stroke: #000;
+	stroke-opacity: 0.2;
+}
+
+.link:hover {
+	stroke-opacity: 0.5;
+}
+
+.dashboard-top-section {
+	min-height: 230px;
+}
+
+.ms-choice {
+	height: 16px;
+}
+
+.needle,
+.needle-center {
+	fill: #f1f2f6;
+}
+
+#total-icon-legend {
+	position: absolute;
+	top: 250px;
+	right: 10px;
+}
+
+#total-icon-legend > div {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.3em;
+}
+
+#total-icon-legend > div:last-child {
+	margin-bottom: 0;
+}
+
+#total-icon-legend > div > .text {
+	padding-top: 3px;
+	font-size: 10px;
+}
+
+.circle {
+	display: inline-block;
+	background-color: red;
+	width: 11px;
+	height: 11px;
+	border-radius: 50px;
+	margin-top: 4px;
+	margin-right: 8px;
+	border: 1px solid white;
+}
+
+.c3-bars path {
+	stroke: white;
+	stroke-width: 0.5px;
+}
+
+@media (max-width: 768px) {
+	#chart-product-manpower svg {
+		position: absolute;
+		top: 100%;
+	}
+}
+
+
+#chart-product-manpower {
+	position: relative;
+	height: 780px;
+}
+
+
+#chart-product-manpower svg {
+	position: absolute;
+	top: 60%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+
+/* Analysis 분석 종료 */
