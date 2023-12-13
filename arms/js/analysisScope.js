@@ -49,8 +49,10 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"
 		],
 		[
-			// d3 network chart
+			// d3-7.8.2 network chart
 			"../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
+			// d3-5.16.0
+			// "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// 생성한 차트 import
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js",
@@ -614,12 +616,13 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 	/******** network graph config ********/
 	var networkGraph = {
 		createGraph: function () {
-			var links = NETWORK_DATA.links.map(function (d) {
+			let links = NETWORK_DATA.links.map(function (d) {
 				return Object.create(d);
 			});
-			var nodes = NETWORK_DATA.nodes.map(function (d) {
+			let nodes = NETWORK_DATA.nodes.map(function (d) {
 				return Object.create(d);
 			});
+
 			var fillCircle = function (g) {
 				if (g.type === "pdService") {
 					return "#c67cff";
@@ -635,7 +638,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			};
 
 			var typeBinding = function (g) {
-				var name = "";
+				let name = "";
 
 				if (g.type === "pdService") {
 					name = "제품(서비스)";
@@ -651,7 +654,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			};
 
 			var nameBinding = function (g) {
-				var name = "";
+				let name = "";
 
 				if (g.type === "pdService") {
 					return g.c_title;
@@ -662,43 +665,63 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				}
 			};
 
-			var width = 500;
-			var height = 500;
+			let baseWidth = 400;
+			let baseHeight = 400;
+			let nodeCount = nodes.length;
 
-			var simulation = d3
-				.forceSimulation(nodes)
-				.force(
-					"link",
-					d3
-						.forceLink(links)
-						.id(function (d) {
-							return d.id;
-						})
-						.distance(80)
-				)
-				.force("charge", d3.forceManyBody().strength(-800))
-				.force("center", d3.forceCenter(width / 2, height / 2));
-			// .force("collide",d3.forceCollide().radius( function(d){ return d.value*8}) );
+			let increaseFactor = Math.floor(nodeCount / 100);
+			if (nodeCount % 100 !== 0)  {
+				increaseFactor++;
+			}
+			baseWidth += increaseFactor * 100;
+			baseHeight += increaseFactor * 100;
 
-			//simulation.stop(); // stop 필요한가?
+			let width = baseWidth;
+			let height = baseHeight;
 
-			var svg = d3.select("#NETWORK_GRAPH").attr("viewBox", [0, 0, width, height]);
+			let initScale = 1;
 
-			var initScale;
-
-			if (NETWORK_DATA.nodes.length > 200) {
-				initScale = 0.2;
-			} else if (NETWORK_DATA.nodes.length > 90) {
-				initScale = 0.4;
-			} else {
-				initScale = 1;
+			if (increaseFactor !== 0) {
+				initScale = initScale / increaseFactor;
 			}
 
-			var initialTransform = d3.zoomIdentity
+			let simulation = d3
+				.forceSimulation(nodes)
+				.force("link",
+					d3.forceLink(links)
+						.id(function (d) { return d.id; })
+						.distance(30)
+				)
+				.force("charge", d3.forceManyBody().strength(-1000))
+				.force("center", d3.forceCenter(width / 3, height / 3))
+				.force("collide", d3.forceCollide().radius(20))
+				.force("radial", d3.forceRadial()
+					.radius(10)
+					.x(width / 3)
+					.y(height / 3)
+					.strength(0.5)
+				);
+				//.force("center", d3.forceCenter(width / 3, height / 3));
+				// .force("collide", d3.forceCollide()
+				// 	.radius(function(node) {
+				// 		var linkCount = countLinks(node, links	);
+				// 		return 5 * linkCount;
+				// 	})
+				// );
+				// .force("collide",d3.forceCollide().radius( function(d){
+				// 	console.log(d);
+				// 	return 20;
+				// }));
+
+			//simulation.stop();
+
+			let svg = d3.select("#NETWORK_GRAPH").attr("viewBox", [0, 0, width, height]);
+
+			let initialTransform = d3.zoomIdentity
 				.translate(width / 3, height / 3) // 초기 위치 설정
 				.scale(initScale); // 초기 줌 레벨 설정
 
-			var zoom = d3
+			let zoom = d3
 				.zoom()
 				.scaleExtent([0.1, 5]) // 줌 가능한 최소/최대 줌 레벨 설정
 				.on("zoom", zoomed); // 줌 이벤트 핸들러 설정
@@ -709,9 +732,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			// 초기 줌 설정
 			svg.transition().duration(500).call(zoom.transform, initialTransform);
 
-			var gHolder = svg.append("g").attr("class", "g-holder");
+			let gHolder = svg.append("g").attr("class", "g-holder");
 
-			var link = gHolder
+			let link = gHolder
 				.append("g")
 				.attr("fill", "none")
 				.attr("stroke", "gray")
@@ -735,7 +758,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
               .text(function(d){ return d.id })
               .style("font-size", "12px") */
 
-			var node = gHolder
+			let node = gHolder
 				.append("g")
 				.attr("class", "circle-node-holder")
 				.attr("stroke", "white")
@@ -806,9 +829,12 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				});
 			});
 
+			// d3-5.16.0
+			// function zoomed() {
+			// 	let transform = d3.event.transform;
 			function zoomed(event) {
 				// 현재 확대/축소 변환을 얻음
-				var transform = event.transform;
+				let transform = event.transform;
 
 				// 모든 노드 및 링크를 현재 확대/축소 변환으로 이동/확대/축소
 				gHolder.attr("transform", transform);
@@ -819,6 +845,24 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			return svg.node();
 		},
 		drag: function (simulation) {
+			// d3-5.16.0
+			// function dragstarted(d) {
+			// 	if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+			// 	d.fx = d.x;
+			// 	d.fy = d.y;
+			// }
+			//
+			// function dragged(d) {
+			// 	d.fx = d3.event.x;
+			// 	d.fy = d3.event.y;
+			// }
+			//
+			// function dragended(d) {
+			// 	if (!d3.event.active) simulation.alphaTarget(0);
+			// 	d.fx = null;
+			// 	d.fy = null;
+			// }
+
 			function dragstarted(event, d) {
 				if (!event.active) simulation.alphaTarget(0.3).restart();
 				d.fx = d.x;

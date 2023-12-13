@@ -36,6 +36,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
 			// 게이지 차트
 			"../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
+			// "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
+			// "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// heatmap
 			"../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
 			"../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
@@ -131,9 +133,9 @@ function makePdServiceSelectBox() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
-				for (var k in data.response) {
-					var obj = data.response[k];
-					var newOption = new Option(obj.c_title, obj.c_id, false, false);
+				for (let k in data.response) {
+					let obj = data.response[k];
+					let newOption = new Option(obj.c_title, obj.c_id, false, false);
 					$("#selected_pdService").append(newOption).trigger("change");
 				}
 			}
@@ -152,8 +154,8 @@ function makePdServiceSelectBox() {
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
 
-		var checked = $("#checkbox1").is(":checked");
-		var endPointUrl = "";
+		let checked = $("#checkbox1").is(":checked");
+		let endPointUrl = "";
 
 		//        if (checked) {
 		//            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
@@ -183,11 +185,11 @@ function bind_VersionData_By_PdService() {
 					return obj;
 				}, {});
 
-				var pdServiceVersionIds = [];
-				for (var k in data.response) {
-					var obj = data.response[k];
+				let pdServiceVersionIds = [];
+				for (let k in data.response) {
+					let obj = data.response[k];
 					pdServiceVersionIds.push(obj.c_id);
-					var newOption = new Option(obj.c_title, obj.c_id, true, false);
+					let newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
 
@@ -239,9 +241,9 @@ function makeVersionMultiSelectBox() {
 		onClose: function () {
 			console.log("[ analysisTime :: makeVersionMultiSelectBox ] :: onOpen event fire!\n");
 
-			var checked = $("#checkbox1").is(":checked");
-			var endPointUrl = "";
-			var versionTag = $(".multiple-select").val();
+			let checked = $("#checkbox1").is(":checked");
+			let endPointUrl = "";
+			let versionTag = $(".multiple-select").val();
 
 			if (versionTag === null || versionTag == "") {
 				alert("버전이 선택되지 않았습니다.");
@@ -292,6 +294,13 @@ function makeVersionMultiSelectBox() {
 			}
 		}
 	});
+}
+
+async function formatDateAsync(date) {
+	var year = date.getFullYear();
+	var month = (date.getMonth() + 1).toString().padStart(2, "0");
+	var day = date.getDate().toString().padStart(2, "0");
+	return year + "-" + month + "-" + day;
 }
 
 function formatDate(date) {
@@ -408,7 +417,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 ////////////////////
 // 두번째 박스
 ////////////////////
-function drawVersionProgress(data) {
+async function drawVersionProgress(data) {
 	var Needle,
 		arc,
 		arcEndRad,
@@ -523,7 +532,9 @@ function drawVersionProgress(data) {
 			}
 		}
 	}
-	deadline = formatDate(new Date(latestEndDate));
+
+	deadline = await formatDateAsync(new Date(latestEndDate));
+
 	$("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
 	$("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
 
