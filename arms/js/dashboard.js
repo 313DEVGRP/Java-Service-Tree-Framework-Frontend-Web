@@ -681,57 +681,14 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 		statusCode: {
 			200: function (data) {
 				let chartDom = document.getElementById('chart-manpower-requirement');
-
 				let myChart = echarts.init(chartDom);
-
 				let option;
-
-				myChart.showLoading();
-				myChart.hideLoading();
-
-				function getLevelOption() {
-					return [
-						{
-							itemStyle: {
-								borderColor: '#777',
-								borderWidth: 0,
-								gapWidth: 1
-							},
-							upperLabel: {
-								show: false
-							}
-						},
-						{
-							itemStyle: {
-								borderColor: '#555',
-								borderWidth: 5,
-								gapWidth: 1
-							},
-							emphasis: {
-								itemStyle: {
-									borderColor: '#ddd'
-								}
-							}
-						},
-						{
-							colorSaturation: [0.35, 0.5],
-							itemStyle: {
-								borderWidth: 5,
-								gapWidth: 1,
-								borderColorSaturation: 0.6
-							}
-						}
-					];
-				}
-
 				myChart.setOption(
-					({
+					(option = {
 						title: {
 							text: '',
-							left: 'center',
-							textStyle: {
-								color: '#ffffff'
-							}
+							subtext: '',
+							left: 'leafDepth'
 						},
 						tooltip: {
 							formatter: function (info) {
@@ -751,8 +708,9 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 						},
 						series: [
 							{
-								name: "ROOT",
+								name: 'ROOT',
 								type: 'treemap',
+								visibleMin: 300,
 								width: '100%',
 								height: '85%', // breadcrumb를 사용하지 않을 경우, width, height 모두 100%를 주면 됩니다.
 								breadcrumb: {
@@ -776,16 +734,46 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 								itemStyle: {
 									borderColor: '#fff',
 								},
-								levels: getLevelOption(),
-								data: data.slice(0, 3) // 담당 이슈 개수 기준 Top 3
+								data: data,
+								leafDepth: 1,
+								levels:
+									[
+										{
+											itemStyle: {
+												borderColor: '#555',
+												borderWidth: 4,
+												gapWidth: 4
+											}
+										},
+										{
+											colorSaturation: [0.3, 0.6],
+											itemStyle: {
+												borderColorSaturation: 0.7,
+												gapWidth: 2,
+												borderWidth: 2
+											}
+										},
+										{
+											colorSaturation: [0.3, 0.5],
+											itemStyle: {
+												borderColorSaturation: 0.6,
+												gapWidth: 1
+											}
+										},
+										{
+											colorSaturation: [0.3, 0.5]
+										}
+									],
 							}
 						]
 					})
 				);
+
 				option && myChart.setOption(option);
 				window.addEventListener('resize', function () {
 					myChart.resize();
 				});
+
 			}
 		}
 	});
