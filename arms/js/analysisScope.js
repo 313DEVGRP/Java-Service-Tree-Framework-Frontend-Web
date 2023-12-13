@@ -11,7 +11,6 @@ var versionListData;
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
-
 function execDocReady() {
 	var pluginGroups = [
 		[
@@ -100,6 +99,23 @@ function execDocReady() {
 			versionUpdateIssueScatterChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 			exampleCircularPackingChart(); // circularPackingChart - MockData
+
+			chord(
+				Object.assign(
+					[
+						[11975, 5871, 8916, 2868],
+						[1951, 10048, 2060, 6171],
+						[8010, 16145, 8090, 8045],
+						[1013, 990, 940, 6907]
+					],
+					{
+						names: ["black", "blond", "brown", "red"],
+						colors: ["#000000", "#ffdd89", "#957244", "#f26223"]
+					}
+				)
+			);
+
+			sankeyItem();
 
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
@@ -804,19 +820,19 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			return svg.node();
 		},
 		drag: function (simulation) {
-			function dragstarted(d) {
-				if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+			function dragstarted(event, d) {
+				if (!event.active) simulation.alphaTarget(0.3).restart();
 				d.fx = d.x;
 				d.fy = d.y;
 			}
 
-			function dragged(d) {
-				d.fx = d3.event.x;
-				d.fy = d3.event.y;
+			function dragged(event, d) {
+				d.fx = event.x;
+				d.fy = event.y;
 			}
 
-			function dragended(d) {
-				if (!d3.event.active) simulation.alphaTarget(0);
+			function dragended(event, d) {
+				if (!event.active) simulation.alphaTarget(0);
 				d.fx = null;
 				d.fy = null;
 			}
@@ -1005,9 +1021,195 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 				});
 				let colorArr = dashboardColor.nightingaleRose;
 
-				drawNightingalePieChart("reqPerVersionRoseChart",chartDataArr,colorArr);
-
+				drawNightingalePieChart("reqPerVersionRoseChart", chartDataArr, colorArr);
 			}
 		}
+	});
+}
+
+function sankeyItem() {
+	var dom = document.getElementById("tree_container");
+	var myChart = echarts.init(dom);
+	var option = {
+		tooltip: {
+			trigger: "item",
+			triggerOn: "mousemove"
+		},
+		animation: false,
+		series: [
+			{
+				type: "sankey",
+				emphasis: {
+					focus: "adjacency"
+				},
+				levels: [
+					{
+						depth: 0,
+						itemStyle: {
+							color: "#fbb4ae"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					},
+					{
+						depth: 1,
+						itemStyle: {
+							color: "#b3cde3"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					},
+					{
+						depth: 2,
+						itemStyle: {
+							color: "#ccebc5"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					},
+					{
+						depth: 3,
+						itemStyle: {
+							color: "#decbe4"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					}
+				],
+				lineStyle: {
+					curveness: 0.5
+				},
+				nodeWidth: 7,
+				nodeGap: 8,
+				left: 5,
+				right: 140
+			}
+		]
+	};
+
+	$.ajax({
+		url: "js/analysis/mockData/tree.json",
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				option.series[0].data = data.nodes;
+				option.series[0].links = data.links;
+				myChart.setOption(option);
+			}
+		}
+	});
+
+	window.addEventListener("resize", function () {
+		myChart.resize();
+	});
+}
+
+function chord(data) {
+	const $container = document.getElementById("circular_sankey");
+	const $chart = makeChart(data);
+
+	$container.append($chart);
+}
+
+function makeChart(data) {
+	const width = 640;
+	const height = width;
+	const outerRadius = Math.min(width, height) * 0.5 - 30;
+	const innerRadius = outerRadius - 20;
+	const { names, colors } = data;
+	const sum = d3.sum(data.flat());
+	const tickStep = d3.tickStep(0, sum, 100);
+	const tickStepMajor = d3.tickStep(0, sum, 20);
+	const formatValue = d3.formatPrefix(",.0", tickStep);
+
+	const chord = d3
+		.chord()
+		.padAngle(20 / innerRadius)
+		.sortSubgroups(d3.descending);
+
+	const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+
+	const ribbon = d3.ribbon().radius(innerRadius);
+
+	const svg = d3
+		.create("svg")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("viewBox", [-width / 2, -height / 2, width, height])
+		.attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
+
+	const chords = chord(data);
+
+	const group = svg.append("g").selectAll().data(chords.groups).join("g");
+
+	group
+		.append("path")
+		.attr("fill", (d) => colors[d.index])
+		.attr("d", arc)
+		.append("title")
+		.text((d) => `${d.value.toLocaleString("en-US")} ${names[d.index]}`);
+
+	const groupTick = group
+		.append("g")
+		.selectAll()
+		.data((d) => groupTicks(d, tickStep))
+		.join("g")
+		.attr("transform", (d) => `rotate(${(d.angle * 180) / Math.PI - 90}) translate(${outerRadius},0)`);
+
+	groupTick.append("line").attr("stroke", "currentColor").attr("x2", 6);
+
+	groupTick
+		.filter((d) => d.value % tickStepMajor === 0)
+		.append("text")
+		.attr("x", 8)
+		.attr("dy", ".35em")
+		.attr("transform", (d) => (d.angle > Math.PI ? "rotate(180) translate(-16)" : null))
+		.attr("text-anchor", (d) => (d.angle > Math.PI ? "end" : null))
+		.text((d) => formatValue(d.value));
+
+	svg
+		.append("g")
+		.attr("fill-opacity", 0.7)
+		.selectAll()
+		.data(chords)
+		.join("path")
+		.attr("d", ribbon)
+		.attr("fill", (d) => colors[d.target.index])
+		.attr("opacity", 0.6)
+		.on("mouseenter", function (d) {
+			d3.select(this).transition().attr("opacity", 1);
+		})
+		.on("mouseout", function () {
+			d3.select(this).transition().attr("opacity", 0.6);
+		})
+		.attr("stroke", "white")
+		.append("title")
+		.text(
+			(d) =>
+				`${d.source.value.toLocaleString("en-US")} ${names[d.source.index]} → ${names[d.target.index]}${
+					d.source.index !== d.target.index
+						? `\n${d.target.value.toLocaleString("en-US")} ${names[d.target.index]} → ${names[d.source.index]}`
+						: ``
+				}`
+		);
+
+	return svg.node();
+}
+
+function groupTicks(d, step) {
+	const k = (d.endAngle - d.startAngle) / d.value;
+	return d3.range(0, d.value, step).map((value) => {
+		return { value: value, angle: value * k + d.startAngle };
 	});
 }
