@@ -11,6 +11,62 @@ var versionListData;
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
+const chartData = [
+	{ from: "Innovation", color: "#3fd7e8" },
+	{ from: "AI", color: "#3fd7e8" },
+	{ from: "Increasing clinical outcomes", color: "#3fd7e8" },
+	{ from: "GI patient diagnosis", color: "#2b3ae3" },
+	{ from: "Vagueness of patient symptom descriptions", color: "#2b3ae3" },
+	{ from: "Misdiagnosis or longer diagnostic pathway", color: "#2b3ae3" },
+	{ from: "Recognising the symptoms and contributors", color: "#2b3ae3" },
+	{ from: "Uncertainty", color: "#2b3ae3" },
+	{ from: "Management pathway", color: "#2b3ae3" },
+	{ from: "Accuracy", color: "#2b3ae3" },
+	{ from: "Patient satisfaction", color: "#e3a619" },
+	{ from: "Patient outcomes", color: "#e3a619" },
+	{ from: "Patient quality of life", color: "#e3a619" },
+	{ from: "Patient satisfaction", color: "#e3a619" },
+	{ from: "Maintaining patient relationships", color: "#e3a619" },
+	{ from: "Insurance", color: "#147a17" },
+	{ from: "Reimbursement", color: "#147a17" },
+	{ from: "Efficient billing", color: "#147a17" },
+	{ from: "Increased patient-centered care", color: "#FF5733" },
+	{ from: "Efficiency", color: "#FF5733" },
+	{ from: "Financing", color: "#E9115C" },
+	{ from: "Dr transparency with patients", color: "#1d2b42" },
+	{ from: "Wait times and processes", color: "#6feda6" },
+	{ from: "Ability to provide 'full package' care", color: "#6feda6" },
+	{ from: "Quality of service", color: "#6feda6" },
+	{ from: "Reviews", color: "#6feda6" },
+	{ from: "When treatment occurs", color: "#6feda6" },
+	{ from: "Lack of communication", color: "#6feda6" },
+	{ from: "Quality", color: "#6feda6" },
+	{ from: "Innovation", to: "AI", value: 1 },
+	{ from: "Innovation", to: "Efficiency", value: 1 },
+	{ from: "AI", to: "Increasing clinical outcomes", value: 3 },
+	{ from: "AI", to: "Patient satisfaction", value: 1 },
+	{ from: "AI", to: "Maintaining patient relationships", value: 1 },
+	{ from: "GI patient diagnosis", to: "Management pathway", value: 1 },
+	{ from: "Vagueness of patient symptom descriptions", to: "Misdiagnosis or longer diagnostic pathway", value: 2 },
+	{ from: "Recognising the symptoms and contributors", to: "Patient quality of life", value: 5 },
+	{ from: "Management pathway", to: "Increased patient-centered care", value: 4 },
+	{ from: "Patient satisfaction", to: "Uncertainty", value: 2 },
+	{ from: "Patient satisfaction", to: "Efficiency", value: 2 },
+	{ from: "Patient satisfaction", to: "Quality", value: 3 },
+	{ from: "Insurance", to: "Financing", value: 1 },
+	{ from: "Efficient billing", to: "Reimbursement", value: 1 },
+	{ from: "Efficiency", to: "Patient outcomes", value: 4 },
+	{ from: "Financing", to: "Insurance", value: 2 },
+	{ from: "Financing", to: "Reimbursement", value: 2 },
+	{ from: "Dr transparency with patients", to: "Quality", value: 2 },
+	{ from: "Wait times and processes", to: "Patient satisfaction", value: 4 },
+	{ from: "Quality of service", to: "Patient satisfaction", value: 4 },
+	{ from: "Quality of service", to: "Reviews", value: 1 },
+	{ from: "Reviews", to: "When treatment occurs", value: 1 },
+	{ from: "Lack of communication", to: "", value: 1 },
+	{ from: "Quality", to: "Accuracy", value: 1 },
+	{ from: "Quality", to: "Efficiency", value: 1 }
+];
 
 function execDocReady() {
 	var pluginGroups = [
@@ -80,8 +136,13 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
 			"../arms/css/analysis/analysis.css",
 			"../arms/js/analysis/resource/sankey.js"
-		]
+		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+		[
+			"../reference/jquery-plugins/amcharts_4.10.38/core.js",
+			"../reference/jquery-plugins/amcharts_4.10.38/charts.js",
+			"../reference/jquery-plugins/amcharts_4.10.38/themes/animated.js"
+		]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -100,6 +161,8 @@ function execDocReady() {
 			versionUpdateIssueScatterChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 			exampleCircularPackingChart(); // circularPackingChart - MockData
+
+			chordChart(chartData);
 
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
@@ -1005,9 +1068,102 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 				});
 				let colorArr = dashboardColor.nightingaleRose;
 
-				drawNightingalePieChart("reqPerVersionRoseChart",chartDataArr,colorArr);
-
+				drawNightingalePieChart("reqPerVersionRoseChart", chartDataArr, colorArr);
 			}
 		}
 	});
+}
+
+// function gradientColor(alpha, colorGenerator) {
+// 	return `background: linear-gradient(${colorGenerator(alpha)}, ${colorGenerator(alpha)})`;
+// }
+//
+// function colorGenerator(alpha = 1) {
+// 	const hex = new Array(7).fill("").reduce((acc, v) => {
+// 		return acc + "0123456789abcdef"[Math.floor(Math.random() * 16)];
+// 	});
+// 	const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
+//
+// 	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+// }
+
+function chordChart(data) {
+	am4core.useTheme(am4themes_animated);
+
+	var chart = am4core.create("circular_sankey", am4charts.ChordDiagram);
+	chart.hiddenState.properties.opacity = 0;
+
+	chart.data = data;
+	chart.dataFields.fromName = "from";
+	chart.dataFields.toName = "to";
+	chart.dataFields.value = "value";
+	chart.dataFields.category = "color";
+	chart.dataFields.color = "color";
+
+	chart.nodePadding = 0.8;
+	chart.minNodeSize = 0.01;
+	chart.startAngle = 270;
+	chart.endAngle = chart.startAngle + 360;
+	chart.fontSize = 10;
+
+	var nodeTemplate = chart.nodes.template;
+	nodeTemplate.readerTitle = "Click to show/hide or drag to rearrange";
+	nodeTemplate.showSystemTooltip = true;
+	nodeTemplate.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+	chart.dataFields.category = "colour";
+	chart.dataFields.colour = "colour";
+	nodeTemplate.propertyFields.fill = "colour";
+	nodeTemplate.tooltipText = "{name}";
+
+	nodeTemplate.events.on("over", function (event) {
+		var node = event.target;
+		node.outgoingDataItems.each(function (dataItem) {
+			if (dataItem.toNode) {
+				dataItem.link.isHover = true;
+				dataItem.toNode.label.isHover = true;
+			}
+		});
+		node.incomingDataItems.each(function (dataItem) {
+			if (dataItem.fromNode) {
+				dataItem.link.isHover = true;
+				dataItem.fromNode.label.isHover = true;
+			}
+		});
+
+		node.label.isHover = true;
+	});
+
+	nodeTemplate.events.on("out", function (event) {
+		var node = event.target;
+		node.outgoingDataItems.each(function (dataItem) {
+			if (dataItem.toNode) {
+				dataItem.link.isHover = false;
+				dataItem.toNode.label.isHover = false;
+			}
+		});
+		node.incomingDataItems.each(function (dataItem) {
+			if (dataItem.fromNode) {
+				dataItem.link.isHover = false;
+				dataItem.fromNode.label.isHover = false;
+			}
+		});
+
+		node.label.isHover = false;
+	});
+
+	var label = nodeTemplate.label;
+	label.relativeRotation = 90;
+
+	label.fillOpacity = 0.4;
+	let labelHS = label.states.create("hover");
+	labelHS.properties.fillOpacity = 1;
+
+	var linkTemplate = chart.links.template;
+	linkTemplate.strokeOpacity = 0;
+	linkTemplate.fillOpacity = 0.15;
+	linkTemplate.tooltipText = "{fromName} -- {toName}";
+
+	var hoverState = linkTemplate.states.create("hover");
+	hoverState.properties.fillOpacity = 0.7;
+	hoverState.properties.strokeOpacity = 0.7;
 }
