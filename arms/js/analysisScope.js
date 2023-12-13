@@ -100,6 +100,8 @@ function execDocReady() {
 			dashboardColor = dashboardPalette.dashboardPalette01;
 			exampleCircularPackingChart(); // circularPackingChart - MockData
 
+			sankeyItem();
+
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
@@ -1010,15 +1012,90 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 	});
 }
 
-// function gradientColor(alpha, colorGenerator) {
-// 	return `background: linear-gradient(${colorGenerator(alpha)}, ${colorGenerator(alpha)})`;
-// }
-//
-// function colorGenerator(alpha = 1) {
-// 	const hex = new Array(7).fill("").reduce((acc, v) => {
-// 		return acc + "0123456789abcdef"[Math.floor(Math.random() * 16)];
-// 	});
-// 	const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
-//
-// 	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-// }
+function sankeyItem() {
+	var dom = document.getElementById("tree_container");
+	var myChart = echarts.init(dom);
+	var option = {
+		tooltip: {
+			trigger: "item",
+			triggerOn: "mousemove"
+		},
+		animation: false,
+		series: [
+			{
+				type: "sankey",
+				emphasis: {
+					focus: "adjacency"
+				},
+				levels: [
+					{
+						depth: 0,
+						itemStyle: {
+							color: "#fbb4ae"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					},
+					{
+						depth: 1,
+						itemStyle: {
+							color: "#b3cde3"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					},
+					{
+						depth: 2,
+						itemStyle: {
+							color: "#ccebc5"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					},
+					{
+						depth: 3,
+						itemStyle: {
+							color: "#decbe4"
+						},
+						lineStyle: {
+							color: "source",
+							opacity: 0.6
+						}
+					}
+				],
+				lineStyle: {
+					curveness: 0.5
+				},
+				nodeWidth: 7,
+				nodeGap: 8,
+				left: 5,
+				right: 140
+			}
+		]
+	};
+
+	$.ajax({
+		url: "js/analysis/mockData/tree.json",
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				option.series[0].data = data.nodes;
+				option.series[0].links = data.links;
+				myChart.setOption(option);
+			}
+		}
+	});
+
+	window.addEventListener("resize", function () {
+		myChart.resize();
+	});
+}

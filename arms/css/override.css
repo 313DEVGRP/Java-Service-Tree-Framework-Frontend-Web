@@ -3665,3 +3665,8 @@ table tbody tr td {
 	font-weight: 600;
 	font-size: 12px;
 }
+
+.tree-container.widget.large,
+.tree-container.widget.large .body {
+	height: auto;
+}
