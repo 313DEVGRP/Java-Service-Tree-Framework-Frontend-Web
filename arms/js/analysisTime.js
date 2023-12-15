@@ -2,6 +2,7 @@
 //Page 전역 변수
 ///////////////////
 var dashboardColor;
+var selectedPdServiceId;
 var selectedVersionId;
 var versionListData;
 var deadline;
@@ -192,32 +193,36 @@ function bind_VersionData_By_PdService() {
 					let newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
-
+				selectedPdServiceId = $("#selected_pdService").val();
 				selectedVersionId = pdServiceVersionIds.join(",");
+
+				if (selectedPdServiceId === null || selectedPdServiceId === undefined || selectedPdServiceId === "") {
+					return;
+				}
 
 				// 최상단 메뉴 통계
 				수치_초기화();
-				getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
+				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
 				// 버전 및 게이지차트, 버전 타임라인 차트 초기화
-				statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
+				statisticsMonitor(selectedPdServiceId, selectedVersionId);
 
 				// 히트맵 차트 초기화
-				calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
+				calendarHeatMap(selectedPdServiceId, selectedVersionId);
 
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 				setTimeout(function () {
-					dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart($("#selected_pdService").val(), selectedVersionId);
+					dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
 				}, 2000);
 
 				setTimeout(function () {
-					dailyUpdatedStatusScatterChart($("#selected_pdService").val(), selectedVersionId);
-				}, 1000);
+					dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
+				}, 2000);
 
-				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+				getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 				// vertical timeline chart
-				verticalTimeLineChart($("#selected_pdService").val(), selectedVersionId);
+				verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -245,52 +250,56 @@ function makeVersionMultiSelectBox() {
 			let endPointUrl = "";
 			let versionTag = $(".multiple-select").val();
 
-			if (versionTag === null || versionTag == "") {
+			if (versionTag === null || versionTag === undefined || versionTag === "" ) {
 				alert("버전이 선택되지 않았습니다.");
 				return;
 			}
-
+			selectedPdServiceId = $("#selected_pdService").val();
 			selectedVersionId = versionTag.join(",");
+
+			if (selectedPdServiceId === null || selectedPdServiceId === undefined || selectedPdServiceId === "") {
+				return;
+			}
 
 			// 최상단 메뉴 통계
 			수치_초기화();
-			getReqAndLinkedIssueData($("#selected_pdService").val(), selectedVersionId);
+			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
 			// 버전 및 게이지차트, 버전 타임라인 차트 초기화
-			statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
+			statisticsMonitor(selectedPdServiceId, selectedVersionId);
 
 			// 히트맵 차트 초기화
-			calendarHeatMap($("#selected_pdService").val(), selectedVersionId);
+			calendarHeatMap(selectedPdServiceId, selectedVersionId);
 
 			// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 			setTimeout(function () {
-				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart($("#selected_pdService").val(), selectedVersionId);
+				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
 			}, 2000);
 
 			// 스캐터 차트
 			setTimeout(function () {
-				dailyUpdatedStatusScatterChart($("#selected_pdService").val(), selectedVersionId);
+				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
 			}, 1000);
 
-			getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
+			getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 			// vertical timeline chart
-			verticalTimeLineChart($("#selected_pdService").val(), selectedVersionId);
+			verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
 
 			if (checked) {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" +
-					$("#selected_pdService").val() +
+					selectedPdServiceId +
 					"/getStatusMonitor.do?disable=true&versionTag=" +
 					versionTag;
-				//dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				//dataTableLoad(selectedPdServiceId, endPointUrl);
 			} else {
 				endPointUrl =
 					"/T_ARMS_REQSTATUS_" +
-					$("#selected_pdService").val() +
+					selectedPdServiceId +
 					"/getStatusMonitor.do?disable=false&versionTag=" +
 					versionTag;
-				//dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				//dataTableLoad(selectedPdServiceId, endPointUrl);
 			}
 		}
 	});
@@ -582,7 +591,7 @@ async function drawVersionProgress(data) {
         var hoverData = d.target.__data__;
         var subgroupId = hoverData.version_id;
         var subgroupName = hoverData.version_name;
-        var subgroupValue = new Date(hoverData.start_date).toLocaleDateString() + " ~ " + new Date(d.end_date).toLocaleDateString();
+        var subgroupValue = new Date(hoverData.start_date).toLocaleDateString() + " ~ " + new Date(hoverData.end_date).toLocaleDateString();
         tooltip.html("버전명: " + subgroupName + "<br>" + "기간: " + subgroupValue).style("opacity", 1);
 
 		d3.selectAll(".myWave").style("opacity", 0.2);
@@ -730,7 +739,7 @@ async function drawVersionProgress(data) {
 ////////////////////
 // 스캐터 차트
 ////////////////////
-function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
+function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
 
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
@@ -739,7 +748,7 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 		.addQueryParam("일자기준", "updated")
 		.addQueryParam("메인그룹필드", "isReq")
 		.addQueryParam("날짜크기", 30)
-		.addQueryParam("날짜페이지", 1)
+		.addQueryParam("날짜페이지", pageIndex)
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)
@@ -763,23 +772,23 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 							acc.dates.push(date);
 
 							acc.totalRequirements.push(data[date].totalRequirements);
-							acc.totalIssues.push(data[date].totalRelationIssues);
+							acc.totalRelationIssues.push(data[date].totalRelationIssues);
 						}
 
 						return acc;
 					},
 					{
 						dates: [],
-						totalIssues: [],
+						totalRelationIssues: [],
 						totalRequirements: [],
 					}
 				);
 
 				let dates = result.dates;
-				let totalIssues = result.totalIssues;
+				let totalRelationIssues = result.totalRelationIssues;
 				let totalRequirements = result.totalRequirements;
 
-				var deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalIssues, deadline, false, 2);
+				var deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalRelationIssues, deadline, false, 2);
 
 				var dom = document.getElementById("scatter-chart-container");
 
@@ -790,7 +799,7 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 
 				var option;
 
-				if ((totalRequirements && totalRequirements.length > 0) || (totalIssues && totalIssues.length > 0)) {
+				if ((totalRequirements && totalRequirements.length > 0) || (totalRelationIssues && totalRelationIssues.length > 0)) {
 
 					option = {
 						aria: {
@@ -836,6 +845,10 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 								symbol: "diamond",
 								clip: false,
 								label: {
+									normal: {
+										show: false,
+										color: "#FFFFFF"
+									},
 									emphasis: {
 										show: true,
 										color: "#FFFFFF"
@@ -853,10 +866,14 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 							},
 							{
 								name: "연결된 이슈",
-								data: totalIssues,
+								data: totalRelationIssues,
 								type: "scatter",
 								clip: false,
 								label: {
+									normal: {
+										show: false,
+										color: "#FFFFFF"
+									},
 									emphasis: {
 										show: true,
 										color: "#FFFFFF"
@@ -902,7 +919,27 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 					myChart.on("click", function (params) {
 						// console.log(params.data);
 					});
-				} else {
+
+					myChart.on("mouseover", function (params) {
+						// if (params.seriesType === 'line') {
+						var option = myChart.getOption();
+						option.series[params.seriesIndex].label.color = 'white';
+						option.series[params.seriesIndex].label.show = true;
+
+						myChart.setOption(option);
+						// }
+					});
+
+					myChart.on("mouseout", function (params) {
+						// if (params.seriesType === 'line') {
+						var option = myChart.getOption();
+						option.series[params.seriesIndex].label.show = false;
+						myChart.setOption(option);
+						// }
+					});
+
+				}
+				else {
 					option = {
 						title: {
 							text: "데이터가 없습니다",
@@ -971,7 +1008,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 ////////////////
 // 멀티 콤비네이션 차트
 ///////////////
-function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks) {
+function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
@@ -1010,7 +1047,7 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 								accumulateRelationIssueCount += data[date].totalRelationIssues;
 
 								acc.totalRequirements.push(accumulateRequirementCount);
-								acc.totalIssues.push(accumulateRelationIssueCount);
+								acc.totalRelationIssues.push(accumulateRelationIssueCount);
 							}
 
 							if (data[date].requirementStatuses !== null) {
@@ -1033,7 +1070,7 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 					},
 					{
 						dates: [],
-						totalIssues: [],
+						totalRelationIssues: [],
 						totalRequirements: [],
 						statusKeys: []
 					}
@@ -1062,11 +1099,11 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 					};
 
 					let dates = result.dates;
-					let totalIssues = result.totalIssues;
+					let totalRelationIssues = result.totalRelationIssues;
 					let totalRequirements = result.totalRequirements;
 					let statusKeys = result.statusKeys;
 
-					var deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalIssues, deadline, true, 4);
+					var deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalRelationIssues, deadline, true, 4);
 
 					let requirementStatusSeries = statusKeys.map((key, i) => {
 						let stackType = "요구사항";
@@ -1136,7 +1173,7 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 								focus: "series"
 							},
 							symbolSize: 10,
-							data: totalIssues
+							data: totalRelationIssues
 						},
 						...deadlineSeries
 					];
@@ -1163,8 +1200,8 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 												item.seriesName +
 												"[" +
 												stackType +
-												"] : " +
-												'<span style="float: right;">' +
+												"]" +
+												'<span>&nbsp;&nbsp;&nbsp;</span><span style="float: right;">' +
 												item.value +
 												"</span>" +
 												"<br/>";
@@ -1172,8 +1209,7 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 											tooltipText +=
 												item.marker +
 												item.seriesName +
-												": " +
-												'<span style="float: right;">' +
+												'<span>&nbsp;&nbsp;&nbsp;</span><span style="float: right;">' +
 												item.value +
 												"</span>" +
 												"<br/>";
@@ -1275,18 +1311,6 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 							return idx * 20;
 						}
 					};
-
-					function toggleStack() {
-						var option = myChart.getOption();
-
-						option.series.forEach(function (series) {
-							if (series.type === "bar") {
-								series.stack = series.stack ? null : "stack";
-							}
-						});
-
-						myChart.setOption(option);
-					}
 				} else {
 					option = {
 						title: {
@@ -1307,31 +1331,18 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 
 				window.addEventListener("resize", function () {
 					myChart.resize();
-
-					// width에 따라 글씨 크기 조절
-					// var chartWidth = myChart.getWidth();
-					// var fontSize = chartWidth * 0.01;
-					//
-					// var option = myChart.getOption();
-					// option.series.forEach(function(series) {
-					//     series.label.fontSize = fontSize;
-					// });
 				});
 
 				myChart.on("mouseover", function (params) {
-					// if (params.seriesType === 'line') {
 					var option = myChart.getOption();
 					option.series[params.seriesIndex].label.show = true;
 					myChart.setOption(option);
-					// }
 				});
 
 				myChart.on("mouseout", function (params) {
-					// if (params.seriesType === 'line') {
 					var option = myChart.getOption();
 					option.series[params.seriesIndex].label.show = false;
 					myChart.setOption(option);
-					// }
 				});
 			}
 		}
@@ -1339,7 +1350,7 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 }
 
 // 마감일 함수
-function createDeadlineSeries(dates, totalIssues, totalRequirements, deadline, usePreviousValue, lineWidth) {
+function createDeadlineSeries(dates, totalRelationIssues, totalRequirements, deadline, usePreviousValue, lineWidth) {
 	var chartStart = dates.reduce((earliest, date) => (date < earliest ? date : earliest), dates[0]);
 	var chartEnd = dates.reduce((latest, date) => (date > latest ? date : latest), dates[0]);
 
@@ -1357,11 +1368,11 @@ function createDeadlineSeries(dates, totalIssues, totalRequirements, deadline, u
 
 			if (dateIndex > 0 && usePreviousValue) {
 				totalRequirements.splice(dateIndex, 0, totalRequirements[dateIndex-1]);
-				totalIssues.splice(dateIndex, 0, totalIssues[dateIndex-1]);
+				totalRelationIssues.splice(dateIndex, 0, totalRelationIssues[dateIndex-1]);
 			}
 			else {
 				totalRequirements.splice(dateIndex, 0, 0);
-				totalIssues.splice(dateIndex, 0, 0);
+				totalRelationIssues.splice(dateIndex, 0, 0);
 			}
 		}
 
@@ -1534,220 +1545,6 @@ function convertVersionIdToTitle(versionId) {
 	}
 }
 
-// 주식차트
-function candleStickChart() {
-	var dom = document.getElementById("candlestick-chart-container");
-	var myChart = echarts.init(dom, "dark", {
-		renderer: "canvas",
-		useDirtyRect: false
-	});
-
-	var option;
-
-	option = {
-		xAxis: {
-			data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27"]
-		},
-		yAxis: {},
-		series: [
-			{
-				type: "candlestick",
-				data: [
-					[20, 34, 10, 38],
-					[40, 35, 30, 50],
-					[31, 38, 33, 44],
-					[38, 15, 5, 42]
-				]
-			}
-		],
-		tooltip: {
-			trigger: "axis",
-			position: "top",
-			borderWidth: 1,
-			axisPointer: {
-				type: "cross"
-			}
-		},
-		backgroundColor: "rgba(255,255,255,0)"
-	};
-
-	if (option && typeof option === "object") {
-		myChart.setOption(option, true);
-	}
-
-	window.addEventListener("resize", myChart.resize);
-}
-
-function versionTimelineChart(versionData) {
-
-
-    var yVersionData = [];
-    var xVesrionStartEndData = [];
-	var yearData = new Set();
-    versionData.forEach(version => {
-        yVersionData.push(version.title);
-        var arrayData = [version.title, +new Date(version.startDate), +new Date(version.endDate)];
-		yearData.add(new Date(version.startDate).getFullYear());
-		yearData.add(new Date(version.endDate).getFullYear());
-        xVesrionStartEndData.push(arrayData);
-    });
-
-    var dom = document.getElementById('version-timeline-chart-container');
-
-    var myChart = echarts.init(dom, null, {
-        renderer: 'canvas',
-        useDirtyRect: false
-    });
-
-    var colorList = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC'];
-    var versionData = ['v1.0', 'v1.1', 'v1.2', 'v1.3', 'v1.4', 'v1.5', 'v1.6', 'v1.7', 'v1.8', 'v1.9'];
-    var startEndData= [
-        ['v1.0', +new Date(2023, 0, 1), +new Date(2023, 0, 15)],
-        ['v1.1', +new Date(2023, 0, 10), +new Date(2023, 0, 25)],
-        ['v1.2', +new Date(2023, 1, 1), +new Date(2023, 1, 15)],
-        ['v1.3', +new Date(2023, 3, 1), +new Date(2023, 4, 15)],
-        ['v1.4', +new Date(2023, 2, 1), +new Date(2024, 3, 15)],
-        ['v1.5', +new Date(2023, 6, 1), +new Date(2023, 6, 15)],
-        ['v1.6', +new Date(2023, 5, 1), +new Date(2023, 11, 15)],
-        ['v1.7', +new Date(2024, 2, 1), +new Date(2024, 3, 15)],
-        ['v1.8', +new Date(2024, 5, 1), +new Date(2024, 6, 15)],
-        ['v1.9', +new Date(2024, 1, 1), +new Date(2024, 11, 15)],
-    ];
-
-    var today = new Date()
-    var todayLine =  {
-        name: '오늘',
-        type: 'line',
-        data: [[formatDate(today), 0], [formatDate(today), 1]], // y축 전체에 걸쳐 라인을 그립니다.
-        tooltip: {
-            show: false
-        },
-        markLine : {
-            silent: true,
-            symbol: 'none',
-            data : [{
-                xAxis : formatDate(today)
-            }],
-            lineStyle: {
-                color: 'red',
-                width: 2,
-                type: 'dashed'
-            },
-            label: {
-                formatter: '오늘 : {c}',
-                color: 'white',
-                fontSize: 12,
-                fontWeight: 'bold',
-                position: 'start'
-            }
-        },
-        lineStyle: {
-            color: 'red',
-            type: 'dashed'
-        },
-        symbol: 'none'
-    };
-
-	let yearsArray = Array.from(yearData);
-
-	let minYear = Math.min(...yearsArray);
-	let maxYear = Math.max(...yearsArray);
-
-	if (maxYear.valueOf() < today.getFullYear()) {
-		maxYear = today.getFullYear();
-	}
-
-    var option = {
-        xAxis: {
-            type: 'time',
-			min: minYear + '-01-01',
-			max: maxYear + '-12-31',
-			axisLabel: {
-				textStyle: {
-					color: "white"
-				},
-				rotate: 45
-			},
-			axisTick: { show: false },
-			splitLine: {
-				show: true,
-				lineStyle: {
-					color: "rgba(255,255,255,0.2)",
-					width: 1,
-					type: "dashed"
-				}
-			},
-        },
-        yAxis: {
-            data: yVersionData,
-            inverse: true,
-			axisLabel: {
-				textStyle: {
-					color: "white"
-				}
-			}
-        },
-        series: [
-            {
-                name: 'Versions',
-                type: 'custom',
-                itemStyle: {
-                    color: function(params) {
-                        return colorList[params.dataIndex % colorList.length];
-                    }
-                },
-                renderItem: function(params, api) {
-                    var categoryIndex = api.value(0);
-                    var start = api.coord([api.value(1), categoryIndex]);
-                    var end = api.coord([api.value(2), categoryIndex]);
-                    var height = params.coordSys.height / yVersionData.length;
-
-                    return {
-                        type: 'rect',
-                        shape: {
-                            x: start[0],
-                            y: start[1] - height / 2,
-                            width: end[0] - start[0],
-                            height: height
-                        },
-                        style: api.style(params.dataIndex) // apply color here
-                    };
-                  },
-                encode: {
-                    x: [1, 2],
-                    y: 0
-                },
-                data: xVesrionStartEndData
-            },
-            todayLine,
-        ],
-        tooltip: {
-            trigger: 'axis',
-            position: 'top',
-            borderWidth: 1,
-			axisPointer: {
-				type: 'cross',
-				axis: 'y'
-			},
-            formatter: function (params) {
-                var tooltipText = '';
-                tooltipText += params[0].marker + params[0].data[0] + '<br/><span style="float: right;">' + new Date(params[0].data[1]).toLocaleDateString()+ " ~ " + new Date(params[0].data[2]).toLocaleDateString() + '</span>' + '<br/>';
-                return tooltipText;
-            }
-        },
-        grid: {
-            left: '15%',
-            containLabel: false
-        }
-    };
-
-    if (option && typeof option === 'object') {
-        myChart.setOption(option, true);
-    }
-
-    window.addEventListener('resize', myChart.resize);
-}
-
 function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
 
 	const url = new UrlBuilder()
@@ -1857,4 +1654,218 @@ function makeVerticalTimeline(data) {
 function formatDateTime(dateTime) {
 	var date = dateTime.split('T')[0];
 	return date;
+}
+
+// 주식차트
+function candleStickChart() {
+	var dom = document.getElementById("candlestick-chart-container");
+	var myChart = echarts.init(dom, "dark", {
+		renderer: "canvas",
+		useDirtyRect: false
+	});
+
+	var option;
+
+	option = {
+		xAxis: {
+			data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27"]
+		},
+		yAxis: {},
+		series: [
+			{
+				type: "candlestick",
+				data: [
+					[20, 34, 10, 38],
+					[40, 35, 30, 50],
+					[31, 38, 33, 44],
+					[38, 15, 5, 42]
+				]
+			}
+		],
+		tooltip: {
+			trigger: "axis",
+			position: "top",
+			borderWidth: 1,
+			axisPointer: {
+				type: "cross"
+			}
+		},
+		backgroundColor: "rgba(255,255,255,0)"
+	};
+
+	if (option && typeof option === "object") {
+		myChart.setOption(option, true);
+	}
+
+	window.addEventListener("resize", myChart.resize);
+}
+
+function versionTimelineChart(versionData) {
+
+
+	var yVersionData = [];
+	var xVesrionStartEndData = [];
+	var yearData = new Set();
+	versionData.forEach(version => {
+		yVersionData.push(version.title);
+		var arrayData = [version.title, +new Date(version.startDate), +new Date(version.endDate)];
+		yearData.add(new Date(version.startDate).getFullYear());
+		yearData.add(new Date(version.endDate).getFullYear());
+		xVesrionStartEndData.push(arrayData);
+	});
+
+	var dom = document.getElementById('version-timeline-chart-container');
+
+	var myChart = echarts.init(dom, null, {
+		renderer: 'canvas',
+		useDirtyRect: false
+	});
+
+	var colorList = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC'];
+	var versionData = ['v1.0', 'v1.1', 'v1.2', 'v1.3', 'v1.4', 'v1.5', 'v1.6', 'v1.7', 'v1.8', 'v1.9'];
+	var startEndData= [
+		['v1.0', +new Date(2023, 0, 1), +new Date(2023, 0, 15)],
+		['v1.1', +new Date(2023, 0, 10), +new Date(2023, 0, 25)],
+		['v1.2', +new Date(2023, 1, 1), +new Date(2023, 1, 15)],
+		['v1.3', +new Date(2023, 3, 1), +new Date(2023, 4, 15)],
+		['v1.4', +new Date(2023, 2, 1), +new Date(2024, 3, 15)],
+		['v1.5', +new Date(2023, 6, 1), +new Date(2023, 6, 15)],
+		['v1.6', +new Date(2023, 5, 1), +new Date(2023, 11, 15)],
+		['v1.7', +new Date(2024, 2, 1), +new Date(2024, 3, 15)],
+		['v1.8', +new Date(2024, 5, 1), +new Date(2024, 6, 15)],
+		['v1.9', +new Date(2024, 1, 1), +new Date(2024, 11, 15)],
+	];
+
+	var today = new Date()
+	var todayLine =  {
+		name: '오늘',
+		type: 'line',
+		data: [[formatDate(today), 0], [formatDate(today), 1]], // y축 전체에 걸쳐 라인을 그립니다.
+		tooltip: {
+			show: false
+		},
+		markLine : {
+			silent: true,
+			symbol: 'none',
+			data : [{
+				xAxis : formatDate(today)
+			}],
+			lineStyle: {
+				color: 'red',
+				width: 2,
+				type: 'dashed'
+			},
+			label: {
+				formatter: '오늘 : {c}',
+				color: 'white',
+				fontSize: 12,
+				fontWeight: 'bold',
+				position: 'start'
+			}
+		},
+		lineStyle: {
+			color: 'red',
+			type: 'dashed'
+		},
+		symbol: 'none'
+	};
+
+	let yearsArray = Array.from(yearData);
+
+	let minYear = Math.min(...yearsArray);
+	let maxYear = Math.max(...yearsArray);
+
+	if (maxYear.valueOf() < today.getFullYear()) {
+		maxYear = today.getFullYear();
+	}
+
+	var option = {
+		xAxis: {
+			type: 'time',
+			min: minYear + '-01-01',
+			max: maxYear + '-12-31',
+			axisLabel: {
+				textStyle: {
+					color: "white"
+				},
+				rotate: 45
+			},
+			axisTick: { show: false },
+			splitLine: {
+				show: true,
+				lineStyle: {
+					color: "rgba(255,255,255,0.2)",
+					width: 1,
+					type: "dashed"
+				}
+			},
+		},
+		yAxis: {
+			data: yVersionData,
+			inverse: true,
+			axisLabel: {
+				textStyle: {
+					color: "white"
+				}
+			}
+		},
+		series: [
+			{
+				name: 'Versions',
+				type: 'custom',
+				itemStyle: {
+					color: function(params) {
+						return colorList[params.dataIndex % colorList.length];
+					}
+				},
+				renderItem: function(params, api) {
+					var categoryIndex = api.value(0);
+					var start = api.coord([api.value(1), categoryIndex]);
+					var end = api.coord([api.value(2), categoryIndex]);
+					var height = params.coordSys.height / yVersionData.length;
+
+					return {
+						type: 'rect',
+						shape: {
+							x: start[0],
+							y: start[1] - height / 2,
+							width: end[0] - start[0],
+							height: height
+						},
+						style: api.style(params.dataIndex) // apply color here
+					};
+				},
+				encode: {
+					x: [1, 2],
+					y: 0
+				},
+				data: xVesrionStartEndData
+			},
+			todayLine,
+		],
+		tooltip: {
+			trigger: 'axis',
+			position: 'top',
+			borderWidth: 1,
+			axisPointer: {
+				type: 'cross',
+				axis: 'y'
+			},
+			formatter: function (params) {
+				var tooltipText = '';
+				tooltipText += params[0].marker + params[0].data[0] + '<br/><span style="float: right;">' + new Date(params[0].data[1]).toLocaleDateString()+ " ~ " + new Date(params[0].data[2]).toLocaleDateString() + '</span>' + '<br/>';
+				return tooltipText;
+			}
+		},
+		grid: {
+			left: '15%',
+			containLabel: false
+		}
+	};
+
+	if (option && typeof option === 'object') {
+		myChart.setOption(option, true);
+	}
+
+	window.addEventListener('resize', myChart.resize);
 }

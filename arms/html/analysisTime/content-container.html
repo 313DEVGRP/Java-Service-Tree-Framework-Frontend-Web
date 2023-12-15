@@ -209,7 +209,7 @@
                                         style="padding-bottom: 10px; border: 0">
                                     <div    class="controls form-group darkBack col-md-12"
                                             style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-                                        <span>작업 종료 예상 기간 : <a id="complete_date" style="font-weight: bold;">-</a> 일</span><br>
+                                        <span>작업 종료 예상 기간<br><a id="complete_date" style="font-weight: bold;">-</a> 일</span><br>
                                     </div>
                                 </div>
                             </div>
@@ -301,7 +301,7 @@
                     </a>
                 </div>
             </header>
-            <div class="body maxwidget">
+            <div class="body">
                 <div class="gradient_middle_border" style="width: 100%; margin-top: 10px; margin-bottom: 15px"></div>
                 <blockquote class="font13"
                             style="margin-top: 5px;">
@@ -787,6 +787,7 @@
         overflow-x: scroll;
         white-space:nowrap;
     }
+
     @media (min-width: 0px) {
 
         .col-sm-6 {
@@ -814,21 +815,11 @@
 		color: white;
 	}
 
-	.ms-drop ul > li.hide-radio:focus,
-	.ms-drop ul > li.hide-radio:hover {
-		background-color: #007bff;
-		color: white;
-	}
-
-	canvas {
-		margin: auto;
-	}
-
-	@media (max-width: 992px) {
-		.maxwidget {
-			min-height: 590px;
-		}
-	}
+	//.ms-drop ul > li.hide-radio:focus,
+	//.ms-drop ul > li.hide-radio:hover {
+	//	background-color: #007bff;
+	//	color: white;
+	//}
 
 	#versionGaugeChart svg {
 		height: 185px;

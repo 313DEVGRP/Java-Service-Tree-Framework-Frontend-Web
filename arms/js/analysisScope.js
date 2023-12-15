@@ -954,50 +954,6 @@ function versionUpdateIssueScatterChart() {
 	window.addEventListener("resize", myChart.resize);
 }
 
-function versionUpdateIssueScatterChart223() {
-	console.log("box stick");
-	var dom = document.getElementById("boxplot-scatter-chart-container");
-	var myChart = echarts.init(dom, "dark", {
-		renderer: "canvas",
-		useDirtyRect: false
-	});
-
-	var option;
-
-	option = {
-		xAxis: {
-			data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27"]
-		},
-		yAxis: {},
-		series: [
-			{
-				type: "candlestick",
-				data: [
-					[20, 34, 10, 38],
-					[40, 35, 30, 50],
-					[31, 38, 33, 44],
-					[38, 15, 5, 42]
-				]
-			}
-		],
-		tooltip: {
-			trigger: "axis",
-			position: "top",
-			borderWidth: 1,
-			axisPointer: {
-				type: "cross"
-			}
-		},
-		backgroundColor: "rgba(255,255,255,0)"
-	};
-
-	if (option && typeof option === "object") {
-		myChart.setOption(option, true);
-	}
-
-	window.addEventListener("resize", myChart.resize);
-}
-
 /////////////////////////////////////////////////////////
 // Nightingale Rose chart - 제품(서비스)의 버전별 요구사항 수
 /////////////////////////////////////////////////////////
