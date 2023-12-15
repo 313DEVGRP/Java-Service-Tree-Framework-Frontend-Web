@@ -107,6 +107,8 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
+			dailyChartDataSearchEvent();
+
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 		})
@@ -153,6 +155,8 @@ function makePdServiceSelectBox() {
 		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
+		baseDateReset();
+
 		bind_VersionData_By_PdService();
 
 		let checked = $("#checkbox1").is(":checked");
@@ -196,7 +200,7 @@ function bind_VersionData_By_PdService() {
 				selectedPdServiceId = $("#selected_pdService").val();
 				selectedVersionId = pdServiceVersionIds.join(",");
 
-				if (selectedPdServiceId === null || selectedPdServiceId === undefined || selectedPdServiceId === "") {
+				if (!selectedPdServiceId || selectedPdServiceId === null || selectedPdServiceId === undefined || selectedPdServiceId === "") {
 					return;
 				}
 
@@ -212,11 +216,29 @@ function bind_VersionData_By_PdService() {
 
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 				setTimeout(function () {
-					dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
+/*					if (!validateSearchDateWithChart("multi_stack_base_date")) {
+						return;
+					}*/
+
+					// $("#multi_stack_base_date").prop('readonly', false);
+
+					let pageSize = $("#multi_stack_base_date").val();
+					if (!validateSearchDateWithChart(pageSize)) {
+						return;
+					}
+
+					dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
 				}, 2000);
 
 				setTimeout(function () {
-					dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
+					let pageSize = $("#scatter_base_date").val();
+					if (!validateSearchDateWithChart(pageSize)) {
+						return;
+					}
+
+					// $("#scatter_base_date").prop('readonly', false);
+
+					dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
 				}, 2000);
 
 				getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
@@ -250,16 +272,19 @@ function makeVersionMultiSelectBox() {
 			let endPointUrl = "";
 			let versionTag = $(".multiple-select").val();
 
-			if (versionTag === null || versionTag === undefined || versionTag === "" ) {
+			if (!versionTag || versionTag === null || versionTag === undefined || versionTag === "" || versionTag.length === 0) {
 				alert("버전이 선택되지 않았습니다.");
 				return;
 			}
+
 			selectedPdServiceId = $("#selected_pdService").val();
 			selectedVersionId = versionTag.join(",");
 
 			if (selectedPdServiceId === null || selectedPdServiceId === undefined || selectedPdServiceId === "") {
 				return;
 			}
+
+			baseDateReset();
 
 			// 최상단 메뉴 통계
 			수치_초기화();
@@ -273,13 +298,30 @@ function makeVersionMultiSelectBox() {
 
 			// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 			setTimeout(function () {
-				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
+				/*					if (!validateSearchDateWithChart("multi_stack_base_date")) {
+                                        return;
+                                    }*/
+
+				// $("#multi_stack_base_date").prop('readonly', false);
+
+				let pageSize = $("#multi_stack_base_date").val();
+				if (!validateSearchDateWithChart(pageSize)) {
+					return;
+				}
+
+				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
 			}, 2000);
 
-			// 스캐터 차트
 			setTimeout(function () {
-				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
-			}, 1000);
+				let pageSize = $("#scatter_base_date").val();
+				if (!validateSearchDateWithChart(pageSize)) {
+					return;
+				}
+
+				// $("#scatter_base_date").prop('readonly', false);
+
+				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
+			}, 2000);
 
 			getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
@@ -305,6 +347,10 @@ function makeVersionMultiSelectBox() {
 	});
 }
 
+function baseDateReset() {
+	$("#scatter_base_date").val(30);
+	$("#multi_stack_base_date").val(30);
+}
 async function formatDateAsync(date) {
 	var year = date.getFullYear();
 	var month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -739,7 +785,7 @@ async function drawVersionProgress(data) {
 ////////////////////
 // 스캐터 차트
 ////////////////////
-function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
+function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pageIndex, pageSize) {
 
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
@@ -747,7 +793,7 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pa
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
 		.addQueryParam("메인그룹필드", "isReq")
-		.addQueryParam("날짜크기", 30)
+		.addQueryParam("날짜크기", pageSize)
 		.addQueryParam("날짜페이지", pageIndex)
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
@@ -963,6 +1009,77 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pa
 	});
 }
 
+function dailyChartDataSearchEvent() {
+	$("#scatter_base_date").on("change", function () {
+		let value = $(this).val();
+		if (!validateSearchDateWithChart(value)) {
+			return;
+		}
+
+		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, value);
+	});
+
+	$("#multi_stack_base_date").on("change", function () {
+		let value = $(this).val();
+		console.log("multi : "  + value);
+		if (!validateSearchDateWithChart(value)) {
+			return;
+		}
+
+		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, value);
+	});
+
+	// $("#scatter_search_button").on("click", function (params) {
+	// 	if (!validateSearchDateWithChart("scatter_base_date")) {
+	// 		return;
+	// 	}
+	//
+	// 	let pageSize = $("#scatter_base_date").val();
+	//
+	// 	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
+	// });
+	//
+	// $("#multi_stack_search_button").on("click", function (params) {
+	// 	if (!validateSearchDateWithChart("multi_stack_base_date")) {
+	// 		return;
+	// 	}
+	//
+	// 	let pageSize = $("#multi_stack_base_date").val();
+	//
+	// 	dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
+	// });
+}
+
+function validateSearchDateWithChart(inputData) {
+	let result = true;
+	if(!selectedPdServiceId || !selectedVersionId) {
+		alert("제품(서비스) 혹은 버전 선택이 되지 않았습니다.");
+		result = false;
+	}
+
+	// let pageSize = $("#" + inputBoxId).val();
+	let pageSize = inputData;
+
+	if (!pageSize) {
+		alert("일자를 지정하지 않았습니다.");
+		result = false;
+	}
+	else if (isNaN(pageSize)) {
+		alert("숫자만 입력해주세요.");
+		result = false;
+	}
+	else if (pageSize < 1) {
+		alert("1 이상 입력해주세요.");
+		result = false;
+	}
+	else if (pageSize > 100) {
+		alert("100 이하 입력해주세요.");
+		result = false;
+	}
+
+	return result;
+}
+
 function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 	$("#calendar_yearview_blocks_chart_1 svg").remove();
 	$("#calendar_yearview_blocks_chart_2 svg").remove();
@@ -1008,7 +1125,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 ////////////////
 // 멀티 콤비네이션 차트
 ///////////////
-function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
+function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks, pageIndex, pageSize) {
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
@@ -1016,8 +1133,8 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 		.addQueryParam("일자기준", "updated")
 		.addQueryParam("메인그룹필드", "isReq")
 		.addQueryParam("하위그룹필드들", "status.status_name.keyword")
-		.addQueryParam("날짜크기", 30)
-		.addQueryParam("날짜페이지", 1)
+		.addQueryParam("날짜크기", pageSize)
+		.addQueryParam("날짜페이지", pageIndex)
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)

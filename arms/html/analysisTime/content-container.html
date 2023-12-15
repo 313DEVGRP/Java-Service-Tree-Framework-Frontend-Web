@@ -319,7 +319,7 @@
                                         진행 기한
                                     </span>
                                 </h4>
-                                <div class="gradient_middle_border" style="width: 100%; margin-bottom: 10px;"></div>
+                                <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 10px;"></div>
                             </header>
                             <div
                                     class="body"
@@ -440,7 +440,44 @@
                     <div class="col-lg-6" style="/*padding-right: 4px !important;*/">
                         <section class="widget large" style="min-height: 460px;">
                             <header>
-                                <h4><i class="fa fa-pie-chart"></i> 일자별 업데이트 분포</h4>
+                                <h4>
+                                    <span class="font13" style="font-weight: bold">
+										<i class="fa fa-pie-chart"></i> 일자별 업데이트 분포
+									</span>
+<!--                                    <div class="project-progress">
+                                        <div class="progress-group">
+                                            <label class="font13" style="min-width: 40px; font-weight: bold" for="scatter_base_date">최근 :</label>
+                                            <div class="progress-desc">
+                                                <span class="icon input-group-addon">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </span>
+                                                <span class="progress-input font11" style="width: 100px;">
+                                                    <input
+                                                            type="text"
+                                                            id="scatter_base_date"
+                                                            name="scatter_base_date"
+                                                            class="form-control parsley-validated font13 darkBack"
+                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                            placeholder="일"
+                                                            value=30
+                                                            required="required"
+                                                            readonly="readonly"/>
+                                                    일
+                                                </span>
+                                                <button style="margin-top:0px!important;" id="scatter_search_button" type="button" class="btn btn-default btn-sm ml-1">조회</button>
+                                                <button style="display: none; margin-top:0px!important;" id="left-button" type="button" class="btn btn-default btn-sm ml-1">후</button>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                </h4>
+                                <div class="widget-controls">
+                                    최근:
+                                    <select id="scatter_base_date" name="scatter_base_date" aria-controls="reqstatustable" class="darkBack" style="min-height: 25px; width: 50px; margin-top: -10px;">
+                                        <option value="30">30일</option>
+                                        <option value="60">60일</option>
+                                        <option value="90">90일</option>
+                                    </select>
+                                </div>
                             </header>
                             <div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
                             <div class="body" style="height: 100%;">
@@ -537,12 +574,50 @@
                     <div class="col-lg-12 color-legend-widget">
                         <section class="widget large" style="min-height: 540px;">
                             <header style="margin-bottom: 15px">
-                                <h4>
-									<span class="font13" style="font-weight: bold">
+                                <h4> <!--style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                    "-->
+<!--                                    <div>-->
+                                        <span class="font13" style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
 										생성 개수 및 업데이트 상태 현황
 									</span>
+<!--                                    </div>-->
+<!--                                    <div class="project-progress">
+                                        <div class="progress-group">
+                                            <label class="font13" style="min-width: 40px; font-weight: bold" for="multi_stack_base_date">최근 :</label>
+                                            <div class="progress-desc">
+                                                <span class="icon input-group-addon">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </span>
+                                                <span class="progress-input font11" style="width: 100px;">
+                                                    <input
+                                                            type="text"
+                                                            id="multi_stack_base_date"
+                                                            name="multi_stack_base_date"
+                                                            class="form-control parsley-validated font13 darkBack"
+                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                            placeholder="일"
+                                                            value=30
+                                                            required="required"
+                                                            readonly="readonly"/>
+                                                    일
+                                                </span>
+                                                <button style="margin-top:0px!important;" id="multi_stack_search_button" type="button" class="btn btn-default btn-sm ml-1">조회</button>
+                                                <button style="display: none; margin-top:0px!important;" id="left-button" type="button" class="btn btn-default btn-sm ml-1">후</button>
+                                            </div>
+                                        </div>
+                                    </div>-->
                                 </h4>
+                                <div class="widget-controls">
+                                    최근:
+                                    <select id="multi_stack_base_date" name="multi_stack_base_date" aria-controls="reqstatustable" class="darkBack" style="min-height: 25px; width: 50px; margin-top: -10px;">
+                                        <option value="30">30일</option>
+                                        <option value="60">60일</option>
+                                        <option value="90">90일</option>
+                                    </select>
+                                </div>
                                 <div class="gradient_middle_border" style="width: 100%; margin-top: 8px"></div>
                             </header>
                             <div class="body" style="height: 100%;">
@@ -799,18 +874,6 @@
         }
     }
 
-	// datatable
-	.source-col-header {
-		width: 10% !important;
-	}
-	.chart-col-header {
-		width: 30% !important;
-	}
-
-	.dashboard-top-section {
-		min-height: 250px;
-	}
-
 	.infographic.basic .timeline .month {
 		color: white;
 	}
@@ -828,21 +891,14 @@
 	#scatter-chart-container {
 		position: relative;
 		width: 100%;
-		height: 100%;
-		overflow: visible;
-	}
-
-	#candlestick-chart-container {
-		position: relative;
-		width: 100%;
-		height: 100%;
+		height: 90%;
 		overflow: visible;
 	}
 
 	#multi-chart-container {
 		position: relative;
 		width: 100%;
-		height: 100%;
+		height: 90%;
 		overflow: visible;
 	}
 
@@ -853,8 +909,11 @@
 		overflow: visible;
 	}
 
-	#calendar_yearview_blocks_chart_1,
-	#calendar_yearview_blocks_chart_2 {
-		max-width: 100%; /* 부모 컨테이너의 최대 너비 설정 */
-	}
+    #candlestick-chart-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
 </style>
