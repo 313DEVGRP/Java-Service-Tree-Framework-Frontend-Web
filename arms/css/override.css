@@ -3915,13 +3915,13 @@ button {
 
 /* Analysis 분석 종료 */
 
-#tree_container .link {
+#tree_bar_container .link {
 	fill: none;
 	stroke: #ccc;
 	stroke-opacity: 0.4;
 	stroke-width: 1px;
 }
-#tree_container text {
+#tree_bar_container text {
 	font-family: "Arial Black", Gadget, sans-serif;
 	fill: white;
 	font-weight: bold;
@@ -3929,27 +3929,27 @@ button {
 	text-shadow: none;
 }
 
-#tree_container .xAxis .tick text {
+#tree_bar_container .xAxis .tick text {
 	fill: white;
 }
-#tree_container .grid .tick line {
+#tree_bar_container .grid .tick line {
 	stroke: grey;
 	stroke-dasharray: 5, 10;
 	opacity: 0.7;
 }
-#tree_container .grid path {
+#tree_bar_container .grid path {
 	stroke-width: 0;
 }
 
-#tree_container .node circle {
+#tree_bar_container .node circle {
 	fill: #999;
 }
-#tree_container .node--internal circle {
+#tree_bar_container .node--internal circle {
 	fill: #555;
 }
-#tree_container .node--internal text {
-	font-size: 14px;
-}
-#tree_container .node--internal .root {
+/*#tree_bar_container .node--internal text {*/
+/*	font-size: 14px;*/
+/*}*/
+#tree_bar_container .node--internal .root {
 	transform: translateX(10px);
 }

@@ -1148,10 +1148,10 @@ function treeBar() {
 }
 
 function renderTreeBar(data) {
-	const $container = document.getElementById("tree_container"),
+	const $container = document.getElementById("tree_bar_container"),
 		width = $container.offsetWidth,
 		height = $container.offsetHeight,
-		svg = d3.select("#tree_container svg"),
+		svg = d3.select("#tree_bar_container svg"),
 		g = svg.append("g").attr("transform", "translate(20,0)"),
 		experienceName = ["", "1", "2", "3", "4", "5"],
 		formatSkillPoints = function (d) {
@@ -1168,48 +1168,31 @@ function renderTreeBar(data) {
 
 	tree(root);
 
-	var link = g
+	const link = g
 		.selectAll(".link")
 		.data(root.descendants().slice(1))
 		.enter()
 		.append("path")
 		.attr("class", "link")
 		.attr("d", function (d) {
-			return (
-				"M" +
-				d.y +
-				"," +
-				d.x +
-				"C" +
-				(d.parent.y + 100) +
-				"," +
-				d.x +
-				" " +
-				(d.parent.y + 100) +
-				"," +
-				d.parent.x +
-				" " +
-				d.parent.y +
-				"," +
-				d.parent.x
-			);
+			return `M${d.y},${d.x}C${d.parent.y + 100},${d.x} ${d.parent.y + 100},${d.parent.x} ${d.parent.y},${d.parent.x}`;
 		});
 
-	var node = g
+	const node = g
 		.selectAll(".node")
 		.data(root.descendants())
 		.enter()
 		.append("g")
 		.attr("class", function (d) {
-			return "node" + (d.children ? " node--internal" : " node--leaf");
+			return `node${d.children ? " node--internal" : " node--leaf"}`;
 		})
 		.attr("transform", function (d) {
-			return "translate(" + d.y + "," + d.x + ")";
+			return `translate(${d.y}, ${d.x})`;
 		});
 
 	node.append("circle").attr("r", 4);
 
-	var leafNodeG = g
+	const leafNodeG = g
 		.selectAll(".node--leaf")
 		.append("g")
 		.attr("class", "node--leaf-g")
@@ -1239,8 +1222,7 @@ function renderTreeBar(data) {
 			return d.data.name;
 		});
 
-	// Write down text for every parent datum
-	var internalNode = g.selectAll(".node--internal");
+	const internalNode = g.selectAll(".node--internal");
 	internalNode
 		.append("text")
 		.attr("class", (d) => d.data.id === "1" && "root")
@@ -1250,22 +1232,18 @@ function renderTreeBar(data) {
 			return d.data.name;
 		});
 
-	// Attach axis on top of the first leaf datum.
-	var firstEndNode = g.select(".node--leaf");
+	const firstEndNode = g.select(".node--leaf");
 	firstEndNode
 		.insert("g")
 		.attr("class", "xAxis")
 		.attr("transform", "translate(" + 7 + "," + -14 + ")")
 		.call(xAxis);
 
-	// tick mark for x-axis
 	firstEndNode
 		.insert("g")
 		.attr("class", "grid")
 		.attr("transform", "translate(7," + (height - 15) + ")")
 		.call(d3.axisBottom().scale(xScale).ticks(5).tickSize(-height, 0, 0).tickFormat(""));
 
-	// Emphasize the y-axis baseline.
 	svg.selectAll(".grid").select("line").style("stroke-dasharray", "1,1").style("stroke", "white");
-	// });
 }
