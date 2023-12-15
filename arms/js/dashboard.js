@@ -735,7 +735,7 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 									borderColor: '#fff',
 								},
 								data: data,
-								leafDepth: 1,
+								leafDepth: 2,
 								levels:
 									[
 										{
