@@ -3953,3 +3953,26 @@ button {
 #tree_bar_container .node--internal .root {
 	transform: translateX(10px);
 }
+
+.chart-footer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start; /* 아이템을 왼쪽으로 정렬 */
+	align-content: flex-start; /* 아이템을 위쪽으로 정렬 */
+	width: 100%;
+}
+.chart-footer .footer-item {
+	border-top: 2px solid;
+	box-sizing: border-box;
+	width: 33.33%; /* 기본 너비 설정 */
+	padding: 1px 2px;
+}
+.chart-footer .footer-item .item-name,
+.chart-footer .footer-item .item-value{
+	text-align: center;
+	width: 100%;
+	margin-top: 2px;
+}
+.chart-footer .footer-item .item-value{
+	font-weight: bold;
+}

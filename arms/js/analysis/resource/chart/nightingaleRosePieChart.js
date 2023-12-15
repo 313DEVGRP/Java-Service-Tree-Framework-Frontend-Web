@@ -53,7 +53,17 @@ function drawNightingalePieChart(target, dataArr, colorArr) {
         const total = dataArr.reduce((acc, curr) => acc + curr.value, 0);
         return total;
     }
-
+    // 테스트를 위한 mockData -> calculateTotal , drawChartWithFooter 함수 호출에 넣으면 된다.
+    var mockData = [
+        { value: 40, name: 'rose 1' },
+        { value: 38, name: 'rose 2' },
+        { value: 32, name: 'rose 3' },
+        { value: 30, name: 'rose 4' },
+        { value: 28, name: 'rose 5' },
+        { value: 26, name: 'rose 6' },
+        { value: 22, name: 'rose 7' },
+        { value: 18, name: 'rose 8' }
+    ];
     const totalValue = calculateTotal(dataArr);
 
     option = {
@@ -131,6 +141,46 @@ function drawNightingalePieChart(target, dataArr, colorArr) {
     if(colorArr && colorArr.length > 0) {
         option.series[0]["color"] = colorArr;
     }
+    function drawChartWithFooter(dataArr,total) {
+        const existingChartFooter = document.querySelector('.chart-footer');
+
+        if (existingChartFooter) {
+            existingChartFooter.remove();
+        }
+
+        const chartFooter = document.createElement("div");
+        chartFooter.classList.add("chart-footer");
+
+        dataArr.forEach((data,index) => {
+            const item = document.createElement("div");
+            const portion = (data.value*100/ +total).toFixed(0);
+            item.classList.add("footer-item");
+            item.style.borderColor = colorArr[index];
+            item.innerHTML = `<div class="item-name">${data.name}</div> <div class="item-value">${data.value} (${portion}%)</div>`;
+            chartFooter.appendChild(item);
+        });
+
+        chartDom.appendChild(chartFooter);
+
+        const footerItems = document.querySelectorAll('.footer-item');
+        const itemCount = footerItems.length;
+
+        const remainder = itemCount % 3;
+        const quotient = Math.floor(itemCount / 3);
+
+        footerItems.forEach((item, index) => {
+            if (remainder === 1 && Math.floor(index / 3) === quotient) {
+                item.style.width = '100%';
+            } else if (remainder === 2 && Math.floor(index / 3) >= quotient) {
+                item.style.width = '50%';
+            } else {
+                item.style.width = '33.33%';
+            }
+        });
+    }
+
+    drawChartWithFooter(dataArr,totalValue);
+
     option && myChart.setOption(option, true);
 
     window.addEventListener('resize', function () {
