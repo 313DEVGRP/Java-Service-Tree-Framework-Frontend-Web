@@ -679,7 +679,8 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				let chartDom = document.getElementById('chart-manpower-requirement');
 				let myChart = echarts.init(chartDom);
 				let option;
@@ -808,11 +809,10 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
 				removeSankeyChart();
-
+				const data = apiResponse.response;
 				SankeyChart.loadChart(data);
-
 			}
 		}
 	});
@@ -1064,7 +1064,8 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				let 검색결과 = data.검색결과['group_by_status.status_name.keyword'];
 				if ((Array.isArray(data) && data.length === 0) ||
 					(typeof data === 'object' && Object.keys(data).length === 0) ||
@@ -1163,7 +1164,8 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				if ((Array.isArray(data) && data.length === 0) ||
 					(typeof data === 'object' && Object.keys(data).length === 0) ||
 					(typeof data === 'string' && data === "{}")) {
