@@ -857,7 +857,7 @@ var SankeyChart = (function ($) {
 	var loadChart = function (data) {
 		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
 		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
-		var height = 500 - margin.top - margin.bottom;
+		var height = 450 - margin.top - margin.bottom;
 
 		var formatNumber = d3.format(",.0f");
 		var format = function (d) {

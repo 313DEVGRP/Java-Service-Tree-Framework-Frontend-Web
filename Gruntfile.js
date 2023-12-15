@@ -7,9 +7,9 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					//외부에서 개발
-					//port: 80,
+					port: 80,
 					//내부에서 개발
-					port: 9999,
+					// port: 9999,
 					hostname: "0.0.0.0",
 					middleware: function (connect, options, defaultMiddleware) {
 						defaultMiddleware.unshift(function (req, res, next) {

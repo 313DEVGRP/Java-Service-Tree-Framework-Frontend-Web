@@ -1,0 +1,85 @@
+[
+  {
+    "id": "1",
+    "name": "service",
+    "color": "",
+    "parent": ""
+  },
+  {
+    "id": "req1",
+    "name": "요구사항 1",
+    "value": "",
+    "color": "",
+    "parent": "1"
+  },
+  {
+    "id": "req1-1",
+    "name": "Sophia",
+    "value": 1,
+    "color": "#0678BE",
+    "parent": "req1"
+  },
+  {
+    "id": "req1-2",
+    "name": "Emma",
+    "value": 4.5,
+    "color": "#2E2575",
+    "parent": "req1"
+  },
+  {
+    "id": "req1-3",
+    "name": "Olivia",
+    "value": 3,
+    "color": "#E54F24",
+    "parent": "req1"
+  },
+  {
+    "id": "req2",
+    "name": "요구사항 2",
+    "value": "",
+    "color": "",
+    "parent": "1"
+  },
+  {
+    "id": "req2-1",
+    "name": "Isabella",
+    "value": 1.5,
+    "color": "#617CBE",
+    "parent": "req2"
+  },
+  {
+    "id": "req3",
+    "name": "요구사항 3",
+    "value": "",
+    "color": "",
+    "parent": "1"
+  },
+  {
+    "id": "req3-1",
+    "name": "Madison",
+    "value": 2.5,
+    "color": "#00618A",
+    "parent": "req3"
+  },
+  {
+    "id": "req3-2",
+    "name": "Elizabeth",
+    "value": 2,
+    "color": "#EB2C2F",
+    "parent": "req3"
+  },
+  {
+    "id": "req3-3",
+    "name": "Victoria",
+    "value": 2.5,
+    "color": "#5FA134",
+    "parent": "req3"
+  },
+  {
+    "id": "req3-4",
+    "name": "Charlotte",
+    "value": 2,
+    "color": "#CA212F",
+    "parent": "req3"
+  }
+]

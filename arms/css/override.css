@@ -3671,7 +3671,6 @@ table tbody tr td {
 	height: auto;
 }
 
-
 /* Dashboard 시작 */
 
 .c3-tooltip {
@@ -3709,7 +3708,7 @@ table tbody tr td {
 	min-width: 0;
 	word-wrap: break-word;
 	background-clip: border-box;
-	border: 0 solid rgba(0, 0, 0, .125);
+	border: 0 solid rgba(0, 0, 0, 0.125);
 	border-radius: 0.25rem;
 }
 
@@ -3745,7 +3744,7 @@ img {
 /*! Light */
 #light {
 	background-color: #000;
-	box-shadow: 0 0 5px rgba(0, 0, 0, .8);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
 	overflow: hidden;
 	padding: 0 0 4px;
 	width: 40px;
@@ -3758,7 +3757,7 @@ img {
 	display: block;
 	height: 30px;
 	margin: 4px auto 0;
-	opacity: .5;
+	opacity: 0.5;
 	width: 30px;
 }
 
@@ -3898,12 +3897,10 @@ button {
 	}
 }
 
-
 #chart-product-manpower {
 	position: relative;
 	height: 780px;
 }
-
 
 #chart-product-manpower svg {
 	position: absolute;
@@ -3917,3 +3914,42 @@ button {
 }
 
 /* Analysis 분석 종료 */
+
+#tree_container .link {
+	fill: none;
+	stroke: #ccc;
+	stroke-opacity: 0.4;
+	stroke-width: 1px;
+}
+#tree_container text {
+	font-family: "Arial Black", Gadget, sans-serif;
+	fill: white;
+	font-weight: bold;
+	font-size: 12px;
+	text-shadow: none;
+}
+
+#tree_container .xAxis .tick text {
+	fill: white;
+}
+#tree_container .grid .tick line {
+	stroke: grey;
+	stroke-dasharray: 5, 10;
+	opacity: 0.7;
+}
+#tree_container .grid path {
+	stroke-width: 0;
+}
+
+#tree_container .node circle {
+	fill: #999;
+}
+#tree_container .node--internal circle {
+	fill: #555;
+}
+#tree_container .node--internal text {
+	font-size: 14px;
+}
+#tree_container .node--internal .root {
+	transform: translateX(10px);
+}
