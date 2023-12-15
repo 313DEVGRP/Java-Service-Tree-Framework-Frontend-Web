@@ -199,7 +199,7 @@ function topbarConfig() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function makeSlimScroll(targetElement) {
 	$(targetElement).slimScroll({
-		height: "200px",
+		height: "250px",
 		railVisible: true,
 		railColor: "#222",
 		railOpacity: 0.3,
