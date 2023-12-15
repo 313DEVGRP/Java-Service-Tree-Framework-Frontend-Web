@@ -237,11 +237,10 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (data) {
+            200: function (apiResponse) {
                 removeSankeyChart();
-
+                const data = apiResponse.response;
                 SankeyChart.loadChart(data);
-
             }
         }
     });

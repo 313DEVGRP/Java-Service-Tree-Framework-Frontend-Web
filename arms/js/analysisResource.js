@@ -254,8 +254,8 @@ function stackedHorizontalBar(){
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (response) {
-                stackedBarChartInit(response);
+            200: function (apiResponse) {
+                stackedBarChartInit(apiResponse.response);
             }
         }
     });
@@ -367,7 +367,8 @@ function wordCloud() {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (data) {
+            200: function (apiResponse) {
+                const data = apiResponse.response;
                 let words = data['검색결과']["group_by_assignee.assignee_accountId.keyword"].map(item => ({
                     text: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["필드명"],
                     weight: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["개수"]
@@ -980,7 +981,8 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (data) {
+            200: function (apiResponse) {
+                const data = apiResponse.response;
                 let chartDom = document.getElementById('chart-manpower-requirement');
                 let myChart = echarts.init(chartDom);
                 let option;

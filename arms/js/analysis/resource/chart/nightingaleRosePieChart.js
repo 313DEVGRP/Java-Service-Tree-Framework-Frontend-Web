@@ -49,6 +49,13 @@ function drawNightingalePieChart(target, dataArr, colorArr) {
     var myChart = echarts.init(chartDom);
     var option;
 
+    function calculateTotal(dataArr) {
+        const total = dataArr.reduce((acc, curr) => acc + curr.value, 0);
+        return total;
+    }
+
+    const totalValue = calculateTotal(dataArr);
+
     option = {
 
         legend: {
@@ -63,6 +70,29 @@ function drawNightingalePieChart(target, dataArr, colorArr) {
             trigger: 'item',
             formatter: '{b} - {c}개 ({d}%)'
         },
+        graphic: [
+            {
+                type: 'text',
+                left: 'center',
+                top: 'middle',
+                z: 100,
+                style: {
+                    text: [
+                        '{a|Total}',
+                        '{a|  ' + totalValue + '}' // 여기에 값들의 총 합을 계산하여 넣어주세요.
+                    ].join('\n'),
+                    rich: {
+                        a: {
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            lineHeight: 30,
+                            fontFamily: 'Arial',
+                            fill:"white"
+                        }
+                    }
+                }
+            }
+        ],
         toolbox: {
             show: true,
             feature: {
@@ -72,25 +102,25 @@ function drawNightingalePieChart(target, dataArr, colorArr) {
                 saveAsImage: { show: true }
             }
         },
-        label: {
-            show: true,
-            color:'white',
-            formatter: '{b} - {c}개 ({d}%)', // 레이블 포맷 설정 (이름 : 백분율)
-        },
-        labelLine: {
-            length: 5,
-            length2: 10,
-        },
         backgroundColor: 'rgba(0,0,0,0)',
         series: [
             {
                 name: 'Nightingale Chart',
                 type: 'pie',
-                radius: ["10%", "40%"],
+                radius: ["25%", "65%"],
                 center: ['50%', '50%'],
                 roseType: 'area',
                 itemStyle: {
                     borderRadius: 1
+                },
+                label: {
+                    show: true,
+                    color:'white',
+                    fontSize: 12,
+                    formatter: function (params) {
+                        return params.name + '\n' + '(' +params.value+')';
+                    },
+                    position: 'inner'
                 },
                 data: dataArr
             }
