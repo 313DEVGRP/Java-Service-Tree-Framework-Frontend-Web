@@ -116,7 +116,7 @@ function execDocReady() {
 				)
 			);
 
-			sankeyItem();
+			treeBar();
 
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
@@ -670,7 +670,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			let nodeCount = nodes.length;
 
 			let increaseFactor = Math.floor(nodeCount / 100);
-			if (nodeCount % 100 !== 0)  {
+			if (nodeCount % 100 !== 0) {
 				increaseFactor++;
 			}
 			baseWidth += increaseFactor * 100;
@@ -687,31 +687,38 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
 			let simulation = d3
 				.forceSimulation(nodes)
-				.force("link",
-					d3.forceLink(links)
-						.id(function (d) { return d.id; })
+				.force(
+					"link",
+					d3
+						.forceLink(links)
+						.id(function (d) {
+							return d.id;
+						})
 						.distance(30)
 				)
 				.force("charge", d3.forceManyBody().strength(-1000))
 				.force("center", d3.forceCenter(width / 3, height / 3))
 				.force("collide", d3.forceCollide().radius(20))
-				.force("radial", d3.forceRadial()
-					.radius(10)
-					.x(width / 3)
-					.y(height / 3)
-					.strength(0.5)
+				.force(
+					"radial",
+					d3
+						.forceRadial()
+						.radius(10)
+						.x(width / 3)
+						.y(height / 3)
+						.strength(0.5)
 				);
-				//.force("center", d3.forceCenter(width / 3, height / 3));
-				// .force("collide", d3.forceCollide()
-				// 	.radius(function(node) {
-				// 		var linkCount = countLinks(node, links	);
-				// 		return 5 * linkCount;
-				// 	})
-				// );
-				// .force("collide",d3.forceCollide().radius( function(d){
-				// 	console.log(d);
-				// 	return 20;
-				// }));
+			//.force("center", d3.forceCenter(width / 3, height / 3));
+			// .force("collide", d3.forceCollide()
+			// 	.radius(function(node) {
+			// 		var linkCount = countLinks(node, links	);
+			// 		return 5 * linkCount;
+			// 	})
+			// );
+			// .force("collide",d3.forceCollide().radius( function(d){
+			// 	console.log(d);
+			// 	return 20;
+			// }));
 
 			//simulation.stop();
 
@@ -1070,94 +1077,6 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 	});
 }
 
-function sankeyItem() {
-	var dom = document.getElementById("tree_container");
-	var myChart = echarts.init(dom);
-	var option = {
-		tooltip: {
-			trigger: "item",
-			triggerOn: "mousemove"
-		},
-		animation: false,
-		series: [
-			{
-				type: "sankey",
-				emphasis: {
-					focus: "adjacency"
-				},
-				levels: [
-					{
-						depth: 0,
-						itemStyle: {
-							color: "#fbb4ae"
-						},
-						lineStyle: {
-							color: "source",
-							opacity: 0.6
-						}
-					},
-					{
-						depth: 1,
-						itemStyle: {
-							color: "#b3cde3"
-						},
-						lineStyle: {
-							color: "source",
-							opacity: 0.6
-						}
-					},
-					{
-						depth: 2,
-						itemStyle: {
-							color: "#ccebc5"
-						},
-						lineStyle: {
-							color: "source",
-							opacity: 0.6
-						}
-					},
-					{
-						depth: 3,
-						itemStyle: {
-							color: "#decbe4"
-						},
-						lineStyle: {
-							color: "source",
-							opacity: 0.6
-						}
-					}
-				],
-				lineStyle: {
-					curveness: 0.5
-				},
-				nodeWidth: 7,
-				nodeGap: 8,
-				left: 5,
-				right: 140
-			}
-		]
-	};
-
-	$.ajax({
-		url: "js/analysis/mockData/tree.json",
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				option.series[0].data = data.nodes;
-				option.series[0].links = data.links;
-				myChart.setOption(option);
-			}
-		}
-	});
-
-	window.addEventListener("resize", function () {
-		myChart.resize();
-	});
-}
-
 function chord(data) {
 	const $container = document.getElementById("circular_sankey");
 	const $chart = makeChart(data);
@@ -1255,4 +1174,142 @@ function groupTicks(d, step) {
 	return d3.range(0, d.value, step).map((value) => {
 		return { value: value, angle: value * k + d.startAngle };
 	});
+}
+
+function treeBar() {
+	$.ajax({
+		url: "js/analysis/mockData/temp.json",
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true
+	})
+		.done(function (data) {
+			renderTreeBar(data);
+		})
+		.fail(function (e) {})
+		.always(function () {});
+}
+
+function renderTreeBar(data) {
+	const $container = document.getElementById("tree_container"),
+		width = $container.offsetWidth,
+		height = $container.offsetHeight,
+		svg = d3.select("#tree_container svg"),
+		g = svg.append("g").attr("transform", "translate(20,0)"),
+		experienceName = ["", "1", "2", "3", "4", "5"],
+		formatSkillPoints = function (d) {
+			return experienceName[d % 6];
+		},
+		xScale = d3.scaleLinear().domain([0, 5]).range([0, 100]),
+		xAxis = d3.axisTop().scale(xScale).ticks(5).tickFormat(formatSkillPoints),
+		tree = d3.cluster().size([height, width - 145]),
+		stratify = d3
+			.stratify()
+			.id((d) => d.id)
+			.parentId((d) => d.parent),
+		root = stratify(data);
+
+	tree(root);
+
+	var link = g
+		.selectAll(".link")
+		.data(root.descendants().slice(1))
+		.enter()
+		.append("path")
+		.attr("class", "link")
+		.attr("d", function (d) {
+			return (
+				"M" +
+				d.y +
+				"," +
+				d.x +
+				"C" +
+				(d.parent.y + 100) +
+				"," +
+				d.x +
+				" " +
+				(d.parent.y + 100) +
+				"," +
+				d.parent.x +
+				" " +
+				d.parent.y +
+				"," +
+				d.parent.x
+			);
+		});
+
+	var node = g
+		.selectAll(".node")
+		.data(root.descendants())
+		.enter()
+		.append("g")
+		.attr("class", function (d) {
+			return "node" + (d.children ? " node--internal" : " node--leaf");
+		})
+		.attr("transform", function (d) {
+			return "translate(" + d.y + "," + d.x + ")";
+		});
+
+	node.append("circle").attr("r", 4);
+
+	var leafNodeG = g
+		.selectAll(".node--leaf")
+		.append("g")
+		.attr("class", "node--leaf-g")
+		.attr("transform", "translate(" + 8 + "," + -13 + ")");
+
+	leafNodeG
+		.append("rect")
+		.style("fill", function (d) {
+			return d.data.color;
+		})
+		.attr("width", 2)
+		.attr("height", 20)
+		.attr("rx", 2)
+		.attr("ry", 2)
+		.transition()
+		.duration(800)
+		.attr("width", function (d) {
+			return xScale(d.data.value);
+		});
+
+	leafNodeG
+		.append("text")
+		.attr("dy", 14)
+		.attr("x", 8)
+		.style("text-anchor", "start")
+		.text(function (d) {
+			return d.data.name;
+		});
+
+	// Write down text for every parent datum
+	var internalNode = g.selectAll(".node--internal");
+	internalNode
+		.append("text")
+		.attr("class", (d) => d.data.id === "1" && "root")
+		.attr("y", -10)
+		.style("text-anchor", "middle")
+		.text(function (d) {
+			return d.data.name;
+		});
+
+	// Attach axis on top of the first leaf datum.
+	var firstEndNode = g.select(".node--leaf");
+	firstEndNode
+		.insert("g")
+		.attr("class", "xAxis")
+		.attr("transform", "translate(" + 7 + "," + -14 + ")")
+		.call(xAxis);
+
+	// tick mark for x-axis
+	firstEndNode
+		.insert("g")
+		.attr("class", "grid")
+		.attr("transform", "translate(7," + (height - 15) + ")")
+		.call(d3.axisBottom().scale(xScale).ticks(5).tickSize(-height, 0, 0).tickFormat(""));
+
+	// Emphasize the y-axis baseline.
+	svg.selectAll(".grid").select("line").style("stroke-dasharray", "1,1").style("stroke", "white");
+	// });
 }
