@@ -26,7 +26,7 @@ function execDocReady() {
 			// "./js/dashboard/chart/colorPalette.js",
 			"./js/common/colorPalette.js",
 			// 2번째 박스 timeline
-			"../reference/jquery-plugins/info-chart-v1/js/D.js",
+			"../reference/jquery-plugins/info-chart-v1/js/D_analysisTime.js",
 			"../reference/jquery-plugins/info-chart-v1/js/timeline_analysisTime.js",
 			//"./js/dashboard/chart/timeline_custom.js",
 			"./js/dashboard/chart/infographic_custom.css",
@@ -411,9 +411,8 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                                 }
                                 versionGauge.push(gaugeElement);
                             }
-
                             var timelineElement = {
-                                "id" : "timelineData",
+                                "id" : versionElement.c_id,
                                 "title" : "버전: "+versionElement.c_title,
                                 "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
                                 "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
@@ -431,13 +430,13 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						drawVersionProgress(versionGauge); // 버전 게이지
 						// 이번 달의 첫째 날 구하기
 						var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-
 						// 이번 달의 마지막 날 구하기
 						var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 						// 이번달 일수 구하기
 						var daysCount = lastDay.getDate();
 						// 오늘 일자 구하기
 						var day = today.getDate();
+
 						var today_flag = {
 							title: "오늘",
 							startDate: formatDate(firstDay),
@@ -450,18 +449,43 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
                         Timeline.init($("#version-timeline-bar"), versionTimeline);
 
 						var basePosition = $("#today_flag").css("left");
-						var baseWidth = $("#today_flag").css("width");
+						var baseWidth = $(".month").css("width");
 						var calFlagPosition = (parseFloat(baseWidth) / daysCount) * day;
 						var flagPosition = parseFloat(basePosition) + calFlagPosition + "px";
 
-						$("#today_flag").css("border-top-width", "150px");
-						$("#today_flag").css("width", "3px");
-						$("#today_flag").css("border-top-color", "rgba(255, 0, 0,0.78)");
+                        $("#today_flag").removeAttr("style");
+                        $("#today_flag").removeClass("block");
+                        $("#today_flag").css("position", "absolute");
+
+						$("#today_flag").css("height", "170px");
+                        $("#today_flag").css("bottom", "-35px");
 						$("#today_flag span").remove();
-						$("#timelineData .label").css("text-align", "left");
+						$(".block .label").css("text-align", "left");
 						$("#today_flag").css("left", flagPosition);
 
-						// versionTimelineChart(versionCustomTimeline);
+                        $("#today_flag").css("position", "relative");
+                        $("#today_flag").prepend("<div class='today_flag_text'>오늘: "+formatDate(today)+"</div>");
+
+						 $("#today_flag").css("text-align", "center");
+
+                        // 박스 위치 수정
+						versionData.forEach(function(version) {
+                            var id = version.c_id;
+                            var start = new Date(version.c_pds_version_start_date);
+                            var startDate = start.getDate();
+                            var daysCount = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+                            var end = new Date(version.c_pds_version_end_date);
+
+                            var pos = $("#"+id).css("left");
+                            var baseWidth =(parseFloat($(".month").css("width")))/daysCount;
+                            var diffTime = Math.abs(end - start);
+                            var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            var realWidth = baseWidth*diffDays
+                            var realPos = parseFloat(pos)+ startDate*baseWidth;
+                            $("#"+id).css("left",realPos+"px");
+                            $("#"+id).css("width",realWidth+"px");
+                        });
+                        window.addEventListener("resize", $("#version-timeline-bar").width);
 					}
 				}
 			}

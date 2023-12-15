@@ -232,19 +232,21 @@ var Timeline = (function () {
                         .concat(d.zIndex, ';width:')
                         .concat(d.width, 'px;border-top-width:')
                         .concat(d.height, 'px;border-top-color:')
-                        .concat(d.color, ';" title="')
-                        .concat(d.title, ', ')
-                        .concat(D.date(d.startDate, "yyyy.MM"), ' ~ ')
-                        .concat(D.date(d.endDate, "yyyy.MM"), '">')
+                        .concat(d.color,  '";>')
                 );
 
-				t.push(
-					'\t<span class="label" style="height:'
-						.concat(d.labelHeight, "px;border-left-color:")
-						.concat(d.color, '"><span class="ellipsis">')
-						.concat(d.title, "</span></span>")
-				);
-				t.push("</div>");
+				t.push('\t<span class="label" data-toggle="tooltip" data-placement="top" title="'
+                  .concat(d.title, ' ')
+                  .concat(D.date(d.startDate, "yyyy.MM.dd"), ' ~ ')
+                  .concat(D.date(d.endDate, "yyyy.MM.dd"), '" style="height:')
+                  .concat(d.labelHeight, 'px;border-left-color:')
+                  .concat(d.color, '"><span class="ellipsis">')
+                  .concat(d.title, '</span></span>')
+                );
+
+
+                t.push("</div>");
+
 			}
 			t.push("</div>");
 			t.push('<div class="monthList clearfix" style="width: '.concat(v.maxWidth).concat('px">'));
