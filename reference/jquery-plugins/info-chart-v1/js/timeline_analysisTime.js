@@ -63,7 +63,7 @@ var Timeline = (function () {
 
 			// 템플릿 생성 후 바로 삽입
 			t.push(
-				'<div class="infographic basic"><div data-type="timeline" class="timeline">'.concat(fn.draw(), "</div></div>")
+				'<div class="infographic basic"><div data-type="timeline" class="timeline" style="overflow-x:scroll">'.concat(fn.draw(), "</div></div>")
 			);
 			$(target).html(t.join(""));
 		},

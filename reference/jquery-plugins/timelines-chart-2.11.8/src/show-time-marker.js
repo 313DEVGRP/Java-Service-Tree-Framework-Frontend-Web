@@ -7771,7 +7771,6 @@
                 var r = n.zColorScale.domain()[n.zColorScale.domain().length - 1] - n.zColorScale.domain()[0]
                   , i = (n.useUtc ? we : be)("".concat(n.timeFormat).concat(n.useUtc ? " (UTC)" : ""));
 
-                console.log(e);
                 return "<strong>" + e.label+ " </strong>" + n.zDataLabel + (r ? " (<strong>" + Math.round((e.val - n.zColorScale.domain()[0]) / r * 100 * 100) / 100 + "%</strong>)" : "") + "<br><strong>From: </strong>" + i(e.timeRange[0]) + "<br><strong>To: </strong>" + i(e.timeRange[1])
             }
             )),
@@ -7840,8 +7839,8 @@
                 .attr("height", 25) // 버튼의 높이
                 .attr("rx", 5) // 가로 방향 모서리 반지름
                 .attr("ry", 5) // 세로 방향 모서리 반지름
-                .attr("x", 1257) // 텍스트의 x좌표
-                .attr("y", 2) // 텍스트의 y좌표
+                .attr("x", 757) // 박스 x좌표
+                .attr("y", 2) // 박스 y좌표
                 .style("fill", "#666") // 버튼 배경색
 
                 .on("mouseup", (function() {
@@ -7856,7 +7855,7 @@
             )),
             n.svg.append("text")
                 .attr("class", "reset-zoom-btn-text")
-                .attr("x", 1297) // 텍스트의 x좌표
+                .attr("x", 797) // 텍스트의 x좌표
                 .attr("y", 15) // 텍스트의 y좌표
                 .style("text-anchor", "middle") // 텍스트의 가운데 정렬
                 .style("dominant-baseline", "central") // 텍스트의 가운데 정렬
@@ -8048,7 +8047,7 @@
                 }
                 ));
                 t.exit().transition().duration(n.transDuration).style("stroke-opacity", 0).style("fill-opacity", 0).remove();
-                var e = t.enter().append("rect").attr("class", "series-group").attr("x", 0).attr("y", 0).attr("height", 0).style("fill", "url(#" + n.groupGradId + ")").on("mouseover", n.groupTooltip.show).on("mouseout", n.groupTooltip.hide);
+                var e = t.enter().append("rect").attr("class", "series-group").attr("x", 0).attr("y", 0).attr("height", 0).style("fill", "rgba(0,0,0,0.1)").on("mouseover", n.groupTooltip.show).on("mouseout", n.groupTooltip.hide);
                 e.append("title").text("click-drag to zoom in"),
                 (t = t.merge(e)).transition().duration(n.transDuration).attr("width", n.graphW).attr("height", (function(t) {
                     return n.graphH * t.lines.length / n.nLines

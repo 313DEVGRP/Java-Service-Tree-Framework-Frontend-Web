@@ -222,6 +222,8 @@ function bind_VersionData_By_PdService() {
 
 				// vertical timeline chart
 				verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
+                // detail timeline chart
+				 detailTimeLineChart(selectedPdServiceId, selectedVersionId)
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -423,7 +425,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						$("#today_flag").css("left", flagPosition);
 
                         $("#today_flag").css("position", "relative");
-                        $("#today_flag").prepend("<div class='today_flag_text'>오늘: "+formatDate(today)+"</div>");
+                        $("#today_flag").prepend("<div class='today_flag_text'>오늘</div>");
 
 						 $("#today_flag").css("text-align", "center");
 
@@ -1539,25 +1541,52 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 		async: true,
 		statusCode: {
 			200: function (data) {
-				sevenTimeline(data);
+				//sevenTimeline(data);
 			}
 		}
 	});
 }
 
-function sevenTimeline(data) {
-	var sevenTimeLineDiv = document.getElementById("sevenTimeLine");
+function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
+
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
+		.addQueryParam("pdServiceLink", pdServiceLink)
+		.addQueryParam("pdServiceVersionLinks", pdServiceVersions)
+		.addQueryParam("크기", 1000)
+		.addQueryParam("하위크기", 1000)
+		.addQueryParam("baseWeek", 20)
+		.addQueryParam("sortField", "created")
+		.build();
+
+	$.ajax({
+		url: url,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+                detailTimeLineData(data);
+			}
+		}
+	});
+
+}
+
+
+function detailTimeLineData(data) {
+	var sevenTimeLineDiv = document.getElementById("detailTimeLine");
 	sevenTimeLineDiv.innerHTML = "";
 
 	if (typeof data === "object" && Object.keys(data).length > 0) {
 		//필요한 데이터만 추출
-		var extractedData = extractDataForSevenTimeline(data);
-		// 버전 별 그룹화
-		var groupedData = groupingByVersion(extractedData);
+		var extractedData = extractDataForDetailTimeLine(data);
+
 		var myData = [];
-		var myData = dataFormattingForSevenTimeLine(groupedData);
-		TimelinesChart()("#sevenTimeLine")
-			.width(1440)
+		var myData = dataFormattingForDetailTimeLine(extractedData);
+		TimelinesChart()("#detailTimeLine")
+			.width(950)
 			.maxHeight(3000)
 			.maxLineHeight(40)
 			.topMargin(40)
@@ -1567,81 +1596,67 @@ function sevenTimeline(data) {
 		$("#sevenTimeLineBody").css("overflow", "scroll");
 	} else {
 		var pElement = document.createElement("p");
-		pElement.textContent = "데이터가 없습니다.";
+		pElement.textContent = "조회된 데이터가 없습니다.";
 		sevenTimeLineDiv.appendChild(pElement);
 	}
 }
 
-//  필요한 데이터만 추출
-function extractDataForSevenTimeline(data) {
-	var extractedData = [];
-	data.forEach((obj) => {
-		var extractedObj = {
-			issueKey: obj.key,
-			isReq: obj.isReq,
-			parentReqKey: obj.parentReqKey,
-			createdDate: new Date(Date.parse(obj.created)),
-			resolutionDate: obj.resolutiondate ? obj.resolutiondate : new Date(),
-			version: obj.pdServiceVersion
-		};
-		extractedData.push(extractedObj);
-	});
-	return extractedData;
+function extractDataForDetailTimeLine(data) {
+    let extractedData = {};
+
+    Object.entries(data).forEach(([key, value]) => {
+        extractedData[key] = value.map(obj => ({
+            issueKey: obj.key,
+            isReq: obj.isReq,
+            parentReqKey: obj.parentReqKey,
+            createdDate: new Date(Date.parse(obj.created)),
+            resolutionDate: obj.resolutiondate ? obj.resolutiondate : new Date(),
+            version: obj.pdServiceVersion
+        }));
+    });
+
+    return extractedData;
 }
 
-function groupingByVersion(data) {
-	var groupedData = data.reduce((result, item) => {
-		var pdServiceVersion = item.version;
-		if (!result[pdServiceVersion]) {
-			result[pdServiceVersion] = [];
-		}
-		result[pdServiceVersion].push(item);
-		return result;
-	}, {});
+function dataFormattingForDetailTimeLine(groupedByVersionData) {
 
-	return groupedData;
-}
-
-// 차트에 맞게 데이터 변환 하기
-function dataFormattingForSevenTimeLine(groupedByVersionData) {
 	var formattedData = [];
-
 	for (var version in groupedByVersionData) {
-		var reqIssueData = groupedByVersionData[version].filter((data) => data.isReq === true);
+	    console.log(version)
+		var versionData = groupedByVersionData[version];
 
-		reqIssueData.forEach((reqIssue) => {
-			var groupByReqIssueData = {
-				group: reqIssue.issueKey,
-				data: []
-			};
-
-			var childData = groupedByVersionData[version].filter((issue) => issue.parentReqKey === groupByReqIssueData.group);
-			groupByReqIssueData.data.push({
-				label: "요구사항 이슈",
-				data: [
-					{
-						timeRange: [reqIssue.createdDate, reqIssue.resolutionDate],
-						val: convertVersionIdToTitle(reqIssue.version)
-					}
-				]
-			});
-			childData.forEach((child) => {
-				groupByReqIssueData.data.push({
-					label: child.issueKey,
-					data: [
-						{
-							timeRange: [child.createdDate, child.resolutionDate],
-							val: convertVersionIdToTitle(child.version)
-						}
-					]
-				});
-			});
-			formattedData.push(groupByReqIssueData);
+        var groupByVersion = {
+            group: "버전: "+convertVersionIdToTitle(version),
+        	data: []
+        };
+		versionData.forEach((issueData) => {
+		    if(issueData.isReq == true){
+		        groupByVersion.data.push({
+            	label: "요구사항: "+issueData.issueKey,
+            	data: [
+            		{
+            			timeRange: [issueData.createdDate, issueData.resolutionDate],
+            			val: convertVersionIdToTitle(issueData.version),
+            		}
+            	]
+                });
+		    }else{
+		        groupByVersion.data.push({
+                label: "연결된 이슈: "+issueData.issueKey,
+                data: [
+                    {
+                        timeRange: [issueData.createdDate, issueData.resolutionDate],
+                        val: convertVersionIdToTitle(issueData.version),
+                    }
+                ]
+                });
+		    }
 		});
+		formattedData.push(groupByVersion);
 	}
-
 	return formattedData;
 }
+
 
 function convertVersionIdToTitle(versionId) {
 	if (versionListData.hasOwnProperty(versionId)) {
@@ -1659,7 +1674,7 @@ function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
 		.addQueryParam("isReqType", "ISSUE")
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
-		.addQueryParam("baseWeek", 2)
+		.addQueryParam("baseWeek", 1)
 		.addQueryParam("sortField", "updated")
 		.build();
 
