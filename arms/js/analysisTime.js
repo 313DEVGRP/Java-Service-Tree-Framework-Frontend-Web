@@ -5,7 +5,7 @@ var dashboardColor;
 var selectedPdServiceId;
 var selectedVersionId;
 var versionListData;
-var deadline;
+var globalDeadline;
 // 최상단 메뉴 변수
 var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
 var mailAddressList;
@@ -215,31 +215,8 @@ function bind_VersionData_By_PdService() {
 				calendarHeatMap(selectedPdServiceId, selectedVersionId);
 
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
-				setTimeout(function () {
-/*					if (!validateSearchDateWithChart("multi_stack_base_date")) {
-						return;
-					}*/
-
-					// $("#multi_stack_base_date").prop('readonly', false);
-
-					let pageSize = $("#multi_stack_base_date").val();
-					if (!validateSearchDateWithChart(pageSize)) {
-						return;
-					}
-
-					dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
-				}, 2000);
-
-				setTimeout(function () {
-					let pageSize = $("#scatter_base_date").val();
-					if (!validateSearchDateWithChart(pageSize)) {
-						return;
-					}
-
-					// $("#scatter_base_date").prop('readonly', false);
-
-					dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
-				}, 2000);
+				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
+				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
 
 				getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
@@ -297,31 +274,8 @@ function makeVersionMultiSelectBox() {
 			calendarHeatMap(selectedPdServiceId, selectedVersionId);
 
 			// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
-			setTimeout(function () {
-				/*					if (!validateSearchDateWithChart("multi_stack_base_date")) {
-                                        return;
-                                    }*/
-
-				// $("#multi_stack_base_date").prop('readonly', false);
-
-				let pageSize = $("#multi_stack_base_date").val();
-				if (!validateSearchDateWithChart(pageSize)) {
-					return;
-				}
-
-				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
-			}, 2000);
-
-			setTimeout(function () {
-				let pageSize = $("#scatter_base_date").val();
-				if (!validateSearchDateWithChart(pageSize)) {
-					return;
-				}
-
-				// $("#scatter_base_date").prop('readonly', false);
-
-				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
-			}, 2000);
+			dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
+			dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
 
 			getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
@@ -351,11 +305,16 @@ function baseDateReset() {
 	$("#scatter_base_date").val(30);
 	$("#multi_stack_base_date").val(30);
 }
-async function formatDateAsync(date) {
-	var year = date.getFullYear();
-	var month = (date.getMonth() + 1).toString().padStart(2, "0");
-	var day = date.getDate().toString().padStart(2, "0");
-	return year + "-" + month + "-" + day;
+
+function waitForGlobalDeadline() {
+	return new Promise(resolve => {
+		let intervalId = setInterval(() => {
+			if (globalDeadline !== undefined) {
+				clearInterval(intervalId);
+				resolve(globalDeadline);
+			}
+		}, 100);  // 100ms마다 globalDeadline 값 확인
+	});
 }
 
 function formatDate(date) {
@@ -612,7 +571,7 @@ async function drawVersionProgress(data) {
 		}
 	}
 
-	deadline = await formatDateAsync(new Date(latestEndDate));
+	globalDeadline = formatDate(new Date(latestEndDate));
 
 	$("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
 	$("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
@@ -809,7 +768,15 @@ async function drawVersionProgress(data) {
 ////////////////////
 // 스캐터 차트
 ////////////////////
-function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pageIndex, pageSize) {
+async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
+
+	let deadline = await waitForGlobalDeadline();
+	console.log(`Deadline is ${deadline}`);
+
+	let pageSize = $("#scatter_base_date").val();
+	if (!validateSearchDateWithChart(pageSize)) {
+		return;
+	}
 
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
@@ -858,7 +825,7 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pa
 				let totalRelationIssues = result.totalRelationIssues;
 				let totalRequirements = result.totalRequirements;
 
-				var deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalRelationIssues, deadline, false, 2);
+				let deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalRelationIssues, globalDeadline, false, 2);
 
 				var dom = document.getElementById("scatter-chart-container");
 
@@ -1035,22 +1002,11 @@ function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pa
 
 function dailyChartDataSearchEvent() {
 	$("#scatter_base_date").on("change", function () {
-		let value = $(this).val();
-		if (!validateSearchDateWithChart(value)) {
-			return;
-		}
-
-		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, value);
+		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
 	});
 
 	$("#multi_stack_base_date").on("change", function () {
-		let value = $(this).val();
-		console.log("multi : "  + value);
-		if (!validateSearchDateWithChart(value)) {
-			return;
-		}
-
-		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, value);
+		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
 	});
 
 	// $("#scatter_search_button").on("click", function (params) {
@@ -1149,7 +1105,15 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 ////////////////
 // 멀티 콤비네이션 차트
 ///////////////
-function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks, pageIndex, pageSize) {
+async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
+	let deadline = await waitForGlobalDeadline();
+	console.log(`Deadline is ${deadline}`);
+
+	let pageSize = $("#multi_stack_base_date").val();
+	if (!validateSearchDateWithChart(pageSize)) {
+		return;
+	}
+
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
@@ -1244,7 +1208,7 @@ function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdService
 					let totalRequirements = result.totalRequirements;
 					let statusKeys = result.statusKeys;
 
-					var deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalRelationIssues, deadline, true, 4);
+					let deadlineSeries = createDeadlineSeries(dates, totalRequirements, totalRelationIssues, globalDeadline, true, 4);
 
 					let requirementStatusSeries = statusKeys.map((key, i) => {
 						let stackType = "요구사항";
