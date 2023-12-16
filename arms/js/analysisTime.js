@@ -1555,7 +1555,7 @@ function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersions)
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
-		.addQueryParam("baseWeek", 20)
+		.addQueryParam("baseWeek", 1)
 		.addQueryParam("sortField", "created")
 		.build();
 
