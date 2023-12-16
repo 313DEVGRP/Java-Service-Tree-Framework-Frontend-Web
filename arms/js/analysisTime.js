@@ -107,8 +107,6 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
-			dailyChartDataSearchEvent();
-
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 		})
@@ -155,6 +153,10 @@ function makePdServiceSelectBox() {
 		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
+		dateTimePickerBinding();
+
+		dailyChartDataSearchEvent();
+
 		baseDateReset();
 
 		bind_VersionData_By_PdService();
@@ -215,15 +217,15 @@ function bind_VersionData_By_PdService() {
 				calendarHeatMap(selectedPdServiceId, selectedVersionId);
 
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
-				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
-				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
+				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
+				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
 
-				getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
+				// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 				// vertical timeline chart
 				verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
                 // detail timeline chart
-				 detailTimeLineChart(selectedPdServiceId, selectedVersionId)
+				detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -276,13 +278,15 @@ function makeVersionMultiSelectBox() {
 			calendarHeatMap(selectedPdServiceId, selectedVersionId);
 
 			// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
-			dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
-			dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
+			dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
+			dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
 
-			getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
+			// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 			// vertical timeline chart
 			verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
+			// detail timeline chart
+			detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 
 			if (checked) {
 				endPointUrl =
@@ -303,9 +307,83 @@ function makeVersionMultiSelectBox() {
 	});
 }
 
+function dateTimePickerBinding() {
+	let today = new Date();
+	$('#scatter_start_date').datetimepicker({
+		theme:'dark',
+		onShow: function(ct) {
+			this.setOptions({
+				maxDate: $('#scatter_end_date').val()?$('#scatter_end_date').datetimepicker('getValue'):false
+			})
+		},
+		timepicker: false,
+		format: 'Y-m-d',
+		onSelectDate: function(ct, $i) {
+/*			var startDate = $('#scatter_start_date').datetimepicker('getValue');
+			var endDate = $('#scatter_end_date').datetimepicker('getValue');
+			if (endDate && (endDate - ct) / (1000 * 60 * 60 * 24) > 100) {
+				alert('시작일과 종료일의 차이는 최대 100일이어야 합니다.');
+				$i.val(startDate);
+			}*/
+		}
+	});
+
+	$('#scatter_end_date').datetimepicker({
+		theme:'dark',
+		onShow: function(ct) {
+			this.setOptions({
+				minDate: $('#scatter_start_date').val()?$('#scatter_start_date').datetimepicker('getValue'):false,
+				maxDate: today
+			})
+		},
+		timepicker: false,
+		format: 'Y-m-d',
+		onSelectDate: function(ct, $i) {
+/*			var startDate = $('#scatter_start_date').datetimepicker('getValue');
+			var endDate = $('#scatter_end_date').datetimepicker('getValue');
+			if (startDate && (ct - startDate) / (1000 * 60 * 60 * 24) > 100) {
+				alert('시작일과 종료일의 차이는 최대 100일이어야 합니다.');
+				$i.val(endDate);
+			}*/
+		},
+		// onClose: onScatterChartDateEndChanged
+	});
+
+	$('#multi_stack_start_date').datetimepicker({
+		theme:'dark',
+		onShow: function(ct) {
+			this.setOptions({
+				maxDate: $('#multi_stack_end_date').val()?$('#multi_stack_end_date').datetimepicker('getValue'):false
+			})
+		},
+		timepicker: false,
+		format: 'Y-m-d'
+	});
+
+	$('#multi_stack_end_date').datetimepicker({
+		theme:'dark',
+		onShow: function(ct) {
+			this.setOptions({
+				minDate: $('#multi_stack_start_date').val()?$('#multi_stack_start_date').datetimepicker('getValue'):false,
+				maxDate: today
+			})
+		},
+		timepicker: false,
+		format: 'Y-m-d',
+		// onClose: onMultiStackChartDateEndChanged
+	});
+}
+
 function baseDateReset() {
-	$("#scatter_base_date").val(30);
-	$("#multi_stack_base_date").val(30);
+	let today = new Date();
+
+	$("#scatter_end_date").val(formatDate(today));
+	$("#multi_stack_end_date").val(formatDate(today));
+
+	today.setDate(today.getDate() - 30);
+
+	$("#scatter_start_date").val(formatDate(today));
+	$("#multi_stack_start_date").val(formatDate(today));
 }
 
 function waitForGlobalDeadline() {
@@ -770,13 +848,15 @@ async function drawVersionProgress(data) {
 ////////////////////
 // 스캐터 차트
 ////////////////////
-async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
+async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 
 	let deadline = await waitForGlobalDeadline();
 	console.log(`Deadline is ${deadline}`);
 
-	let pageSize = $("#scatter_base_date").val();
-	if (!validateSearchDateWithChart(pageSize)) {
+	let startDate = $("#scatter_start_date").val();
+	let endDate = $("#scatter_end_date").val();
+
+	if (!validateSearchDateWithChart(startDate, endDate)) {
 		return;
 	}
 
@@ -786,8 +866,8 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
 		.addQueryParam("메인그룹필드", "isReq")
-		.addQueryParam("날짜크기", pageSize)
-		.addQueryParam("날짜페이지", pageIndex)
+		.addQueryParam("시작일", startDate)
+		.addQueryParam("종료일", endDate)
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)
@@ -1002,60 +1082,29 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 	});
 }
 
-function dailyChartDataSearchEvent() {
-	$("#scatter_base_date").on("change", function () {
-		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1);
-	});
-
-	$("#multi_stack_base_date").on("change", function () {
-		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1);
-	});
-
-	// $("#scatter_search_button").on("click", function (params) {
-	// 	if (!validateSearchDateWithChart("scatter_base_date")) {
-	// 		return;
-	// 	}
-	//
-	// 	let pageSize = $("#scatter_base_date").val();
-	//
-	// 	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
-	// });
-	//
-	// $("#multi_stack_search_button").on("click", function (params) {
-	// 	if (!validateSearchDateWithChart("multi_stack_base_date")) {
-	// 		return;
-	// 	}
-	//
-	// 	let pageSize = $("#multi_stack_base_date").val();
-	//
-	// 	dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId, 1, pageSize);
-	// });
+function onScatterChartDateEndChanged() {
+	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
 }
 
-function validateSearchDateWithChart(inputData) {
+function dailyChartDataSearchEvent() {
+	$("#scatter-search").on("click", function (params) {
+		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
+	});
+
+	$("#multi-stack-search").on("click", function (params) {
+		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
+	});
+}
+
+function validateSearchDateWithChart(startDate, endDate) {
 	let result = true;
 	if(!selectedPdServiceId || !selectedVersionId) {
 		alert("제품(서비스) 혹은 버전 선택이 되지 않았습니다.");
 		result = false;
 	}
 
-	// let pageSize = $("#" + inputBoxId).val();
-	let pageSize = inputData;
-
-	if (!pageSize) {
+	if (!startDate || !endDate) {
 		alert("일자를 지정하지 않았습니다.");
-		result = false;
-	}
-	else if (isNaN(pageSize)) {
-		alert("숫자만 입력해주세요.");
-		result = false;
-	}
-	else if (pageSize < 1) {
-		alert("1 이상 입력해주세요.");
-		result = false;
-	}
-	else if (pageSize > 100) {
-		alert("100 이하 입력해주세요.");
 		result = false;
 	}
 
@@ -1107,12 +1156,14 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 ////////////////
 // 멀티 콤비네이션 차트
 ///////////////
-async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks, pageIndex) {
+async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 	let deadline = await waitForGlobalDeadline();
 	console.log(`Deadline is ${deadline}`);
 
-	let pageSize = $("#multi_stack_base_date").val();
-	if (!validateSearchDateWithChart(pageSize)) {
+	let startDate = $("#multi_stack_start_date").val();
+	let endDate = $("#multi_stack_end_date").val();
+
+	if (!validateSearchDateWithChart(startDate, endDate)) {
 		return;
 	}
 
@@ -1123,8 +1174,8 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 		.addQueryParam("일자기준", "updated")
 		.addQueryParam("메인그룹필드", "isReq")
 		.addQueryParam("하위그룹필드들", "status.status_name.keyword")
-		.addQueryParam("날짜크기", pageSize)
-		.addQueryParam("날짜페이지", pageIndex)
+		.addQueryParam("시작일", startDate)
+		.addQueryParam("종료일", endDate)
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)
@@ -1454,6 +1505,10 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 			}
 		}
 	});
+}
+
+function onMultiStackChartDateEndChanged() {
+	dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
 }
 
 // 마감일 함수
