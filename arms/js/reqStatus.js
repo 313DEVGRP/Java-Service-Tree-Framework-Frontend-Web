@@ -184,7 +184,8 @@ function resourceLoad(pdservice_id, pdservice_version_id){
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 
 				for (var key in data) {
 					var value = data[key];

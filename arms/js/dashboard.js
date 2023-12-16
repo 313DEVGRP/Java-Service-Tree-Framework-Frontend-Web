@@ -1407,8 +1407,8 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
-				//console.log(data); //console.log(data.검색결과);
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				var cat_persons = Object.keys(data);
 				console.log(cat_persons);
 				let persion_size = cat_persons.length;
@@ -1493,7 +1493,8 @@ function getReqAndLinkedIssueTop5(pdservice_id) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				top5ReqLinkedIssue = []; // 초기화
 
 				for(let i =0; i<5; i++) {
@@ -1562,7 +1563,8 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				subtask_count = data.전체합계;
 				$('#linkedIssue_subtask_count').text(subtask_count);
 				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
@@ -1621,9 +1623,8 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (data) {
-				//console.log(data); console.log(Object.keys(data).length);
-
+			200: function (apiResponse) {
+				const data = apiResponse.response;
 				//담당자 미지정 이슈 수
 				$('#no_assigned_issue_count').text(data["담당자 미지정"]);
 				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
