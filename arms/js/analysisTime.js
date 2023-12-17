@@ -199,6 +199,7 @@ function bind_VersionData_By_PdService() {
 					let newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
+
 				selectedPdServiceId = $("#selected_pdService").val();
 				selectedVersionId = pdServiceVersionIds.join(",");
 
@@ -319,13 +320,17 @@ function dateTimePickerBinding() {
 		timepicker: false,
 		format: 'Y-m-d',
 		onSelectDate: function(ct, $i) {
-/*			var startDate = $('#scatter_start_date').datetimepicker('getValue');
+			var startDate = $('#scatter_start_date').datetimepicker('getValue');
 			var endDate = $('#scatter_end_date').datetimepicker('getValue');
-			if (endDate && (endDate - ct) / (1000 * 60 * 60 * 24) > 100) {
-				alert('시작일과 종료일의 차이는 최대 100일이어야 합니다.');
-				$i.val(startDate);
-			}*/
-		}
+			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+			if (dayDifference > 31) {
+				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+				var newDate = new Date(endDate);
+				newDate.setDate(endDate.getDate() - 30);
+				$i.val(formatDate(newDate));
+			}
+		},
 	});
 
 	$('#scatter_end_date').datetimepicker({
@@ -339,12 +344,16 @@ function dateTimePickerBinding() {
 		timepicker: false,
 		format: 'Y-m-d',
 		onSelectDate: function(ct, $i) {
-/*			var startDate = $('#scatter_start_date').datetimepicker('getValue');
+			var startDate = $('#scatter_start_date').datetimepicker('getValue');
 			var endDate = $('#scatter_end_date').datetimepicker('getValue');
-			if (startDate && (ct - startDate) / (1000 * 60 * 60 * 24) > 100) {
-				alert('시작일과 종료일의 차이는 최대 100일이어야 합니다.');
-				$i.val(endDate);
-			}*/
+			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+			if (dayDifference > 31) {
+				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+				var newDate = new Date(startDate);
+				newDate.setDate(startDate.getDate() + 30);
+				$i.val(formatDate(newDate));
+			}
 		},
 		// onClose: onScatterChartDateEndChanged
 	});
@@ -357,7 +366,19 @@ function dateTimePickerBinding() {
 			})
 		},
 		timepicker: false,
-		format: 'Y-m-d'
+		format: 'Y-m-d',
+		onSelectDate: function(ct, $i) {
+			var startDate = $('#multi_stack_start_date').datetimepicker('getValue');
+			var endDate = $('#multi_stack_end_date').datetimepicker('getValue');
+			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+			if (dayDifference > 31) {
+				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+				var newDate = new Date(endDate);
+				newDate.setDate(endDate.getDate() - 30);
+				$i.val(formatDate(newDate));
+			}
+		}
 	});
 
 	$('#multi_stack_end_date').datetimepicker({
@@ -370,6 +391,18 @@ function dateTimePickerBinding() {
 		},
 		timepicker: false,
 		format: 'Y-m-d',
+		onSelectDate: function(ct, $i) {
+			var startDate = $('#multi_stack_start_date').datetimepicker('getValue');
+			var endDate = $('#multi_stack_end_date').datetimepicker('getValue');
+			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+			if (dayDifference > 31) {
+				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+				var newDate = new Date(startDate);
+				newDate.setDate(startDate.getDate() + 30);
+				$i.val(formatDate(newDate));
+			}
+		},
 		// onClose: onMultiStackChartDateEndChanged
 	});
 }
@@ -429,7 +462,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 					if (version_count >= 0) {
 						let today = new Date();
-						let plusDate = new Date();
 
 						$("#notifyNoVersion").slideUp();
 						$("#project-start").show();
@@ -1082,10 +1114,6 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 	});
 }
 
-function onScatterChartDateEndChanged() {
-	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
-}
-
 function dailyChartDataSearchEvent() {
 	$("#scatter-search").on("click", function (params) {
 		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
@@ -1507,6 +1535,10 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 	});
 }
 
+function onScatterChartDateEndChanged() {
+	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
+}
+
 function onMultiStackChartDateEndChanged() {
 	dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
 }
@@ -1521,7 +1553,7 @@ function createDeadlineSeries(dates, totalRelationIssues, totalRequirements, dea
 
 	var deadlineSeries = [];
 
-	if (/*new Date(deadline) >= chartStart && */new Date(deadline) <= chartEnd) {
+	if (new Date(deadline) <= chartEnd) {
 
 		if (!dates.includes(deadline)) {
 			dates.push(deadline);
@@ -1581,137 +1613,6 @@ function createDeadlineSeries(dates, totalRelationIssues, totalRequirements, dea
 
 	return deadlineSeries;
 }
-
-////////////////////
-// 타임라인 차트 데이터 호출
-////////////////////
-function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
-	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
-		type: "GET",
-		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		async: true,
-		statusCode: {
-			200: function (data) {
-				//sevenTimeline(data);
-			}
-		}
-	});
-}
-
-function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
-
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
-		.addQueryParam("pdServiceLink", pdServiceLink)
-		.addQueryParam("pdServiceVersionLinks", pdServiceVersions)
-		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("baseWeek", 1)
-		.addQueryParam("sortField", "created")
-		.build();
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-                detailTimeLineData(data);
-			}
-		}
-	});
-
-}
-
-
-function detailTimeLineData(data) {
-	var sevenTimeLineDiv = document.getElementById("detailTimeLine");
-	sevenTimeLineDiv.innerHTML = "";
-
-	if (typeof data === "object" && Object.keys(data).length > 0) {
-		//필요한 데이터만 추출
-		var extractedData = extractDataForDetailTimeLine(data);
-
-		var myData = [];
-		var myData = dataFormattingForDetailTimeLine(extractedData);
-		TimelinesChart()("#detailTimeLine")
-			.width(950)
-			.maxHeight(3000)
-			.maxLineHeight(40)
-			.topMargin(40)
-			.zQualitative(true)
-			.data(myData)
-			.refresh();
-		$("#sevenTimeLineBody").css("overflow", "scroll");
-	} else {
-		var pElement = document.createElement("p");
-		pElement.textContent = "조회된 데이터가 없습니다.";
-		sevenTimeLineDiv.appendChild(pElement);
-	}
-}
-
-function extractDataForDetailTimeLine(data) {
-    let extractedData = {};
-
-    Object.entries(data).forEach(([key, value]) => {
-        extractedData[key] = value.map(obj => ({
-            issueKey: obj.key,
-            isReq: obj.isReq,
-            parentReqKey: obj.parentReqKey,
-            createdDate: new Date(Date.parse(obj.created)),
-            resolutionDate: obj.resolutiondate ? obj.resolutiondate : new Date(),
-            version: obj.pdServiceVersion
-        }));
-    });
-
-    return extractedData;
-}
-
-function dataFormattingForDetailTimeLine(groupedByVersionData) {
-
-	var formattedData = [];
-	for (var version in groupedByVersionData) {
-	    console.log(version)
-		var versionData = groupedByVersionData[version];
-
-        var groupByVersion = {
-            group: "버전: "+convertVersionIdToTitle(version),
-        	data: []
-        };
-		versionData.forEach((issueData) => {
-		    if(issueData.isReq == true){
-		        groupByVersion.data.push({
-            	label: "요구사항: "+issueData.issueKey,
-            	data: [
-            		{
-            			timeRange: [issueData.createdDate, issueData.resolutionDate],
-            			val: convertVersionIdToTitle(issueData.version),
-            		}
-            	]
-                });
-		    }else{
-		        groupByVersion.data.push({
-                label: "연결된 이슈: "+issueData.issueKey,
-                data: [
-                    {
-                        timeRange: [issueData.createdDate, issueData.resolutionDate],
-                        val: convertVersionIdToTitle(issueData.version),
-                    }
-                ]
-                });
-		    }
-		});
-		formattedData.push(groupByVersion);
-	}
-	return formattedData;
-}
-
 
 function convertVersionIdToTitle(versionId) {
 	if (versionListData.hasOwnProperty(versionId)) {
@@ -1829,6 +1730,115 @@ function makeVerticalTimeline(data) {
 function formatDateTime(dateTime) {
 	var date = dateTime.split('T')[0];
 	return date;
+}
+
+function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
+
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
+		.addQueryParam("pdServiceLink", pdServiceLink)
+		.addQueryParam("pdServiceVersionLinks", pdServiceVersions)
+		.addQueryParam("크기", 1000)
+		.addQueryParam("하위크기", 1000)
+		.addQueryParam("baseWeek", 1)
+		.addQueryParam("sortField", "created")
+		.build();
+
+	$.ajax({
+		url: url,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				detailTimeLineData(data);
+			}
+		}
+	});
+
+}
+
+function detailTimeLineData(data) {
+	var sevenTimeLineDiv = document.getElementById("detailTimeLine");
+	sevenTimeLineDiv.innerHTML = "";
+
+	if (typeof data === "object" && Object.keys(data).length > 0) {
+		//필요한 데이터만 추출
+		var extractedData = extractDataForDetailTimeLine(data);
+
+		var myData = [];
+		var myData = dataFormattingForDetailTimeLine(extractedData);
+		TimelinesChart()("#detailTimeLine")
+			.width(950)
+			.maxHeight(3000)
+			.maxLineHeight(40)
+			.topMargin(40)
+			.zQualitative(true)
+			.data(myData)
+			.refresh();
+		$("#sevenTimeLineBody").css("overflow", "scroll");
+	} else {
+		var pElement = document.createElement("p");
+		pElement.textContent = "조회된 데이터가 없습니다.";
+		sevenTimeLineDiv.appendChild(pElement);
+	}
+}
+
+function extractDataForDetailTimeLine(data) {
+	let extractedData = {};
+
+	Object.entries(data).forEach(([key, value]) => {
+		extractedData[key] = value.map(obj => ({
+			issueKey: obj.key,
+			isReq: obj.isReq,
+			parentReqKey: obj.parentReqKey,
+			createdDate: new Date(Date.parse(obj.created)),
+			resolutionDate: obj.resolutiondate ? obj.resolutiondate : new Date(),
+			version: obj.pdServiceVersion
+		}));
+	});
+
+	return extractedData;
+}
+
+function dataFormattingForDetailTimeLine(groupedByVersionData) {
+
+	var formattedData = [];
+	for (var version in groupedByVersionData) {
+		console.log(version)
+		var versionData = groupedByVersionData[version];
+
+		var groupByVersion = {
+			group: "버전: "+convertVersionIdToTitle(version),
+			data: []
+		};
+		versionData.forEach((issueData) => {
+			if(issueData.isReq == true){
+				groupByVersion.data.push({
+					label: "요구사항: "+issueData.issueKey,
+					data: [
+						{
+							timeRange: [issueData.createdDate, issueData.resolutionDate],
+							val: convertVersionIdToTitle(issueData.version),
+						}
+					]
+				});
+			}else{
+				groupByVersion.data.push({
+					label: "연결된 이슈: "+issueData.issueKey,
+					data: [
+						{
+							timeRange: [issueData.createdDate, issueData.resolutionDate],
+							val: convertVersionIdToTitle(issueData.version),
+						}
+					]
+				});
+			}
+		});
+		formattedData.push(groupByVersion);
+	}
+	return formattedData;
 }
 
 // 주식차트
@@ -2043,4 +2053,24 @@ function versionTimelineChart(versionData) {
 	}
 
 	window.addEventListener('resize', myChart.resize);
+}
+
+////////////////////
+//서비스, 버전으로 연결된 이슈 전체 호출
+////////////////////
+function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
+		type: "GET",
+		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		async: true,
+		statusCode: {
+			200: function (data) {
+				//sevenTimeline(data);
+			}
+		}
+	});
 }
