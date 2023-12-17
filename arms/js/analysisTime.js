@@ -7,7 +7,7 @@ var selectedVersionId;
 var versionListData;
 var globalDeadline;
 // 최상단 메뉴 변수
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
 var mailAddressList;
 // 필요시 작성
 
@@ -1816,7 +1816,7 @@ function dataFormattingForDetailTimeLine(groupedByVersionData) {
 		};
 
 		versionData.forEach((issueData) => {
-			if(issueData.isReq == true){
+			if(issueData.isReq === true){
 				groupByVersion.data.push({
 					label: "요구사항: "+issueData.issueKey,
 					data: [

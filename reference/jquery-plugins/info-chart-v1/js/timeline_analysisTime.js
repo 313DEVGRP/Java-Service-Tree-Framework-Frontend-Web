@@ -13,7 +13,6 @@ var Timeline = (function () {
 	fn = {
 		init: function init(_target, _data) {
 			var widgetWidth = $("#version-timeline-bar")[0].offsetWidth;
-			console.log(widgetWidth);
 
 			// 화면을 그리는데 필요한 기본 데이터
 			viewData = {
@@ -198,7 +197,6 @@ var Timeline = (function () {
 
 				// 타임라인 z-index
 				d.zIndex = (function () {
-					console.log("i(z-index) =" + i);
 					if (i === 0) return 9999;
 
 					if (d.startDate <= data[i - 1].endDate) {

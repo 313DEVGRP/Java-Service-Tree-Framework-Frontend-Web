@@ -321,6 +321,11 @@
 										<div class="description">【 경과 】</div>
 									</div>
 								</div>
+								<div class="box" style="display: flex; justify-content: space-evenly; margin: 10px 0;">
+									<div>
+										<span>작업 종료 예상일<br><a id="expected_end_date" style="font-weight: bold;">-</a></span><br>
+									</div>
+								</div>
 							</div>
 						</section>
 					</div>
@@ -991,3 +996,26 @@
 		</section>
 	</div>
 </div>
+
+<style>
+    .network-graph {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #NETWORK_GRAPH {
+        overflow: hidden!important;
+    }
+
+    #NETWORK_GRAPH .node-label {
+        font-size: 14px;
+        font-weight:bold;
+        color:#111;
+        stroke: white;
+        stroke-width: 1.5px;
+        paint-order: stroke fill;
+        text-anchor: middle;
+    }
+</style>

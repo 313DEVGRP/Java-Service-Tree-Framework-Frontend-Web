@@ -6,7 +6,7 @@ var selectedVersionId;   // 선택된 버전 아이디
 var dataTableRef;
 var mailAddressList;
 var dashboardColor;
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var resourceSet = new Set(); // 담당자 set
 var searchMap = [
@@ -516,6 +516,7 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
                 }
                 // 작업자수 및 평균계산
                 getAssigneeInfo(pdservice_id,pdServiceVersionLinks);
+                getExpectedEndDate(pdservice_id,pdServiceVersionLinks, all_req_count);
 
                 // 요구사항 및 연결이슈 파이차트
                 drawSimplePieChart("req_pie","요구사항",reqDataMapForPie);
@@ -908,6 +909,8 @@ function getScheduleToDrawRadarChart(pdservice_id, pdServiceVersionLinks) {
                     let objectiveDateDiff = getDateDiff(가장이른시작날짜, 가장늦은종료날짜);
                     let currentDateDiff = getDateDiff(가장이른시작날짜, new Date());
 
+                    total_days_progress = currentDateDiff;
+
                     let 목표데이터_배열 = [resource_count, req_count, objectiveDateDiff];
                     let 현재진행데이터_배열 = [resource_count, req_in_action, currentDateDiff];
                     let dateDiff = Math.abs(objectiveDateDiff - currentDateDiff).toFixed(0);
@@ -939,10 +942,12 @@ const getDateDiff = (d1, d2) => {
 }
 
 function 수치_초기화() {
-    req_count =0
-    linkedIssue_subtask_count =0
+    req_count = 0;
+    linkedIssue_subtask_count = 0;
     resource_count =0;
     req_in_action =0;
+    total_days_progress = undefined;
+
     $("#total_req_count").text("-");       // 총 요구사항 수(미할당포함)
     $("#no_assigned_req_count").text("-"); // 미할당 요구사항 수
     $("#req_count").text("-");             // 작업 대상 요구사항 수
@@ -1079,4 +1084,75 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
             }
         }
     });
+}
+
+async function getExpectedEndDate(pdServiceLink, pdServiceVersionLinks, all_req_count) {
+    $("#expected_end_date").text("").css("color", "");
+
+    let totalDaysProgress = await waitForTotalDaysProgress();
+
+    const url = new UrlBuilder()
+        .setBaseUrl("/auth-user/api/arms/analysis/time/normal-version/resolution")
+        .addQueryParam("pdServiceLink", pdServiceLink)
+        .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+        .addQueryParam("isReqType", "REQUIREMENT")
+        .addQueryParam("resolution", "resolutiondate")
+        .addQueryParam("메인그룹필드", "isReq")
+        .addQueryParam("크기", 1000)
+        .addQueryParam("컨텐츠보기여부", true)
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: async function (data) {
+                console.log("[ topMenu :: getExpectedEndDate ] :: Resolution 개수 확인 = " + data.전체합계);
+                console.log("[ topMenu :: getExpectedEndDate ] :: 전체 요구사항 개수 확인 = " + all_req_count);
+
+                if (data.전체합계 !== 0) {
+                    let workingRatio = (data.전체합계 / all_req_count) * 100;
+                    if (all_req_count === data.전체합계) {
+                        $("#expected_end_date").text("작업 완료");
+                    }
+                    else {
+                        console.log("totalDaysProgress : " + totalDaysProgress);
+                        let result = Math.abs((100 / workingRatio) * totalDaysProgress).toFixed(0);
+
+                        $("#expected_end_date").text(addDaysToDate(result));
+                    }
+                }
+                else {
+                    $("#expected_end_date").text("예측 불가").css("color", "red");
+                }
+            }
+        }
+    });
+
+}
+
+function waitForTotalDaysProgress() {
+    return new Promise(resolve => {
+        let intervalId = setInterval(() => {
+            if (total_days_progress !== undefined) {
+                clearInterval(intervalId);
+                resolve(total_days_progress);
+            }
+        }, 100);  // 100ms마다 globalDeadline 값 확인
+    });
+}
+
+function addDaysToDate(daysToAdd) {
+    var currentDate = new Date(); // 현재 날짜 가져오기
+    var targetDate = new Date(currentDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000)); // 대상 날짜 계산
+
+    // 대상 날짜를 년, 월, 일로 분리
+    var year = targetDate.getFullYear();
+    var month = targetDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    var day = targetDate.getDate();
+
+    return year + "년 " + month + "월 " + day + "일"; // 결과 반환
 }

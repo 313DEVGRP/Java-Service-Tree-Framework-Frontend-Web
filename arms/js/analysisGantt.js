@@ -8,7 +8,7 @@ var parentIdOfSelected;
 var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId;   // 선택된 버전 아이디
 var mailAddressList; // 투입 작업자 메일
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
 var dashboardColor;
 
 var reqStatusDataTable;
