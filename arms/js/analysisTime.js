@@ -684,6 +684,7 @@ async function drawVersionProgress(data) {
 	}
 
 	globalDeadline = formatDate(new Date(latestEndDate));
+	console.log("[ analysisTime :: globalDeadline ] :: globalDeadline = " + globalDeadline);
 
 	$("#fastestStartDate").text(new Date(fastestStartDate).toLocaleDateString());
 	$("#latestEndDate").text(new Date(latestEndDate).toLocaleDateString());
@@ -878,12 +879,56 @@ async function drawVersionProgress(data) {
 }
 
 ////////////////////
+// 히트맵 차트
+////////////////////
+function calendarHeatMap(pdServiceLink, pdServiceVersions) {
+	$("#calendar_yearview_blocks_chart_1 svg").remove();
+	$("#calendar_yearview_blocks_chart_2 svg").remove();
+
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/time/heatmap",
+		type: "GET",
+		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		async: true,
+		statusCode: {
+			200: function (data) {
+				console.log("[ analysisTime :: calendarHeatMap ] :: 누적 업데이트 히트맵 차트데이터 = ");
+				console.log(data);
+				$(".update-title").show();
+
+				$("#calendar_yearview_blocks_chart_1").calendar_yearview_blocks({
+					data: JSON.stringify(data.requirement),
+					start_monday: true,
+					always_show_tooltip: true,
+					month_names: ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sept", "oct", "nov", "dec"],
+					day_names: ["mon", "wed", "fri", "sun"]
+					//colors: data.requirementColors
+				});
+
+				$("#calendar_yearview_blocks_chart_2").calendar_yearview_blocks({
+					data: JSON.stringify(data.relationIssue),
+					start_monday: true,
+					always_show_tooltip: true,
+					month_names: ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
+					day_names: ["mon", "wed", "fri", "sun"]
+					//colors: data.relationIssueColors
+				});
+
+				// d3.select("#heatmap-body").style("overflow-x","scroll");
+			}
+		}
+	});
+}
+
+////////////////////
 // 스캐터 차트
 ////////////////////
 async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLinks) {
 
 	let deadline = await waitForGlobalDeadline();
-	console.log(`Deadline is ${deadline}`);
 
 	let startDate = $("#scatter_start_date").val();
 	let endDate = $("#scatter_end_date").val();
@@ -1114,79 +1159,11 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 	});
 }
 
-function dailyChartDataSearchEvent() {
-	$("#scatter-search").on("click", function (params) {
-		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
-	});
-
-	$("#multi-stack-search").on("click", function (params) {
-		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
-	});
-}
-
-function validateSearchDateWithChart(startDate, endDate) {
-	let result = true;
-	if(!selectedPdServiceId || !selectedVersionId) {
-		alert("제품(서비스) 혹은 버전 선택이 되지 않았습니다.");
-		result = false;
-	}
-
-	if (!startDate || !endDate) {
-		alert("일자를 지정하지 않았습니다.");
-		result = false;
-	}
-
-	return result;
-}
-
-function calendarHeatMap(pdServiceLink, pdServiceVersions) {
-	$("#calendar_yearview_blocks_chart_1 svg").remove();
-	$("#calendar_yearview_blocks_chart_2 svg").remove();
-
-	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/heatmap",
-		type: "GET",
-		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		async: true,
-		statusCode: {
-			200: function (data) {
-				console.log("[ analysisTime :: calendarHeatMap ] :: 누적 업데이트 히트맵 차트데이터 = ");
-				console.log(data);
-				$(".update-title").show();
-
-				$("#calendar_yearview_blocks_chart_1").calendar_yearview_blocks({
-					data: JSON.stringify(data.requirement),
-					start_monday: true,
-					always_show_tooltip: true,
-					month_names: ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sept", "oct", "nov", "dec"],
-					day_names: ["mon", "wed", "fri", "sun"]
-					//colors: data.requirementColors
-				});
-
-				$("#calendar_yearview_blocks_chart_2").calendar_yearview_blocks({
-					data: JSON.stringify(data.relationIssue),
-					start_monday: true,
-					always_show_tooltip: true,
-					month_names: ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
-					day_names: ["mon", "wed", "fri", "sun"]
-					//colors: data.relationIssueColors
-				});
-
-				// d3.select("#heatmap-body").style("overflow-x","scroll");
-			}
-		}
-	});
-}
-
 ////////////////
 // 멀티 콤비네이션 차트
 ///////////////
 async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdServiceLink, pdServiceVersionLinks) {
 	let deadline = await waitForGlobalDeadline();
-	console.log(`Deadline is ${deadline}`);
 
 	let startDate = $("#multi_stack_start_date").val();
 	let endDate = $("#multi_stack_end_date").val();
@@ -1535,14 +1512,6 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 	});
 }
 
-function onScatterChartDateEndChanged() {
-	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
-}
-
-function onMultiStackChartDateEndChanged() {
-	dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
-}
-
 // 마감일 함수
 function createDeadlineSeries(dates, totalRelationIssues, totalRequirements, deadline, usePreviousValue, lineWidth) {
 	var chartStart = dates.reduce((earliest, date) => (date < earliest ? date : earliest), dates[0]);
@@ -1612,6 +1581,39 @@ function createDeadlineSeries(dates, totalRelationIssues, totalRequirements, dea
 	}
 
 	return deadlineSeries;
+}
+
+function dailyChartDataSearchEvent() {
+	$("#scatter-search").on("click", function (params) {
+		dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
+	});
+
+	$("#multi-stack-search").on("click", function (params) {
+		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
+	});
+}
+
+function validateSearchDateWithChart(startDate, endDate) {
+	let result = true;
+	if(!selectedPdServiceId || !selectedVersionId) {
+		alert("제품(서비스) 혹은 버전 선택이 되지 않았습니다.");
+		result = false;
+	}
+
+	if (!startDate || !endDate) {
+		alert("일자를 지정하지 않았습니다.");
+		result = false;
+	}
+
+	return result;
+}
+
+function onScatterChartDateEndChanged() {
+	dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
+}
+
+function onMultiStackChartDateEndChanged() {
+	dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
 }
 
 function convertVersionIdToTitle(versionId) {
@@ -1806,13 +1808,13 @@ function dataFormattingForDetailTimeLine(groupedByVersionData) {
 
 	var formattedData = [];
 	for (var version in groupedByVersionData) {
-		console.log(version)
 		var versionData = groupedByVersionData[version];
 
 		var groupByVersion = {
 			group: "버전: "+convertVersionIdToTitle(version),
 			data: []
 		};
+
 		versionData.forEach((issueData) => {
 			if(issueData.isReq == true){
 				groupByVersion.data.push({
