@@ -3585,6 +3585,8 @@ table tbody tr td {
 	padding: 1px 0 0 75px;
 	color: #fff;
 	font-size: 13px;
+	margin-top: 35px;
+	padding-top: 15px;
 }
 
 .timeline-container ul:before {
@@ -3669,6 +3671,29 @@ table tbody tr td {
 .tree-container.widget.large,
 .tree-container.widget.large .body {
 	height: auto;
+}
+
+.vertical-chevron-up, .vertical-chevron-down {
+	position: absolute;
+	left: 48%;
+	transform: translateY(-20px);
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.vertical-chevron-down {
+	transform: translateY(20px);
+}
+
+.fa-chevron-up:hover, .fa-chevron-down:hover {
+	opacity: 80%;
+}
+
+@media screen and (max-width: 1295px) {
+	.timeline-period {
+		flex: 1 1 auto;
+		margin-bottom: 10px;
+	}
 }
 
 /* Dashboard 시작 */

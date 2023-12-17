@@ -779,10 +779,49 @@
 			</header>
 			<div class="body">
 				<div class="gradient_middle_border" style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
-                <blockquote class="font13"
-                            style="margin-top: 5px;">
-                    선택한 제품(서비스)와 버전에 최근 7일 이내의 업데이트된 요구사항과 그에 연결된 이슈의 타임라인을 확인할 수 있습니다.
-                </blockquote>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <blockquote class="font13"
+                                style="margin-top: 5px;">
+                        선택한 제품(서비스)와 버전에 최근 7일 이내의 업데이트된 요구사항과 그에 연결된 이슈의 타임라인을 확인할 수 있습니다.
+                    </blockquote>
+                    <div class="timeline-period col-md-4">
+                        <label for="multi_stack_start_date"
+                               class="control-label"
+                               style="text-align: left; width: 40px !important">
+                            기간 :
+                        </label>
+                        <div class="controls input-group"
+                             style="">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </span>
+                            <input type="text"
+                                   id="timeline_start_date"
+                                   name="timeline_start_date"
+                                   class="form-control parsley-validated font13 darkBack"
+                                   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                   placeholder="yyyy-mm-dd"
+                                   required="required"
+                                   readonly
+                            />
+                            <span class="input-group-addon" style="padding: 0px; background-color: rgba(255,255,255,0);">
+                                &nbsp;~&nbsp;
+                            </span>
+                            <input type="text"
+                                   id="timeline_end_date"
+                                   name="timeline_end_date"
+                                   class="form-control parsley-validated font13 darkBack"
+                                   style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                   placeholder="yyyy-mm-dd"
+                                   required="required"
+                                   readonly
+                            />
+                            <span id="multi-stack-search" class="input-group-addon" style="cursor: pointer; background-color: white; color: black;">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 				<div class="row">
 					<div class="col-lg-4 color-legend-widget">
 						<section

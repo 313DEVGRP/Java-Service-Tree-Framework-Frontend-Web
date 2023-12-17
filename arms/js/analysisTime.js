@@ -224,7 +224,7 @@ function bind_VersionData_By_PdService() {
 				// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 				// vertical timeline chart
-				verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
+				verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
                 // detail timeline chart
 				detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 
@@ -285,7 +285,7 @@ function makeVersionMultiSelectBox() {
 			// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 			// vertical timeline chart
-			verticalTimeLineChart(selectedPdServiceId, selectedVersionId);
+			verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
 			// detail timeline chart
 			detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 
@@ -1623,7 +1623,7 @@ function convertVersionIdToTitle(versionId) {
 	}
 }
 
-function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
+function verticalTimeLineChart(pdServiceLink, pdServiceVersions, week) {
 
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
@@ -1632,7 +1632,7 @@ function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
 		.addQueryParam("isReqType", "ISSUE")
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
-		.addQueryParam("baseWeek", 1)
+		.addQueryParam("baseWeek", week)
 		.addQueryParam("sortField", "updated")
 		.build();
 
@@ -1648,23 +1648,29 @@ function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
 				let contentSet = {}; // 객체로 선언
 
 				let items = Object.values(data).reduce((acc, versionData) => {
-					let filteredItems = versionData.filter(item => {
-						if (!contentSet[item.summary]) { // 객체의 키로 중복 체크
-							contentSet[item.summary] = true; // 중복 체크를 위해 키에 값을 할당
-							return true;
+					versionData.forEach(item => {
+						if (!contentSet[item.summary]) { // 중복 체크
+							contentSet[item.summary] = {
+								title: convertVersionIdToTitle(item.pdServiceVersion),
+								content: item.summary,
+								type: [item.key],
+								date: formatDateTime(item.updated)
+							};
+						} else {
+							contentSet[item.summary].type.push(item.key);
+							contentSet[item.summary].type.sort();
 						}
-						return false;
-					}).map(item => ({ // 중복이 없는 항목들을 새 객체로 변환
-						title: convertVersionIdToTitle(item.pdServiceVersion),
-						content: item.summary,
-						type: "",
-						date: formatDateTime(item.updated)
-					}));
+					});
 
-					return [...acc, ...filteredItems]; // 새로운 객체들을 누적값에 추가
+					return acc;
 				}, []);
 
-				makeVerticalTimeline(items);
+				items = Object.values(contentSet).map(item => ({
+					...item,
+					type: item.type.join('  |  ')
+				}));
+
+				makeVerticalTimeline(pdServiceLink, pdServiceVersions, week, items);
 			}
 		}
 	});
@@ -1700,15 +1706,27 @@ function verticalTimeLineChart(pdServiceLink, pdServiceVersions) {
 	 */
 }
 
-function makeVerticalTimeline(data) {
+function makeVerticalTimeline(pdServiceLink, pdServiceVersions, week, data) {
+
+	// 날짜 세팅
+	const { from, to } = getFromToDates(week);
+	$("#timeline_start_date").val(from);
+	$("#timeline_end_date").val(to);
+
+	// 데이터 세팅
 	const $container = document.querySelector(".timeline-container");
+	$container.innerHTML = '';
+
+	const upIcon = document.createElement("i");
+	upIcon.className = "fa fa-chevron-up vertical-chevron-up";
+	$container.append(upIcon);
 
 	if (data.length == 0) {
-		$container.innerHTML = "<p style='text-align: center;'>데이터가 없습니다.</p>";
+		$container.innerHTML += "<p style='text-align: center; padding-top: 20px;'>데이터가 없습니다.</p>";
 	} else {
 		const $ul = document.createElement("ul");
 
-		data.forEach(({ title, content, type, date }, index) => {
+		data.forEach(({title, content, type, date}, index) => {
 			const $li = document.createElement("li");
 			$li.className = "session";
 			$li.innerHTML = `
@@ -1727,11 +1745,40 @@ function makeVerticalTimeline(data) {
 
 		$container.append($ul);
 	}
+
+	const downIcon = document.createElement("i");
+	downIcon.className = "fa fa-chevron-down vertical-chevron-down";
+	if (week != 1) {
+		$container.append(downIcon);
+	}
+
+	// 버튼 클릭 이벤트
+	$('.fa-chevron-up').on('click', function() {
+		verticalTimeLineChart(pdServiceLink, pdServiceVersions, week+1);
+	});
+
+	$('.fa-chevron-down').on('click', function() {
+		if (week - 1 > 0) {
+			verticalTimeLineChart(pdServiceLink, pdServiceVersions, week-1);
+		}
+	});
 }
 
 function formatDateTime(dateTime) {
 	var date = dateTime.split('T')[0];
 	return date;
+}
+
+function getFromToDates(week) {
+	const fromDate = new Date();
+	fromDate.setDate(fromDate.getDate() - week * 7);
+	const from = fromDate.toISOString().split('T')[0];
+
+	const toDate = new Date();
+	toDate.setDate(toDate.getDate() - (week - 1) * 7);
+	const to = toDate.toISOString().split('T')[0];
+
+	return { from, to };
 }
 
 function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
