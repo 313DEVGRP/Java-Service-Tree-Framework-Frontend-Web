@@ -118,11 +118,9 @@
 										</div>
 									</div>
 									<blockquote class="font12">
-										<strong>
-											2. Product
-											<sup>service</sup>
-											의 버전을 선택해 주세요
-										</strong>
+										2. Product
+										<sup>service</sup>
+										의 버전을 선택해 주세요
 									</blockquote>
 									<div
 										class="control-group"
@@ -321,9 +319,20 @@
 										<div class="description">【 경과 】</div>
 									</div>
 								</div>
-								<div class="box" style="display: flex; justify-content: space-evenly; margin: 10px 0;">
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
 									<div>
-										<span>작업 종료 예상일<br><a id="expected_end_date" style="font-weight: bold;">-</a></span><br>
+										<span>
+											작업 종료 예상일
+											<br />
+											<a
+												id="expected_end_date"
+												style="font-weight: bold">
+												-
+											</a>
+										</span>
+										<br />
 									</div>
 								</div>
 							</div>
@@ -696,11 +705,9 @@
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
 								<blockquote class="font12">
-									<strong>
-										제품
-										<sup>서비스</sup>
-										에 몇개의 버전이 있는지, 버전 하위로 몇개의 요구사항이 있는지
-									</strong>
+									제품
+									<sup>서비스</sup>
+									에 몇개의 버전이 있는지, 버전 하위로 몇개의 요구사항이 있는지
 								</blockquote>
 								<div
 									class="body"
@@ -767,9 +774,7 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12">
-									<strong>버전별로 요구사항 이슈의 업데이트 분포</strong>
-								</blockquote>
+								<blockquote class="font12">버전별로 요구사항 이슈의 업데이트 분포</blockquote>
 								<div
 									class="body"
 									id="boxplot-scatter-chart-container"
@@ -835,9 +840,7 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12">
-									<strong>요구사항이 다른 버전으로 옮겨간 이력이 있는지 분포</strong>
-								</blockquote>
+								<blockquote class="font12">요구사항이 다른 버전으로 옮겨간 이력이 있는지 분포</blockquote>
 								<div
 									class="body"
 									id="circular_sankey"
@@ -905,9 +908,7 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12">
-									<strong>하나의 요구사항에 몇명의 개입이 있었는지</strong>
-								</blockquote>
+								<blockquote class="font12">하나의 요구사항에 몇명의 개입이 있었는지</blockquote>
 								<div class="body">
 									<div
 										id="tree_bar_container"
@@ -977,12 +978,10 @@
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
 								<blockquote class="font12">
-									<strong>
-										이번 버전에 처리한 요구사항은 어떤것이고, 이번 버전에 처리하지 못한 요구사항은 어떤것인지 (Text
-										색으로 표시)
-										<br />
-										버블 하나당 연관된 사람 수가 많을 수록 크게.
-									</strong>
+									이번 버전에 처리한 요구사항은 어떤것이고, 이번 버전에 처리하지 못한 요구사항은 어떤것인지 (Text 색으로
+									표시)
+									<br />
+									버블 하나당 연관된 사람 수가 많을 수록 크게.
 								</blockquote>
 								<div
 									class="body"
@@ -998,24 +997,24 @@
 </div>
 
 <style>
-    .network-graph {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+	.network-graph {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-    #NETWORK_GRAPH {
-        overflow: hidden!important;
-    }
+	#NETWORK_GRAPH {
+		overflow: hidden !important;
+	}
 
-    #NETWORK_GRAPH .node-label {
-        font-size: 14px;
-        font-weight:bold;
-        color:#111;
-        stroke: white;
-        stroke-width: 1.5px;
-        paint-order: stroke fill;
-        text-anchor: middle;
-    }
+	#NETWORK_GRAPH .node-label {
+		font-size: 14px;
+		font-weight: bold;
+		color: #111;
+		stroke: white;
+		stroke-width: 1.5px;
+		paint-order: stroke fill;
+		text-anchor: middle;
+	}
 </style>
