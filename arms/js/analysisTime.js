@@ -289,7 +289,7 @@ function makeVersionMultiSelectBox() {
 			// vertical timeline chart
 			verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
 			// detail timeline chart
-			detailTimeLineChart(selectedPdServiceId, selectedVersionId);
+			//detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 			// timeline chart
 			timeLineChart(selectedPdServiceId, selectedVersionId);
 
@@ -463,13 +463,19 @@ function dateTimePickerBinding() {
 function baseDateReset() {
 	let today = new Date();
 
-	$("#scatter_end_date").val(formatDate(today));
-	$("#multi_stack_end_date").val(formatDate(today));
+    $("#scatter_end_date").val(formatDate(today));
+    $("#multi_stack_end_date").val(formatDate(today));
+    $("#timeline_end_date").val(formatDate(today));
 
-	today.setDate(today.getDate() - 30);
+    let aMonthAgo = new Date();
+    aMonthAgo.setDate(today.getDate() - 30);
 
-	$("#scatter_start_date").val(formatDate(today));
-	$("#multi_stack_start_date").val(formatDate(today));
+    let aWeekAgo = new Date();
+    aWeekAgo.setDate(today.getDate() - 7);
+
+    $("#scatter_start_date").val(formatDate(aMonthAgo));
+    $("#multi_stack_start_date").val(formatDate(aMonthAgo));
+    $("#timeline_start_date").val(formatDate(aWeekAgo));
 }
 
 function waitForGlobalDeadline() {
@@ -1882,9 +1888,9 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("[ analysisTime :: detailTimeLineData ] :: = ");
+				console.log("[ analysisTime :: TimeLineData ] :: = ");
 				console.log(data);
-				detailTimeLineData(data);
+
 			}
 		}
 	});
@@ -1897,8 +1903,9 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function (data) {
-				console.log("[ analysisTime :: timeLineChart ] :: = ");
+				console.log("[ analysisTime :: detailTimeLineData ] :: = ");
 				console.log(data);
+				detailTimeLineData(data);
 			}
 		}
 	});
