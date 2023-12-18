@@ -56,7 +56,6 @@ function runScript() {
 function 로드_완료_이후_실행_함수() {
 
 	톱니바퀴_초기설정();
-	checkTourGuideMode();
 
 }
 
