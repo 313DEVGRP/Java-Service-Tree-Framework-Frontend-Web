@@ -226,7 +226,9 @@ function bind_VersionData_By_PdService() {
 				// vertical timeline chart
 				verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
                 // detail timeline chart
-				detailTimeLineChart(selectedPdServiceId, selectedVersionId);
+				//detailTimeLineChart(selectedPdServiceId, selectedVersionId);
+
+				timeLineChart(selectedPdServiceId, selectedVersionId);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -288,6 +290,9 @@ function makeVersionMultiSelectBox() {
 			verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
 			// detail timeline chart
 			detailTimeLineChart(selectedPdServiceId, selectedVersionId);
+			// timeline chart
+			timeLineChart(selectedPdServiceId, selectedVersionId);
+
 
 			if (checked) {
 				endPointUrl =
@@ -394,6 +399,54 @@ function dateTimePickerBinding() {
 		onSelectDate: function(ct, $i) {
 			var startDate = $('#multi_stack_start_date').datetimepicker('getValue');
 			var endDate = $('#multi_stack_end_date').datetimepicker('getValue');
+			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+			if (dayDifference > 31) {
+				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+				var newDate = new Date(startDate);
+				newDate.setDate(startDate.getDate() + 30);
+				$i.val(formatDate(newDate));
+			}
+		},
+		// onClose: onMultiStackChartDateEndChanged
+	});
+
+    $('#timeline_start_date').datetimepicker({
+		theme:'dark',
+		onShow: function(ct) {
+			this.setOptions({
+				maxDate: $('#timeline_end_date').val()?$('#timeline_end_date').datetimepicker('getValue'):false
+			})
+		},
+		timepicker: false,
+		format: 'Y-m-d',
+		onSelectDate: function(ct, $i) {
+			var startDate = $('#timeline_start_date').datetimepicker('getValue');
+			var endDate = $('#timeline_end_date').datetimepicker('getValue');
+			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+			if (dayDifference > 31) {
+				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+				var newDate = new Date(endDate);
+				newDate.setDate(endDate.getDate() - 30);
+				$i.val(formatDate(newDate));
+			}
+		}
+	});
+
+	$('#timeline_end_date').datetimepicker({
+		theme:'dark',
+		onShow: function(ct) {
+			this.setOptions({
+				minDate: $('#timeline_start_date').val()?$('#timeline_start_date').datetimepicker('getValue'):false,
+				maxDate: today
+			})
+		},
+		timepicker: false,
+		format: 'Y-m-d',
+		onSelectDate: function(ct, $i) {
+			var startDate = $('#timeline_start_date').datetimepicker('getValue');
+			var endDate = $('#timeline_end_date').datetimepicker('getValue');
 			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
 			if (dayDifference > 31) {
@@ -1591,6 +1644,10 @@ function dailyChartDataSearchEvent() {
 	$("#multi-stack-search").on("click", function (params) {
 		dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
 	});
+
+	$("#timeline-search").on("click", function (params) {
+		timeLineChart(selectedPdServiceId, selectedVersionId);
+	});
 }
 
 function validateSearchDateWithChart(startDate, endDate) {
@@ -1781,7 +1838,74 @@ function getFromToDates(week) {
 	return { from, to };
 }
 
-function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
+async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
+	let deadline = await waitForGlobalDeadline();
+
+	let startDate = $("#timeline_start_date").val();
+	let endDate = $("#timeline_end_date").val();
+
+	if (!validateSearchDateWithChart(startDate, endDate)) {
+		return;
+	}
+	const verticalUrl = new UrlBuilder()
+    		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-jira-issue")
+    		.addQueryParam("pdServiceLink", pdServiceLink)
+    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+    		.addQueryParam("일자기준", "updated")
+    		.addQueryParam("메인그룹필드", "isReq")
+    		.addQueryParam("시작일", startDate)
+    		.addQueryParam("종료일", endDate)
+    		.addQueryParam("sortField", "updated")
+    		.addQueryParam("크기", 1000)
+    		.addQueryParam("하위크기", 1000)
+    		.addQueryParam("컨텐츠보기여부", true)
+    		.build();
+
+	const detailUrl = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-jira-issue")
+		.addQueryParam("pdServiceLink", pdServiceLink)
+		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+		.addQueryParam("일자기준", "updated")
+		.addQueryParam("시작일", startDate)
+		.addQueryParam("종료일", endDate)
+		.addQueryParam("sortField", "created")
+		.addQueryParam("크기", 1000)
+		.addQueryParam("하위크기", 1000)
+		.addQueryParam("컨텐츠보기여부", true)
+		.build();
+
+	$.ajax({
+		url: verticalUrl,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("[ analysisTime :: detailTimeLineData ] :: = ");
+				console.log(data);
+				detailTimeLineData(data);
+			}
+		}
+	});
+
+    $.ajax({
+		url: detailUrl,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (data) {
+				console.log("[ analysisTime :: timeLineChart ] :: = ");
+				console.log(data);
+			}
+		}
+	});
+
+}
+
+/*function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
 
 	const url = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
@@ -1806,7 +1930,7 @@ function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
 		}
 	});
 
-}
+}*/
 
 function detailTimeLineData(data) {
 	var sevenTimeLineDiv = document.getElementById("detailTimeLine");
