@@ -224,7 +224,7 @@ body::-webkit-scrollbar-track {
 }
 
 .darkBack {
-	background: rgba(51, 51, 51, 0.4) !important;
+	background: rgba(51, 51, 51, 0.425) !important;
 	border: 1px solid rgba(51, 51, 51, 0.425) !important;
 }
 
@@ -3673,7 +3673,8 @@ table tbody tr td {
 	height: auto;
 }
 
-.vertical-chevron-up, .vertical-chevron-down {
+.vertical-chevron-up,
+.vertical-chevron-down {
 	position: absolute;
 	left: 48%;
 	transform: translateY(-20px);
@@ -3685,7 +3686,8 @@ table tbody tr td {
 	transform: translateY(20px);
 }
 
-.fa-chevron-up:hover, .fa-chevron-down:hover {
+.fa-chevron-up:hover,
+.fa-chevron-down:hover {
 	opacity: 80%;
 }
 
@@ -3994,11 +3996,15 @@ button {
 	background: rgba(51, 51, 51, 0.4);
 }
 .chart-footer .footer-item .item-name,
-.chart-footer .footer-item .item-value{
+.chart-footer .footer-item .item-value {
 	text-align: center;
 	width: 100%;
 	margin-top: 2px;
 }
-.chart-footer .footer-item .item-value{
+.chart-footer .footer-item .item-value {
 	font-weight: bold;
+}
+
+.select-box button {
+	margin: 0;
 }
