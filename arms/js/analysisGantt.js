@@ -6,7 +6,7 @@ var selectedType;
 var parentIdOfSelected;
 
 var selectedPdServiceId; // 제품(서비스) 아이디
-var selectedVersionId;   // 선택된 버전 아이디
+var selectedVersionId; // 선택된 버전 아이디
 var mailAddressList; // 투입 작업자 메일
 var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
 var dashboardColor;
@@ -84,8 +84,7 @@ function execDocReady() {
 			//topMenu
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js"
-
-		]// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+		] // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -306,7 +305,7 @@ function makeVersionMultiSelectBox() {
 			}
 
 			수치_초기화();
-			selectedVersionId = versionTag.join(',');
+			selectedVersionId = versionTag.join(",");
 			// 요구사항 및 연결이슈 통계
 			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
@@ -352,7 +351,7 @@ function bind_VersionData_By_PdService() {
 				}
 
 				수치_초기화();
-				selectedVersionId = pdServiceVersionIds.join(',');
+				selectedVersionId = pdServiceVersionIds.join(",");
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
@@ -1748,6 +1747,66 @@ function initGantt(data) {
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},
 		[
+			{
+				data: "id",
+				title: "",
+				render: (data, row) => {
+					const btnWrapper = $("<div />");
+					const updateBtn = $("<button />")
+						.addClass("btn btn-success btn-sm mr-xs")
+						.append($("<i />").addClass("fa fa-pencil"))
+						.css({
+							"margin-top": 0,
+							"padding-top": 0,
+							"padding-bottom": 0,
+							border: "none",
+							outline: "none",
+							background: "none"
+						})
+						.attr({ "data-placement": "left", "data-original-title": "상세정보 조회 및 수정" })
+						.tooltip()
+						.on("click", () => updateNodeModalOpen(row));
+					const addBtn = $("<button />")
+						.addClass("btn btn-primary btn-sm mr-xs")
+						.append($("<i />").addClass("fa fa-plus-circle"))
+						.css({
+							"margin-top": 0,
+							"padding-top": 0,
+							"padding-bottom": 0,
+							border: "none",
+							outline: "none",
+							background: "none"
+						})
+						.attr({ "data-placement": "left", "data-original-title": "동일 레벨에 요구사항 추가" })
+						.tooltip()
+						.on("click", () => addNodeModalOpen(row.parentId));
+
+					btnWrapper.append(updateBtn);
+					btnWrapper.append(addBtn);
+
+					if (row.type !== "default") {
+						const addLevelDownBtn = $("<button />")
+							.addClass("btn btn-primary btn-sm mr-xs")
+							.append($("<i />").addClass("fa fa-level-down"))
+							.css({
+								"margin-top": 0,
+								"padding-top": 0,
+								"padding-bottom": 0,
+								border: "none",
+								outline: "none",
+								background: "none"
+							})
+							.attr({ "data-placement": "left", "data-original-title": "하위에 요구사항 추가" })
+							.tooltip()
+							.on("click", () => addNodeModalOpen(row.parentId));
+
+						btnWrapper.append(addLevelDownBtn);
+					}
+
+					return btnWrapper[0];
+				}
+			},
+			{ data: "drag", title: "" },
 			{ data: "wbs", title: "WBS" },
 			{ data: "name", title: "작업" },
 			{ data: "etc", title: "비고" },
@@ -1760,45 +1819,7 @@ function initGantt(data) {
 			{ data: "manager", title: "담당자" },
 			{ data: "result", title: "산출물" },
 			{ data: "plan", title: "계획" },
-			{ data: "performance", title: "실적" },
-			{
-				data: "id",
-				title: "",
-				render: (data, row) => {
-					const btnWrapper = $("<div />");
-					const updateBtn = $("<button />")
-						.addClass("btn btn-success btn-sm mr-xs")
-						.append($("<i />").addClass("fa fa-pencil"))
-						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
-						.attr({ "data-placement": "left", "data-original-title": "상세정보 조회 및 수정" })
-						.tooltip()
-						.on("click", () => updateNodeModalOpen(row));
-					const addBtn = $("<button />")
-						.addClass("btn btn-primary btn-sm mr-xs")
-						.append($("<i />").addClass("fa fa-plus-circle"))
-						.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
-						.attr({ "data-placement": "left", "data-original-title": "동일 레벨에 요구사항 추가" })
-						.tooltip()
-						.on("click", () => addNodeModalOpen(row.parentId));
-
-					btnWrapper.append(updateBtn);
-					btnWrapper.append(addBtn);
-
-					if (row.type !== "default") {
-						const addLevelDownBtn = $("<button />")
-							.addClass("btn btn-primary btn-sm mr-xs")
-							.append($("<i />").addClass("fa fa-level-down"))
-							.css({ "padding-top": 0, "padding-bottom": 0, border: "none", outline: "none", background: "none" })
-							.attr({ "data-placement": "left", "data-original-title": "하위에 요구사항 추가" })
-							.tooltip()
-							.on("click", () => addNodeModalOpen(row.parentId));
-
-						btnWrapper.append(addLevelDownBtn);
-					}
-
-					return btnWrapper[0];
-				}
-			}
+			{ data: "performance", title: "실적" }
 		]
 	);
 }

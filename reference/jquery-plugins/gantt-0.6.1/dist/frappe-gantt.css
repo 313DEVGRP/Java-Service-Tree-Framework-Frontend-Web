@@ -68,8 +68,11 @@
 .table-container table .table-body tr td {
   border-right: 2px solid #515256;
 }
-.table-container table .table-body tr td:nth-child(2) {
-  border-right: none;
+.table-container table .table-body tr td.draggable-item {
+  padding: 0 12px;
+}
+.table-container table .table-body tr td.wbs {
+  border-right: 0 none;
 }
 .table-container table .table-body tr td.work-name {
   position: relative;

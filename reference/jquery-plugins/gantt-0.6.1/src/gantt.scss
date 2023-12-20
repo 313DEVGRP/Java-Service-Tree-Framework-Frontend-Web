@@ -96,8 +96,12 @@ $selected: rgba(229, 96, 59, 0.2) !default;
                 td {
                     border-right: 2px solid $border-right-color;
 
-                    &:nth-child(2) {
-                        border-right: none;
+                    &.draggable-item {
+                        padding: 0 12px;
+                    }
+
+                    &.wbs {
+                        border-right: 0 none;
                     }
 
                     &.work-name {

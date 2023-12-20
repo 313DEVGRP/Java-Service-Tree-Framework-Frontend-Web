@@ -11,22 +11,9 @@ export default class Table {
         this.columns = columns;
     }
 
-    draw_draggable_col(el) {
-        const $el = document.createElement(el);
-
-        if (el === 'td') {
-            $el.innerHTML = `<i class="fa fa-sort"></i>`;
-            $el.className = 'draggable-item';
-        }
-
-        return $el;
-    }
-
     draw_table_header() {
         const $thead = document.createElement('thead');
         const $tr = document.createElement('tr');
-
-        $tr.appendChild(this.draw_draggable_col('th'));
 
         this.columns.forEach((column) => {
             const $th = document.createElement('th');
@@ -86,8 +73,6 @@ export default class Table {
                     'px',
             });
 
-            $tr.appendChild(this.draw_draggable_col('td'));
-
             if (deps === 1 && task.groupPosition.includes('last')) {
                 $tr.classList.add('root-last');
             }
@@ -95,6 +80,17 @@ export default class Table {
             this.columns.forEach((column) => {
                 const $td = document.createElement('td');
                 const { data, render } = column;
+
+                if (data === 'drag') {
+                    $td.innerHTML = `<i class="fa fa-sort"></i>`;
+                    $td.className = 'draggable-item';
+                    $tr.append($td);
+                    return;
+                }
+
+                if (data === 'wbs') {
+                    $td.className = data;
+                }
 
                 if (data === 'name' && task.level > 1) {
                     $td.setAttribute('rel', task.type);
