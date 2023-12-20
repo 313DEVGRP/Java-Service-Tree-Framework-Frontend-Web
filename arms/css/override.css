@@ -3991,6 +3991,7 @@ button {
 	box-sizing: border-box;
 	width: 33.33%; /* 기본 너비 설정 */
 	padding: 1px 2px;
+	background: rgba(51, 51, 51, 0.4);
 }
 .chart-footer .footer-item .item-name,
 .chart-footer .footer-item .item-value{
