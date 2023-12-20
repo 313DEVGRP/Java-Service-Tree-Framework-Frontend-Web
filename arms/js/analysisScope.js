@@ -116,8 +116,6 @@ function execDocReady() {
 				)
 			);
 
-			treeBar();
-
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
 				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
@@ -206,6 +204,8 @@ function makeVersionMultiSelectBox() {
 
 			// 나이팅게일로즈 차트(pie) - 버전별 요구사항
 			getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+
+			treeBar();
 		}
 	});
 }
@@ -247,6 +247,7 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
+				treeBar();
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
@@ -1135,32 +1136,60 @@ function groupTicks(d, step) {
 }
 
 function treeBar() {
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/scope/tree-bar-top10")
+		.addQueryParam("pdServiceLink", selectedPdServiceId)
+		.addQueryParam("pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('메인그룹필드', "parentReqKey")
+		.addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
+		.addQueryParam('컨텐츠보기여부', true)
+		.addQueryParam("isReqType", "ISSUE")
+		.build();
+
 	$.ajax({
-		url: "js/analysis/mockData/temp.json",
+		url: url,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true
 	})
-		.done(function (data) {
-			renderTreeBar(data);
+		.done(function (apiResponse) {
+			const data = apiResponse.response;
+
+			d3.select("#tree_bar_container svg").selectAll("*").remove();
+
+			let assigneeData = data.filter(item => item.type === 'assignee');
+
+			if(assigneeData.length === 0) {
+				console.log("assigneeData.length === 0")
+				return;
+			}
+
+			if (assigneeData.length === 1 && assigneeData[0].name === "No Data") {
+				console.log('assigneeData.length === 1 && assigneeData[0].name === "No Data"')
+				return;
+			}
+
+			let maxValue = Math.max(...assigneeData.map(item => item.value));
+
+			renderTreeBar(data, assigneeData, maxValue);
 		})
 		.fail(function (e) {})
 		.always(function () {});
 }
 
-function renderTreeBar(data) {
+function renderTreeBar(data, assigneeData, maxValue) {
 	const $container = document.getElementById("tree_bar_container"),
 		width = $container.offsetWidth,
 		height = $container.offsetHeight,
 		svg = d3.select("#tree_bar_container svg"),
 		g = svg.append("g").attr("transform", "translate(20,0)"),
-		experienceName = ["", "1", "2", "3", "4", "5"],
+		experienceName = Array(maxValue).fill("").map((_, i) => (i+1 === maxValue ? maxValue.toString() : "")),
 		formatSkillPoints = function (d) {
-			return experienceName[d % 6];
+			return experienceName[d % maxValue];
 		},
-		xScale = d3.scaleLinear().domain([0, 5]).range([0, 100]),
-		xAxis = d3.axisTop().scale(xScale).ticks(5).tickFormat(formatSkillPoints),
+		xScale = d3.scaleLinear().domain([0, maxValue]).range([0, 100]),
+		xAxis = d3.axisTop().scale(xScale).ticks(maxValue).tickFormat(formatSkillPoints),
 		tree = d3.cluster().size([height, width - 145]),
 		stratify = d3
 			.stratify()
