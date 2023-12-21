@@ -206,6 +206,7 @@ function bind_VersionData_By_PdService() {
 				if (!selectedPdServiceId || selectedPdServiceId === null || selectedPdServiceId === undefined || selectedPdServiceId === "") {
 					return;
 				}
+				baseDateReset();
 
 				// 최상단 메뉴 통계
 				수치_초기화();
@@ -342,7 +343,7 @@ function dateTimePickerBinding() {
 		theme:'dark',
 		onShow: function(ct) {
 			this.setOptions({
-				minDate: $('#scatter_start_date').val()?$('#scatter_start_date').datetimepicker('getValue'):false,
+				// minDate: $('#scatter_start_date').val()?$('#scatter_start_date').datetimepicker('getValue'):false,
 				maxDate: today
 			})
 		},
@@ -390,7 +391,7 @@ function dateTimePickerBinding() {
 		theme:'dark',
 		onShow: function(ct) {
 			this.setOptions({
-				minDate: $('#multi_stack_start_date').val()?$('#multi_stack_start_date').datetimepicker('getValue'):false,
+				// minDate: $('#multi_stack_start_date').val()?$('#multi_stack_start_date').datetimepicker('getValue'):false,
 				maxDate: today
 			})
 		},
@@ -438,7 +439,7 @@ function dateTimePickerBinding() {
 		theme:'dark',
 		onShow: function(ct) {
 			this.setOptions({
-				minDate: $('#timeline_start_date').val()?$('#timeline_start_date').datetimepicker('getValue'):false,
+				// minDate: $('#timeline_start_date').val()?$('#timeline_start_date').datetimepicker('getValue'):false,
 				maxDate: today
 			})
 		},
@@ -461,6 +462,8 @@ function dateTimePickerBinding() {
 }
 
 function baseDateReset() {
+	globalDeadline = undefined;
+
 	let today = new Date();
 
     $("#scatter_end_date").val(formatDate(today));
@@ -2101,7 +2104,7 @@ function versionTimelineChart(versionData) {
 		['v1.9', +new Date(2024, 1, 1), +new Date(2024, 11, 15)],
 	];
 
-	var today = new Date()
+	var today = new Date();
 	var todayLine =  {
 		name: '오늘',
 		type: 'line',
