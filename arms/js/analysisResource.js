@@ -49,6 +49,10 @@ function execDocReady() {
             "../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
             "../reference/lightblue4/docs/lib/widgster/widgster.js",
             "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+            // 투입 인력별 요구사항 관여 차트
+            "../reference/jquery-plugins/Jit-2.0.1/jit.js",
+            "../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
+            "../arms/js/analysis/resource/treemap.js",
             // 제품-버전-투입인력 차트
             "../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js",
         ],
@@ -967,6 +971,9 @@ function 수치_초기화() {
     if(stackBarChart) { stackBarChart.dispose(); }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+// 투입 인력별 요구사항 관여 차트 생성
+////////////////////////////////////////////////////////////////////////////////////////
 function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
     const url = new UrlBuilder()
         .setBaseUrl('/auth-user/api/arms/dashboard/assignees-requirements-involvements')
@@ -988,103 +995,21 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
         statusCode: {
             200: function (apiResponse) {
                 const data = apiResponse.response;
-                let chartDom = document.getElementById('chart-manpower-requirement');
-                let myChart = echarts.init(chartDom);
-                let option;
-                    myChart.setOption(
-                        (option = {
-                            title: {
-                                text: '',
-                                subtext: '',
-                                left: 'leafDepth'
-                            },
-                            tooltip: {
-                                formatter: function (info) {
-                                    var value = info.value;
-                                    var treePathInfo = info.treePathInfo;
-                                    var treePath = [];
-                                    for (var i = 1; i < treePathInfo.length; i++) {
-                                        treePath.push(treePathInfo[i].name);
-                                    }
-                                    return [
-                                        '<div class="tooltip-title">' +
-                                        echarts.format.encodeHTML(treePath.join('/')) +
-                                        '</div>',
-                                        '관여한 횟수: ' + echarts.format.addCommas(value)
-                                    ].join('');
-                                }
-                            },
-                            series: [
-                                {
-                                    name: 'ROOT',
-                                    type: 'treemap',
-                                    visibleMin: 300,
-                                    width: '100%',
-                                    height: '90%', // breadcrumb를 사용하지 않을 경우, width, height 모두 100%를 주면 됩니다.
-                                    breadcrumb: {
-                                        show: true,
-                                        itemStyle: {
-                                            color: 'grey'
-                                        }
-                                    },
-                                    label: {
-                                        show: true,
-                                        formatter: '{b}',
-                                        color: 'white',
-                                        borderWidth: 0,
-                                    },
-                                    upperLabel: {
-                                        show: true,
-                                        height: 30,
-                                        color: 'white',
-                                        borderWidth: 0,
-                                    },
-                                    itemStyle: {
-                                        borderColor: '#fff',
-                                    },
-                                    data: data,
-                                    leafDepth: 1,
-                                    levels:
-                                        [
-                                            {
-                                                itemStyle: {
-                                                    borderColor: '#555',
-                                                    borderWidth: 4,
-                                                    gapWidth: 4
-                                                }
-                                            },
-                                            {
-                                                colorSaturation: [0.3, 0.6],
-                                                itemStyle: {
-                                                    borderColorSaturation: 0.7,
-                                                    gapWidth: 2,
-                                                    borderWidth: 2
-                                                }
-                                            },
-                                            {
-                                                colorSaturation: [0.3, 0.5],
-                                                itemStyle: {
-                                                    borderColorSaturation: 0.6,
-                                                    gapWidth: 1
-                                                }
-                                            },
-                                            {
-                                                colorSaturation: [0.3, 0.5]
-                                            }
-                                        ],
-                                }
-                            ]
-                        })
-                    );
-
-                option && myChart.setOption(option);
-                window.addEventListener('resize', function () {
-                    myChart.resize();
-                });
+                if ($("#chart-manpower-requirement").children().length !== 0) {
+                    $("#chart-manpower-requirement").empty();
+                }
+                const treeMapInfos = {
+                    "id": "root",
+                    "name": "작업자별 요구사항 관여 트리맵",
+                    "data": {},
+                    "children": data
+                };
+                init(treeMapInfos);
             }
         }
     });
 }
+
 
 async function getExpectedEndDate(pdServiceLink, pdServiceVersionLinks, all_req_count) {
     $("#expected_end_date").text("").css("color", "");
