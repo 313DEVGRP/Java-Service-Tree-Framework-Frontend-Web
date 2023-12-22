@@ -1323,12 +1323,10 @@ function treeBar() {
 			let assigneeData = data.filter(item => item.type === 'assignee');
 
 			if(assigneeData.length === 0) {
-				console.log("assigneeData.length === 0")
 				return;
 			}
 
 			if (assigneeData.length === 1 && assigneeData[0].name === "No Data") {
-				console.log('assigneeData.length === 1 && assigneeData[0].name === "No Data"')
 				return;
 			}
 
@@ -1345,7 +1343,7 @@ function renderTreeBar(data, assigneeData, maxValue) {
 		width = $container.offsetWidth,
 		height = $container.offsetHeight,
 		svg = d3.select("#tree_bar_container svg"),
-		g = svg.append("g").attr("transform", "translate(20,0)"),
+		g = svg.append("g").attr("transform", "translate(10,10)"),
 		experienceName = Array(maxValue).fill("").map((_, i) => (i+1 === maxValue ? maxValue.toString() : "")),
 		formatSkillPoints = function (d) {
 			return experienceName[d % maxValue];
