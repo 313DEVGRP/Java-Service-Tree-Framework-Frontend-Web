@@ -143,9 +143,9 @@ function noReqCommentMessage() {
 }
 
 function addReqComment() {
-	const content = document.getElementById("new_message").value;
+	const content = document.getElementById("new_message");
 
-	if (!content) {
+	if (!content.value) {
 		alert("질문을 작성 후 등록해주세요.");
 		return;
 	}
@@ -160,7 +160,7 @@ function addReqComment() {
 			c_req_link: selectedJsTreeId,
 			c_type: "default",
 			c_req_comment_sender: userName,
-			c_req_comment_contents: content
+			c_req_comment_contents: content.value
 		},
 		statusCode: {
 			200: function () {
@@ -171,6 +171,7 @@ function addReqComment() {
 				getTotalCount();
 				getReqCommentList(1);
 				//데이터 테이블 데이터 재 로드
+				content.value = "";
 			}
 		},
 		beforeSend: function () {},
@@ -248,7 +249,7 @@ function handleEditClick(e, id, comment) {
 	messageBody.find(".edit").show();
 }
 
-function handleDeleteClick(id) {
+function handleDeleteClick(c_id) {
 	if (confirm("해당 글을 삭제하시겠습니까?")) {
 		console.log("delete : " + c_id);
 		$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
@@ -256,7 +257,7 @@ function handleDeleteClick(id) {
 			url: "/auth-user/api/arms/reqComment/removeNode.do",
 			type: "DELETE",
 			data: {
-				c_id: c_id
+				c_id
 			},
 			statusCode: {
 				200: function () {
@@ -303,7 +304,7 @@ function req_comment_edit_btn_click(c_id, commentText) {
 			url: "/auth-user/api/arms/reqComment/updateNode.do",
 			type: "PUT",
 			data: {
-				c_id: c_id,
+				c_id,
 				c_req_comment_contents: commentText
 			},
 			statusCode: {

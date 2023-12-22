@@ -4005,3 +4005,7 @@ button {
 .select-box button {
 	margin: 0;
 }
+
+.chat-footer button {
+	margin-top: 0;
+}
