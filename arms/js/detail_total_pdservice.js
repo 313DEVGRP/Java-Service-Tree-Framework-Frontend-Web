@@ -67,6 +67,7 @@ function execDocReady() {
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_pdservice");
 			// 스크립트 실행 로직을 이곳에 추가합니다.
+			getNodeInfo();
 			fileLoadByPdService();
 		})
 		.catch(function () {
@@ -95,9 +96,9 @@ function setUrlParams() {
 function fileLoadByPdService() {
 	console.log("File Tab ::::");
 
-	if (callAPI("fileAPI")) {
-		return;
-	}
+	// if (callAPI("fileAPI")) {
+	// 	return;
+	// }
 
 	// $("#fileIdlink").val(selectedPdService);
 	$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
@@ -113,6 +114,17 @@ function fileLoadByPdService() {
 		bindFileList(result);
 
 		jSuccess("기획서 조회가 완료 되었습니다.");
+	});
+}
+
+function getNodeInfo() {
+	$.ajax({
+		url: "/auth-user/api/arms/pdServicePure/getNode.do",
+		data: { c_id: selectedPdService },
+		async: false,
+		dataType: "json"
+	}).done(function (result) {
+		document.getElementById("file_description").innerHTML = result.c_pdservice_contents;
 	});
 }
 
