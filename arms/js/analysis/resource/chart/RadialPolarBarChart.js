@@ -188,8 +188,7 @@ function drawRadialPolarBarChart(target, dataArr, colorArr) {
     }
 
     function drawChartWithFooter(dataArr,total) {
-        const existingChartFooter = document.querySelector('.chart-footer');
-
+        const existingChartFooter = document.querySelector('#'+target+' .chart-footer');
         if (existingChartFooter) {
             existingChartFooter.remove();
         }
@@ -208,7 +207,7 @@ function drawRadialPolarBarChart(target, dataArr, colorArr) {
 
         chartDom.appendChild(chartFooter);
 
-        const footerItems = document.querySelectorAll('.footer-item');
+        const footerItems = document.querySelectorAll('#'+target+' .chart-footer .footer-item');
         const itemCount = footerItems.length;
 
         const remainder = itemCount % 3;

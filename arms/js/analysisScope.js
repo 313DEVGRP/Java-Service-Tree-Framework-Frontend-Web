@@ -1152,26 +1152,9 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 					}
 				});
 
-				let reqStatusList = [];
-				console.log("getReqStatusAndAssignees :: getReqStatus ==> 시작");
-				getReqStatus(pdServiceLink, pdServiceVersionLinks, function(result) {
-					if (result != null) {
-						reqStatusList = result;
-					} else {
-						console.error("getReqStatus AJAX 요청에서 에러 발생");
-					}
-				});
-				console.log("getReqStatusAndAssignees :: getReqStatus ==> ");
-				console.log(reqStatusList);
-
-				let 버전별_검색결과_목록 = reqStatusList["검색결과"]["group_by_pdServiceVersion"];
-
-				if(버전별_검색결과_목록 && 버전별_검색결과_목록.length > 0) {
-
-				}
-
-
 				let dataObject = {};
+				let issueStatusSet = new Set();
+				let issueStatusList = [];
 				if (result.length > 0) {
 					for (let i = 0; i < result.length; i++) {
 						// 버전이름 가져오기
@@ -1187,17 +1170,20 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 						    result[i]["요구사항들"].forEach((element) => {
 								// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
 								if (element["작업자수"] !== 0) {
-									verSubObject[element["요구_사항_번호"]] = {"$count" : element["작업자수"]};
+									verSubObject[element["요구_사항_번호"]] =
+										{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
+									issueStatusSet.add(element["요구_사항_상태"]);
 								}
 						});
 						dataObject[versionName] = verSubObject;
 					}
 				}
-
-
+				issueStatusSet.forEach(e=>issueStatusList.push(e));
 				console.log("getReqStatusAndAssignees :: dataObject ==> ");
 				console.log(dataObject);
-				drawCircularPacking("circularPacking",pdServiceName,dataObject);
+				console.log("getReqStatusAndAssignees :: issueStatusSet");
+				console.log(issueStatusSet.size); console.log(issueStatusList);
+				drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
 			}
 		}
 	});
@@ -1209,11 +1195,12 @@ function getReqStatus(pdServiceId, pdServiceVersionLinks, callback) {
 		url: "/auth-user/api/arms/analysis/scope/getReqStatus/"+pdServiceId,
 		type: "GET",
 		data: {
-			서비스아이디: pdServiceId,
+			"서비스아이디": pdServiceId,
 			pdServiceVersionLinks: pdServiceVersionLinks,
-			메인그룹필드: "pdServiceVersion",
-			하위그룹필드들: "key,status.status_name.keyword",
-			컨텐츠보기여부: true
+			"메인그룹필드": "pdServiceVersion",
+			"하위그룹필드들": "key,status.status_name.keyword",
+			"isReq" : false,
+			"컨텐츠보기여부": true
 		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
