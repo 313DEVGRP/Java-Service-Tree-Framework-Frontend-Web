@@ -6,7 +6,7 @@ function exampleCircularPackingChart() {
     $.when(
         $.get("./js/analysis/mockData/circularPackingEx.json"),
         $.getScript(
-            "../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
+            "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
             /*'https://fastly.jsdelivr.net/npm/d3-hierarchy@2.0.0/dist/d3-hierarchy.min.js'*/
         )
     ).done(function (res) {
@@ -213,7 +213,7 @@ function drawCircularPacking(target, psServiceName) {
     $.when(
         $.get("./js/analysis/mockData/circularPackingEx.json"),
         $.getScript(
-            "../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
+            "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
         )
     ).done(function (res) {
         run(res[0]);
