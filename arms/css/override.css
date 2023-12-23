@@ -4012,3 +4012,13 @@ button {
 .chat-footer button {
 	margin-top: 0;
 }
+
+#chart-manpower-requirement, #chart-manpower-requirement-canvaswidget, #chart-manpower-requirement-canvas {
+	width: 100% !important;
+}
+
+#chart-manpower-requirement-label {
+	width: 100% !important;
+	position: relative !important;
+}
+
