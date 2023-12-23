@@ -1812,7 +1812,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("pdServiceLink", pdServiceLink)
     		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
     		.addQueryParam("일자기준", "updated")
-			.addQueryParam("isReqType", "ISSUE")
+			.addQueryParam("isReqType", "REQUIREMENT")
     		.addQueryParam("시작일", startDate)
     		.addQueryParam("종료일", endDate)
     		.addQueryParam("sortField", "updated")
