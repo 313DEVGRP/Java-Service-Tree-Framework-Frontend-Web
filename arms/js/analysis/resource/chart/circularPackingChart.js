@@ -226,7 +226,8 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
     var myChart = echarts.init(chartDom);
     var option;
 
-    let reqCount = 0;
+    // ChartWithFooter 관련
+    let reqCount = 0; // total
     let statusCounts = {};
     let statusDataArr = [];
 
@@ -249,7 +250,7 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
         console.log(dataWrap);
         dataWrap.seriesData.forEach(element => {
             if (element["depth"] === 2) {
-                reqCount++; // 총 활성 요구사항 수
+                reqCount++; // 총 진행중인 요구사항 수
                 const status = element["status"];
                 if (!statusCounts[status]) {
                     statusCounts[status] = 1;
@@ -258,9 +259,9 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
                 }
             } 
         });
-        console.log(statusCounts);
+        //자료 구조 변경
         statusDataArr = Object.entries(statusCounts).map(([key, value]) => ({ name: key, value }));
-        console.log(statusDataArr);
+        
         initChart(dataWrap.seriesData, dataWrap.maxDepth);
     }
     function prepareData(rawData) {
