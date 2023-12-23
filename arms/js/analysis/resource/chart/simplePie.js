@@ -70,24 +70,25 @@ function drawSimplePieChart(target,seriesName,dataArr) {
             orient: 'horizontal',
             left: 'left',
             textStyle: {
-                color: 'white', // 이름의 텍스트 색상 설정
-                fontStyle: 'normal', // 이름의 텍스트 스타일 설정 (예: italic, normal)
-                fontWeight: '', // 이름의 텍스트 굵기 설정 (예: bold, normal)
-                fontSize: 11 // 이름의 텍스트 크기 설정
-                // 그 외 다른 텍스트 관련 속성들도 설정 가능합니다.
+                color: 'white',
+                fontStyle: 'normal',
+                fontWeight: '',
+                fontSize: 11
             }
         },
         series: [
             {
                 name: seriesName,
                 type: 'pie',
-                radius: '50%',
+                radius: '65%',
                 label: {
+                    show: true, // 라벨을 표시합니다.
                     textStyle: {
-                        color: 'white', // 데이터 전체의 이름 폰트 색상 설정
-                        fontSize: 11 // 데이터 전체의 이름 폰트 크기 설정
-                        // 다른 텍스트 관련 속성들도 설정 가능합니다.
-                    }
+                        color: 'white',
+                        fontSize: 12
+                    },
+                    position: "inner",
+                    formatter: '{c} ({d}%)' // 표시할 포맷을 지정합니다. {b}는 name, {c}는 value를 나타냅니다.
                 },
                 data: dataArr,
                 emphasis: {
