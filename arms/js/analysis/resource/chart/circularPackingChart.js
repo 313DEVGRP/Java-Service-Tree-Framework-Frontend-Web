@@ -205,21 +205,16 @@ function exampleCircularPackingChart() {
     });
 }
 
-function drawCircularPacking(target, psServiceName) {
-    var chartDom = document.getElementById('circularPacking');
+function drawCircularPacking(target, psServiceName,rawData) {
+    var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
     var option;
-
-    $.when(
-        $.get("./js/analysis/mockData/circularPackingEx.json"),
-        $.getScript(
-            "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
-        )
-    ).done(function (res) {
-        run(res[0]);
-    });
+    if(rawData) {
+        run(rawData);
+    }
     function run(rawData) {
         const dataWrap = prepareData(rawData);
+        console.log(dataWrap);
         initChart(dataWrap.seriesData, dataWrap.maxDepth);
     }
     function prepareData(rawData) {
@@ -236,6 +231,7 @@ function drawCircularPacking(target, psServiceName) {
             seriesData.push({
                 id: basePath,
                 value: source.$count,
+                status: source.$status,
                 depth: depth,
                 index: seriesData.length
             });
@@ -253,6 +249,8 @@ function drawCircularPacking(target, psServiceName) {
         };
     }
     function initChart(seriesData, maxDepth) {
+        console.log("seriesData ===> ")
+        console.log(seriesData);
         var displayRoot = stratify();
         function stratify() {
             return d3
@@ -361,7 +359,7 @@ function drawCircularPacking(target, psServiceName) {
                     max: maxDepth,
                     dimension: 'depth',
                     inRange: {
-                        color: ["#182E3D", "#4A8FBD", "#82A5BD", "#5E7788", "#5D8AA8", "#2c5571"]//['#006edd', '#e0ffff']
+                        //color: ["#182E3D", "#4A8FBD", "#82A5BD", "#5E7788", "#5D8AA8", "#2c5571"]//['#006edd', '#e0ffff']
                     }
                 }
             ],
@@ -374,6 +372,24 @@ function drawCircularPacking(target, psServiceName) {
                 encode: {
                     tooltip: 'value',
                     itemName: 'id'
+                },
+                itemStyle: {
+                    color: function(params) {
+                        // 여기에서 각 항목에 특정 색상을 지정하는 함수를 정의할 수 있습니다.
+                        // 데이터에 액세스하고 조건 또는 로직에 따라 색상을 할당할 수 있습니다.
+                        // 예시:
+                        if (params.data.value % 5 === 4) {
+                            return "rgba(255,255,51,0.71)"; // 값이 50보다 큰 경우 빨간색으로 지정
+                        } else if (params.data.value % 5 ===3) {
+                            return "rgba(151,78,163,0.73)";
+                        } else if(params.data.value % 5 === 2) {
+                            return "rgba(77,175,74,0.65)";
+                        } else if(params.data.value % 5 === 1) {
+                            return "rgba(255,127,0,0.7)";
+                        } else {
+                            return "rgba(55,125,184,0.62)"; // 기타 값은 초록색으로 지정
+                        }
+                    }
                 }
             }
         };

@@ -6,6 +6,8 @@ var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_d
 
 var dashboardColor;
 var pdServiceData;
+
+var pdServiceListData;
 var versionListData;
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +97,6 @@ function execDocReady() {
 			makeVersionMultiSelectBox();
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
-			exampleCircularPackingChart(); // circularPackingChart - MockData
 
 			//d3Chart 그리기
 			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
@@ -126,12 +127,16 @@ function makePdServiceSelectBox() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
+				pdServiceListData = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
+					pdServiceListData.push({ "pdServiceId": obj.c_id, "pdServiceName": obj.c_title });
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
 					$("#selected_pdService").append(newOption).trigger("change");
 				}
 				//////////////////////////////////////////////////////////
+				console.log("[analysisScope :: makePdServiceSelectBox] :: pdServiceListData => " );
+				console.log(pdServiceListData);
 			}
 		}
 	});
@@ -220,6 +225,8 @@ function bind_VersionData_By_PdService() {
 				selectedVersionId = pdServiceVersionIds.join(",");
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+				// Circular Packing with D3 차트
+				getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 				// 네트워크 차트
 				statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
@@ -1117,7 +1124,116 @@ function formatDate(date) {
 }
 
 /////////////////////////////////////////////////////////
-// Nightingale Rose chart - 제품(서비스)의 버전별 요구사항 수
+// Circular Packing Chart
+/////////////////////////////////////////////////////////
+function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
+
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees2",
+		type: "GET",
+		data: {
+			pdServiceLink: pdServiceLink,
+			pdServiceVersionLinks: pdServiceVersionLinks,
+			메인그룹필드: "pdServiceVersion",
+			하위그룹필드들: "isReq",
+			컨텐츠보기여부: true
+		},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (result) {
+				console.log("[ analysisScope :: getReqStatusAndAssignees ] :: result");
+				console.log(result);
+				let pdServiceName;
+				pdServiceListData.forEach(elements => {
+					if (elements["pdServiceId"] === +pdServiceLink) {
+						pdServiceName = elements["pdServiceName"];
+					}
+				});
+
+				let reqStatusList = [];
+				console.log("getReqStatusAndAssignees :: getReqStatus ==> 시작");
+				getReqStatus(pdServiceLink, pdServiceVersionLinks, function(result) {
+					if (result != null) {
+						reqStatusList = result;
+					} else {
+						console.error("getReqStatus AJAX 요청에서 에러 발생");
+					}
+				});
+				console.log("getReqStatusAndAssignees :: getReqStatus ==> ");
+				console.log(reqStatusList);
+
+				let 버전별_검색결과_목록 = reqStatusList["검색결과"]["group_by_pdServiceVersion"];
+
+				if(버전별_검색결과_목록 && 버전별_검색결과_목록.length > 0) {
+
+				}
+
+
+				let dataObject = {};
+				if (result.length > 0) {
+					for (let i = 0; i < result.length; i++) {
+						// 버전이름 가져오기
+						let versionName ="";
+						for (let j = 0; j < versionListData.length; j++) {
+							if(result[i]["상품_서비스_버전"] === versionListData[j]["c_id"]){
+								versionName = versionListData[j]["c_title"].replaceAll(".","_");
+								console.log("getReqStatusAndAssignees :: 상품_서비스_버전 이름 : " + versionName);
+								break;
+							}
+						}
+						let verSubObject = {};
+						    result[i]["요구사항들"].forEach((element) => {
+								// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
+								if (element["작업자수"] !== 0) {
+									verSubObject[element["요구_사항_번호"]] = {"$count" : element["작업자수"]};
+								}
+						});
+						dataObject[versionName] = verSubObject;
+					}
+				}
+
+
+				console.log("getReqStatusAndAssignees :: dataObject ==> ");
+				console.log(dataObject);
+				drawCircularPacking("circularPacking",pdServiceName,dataObject);
+			}
+		}
+	});
+}
+
+// 요구사항별 Status 가져오기
+function getReqStatus(pdServiceId, pdServiceVersionLinks, callback) {
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/scope/getReqStatus/"+pdServiceId,
+		type: "GET",
+		data: {
+			서비스아이디: pdServiceId,
+			pdServiceVersionLinks: pdServiceVersionLinks,
+			메인그룹필드: "pdServiceVersion",
+			하위그룹필드들: "key,status.status_name.keyword",
+			컨텐츠보기여부: true
+		},
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		async: false,
+		statusCode: {
+			200: function(result) {
+				callback(result);
+			},
+			error: function(xhr, status, error) {
+				// 에러 처리
+				console.error(error);
+				callback(null); // 에러 발생 시 callback 호출
+			}
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////
+// Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
 /////////////////////////////////////////////////////////
 function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 	$.ajax({
