@@ -24,7 +24,7 @@ var Log = {
 
 function init(treeMapInfos) {
     const colorMapping = {};
-    // TODO: 요구사항의 가짓수가 많아지면 색상을 더 추가해야 함
+    // 현재 512개의 색상 지원
     let colors = dashboardColor.treeMapColor;
     function getColorForName(name) {
         if (!colorMapping[name]) {
@@ -160,16 +160,12 @@ function init(treeMapInfos) {
         tm.out();
     });
 
-    let resizeTimeout;
-
-    function drawChart() {
-        tm.refresh();
-    }
-
-    function onResize() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(drawChart, 100);
-    }
-
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', function() {
+        var charts = document.getElementById('chart-manpower-requirement');
+        var width = charts.offsetWidth;
+        var height = charts.offsetHeight;
+        // dashboard는 297px, 분석 페이지는 400px을 고정으로 사용하고 있음.
+        tm.canvas.resize(width, height);
+        tm.plot();
+    });
 }
