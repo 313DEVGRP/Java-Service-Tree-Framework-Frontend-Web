@@ -1532,5 +1532,5 @@ function targetLink(path) {
 		}
 	});
 
-	location.href = `detail.html?${new URLSearchParams(params).toString()}`;
+	location.href = `/313devgrp/arms/detail.html?${new URLSearchParams(params).toString()}`;
 }
