@@ -43,8 +43,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/github-calendar-heatmap/js/calendar_yearview_blocks.js",
 			"../reference/jquery-plugins/github-calendar-heatmap/css/calendar_yearview_blocks.css",
 			// 요구사항 및 연결된 이슈 타임라인
-			"../reference/jquery-plugins/timelines-chart-2.11.8/src/show-time-marker.js",
-			"../reference/jquery-plugins/timelines-chart-2.11.8/example/random-data.js",
+
 			//  최상단 메뉴
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js"
@@ -1869,122 +1868,96 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 			200: function (data) {
 				console.log("[ analysisTime :: detailTimeLineData ] :: = ");
 				console.log(data);
-				detailTimeLineData(data);
+				//detailTimeLineData(data);
+				detailTimeLine();
 			}
 		}
 	});
 
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function detailTimeLine(){
+    d3.json("../reference/jquery-plugins/d3-ridgeline-plot/traffic.json").then(function(traffic) {
+       console.log(traffic);
+      // dates: traffic 데이터셋에서 date 필드를 기준으로 날짜를 추출하여 정렬
+      const dates = Array.from(d3.group(traffic, d => +new Date(d.date)).keys()).sort(d3.ascending);
+      // series: traffic 데이터셋을 name 필드를 기준으로 그룹화하고, 각 name에 대한 날짜별 value 값을 매핑
+      const series = d3.groups(traffic, d => d.name).map(([name, values]) => {
+      const value = new Map(values.map(d => [+new Date(d.date), d.value]));
+        return {name, values: dates.map(date => value.get(date))};
+      });
+      const overlap = 8;
+      const width = 928;
+      const height = series.length * 20;
+      const marginTop = 40;
+      const marginRight = 20;
+      const marginBottom = 30;
+      const marginLeft = 120;
+      // Create the scales.
+        const x = d3.scaleTime()
+            .domain(d3.extent(dates))
+            .range([marginLeft, width - marginRight]);
 
-/*function detailTimeLineChart(pdServiceLink, pdServiceVersions) {
+        const y = d3.scalePoint()
+            .domain(series.map(d => d.name))
+            .range([marginTop, height - marginBottom]);
 
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/weekly-updated-issue-search")
-		.addQueryParam("pdServiceLink", pdServiceLink)
-		.addQueryParam("pdServiceVersionLinks", pdServiceVersions)
-		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("baseWeek", 1)
-		.addQueryParam("sortField", "created")
-		.build();
+        const z = d3.scaleLinear()
+            .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
+            .range([0, -overlap * y.step()]);
 
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				detailTimeLineData(data);
-			}
-		}
-	});
+        // Create the area generator and its top-line generator.
+        const area = d3.area()
+            .curve(d3.curveBasis)
+            .defined(d => !isNaN(d))
+            .x((d, i) => x(dates[i]))
+            .y0(0)
+            .y1(d => z(d));
 
-}*/
+        const line = area.lineY1();
 
-function detailTimeLineData(data) {
-	var sevenTimeLineDiv = document.getElementById("detailTimeLine");
-	sevenTimeLineDiv.innerHTML = "";
+        // Create the SVG container.
+        const svg = d3.create("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0, 0, width, height])
+            .attr("style", "max-width: 100%; height: auto;");
 
-	if (typeof data === "object" && Object.keys(data).length > 0) {
-		//필요한 데이터만 추출
-		var extractedData = extractDataForDetailTimeLine(data);
+        // Append the axes.
+        svg.append("g")
+            .attr("transform", `translate(0,${height - marginBottom})`)
+            .call(d3.axisBottom(x)
+                .ticks(width / 80)
+                .tickSizeOuter(0));
 
-		var myData = [];
-		var myData = dataFormattingForDetailTimeLine(extractedData);
-		TimelinesChart()("#detailTimeLine")
-			.width(950)
-			.maxHeight(3000)
-			.maxLineHeight(40)
-			.topMargin(40)
-			.zQualitative(true)
-			.data(myData)
-			.refresh();
-		$("#sevenTimeLineBody").css("overflow", "scroll");
-	} else {
-		var pElement = document.createElement("p");
-		pElement.textContent = "조회된 데이터가 없습니다.";
-		sevenTimeLineDiv.appendChild(pElement);
-	}
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft},0)`)
+            .call(d3.axisLeft(y).tickSize(0).tickPadding(4))
+            .call(g => g.select(".domain").remove());
+
+        // Append a layer for each series.
+        const group = svg.append("g")
+          .selectAll("g")
+          .data(series)
+          .join("g")
+            .attr("transform", d => `translate(0,${y(d.name) + 1})`);
+
+        group.append("path")
+            .attr("fill", "#ddd")
+            .attr("d", d => area(d.values));
+
+        group.append("path")
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("d", d => line(d.values));
+
+      // #chart div에 SVG를 추가합니다.
+      document.getElementById('detailTimeLine').appendChild(svg.node());
+    }).catch(error => {
+      console.error('Error loading or parsing the JSON file', error);
+    });
 }
-
-function extractDataForDetailTimeLine(data) {
-	let extractedData = {};
-
-	Object.entries(data).forEach(([key, value]) => {
-		extractedData[key] = value.map(obj => ({
-			issueKey: obj.key,
-			isReq: obj.isReq,
-			parentReqKey: obj.parentReqKey,
-			createdDate: new Date(Date.parse(obj.created)),
-			resolutionDate: obj.resolutiondate ? obj.resolutiondate : new Date(),
-			version: obj.pdServiceVersion
-		}));
-	});
-
-	return extractedData;
-}
-
-function dataFormattingForDetailTimeLine(groupedByVersionData) {
-
-	var formattedData = [];
-	for (var version in groupedByVersionData) {
-		var versionData = groupedByVersionData[version];
-
-		var groupByVersion = {
-			group: "버전: "+convertVersionIdToTitle(version),
-			data: []
-		};
-
-		versionData.forEach((issueData) => {
-			if(issueData.isReq === true){
-				groupByVersion.data.push({
-					label: "요구사항: "+issueData.issueKey,
-					data: [
-						{
-							timeRange: [issueData.createdDate, issueData.resolutionDate],
-							val: convertVersionIdToTitle(issueData.version),
-						}
-					]
-				});
-			}else{
-				groupByVersion.data.push({
-					label: "연결된 이슈: "+issueData.issueKey,
-					data: [
-						{
-							timeRange: [issueData.createdDate, issueData.resolutionDate],
-							val: convertVersionIdToTitle(issueData.version),
-						}
-					]
-				});
-			}
-		});
-		formattedData.push(groupByVersion);
-	}
-	return formattedData;
-}
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 주식차트
 function candleStickChart() {
 	var dom = document.getElementById("candlestick-chart-container");
