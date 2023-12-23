@@ -138,7 +138,10 @@ function includeLayout(page) {
 	$.each(includeArea, function () {
 		self = $(this);
 		url = self.data("include");
-		console.log("[ common :: authUserCheck ] page = " + url);
+		console.log("[ common :: includeLayout ] url = " + url);
+
+		var urlParams = new URL(location.href).searchParams;
+		var mode = urlParams.get("mode");
 
 		if (url.indexOf("content-header") !== -1) {
 			url = "html/" + page + "/content-header.html";
@@ -150,6 +153,18 @@ function includeLayout(page) {
 			self.load(url, function () {
 				self.removeAttr("data-include");
 			});
+		} else if (url.indexOf("page-sidebar") !== -1) {
+			if(mode == "detail"){
+				url = "/313devgrp/arms/html/detail/page-sidebar.html";
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
+			}else{
+				url = "/313devgrp/arms/html/template/page-sidebar.html";
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
+			}
 		} else {
 			self.load(url, function () {
 				self.removeAttr("data-include");
