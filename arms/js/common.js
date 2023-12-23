@@ -140,6 +140,7 @@ function includeLayout(page) {
 		url = self.data("include");
 		console.log("[ common :: includeLayout ] url = " + url);
 
+		var hrefLink = window.location.href;
 		var urlParams = new URL(location.href).searchParams;
 		var mode = urlParams.get("mode");
 
@@ -154,7 +155,8 @@ function includeLayout(page) {
 				self.removeAttr("data-include");
 			});
 		} else if (url.indexOf("page-sidebar") !== -1) {
-			if(mode == "detail"){
+
+			if (mode == "detail" || hrefLink.indexOf("detail.html") > 0) {
 				url = "/313devgrp/arms/html/detail/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
