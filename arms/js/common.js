@@ -157,12 +157,12 @@ function includeLayout(page) {
 		} else if (url.indexOf("page-sidebar") !== -1) {
 
 			if (mode == "detail" || hrefLink.indexOf("detail.html") > 0) {
-				url = "/313devgrp/arms/html/detail/page-sidebar.html";
+				url = "/arms/html/detail/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
 			}else{
-				url = "/313devgrp/arms/html/template/page-sidebar.html";
+				url = "/arms/html/template/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
@@ -1532,5 +1532,5 @@ function targetLink(path) {
 		}
 	});
 
-	location.href = `/313devgrp/arms/detail.html?${new URLSearchParams(params).toString()}`;
+	location.href = `/arms/detail.html?${new URLSearchParams(params).toString()}`;
 }
