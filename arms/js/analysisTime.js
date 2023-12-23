@@ -1755,23 +1755,38 @@ function makeVerticalTimeline(data) {
 			"    left: 40%;" +
 			"    position: absolute;'>데이터가 없습니다.</p>";
 	} else {
+		// 날짜별로 데이터 그룹화
+		let groupedData = data.reduce((group, item) => {
+			let date = item.date;
+			if (!group[date]) group[date] = [];
+			group[date].push(item);
+			return group;
+		}, {});
+
 		const $ul = document.createElement("ul");
 
-		data.forEach(({title, content, type, date}, index) => {
-			const $li = document.createElement("li");
-			$li.className = "session";
-			$li.innerHTML = `
-			<div class="session-content">
-			  <div class="title">${title}</div>
-			  <div class="info">${content}</div>
-			  <div class="type">${type}</div>
-			</div>
-			<span class="time-range">
-			  <span class="date">${date}</span>
-			</span>
-		`;
+		Object.entries(groupedData).forEach(([date, items]) => {
+			items.forEach(({title, content, type}, index) => {
+				const $li = document.createElement("li");
+				$li.className = "session";
 
-			$ul.append($li);
+				if (index === 0) {
+					$li.innerHTML += `
+                    <span class="time-range">
+                      <span class="date">${date}</span>
+                    </span>
+                    `;
+				}
+				$li.innerHTML += `
+                <div class="session-content">
+                  <div class="title">${title}</div>
+                  <div class="info">${content}</div>
+                  <div class="type">${type}</div>
+                </div>
+                `;
+
+				$ul.append($li);
+			});
 		});
 
 		$container.append($ul);
