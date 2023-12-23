@@ -56,11 +56,10 @@ function execDocReady() {
 			// 생성한 차트 import
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js",
-			// NightingaleRoseChart
-			"js/analysis/resource/chart/nightingaleRosePieChart.js",
-			// Box-plot chart
 
-			//circular-sankey chart
+			// 버전 별 요구사항 현황 (RadialPolarBarChart)
+			"js/analysis/resource/chart/nightingaleRosePieChart.js",
+			"js/analysis/resource/chart/RadialPolarBarChart.js",
 
 			//CirclePacking with d3 Chart
 			"js/analysis/resource/chart/circularPackingChart.js",
@@ -1191,8 +1190,7 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 					chartDataArr.push({ name: e.title, value: e.req });
 				});
 				let colorArr = dashboardColor.nightingaleRose;
-
-				drawNightingalePieChart("reqPerVersionRoseChart", chartDataArr, colorArr);
+				drawRadialPolarBarChart("reqPerVersionRoseChart", chartDataArr, colorArr);
 			}
 		}
 	});
