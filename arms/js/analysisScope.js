@@ -49,10 +49,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js"
 		],
 		[
-			// d3-7.8.2 network chart
-			"../reference/jquery-plugins/d3-7.8.2/dist/d3.min.js",
-			// d3-5.16.0
-			// "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
+			// d3-5.16.0 네트워크 차트
+			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// 생성한 차트 import
 			"js/analysis/topmenu/basicRadar.js",
 			"js/analysis/topmenu/topMenu.js",
@@ -848,9 +846,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			// d3-5.16.0
 			// function zoomed() {
 			// 	let transform = d3.event.transform;
-			function zoomed(event) {
+			function zoomed() {
 				// 현재 확대/축소 변환을 얻음
-				let transform = event.transform;
+				let transform = d3.event.transform;
 
 				// 모든 노드 및 링크를 현재 확대/축소 변환으로 이동/확대/축소
 				gHolder.attr("transform", transform);
@@ -879,19 +877,19 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			// 	d.fy = null;
 			// }
 
-			function dragstarted(event, d) {
-				if (!event.active) simulation.alphaTarget(0.3).restart();
+			function dragstarted(d) {
+				if (!d3.event.active) simulation.alphaTarget(0.3).restart();
 				d.fx = d.x;
 				d.fy = d.y;
 			}
 
-			function dragged(event, d) {
-				d.fx = event.x;
-				d.fy = event.y;
+			function dragged(d) {
+				d.fx = d3.event.x;
+				d.fy = d3.event.y;
 			}
 
-			function dragended(event, d) {
-				if (!event.active) simulation.alphaTarget(0);
+			function dragended(d) {
+				if (!d3.event.active) simulation.alphaTarget(0);
 				d.fx = null;
 				d.fy = null;
 			}

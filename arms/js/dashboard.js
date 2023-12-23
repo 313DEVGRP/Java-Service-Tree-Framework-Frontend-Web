@@ -24,7 +24,7 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			//d3 변경
-			"../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
+			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			"../reference/jquery-plugins/c3-0.7.20/c3.min.css",
 			"../reference/jquery-plugins/c3-0.7.20/c3.min.js",
 			"./js/common/colorPalette.js",
@@ -327,50 +327,58 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
-	d3.json("/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,function(json) {
+	// d3.json은 d3.v4에서 사용 가능, d3.v5에선 ajax로 호출해서 사용
+	$.ajax({
+		url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (json) {
+				let versionData = json.pdServiceVersionEntities;
+				let version_count = versionData.length;
+				tot_ver_count = version_count;
 
-		let versionData = json.pdServiceVersionEntities;
-		let version_count = versionData.length;
-		tot_ver_count = version_count;
+				console.log("등록된 버전 개수 = " + version_count);
+				if (version_count !== undefined) {
+					$('#version_count').text(version_count);
 
-		console.log("등록된 버전 개수 = " + version_count);
-		if(version_count !== undefined) {
-			$('#version_count').text(version_count);
+					if (version_count >= 0) {
+						let today = new Date();
 
-			if (version_count >= 0) {
-				let today = new Date();
+						$("#notifyNoVersion").slideUp();
+						$("#project-start").show();
+						$("#project-end").show();
 
-				$("#notifyNoVersion").slideUp();
-				$("#project-start").show();
-				$("#project-end").show();
-				
-				$("#versionGaugeChart").html(""); //게이지 차트 초기화
-				var versionGauge = [];
-				var versionTimeline = [];
-				versionData.forEach(function (versionElement, idx) {
+						$("#versionGaugeChart").html(""); //게이지 차트 초기화
+						var versionGauge = [];
+						var versionTimeline = [];
+						versionData.forEach(function (versionElement, idx) {
 
-					var gaugeElement = {
-						"current_date": today.toString(),
-						"version_name": versionElement.c_title,
-						"version_id": versionElement.c_id,
-						"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
-						"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+							var gaugeElement = {
+								"current_date": today.toString(),
+								"version_name": versionElement.c_title,
+								"version_id": versionElement.c_id,
+								"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
+								"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+							}
+							versionGauge.push(gaugeElement);
+							var timelineElement = {
+								"title" : "버전: "+versionElement.c_title,
+								"startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+								"endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+							};
+							versionTimeline.push(timelineElement);
+						});
+
+						drawVersionProgress(versionGauge); // 버전 게이지
+						Timeline.init($("#version-timeline-bar"), versionTimeline);
 					}
-					versionGauge.push(gaugeElement);
-					var timelineElement = {
-						"title" : "버전: "+versionElement.c_title,
-						"startDate" : (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
-						"endDate" : (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
-					};
-					versionTimeline.push(timelineElement);
-				});
-
-				drawVersionProgress(versionGauge); // 버전 게이지
-				Timeline.init($("#version-timeline-bar"), versionTimeline);
+				}
 			}
 		}
 	});
-
 
 	// 제품서비스 - status
 	getReqCount(pdservice_id, "");

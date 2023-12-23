@@ -30,10 +30,6 @@
             obj_timestamp = JSON.parse(settings.data);
 
             var wrap_chart = _this;
-            var containerWidth = wrap_chart.width(); // 1. 컨테이너 너비 가져오기
-            var gap = 2;
-            var rectWidth = (containerWidth - gap * 51) / 52; // 52는 주의 개수, 간격을 고려하여 사각형의 너비를 계산
-            var rectHeight = rectWidth; // 7은 요일의 개수, 동적으로 조절할 수 있습니다.
 
             var end_date = new Date(settings.final_date);
             var current_date = new Date();
@@ -54,15 +50,13 @@
             var loop_html = "";
 
             // One year has 52 weeks
-            // var step = 13; // Amount of pixels to move
-            var step = Math.floor(containerWidth / 52); // Adjust the calculation based on your requirement
+            var step = 13; // Amount of pixels to move
 
             var month_position = [];
             month_position.push({month_index: start_date.getMonth(), x: 0});
             var using_month = start_date.getMonth();
             for (var i = 0; i <= 52; i++) { // For each week, generate a column
                 var g_x = i * step;
-
                 var item_html = '<g transform="translate(' + g_x.toString() + ',0)">';
 
                 for (var j = 0; j < 7; j++) { // For each weekday, generate a row
@@ -71,7 +65,6 @@
                         // Break the loop when today's date is found
                         break;
                     }
-
                     var y = j * step;
 
                     var month_in_day = start_date.getMonth();
@@ -83,62 +76,60 @@
                         month_position.push({month_index: using_month, x: g_x});
                     }
 
-                    var match_today;
                     // Put a box around today's date
                     if (settings.stylize_today) {
-                        match_today = current_date.getTime() === start_date.getTime() ? '" style="stroke:black;stroke-width:2;opacity:0.5"' : '';
+                        var match_today = current_date.getTime() === start_date.getTime() ? '" style="stroke:black;stroke-width:2;opacity:0.5"' : '';
                     } else {
-                        match_today = "";
+                        var match_today = "";
                     }
 
                     var items = [];
-                    var count = 0;
                     var legend = '', items_str = '';
                     if (obj_timestamp[data_date]) {
                         if (obj_timestamp[data_date].items) {
                             items = obj_timestamp[data_date].items;
-                            count = obj_timestamp[data_date].count;
-							items_str = items.join(", ");
-							items_str = items_str.replaceAll('&', '&amp;');
-							items_str = items_str.replaceAll('"', '&quot;');
+                            items_str = items.join(", ")
+                            items_str = items_str.replaceAll('&', '&amp;');
+                            items_str = items_str.replaceAll('"', '&quot;');
                         }
                         if (obj_timestamp[data_date].legend) {
                             legend = obj_timestamp[data_date].legend;
-							legend = legend.replaceAll('&', '&amp;');
-							legend = legend.replaceAll('"', '&quot;');
+                            legend = legend.replaceAll('&', '&amp;');
+                            legend = legend.replaceAll('"', '&quot;');
                         }
                     }
 
                     var item_name = items[0]?items[0]:false;
-                    var color = getColorByCount(count);
+                    var color = settings.colors[item_name]?settings.colors[item_name]:settings.colors['default'];
 
-                    item_html += '<rect class="day" width="' + rectWidth + '" height="' + rectHeight + '" y="' + y + '" fill="' + color + match_today + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '" rx="3" ry="3"/>';
-                    /*
-                    if (items.length === 2) { // Fill a triangle for the 2nd
-                        var item_name_1 = items[1] ? items[1] : false;
-                        var color_1 = settings.colors[item_name_1] ? settings.colors[item_name_1] : settings.colors['default'];
-                        item_html += '<polygon points="' + (rectWidth / 2) + ',' + (y + rectHeight) + ' ' + 0 + ',' + y + ' ' + rectWidth + ',' + y + '" fill="' + color_1 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                    // Fill a square for the 1st item
+                    item_html += '<rect class="day" width="11" height="11" y="' + y + '" fill="' + color + match_today + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                    if (items.length === 2) { // Fill a trangle for the 2nd
+                        var item_name_1 = items[1]?items[1]:false;
+                        var color_1 = settings.colors[item_name_1]?settings.colors[item_name_1]:settings.colors['default'];
+                        item_html += '<polygon points="' + 0 + ',' + (y+11) + ' ' + 0 + ',' + y + ' ' + 11 + ',' + y + '" fill="' + color_1 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
                     } else if (items.length === 3) { // Fill 2 rectangles for 2nd and 3rd
-                        var item_name_1 = items[1] ? items[1] : false;
-                        var color_1 = settings.colors[item_name_1] ? settings.colors[item_name_1] : settings.colors['default'];
-                        var item_name_2 = items[2] ? items[2] : false;
-                        var color_2 = settings.colors[item_name_2] ? settings.colors[item_name_2] : settings.colors['default'];
-                        item_html += '<polygon points="' + (rectWidth / 2) + ',' + (y + rectHeight - (rectHeight / 4)) + ' ' + 0 + ',' + y + ' ' + rectWidth + ',' + y + ' ' + rectWidth + ',' + (y + rectHeight - (rectHeight / 4)) + '" fill="' + color_1 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
-                        item_html += '<polygon points="' + (rectWidth / 2) + ',' + (y + rectHeight - (rectHeight / 2)) + ' ' + 0 + ',' + (y + (rectHeight / 4)) + ' ' + rectWidth + ',' + (y + (rectHeight / 4)) + ' ' + rectWidth + ',' + (y + rectHeight - (rectHeight / 2)) + '" fill="' + color_2 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
-                    } else if (items.length === 4) { // Fill 3 cubes for 2nd, 3rd, and 4th
-                        var item_name_1 = items[1] ? items[1] : false;
-                        var color_1 = settings.colors[item_name_1] ? settings.colors[item_name_1] : settings.colors['default'];
-                        var item_name_2 = items[2] ? items[2] : false;
-                        var color_2 = settings.colors[item_name_2] ? settings.colors[item_name_2] : settings.colors['default'];
-                        var item_name_3 = items[3] ? items[3] : false;
-                        var color_3 = settings.colors[item_name_3] ? settings.colors[item_name_3] : settings.colors['default'];
-                        item_html += '<polygon points="' + (rectWidth / 2) + ',' + (y + rectHeight) + ' ' + 0 + ',' + (y + rectHeight - (rectHeight / 4)) + ' ' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 4)) + ' ' + (rectWidth / 4) + ',' + (y + rectHeight) + '" fill="' + color_1 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
-                        item_html += '<polygon points="' + (rectWidth / 2) + ',' + (y + rectHeight - (rectHeight / 4)) + ' ' + 0 + ',' + (y + (rectHeight / 2)) + ' ' + (rectWidth / 4) + ',' + (y + (rectHeight / 2)) + ' ' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 4)) + '" fill="' + color_2 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
-                        item_html += '<polygon points="' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 2)) + ' ' + 0 + ',' + (y + (rectHeight / 4)) + ' ' + rectWidth + ',' + (y + (rectHeight / 4)) + ' ' + (rectWidth / 4) + ',' + (y + rectHeight - (rectHeight / 2)) + '" fill="' + color_3 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                        var item_name_1 = items[1]?items[1]:false;
+                        var color_1 = settings.colors[item_name_1]?settings.colors[item_name_1]:settings.colors['default'];
+                        var item_name_2 = items[2]?items[2]:false;
+                        var color_2 = settings.colors[item_name_2]?settings.colors[item_name_2]:settings.colors['default'];
+                        item_html += '<polygon points="' + 0 + ',' + (y+8) + ' ' + 0 + ',' + y + ' ' + 11 + ',' + y + ' ' + 11 + ',' + (y+8) + '" fill="' + color_1 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                        item_html += '<polygon points="' + 0 + ',' + (y+4) + ' ' + 0 + ',' + y + ' ' + 11 + ',' + y + ' ' + 11 + ',' + (y+4) + '" fill="' + color_2 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                    } else if (items.length === 4) { // Fill 3 cubes for 2nd, 3rd and 4th
+                        var item_name_1 = items[1]?items[1]:false;
+                        var color_1 = settings.colors[item_name_1]?settings.colors[item_name_1]:settings.colors['default'];
+                        var item_name_2 = items[2]?items[2]:false;
+                        var color_2 = settings.colors[item_name_2]?settings.colors[item_name_2]:settings.colors['default'];
+                        var item_name_3 = items[3]?items[3]:false;
+                        var color_3 = settings.colors[item_name_3]?settings.colors[item_name_3]:settings.colors['default'];
+                        item_html += '<polygon points="' + 0 + ',' + (y+11) + ' ' + 0 + ',' + (y+6) + ' ' + 6 + ',' + (y+6) + ' ' + 6 + ',' + (y+11) + '" fill="' + color_1 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                        item_html += '<polygon points="' + 0 + ',' + (y+6) + ' ' + 0 + ',' + y + ' ' + 6 + ',' + y + ' ' + 6 + ',' + (y+6) + '" fill="' + color_2 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
+                        item_html += '<polygon points="' + 6 + ',' + (y+6) + ' ' + 6 + ',' + y + ' ' + 11 + ',' + y + ' ' + 11 + ',' + (y+6) + '" fill="' + color_3 + '" data-items="' + items_str + '" data-legend="' + legend + '" data-date="' + data_date + '"/>';
                     }
-                    */
+
                     // Move on to the next day
                     start_date.setDate(start_date.getDate() + 1);
+
                 }
 
                 item_html += "</g>";
@@ -160,18 +151,21 @@
                 loop_html += '<text x="' + item.x + '" y="-5" class="month">' + month_name + '</text>';
             }
 
-            var wday_html = '';
-            for (var i = 0; i < settings.day_names.length; i++) {
-                var dx = calculateWdayDx(i, settings.start_monday);
-                var dy = calculateWdayDy(i, settings.start_monday, rectHeight);
-                wday_html += '<text text-anchor="middle" class="wday" dx="' + dx + '" dy="' + dy + '">' + settings.day_names[i] + '</text>';
+            // Add labels for Weekdays
+            if (settings.start_monday === true) {
+                loop_html += '<text text-anchor="middle" class="wday" dx="-12" dy="11">{0}</text>'.formatString(settings.day_names[0]) +
+                    '<text text-anchor="middle" class="wday" dx="-12" dy="36">{0}</text>'.formatString(settings.day_names[1]) +
+                    '<text text-anchor="middle" class="wday" dx="-12" dy="61">{0}</text>'.formatString(settings.day_names[2]) +
+                    '<text text-anchor="middle" class="wday" dx="-12" dy="86">{0}</text>'.formatString(settings.day_names[3]);
+            } else {
+                loop_html += '<text text-anchor="middle" class="wday" dx="-10" dy="22">{0}</text>'.formatString(settings.day_names[0]) +
+                    '<text text-anchor="middle" class="wday" dx="-10" dy="48">{0}</text>'.formatString(settings.day_names[1]) +
+                    '<text text-anchor="middle" class="wday" dx="-10" dy="74">{0}</text>'.formatString(settings.day_names[2]);
             }
-            loop_html += wday_html;
 
-            // Fixed size  with width= 721 and height = 110
+            // Fixed size with width= 721 and height = 110
             var wire_html =
-                // '<svg width="721" <!--height="140" --> style="min-height: 140px;">' +
-                '<svg viewBox="0 0 ' + (containerWidth+10) + ' 140" preserveAspectRatio="xMinYMin meet" style="width: 100%; height: auto; min-height: 140px;">' +
+                '<svg width="721" height="110">' +
                 '<g transform="translate(25, 20)">' +
                 loop_html +
                 '</g>' + '"Your browser does not support inline SVG."' +
@@ -186,17 +180,6 @@
 
         };
 
-        // Function to calculate dx for Weekdays
-        var calculateWdayDx = function(index, startMonday) {
-            // Calculate dx based on startMonday and index
-            var offset = startMonday ? -12 : -10;
-            return offset;
-        };
-
-        function calculateWdayDy(index, startMonday, rectHeight) {
-            return rectHeight * 2.1 * index +rectHeight;
-        }
-
         var mouseLeave = function (evt) {
             $('.svg-tip').hide();
         };
@@ -209,6 +192,7 @@
 
         // Handle mouseEnter event when entering into rect element
         var mouseEnter = function (evt) {
+
             var target_offset = $(evt.target).offset();
             var items = $(evt.target).attr('data-items');
             var legend = $(evt.target).attr('data-legend');
@@ -221,12 +205,12 @@
                 var svg_tip = $('.svg-tip').show();
                 svg_tip.html(text);
                 var svg_width = Math.round(svg_tip.width() / 2 + 5);
-                /*var svg_height = svg_tip.height() * 2 + 10;
+                var svg_height = svg_tip.height() * 2 + 10;
+
                 svg_tip.css({top: target_offset.top - svg_height - 5});
-                svg_tip.css({left: target_offset.left - svg_width});*/
-                var top = target_offset.top + $(evt.target).outerHeight() + 20;
-                svg_tip.css({top: top, left: target_offset.left - svg_width});
+                svg_tip.css({left: target_offset.left - svg_width});
             }
+
         };
 
         // Append tooltip to display when the mouse enters the rect element
@@ -240,7 +224,7 @@
         // Default settings which can be overridden by the user
         var settings = $.extend({
             colors: {
-                    'default': '#eeeeee'
+                'default': '#eeeeee'
             },
             month_names: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             day_names: ['M', 'W', 'F', 'S'],
@@ -252,40 +236,9 @@
             data: []
         }, options);
 
-        function getColorByCount(count) {
-            var colors = {
-                0: 'rgba(235,237,240,0.8)', // 가장 연한 색
-                1: 'rgba(155,233,168,0.8)',
-                2: 'rgba(64,196,99,0.8)',
-                3: 'rgba(48,161,78,0.8)',
-                4: 'rgba(33,110,57,0.8)'  // 가장 짙은 색
-            };
-
-            if (count == 0) {
-                return colors[0];
-            }
-            else if (count <= 5) {
-                return colors[1];
-            }
-            else if (count <= 10) {
-                return colors[2];
-            }
-            else if (count <= 15) {
-                return colors[3];
-            }
-            else {
-                return colors[4];
-            }
-        }
-
         var _this = $(this);
 
         start();
-
-        $(window).on('resize', function() {
-            // 리사이즈 이벤트 처리
-            start();
-        });
 
     };
 

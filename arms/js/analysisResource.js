@@ -28,7 +28,7 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.fileupload-fp.js",
             "../reference/light-blue/lib/jquery.fileupload-ui.js",
             //d3
-            "../reference/jquery-plugins/d3-v4.13.0/d3.v4.min.js",
+            "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
             // "./js/common/colorPalette.js",
             //chart Colors
             "./js/dashboard/chart/colorPalette.js",
