@@ -1525,12 +1525,31 @@ function targetLink(path) {
 	const params = {};
 
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-		if (key === "page") {
+
+		if (!isEmpty(path) &&  key === "page") {
 			params[key] = path;
 		} else {
 			params[key] = value;
 		}
 	});
+	params["mode"] = "detail";
 
 	location.href = `/arms/detail.html?${new URLSearchParams(params).toString()}`;
+}
+
+function gnuboardLink(bo_table) {
+	const params = {};
+
+	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
+
+		if (!isEmpty(bo_table) &&  key === "page") {
+			params[key] = "index";
+		} else {
+			params[key] = value;
+		}
+	});
+	params["bo_table"] = bo_table;
+	params["mode"] = "detail";
+
+	location.href = `/php/gnuboard5/bbs/board.php?${new URLSearchParams(params).toString()}`;
 }
