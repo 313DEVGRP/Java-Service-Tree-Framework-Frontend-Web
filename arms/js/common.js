@@ -1569,9 +1569,12 @@ function gnuboardIndex() {
 	const params = {};
 
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-		params[key] = value;
+		if (key === "wr_id") {
+			console.log("skip");
+		} else {
+			params[key] = value;
+		}
 	});
-	delete params["wr_id"];
 	params["page"] = "index";
 	params["mode"] = "detail";
 
