@@ -131,6 +131,34 @@ p {
 	clear: both;
 }
 
+#topicon {
+	width: 36px;
+	height: 35px;
+	position: fixed;
+	right: 1%;
+	bottom: 15px;
+	z-index: 200;
+	transition: 0.3s;
+	cursor: pointer;
+	opacity: 0;
+	border-radius: 50%;
+	overflow: hidden;
+	padding-left: -1px;
+	animation: doongdoong 1.3s linear infinite;
+}
+
+@keyframes doongdoong {
+	0% {
+		bottom: 15px;
+	}
+	50% {
+		bottom: 10px;
+	}
+	100% {
+		bottom: 15px;
+	}
+}
+
 .widgetheader {
 	border-radius: 3px;
 	-webkit-box-sizing: content-box;
@@ -195,6 +223,14 @@ blockquote {
 	word-spacing: 1px;
 }
 
+.alert-created {
+	width: max-content;
+	background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
+	padding: 1px;
+	animation: border-dance 7s infinite linear;
+	border-radius: 10px;
+}
+
 @media (min-width: 1200px) {
 	.content {
 		position: relative;
@@ -243,4 +279,211 @@ blockquote {
 		width: auto;
 		opacity: 1;
 	}
+}
+
+/*****************/
+/** jNotify CSS **/
+/*****************/
+#jNotify {
+	position: absolute !important;
+	-webkit-transition: background-color 0.4s !important;
+	-o-transition: background-color 0.4s !important;
+	transition: background-color 0.4s !important;
+	border-radius: 5px !important;
+	border-color: transparent !important;
+	background-color: rgba(52, 52, 52, 0.425) !important;
+	margin-bottom: 1em !important;
+	color: #f8f8f8 !important;
+	font-weight: 500 !important;
+
+	background: #d8e6fc url("../info.png") no-repeat 15px center;
+	padding: 10px;
+	padding-left: 50px;
+	margin: 15px;
+	z-index: 99999;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+#jNotify a {
+	color: #35517c !important;
+	text-decoration: none;
+}
+
+/******************/
+/** jSuccess CSS **/
+/******************/
+#jSuccess {
+	position: absolute !important;
+	-webkit-transition: background-color 0.4s !important;
+	-o-transition: background-color 0.4s !important;
+	transition: background-color 0.4s !important;
+	border-radius: 5px !important;
+	border-color: transparent !important;
+	background-color: rgba(52, 52, 52, 0.425) !important;
+	margin-bottom: 1em !important;
+	color: #f8f8f8 !important;
+	font-weight: 500 !important;
+
+	background: #e6efc2 url("../success.png") no-repeat 15px center;
+	padding: 10px;
+	padding-left: 50px;
+	margin: 15px;
+	z-index: 99999;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+#jSuccess a {
+	color: #264409 !important;
+	text-decoration: none;
+}
+
+/****************/
+/** jError CSS **/
+/****************/
+#jError {
+	position: absolute !important;
+	-webkit-transition: background-color 0.4s !important;
+	-o-transition: background-color 0.4s !important;
+	transition: background-color 0.4s !important;
+	border-radius: 5px !important;
+	border-color: transparent !important;
+	background-color: rgba(52, 52, 52, 0.425) !important;
+	margin-bottom: 1em !important;
+	color: #f8f8f8 !important;
+	font-weight: 500 !important;
+
+	background: #fbe3e4 url("../error.png") no-repeat 15px center;
+	padding: 10px;
+	padding-left: 50px;
+	margin: 15px;
+	z-index: 99999;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+#jError a {
+	color: #8a1f11 !important;
+	text-decoration: none;
+}
+
+/** OVERLAY **/
+#jOverlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99998;
+}
+
+.mailbox-content .form-email-compose .control-group {
+	margin-bottom: 10px;
+}
+
+.fileupload-buttonbar .btn,
+.fileupload-buttonbar .toggle {
+	margin-bottom: 5px;
+	background: rgba(51, 51, 51, 0.4);
+	border-color: transparent;
+	color: #fff;
+	text-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-transition: background-color 0.2s;
+	-moz-transition: background-color 0.2s;
+	-o-transition: background-color 0.2s;
+	transition: background-color 0.2s;
+}
+.fileinput-button {
+	position: relative;
+	overflow: hidden;
+	float: left;
+	margin-right: 4px;
+	color: #fff;
+	text-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border-color: #c5c5c5;
+	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
+	padding: 2px 10px;
+	font-size: 11.05px;
+	line-height: 1.9;
+	border-radius: 0;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 300;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid transparent;
+	white-space: nowrap;
+	padding: 4px 12px;
+	font-size: 13px;
+	line-height: 20px;
+	border-radius: 1px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+.fileinput-button input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	opacity: 0;
+	filter: alpha(opacity=0);
+	transform: translate(-300px, 0) scale(4);
+	font-size: 23px;
+	direction: ltr;
+	cursor: pointer;
+}
+.fileupload-loading {
+	position: absolute;
+	left: 50%;
+	width: 128px;
+	height: 128px;
+	display: none;
+}
+.dropzone {
+	border: 1px dashed #eee;
+	margin-top: 10px;
+	font-size: 13px;
+	color: #eee;
+	line-height: 100px;
+	vertical-align: middle;
+}
+
+.tooltip-inner {
+	max-width: 100% !important;
+}
+
+.flex {
+	display: flex;
+}
+.flex-space-between {
+	justify-content: space-between;
+}
+
+.widget-controls > a:hover {
+	color: rgba(255, 255, 255, 0.6);
+	text-decoration: none;
+}
+
+.carousel-indicators .active {
+	margin: 0;
+	width: 12px;
+	height: 12px;
+	background-color: #e5603b;
+}
+
+.modal-content {
+	max-height: calc(100vh - 100px);
+	overflow-y: auto;
+	overflow-x: hidden;
 }
