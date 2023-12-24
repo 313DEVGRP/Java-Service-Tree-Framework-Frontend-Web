@@ -1562,7 +1562,7 @@ function gnuboardList(param) {
 	});
 	params["mode"] = "detail";
 
-	location.href = `/php/gnuboard5/bbs/board.php` + param + `${new URLSearchParams(params).toString()}`;
+	location.href = param + `&${new URLSearchParams(params).toString()}`;
 }
 
 function gnuboardIndex() {
