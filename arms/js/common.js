@@ -1571,7 +1571,7 @@ function gnuboardIndex() {
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
 		params[key] = value;
 	});
-	delete params.wr_id;
+	delete params["wr_id"];
 	params["page"] = "index";
 	params["mode"] = "detail";
 
