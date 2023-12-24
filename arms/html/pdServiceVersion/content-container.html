@@ -1,101 +1,156 @@
 <div class="col-lg-4 col-layer">
 	<section class="widget">
-        <header>
-            <h4>
-                <span   class="font13"
-                        style="font-weight: bold">
-                            <i  class="fa fa-sort-amount-asc"
-                                style="vertical-align: middle;font-size: 14px;"></i>
-                            제품(서비스) 조회 및 선택
-                </span>
-            </h4>
-            <div class="widget-controls">
-                <a  data-widgster="toleft"
-                    title="change width to left"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-left"></i>
-                </a>
-                <a  data-widgster="expand"
-                    title="Expand"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-up"></i>
-                </a>
-                <a  data-widgster="collapse"
-                    title="Collapse"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-down"></i>
-                </a>
-                <a  data-widgster="toright"
-                    title="change width to right"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
-                </a>
-                <a  data-widgster="restore"
-                    title="Restore"
-                    href="#">
-                    <span class="glyphicon glyphicon-repeat"></span>
-                </a>
-                <a  data-widgster="fullscreen"
-                    title="Fullscreen"
-                    href="#">
-                    <i class="glyphicon glyphicon-fullscreen"
-                       style="font-size: 11px"></i>
-                </a>
-            </div>
-        </header>
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i
+						class="fa fa-sort-amount-asc"
+						style="vertical-align: middle; font-size: 14px"></i>
+					제품(서비스) 조회 및 선택
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+					data-widgster="toleft"
+					title="change width to left"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="toright"
+					title="change width to right"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a
+					data-widgster="restore"
+					title="Restore"
+					href="#">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</a>
+				<a
+					data-widgster="fullscreen"
+					title="Fullscreen"
+					href="#">
+					<i
+						class="glyphicon glyphicon-fullscreen"
+						style="font-size: 11px"></i>
+				</a>
+			</div>
+		</header>
 		<div class="body">
-            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-            <blockquote class="font13"
-                        style="margin-top: 5px;">
-                1. 제품(서비스) 선택
-                <div style="float: right;">
-                    <button class="btn btn-transparent btn-xs"
-                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                            onclick="window.open('docs/guide.html#version_inquiry_selection');">
+			<div
+				class="gradient_middle_border"
+				style="width: 100%; height: 2px"></div>
+			<blockquote
+				class="font13"
+				style="margin-top: 5px">
+				1. 제품(서비스) 선택
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="window.open('docs/guide.html#version_inquiry_selection');">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div class="clearfix widget-content">
+				<div style="float: left">
+					<div
+						style="float: left"
+						class="btn-group">
+						<button
+							class="btn btn-default btn-sm dropdown-toggle"
+							data-toggle="dropdown">
+							&nbsp; Export &nbsp;
+							<i class="fa fa-caret-down"></i>
+						</button>
+						<ul
+							class="dropdown-menu"
+							style="background: rgba(51, 51, 51, 0.9) !important">
+							<li>
+								<a
+									id="copychecker"
+									style="color: white">
+									Copy
+								</a>
+							</li>
+							<li>
+								<a
+									id="csvchecker"
+									style="color: white">
+									CSV
+								</a>
+							</li>
+							<li>
+								<a
+									id="excelchecker"
+									style="color: white">
+									Excel
+								</a>
+							</li>
+							<li>
+								<a
+									id="printchecker"
+									style="color: white">
+									Print
+								</a>
+							</li>
+							<li>
+								<a
+									id="pdfchecker"
+									style="color: white">
+									PDF
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 
-                    Help
-                        <i  class="fa fa-question"
-                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                    </button>
-                </div>
-            </blockquote>
-            <div class="clearfix"
-                 style="margin-bottom: 10px; margin-top: 10px;">
-                <div style="float: left">
-                    <div  style="float: left;"  class="btn-group">
-                        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                            &nbsp; Export &nbsp;
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <ul class="dropdown-menu"
-                            style="background: rgba(51, 51, 51, 0.9) !important;">
-                            <li><a id="copychecker" style="color: white;">Copy</a></li>
-                            <li><a id="csvchecker" style="color: white;">CSV</a></li>
-                            <li><a id="excelchecker" style="color: white;">Excel</a></li>
-                            <li><a id="printchecker" style="color: white;">Print</a></li>
-                            <li><a id="pdfchecker" style="color: white;">PDF</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div style="float: right">
-                    <button class="btn btn-warning btn-block btn-sm"
-                            data-target="#my_modal2"
-                            data-toggle="modal"
-                            id="modal_popup_id"
-                            type="button"
-                            onclick="goToTemplatePage('pdService')">
-                        제품(서비스) 관리로 이동
-                    </button>
-                </div>
-            </div>
-			<div    class="box box-primary"
-				    style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important;border: dashed;border-width: thin;border-color: lightsteelblue;">
-				<div    class="box-body">
-					<table  id="pdservice_table"
-						    class="display"
-						    style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
-                    </table>
+				<div style="float: right">
+					<button
+						class="btn btn-warning btn-block btn-sm"
+						data-target="#my_modal2"
+						data-toggle="modal"
+						id="modal_popup_id"
+						type="button"
+						onclick="goToTemplatePage('pdService')">
+						제품(서비스) 관리로 이동
+					</button>
+				</div>
+			</div>
+			<div
+				class="box box-primary"
+				style="
+					background: rgba(51, 51, 51, 0.225);
+					margin-bottom: 5px !important;
+					border: dashed;
+					border-width: thin;
+					border-color: lightsteelblue;
+				">
+				<div class="box-body">
+					<table
+						id="pdservice_table"
+						class="display"
+						style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
 				</div>
 			</div>
 		</div>
@@ -103,262 +158,322 @@
 </div>
 <div class="col-lg-3 col-layer">
 	<section class="widget">
-        <header>
-            <h4>
-				<span   class="font13"
-                        style="font-weight: bold">
-					    <i  class="fa fa-edit"
-                            style="vertical-align: middle;font-size: 14px;"></i>
-					    제품(서비스) Version 조회
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i
+						class="fa fa-edit"
+						style="vertical-align: middle; font-size: 14px"></i>
+					제품(서비스) Version 조회
 				</span>
-            </h4>
-            <div class="widget-controls">
-                <a  data-widgster="toleft"
-                    title="change width to left"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-left"></i>
-                </a>
-                <a  data-widgster="expand"
-                    title="Expand"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-up"></i>
-                </a>
-                <a  data-widgster="collapse"
-                    title="Collapse"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-down"></i>
-                </a>
-                <a  data-widgster="toright"
-                    title="change width to right"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
-                </a>
-                <a  data-widgster="restore"
-                    title="Restore"
-                    href="#">
-                    <span class="glyphicon glyphicon-repeat"></span>
-                </a>
-                <a  data-widgster="fullscreen"
-                    title="Fullscreen"
-                    href="#">
-                    <i class="glyphicon glyphicon-fullscreen"
-                       style="font-size: 11px"></i>
-                </a>
-            </div>
-        </header>
+			</h4>
+			<div class="widget-controls">
+				<a
+					data-widgster="toleft"
+					title="change width to left"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="toright"
+					title="change width to right"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a
+					data-widgster="restore"
+					title="Restore"
+					href="#">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</a>
+				<a
+					data-widgster="fullscreen"
+					title="Fullscreen"
+					href="#">
+					<i
+						class="glyphicon glyphicon-fullscreen"
+						style="font-size: 11px"></i>
+				</a>
+			</div>
+		</header>
 		<div class="body">
-            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-            <blockquote class="font13"
-                        style="margin-top: 5px;">
-                2. 선택된 제품(서비스) 버전 조회
-                <div style="float: right;">
-                    <button class="btn btn-transparent btn-xs"
-                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                            onclick="window.open('docs/guide.html#version_inquiry')">
-                        Help
-                        <i  class="fa fa-question"
-                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                    </button>
-                </div>
-            </blockquote>
-            <div class="clearfix"
-                 id="default_non_version"
-                 style="margin-bottom: 10px; margin-top: 10px;">
-                <!-- 컴포넌트 대상 -->
-                <div id="selected_info"
-                     style="float: left; width: 100% !important;">
-                    <div    class="panel-group json-menu"
-                            style="margin-bottom: 0px !important">
-                        <li     class="list-group-item json-menu-header"
-                                style="padding: 0px">
-                            <div class="chat-message">
-                                <div    class="chat-message-body"
-                                        style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important; border-left: 2px solid #a4c6ff;">
-                                    <span   class="arrow"
-                                            style="top: 10px !important; border-right: 5px solid #a4c6ff;"></span>
-                                    <div    class="sender"
-                                            style="padding-bottom: 5px; padding-top: 5px">
-                                        선택된 제품(서비스) :
-                                        <span   id="select_Service"
-                                                style="color: #a4c6ff">
-                                                선택되지 않음
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                </div>
-
-            </div>
-			<div    class="panel-group"
-				    id="version_accordion"></div>
+			<div
+				class="gradient_middle_border"
+				style="width: 100%; height: 2px"></div>
+			<blockquote
+				class="font13"
+				style="margin-top: 5px">
+				2. 선택된 제품(서비스) 버전 조회
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="window.open('docs/guide.html#version_inquiry')">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div
+				class="clearfix widget-content"
+				id="default_non_version">
+				<!-- 컴포넌트 대상 -->
+				<div
+					id="selected_info"
+					style="float: left; width: 100% !important">
+					<div
+						class="panel-group json-menu"
+						style="margin-bottom: 0px !important">
+						<li
+							class="list-group-item json-menu-header"
+							style="padding: 0px">
+							<div class="chat-message">
+								<div
+									class="chat-message-body"
+									style="
+										margin-left: 0px !important;
+										padding: 0px 10px 0px 10px !important;
+										border-left: 2px solid #a4c6ff;
+									">
+									<span
+										class="arrow"
+										style="top: 10px !important; border-right: 5px solid #a4c6ff"></span>
+									<div
+										class="sender"
+										style="padding-bottom: 5px; padding-top: 5px">
+										선택된 제품(서비스) :
+										<span
+											id="select_Service"
+											style="color: #a4c6ff">
+											선택되지 않음
+										</span>
+									</div>
+								</div>
+							</div>
+						</li>
+					</div>
+				</div>
+			</div>
+			<div
+				class="panel-group"
+				id="version_accordion"></div>
 		</div>
 	</section>
 </div>
 
 <div class="col-lg-5 col-layer">
 	<section class="widget">
-        <header>
-            <h4>
-				<span   class="font13"
-                        style="font-weight: bold">
-					    <i  class="fa fa-edit"
-                            style="vertical-align: middle;font-size: 14px;">
-                        </i>
-					    제품(서비스) 버전 등록 / 변경
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i
+						class="fa fa-edit"
+						style="vertical-align: middle; font-size: 14px"></i>
+					제품(서비스) 버전 등록 / 변경
 				</span>
-            </h4>
-            <div class="widget-controls">
-                <a  data-widgster="toleft"
-                    title="change width to left"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-left"></i>
-                </a>
-                <a  data-widgster="expand"
-                    title="Expand"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-up"></i>
-                </a>
-                <a  data-widgster="collapse"
-                    title="Collapse"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-down"></i>
-                </a>
-                <a  data-widgster="toright"
-                    title="change width to right"
-                    href="#">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
-                </a>
-                <a  data-widgster="restore"
-                    title="Restore"
-                    href="#">
-                    <span class="glyphicon glyphicon-repeat"></span>
-                </a>
-                <a  data-widgster="fullscreen"
-                    title="Fullscreen"
-                    href="#">
-                    <i class="glyphicon glyphicon-fullscreen"
-                       style="font-size: 11px"></i>
-                </a>
-            </div>
-        </header>
+			</h4>
+			<div class="widget-controls">
+				<a
+					data-widgster="toleft"
+					title="change width to left"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="toright"
+					title="change width to right"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a
+					data-widgster="restore"
+					title="Restore"
+					href="#">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</a>
+				<a
+					data-widgster="fullscreen"
+					title="Fullscreen"
+					href="#">
+					<i
+						class="glyphicon glyphicon-fullscreen"
+						style="font-size: 11px"></i>
+				</a>
+			</div>
+		</header>
 		<div class="body">
-            <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
-            <blockquote class="font13"
-                        style="margin-top: 5px;">
-                3. 제품(서비스)의 내용을 확인하고 편집/삭제
-                <div style="float: right;">
-                    <button class="btn btn-transparent btn-xs"
-                            style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
-                            onclick="window.open('docs/guide.html#version_register_Change')">
-                        Help
-                        <i  class="fa fa-question"
-                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                    </button>
-                </div>
-            </blockquote>
-            <div class="clearfix"
-                 style="margin-bottom: 10px; margin-top: 10px;">
-                <div style="float: left">
-                    <button type="button"
-                            id="copychecker"
-                            class="btn btn-default btn-sm hidden">
-                        Copy
-                    </button>
-                    <button type="button"
-                            id="csvchecker"
-                            class="btn btn-default btn-sm hidden">
-                        CSV
-                    </button>
-                    <button type="button"
-                            id="excelchecker"
-                            class="btn btn-default btn-sm hidden">
-                        Excel
-                    </button>
-                    <button type="button"
-                            id="printchecker"
-                            class="btn btn-default btn-sm hidden">
-                        Print
-                    </button>
-                    <button type="button"
-                            id="pdfchecker"
-                            class="btn btn-default btn-sm hidden">
-                        PDF
-                    </button>
-                </div>
-                <!-- 컴포넌트 대상 -->
-                <div id="selected_info"
-                     style="float: left">
-                    <div    class="panel-group json-menu"
-                            id="versionAccordion"
-                            style="margin-bottom: 0px !important">
-                        <li     class="list-item1 json-menu-header"
-                                style="padding: 0px; list-style: none;">
-                            <div class="chat-message">
-                                <div    class="chat-message-body"
-                                        style="margin-left: 0px !important; padding: 5px 10px 0px 10px !important; border-left: 2px solid #a4c6ff;">
-                                    <span   class="arrow"
-                                            style="border-right: 5px solid #a4c6ff;"></span>
-<!--                                    <span   id="toRight"
+			<div
+				class="gradient_middle_border"
+				style="width: 100%; height: 2px"></div>
+			<blockquote
+				class="font13"
+				style="margin-top: 5px">
+				3. 제품(서비스)의 내용을 확인하고 편집/삭제
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="window.open('docs/guide.html#version_register_Change')">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div class="clearfix widget-content">
+				<div style="float: left">
+					<button
+						type="button"
+						id="copychecker"
+						class="btn btn-default btn-sm hidden">
+						Copy
+					</button>
+					<button
+						type="button"
+						id="csvchecker"
+						class="btn btn-default btn-sm hidden">
+						CSV
+					</button>
+					<button
+						type="button"
+						id="excelchecker"
+						class="btn btn-default btn-sm hidden">
+						Excel
+					</button>
+					<button
+						type="button"
+						id="printchecker"
+						class="btn btn-default btn-sm hidden">
+						Print
+					</button>
+					<button
+						type="button"
+						id="pdfchecker"
+						class="btn btn-default btn-sm hidden">
+						PDF
+					</button>
+				</div>
+				<!-- 컴포넌트 대상 -->
+				<div
+					id="selected_info"
+					style="float: left">
+					<div
+						class="panel-group json-menu"
+						id="versionAccordion"
+						style="margin-bottom: 0px !important">
+						<li
+							class="list-item1 json-menu-header"
+							style="padding: 0px; list-style: none">
+							<div class="chat-message">
+								<div
+									class="chat-message-body"
+									style="
+										margin-left: 0px !important;
+										padding: 5px 10px 0px 10px !important;
+										border-left: 2px solid #a4c6ff;
+									">
+									<span
+										class="arrow"
+										style="border-right: 5px solid #a4c6ff"></span>
+									<!--                                    <span   id="toRight"
                                             class="arrow"
                                             style=" top: 17px !important;"></span>-->
-                                    <div    class="sender"
-                                            style="padding-bottom: 5px; padding-top: 3px">
-                                        선택된 제품(서비스) :
-                                        <span   id="select_PdService"
-                                                style="color: #a4c6ff">
-                                                선택되지 않음
-                                        </span>
-                                    </div>
-                                    <div    class="sender"
-                                            style="padding-bottom: 5px; padding-top: 3px">
-                                        선택된 버전 :
-                                        <span   id="select_Version"
-                                                style="color: #a4c6ff">
-                                                    선택되지 않음
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                </div>
-                <div style="float: right">
-                    <button type="button"
-                            id="version_popup"
-                            class="btn btn-warning btn-sm"
-                            data-toggle="modal"
-                            data-target="#my_modal2"
-                            onClick="modalPopup('versionPopup')">
-                        팝업 창으로 보기
-                    </button>
-                    <button type="button"
-                            id="version_update"
-                            class="btn btn-success btn-sm hidden">
-                        Save Changes
-                    </button>
-                </div>
-            </div>
+									<div
+										class="sender"
+										style="padding-bottom: 5px; padding-top: 3px">
+										선택된 제품(서비스) :
+										<span
+											id="select_PdService"
+											style="color: #a4c6ff">
+											선택되지 않음
+										</span>
+									</div>
+									<div
+										class="sender"
+										style="padding-bottom: 5px; padding-top: 3px">
+										선택된 버전 :
+										<span
+											id="select_Version"
+											style="color: #a4c6ff">
+											선택되지 않음
+										</span>
+									</div>
+								</div>
+							</div>
+						</li>
+					</div>
+				</div>
+				<div style="float: right">
+					<button
+						type="button"
+						id="version_popup"
+						class="btn btn-warning btn-sm"
+						data-toggle="modal"
+						data-target="#my_modal2"
+						onClick="modalPopup('versionPopup')">
+						팝업 창으로 보기
+					</button>
+					<button
+						type="button"
+						id="version_update"
+						class="btn btn-success btn-sm hidden">
+						Save Changes
+					</button>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-md-12">
 					<section class="widget widget-tabs">
 						<header>
 							<ul class="nav nav-tabs">
 								<li class="active">
-									<a  href="#stats"
+									<a
+										href="#stats"
 										data-toggle="tab">
 										<strong>상세 보기</strong>
 									</a>
 								</li>
 								<li>
-									<a  href="#report"
+									<a
+										href="#report"
 										data-toggle="tab">
 										<strong>편집 하기</strong>
 									</a>
 								</li>
 								<li>
-									<a  href="#dropdown1"
+									<a
+										href="#dropdown1"
 										data-toggle="tab">
 										<strong>삭제 하기</strong>
 									</a>
@@ -366,32 +481,36 @@
 							</ul>
 						</header>
 						<div class="body tab-content">
-							<div    id="stats"
-								    class="tab-pane active clearfix"
-								    style="padding-top: 30px !important">
-								<form   class="form-horizontal"
-									    method="post">
+							<div
+								id="stats"
+								class="tab-pane active clearfix"
+								style="padding-top: 30px !important">
+								<form
+									class="form-horizontal"
+									method="post">
 									<fieldset>
 										<div class="control-group">
-											<label  for="pdservice_name"
-                                                    class="control-label"
-                                                    style="width: 100px !important">
-												    제품(서비스) :
+											<label
+												for="pdservice_name"
+												class="control-label"
+												style="width: 100px !important">
+												제품(서비스) :
 											</label>
-											<div    class="controls form-group input-group"
-												    style="margin-left: 100px">
+											<div
+												class="controls form-group input-group"
+												style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input  type="text"
-                                                        id="pdservice_name"
-                                                        name="pdservice_name"
-                                                        class="form-control parsley-validated font13 darkBack"
-                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="제품(서비스) 이름"
-                                                        required="required"
-                                                        readonly
-                                                />
+												<input
+													type="text"
+													id="pdservice_name"
+													name="pdservice_name"
+													class="form-control parsley-validated font13 darkBack"
+													style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+													placeholder="제품(서비스) 이름"
+													required="required"
+													readonly />
 												<span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													중복 불가
@@ -399,24 +518,27 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label  for="pdservice_version"
-                                                    class="control-label"
-                                                    style="width: 100px !important">
-                                                    버전 :
+											<label
+												for="pdservice_version"
+												class="control-label"
+												style="width: 100px !important">
+												버전 :
 											</label>
-											<div    class="controls form-group input-group"
-												    style="margin-left: 100px">
+											<div
+												class="controls form-group input-group"
+												style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<input  type="text"
-                                                        id="pdservice_version"
-                                                        name="pdservice_version"
-                                                        class="form-control parsley-validated font13 darkBack"
-                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        readonly
-                                                        placeholder="x.x.x"
-                                                        required="required" />
+												<input
+													type="text"
+													id="pdservice_version"
+													name="pdservice_version"
+													class="form-control parsley-validated font13 darkBack"
+													style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+													readonly
+													placeholder="x.x.x"
+													required="required" />
 												<span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													ex: X.X.X
@@ -424,25 +546,27 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label  for="version_start_date"
-                                                    class="control-label"
-                                                    style="width: 100px !important">
-                                                    시작 날짜 :
+											<label
+												for="version_start_date"
+												class="control-label"
+												style="width: 100px !important">
+												시작 날짜 :
 											</label>
-											<div    class="controls form-group input-group"
-												    style="margin-left: 100px">
+											<div
+												class="controls form-group input-group"
+												style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-calendar"></i>
 												</span>
-												<input  type="text"
-                                                        id="version_start_date"
-                                                        name="version_start_date"
-                                                        class="form-control parsley-validated font13 darkBack"
-                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="yyyy/mm/dd hh:mm"
-                                                        required="required"
-                                                        readonly
-                                                />
+												<input
+													type="text"
+													id="version_start_date"
+													name="version_start_date"
+													class="form-control parsley-validated font13 darkBack"
+													style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+													placeholder="yyyy/mm/dd hh:mm"
+													required="required"
+													readonly />
 												<span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													버전 구현 시작일
@@ -450,25 +574,27 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label  for="version_end_date"
-                                                    class="control-label"
-                                                    style="width: 100px !important">
-                                                    종료 날짜 :
+											<label
+												for="version_end_date"
+												class="control-label"
+												style="width: 100px !important">
+												종료 날짜 :
 											</label>
-											<div    class="controls form-group input-group"
-												    style="margin-left: 100px">
+											<div
+												class="controls form-group input-group"
+												style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-calendar"></i>
 												</span>
-												<input  type="text"
-                                                        id="version_end_date"
-                                                        name="version_end_date"
-                                                        class="form-control parsley-validated font13 darkBack"
-                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="yyyy/mm/dd hh:mm"
-                                                        required="required"
-                                                        readonly
-                                                />
+												<input
+													type="text"
+													id="version_end_date"
+													name="version_end_date"
+													class="form-control parsley-validated font13 darkBack"
+													style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+													placeholder="yyyy/mm/dd hh:mm"
+													required="required"
+													readonly />
 												<span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
 													버전 구현 종료일
@@ -476,79 +602,92 @@
 											</div>
 										</div>
 										<div class="control-group">
-											<label  class="control-label font13"
-												    style="width: 25% !important">
-												    버전 내용 :
+											<label
+												class="control-label font13"
+												style="width: 25% !important">
+												버전 내용 :
 											</label>
-											<div    class="col-sm-12 darkBack"
-												    style="padding-top: 10px; padding-bottom: 10px; margin-top: 10px"
-												    id="version_contents">
-												    Version Contents
+											<div
+												class="col-sm-12 darkBack"
+												style="padding-top: 10px; padding-bottom: 10px; margin-top: 10px"
+												id="version_contents">
+												Version Contents
 											</div>
 										</div>
 									</fieldset>
 								</form>
 							</div>
-							<div    id="report"
-								    class="tab-pane">
+							<div
+								id="report"
+								class="tab-pane">
 								<div>
-									<form   class="form-horizontal product-service-version-form"
-										    method="post">
+									<form
+										class="form-horizontal product-service-version-form"
+										method="post">
 										<fieldset>
-											<div    class="control-group"
-												    for="popup_editview_pdservice_name">
-												<label  class="control-label font13"
-													    style="color: #f8f8f8; width: 25% !important">
-                                                        제품
-                                                        <sup>서비스</sup>
-                                                        :
+											<div
+												class="control-group"
+												for="popup_editview_pdservice_name">
+												<label
+													class="control-label font13"
+													style="color: #f8f8f8; width: 25% !important">
+													제품
+													<sup>서비스</sup>
+													:
 												</label>
 												<div class="controls form-group input-group">
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-gift"></i>
 													</span>
-													<input  type="text"
-                                                            id="input_pdservice_name"
-                                                            name="input_pdservice_name"
-                                                            class="form-control parsley-validated font13 darkBack"
-                                                            data-placement="top"
-                                                            data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-                                                            required="required"
-                                                            readonly
-                                                            style="color: #a4c6ff"
-													    	placeholder="service name" />
+													<input
+														type="text"
+														id="input_pdservice_name"
+														name="input_pdservice_name"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														readonly
+														style="color: #a4c6ff"
+														placeholder="service name" />
 												</div>
 											</div>
-											<div    class="control-group"
-												    for="popup_editview_pdservice_name">
-												<label  class="control-label font13"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                        버전 :
+											<div
+												class="control-group"
+												for="popup_editview_pdservice_name">
+												<label
+													class="control-label font13"
+													style="color: #f8f8f8; width: 25% !important">
+													버전 :
 												</label>
 												<div class="controls form-group input-group">
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-gift"></i>
 													</span>
-													<input  type="text"
-                                                            id="input_pdservice_version"
-                                                            name="input_pdservice_version"
-                                                            class="form-control parsley-validated font13 darkBack input_pdservice_version"
-                                                            data-placement="top"
-                                                            data-original-title="Version is required."
-                                                            required="required"
-                                                            style="color: #a4c6ff"
-														    placeholder="version text" />
+													<input
+														type="text"
+														id="input_pdservice_version"
+														name="input_pdservice_version"
+														class="form-control parsley-validated font13 darkBack input_pdservice_version"
+														data-placement="top"
+														data-original-title="Version is required."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="version text" />
 												</div>
 											</div>
-											<div    class="control-group"
-												    for="popup_editview_pdservice_name">
-												<label  class="control-label font13"
-                                                        style="color: #f8f8f8; width: 25% !important">
-                                                        시작 날짜 :
+											<div
+												class="control-group"
+												for="popup_editview_pdservice_name">
+												<label
+													class="control-label font13"
+													style="color: #f8f8f8; width: 25% !important">
+													시작 날짜 :
 												</label>
 												<div class="controls form-group input-group">
 													<span class="input-group-btn">
-														<a  href="#"
+														<a
+															href="#"
 															id="btn_select_calendar"
 															class="btn btn-danger"
 															style="background-color: #e5603b !important; border: 1px solid transparent !important"
@@ -556,27 +695,30 @@
 															<i class="fa fa-calendar"></i>
 														</a>
 													</span>
-													<input  id="input_pdservice_start_date"
-                                                            class="form-control darkBack input_pdservice_start_date"
-                                                            type="text"
-                                                            name="btn_enabled_date"
-                                                            value=""
-                                                            style="color: #a4c6ff"
-                                                            data-original-title="Start date is required."
-                                                            required
-														    pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
-                                                    />
+													<input
+														id="input_pdservice_start_date"
+														class="form-control darkBack input_pdservice_start_date"
+														type="text"
+														name="btn_enabled_date"
+														value=""
+														style="color: #a4c6ff"
+														data-original-title="Start date is required."
+														required
+														pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
 												</div>
 											</div>
-											<div    class="control-group"
-												    for="popup_editview_pdservice_name">
-												<label  class="control-label font13"
-													    style="color: #f8f8f8; width: 25% !important">
-													    종료 날짜 :
+											<div
+												class="control-group"
+												for="popup_editview_pdservice_name">
+												<label
+													class="control-label font13"
+													style="color: #f8f8f8; width: 25% !important">
+													종료 날짜 :
 												</label>
 												<div class="controls form-group input-group">
 													<span class="input-group-btn">
-														<a  href="#"
+														<a
+															href="#"
 															id="btn_end_calendar"
 															class="btn btn-danger"
 															style="background-color: #e5603b !important; border: 1px solid transparent !important"
@@ -584,30 +726,32 @@
 															<i class="fa fa-calendar"></i>
 														</a>
 													</span>
-													<input  id="input_pdservice_end_date"
-                                                            class="form-control darkBack input_pdservice_end_date"
-                                                            type="text"
-                                                            name="btn_enabled_date"
-                                                            value=""
-                                                            style="color: #a4c6ff"
-                                                            data-original-title="End date is required."
-                                                            required
-													    	pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
-                                                    />
+													<input
+														id="input_pdservice_end_date"
+														class="form-control darkBack input_pdservice_end_date"
+														type="text"
+														name="btn_enabled_date"
+														value=""
+														style="color: #a4c6ff"
+														data-original-title="End date is required."
+														required
+														pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
 												</div>
 											</div>
 											<div class="control-group">
-												<label  class="control-label"
-													    style="color: #f8f8f8; width: 25% !important">
-													    버전 내용
+												<label
+													class="control-label"
+													style="color: #f8f8f8; width: 25% !important">
+													버전 내용
 												</label>
 												<br />
 												<br />
 												<div class="controls form-group">
 													<div class="col-sm-12">
-														<div    id="input_pdservice_editor"
-															    class="darkBack">
-															    <p>버전에 포함될 기능을 요약합니다.</p>
+														<div
+															id="input_pdservice_editor"
+															class="darkBack">
+															<p>버전에 포함될 기능을 요약합니다.</p>
 														</div>
 													</div>
 												</div>
@@ -616,8 +760,9 @@
 									</form>
 								</div>
 							</div>
-							<div    id="dropdown1"
-								    class="tab-pane">
+							<div
+								id="dropdown1"
+								class="tab-pane">
 								<p>삭제 하시겠습니까?</p>
 								<p><strong>Jira 프로젝트에서 버전은 삭제되지 않습니다.</strong></p>
 								<p>
@@ -630,9 +775,10 @@
 									<strong>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong>
 								</p>
 								<div>
-									<button id="del_version"
-										    class="btn btn-danger">
-										    Delete Version
+									<button
+										id="del_version"
+										class="btn btn-danger">
+										Delete Version
 									</button>
 									<button class="btn btn-default">Cancel</button>
 								</div>
@@ -645,160 +791,178 @@
 	</section>
 </div>
 
-<div    id="my_modal2"
-        class="modal fade"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="myModalLabel"
-        aria-hidden="true"
-        style="display: none">
-	<div    class="modal-dialog"
-		    style="width: 80%; height: 80%">
+<div
+	id="my_modal2"
+	class="modal fade"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="myModalLabel"
+	aria-hidden="true"
+	style="display: none">
+	<div
+		class="modal-dialog"
+		style="width: 80%; height: 80%">
 		<div class="modal-content modalDarkBack">
 			<div
 				class="modal-header"
 				style="padding: 0px; border-bottom: 0px">
-				<button type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-hidden="true"
-					    style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px">
-					    ×
+				<button
+					type="button"
+					class="close"
+					data-dismiss="modal"
+					aria-hidden="true"
+					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px">
+					×
 				</button>
-				<h4 class="modal-title font14"
+				<h4
+					class="modal-title font14"
 					id="my_modal_label2"
 					style="color: #f8f8f8; text-align: left; padding: 5px">
 					<i class="fa fa-edit"></i>
-					<span   class="font13"
-                            id="modal_title"
-                            style="font-weight: bold">
-						    제품(서비스) 신규 버전 등록 팝업
+					<span
+						class="font13"
+						id="modal_title"
+						style="font-weight: bold">
+						제품(서비스) 신규 버전 등록 팝업
 					</span>
-					<blockquote    class="search-result"
-						        style="border-left: 5px solid #e5603b">
-						<p  id="modal_sub"
+					<blockquote
+						class="search-result"
+						style="border-left: 5px solid #e5603b">
+						<p
+							id="modal_sub"
 							style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
 							선택한 제품(서비스)에 버전을 등록합니다.
 						</p>
 					</blockquote>
 				</h4>
 			</div>
-			<div    class="modal-body"
-				    style="padding: 5px">
-				<form   class="form-horizontal product-service-version-modal-form"
-					    method="post">
+			<div
+				class="modal-body"
+				style="padding: 5px">
+				<form
+					class="form-horizontal product-service-version-modal-form"
+					method="post">
 					<fieldset>
 						<div class="control-group">
-							<label  class="control-label"
-								    style="color: #f8f8f8">
-                                    제품
-                                <sup>서비스</sup>
-                                    이름 :
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								제품
+								<sup>서비스</sup>
+								이름 :
 							</label>
 							<div class="controls form-group">
 								<div class="col-sm-8">
-									<input  type="text"
-                                            id="tooltip_enabled_service_name"
-                                            class="form-control darkBack"
-                                            data-placement="top"
-                                            style="color: #a4c6ff"
-                                            placeholder="Product(Service) name"
-                                            readonly
-                                            required
-                                            data-original-title="Service name is required."
-                                    />
+									<input
+										type="text"
+										id="tooltip_enabled_service_name"
+										class="form-control darkBack"
+										data-placement="top"
+										style="color: #a4c6ff"
+										placeholder="Product(Service) name"
+										readonly
+										required
+										data-original-title="Service name is required." />
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
-							<label  class="control-label"
-								    style="color: #f8f8f8">
-								    버전 :
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								버전 :
 							</label>
 							<div class="controls form-group">
 								<div class="col-sm-8">
-									<input  type="text"
-                                            id="tooltip_enabled_service_version"
-                                            class="form-control darkBack input_pdservice_version"
-                                            data-placement="top"
-                                            style="color: #a4c6ff"
-                                            placeholder="Product(Service) version"
-                                            required
-                                            data-original-title="Version is required."
-                                    />
+									<input
+										type="text"
+										id="tooltip_enabled_service_version"
+										class="form-control darkBack input_pdservice_version"
+										data-placement="top"
+										style="color: #a4c6ff"
+										placeholder="Product(Service) version"
+										required
+										data-original-title="Version is required." />
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
-							<label  class="control-label"
-								    style="color: #f8f8f8">
-								    시작 날짜
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								시작 날짜
 								<span class="help-block">Some help text</span>
 							</label>
 							<div class="controls form-group">
 								<div class="col-sm-8">
 									<div class="input-group">
 										<span class="input-group-btn">
-											<a  href="#"
+											<a
+												href="#"
 												id="btn_select_calendar_popup"
 												class="btn btn-danger"
 												data-date-format="yyyy/mm/dd">
 												<i class="fa fa-calendar"></i>
 											</a>
 										</span>
-										<input  id="btn_enabled_date"
-                                                class="form-control darkBack input_pdservice_start_date"
-                                                type="text"
-                                                name="btn_enabled_date"
-                                                value=""
-                                                style="color: #a4c6ff"
-                                                pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
-                                                required
-                                                data-original-title="Start date is required."
-                                        />
+										<input
+											id="btn_enabled_date"
+											class="form-control darkBack input_pdservice_start_date"
+											type="text"
+											name="btn_enabled_date"
+											value=""
+											style="color: #a4c6ff"
+											pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+											required
+											data-original-title="Start date is required." />
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
-							<label  class="control-label"
-								    style="color: #f8f8f8">
-								    종료 날짜 :
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								종료 날짜 :
 							</label>
 							<div class="controls form-group">
 								<div class="col-sm-8">
 									<div class="input-group">
 										<span class="input-group-btn">
-											<a  href="#"
+											<a
+												href="#"
 												id="btn_end_calendar_popup"
 												class="btn btn-danger"
 												data-date-format="yyyy/mm/dd">
 												<i class="fa fa-calendar"></i>
 											</a>
 										</span>
-										<input  id="btn_end_date"
-										    	class="form-control darkBack input_pdservice_end_date"
-                                                type="text"
-                                                name="btn_enabled_date"
-                                                value=""
-                                                style="color: #a4c6ff"
-                                                pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
-                                                required
-                                                data-original-title="End date is required."
-                                        />
+										<input
+											id="btn_end_date"
+											class="form-control darkBack input_pdservice_end_date"
+											type="text"
+											name="btn_enabled_date"
+											value=""
+											style="color: #a4c6ff"
+											pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/"
+											required
+											data-original-title="End date is required." />
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
-							<label  class="control-label"
-								    style="color: #f8f8f8">
-								    버전 내용
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								버전 내용
 							</label>
 							<div class="controls form-group">
 								<div class="col-sm-12">
-									<div    id="extend_modal_editor"
-										    class="darkBack">다
+									<div
+										id="extend_modal_editor"
+										class="darkBack">
+										다
 										<p>버전에 포함될 기능을 요약합니다.</p>
 									</div>
 								</div>
@@ -807,19 +971,22 @@
 					</fieldset>
 				</form>
 			</div>
-			<div    class="modal-footer"
-				    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
-				<button type="button"
-                        id="close_version"
-                        class="btn btn-default"
-                        data-dismiss="modal">
-					    Close
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="close_version"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
 				</button>
-				<button type="button"
-                        id="extendupdate_pdservice_version"
-                        class="btn btn-primary"
-                        onClick="modalPopupUpdate()">
-					    Save Changes
+				<button
+					type="button"
+					id="extendupdate_pdservice_version"
+					class="btn btn-primary"
+					onClick="modalPopupUpdate()">
+					Save Changes
 				</button>
 			</div>
 		</div>

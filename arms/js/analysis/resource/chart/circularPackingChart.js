@@ -169,6 +169,22 @@ function exampleCircularPackingChart() {
                 encode: {
                     tooltip: 'value',
                     itemName: 'id'
+                },
+                itemStyle: {
+                    color: function(params) {
+                        // 예시: value (사람수) 를 기준으로.
+                        if (params.data.value % 5 === 4) {
+                            return "rgba(255,255,51,0.71)";
+                        } else if (params.data.value % 5 ===3) {
+                            return "rgba(151,78,163,0.73)";
+                        } else if(params.data.value % 5 === 2) {
+                            return "rgba(77,175,74,0.65)";
+                        } else if(params.data.value % 5 === 1) {
+                            return "rgba(255,127,0,0.7)";
+                        } else {
+                            return "rgba(55,125,184,0.62)";
+                        }
+                    }
                 }
             }
         };
@@ -205,16 +221,47 @@ function exampleCircularPackingChart() {
     });
 }
 
-function drawCircularPacking(target, psServiceName,rawData) {
+function drawCircularPacking(target, psServiceName,rawData, issueStatusList, colorArr) {
     var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
     var option;
+
+    // ChartWithFooter 관련
+    let reqCount = 0; // total
+    let statusCounts = {};
+    let statusDataArr = [];
+
+    var defaultColorSet = [
+        "rgba(255,255,51,0.71)",
+        "rgba(151,78,163,0.73)",
+        "rgba(77,175,74,0.65)",
+        "rgba(255,127,0,0.7)",
+        "rgba(55,125,184,0.62)",
+        "rgba(166,86,40,0.7)",
+        "rgba(227,26,27,0.66)"
+    ];
+
     if(rawData) {
         run(rawData);
     }
+
     function run(rawData) {
         const dataWrap = prepareData(rawData);
         console.log(dataWrap);
+        dataWrap.seriesData.forEach(element => {
+            if (element["depth"] === 2) {
+                reqCount++; // 총 진행중인 요구사항 수
+                const status = element["status"];
+                if (!statusCounts[status]) {
+                    statusCounts[status] = 1;
+                } else {
+                    statusCounts[status]++;
+                }
+            } 
+        });
+        //자료 구조 변경
+        statusDataArr = Object.entries(statusCounts).map(([key, value]) => ({ name: key, value }));
+        
         initChart(dataWrap.seriesData, dataWrap.maxDepth);
     }
     function prepareData(rawData) {
@@ -242,7 +289,7 @@ function drawCircularPacking(target, psServiceName,rawData) {
                 }
             }
         }
-        convert(rawData, psServiceName, 0); // 첫번째 Node 이름 설정.
+        convert(rawData, psServiceName, 0); // raw데이터 삽입,첫번째 Node 이름 설정.
         return {
             seriesData: seriesData,
             maxDepth: maxDepth
@@ -347,6 +394,7 @@ function drawCircularPacking(target, psServiceName,rawData) {
                 }
             };
         }
+
         option = {
             dataset: {
                 source: seriesData
@@ -358,9 +406,7 @@ function drawCircularPacking(target, psServiceName,rawData) {
                     min: 0,
                     max: maxDepth,
                     dimension: 'depth',
-                    inRange: {
-                        //color: ["#182E3D", "#4A8FBD", "#82A5BD", "#5E7788", "#5D8AA8", "#2c5571"]//['#006edd', '#e0ffff']
-                    }
+                    inRange: {} // 색 일괄 지정을 하지 않아도. 빈값으로 두어야 합니다.
                 }
             ],
             hoverLayerThreshold: Infinity,
@@ -369,34 +415,68 @@ function drawCircularPacking(target, psServiceName,rawData) {
                 renderItem: renderItem,
                 progressive: 0,
                 coordinateSystem: 'none',
-                encode: {
-                    tooltip: 'value',
-                    itemName: 'id'
-                },
                 itemStyle: {
                     color: function(params) {
-                        // 여기에서 각 항목에 특정 색상을 지정하는 함수를 정의할 수 있습니다.
-                        // 데이터에 액세스하고 조건 또는 로직에 따라 색상을 할당할 수 있습니다.
-                        // 예시:
-                        if (params.data.value % 5 === 4) {
-                            return "rgba(255,255,51,0.71)"; // 값이 50보다 큰 경우 빨간색으로 지정
-                        } else if (params.data.value % 5 ===3) {
-                            return "rgba(151,78,163,0.73)";
-                        } else if(params.data.value % 5 === 2) {
-                            return "rgba(77,175,74,0.65)";
-                        } else if(params.data.value % 5 === 1) {
-                            return "rgba(255,127,0,0.7)";
+                        if (params.data.value) {
+
+                            return defaultColorSet[issueStatusList.indexOf(params.data.status)];
                         } else {
-                            return "rgba(55,125,184,0.62)"; // 기타 값은 초록색으로 지정
+                            return "rgba(55,125,184,0.62)";
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function(params) {
+                        // params.value에는 원본 값이 들어있을 것입니다. 여기에 단위를 붙여 반환하면 됩니다.
+                        if(params.data.value) {
+                            return `${params.data.id} </br>
+                            - 상태 : ${params.data.status} </br>
+                            - 작업자 : ${params.data.value} 명`;
+                        } else {
+                            return `${params.data.id}`;
                         }
                     }
                 }
-            }
+            },
+            graphic: [
+                {
+                    type: 'group',
+                    left: 20,
+                    top: 20,
+                    children: [
+                        {
+                            type: 'text',
+                            z: 100,
+                            left: 0,
+                            top: 0,
+                            style: {
+                                text: [
+                                    '{a| Total }',
+                                    '{a| ' + reqCount + '}'
+                                ].join('\n'),
+                                rich: {
+                                    a: {
+                                        fontSize: 13,
+                                        fontWeight: 'bold',
+                                        lineHeight: 20,
+                                        fontFamily: 'Arial',
+                                        fill: 'white'
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
         };
-        myChart.setOption(option);
+
+        option && myChart.setOption(option, true);
+        drawChartWithFooter(statusDataArr,reqCount);
+
         myChart.on('click', { seriesIndex: 0 }, function (params) {
             drillDown(params.data.id);
         });
+
         function drillDown(targetNodeId) {
             displayRoot = stratify();
             if (targetNodeId != null) {
@@ -420,7 +500,54 @@ function drawCircularPacking(target, psServiceName,rawData) {
         });
     }
 
-    option && myChart.setOption(option, true);
+    function replaceNaN(value) {
+        if (isNaN(value)) {
+            return " - ";
+        } else {
+            return value;
+        }
+    }
+
+    function drawChartWithFooter(dataArr,total) {
+        console.log("drawChartWithFooter 호출");
+        const existingChartFooter = document.querySelector('#'+target+' .chart-footer');
+
+        if (existingChartFooter) {
+            existingChartFooter.remove();
+        }
+
+        const chartFooter = document.createElement("div");
+        chartFooter.classList.add("chart-footer");
+
+        dataArr.forEach((data,index) => {
+            const item = document.createElement("div");
+            const portion =replaceNaN(+(data.value*100/ +total).toFixed(0));
+            item.classList.add("footer-item");
+            item.style.borderColor = defaultColorSet[index];
+            item.innerHTML = `<div class="item-name">${data.name}</div> <div class="item-value">${data.value} (${portion}%)</div>`;
+            chartFooter.appendChild(item);
+        });
+
+        chartDom.appendChild(chartFooter);
+
+        const footerItems = document.querySelectorAll('#'+target+' .chart-footer .footer-item');
+        const itemCount = footerItems.length;
+        const remainder = itemCount % 4; //나머지
+        const quotient = Math.floor(itemCount / 4); // 몫
+
+        footerItems.forEach((item, index) => {
+            if (remainder === 1 && Math.floor(index / 4) === quotient) {
+                item.style.width = '100%';
+            } else if (remainder === 2 && Math.floor(index / 4) >= quotient) {
+                item.style.width = '50%';
+            } else if (remainder === 3 && Math.floor(index / 4) >= quotient) {
+                item.style.width = '33.33%';
+            } else { // 나머지 0
+                item.style.width = '25%';
+            }
+        });
+    }
+
     window.addEventListener('resize', function () {
         myChart.resize();
     });
