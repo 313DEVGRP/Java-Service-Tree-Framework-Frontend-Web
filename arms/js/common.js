@@ -1553,3 +1553,15 @@ function gnuboardLink(bo_table) {
 
 	location.href = `/php/gnuboard5/bbs/board.php?${new URLSearchParams(params).toString()}`;
 }
+
+function gnuboardIndex() {
+	const params = {};
+
+	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
+		params[key] = value;
+	});
+	params["page"] = "index";
+	params["mode"] = "detail";
+
+	location.href = `/php/gnuboard5/index.php?${new URLSearchParams(params).toString()}`;
+}
