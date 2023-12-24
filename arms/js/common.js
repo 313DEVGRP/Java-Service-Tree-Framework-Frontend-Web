@@ -1544,6 +1544,8 @@ function gnuboardLink(bo_table) {
 
 		if (!isEmpty(bo_table) &&  key === "page") {
 			params[key] = "index";
+		} else if (key == "wr_id") {
+			console.log("skip");
 		} else {
 			params[key] = value;
 		}
@@ -1569,7 +1571,7 @@ function gnuboardIndex() {
 	const params = {};
 
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-		if (key === "wr_id") {
+		if (key == "wr_id") {
 			console.log("skip");
 		} else {
 			params[key] = value;
