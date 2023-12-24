@@ -1544,12 +1544,17 @@ function gnuboardLink(bo_table) {
 
 		if (!isEmpty(bo_table) &&  key === "page") {
 			params[key] = "index";
-		} else if (key == "wr_id") {
-			console.log("skip");
 		} else {
-			params[key] = value;
+
+			if (key == "wr_id") {
+				console.log("skip");
+			}else {
+				params[key] = value;
+			}
 		}
 	});
+
+	delete params["wr_id"];
 	params["bo_table"] = bo_table;
 	params["mode"] = "detail";
 
