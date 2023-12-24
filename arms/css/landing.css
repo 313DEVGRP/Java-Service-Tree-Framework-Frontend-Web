@@ -1,0 +1,122 @@
+.wrap {
+	margin-left: 0;
+}
+
+.board-thumb {
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 10px;
+	background-size: contain;
+}
+
+.board-thumb::after {
+	content: "";
+	display: block;
+}
+
+.board-thumb.back-wemade {
+	background-image: url("../img/index/wemade.png");
+	padding-bottom: 75.2631578947%;
+}
+
+.board-thumb.back-nc {
+	background-image: url("../img/index/nc.png");
+	padding-bottom: 75.2631578947%;
+}
+
+.board-thumb.back-kakao {
+	background-image: url("../img/index/kakao.png");
+	padding-bottom: 75.2631578947%;
+}
+
+.board-thumb.disconnection {
+	background-image: url("../img/index/disconnection.png");
+	height: 200px;
+}
+
+.board-thumb.disconnect-detail {
+	background-image: url("../img/index/disconnect_detail.png");
+	height: 200px;
+}
+
+.board-thumb.solution {
+	background-image: url("../img/index/solution.png");
+	height: 200px;
+}
+
+.board-thumb.connect {
+	background-image: url("../img/index/connect_effect.png");
+	height: 200px;
+}
+
+.board-thumb.arms-about {
+	background-image: url("../img/index/about.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-1 {
+	background-image: url("../img/index/design/CUT_01.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-2 {
+	background-image: url("../img/index/design/CUT_02.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-3 {
+	background-image: url("../img/index/design/CUT_03.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-4 {
+	background-image: url("../img/index/design/CUT_04.png");
+	height: 274px;
+}
+
+.board-thumb.back-buy-5 {
+	background-image: url("../img/index/design/CUT_05.png");
+	height: 274px;
+}
+
+.board-thumb.img-1 {
+	background-image: url("../img/landing/board_img_1.jpg");
+}
+
+.board-thumb.img-2 {
+	background-image: url("../img/landing/board_img_2.jpg");
+}
+
+.board-thumb.img-3 {
+	background-image: url("../img/landing/board_img_3.jpg");
+}
+
+.board-title {
+	text-align: center;
+	font-size: 1em;
+	font-weight: 700;
+	color: #15235b;
+}
+
+.board-title .em {
+	color: #e5603b;
+	font-weight: 700;
+}
+
+.board-desc {
+	padding: 24px 20px;
+}
+
+.board-bar {
+	margin: 1.5rem auto;
+	width: 2rem;
+	height: 3px !important;
+	background-color: #666;
+}
+
+.board-text {
+	font-weight: 300;
+	color: rgba(255, 255, 255, 0.7);
+	text-align: justify;
+	word-break: keep-all;
+}

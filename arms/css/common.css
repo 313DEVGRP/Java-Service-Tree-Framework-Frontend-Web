@@ -1,0 +1,246 @@
+@font-face {
+	font-family: "Nanum Gothic";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot"); /* IE9 Compat Modes */
+	src: local("NanumGothic"),
+		url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot?#iefix")
+			format("embedded-opentype"),
+		/* IE6-IE8 */ url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff2")
+			format("woff2"),
+		/* Super Modern Browsers */
+			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff") format("woff"),
+		/* Modern Browsers */
+			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.ttf")
+			format("truetype"),
+		/* Safari, Android, iOS */
+			url("../../reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.svg#NanumGothic")
+			format("svg"); /* Legacy iOS */
+}
+html,
+body {
+	font-family: "Nanum Gothic" !important;
+}
+body {
+	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTAyLCAxMDUsIDEwNCwgMC45MCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSg5MywgMTEyLCAxMTksIDAuODkpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE2MCwgMTc0LCAxNTAsIDAuOTApIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="),
+		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	background-color: rgba(102, 105, 104, 0.9);
+	background: radial-gradient(
+			farthest-side ellipse at 10% 0,
+			rgba(40, 40, 40, 0.9),
+			rgba(90, 100, 130, 0.89),
+			rgba(60, 60, 60, 0.9)
+		),
+		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	background: -webkit-radial-gradient(
+			10% 0,
+			farthest-side ellipse,
+			rgba(40, 40, 40, 0.9),
+			rgba(90, 100, 130, 0.89),
+			rgba(60, 60, 60, 0.9)
+		),
+		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	background: -moz-radial-gradient(
+			10% 0,
+			farthest-side ellipse,
+			rgba(40, 40, 40, 0.9),
+			rgba(90, 100, 130, 0.89),
+			rgba(60, 60, 60, 0.9)
+		),
+		url("../../reference/light-blue/img/bgnoise_lg_dark.png");
+	padding-bottom: 10px;
+	background-attachment: fixed;
+}
+
+/* 스크롤 테마 */
+body::-webkit-scrollbar {
+	width: 8px; /* 스크롤바의 너비 */
+	height: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+	height: 30%; /* 스크롤바의 길이 */
+	background: #313131; /* 스크롤바의 색상 */
+
+	border-radius: 10px;
+}
+
+body::-webkit-scrollbar-track {
+	background-color: #4b4b4b; /*스크롤바 뒷 배경 색상*/
+}
+
+p {
+	margin: 0;
+	text-align: center;
+}
+
+/* Font */
+.jstree-default-context {
+	font-family: "Nanum Gothic" !important;
+	font-size: 12px;
+	color: #f8f8f8;
+}
+.font10 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 10px;
+	color: #f8f8f8;
+}
+.font11 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 11px;
+	color: #f8f8f8;
+}
+.font12 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 12px;
+	color: #f8f8f8;
+}
+.font13 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 13px;
+	color: #f8f8f8;
+}
+.font14 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 14px;
+	color: #f8f8f8;
+}
+.font15 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 15px;
+	color: #f8f8f8;
+}
+.font16 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 16px;
+	color: #f8f8f8;
+}
+.font17 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 17px;
+	color: #f8f8f8;
+}
+.font18 {
+	font-family: "Nanum Gothic" !important;
+	font-size: 18px;
+	color: #f8f8f8;
+}
+
+.row {
+	overflow: hidden;
+	clear: both;
+}
+
+.widgetheader {
+	border-radius: 3px;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	padding: 5px 5px 1px 5px;
+	color: #f8f8f8;
+	margin-bottom: 5px;
+	position: relative;
+}
+
+.breadcrumb {
+	padding: 0px;
+	margin: 3px;
+	list-style: none;
+	background-color: transparent;
+	border-radius: 3px;
+}
+
+.content .content-footer {
+	position: initial;
+	bottom: 0px;
+	color: #d2d2d2;
+}
+
+/* 그라디언트 보더 */
+.gradient_left_border {
+	border-left: 1px dashed transparent;
+	border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+	border-image-slice: 1;
+}
+
+.gradient_right_border {
+	border-right: 1px dashed transparent;
+	border-image: linear-gradient(0turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+	border-image-slice: 1;
+}
+.gradient_bottom_border {
+	border-bottom: 1px solid transparent;
+	border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #979797, rgb(0 0 0 / 0%));
+	border-image-slice: 1;
+}
+.gradient_middle_border {
+	border-bottom: 1px solid transparent;
+	border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #666666, rgb(0 0 0 / 0%));
+	border-image-slice: 1;
+}
+
+blockquote {
+	padding: 9px 0px 9px 18px !important;
+	margin: 9px 0 9px !important;
+	font-size: 16.25px;
+	border-left: 5px solid rgba(51, 51, 51, 0.425);
+}
+
+.widget-controls {
+	position: absolute;
+	z-index: 1;
+	top: 3px !important;
+	right: 0;
+	font-size: 12px;
+	word-spacing: 1px;
+}
+
+@media (min-width: 1200px) {
+	.content {
+		position: relative;
+		padding: 30px 2.5641%;
+		-webkit-transition: margin-top 0.35s ease, opacity 0.2s;
+		-o-transition: margin-top 0.35s ease, opacity 0.2s;
+		transition: margin-top 0.35s ease, opacity 0.2s;
+		max-width: none;
+		width: auto;
+		opacity: 1;
+	}
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+	.content {
+		position: relative;
+		padding: 30px 2.5641%;
+		-webkit-transition: margin-top 0.35s ease, opacity 0.2s;
+		-o-transition: margin-top 0.35s ease, opacity 0.2s;
+		transition: margin-top 0.35s ease, opacity 0.2s;
+		max-width: none;
+		width: auto;
+		opacity: 1;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	.content {
+		position: relative;
+		padding: 30px 2.5641%;
+		-webkit-transition: margin-top 0.35s ease, opacity 0.2s;
+		-o-transition: margin-top 0.35s ease, opacity 0.2s;
+		transition: margin-top 0.35s ease, opacity 0.2s;
+		max-width: none;
+		width: auto;
+		opacity: 1;
+	}
+}
+@media (max-width: 767px) {
+	.content {
+		position: relative;
+		padding: 75px 2.5641%;
+		-webkit-transition: margin-top 0.35s ease, opacity 0.2s;
+		-o-transition: margin-top 0.35s ease, opacity 0.2s;
+		transition: margin-top 0.35s ease, opacity 0.2s;
+		max-width: none;
+		width: auto;
+		opacity: 1;
+	}
+}
