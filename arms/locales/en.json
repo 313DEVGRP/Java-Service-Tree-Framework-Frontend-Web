@@ -1,0 +1,31 @@
+{
+	"nav": {
+		"product": {
+			"p": "Product Management",
+			"v": "Version Management"
+		},
+		"alm": {
+			"s": "Server Management",
+			"c": "Manage Connection"
+		},
+		"requirement": {
+			"q": "Demand Management",
+			"s": "Status Management"
+		},
+		"analysis": {
+			"g": "Gantt Chart",
+			"t": "Time Analysis",
+			"s": "Scope Analysis",
+			"r": "Resource Analysis"
+		},
+		"community": {
+			"n": "Notice",
+			"q": "Inquiry Answers",
+			"p": "Patch Note",
+			"m": "Manual",
+			"t": "Administrative Tools",
+			"c": "Contributors",
+			"l": "Licenses"
+		}
+	}
+}
