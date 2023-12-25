@@ -1622,7 +1622,7 @@ function flattenObject(obj, parentKey) {
 
 function setLocale(locale = "ko") {
 	$.ajax({
-		url: `locales/${locale}.json`,
+		url: `/arms/locales/${locale}.json`,
 		async: false,
 		dataType: "json"
 	}).done(function (data) {
