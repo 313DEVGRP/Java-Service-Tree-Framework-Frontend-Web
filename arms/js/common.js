@@ -54,9 +54,8 @@ function runScript() {
 }
 
 function 로드_완료_이후_실행_함수() {
-
 	톱니바퀴_초기설정();
-
+	setLocale();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -155,13 +154,12 @@ function includeLayout(page) {
 				self.removeAttr("data-include");
 			});
 		} else if (url.indexOf("page-sidebar") !== -1) {
-
 			if (mode == "detail" || hrefLink.indexOf("detail.html") > 0) {
 				url = "/arms/html/detail/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
-			}else{
+			} else {
 				url = "/arms/html/template/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
@@ -1111,9 +1109,7 @@ function goToTemplatePage(pageName) {
 }
 
 function laddaBtnSetting(라따적용_클래스이름_배열) {
-
 	for (i = 0; i < 라따적용_클래스이름_배열.length; i++) {
-
 		// add css
 		$(라따적용_클래스이름_배열[i]).addClass("ladda-button");
 
@@ -1122,7 +1118,6 @@ function laddaBtnSetting(라따적용_클래스이름_배열) {
 			callback: function (instance) {
 				var progress = 0;
 				var interval = setInterval(function () {
-
 					progress = Math.min(progress + 0.1, 1);
 					instance.setProgress(progress);
 
@@ -1181,7 +1176,8 @@ function getTourGuideMode() {
 	let tourGuideMode = getCookie("tourGuideMode");
 	if (tourGuideMode) {
 		return tourGuideMode;
-	} else { //쿠키가 없을 때, "on"으로 체크
+	} else {
+		//쿠키가 없을 때, "on"으로 체크
 		setTourGuideMode("on");
 		return getCookie("tourGuideMode");
 	}
@@ -1192,14 +1188,13 @@ function getTourGuideMode() {
 /////////////////////////////////
 function setTourGuideMode(mode) {
 	console.log("[ common :: setTourGuideMode ] :: mode → " + mode);
-	$.cookie("tourGuideMode",mode,{ expires: 7});
+	$.cookie("tourGuideMode", mode, { expires: 7 });
 	return mode;
 }
 
-
 function tourGuideStart() {
 	let pageName = getPageName(this.location.search);
-	console.log("[ common :: tourGuideStart ] :: pageName → " +pageName);
+	console.log("[ common :: tourGuideStart ] :: pageName → " + pageName);
 	let tg = TourGuideApi.makeInstance(pageName);
 	tg.start();
 }
@@ -1210,7 +1205,8 @@ function checkTourGuideMode() {
 	if (!checkMobileDevice()) {
 		if (tourGuideMode === "off") {
 			console.log("common :: checkTourGuideMode : tourGuideMode is Off");
-		} else {//mode 가 없거나 on 일때
+		} else {
+			//mode 가 없거나 on 일때
 			console.log("common :: checkTourGuideMode : tourGuideMode is On");
 			setTourGuideMode("on");
 			setTimeout(function () {
@@ -1232,7 +1228,7 @@ function tourGuideEventListener() {
 		$("#tourGuideButtons #tour_guide_on").addClass("active");
 	}
 
-	$("#tourGuideButtons button").click(function() {
+	$("#tourGuideButtons button").click(function () {
 		let $active_label = $(this).text().toLowerCase();
 		console.log($active_label);
 		if ($active_label === "on") {
@@ -1260,7 +1256,6 @@ function checkMobileDevice() {
 	console.log("[ common :: checkMobileDevice] isMobile → " + isMobile);
 	return isMobile;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 헤더 :: 톱니바퀴 대응함수
@@ -1525,8 +1520,7 @@ function targetLink(path) {
 	const params = {};
 
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-
-		if (!isEmpty(path) &&  key === "page") {
+		if (!isEmpty(path) && key === "page") {
 			params[key] = path;
 		} else {
 			params[key] = value;
@@ -1541,14 +1535,12 @@ function gnuboardLink(bo_table) {
 	const params = {};
 
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-
-		if (!isEmpty(bo_table) &&  key === "page") {
+		if (!isEmpty(bo_table) && key === "page") {
 			params[key] = "index";
 		} else {
-
 			if (key == "wr_id") {
 				console.log("skip");
-			}else {
+			} else {
 				params[key] = value;
 			}
 		}
@@ -1586,4 +1578,46 @@ function gnuboardIndex() {
 	params["mode"] = "detail";
 
 	location.href = `/php/gnuboard5/index.php?${new URLSearchParams(params).toString()}`;
+}
+
+/**
+ * Locales
+ * */
+function bindLocaleText(locales) {
+	const targets = document.querySelectorAll("[data-locale]");
+
+	targets.forEach((tag) => {
+		tag.textContent = locales[tag.dataset.locale];
+	});
+}
+
+function flattenObject(obj, parentKey) {
+	let result = {};
+
+	Object.entries(obj).forEach(([key, value]) => {
+		const _key = parentKey ? parentKey + "." + key : key;
+		if (typeof value === "object") {
+			result = { ...result, ...flattenObject(value, _key) };
+		} else {
+			result[_key] = value;
+		}
+	});
+
+	return result;
+}
+
+function setLocale(locale = "ko") {
+	$.ajax({
+		url: `locales/${locale}.json`,
+		async: false,
+		dataType: "json"
+	}).done(function (data) {
+		bindLocaleText(flattenObject(data));
+	});
+}
+
+function chnageLoocale() {
+	const localeSelect = document.getElementById("localeSelect");
+
+	setLocale(localeSelect.options[localeSelect.selectedIndex].value);
 }
