@@ -1559,10 +1559,11 @@ function gnuboardList(param) {
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
 
 		if(key == "mode"){
-			var tempValue = params[key];
-			if( tempValue == "detail"){
+
+			if(value == "detail") {
 				userMode = true;
 			}
+
 		}
 		params[key] = value;
 
