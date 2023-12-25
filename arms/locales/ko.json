@@ -13,10 +13,10 @@
 			"s": "현황 관리"
 		},
 		"analysis": {
-			"g": "간트 차트 - Gantt",
-			"t": "일정 분석 - Time",
-			"s": "범위 분석 - Scope",
-			"r": "자원 분석 - Resource"
+			"g": "간트 차트. Gantt",
+			"t": "일정 분석. Time",
+			"s": "범위 분석. Scope",
+			"r": "자원 분석. Resource"
 		},
 		"community": {
 			"n": "공지 사항",
