@@ -1563,13 +1563,26 @@ function gnuboardLink(bo_table) {
 
 function gnuboardList(param) {
 	const params = {};
-
+	var userMode = false;
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-		params[key] = value;
-	});
-	params["mode"] = "detail";
 
-	location.href = param + `&${new URLSearchParams(params).toString()}`;
+		if(key == "mode"){
+			var tempValue = params[key];
+			if( tempValue == "detail"){
+				userMode = true;
+			}
+		}
+		params[key] = value;
+
+	});
+
+	if(userMode){
+		params["mode"] = "detail";
+		location.href = param + `&${new URLSearchParams(params).toString()}`;
+	}else{
+		location.href = param;
+	}
+
 }
 
 function gnuboardIndex() {
