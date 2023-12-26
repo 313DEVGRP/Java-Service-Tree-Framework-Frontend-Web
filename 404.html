@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A-RMS</title>
+
+    <meta charset="utf-8" />
+    <meta
+            http-equiv="X-UA-Compatible"
+            content="IE=edge" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <meta
+            http-equiv="Expire"
+            content="-1" />
+    <meta
+            http-equiv="Keywords"
+            content="A-RMS" />
+    <meta
+            http-equiv="Reply-to"
+            content="admin@a-rms.net" />
+    <meta
+            http-equiv="Content-Language"
+            content="Korean" />
+    <meta
+            http-equiv="Last-Modified"
+            content="Thu 01 Nov 2016 23:59:59" />
+    <meta
+            http-equiv="Organization"
+            content="www.a-rms.net" />
+    <meta
+            http-equiv="Content-Type"
+            content="text/html;charset=utf-8" />
+    <meta
+            http-equiv="Cache-Control"
+            content="no-cache" />
+    <meta
+            http-equiv="Pragma"
+            content="no-cache" />
+    <meta
+            http-equiv="imagetoolbar"
+            content="no" />
+    <meta
+            http-equiv="content-Script-type"
+            content="text/javascript" />
+    <meta
+            http-equiv="content-Style-type"
+            content="text/css" />
+
+    <meta
+            name="robots"
+            content="ALL, INDEX, FOLLOW" />
+    <meta
+            name="Subject"
+            content="A-RMS" />
+    <meta
+            name="Filename"
+            content="ARMS.html" />
+    <meta
+            name="Author-Date"
+            content="31 Oct 16" />
+    <meta
+            name="Date"
+            content="31 Oct 16" />
+    <meta
+            name="Author"
+            content="LeeDongmin" />
+    <meta
+            name="Other Agent"
+            content="LeeDongMin" />
+    <meta
+            name="Email"
+            content="admin@a-rms.net" />
+    <meta
+            name="Reply-To"
+            content="admin@a-rms.net" />
+    <meta
+            name="Project"
+            content="A-RMS" />
+    <meta
+            name="Status"
+            content="Draft" />
+    <meta
+            name="Location"
+            content="South Korea" />
+    <meta
+            name="distribution"
+            content="aRMS" />
+    <meta
+            name="Description"
+            content="Standard Web Project" />
+    <meta
+            name="verify-v1"
+            content="Eal6+fiCjgKAZb5A6pRvSLmsh9NLF2AsqxqJrLuFoAs=" />
+    <meta
+            name="Revision"
+            content="1.0" />
+    <meta
+            name="Generator"
+            content="eclipse 3.6.1" />
+    <meta
+            name="Classification"
+            content="Development,Deployment" />
+    <meta
+            name="Copyright"
+            content="CopyRight@aRMS. All Rights Reserved" />
+    <meta
+            name="title"
+            content="A-RMS" />
+    <meta
+            name="revisit-after"
+            content="7 days" />
+    <meta
+            name="siteinfo"
+            content="http://www.a-rms.net/robots.txt" />
+    <meta
+            name="HandheldFriendly"
+            content="True" />
+    <meta
+            name="MobileOptimized"
+            content="320" />
+
+    <meta
+            property="og:type"
+            content="website" />
+    <meta
+            property="og:title"
+            content="A-RMS" />
+    <meta
+            property="og:url"
+            content="http://www.a-rms.net/" />
+    <meta
+            property="og:site_name"
+            content="A-RMS" />
+
+    <!-- favicon -->
+    <link
+            rel="icon"
+            href="/313devgrp/arms/img/313_logo.ico"
+            type="image/x-icon" />
+    <link
+            rel="shortcut icon"
+            href="/313devgrp/arms/img/313_logo.ico"
+            type="image/x-icon" />
+
+    <link
+            href="/313devgrp/reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
+            rel="stylesheet" />
+    <link
+            href="/313devgrp/reference/lightblue4/docs/css/application.css"
+            rel="stylesheet" />
+    <link
+            href="/313devgrp/arms/css/override.css"
+            rel="stylesheet" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/313devgrp/reference/jquery-plugins/html5shiv.js"></script>
+    <script src="/313devgrp/reference/jquery-plugins/respond.js"></script>
+    <![endif]-->
+</head>
+
+<body style="overflow-x: hidden">
+<div
+        class="logo"
+        data-include="html/template/page-logo.html"
+        style="left: 35px !important; position: absolute !important"></div>
+
+
+<div class="wrap">
+    <div class="single-widget-container error-page">
+        <section class="widget transparent widget-404">
+            <div class="body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h1 class="text-align-center">404</h1>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="description">
+                            <h3>Opps, it seems that this page does not exist here.</h3>
+                            <p>If you are sure it should, search for it.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="widget widget-404-search">
+            <div class="body no-margin">
+                <form class="form-inline form-search no-margin text-align-center" method="get" action="special_search.html" role="form">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Pages: Posts, Tags">
+                        <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">
+                            &nbsp; Search &nbsp;
+                        </button>
+                    </span>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<!-- common libraries. required for every page-->
+<script src="/313devgrp/reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/jquery-pjax/jquery.pjax.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/widgster/widgster.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/underscore/underscore.js"></script>
+
+<!-- jquery plugins -->
+<script src="/313devgrp/reference/light-blue/lib/jquery-maskedinput/jquery.maskedinput.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/parsley/parsley.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/jquery.autogrow-textarea.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/jquery.ui.touch-punch.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/jquery.nestable.js"></script>
+
+<!-- jquery upload plugins -->
+<script src="/313devgrp/reference/light-blue/lib/icheck.js/jquery.icheck.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/vendor/jquery.ui.widget.js"></script>
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="/313devgrp/reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js"></script>
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="/313devgrp/reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="/313devgrp/reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="/313devgrp/reference/light-blue/lib/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="/313devgrp/reference/light-blue/lib/jquery.fileupload.js"></script>
+<!-- The File Upload file processing plugin -->
+<script src="/313devgrp/reference/light-blue/lib/jquery.fileupload-fp.js"></script>
+<!-- The File Upload user interface plugin -->
+<script src="/313devgrp/reference/light-blue/lib/jquery.fileupload-ui.js"></script>
+
+<!-- common application js -->
+<script src="/313devgrp/reference/lightblue4/docs/js/app.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/js/settings.js"></script>
+
+<!-- page libs -->
+<script src="/313devgrp/reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/jquery.sparkline/index.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/backbone/backbone.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/backbone.localStorage/build/backbone.localStorage.min.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/d3/d3.min.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js"></script>
+<!-- d3, nvd3-->
+<!--
+<script src="/313devgrp/reference/light-blue/lib/nvd3/lib/d3.v2.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/nv.d3.custom.js"></script>
+-->
+<!-- nvd3 models -->
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/scatter.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/axis.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/legend.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/stackedArea.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/stackedAreaChart.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/line.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/pie.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/pieChartTotal.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/stream_layers.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/lineChart.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/multiBar.js"></script>
+<script src="/313devgrp/reference/light-blue/lib/nvd3/src/models/multiBarChart.js"></script>
+
+<!-- bootstrap default plugins -->
+<script src="/313devgrp/reference/light-blue/lib/bootstrap/tooltip.js"></script>
+
+<!-- page interaction -->
+<script src="/313devgrp/reference/jquery-plugins/topbar.js"></script>
+
+<!-- 날짜 선택 -->
+<script src="/313devgrp/reference/light-blue/lib/bootstrap-datepicker.js"></script>
+
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css"
+        media="screen" />
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.js"></script>
+
+<!-- common templates -->
+<script
+        type="text/template"
+        id="settings-template">
+    <div class="setting clearfix">
+        <div>Sidebar on the</div>
+        <div id="sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
+            <% onRight = sidebar == 'right'%>
+            <button type="button" data-value="left" class="btn btn-sm btn-default <%= onRight? '' : 'active' %>">Left</button>
+            <button type="button" data-value="right" class="btn btn-sm btn-default <%= onRight? 'active' : '' %>">Right</button>
+        </div>
+    </div>
+    <div class="setting clearfix">
+        <div>Sidebar</div>
+        <div id="display-sidebar-toggle" class="pull-left btn-group" data-toggle="buttons-radio">
+            <% display = displaySidebar%>
+            <button type="button" data-value="true" class="btn btn-sm btn-default <%= display? 'active' : '' %>">Show</button>
+            <button type="button" data-value="false" class="btn btn-sm btn-default <%= display? '' : 'active' %>">Hide</button>
+        </div>
+    </div>
+</script>
+
+<!-- page specific scripts -->
+<script
+        type="text/template"
+        id="sidebar-settings-template">
+    <% auto = sidebarState == 'auto'%>
+    <% if (auto) {%>
+    <button type="button"
+            data-value="icons"
+            class="btn-icons btn btn-transparent btn-sm">Icons</button>
+    <button type="button"
+            data-value="auto"
+            class="btn-auto btn btn-transparent btn-sm">Auto</button>
+    <%} else {%>
+    <button type="button"
+            data-value="auto"
+            class="btn btn-transparent btn-sm">Auto</button>
+    <% } %>
+</script>
+
+<!-- page template -->
+<script
+        type="text/template"
+        id="message-template">
+    <div class="sender pull-left">
+        <div class="icon">
+            <img src="img/avatars/2.png" class="img-circle" alt="">
+        </div>
+        <div class="time">
+            just now
+        </div>
+    </div>
+    <div class="chat-message-body">
+        <span class="arrow"></span>
+        <div class="sender"><a href="#">Tikhon Laninga</a></div>
+        <div class="text">
+            <%- text %>
+        </div>
+    </div>
+</script>
+
+<!-- upload template -->
+<script
+        id="template-upload"
+        type="text/x-tmpl">
+			{% for (var i=0, file; file=o.files[i]; i++) { %}
+			<tr class="template-upload fade">
+			    <td class="preview"><span class="fade"></span></td>
+			    <td class="name"><span>{%=file.name%}</span></td>
+			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+			    {% if (file.error) { %}
+			    <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+			    {% } else if (o.files.valid && !i) { %}
+			    <td>
+			        <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+			            <div class="bar" style="width:0%;"></div>
+			        </div>
+			    </td>
+			    <td>{% if (!o.options.autoUpload) { %}
+			        <button class="btn btn-primary btn-sm start">
+			            <i class="fa fa-upload"></i>
+			            <span>Start</span>
+			        </button>
+			        {% } %}</td>
+			    {% } else { %}
+			    <td colspan="2"></td>
+			    {% } %}
+			    <td>{% if (!i) { %}
+			        <button class="btn btn-warning btn-sm cancel">
+			            <i class="fa fa-ban"></i>
+			            <span>Cancel</span>
+			        </button>
+			        {% } %}</td>
+			</tr>
+			{% } %}
+		</script>
+
+<!-- The template to display files available for download -->
+<script
+        id="template-download"
+        type="text/x-tmpl">
+			{% for (var i=0, file; file=o.files[i]; i++) { %}
+			<tr class="template-download fade">
+			    {% if (file.error) { %}
+			    <td></td>
+			    <td class="name"><span>{%=file.name%}</span></td>
+			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+			    <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+			    {% } else { %}
+			    <td class="preview">{% if (file.thumbnail_url) { %}
+			        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+			        {% } %}</td>
+			    <td class="name">
+			        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+			    </td>
+			    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+			    <td colspan="2"></td>
+			    {% } %}
+			    <td>
+			        <button class="btn btn-danger btn-sm delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+			        <i class="fa fa-trash"></i>
+			        <span>Delete</span>
+			        </button>
+			    </td>
+			</tr>
+			{% } %}
+		</script>
+
+<!-- JSTREE -->
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.cookie.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/jstree-v.pre1.0/_lib/jquery.hotkeys.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/jstree-v.pre1.0/jquery.jstree.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js"
+        charset="utf-8"></script>
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css"
+        media="screen" />
+
+<!-- dataTable -->
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css"
+        media="screen" />
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css"
+        media="screen" />
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css"
+        media="screen" />
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/arms_dataTables.rowsGroup.js"
+        charset="utf-8"></script>
+
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"
+        charset="utf-8"></script>
+
+<!-- ckeditor4 -->
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js"
+        charset="utf-8"></script>
+
+<!-- multiselect -->
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css"
+        media="screen" />
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js"
+        charset="utf-8"></script>
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css"
+        media="screen" />
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js"
+        charset="utf-8"></script>
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js"
+        charset="utf-8"></script>
+
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css"
+        media="screen" />
+<script
+        type="text/javascript"
+        src="/313devgrp/reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.js"
+        charset="utf-8"></script>
+
+<!-- notification popup -->
+<script src="/313devgrp/reference/lightblue4/docs/lib/messenger/build/js/messenger.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/lib/messenger/build/js/messenger-theme-flat.js"></script>
+<script src="/313devgrp/reference/lightblue4/docs/js/ui-notifications.js"></script>
+
+<!-- code diff -->
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/313devgrp/reference/jquery-plugins/diff2html-2.12.2/dist/diff2html.css"
+        media="screen" />
+<script src="/313devgrp/reference/jquery-plugins/diff2html-2.12.2/dist/diff2html.js"></script>
+
+
+</body>
+</html>
