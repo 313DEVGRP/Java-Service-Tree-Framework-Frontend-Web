@@ -277,10 +277,6 @@ function makeVersionMultiSelectBox() {
 
 			// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
-			// vertical timeline chart
-			//verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
-			// detail timeline chart
-			//detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 			// timeline chart
 			timeLineChart(selectedPdServiceId, selectedVersionId);
 
@@ -1835,156 +1831,277 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("하위크기", 1000)
     		.addQueryParam("컨텐츠보기여부", true)
     		.build();
+    $.ajax({
+            url: verticalUrl,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (data) {
+                    console.log("[ analysisTime :: TimeLineData ] :: = ");
+                    console.log(data);
+                    verticalTimeLineChart(data);
+                }
+            }
+        });
 
-	const detailUrl = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-jira-issue")
+	const ridgeLineIssueUrl = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-ridgeline")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
+		.addQueryParam("isReqType", "ISSUE")
 		.addQueryParam("시작일", startDate)
 		.addQueryParam("종료일", endDate)
-		.addQueryParam("sortField", "created")
 		.addQueryParam("크기", 1000)
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)
 		.build();
+	const ridgeLineReqUrl = new UrlBuilder()
+    		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-ridgeline")
+    		.addQueryParam("pdServiceLink", pdServiceLink)
+    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+    		.addQueryParam("일자기준", "updated")
+    		.addQueryParam("isReqType", "REQUIREMENT")
+    		.addQueryParam("시작일", startDate)
+    		.addQueryParam("종료일", endDate)
+    		.addQueryParam("크기", 1000)
+    		.addQueryParam("하위크기", 1000)
+    		.addQueryParam("컨텐츠보기여부", true)
+    		.build();
 
-	$.ajax({
-		url: verticalUrl,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log("[ analysisTime :: TimeLineData ] :: = ");
-				console.log(data);
-				verticalTimeLineChart(data);
-			}
-		}
-	});
-
-    $.ajax({
-		url: detailUrl,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log("[ analysisTime :: detailTimeLineData ] :: = ");
-				console.log(data);
-				//detailTimeLineData(data);
-				detailTimeLine();
-			}
-		}
-	});
-
+    function executeAjaxCall(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                progress: true,
+                statusCode: {
+                    200: function (data) {
+                        console.log("[ analysisTime :: UrlData ] :: = ");
+                        console.log(data);
+                        var data = transformData(data);
+                        updateRidgeLine(data);
+                    }
+                }
+            });
+        }
+    executeAjaxCall(ridgeLineIssueUrl);
+   /* if ($("#issueRadio").is(":checked")) {
+        executeAjaxCall(ridgeLineIssueUrl);
+    } else if ($("#reqRadio").is(":checked")) {
+        executeAjaxCall(ridgeLineReqUrl);
+    }*/
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function detailTimeLine(){
-    d3.json("../reference/jquery-plugins/d3-ridgeline-plot/traffic.json").then(function(traffic) {
-       console.log(traffic);
-      	// dates: traffic 데이터셋에서 date 필드를 기준으로 날짜를 추출하여 정렬
-		// d3 v6 이상부터 group 메소드 사용가능
-		/*		const dates = Array.from(d3.group(traffic, d => +new Date(d.date)).keys()).sort(d3.ascending);
-		// series: traffic 데이터셋을 name 필드를 기준으로 그룹화하고, 각 name에 대한 날짜별 value 값을 매핑
-		const series = d3.groups(traffic, d => d.name).map(([name, values]) => {
-		const value = new Map(values.map(d => [+new Date(d.date), d.value]));
-		return {name, values: dates.map(date => value.get(date))};
-		});*/
+//// 등고선 차트
+function transformData(data) {
+    let result = Object.entries(data).reduce((result, [version, dateObj]) => {
+        Object.entries(dateObj).forEach(([date, nameObj]) => {
+            Object.entries(nameObj).forEach(([name, arr]) => {
+                result.push({
+                    version: version,
+                    date: new Date(date),
+                    name: "요구사항 "+name,
+                    value: arr.length
+                });
+            });
+        });
+        return result;
+    }, []);
 
-		var nestedDataByDate = d3.nest()
-			.key(function(d) { return +new Date(d.date); })
-			.entries(traffic);
+    // 결과가 하나일 경우 앞 뒤로 날짜를 추가하고 value를 0으로 설정
+    if (result.length == 1) {
+        let previousDay = new Date(result[0].date);
+        previousDay.setDate(previousDay.getDate() - 1);
+        let nextDay = new Date(result[0].date);
+        nextDay.setDate(nextDay.getDate() + 1);
 
-		var dates = nestedDataByDate.map(function(d) { return +d.key; }).sort(d3.ascending);
+        result.unshift({
+            version: result[0].version,
+            date: previousDay,
+            name: result[0].name,
+            value: 0
+        });
 
-		var nestedDataByName = d3.nest()
-			.key(function(d) { return d.name; })
-			.entries(traffic);
+        result.push({
+            version: result[0].version,
+            date: nextDay,
+            name: result[0].name,
+            value: 0
+        });
+    }
 
-		var series = nestedDataByName.map(function(d) {
-			var valuesMap = d3.map(d.values, function(e) { return String(+new Date(e.date)); });
-			var values = dates.map(function(date) {
-				var valueObj = valuesMap.get(String(date));
-				return valueObj ? valueObj.value : null;
-			});
-			return { name: d.key, values: values };
-		});
+    return result;
+}
 
-      	const overlap = 8;
-		const width = 928;
-		const height = series.length * 20;
-		const marginTop = 40;
-		const marginRight = 20;
-		const marginBottom = 30;
-		const marginLeft = 120;
-		// Create the scales.
-		const x = d3.scaleTime()
-			.domain(d3.extent(dates))
-			.range([marginLeft, width - marginRight]);
 
-		const y = d3.scalePoint()
-			.domain(series.map(d => d.name))
-			.range([marginTop, height - marginBottom]);
+function getColorByVersion(version) {
 
-		const z = d3.scaleLinear()
-			.domain([0, d3.max(series, d => d3.max(d.values))]).nice()
-			.range([0, -overlap * y.step()]);
+    var colorPalette = [ //e chart 컬러 팔레트
+        '#c23531','#2f4554','#61a0a8','#d48265','#91c7ae',
+        '#749f83','#ca8622','#bda29a','#6e7074','#546570',
+        '#c4ccd3'
+    ];
+    var versionNumber = parseInt(version);
 
-		// Create the area generator and its top-line generator.
-		const area = d3.area()
-			.curve(d3.curveBasis)
-			.defined(d => !isNaN(d))
-			.x((d, i) => x(dates[i]))
-			.y0(0)
-			.y1(d => z(d));
+    return colorPalette[versionNumber % colorPalette.length];
+}
+function updateRidgeLine(traffic){
+    if (!traffic || traffic.length === 0) {
+        return;
+    }
+  var overlapInput = document.getElementById("overlapInput");
+    var overlapNumberInput = document.getElementById("overlapNumberInput");
 
-		const line = area.lineY1();
-
-		// Create the SVG container.
-		const svg = d3.create("svg")
-			.attr("width", width)
-			.attr("height", height)
-			.attr("viewBox", [0, 0, width, height])
-			.attr("style", "max-width: 100%; height: auto;");
-
-		// Append the axes.
-		svg.append("g")
-			.attr("transform", `translate(0,${height - marginBottom})`)
-			.call(d3.axisBottom(x)
-				.ticks(width / 80)
-				.tickSizeOuter(0));
-
-		svg.append("g")
-			.attr("transform", `translate(${marginLeft},0)`)
-			.call(d3.axisLeft(y).tickSize(0).tickPadding(4))
-			.call(g => g.select(".domain").remove());
-
-		// Append a layer for each series.
-		const group = svg.append("g")
-		  .selectAll("g")
-		  .data(series)
-		  .join("g")
-			.attr("transform", d => `translate(0,${y(d.name) + 1})`);
-
-		group.append("path")
-			.attr("fill", "#ddd")
-			.attr("d", d => area(d.values));
-
-		group.append("path")
-			.attr("fill", "none")
-			.attr("stroke", "black")
-			.attr("d", d => line(d.values));
-
-		  // #chart div에 SVG를 추가합니다.
-		  document.getElementById('detailTimeLine').appendChild(svg.node());
-    }).catch(error => {
-      console.error('Error loading or parsing the JSON file', error);
+    overlapInput.addEventListener('input', function(e) {
+        var overlap = e.target.value;
+        overlapNumberInput.value = overlap;  // 슬라이더의 값을 숫자 입력 필드에 표시합니다.
+        drawGraph(traffic, overlap);
     });
+
+    overlapNumberInput.addEventListener('input', function(e) {
+        var overlap = e.target.value;
+        overlapInput.value = overlap;  // 숫자 입력 필드의 값을 슬라이더에 표시합니다.
+        drawGraph(traffic, overlap);
+    });
+
+    var trafficLength = traffic.length;
+    var initialOverlap = trafficLength > 30 ? 5 : 2;
+    overlapInput.value = initialOverlap;
+    overlapNumberInput.value = initialOverlap;
+
+    drawGraph(traffic, initialOverlap);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function drawGraph(traffic, overlap){updateRidgeLine
+
+        document.getElementById("updateRidgeLine").innerHTML = "";
+
+        var nestedDataByDate = d3.nest()
+                .key(function(d) { return +new Date(d.date); })
+        		.entries(traffic);
+        var dates = nestedDataByDate.map(function(d) { return +d.key; }).sort(d3.ascending);
+
+        var nestedDataByName = d3.nest()
+            .key(function(d) { return d.name; })
+            .entries(traffic);
+
+        var series = nestedDataByName.map(function(d) {
+        var valuesMap = d3.map(d.values, function(e) { return String(+new Date(e.date)); });
+        var values = dates.map(function(date) {
+            var valueObj = valuesMap.get(String(date));
+        	return valueObj ? valueObj.value : null;
+        	});
+        	var version = d.values[0] ? d.values[0].version : null;  // version 필드 추가
+            return { name: d.key, values: values, version: version };  // version 값 포함하여 반환
+        });
+
+        //const overlap = 4;
+        const width = 928;
+        //const height = series.length * 30;
+        const minHeight = 500;
+        const maxHeight = 780;
+        const height = Math.max(minHeight, Math.min(maxHeight, series.length * 20));
+        const marginTop = 100;
+        const marginRight = 0;
+        const marginBottom = 0;
+        const marginLeft = 120;
+        		// Create the scales.
+        const x = d3.scaleTime()
+            .domain(d3.extent(dates))
+            .range([marginLeft, width - marginRight]);
+
+        const y = d3.scalePoint()
+            .domain(series.map(d => d.name))
+            .range([marginTop, height - marginBottom]);
+
+        /*const z = d3.scaleLinear()
+            .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
+            .range([0, -overlap * y.step()]);*/
+         const z = d3.scaleLinear()
+                .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
+                .range([0, -overlap * y.step()]);
+
+        		// Create the area generator and its top-line generator.
+        const area = d3.area()
+            .curve(d3.curveBasis)
+            .defined(d => !isNaN(d))
+            .x((d, i) => x(dates[i]))
+            .y0(0)
+            .y1(d => z(d));
+
+        const line = area.lineY1();
+
+        		// Create the SVG container.
+        const svg = d3.create("svg")
+            .attr("width", width)
+            .attr("height", maxHeight)
+            .attr("viewBox", [0, 0, width, height])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        		// Append the axes.
+        svg.append("g")
+            .attr("transform", `translate(0,${height - marginBottom})`)
+            .call(d3.axisBottom(x)
+            .ticks(width / 80)
+            .tickSizeOuter(0));
+
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft},0)`)
+            .call(d3.axisLeft(y).tickSize(0).tickPadding(4))
+            .call(g => g.select(".domain").remove())
+            .selectAll("text")  // y축의 모든 텍스트 요소에 접근
+            .style("font-size", "12px");  // y축 텍스트 크기 조절;
+
+        		// Append a layer for each series.
+        const group = svg.append("g")
+            .selectAll("g")
+            .data(series)
+            .join("g")
+            .attr("transform", d => `translate(0,${y(d.name) + 1})`);
+
+        var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        group.append("path")
+            .attr("fill", d => getColorByVersion(d.version))
+            .attr("d", d => area(d.values))
+            .on("mouseover", function(d, i) {
+                d3.select(this)
+                    .transition()
+                    .duration(20)
+                    .style("opacity", 0.4);
+                div.transition()
+                    .duration(20)
+                    .style("opacity", .9);
+                div.html("버전 정보: " +convertVersionIdToTitle(d.version))
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select(this)
+                    .transition()
+                    .duration(20)
+                    .style("opacity", 1);
+                div.transition()
+                    .duration(20)
+                    .style("opacity", 0);
+            });
+        group.append("path")
+            .attr("fill", "none")
+            .attr("stroke","#EBEDF0") //.attr("stroke", d => getColorByVersion(d.version))
+            .attr("stroke-width", 0.5)
+            .attr("d", d => line(d.values));
+
+
+
+
+        $("#overlapInputDiv").css("display", "flex");
+        $('#updateRidgeLine').append(svg.node());
+}
+
 // 주식차트
 function candleStickChart() {
 	var dom = document.getElementById("candlestick-chart-container");

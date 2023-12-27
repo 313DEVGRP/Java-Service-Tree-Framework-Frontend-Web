@@ -1041,7 +1041,7 @@
 					<blockquote
 						class="font13"
 						style="margin-top: 5px">
-						선택한 제품(서비스), 버전, 기간(최대 30일)의 업데이트된 요구사항과 그에 연결된 이슈의 타임라인을 확인할 수 있습니다.
+						선택한 제품(서비스), 버전, 기간(최대 30일)의 업데이트된 요구사항과 그에 연결된 이슈의 업데이트 현황을 확인할 수 있습니다.
 					</blockquote>
 					<div class="timeline-period col-md-4">
 						<label
@@ -1121,18 +1121,34 @@
 										class="font13"
 										style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
-										이슈별 진행기간
+										요구사항 업데이트 현황
 									</span>
 								</h4>
 								<div
 									class="gradient_middle_border"
-									style="width: 100%; margin-top: 8px"></div>
+									style="width: 100%; margin-top: 8px;"></div>
 							</header>
 							<div
 								class="body"
 								id="sevenTimeLineBody"
-								style="overflow: hidden; height: 780px">
-								<div id="detailTimeLine"></div>
+								style="overflow: hidden; height: 780px;">
+
+								<div id="overlapInputDiv" style="display: none; align-items: center; justify-content: space-between;">
+									<!--<form style="margin-right: 10px;">
+										<input type="radio" id="reqRadio" name="option" value="reqRadio">
+										<label for="reqRadio"><span>요구사항 업데이트 현황</span></label><br>
+										<input type="radio" id="issueRadio" name="option" value="issueRadio" checked>
+										<label for="issueRadio"><span>요구사항 기준 연결된 이슈 업데이트 현황</span></label>
+									</form>-->
+
+									<div style="display: flex; align-items: center;">
+										<span style="margin-right: 10px;">높이 조절</span>
+										<input type="number" id="overlapNumberInput" name="overlapNumberInput" min="1" max="10" step="0.1" style="height: 20px; background: #323232; margin-right: 10px;">
+										<input type="range" min="0" max="9" step="0.1" id="overlapInput" value="2" style="width: 150px; background: #323232;">
+									</div>
+								</div>
+								<div id="updateRidgeLine" style="text-align:center;">
+								</div>
 							</div>
 						</section>
 					</div>
@@ -1171,39 +1187,11 @@
 		fill: white;
 	}
 
-	#detailTimeLine {
-		min-height: 340px;
-		position: relative;
-	}
-	#detailTimeLine p {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-	#detailTimeLine svg {
-		height: auto;
-		width: auto;
-		display: initial;
-	}
 	.timelines-chart .axises .y-axis text,
 	.timelines-chart .axises .grp-axis text {
 		fill: white;
 	}
-	#detailTimeLine {
-		position: relative;
-	}
-	#detailTimeLine p {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-	#detailTimeLine svg {
-		height: auto;
-		width: auto;
-		display: initial;
-	}
+
 	.timelines-chart .axises .y-axis text,
 	.timelines-chart .axises .grp-axis text {
 		fill: white;
