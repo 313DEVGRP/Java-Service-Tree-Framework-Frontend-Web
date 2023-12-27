@@ -154,15 +154,15 @@ function makePdServiceSelectBox() {
 		var endPointUrl = "";
 
 		if (checked) {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
+			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=true";
 		} else {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
+			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=false";
 		}
-		//이슈리스트 데이터테이블
+		// 이슈리스트 데이터테이블
 		dataTableLoad($("#selected_pdService").val(), endPointUrl);
-		//통계로드
+		// 통계로드
 		statisticsLoad($("#selected_pdService").val(), null);
-		//진행상태 가져오기
+		// 진행상태 가져오기
 		progressLoad($("#selected_pdService").val(), null);
 
 		resourceLoad($("#selected_pdService").val(), null);
@@ -276,11 +276,11 @@ function makeVersionMultiSelectBox() {
 
 			if (checked) {
 				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
+					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=true&versionTag=" + versionTag;
 				dataTableLoad($("#selected_pdService").val(), endPointUrl);
 			} else {
 				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
+					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=false&versionTag=" + versionTag;
 				dataTableLoad($("#selected_pdService").val(), endPointUrl);
 			}
 		}
@@ -324,16 +324,16 @@ function bind_VersionData_By_PdService() {
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function dataTableLoad(selectId, endPointUrl) {
 	var columnList = [
-		{ name: "c_pdservice_link", title: "제품(서비스) 아이디", data: "c_pdservice_link", visible: false },
+		{ name: "id", title: "이슈 아이디", data: "id", visible: false },
 		{
-			name: "c_pdservice_name",
-			title: "제품(서비스)",
-			data: "c_pdservice_name",
+			name: "key",
+			title: "이슈 키",
+			data: "key",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -548,7 +548,7 @@ function dataTableLoad(selectId, endPointUrl) {
 	var orderList = [[1, "asc"]];
 	var jquerySelector = "#reqstatustable";
 	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
-	var jsonRoot = "";
+	var jsonRoot = "body";
 	var buttonList = [
 		"copy",
 		"excel",
@@ -603,22 +603,6 @@ function dataTableDrawCallback(tableInfo) {
 		.columns.adjust()
 		.responsive.recalc();
 }
-
-$("#checkbox1").click(function () {
-	var checked = $("#checkbox1").is(":checked");
-	var endPointUrl = "";
-	var versionTag = $(".multiple-select").val();
-
-	if (checked) {
-		endPointUrl =
-			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true&versionTag=" + versionTag;
-		dataTableLoad($("#selected_pdService").val(), endPointUrl);
-	} else {
-		endPointUrl =
-			"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-		dataTableLoad($("#selected_pdService").val(), endPointUrl);
-	}
-});
 
 $("#copychecker").on("click", function () {
 	reqStatusDataTable.button(".buttons-copy").trigger();
