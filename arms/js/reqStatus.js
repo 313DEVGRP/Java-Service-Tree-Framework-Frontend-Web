@@ -333,7 +333,7 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data == false) {
 					return "<div style='color: #808080'>" + row.parentReqKey + "의 연결 이슈</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #E49400'>" + row.key + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + row.key + "</div>";
 				}
 				return data;
 			},
@@ -349,9 +349,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -367,9 +367,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -385,9 +385,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -403,9 +403,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -421,9 +421,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -439,9 +439,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -457,9 +457,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -475,9 +475,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -493,9 +493,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
@@ -511,9 +511,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #E49400'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
 			},
