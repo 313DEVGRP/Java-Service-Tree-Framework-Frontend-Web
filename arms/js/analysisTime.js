@@ -410,12 +410,16 @@ function dateTimePickerBinding() {
 		onSelectDate: function(ct, $i) {
 			var startDate = $('#timeline_start_date').datetimepicker('getValue');
 			var endDate = $('#timeline_end_date').datetimepicker('getValue');
-			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+			//var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            var monthDifference = endDate.getMonth() - startDate.getMonth() +
+                     (12 * (endDate.getFullYear() - startDate.getFullYear()));
 
-			if (dayDifference > 31) {
-				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+
+			if (monthDifference > 6) {
+				alert('시작일과 종료일의 차이는 최대 6개월입니다.');
 				var newDate = new Date(endDate);
-				newDate.setDate(endDate.getDate() - 30);
+				//newDate.setDate(endDate.getDate() - 30);
+				newDate.setMonth(endDate.getMonth() - 6);
 				$i.val(formatDate(newDate));
 			}
 		}
@@ -434,12 +438,13 @@ function dateTimePickerBinding() {
 		onSelectDate: function(ct, $i) {
 			var startDate = $('#timeline_start_date').datetimepicker('getValue');
 			var endDate = $('#timeline_end_date').datetimepicker('getValue');
-			var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
-
-			if (dayDifference > 31) {
-				alert('시작일과 종료일의 차이는 최대 30일입니다.');
+			//var dayDifference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            var monthDifference = endDate.getMonth() - startDate.getMonth() +
+                     (12 * (endDate.getFullYear() - startDate.getFullYear()));
+			if (monthDifference > 6) {
+				alert('시작일과 종료일의 차이는 최대 6개월입니다.');
 				var newDate = new Date(startDate);
-				newDate.setDate(startDate.getDate() + 30);
+				newDate.setMonth(startDate.getMonth() + 6);
 				$i.val(formatDate(newDate));
 			}
 		},
@@ -459,12 +464,9 @@ function baseDateReset() {
     let aMonthAgo = new Date();
     aMonthAgo.setDate(today.getDate() - 30);
 
-    let aWeekAgo = new Date();
-    aWeekAgo.setDate(today.getDate() - 7);
-
     $("#scatter_start_date").val(formatDate(aMonthAgo));
     $("#multi_stack_start_date").val(formatDate(aMonthAgo));
-    $("#timeline_start_date").val(formatDate(aWeekAgo));
+    $("#timeline_start_date").val(formatDate(aMonthAgo));
 }
 
 function waitForGlobalDeadline() {
