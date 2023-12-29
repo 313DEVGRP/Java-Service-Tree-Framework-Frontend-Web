@@ -1157,7 +1157,6 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 						pdServiceName = elements["pdServiceName"];
 					}
 				});
-
 				let dataObject = {};
 				let issueStatusSet = new Set();
 				let issueStatusList = [];
@@ -1166,7 +1165,7 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 						// 버전이름 가져오기
 						let versionName ="";
 						for (let j = 0; j < versionListData.length; j++) {
-							if(result[i]["상품_서비스_버전"] === versionListData[j]["c_id"]){
+							if(result[i]["제품_서비스_버전"] === versionListData[j]["c_id"]){
 								versionName = versionListData[j]["c_title"].replaceAll(".","_");
 								break;
 							}
