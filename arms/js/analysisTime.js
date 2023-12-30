@@ -1858,42 +1858,24 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)
 		.build();
-	const ridgeLineReqUrl = new UrlBuilder()
-    		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-ridgeline")
-    		.addQueryParam("pdServiceLink", pdServiceLink)
-    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-    		.addQueryParam("일자기준", "updated")
-    		.addQueryParam("isReqType", "REQUIREMENT")
-    		.addQueryParam("시작일", startDate)
-    		.addQueryParam("종료일", endDate)
-    		.addQueryParam("크기", 1000)
-    		.addQueryParam("하위크기", 1000)
-    		.addQueryParam("컨텐츠보기여부", true)
-    		.build();
 
     function executeAjaxCall(url) {
-            $.ajax({
-                url: url,
-                type: "GET",
-                contentType: "application/json;charset=UTF-8",
-                dataType: "json",
-                progress: true,
-                statusCode: {
-                    200: function (data) {
-                        console.log("[ analysisTime :: UrlData ] :: = ");
-                        console.log(data);
-                        var data = transformData(data);
-                        updateRidgeLine(data);
-                    }
+        $.ajax({
+            url: url,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (data) {
+                console.log("[ analysisTime :: ridgeLineData ] :: = ");
+                console.log(data);
+                updateRidgeLine(data);
                 }
-            });
-        }
-    executeAjaxCall(ridgeLineIssueUrl);
-   /* if ($("#issueRadio").is(":checked")) {
-        executeAjaxCall(ridgeLineIssueUrl);
-    } else if ($("#reqRadio").is(":checked")) {
-        executeAjaxCall(ridgeLineReqUrl);
-    }*/
+            }
+        });
+    }
+    executeAjaxCall(ridgeLineUrl);
 }
 
 function getColorByVersion(version) {
