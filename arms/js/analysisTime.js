@@ -99,6 +99,7 @@ function execDocReady() {
 
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
+
 		})
 		.catch(function (error) {
 			console.error("플러그인 로드 중 오류 발생" + error);
@@ -159,7 +160,6 @@ function makePdServiceSelectBox() {
 		//        } else {
 		//            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
 		//        }
-		
 		console.log("[ analysisTime :: makePdServiceSelectBox ] :: 선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
 
 	});
@@ -216,8 +216,6 @@ function bind_VersionData_By_PdService() {
 
 				// vertical timeline chart
 				//verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
-                // detail timeline chart
-				//detailTimeLineChart(selectedPdServiceId, selectedVersionId);
 
 				timeLineChart(selectedPdServiceId, selectedVersionId);
 
@@ -1848,7 +1846,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
             }
         });
 
-	const ridgeLineIssueUrl = new UrlBuilder()
+	const ridgeLineUrl = new UrlBuilder()
 		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-ridgeline")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
@@ -1897,47 +1895,6 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
         executeAjaxCall(ridgeLineReqUrl);
     }*/
 }
-//// 등고선 차트
-function transformData(data) {
-    let result = Object.entries(data).reduce((result, [version, dateObj]) => {
-        Object.entries(dateObj).forEach(([date, nameObj]) => {
-            Object.entries(nameObj).forEach(([name, arr]) => {
-                result.push({
-                    version: version,
-                    date: new Date(date),
-                    name: "요구사항 "+name,
-                    value: arr.length
-                });
-            });
-        });
-        return result;
-    }, []);
-
-    // 결과가 하나일 경우 앞 뒤로 날짜를 추가하고 value를 0으로 설정
-    if (result.length == 1) {
-        let previousDay = new Date(result[0].date);
-        previousDay.setDate(previousDay.getDate() - 1);
-        let nextDay = new Date(result[0].date);
-        nextDay.setDate(nextDay.getDate() + 1);
-
-        result.unshift({
-            version: result[0].version,
-            date: previousDay,
-            name: result[0].name,
-            value: 0
-        });
-
-        result.push({
-            version: result[0].version,
-            date: nextDay,
-            name: result[0].name,
-            value: 0
-        });
-    }
-
-    return result;
-}
-
 
 function getColorByVersion(version) {
 
@@ -1951,35 +1908,44 @@ function getColorByVersion(version) {
     return colorPalette[versionNumber % colorPalette.length];
 }
 function updateRidgeLine(traffic){
+    // 데이터가 없을 경우
     if (!traffic || traffic.length === 0) {
+        document.getElementById("overlapInputDiv").style.display = "none";
+        document.getElementById("updateRidgeLine").innerHTML = "<p style='text-align: center; position: absolute; top: 48%; left:50%;'>" +
+            "데이터가 없습니다.</p>";
         return;
+    } else {
+
+        document.getElementById("overlapInputDiv").style.display = "flex";
     }
-  var overlapInput = document.getElementById("overlapInput");
-    var overlapNumberInput = document.getElementById("overlapNumberInput");
 
-    overlapInput.addEventListener('input', function(e) {
-        var overlap = e.target.value;
-        overlapNumberInput.value = overlap;  // 슬라이더의 값을 숫자 입력 필드에 표시합니다.
-        drawGraph(traffic, overlap);
-    });
+        function setOverlapInputListener() {
+            var overlap = this.value;
+            overlapNumberInput.value = overlap;
+            drawGraph(traffic, overlap);
+        }
 
-    overlapNumberInput.addEventListener('input', function(e) {
-        var overlap = e.target.value;
-        overlapInput.value = overlap;  // 숫자 입력 필드의 값을 슬라이더에 표시합니다.
-        drawGraph(traffic, overlap);
-    });
+        function setOverlapNumberInputListener() {
+            var overlap = this.value;
+            overlapInput.value = overlap;
+            drawGraph(traffic, overlap);
+        }
 
-    var trafficLength = traffic.length;
-    var initialOverlap = trafficLength > 30 ? 5 : 2;
-    overlapInput.value = initialOverlap;
-    overlapNumberInput.value = initialOverlap;
+        overlapInput.removeEventListener('input', setOverlapInputListener);
+        overlapNumberInput.removeEventListener('input', setOverlapNumberInputListener);
 
+        overlapInput.addEventListener('input', setOverlapInputListener);
+        overlapNumberInput.addEventListener('input', setOverlapNumberInputListener);
+
+    var initialOverlap = traffic.length > 30 ? 5 : 2;
+    document.getElementById("overlapInput").value = initialOverlap;
+    document.getElementById("overlapNumberInput").value = initialOverlap;
     drawGraph(traffic, initialOverlap);
 }
-function drawGraph(traffic, overlap){updateRidgeLine
 
-        document.getElementById("updateRidgeLine").innerHTML = "";
 
+function drawGraph(traffic, overlap){
+document.getElementById("updateRidgeLine").innerHTML = "";
         var nestedDataByDate = d3.nest()
                 .key(function(d) { return +new Date(d.date); })
         		.entries(traffic);
@@ -1996,19 +1962,21 @@ function drawGraph(traffic, overlap){updateRidgeLine
         	return valueObj ? valueObj.value : null;
         	});
         	var version = d.values[0] ? d.values[0].version : null;  // version 필드 추가
-            return { name: d.key, values: values, version: version };  // version 값 포함하여 반환
+        	var summary = d.values[0] ? d.values[0].summary : null;  // version 필드 추가
+        	var key = d.values[0] ? d.values[0].name : null;  // version 필드 추가
+            return { name: summary, values: values, version: version ,key:key};  // version 값 포함하여 반환
         });
 
         //const overlap = 4;
-        const width = 928;
+        const width = 900;
         //const height = series.length * 30;
-        const minHeight = 500;
-        const maxHeight = 780;
-        const height = Math.max(minHeight, Math.min(maxHeight, series.length * 20));
+        const minHeight = 600;
+        const maxHeight = 650;
+        const height = Math.max(minHeight, Math.min(maxHeight, series.length * 16));
         const marginTop = 100;
         const marginRight = 0;
         const marginBottom = 0;
-        const marginLeft = 120;
+        const marginLeft = 280;
         		// Create the scales.
         const x = d3.scaleTime()
             .domain(d3.extent(dates))
@@ -2018,9 +1986,6 @@ function drawGraph(traffic, overlap){updateRidgeLine
             .domain(series.map(d => d.name))
             .range([marginTop, height - marginBottom]);
 
-        /*const z = d3.scaleLinear()
-            .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
-            .range([0, -overlap * y.step()]);*/
          const z = d3.scaleLinear()
                 .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
                 .range([0, -overlap * y.step()]);
@@ -2053,8 +2018,8 @@ function drawGraph(traffic, overlap){updateRidgeLine
             .attr("transform", `translate(${marginLeft},0)`)
             .call(d3.axisLeft(y).tickSize(0).tickPadding(4))
             .call(g => g.select(".domain").remove())
-            .selectAll("text")  // y축의 모든 텍스트 요소에 접근
-            .style("font-size", "12px");  // y축 텍스트 크기 조절;
+           .selectAll(".tick text")
+           .style("font-size", "10px");
 
         		// Append a layer for each series.
         const group = svg.append("g")
@@ -2070,35 +2035,35 @@ function drawGraph(traffic, overlap){updateRidgeLine
         group.append("path")
             .attr("fill", d => getColorByVersion(d.version))
             .attr("d", d => area(d.values))
-            .on("mouseover", function(d, i) {
-                d3.select(this)
-                    .transition()
-                    .duration(20)
-                    .style("opacity", 0.4);
-                div.transition()
-                    .duration(20)
-                    .style("opacity", .9);
-                div.html("버전 정보: " +convertVersionIdToTitle(d.version))
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-            .on("mouseout", function() {
-                d3.select(this)
-                    .transition()
-                    .duration(20)
-                    .style("opacity", 1);
-                div.transition()
-                    .duration(20)
-                    .style("opacity", 0);
-            });
+            .on("mouseover", function(d) {
+                    var event = d3.event;
+                    d3.select(this)
+                        .transition()
+                        .duration(20)
+                        .style("opacity", 0.4);
+                    div.transition()
+                        .duration(20)
+                        .style("opacity", .9);
+                    div.html("버전 정보: " + convertVersionIdToTitle(d.version) +
+                             "<br>요구사항 키: " + d.key +
+                             "<br>요구사항 제목: " + d.name)
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(20)
+                        .style("opacity", 1);
+                    div.transition()
+                        .duration(20)
+                        .style("opacity", 0);
+                });
         group.append("path")
             .attr("fill", "none")
             .attr("stroke","#EBEDF0") //.attr("stroke", d => getColorByVersion(d.version))
             .attr("stroke-width", 0.5)
             .attr("d", d => line(d.values));
-
-
-
 
         $("#overlapInputDiv").css("display", "flex");
         $('#updateRidgeLine').append(svg.node());
