@@ -780,7 +780,7 @@ async function drawVersionProgress(data) {
 	totalDate = Math.floor(Math.abs((new Date(latestEndDate) - new Date(fastestStartDate)) / (1000 * 60 * 60 * 24)) + 1);
 
     var mouseover = function (d) {
-        var hoverData = d.target.__data__;
+        var hoverData = d;
         var subgroupId = hoverData.version_id;
         var subgroupName = hoverData.version_name;
         var subgroupValue = new Date(hoverData.start_date).toLocaleDateString() + " ~ " + new Date(hoverData.end_date).toLocaleDateString();
@@ -791,10 +791,10 @@ async function drawVersionProgress(data) {
 		d3.selectAll(".wave-" + subgroupId).style("opacity", 1);
 	};
 
-    var mousemove = function (d) {
-        var [x, y] = d3.pointer(d);
-        tooltip.style("left", (x + 120) + "px").style("top", (y + 150) + "px");
-    };
+	var mousemove = function (d) {
+		var [x, y] = d3.mouse(this);
+		tooltip.style("left", (x + 120) + "px").style("top", (y + 150) + "px");
+	};
 
 	var mouseleave = function (d) {
 		tooltip.style("opacity", 0);
