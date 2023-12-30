@@ -1534,17 +1534,6 @@ function responsivefy(svg) {
 	}
 }
 
-// var debounceRenderTreeBar = _.debounce(function() {
-// 	var charts = document.getElementById('tree_bar_container');
-// 	var width = charts.offsetWidth;
-// 	var height = charts.offsetHeight;
-//
-// 	d3.select("#tree_bar_container svg").selectAll("*").remove();
-// 	renderTreeBar(data, assigneeData, maxValue, width, height);
-// }, 50);
-//
-// window.addEventListener('resize', debounceRenderTreeBar);
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //요구사항 현황 데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
