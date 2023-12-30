@@ -1178,6 +1178,13 @@ svg .ghostCircle.show {
 }
 
 /* vertical timeline chart */
+#vertical-timeline {
+	overflow-y: auto;
+	height: 732px;
+	padding-right: 20px;
+	margin: 0px;
+}
+
 .timeline-container {
 	margin-bottom: 20px;
 }
@@ -1186,10 +1193,9 @@ svg .ghostCircle.show {
 	margin: 0;
 	list-style: none;
 	position: relative;
-	padding: 1px 0 0 75px;
 	color: #fff;
 	font-size: 13px;
-	padding-top: 15px;
+	padding: 15px 0 0 75px;
 }
 
 .timeline-container ul:before {
@@ -1203,14 +1209,14 @@ svg .ghostCircle.show {
 .timeline-container .session {
 	position: relative;
 	margin-left: 30px;
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: rgba(51, 51, 51, 1);
 	padding: 14px;
 	border-radius: 6px;
 	box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.08);
 }
 
 .timeline-container .session:not(:first-child) {
-	margin-top: 60px;
+	margin-top: 40px;
 }
 
 .timeline-container .session > span {
@@ -1229,7 +1235,7 @@ svg .ghostCircle.show {
 	border-radius: 50%;
 	border: 2px solid #fff;
 	position: absolute;
-	background: #86b7e7;
+	background: #5470C6FF;
 	left: -4px;
 	top: 0;
 }
@@ -1251,21 +1257,17 @@ svg .ghostCircle.show {
 	top: calc(100% - 5px);
 }
 
-.timeline-container .session-content {
-	/*margin-left: 10px;*/
-}
-
-.timeline-container .session-content .title {
+.timeline-container .session-content .version {
 	font-weight: 600;
-	font-size: 12px;
+	font-size: 14px;
 }
 
-.timeline-container .session-content .info {
+.timeline-container .session-content .summary {
 	margin-top: 5px;
 	font-weight: 300;
 }
 
-.timeline-container .session-content .type {
+.timeline-container .session-content .issuekey {
 	margin-top: 5px;
 	font-weight: 600;
 	font-size: 12px;

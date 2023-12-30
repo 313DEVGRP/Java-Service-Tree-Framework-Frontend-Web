@@ -1683,14 +1683,14 @@ function verticalTimeLineChart(data) {
 		versionData.forEach(item => {
 			if (!contentSet[item.summary]) { // 중복 체크
 				contentSet[item.summary] = {
-					title: convertVersionIdToTitle(item.pdServiceVersion),
-					content: item.summary,
-					type: [item.key],
+					version: item.pdServiceVersion,
+					summary: item.summary,
+					issuekey: [item.key],
 					date: formatDateTime(item.updated)
 				};
 			} else {
-				contentSet[item.summary].type.push(item.key);
-				contentSet[item.summary].type.sort();
+				contentSet[item.summary].issuekey.push(item.key);
+				contentSet[item.summary].issuekey.sort();
 			}
 		});
 
@@ -1699,8 +1699,11 @@ function verticalTimeLineChart(data) {
 
 	items = Object.values(contentSet).map(item => ({
 		...item,
-		type: item.type.join('  |  ')
+		issuekey: item.issuekey.join('  |  ')
 	}));
+
+	// 날짜를 기준으로 오름차순 정렬
+	items.sort((a, b) => new Date(a.date) - new Date(b.date));
 
 	makeVerticalTimeline(items);
 
@@ -1746,10 +1749,14 @@ function makeVerticalTimeline(data) {
 	// $container.append(upIcon);
 
 	if (data.length == 0) {
-		$container.innerHTML +=
-			"<p style='text-align: center; top: 48%;" +
-			"    left: 40%;" +
-			"    position: absolute;'>데이터가 없습니다.</p>";
+		const noDataMessage = document.createElement('p');
+		noDataMessage.textContent = '데이터가 없습니다.';
+		noDataMessage.style.position = 'absolute';
+		noDataMessage.style.top = '50%';
+		noDataMessage.style.left = '50%';
+		noDataMessage.style.transform = 'translate(-50%, -50%)';
+
+		$container.appendChild(noDataMessage);
 	} else {
 		// 날짜별로 데이터 그룹화
 		let groupedData = data.reduce((group, item) => {
@@ -1762,7 +1769,7 @@ function makeVerticalTimeline(data) {
 		const $ul = document.createElement("ul");
 
 		Object.entries(groupedData).forEach(([date, items]) => {
-			items.forEach(({title, content, type}, index) => {
+			items.forEach(({version, summary, issuekey}, index) => {
 				const $li = document.createElement("li");
 				$li.className = "session";
 
@@ -1775,9 +1782,9 @@ function makeVerticalTimeline(data) {
 				}
 				$li.innerHTML += `
                 <div class="session-content">
-                  <div class="title">${title}</div>
-                  <div class="info">${content}</div>
-                  <div class="type">${type}</div>
+                  <div class="version" style="color: ${getColorByVersion(version)}">${convertVersionIdToTitle(version)}</div>
+                  <div class="summary">${summary}</div>
+                  <div class="issuekey">${issuekey}</div>
                 </div>
                 `;
 
@@ -1787,6 +1794,8 @@ function makeVerticalTimeline(data) {
 
 		$container.append($ul);
 	}
+
+	adjustHeight();
 
 	// const downIcon = document.createElement("i");
 	// downIcon.className = "fa fa-chevron-down vertical-chevron-down";
@@ -1826,7 +1835,6 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 			.addQueryParam("isReqType", "REQUIREMENT")
     		.addQueryParam("시작일", startDate)
     		.addQueryParam("종료일", endDate)
-    		.addQueryParam("sortField", "updated")
     		.addQueryParam("크기", 1000)
     		.addQueryParam("하위크기", 1000)
     		.addQueryParam("컨텐츠보기여부", true)
@@ -1876,6 +1884,10 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
         });
     }
     executeAjaxCall(ridgeLineUrl);
+
+	window.addEventListener("resize", function() {
+		adjustHeight();
+	});
 }
 
 function getColorByVersion(version) {
@@ -2052,6 +2064,18 @@ document.getElementById("updateRidgeLine").innerHTML = "";
 
         $("#overlapInputDiv").css("display", "flex");
         $('#updateRidgeLine').append(svg.node());
+
+		adjustHeight();
+}
+
+// 차트 높이 조정
+function adjustHeight() {
+	var verticalTimeline = $('#vertical-timeline');
+	var updateRidgeLine = $('#updateRidgeLine');
+
+	if (verticalTimeline && updateRidgeLine) {
+		verticalTimeline.height(updateRidgeLine.height() + 20);
+	}
 }
 
 // 주식차트
