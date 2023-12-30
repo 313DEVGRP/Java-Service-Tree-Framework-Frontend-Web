@@ -62,8 +62,7 @@ function execDocReady() {
 			"js/analysis/resource/chart/RadialPolarBarChart.js",
 
 			//CirclePacking with d3 Chart
-			"js/analysis/resource/chart/circularPackingChart.js",
-			"js/analysis/mockData/circularPackingEx.json"
+			"js/analysis/resource/chart/circularPackingChart.js"
 		],
 		[
 			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
