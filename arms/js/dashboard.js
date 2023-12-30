@@ -1173,7 +1173,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 				});
 
 				$(document).on('click', '#combination-chart .c3-legend-item', function () {
-					const id = $(this).text();
+					const id = this.__data__;
 					const isHidden = $(this).hasClass('c3-legend-item-hidden');
 					let docCount = 0;
 
