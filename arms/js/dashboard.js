@@ -1161,39 +1161,8 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 							type: 'category',
 						},
 					},
-					tooltip: {
-						format: {
-							title: function (index) {
-								const month = Object.keys(data)[index];
-								const total = monthlyTotals[month];
-								return `${month} | Total : ${total}`;
-							},
-						},
-					}
 				});
 
-				$(document).on('click', '#combination-chart .c3-legend-item', function () {
-					const id = this.__data__;
-					const isHidden = $(this).hasClass('c3-legend-item-hidden');
-					let docCount = 0;
-
-					for (const month in data) {
-						if (data[month].statuses.hasOwnProperty(id)) {
-							docCount = data[month].statuses[id];
-						} else if (id === '요구사항') {
-							docCount = data[month].totalRequirements;
-						}
-					}
-
-					// 월별 통계 값 업데이트
-					for (const month in data) {
-						if (isHidden) {
-							monthlyTotals[month] -= docCount;
-						} else {
-							monthlyTotals[month] += docCount;
-						}
-					}
-				});
 			}
 		}
 	});
