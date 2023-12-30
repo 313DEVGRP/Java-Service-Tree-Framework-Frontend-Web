@@ -1409,11 +1409,14 @@ function treeBar() {
 }
 
 function renderTreeBar(data, assigneeData, maxValue) {
+	const charts = document.getElementById("tree_bar_container");
 	const $container = document.getElementById("tree_bar_container"),
 		width = $container.offsetWidth,
 		height = $container.offsetHeight,
 		svg = d3.select("#tree_bar_container svg"),
-		g = svg.append("g").attr("transform", "translate(10,10)"),
+		g = svg.append("g").attr("transform", "translate(10,10)").attr('width', width)
+			.attr('height', height)
+			.call(responsivefy),
 		experienceName = Array(maxValue).fill("").map((_, i) => (i+1 === maxValue ? maxValue.toString() : "")),
 		formatSkillPoints = function (d) {
 			return experienceName[d % maxValue];
@@ -1507,8 +1510,40 @@ function renderTreeBar(data, assigneeData, maxValue) {
 		.call(d3.axisBottom().scale(xScale).ticks(5).tickSize(-height, 0, 0).tickFormat(""));
 
 	svg.selectAll(".grid").select("line").style("stroke-dasharray", "1,1").style("stroke", "white");
+	responsivefy(svg);
+}
+function responsivefy(svg) {
+	const container = d3.select(svg.node().parentNode),
+		width = parseInt(svg.style('width'), 10),
+		height = parseInt(svg.style('height'), 10),
+		aspect = width / height;
+
+	svg.attr('viewBox', `0 0 ${width} ${height}`)
+		.attr('preserveAspectRatio', 'xMinYMid')
+		.call(resize);
+
+	d3.select(window).on(
+		'resize.' + container.attr('id'),
+		resize
+	);
+	function resize() {
+		const w = parseInt(container.style('width')) + 50;
+
+		svg.attr('width', w);
+		svg.attr('height', Math.round(w / aspect));
+	}
 }
 
+// var debounceRenderTreeBar = _.debounce(function() {
+// 	var charts = document.getElementById('tree_bar_container');
+// 	var width = charts.offsetWidth;
+// 	var height = charts.offsetHeight;
+//
+// 	d3.select("#tree_bar_container svg").selectAll("*").remove();
+// 	renderTreeBar(data, assigneeData, maxValue, width, height);
+// }, 50);
+//
+// window.addEventListener('resize', debounceRenderTreeBar);
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //요구사항 현황 데이터 테이블
