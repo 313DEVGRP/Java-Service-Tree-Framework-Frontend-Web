@@ -1946,7 +1946,7 @@ document.getElementById("updateRidgeLine").innerHTML = "";
         	var version = d.values[0] ? d.values[0].version : null;  // version 필드 추가
         	var summary = d.values[0] ? d.values[0].summary : null;  // version 필드 추가
         	var key = d.values[0] ? d.values[0].name : null;  // version 필드 추가
-            return { name: summary, values: values, version: version ,key:key};  // version 값 포함하여 반환
+            return { name: key+": "+summary, values: values, version: version ,key:key};  // version 값 포함하여 반환
         });
 
         //const overlap = 4;
@@ -2001,6 +2001,9 @@ document.getElementById("updateRidgeLine").innerHTML = "";
             .call(d3.axisLeft(y).tickSize(0).tickPadding(4))
             .call(g => g.select(".domain").remove())
            .selectAll(".tick text")
+           .text(function(d) {
+            return d.length > 42 ? d.slice(0, 35) + ' . . .' : d; // 긴 레이블은 축약
+                          })
            .style("font-size", "10px");
 
         		// Append a layer for each series.
