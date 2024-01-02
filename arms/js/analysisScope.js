@@ -1133,16 +1133,29 @@ function formatDate(date) {
 /////////////////////////////////////////////////////////
 function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees")
+		.addQueryParam("요구_사항.isReqType","REQUIREMENT")
+		.addQueryParam("요구_사항.pdServiceLink", selectedPdServiceId)
+		.addQueryParam("요구_사항.pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('요구_사항.메인그룹필드', "pdServiceVersion")
+		.addQueryParam('요구_사항.컨텐츠보기여부', false)
+		.addQueryParam('요구_사항.크기', 10000)
+		.addQueryParam('요구_사항.하위그룹필드들', "key,assignee.assignee_emailAddress.keyword")
+		.addQueryParam('요구_사항.하위크기', 10000)
+		.addQueryParam("하위_이슈_사항.isReqType","ISSUE")
+		.addQueryParam("하위_이슈_사항.pdServiceLink", selectedPdServiceId)
+		.addQueryParam("하위_이슈_사항.pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('하위_이슈_사항.메인그룹필드', "parentReqKey")
+		.addQueryParam('하위_이슈_사항.컨텐츠보기여부', false)
+		.addQueryParam('하위_이슈_사항.크기', 10000)
+		.addQueryParam('하위_이슈_사항.하위그룹필드들', "assignee.assignee_emailAddress.keyword")
+		.addQueryParam('하위_이슈_사항.하위크기', 10000)
+		.build();
+
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees2",
+		url: url,
 		type: "GET",
-		data: {
-			pdServiceLink: pdServiceLink,
-			pdServiceVersionLinks: pdServiceVersionLinks,
-			메인그룹필드: "pdServiceVersion",
-			하위그룹필드들: "isReq",
-			컨텐츠보기여부: true
-		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
@@ -1170,13 +1183,13 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 							}
 						}
 						let verSubObject = {};
-						    result[i]["요구사항들"].forEach((element) => {
-								// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
-								if (element["작업자수"] !== 0) {
-									verSubObject[element["요구_사항_번호"]] =
-										{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
-									issueStatusSet.add(element["요구_사항_상태"]);
-								}
+						result[i]["요구사항들"].forEach((element) => {
+							// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
+							if (element["작업자수"] !== 0) {
+								verSubObject[element["요구_사항_번호"]] =
+									{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
+								issueStatusSet.add(element["요구_사항_상태"]);
+							}
 						});
 						dataObject[versionName] = verSubObject;
 					}
@@ -1187,7 +1200,6 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 		}
 	});
 }
-
 
 /////////////////////////////////////////////////////////
 // Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
