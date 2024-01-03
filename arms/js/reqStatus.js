@@ -266,7 +266,6 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 function makeVersionMultiSelectBox() {
 	//버전 선택 셀렉트 박스 이니시에이터
 	$(".multiple-select").multipleSelect({
-		maxHeight: 500,
 		filter: true,
 		onClose: function () {
 			console.log("onOpen event fire!\n");
