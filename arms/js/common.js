@@ -461,7 +461,7 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 		})
 		.jstree({
 			// List of active plugins
-			plugins: ["themes", "json_data", "ui", "crrm", "cookies", "dnd", "search", "types", "hotkeys", "contextmenu"],
+			plugins: ["themes", "json_data", "ui", "crrm", "dnd", "search", "types"],
 			themes: { theme: ["lightblue4"] },
 			//contextmenu
 			contextmenu: {
@@ -1635,3 +1635,5 @@ function chnageLoocale() {
 
 	setLocale(localeSelect.options[localeSelect.selectedIndex].value);
 }
+
+

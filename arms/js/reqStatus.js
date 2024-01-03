@@ -266,6 +266,7 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 function makeVersionMultiSelectBox() {
 	//버전 선택 셀렉트 박스 이니시에이터
 	$(".multiple-select").multipleSelect({
+		maxHeight: 500,
 		filter: true,
 		onClose: function () {
 			console.log("onOpen event fire!\n");
@@ -490,9 +491,10 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+
+						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
 				}
 				return data;
 			},
@@ -508,9 +510,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
 				}
 				return data;
 			},
@@ -526,9 +528,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
 				}
 				return data;
 			},
