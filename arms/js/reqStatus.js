@@ -359,6 +359,21 @@ function dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		},
 		{
+			name: "pdServiceVersion",
+			title: "Version",
+			data: "pdServiceVersion",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "false") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
 			name: "summary",
 			title: "ALM Issue Title",
 			data: "summary",
