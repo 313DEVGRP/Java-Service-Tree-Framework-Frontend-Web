@@ -26,7 +26,7 @@ function execDocReady() {
 			//d3 변경
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			"../reference/jquery-plugins/c3-0.7.20/c3.min.css",
-			"../reference/jquery-plugins/c3-0.7.20/c3.min.js",
+			"../reference/jquery-plugins/c3-0.7.20/c3.js",
 			"./js/common/colorPalette.js",
 			//timeline
 			"../reference/jquery-plugins/info-chart-v1/js/D.js",
@@ -1034,7 +1034,15 @@ function donutChart(pdServiceLink, pdServiceVersionLinks) {
 
 				$(document).on('click', '#donut-chart .c3-legend-item', function () {
 					const id = $(this).text();
-					const isHidden = $(this).hasClass('c3-legend-item-hidden');
+					let isHidden = false;
+
+					if($(this).hasClass('c3-legend-item-hidden')) {
+						isHidden = false;
+						$(this).removeClass('c3-legend-item-hidden');
+					} else {
+						isHidden = true;
+						$(this).addClass('c3-legend-item-hidden');
+					}
 					let docCount = 0;
 
 					for (const status of 검색결과) {
@@ -1173,8 +1181,17 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 				});
 
 				$(document).on('click', '#combination-chart .c3-legend-item', function () {
-					const id = $(this).text();
-					const isHidden = $(this).hasClass('c3-legend-item-hidden');
+					let id = this.__data__;
+					let isHidden = false;
+
+					if($(this).hasClass('c3-legend-item-hidden')) {
+						isHidden = false;
+						$(this).removeClass('c3-legend-item-hidden');
+					} else {
+						isHidden = true;
+						$(this).addClass('c3-legend-item-hidden');
+					}
+
 					let docCount = 0;
 
 					for (const month in data) {

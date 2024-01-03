@@ -62,8 +62,7 @@ function execDocReady() {
 			"js/analysis/resource/chart/RadialPolarBarChart.js",
 
 			//CirclePacking with d3 Chart
-			"js/analysis/resource/chart/circularPackingChart.js",
-			"js/analysis/mockData/circularPackingEx.json"
+			"js/analysis/resource/chart/circularPackingChart.js"
 		],
 		[
 			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -1134,16 +1133,29 @@ function formatDate(date) {
 /////////////////////////////////////////////////////////
 function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees")
+		.addQueryParam("요구_사항.isReqType","REQUIREMENT")
+		.addQueryParam("요구_사항.pdServiceLink", selectedPdServiceId)
+		.addQueryParam("요구_사항.pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('요구_사항.메인그룹필드', "pdServiceVersion")
+		.addQueryParam('요구_사항.컨텐츠보기여부', false)
+		.addQueryParam('요구_사항.크기', 10000)
+		.addQueryParam('요구_사항.하위그룹필드들', "key,assignee.assignee_emailAddress.keyword")
+		.addQueryParam('요구_사항.하위크기', 10000)
+		.addQueryParam("하위_이슈_사항.isReqType","ISSUE")
+		.addQueryParam("하위_이슈_사항.pdServiceLink", selectedPdServiceId)
+		.addQueryParam("하위_이슈_사항.pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('하위_이슈_사항.메인그룹필드', "parentReqKey")
+		.addQueryParam('하위_이슈_사항.컨텐츠보기여부', false)
+		.addQueryParam('하위_이슈_사항.크기', 10000)
+		.addQueryParam('하위_이슈_사항.하위그룹필드들', "assignee.assignee_emailAddress.keyword")
+		.addQueryParam('하위_이슈_사항.하위크기', 10000)
+		.build();
+
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees2",
+		url: url,
 		type: "GET",
-		data: {
-			pdServiceLink: pdServiceLink,
-			pdServiceVersionLinks: pdServiceVersionLinks,
-			메인그룹필드: "pdServiceVersion",
-			하위그룹필드들: "isReq",
-			컨텐츠보기여부: true
-		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
@@ -1157,7 +1169,6 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 						pdServiceName = elements["pdServiceName"];
 					}
 				});
-
 				let dataObject = {};
 				let issueStatusSet = new Set();
 				let issueStatusList = [];
@@ -1166,19 +1177,19 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 						// 버전이름 가져오기
 						let versionName ="";
 						for (let j = 0; j < versionListData.length; j++) {
-							if(result[i]["상품_서비스_버전"] === versionListData[j]["c_id"]){
+							if(result[i]["제품_서비스_버전"] === versionListData[j]["c_id"]){
 								versionName = versionListData[j]["c_title"].replaceAll(".","_");
 								break;
 							}
 						}
 						let verSubObject = {};
-						    result[i]["요구사항들"].forEach((element) => {
-								// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
-								if (element["작업자수"] !== 0) {
-									verSubObject[element["요구_사항_번호"]] =
-										{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
-									issueStatusSet.add(element["요구_사항_상태"]);
-								}
+						result[i]["요구사항들"].forEach((element) => {
+							// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
+							if (element["작업자수"] !== 0) {
+								verSubObject[element["요구_사항_번호"]] =
+									{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
+								issueStatusSet.add(element["요구_사항_상태"]);
+							}
 						});
 						dataObject[versionName] = verSubObject;
 					}
@@ -1189,7 +1200,6 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 		}
 	});
 }
-
 
 /////////////////////////////////////////////////////////
 // Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
@@ -1410,11 +1420,14 @@ function treeBar() {
 }
 
 function renderTreeBar(data, assigneeData, maxValue) {
+	const charts = document.getElementById("tree_bar_container");
 	const $container = document.getElementById("tree_bar_container"),
 		width = $container.offsetWidth,
 		height = $container.offsetHeight,
 		svg = d3.select("#tree_bar_container svg"),
-		g = svg.append("g").attr("transform", "translate(10,10)"),
+		g = svg.append("g").attr("transform", "translate(10,10)").attr('width', width)
+			.attr('height', height)
+			.call(responsiveTreeBar),
 		experienceName = Array(maxValue).fill("").map((_, i) => (i+1 === maxValue ? maxValue.toString() : "")),
 		formatSkillPoints = function (d) {
 			return experienceName[d % maxValue];
@@ -1508,8 +1521,28 @@ function renderTreeBar(data, assigneeData, maxValue) {
 		.call(d3.axisBottom().scale(xScale).ticks(5).tickSize(-height, 0, 0).tickFormat(""));
 
 	svg.selectAll(".grid").select("line").style("stroke-dasharray", "1,1").style("stroke", "white");
+	responsiveTreeBar(svg);
 }
+function responsiveTreeBar(svg) {
+	const container = d3.select(svg.node().parentNode),
+		width = parseInt(svg.style('width'), 10),
+		height = parseInt(svg.style('height'), 10),
+		aspect = width / height;
 
+	svg.attr('viewBox', `0 0 ${width} ${height}`)
+		.attr('preserveAspectRatio', 'xMinYMid')
+		.call(resize);
+
+	d3.select(window).on(
+		'resize.' + container.attr('id'),
+		resize
+	);
+	function resize() {
+		const w = parseInt(container.style('width')) + 50;
+		svg.attr('width', w);
+		svg.attr('height', Math.round(w / aspect));
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //요구사항 현황 데이터 테이블
