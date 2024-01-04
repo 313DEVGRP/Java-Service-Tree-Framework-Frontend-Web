@@ -811,6 +811,12 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 				break;
 		}
 	});
+
+	$("#mmenu .form-search").submit(function (event) {
+		event.preventDefault();
+
+		$(jQueryElementID).jstree("search", document.getElementById("text").value);
+	});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
