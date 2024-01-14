@@ -513,6 +513,148 @@
 													placeholder="Requirement Title" />
 											</div>
 										</div>
+                                        <div class="control-group">
+                                            <label
+                                                    for="detailview_req_priority"
+                                                    class="control-label font13">
+                                                요구사항 우선순위 :
+                                            </label>
+                                            <div    class="controls form-group input-group"
+                                                    style="margin-left: 180px">
+                                                <span class="input-group-addon">
+													<i class="glyphicon glyphicon-list-alt"></i>
+												</span>
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                                    <div    id="detailview_req_priority"
+                                                            class="btn-group"
+                                                            data-toggle="buttons">
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_priority_options"
+                                                                    value="7"/>
+                                                            매우 높음
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_priority_options"
+                                                                    value="6"/>
+                                                            높음
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_priority_options"
+                                                                    value="5"/>
+                                                            중간
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_priority_options"
+                                                                    value="4"/>
+                                                            낮음
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_priority_options"
+                                                                    value="3"/>
+                                                            매우 낮음
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label
+                                                    for="detailview_req_difficulty"
+                                                    class="control-label font13">
+                                                요구사항 난이도 :
+                                            </label>
+                                            <div    class="controls form-group input-group"
+                                                    style="margin-left: 180px">
+                                                <span class="input-group-addon">
+													<i class="glyphicon glyphicon-list-alt"></i>
+												</span>
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                                    <div    id="detailview_req_difficulty"
+                                                            class="btn-group"
+                                                            data-toggle="buttons">
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_difficulty_options"
+                                                                    value="3"/>
+                                                            매우 어려움
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_difficulty_options"
+                                                                    value="4"/>
+                                                            어려움
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_difficulty_options"
+                                                                    value="5"/>
+                                                            보통
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_difficulty_options"
+                                                                    value="6"/>
+                                                            쉬움
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_difficulty_options"
+                                                                    value="7"/>
+                                                            매우 쉬움
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label
+                                                    for="detailview_req_state"
+                                                    class="control-label font13">
+                                                요구사항 상태 :
+                                            </label>
+                                            <!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+                                            <div    class="controls form-group input-group"
+                                                    style="margin-left: 180px">
+                                                <span class="input-group-addon">
+													<i class="glyphicon glyphicon-list-alt"></i>
+												</span>
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                                    <div    id="detailview_req_state"
+                                                            class="btn-group"
+                                                            data-toggle="buttons">
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_state_options"
+                                                                    value="10"/>
+                                                            열림
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_state_options"
+                                                                    value="11"/>
+                                                            진행중
+                                                        </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_state_options"
+                                                                    value="12"/>
+                                                            해결됨
+                                                        </label>
+<!--                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_state_options"
+                                                                    value="13"/>
+                                                            닫힘
+                                                        </label>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 										<div
 											class="control-group"
 											for="detailview_req_writer">
@@ -682,232 +824,380 @@
 								id="edit"
 								class="tab-pane"
 								style="padding-top: 10px !important">
-								<div
-									class="form-group"
-									style="padding-top: 10px">
-									<div class="control-group">
-										<label
-											class="control-label"
-											style="vertical-align: center">
-											요구사항 등록 모드 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div
-												class="input-group"
-												style="text-align: left">
+                                <form
+                                    class="form-horizontal" method="post">
+                                    <fieldset>
+                                        <div
+                                                class="form-group"
+                                                style="padding-top: 10px">
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        style="vertical-align: center">
+                                                    요구사항 등록 모드 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div
+                                                            class="input-group"
+                                                            style="text-align: left">
 												<span class="input-group-addon">
 													<i class="fa fa-sliders"></i>
 												</span>
-												<div
-													class="btn-group"
-													data-toggle="buttons">
-													<label
-														class="btn btn-transparent btn-sm active"
-														style="color: #f8f8f8 !important">
-														<input type="radio" />
-														요구사항 변경 모드
-													</label>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<!--										<label  class="control-label"-->
-										<!--										    	for="editview_req_pdservice_name">-->
-										<!--										    	요구사항 제품(서비스) :-->
-										<!--										</label>-->
-										<label
-											class="control-label"
-											for="editview_req_pdservice_name">
-											요구사항 제품
-											<sup>서비스</sup>
-											:
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <div
+                                                                class="btn-group"
+                                                                data-toggle="buttons">
+                                                            <label
+                                                                    class="btn btn-transparent btn-sm active"
+                                                                    style="color: #f8f8f8 !important">
+                                                                <input type="radio" />
+                                                                요구사항 변경 모드
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <!--										<label  class="control-label"-->
+                                                <!--										    	for="editview_req_pdservice_name">-->
+                                                <!--										    	요구사항 제품(서비스) :-->
+                                                <!--										</label>-->
+                                                <label
+                                                        class="control-label"
+                                                        for="editview_req_pdservice_name">
+                                                    요구사항 제품
+                                                    <sup>서비스</sup>
+                                                    :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-th-list"></i>
 												</span>
-												<input
-													id="editview_req_pdservice_name"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="제품(서비스)명을 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="edit_multi_version">
-											요구사항 버전 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <input
+                                                                id="editview_req_pdservice_name"
+                                                                disabled="disabled"
+                                                                class="form-control font13 darkBack"
+                                                                style="color: #a4c6ff"
+                                                                size="16"
+                                                                type="text"
+                                                                placeholder="제품(서비스)명을 입력해 주세요" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="edit_multi_version">
+                                                    요구사항 버전 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
-												<select
-													multiple="multiple"
-													id="edit_multi_version"
-													class="multiple-select btn-block darkBack"
-													placeholder="&nbsp;버전을 선택해주세요"
-													style="color: #a4c6ff"></select>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_id">
-											요구사항 아이디 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <select
+                                                                multiple="multiple"
+                                                                id="edit_multi_version"
+                                                                class="multiple-select btn-block darkBack"
+                                                                placeholder="&nbsp;버전을 선택해주세요"
+                                                                style="color: #a4c6ff"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="editview_req_id">
+                                                    요구사항 아이디 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-phone"></i>
 												</span>
-												<input
-													id="editview_req_id"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 아이디를 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_name">
-											요구사항 제목 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <input
+                                                                id="editview_req_id"
+                                                                disabled="disabled"
+                                                                class="form-control font13 darkBack"
+                                                                style="color: #a4c6ff"
+                                                                size="16"
+                                                                type="text"
+                                                                placeholder="요구사항 아이디를 입력해 주세요" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="editview_req_name">
+                                                    요구사항 제목 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-list-alt"></i>
 												</span>
-												<input
-													id="editview_req_name"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 제목을 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_writer">
-											요구사항 요청자 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <input
+                                                                id="editview_req_name"
+                                                                class="form-control font13 darkBack"
+                                                                style="color: #a4c6ff"
+                                                                size="16"
+                                                                type="text"
+                                                                placeholder="요구사항 제목을 입력해 주세요" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        for="editview_req_priority"
+                                                        class="control-label font13">
+                                                    요구사항 우선순위 :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 180px">
+                                                    <span class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                                    </span>
+                                                    <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                                        <div    id="editview_req_priority"
+                                                                class="btn-group"
+                                                                data-toggle="buttons">
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_priority_options"
+                                                                        value="7"/>
+                                                                매우 높음
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_priority_options"
+                                                                        value="6"/>
+                                                                높음
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_priority_options"
+                                                                        value="5"/>
+                                                                중간
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_priority_options"
+                                                                        value="4"/>
+                                                                낮음
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_priority_options"
+                                                                        value="3"/>
+                                                                매우 낮음
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        for="editview_req_difficulty"
+                                                        class="control-label font13">
+                                                    요구사항 난이도 :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 180px">
+                                                <span class="input-group-addon">
+													<i class="glyphicon glyphicon-list-alt"></i>
+												</span>
+                                                    <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                                        <div    id="editview_req_difficulty"
+                                                                class="btn-group"
+                                                                data-toggle="buttons">
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_difficulty_options"
+                                                                        value="3"/>
+                                                                매우 어려움
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_difficulty_options"
+                                                                        value="4"/>
+                                                                어려움
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_difficulty_options"
+                                                                        value="5"/>
+                                                                보통
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_difficulty_options"
+                                                                        value="6"/>
+                                                                쉬움
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_difficulty_options"
+                                                                        value="7"/>
+                                                                매우 쉬움
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        for="editview_req_state"
+                                                        class="control-label font13">
+                                                    요구사항 상태 :
+                                                </label>
+                                                <!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 180px">
+                                                <span class="input-group-addon">
+													<i class="glyphicon glyphicon-list-alt"></i>
+												</span>
+                                                    <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                                        <div    id="editview_req_state"
+                                                                class="btn-group"
+                                                                data-toggle="buttons">
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_state_options"
+                                                                        value="10"/>
+                                                                열림
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_state_options"
+                                                                        value="11"/>
+                                                                진행중
+                                                            </label>
+                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_state_options"
+                                                                        value="12"/>
+                                                                해결됨
+                                                            </label>
+<!--                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_state_options"
+                                                                        value="13"/>
+                                                                닫힘
+                                                            </label>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="editview_req_writer">
+                                                    요구사항 요청자 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-user"></i>
 												</span>
-												<input
-													id="editview_req_writer"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 요청자를 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_write_date">
-											요구사항 요청일 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <input
+                                                                id="editview_req_writer"
+                                                                disabled="disabled"
+                                                                class="form-control font13 darkBack"
+                                                                style="color: #a4c6ff"
+                                                                size="16"
+                                                                type="text"
+                                                                placeholder="요구사항 요청자를 입력해 주세요" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="editview_req_write_date">
+                                                    요구사항 요청일 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-envelope"></i>
 												</span>
-												<input
-													id="editview_req_write_date"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 요청일을 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_reviewers">
-											요구사항 리뷰어 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
+                                                        <input
+                                                                id="editview_req_write_date"
+                                                                disabled="disabled"
+                                                                class="form-control font13 darkBack"
+                                                                style="color: #a4c6ff"
+                                                                size="16"
+                                                                type="text"
+                                                                placeholder="요구사항 요청일을 입력해 주세요" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="editview_req_reviewers">
+                                                    요구사항 리뷰어 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div class="input-group">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-inbox"></i>
 												</span>
-												<select
-													id="editview_req_reviewers"
-													class="js-data-example-ajax form-control font13 darkBack"
-													name="selectedReviewers[]"
-													multiple="multiple"
-													style="width: 100%; color: #a4c6ff"></select>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="edit_tabmodal_editor">
-											요구사항 내용 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div
-												class="input-group"
-												style="padding-top: 5px">
-												<code>
-													입력 창이 좁다면 하단의
-													<span class="glyphicon glyphicon-fullscreen"></span>
-													( 풀스크린 편집 ) 아이콘을 클릭하세요
-												</code>
-											</div>
-										</div>
-										<div
-											class="col-sm-12 darkBack"
-											id="edit_tabmodal_editor">
-											<p>요구사항 내용을 기록합니다.</p>
-										</div>
-									</div>
-								</div>
+                                                        <select
+                                                                id="editview_req_reviewers"
+                                                                class="js-data-example-ajax form-control font13 darkBack"
+                                                                name="selectedReviewers[]"
+                                                                multiple="multiple"
+                                                                style="width: 100%; color: #a4c6ff"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label
+                                                        class="control-label"
+                                                        for="edit_tabmodal_editor">
+                                                    요구사항 내용 :
+                                                </label>
+                                                <div
+                                                        class="controls form-group"
+                                                        style="margin-bottom: 10px; margin-left: 180px;">
+                                                    <div
+                                                            class="input-group"
+                                                            style="padding-top: 5px">
+                                                        <code>
+                                                            입력 창이 좁다면 하단의
+                                                            <span class="glyphicon glyphicon-fullscreen"></span>
+                                                            ( 풀스크린 편집 ) 아이콘을 클릭하세요
+                                                        </code>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                        class="col-sm-12 darkBack"
+                                                        id="edit_tabmodal_editor">
+                                                    <p>요구사항 내용을 기록합니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
 							</div>
 							<div
 								id="report"
@@ -1528,6 +1818,163 @@
 									required="required" />
 							</div>
 						</div>
+                        <div class="control-group col-sm-12">
+                            <div class="controls form-group col-sm-1">&nbsp;</div>
+                            <label
+                                    for="popup_req_priority"
+                                    class="control-label"
+                                    style="color: #f8f8f8">
+                                요구사항 우선순위
+                                <span class="required">*</span>
+                                <span
+                                        class="input-group-addon"
+                                        style="display: inline !important">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</span>
+                            </label>
+                            <div    class="controls form-group input-group"
+                                    style="margin-left: 130px">
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                    <div    id="popup_req_priority"
+                                            class="btn-group"
+                                            data-toggle="buttons">
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_priority_options"
+                                                    value="7"/>
+                                            매우 높음
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_priority_options"
+                                                    value="6"/>
+                                            높음
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_priority_options"
+                                                    value="5"/>
+                                            중간
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_priority_options"
+                                                    value="4"/>
+                                            낮음
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_priority_options"
+                                                    value="3"/>
+                                            매우 낮음
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group col-sm-12">
+                            <div class="controls form-group col-sm-1">&nbsp;</div>
+                            <label
+                                    for="popup_req_difficulty"
+                                    class="control-label"
+                                    style="color: #f8f8f8">
+                                요구사항 난이도
+                                <span class="required">*</span>
+                                <span
+                                        class="input-group-addon"
+                                        style="display: inline !important">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</span>
+                            </label>
+                            <div    class="controls form-group input-group"
+                                    style="margin-left: 130px">
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                    <div    id="popup_req_difficulty"
+                                            class="btn-group"
+                                            data-toggle="buttons">
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_difficulty_options"
+                                                    value="3"/>
+                                            매우 어려움
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_difficulty_options"
+                                                    value="4"/>
+                                            어려움
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_difficulty_options"
+                                                    value="5"/>
+                                            보통
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_difficulty_options"
+                                                    value="6"/>
+                                            쉬움
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_difficulty_options"
+                                                    value="7"/>
+                                            매우 쉬움
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group col-sm-12">
+                            <div class="controls form-group col-sm-1">&nbsp;</div>
+                            <label
+                                    for="popup_req_state"
+                                    class="control-label"
+                                    style="color: #f8f8f8">
+                                요구사항 상태
+                                <span class="required">*</span>
+                                <span
+                                        class="input-group-addon"
+                                        style="display: inline !important">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</span>
+                            </label>
+                            <!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+                            <div    class="controls form-group input-group"
+                                    style="margin-left: 130px">
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
+                                    <div    id="popup_req_state"
+                                            class="btn-group"
+                                            data-toggle="buttons">
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_state_options"
+                                                    value="10"/>
+                                            열림
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_state_options"
+                                                    value="11"/>
+                                            진행중
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_state_options"
+                                                    value="12"/>
+                                            해결됨
+                                        </label>
+<!--                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_state_options"
+                                                    value="13"/>
+                                            닫힘
+                                        </label>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 						<div class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label

@@ -846,11 +846,36 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_id").val(ajaxData.c_id);
 	$("#editview_req_name").val(ajaxData.c_title);
 
-	$("#editview_req_priority").children(".btn.active").removeClass("active");
-	var slectReqPriorityID = "editview_req_priority-option" + ajaxData.c_priority;
-	$("#" + slectReqPriorityID)
-		.parent()
-		.addClass("active");
+	//상세보기 - 우선순위 버튼
+	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");
+	priorityRadioButtons.each(function() {
+		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 난이도 버튼
+	let difficultRadioButtons = $("#editview_req_difficulty input[type='radio']");
+	difficultRadioButtons.each(function() {
+		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 상태 버튼
+	let stateRadioButtons = $("#editview_req_state input[type='radio']");
+	stateRadioButtons.each(function() {
+		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
 
 	// -------------------- reviewer setting -------------------- //
 	//reviewer clear
@@ -958,14 +983,46 @@ function bindDataDetailTab(ajaxData) {
 	$("#detailview_req_id").val(ajaxData.c_id);
 	$("#detailview_req_name").val(ajaxData.c_title);
 
-	//우선순위 셋팅
-	$("#detailview_req_priority").children(".btn.active").removeClass("active");
-	var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
-	$("#" + select_Req_Priority_ID)
-		.parent()
-		.addClass("active");
+	//radio 버튼 - 선택 초기화
+	$("#popup_req_priority label").removeClass("active");
+	$("#popup_req_difficulty label").removeClass("active");
+	$("#popup_req_state label").removeClass("active");
+	//radio 버튼 - 상태 초기화
+	$("input[name='popup_req_priority_options']:checked").prop('checked', false);
+	$("input[name='popup_req_difficulty_options']:checked").prop('checked', false);
+	$("input[name='popup_req_state_options']:checked").prop('checked', false);
 
-	$("#detailview_req_status").val(ajaxData.c_req_status);
+	//상세보기 - 우선순위 버튼
+	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
+	priorityRadioButtons.each(function() {
+		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 난이도 버튼
+	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
+	difficultRadioButtons.each(function() {
+		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 상태 버튼
+	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
+	stateRadioButtons.each(function() {
+		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+
 	$("#detailview_req_writer").val(ajaxData.c_req_writer);
 	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
 
@@ -1187,7 +1244,7 @@ function registNewPopup() {
 	//요구사항 이름 초기화
 	$("#my_modal1 #req_title").val(null);
 	//에디터 내용 초기화
-	CKEDITOR.instances.modal_editor.setData("요구사항 내용을 기록합니다.");
+	CKEDITOR.instances["modal_editor"].setData("요구사항 내용을 기록합니다.");
 
 	//제품(서비스) 셋팅
 	var selectPdService = $("#selected_pdService").select2("data")[0].text;
@@ -1196,6 +1253,15 @@ function registNewPopup() {
 	//version 셋팅
 	var selectedVersion = $("#multiversion").val();
 	$("#popup_version").multipleSelect("setSelects", selectedVersion);
+
+	//radio 버튼 - 선택 초기화
+	$("#popup_req_priority label").removeClass("active");
+	$("#popup_req_difficulty label").removeClass("active");
+	$("#popup_req_state label").removeClass("active");
+	//radio 버튼 - 상태 초기화
+	$("input[name='popup_req_priority_options']:checked").prop('checked', false);
+	$("input[name='popup_req_difficulty_options']:checked").prop('checked', false);
+	$("input[name='popup_req_state_options']:checked").prop('checked', false);
 
 	//리뷰어 셋팅
 	$.ajax({
@@ -1338,34 +1404,46 @@ function save_req() {
 			c_type_value = $("input[name=reqType]:checked").val();
 		}
 
+		console.log("save_req :: popup_req_priority  -> " + $("#popup_req_priority input[name='popup_req_priority_options']:checked").val());
+		console.log("save_req :: popup_req_difficulty  -> " + $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val());
+		console.log("save_req :: popup_req_state  -> " + $("#popup_req_state input[name='popup_req_state_options']:checked").val());
+		let selectedReqPriorityLink = $("#popup_req_priority input[name='popup_req_priority_options']:checked").val();
+		let selectedReqDifficultLink = $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val();
+		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
+
+		let dataObjectParam = {
+			ref: selectedJsTreeId,
+			c_title: $("#req_title").val(),
+			c_type: c_type_value,
+			c_req_pdservice_link: $("#selected_pdService").val(),
+			c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
+			c_req_writer: "[" + userName + "]" + " - " + userID,
+			c_req_priority_link: (selectedReqPriorityLink === undefined ? "5" : selectedReqPriorityLink), // 5 - 중간
+			c_req_difficulty_link: (selectedReqDifficultLink === undefined ? "5" : selectedReqDifficultLink), // 5 - 보통
+			c_req_state_link: (selectedReqStateLink === undefined ? "10" : selectedReqStateLink), //10 - 열림
+			c_req_reviewer01: reviewers01,
+			c_req_reviewer02: reviewers02,
+			c_req_reviewer03: reviewers03,
+			c_req_reviewer04: reviewers04,
+			c_req_reviewer05: reviewers05,
+			c_req_reviewer01_status: "Draft",
+			c_req_reviewer02_status: "Draft",
+			c_req_reviewer03_status: "Draft",
+			c_req_reviewer04_status: "Draft",
+			c_req_reviewer05_status: "Draft",
+			c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
+			c_req_desc: "설명",
+			c_req_etc: "비고"
+		};
+		console.log(dataObjectParam);
+
 		if($("#popup_version").val().length >= 1) {
 			if($("#req_title").val().trim() !== "" ) {
+				/*
 				$.ajax({
 					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 					type: "POST",
-					data: {
-						ref: selectedJsTreeId,
-						c_title: $("#req_title").val(),
-						c_type: c_type_value,
-						c_req_pdservice_link: $("#selected_pdService").val(),
-						c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
-						c_req_writer: "[" + userName + "]" + " - " + userID,
-						c_req_priority_link: $("input[name='req_priority']:checked").val(),
-						c_req_state_link: 3, //요구사항 생성.
-						c_req_reviewer01: reviewers01,
-						c_req_reviewer02: reviewers02,
-						c_req_reviewer03: reviewers03,
-						c_req_reviewer04: reviewers04,
-						c_req_reviewer05: reviewers05,
-						c_req_reviewer01_status: "Draft",
-						c_req_reviewer02_status: "Draft",
-						c_req_reviewer03_status: "Draft",
-						c_req_reviewer04_status: "Draft",
-						c_req_reviewer05_status: "Draft",
-						c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
-						c_req_desc: "설명",
-						c_req_etc: "비고"
-					},
+					data: dataObjectParam,
 					statusCode: {
 						200: function () {
 							$("#req_tree").jstree("refresh");
@@ -1374,6 +1452,7 @@ function save_req() {
 						}
 					}
 				});
+				*/
 			} else {
 				alert("요구사항 제목이 없습니다.");
 				return false;
@@ -1413,28 +1492,68 @@ function click_btn_for_req_update() {
 		if ($("#editview_req_reviewers").select2("data")[4] != undefined) {
 			reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
 		}
+		console.log("click_btn_for_req_update :: editview_req_priority  -> " + $("#editview_req_priority input[name='editview_req_priority_options']:checked").val());
+		console.log("click_btn_for_req_update :: editview_req_difficulty  -> " + $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val());
+		console.log("click_btn_for_req_update :: editview_req_state  -> " + $("#editview_req_state input[name='editview_req_state_options']:checked").val());
 
+		let selectedEditReqPriorityLink = $("#editview_req_priority input[name='editview_req_priority_options']:checked").val();
+		let selectedEditReqDifficultyLink = $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val();
+		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
+		
+		let dataObjectParam = {
+			c_id: $("#editview_req_id").val(),
+			c_title: $("#editview_req_name").val(),
+			c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
+			// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
+			c_req_priority_link: (selectedEditReqPriorityLink === undefined? "5" : selectedEditReqPriorityLink), // 5 - 중간
+			c_req_difficulty_link: (selectedEditReqDifficultyLink === undefined? "5" : selectedEditReqDifficultyLink),// 5 - 보통
+			c_req_state_link: (selectedEditReqStateLink === undefined? "10" : selectedEditReqStateLink), //10 - 열림
+			c_req_update_date: new Date(),
+			c_req_reviewer01: reviewers01,
+			c_req_reviewer02: reviewers02,
+			c_req_reviewer03: reviewers03,
+			c_req_reviewer04: reviewers04,
+			c_req_reviewer05: reviewers05,
+			c_req_status: "ChangeReq",
+			c_req_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
+		};
+
+		console.log(dataObjectParam);
+		/*
+		if (selectedEditReqPriorityLink === undefined || selectedEditReqDifficultyLink === undefined || selectedEditReqStateLink === undefined) {
+			let checkUndefiend = [];
+			if (selectedEditReqPriorityLink === undefined) {
+				checkUndefiend.push("우선순위");
+			}
+			if (selectedEditReqDifficultyLink === undefined) {
+				checkUndefiend.push("난이도");
+			}
+			if (selectedEditReqStateLink === undefined) {
+				checkUndefiend.push("상태");
+			}
+
+			let content = "";
+			checkUndefiend.forEach((e)=>{content += " "+e});
+			$.confirm({
+				title: "확인해주세요.",
+				content: "요구사항의 우선순위 난이도 상태 중" +content+ "를 설정하지 않았습니다. 설정하지 않은 항목은 기본값으로 저장됩니다. 다시 수정하시겠습니까?",
+				buttons: {
+					confirm: function () {
+						return false;
+					},
+					cancel: function () {
+
+					}
+				}
+			})
+		}*/
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
 			type: "POST",
-			data: {
-				c_id: $("#editview_req_id").val(),
-				c_title: $("#editview_req_name").val(),
-				c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
-				// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
-				c_req_update_date: new Date(),
-				c_priority: $("#editview_req_priority").children(".btn.active").children("input").val(),
-				c_req_reviewer01: reviewers01,
-				c_req_reviewer02: reviewers02,
-				c_req_reviewer03: reviewers03,
-				c_req_reviewer04: reviewers04,
-				c_req_reviewer05: reviewers05,
-				c_req_status: "ChangeReq",
-				c_req_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
-			},
+			data: dataObjectParam,
 			statusCode: {
 				200: function () {
-					$("#req_tree").jstree("refresh");
+					//$("#req_tree").jstree("refresh");
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
 				}
 			}
