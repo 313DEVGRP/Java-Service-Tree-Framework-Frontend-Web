@@ -53,9 +53,113 @@ function runScript() {
 	}
 }
 
+function widgsterWrapper() {
+	var height;
+
+	$.fn.widgster.Constructor.prototype.fullscreen = function () {
+		var e = $.Event("fullscreen.widgster");
+
+		this.$element.trigger(e);
+
+		if (e.isDefaultPrevented()) return;
+
+		this.$element.css({
+			position: "fixed",
+			top: 0,
+			right: 0,
+			bottom: 0,
+			left: 0,
+			margin: 0,
+			overflow: "auto",
+			"z-index": 10000
+		});
+
+		var body = this.$element.find(".body");
+		var siblingsHeight = body
+			.siblings()
+			.toArray()
+			.reduce(function (acc, cur) {
+				return (acc += cur.clientHeight);
+			}, 0);
+		var margin =
+			parseInt(body.css("margin-top")) +
+			parseInt(body.css("margin-bottom")) +
+			parseInt(this.$element.css("padding-top")) +
+			parseInt(this.$element.css("padding-bottom")) +
+			parseInt(this.$element.css("margin-top")) +
+			parseInt(this.$element.css("margin-bottom"));
+
+		// height = body.css("height");
+		body.css("height", "calc(100% - " + (siblingsHeight + margin) + "px)");
+
+		$("body").css("overflow", "hidden");
+
+		this.wasCollapsed = this.collapsed;
+		this.expand(false);
+
+		this.$fullscreen.hide();
+		this.$restore.show();
+
+		this.$collapse.hide();
+		this.$expand.hide();
+
+		this.$element.addClass("fullscreened");
+
+		this.$element.addClass("modalDarkBack");
+
+		this.$element.trigger($.Event("fullscreened.widgster"));
+
+		return false;
+	};
+
+	$.fn.widgster.Constructor.prototype.restore = function () {
+		var e = $.Event("restore.widgster");
+
+		this.$element.trigger(e);
+
+		if (e.isDefaultPrevented()) return;
+
+		this.$element.css({
+			position: "",
+			top: "",
+			right: "",
+			bottom: "",
+			left: "",
+			margin: "",
+			overflow: "",
+			"z-index": ""
+		});
+
+		this.$element.find(".body").css("height", height);
+		$("body").css("overflow", "");
+
+		this.$fullscreen.show();
+		this.$restore.hide();
+
+		if (this.collapsed) {
+			this.$collapse.hide();
+			this.$expand.show();
+		} else {
+			this.$collapse.show();
+			this.$expand.hide();
+		}
+
+		this.wasCollapsed && this.collapse(false);
+
+		this.$element.removeClass("fullscreened");
+
+		this.$element.removeClass("modalDarkBack");
+
+		this.$element.trigger($.Event("restored.widgster"));
+
+		return false;
+	};
+}
+
 function 로드_완료_이후_실행_함수() {
 	톱니바퀴_초기설정();
 	setLocale();
+	widgsterWrapper();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1563,25 +1667,20 @@ function gnuboardList(param) {
 	const params = {};
 	var userMode = false;
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (str, key, value) => {
-
-		if(key == "mode"){
-
-			if(value == "detail") {
+		if (key == "mode") {
+			if (value == "detail") {
 				userMode = true;
 			}
-
 		}
 		params[key] = value;
-
 	});
 
-	if(userMode){
+	if (userMode) {
 		params["mode"] = "detail";
 		location.href = param + `&${new URLSearchParams(params).toString()}`;
-	}else{
+	} else {
 		location.href = param;
 	}
-
 }
 
 function gnuboardIndex() {
@@ -1641,5 +1740,3 @@ function chnageLoocale() {
 
 	setLocale(localeSelect.options[localeSelect.selectedIndex].value);
 }
-
-

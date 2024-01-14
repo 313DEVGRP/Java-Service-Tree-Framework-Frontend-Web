@@ -1515,6 +1515,14 @@ svg .ghostCircle.show {
 	opacity: 1;
 }
 
+#select2-selected_pdService-container .select2-selection__placeholder,
+.multiple-select .ms-choice > span.placeholder {
+	color: #f8f8f8;
+}
+#disabled_input_pdservice.form-control {
+	color: #a4c6ff;
+}
+
 /*
 * community
 */
