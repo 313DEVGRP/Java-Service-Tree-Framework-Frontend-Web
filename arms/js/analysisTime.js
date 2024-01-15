@@ -1683,7 +1683,7 @@ function verticalTimeLineChart(data) {
 		versionData.forEach(item => {
 			if (!contentSet[item.summary]) { // 중복 체크
 				contentSet[item.summary] = {
-					version: item.pdServiceVersion,
+					version: item.singlePdServiceVersion,
 					summary: item.summary,
 					issuekey: [item.key],
 					date: formatDateTime(item.updated)
