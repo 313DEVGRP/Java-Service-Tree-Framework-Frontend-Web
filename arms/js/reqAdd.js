@@ -350,7 +350,9 @@ function build_ReqData_By_PdService() {
 	jsTreeBuild(jQueryElementID, serviceNameForURL);
 }
 
+////////////////////////////////////////
 // --- 요구사항 (jstree) 선택 이벤트 --- //
+////////////////////////////////////////
 function jsTreeClick(selectedNode) {
 	console.log("[ reqAdd :: jsTreeClick ] :: selectedNode ");
 	console.log(selectedNode);
@@ -846,6 +848,15 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_id").val(ajaxData.c_id);
 	$("#editview_req_name").val(ajaxData.c_title);
 
+	//radio 버튼 - 선택 초기화
+	$("#editview_req_priority label").removeClass("active");
+	$("#editview_req_difficulty label").removeClass("active");
+	$("#editview_req_state_options label").removeClass("active");
+	//radio 버튼 - 상태 초기화
+	$("input[name='editview_req_priority_options']:checked").prop('checked', false);
+	$("input[name='editview_req_difficulty_options']:checked").prop('checked', false);
+	$("input[name='popup_req_state_options']:checked").prop('checked', false);
+
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");
 	priorityRadioButtons.each(function() {
@@ -984,13 +995,13 @@ function bindDataDetailTab(ajaxData) {
 	$("#detailview_req_name").val(ajaxData.c_title);
 
 	//radio 버튼 - 선택 초기화
-	$("#popup_req_priority label").removeClass("active");
-	$("#popup_req_difficulty label").removeClass("active");
-	$("#popup_req_state label").removeClass("active");
+	$("#detailview_req_priority label").removeClass("active");
+	$("#detailview_req_difficulty label").removeClass("active");
+	$("#detailview_req_state label").removeClass("active");
 	//radio 버튼 - 상태 초기화
-	$("input[name='popup_req_priority_options']:checked").prop('checked', false);
-	$("input[name='popup_req_difficulty_options']:checked").prop('checked', false);
-	$("input[name='popup_req_state_options']:checked").prop('checked', false);
+	$("input[name='detailview_req_priority_options']:checked").prop('checked', false);
+	$("input[name='detailview_req_difficulty_options']:checked").prop('checked', false);
+	$("input[name='detailview_req_state_options']:checked").prop('checked', false);
 
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
@@ -1553,7 +1564,7 @@ function click_btn_for_req_update() {
 			data: dataObjectParam,
 			statusCode: {
 				200: function () {
-					//$("#req_tree").jstree("refresh");
+					$("#req_tree").jstree("refresh");
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
 				}
 			}
