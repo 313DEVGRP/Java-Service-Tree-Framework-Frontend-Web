@@ -89,6 +89,9 @@ function execDocReady() {
             $(".widget").widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_cost");
 
+            costAnalysisChart();
+
+            manPowerAnalysisChart();
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();
 
@@ -2028,4 +2031,285 @@ function getLinkedIssueAndSubtask(endPointUrl) {
         buttonList,
         isServerSide
     );
+}
+
+function costAnalysisChart() {
+    var dom = document.getElementById('cost-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    const requirementPriceJson = {
+        all: 600000000,
+        requirementList: {
+            요구사항1: 10000000,
+            요구사항2: 20000000,
+            요구사항3: 30000000,
+            요구사항4: 40000000,
+            요구사항5: 50000000,
+            요구사항6: 60000000,
+            요구사항7: 30000000,
+            요구사항8: 30000000,
+            요구사항9: 30000000,
+            요구사항11: 10000000,
+            요구사항12: 20000000,
+            요구사항13: 30000000,
+            요구사항14: 40000000,
+            요구사항15: 50000000,
+            요구사항16: 60000000,
+            요구사항17: 30000000,
+            요구사항18: 30000000,
+            요구사항19: 30000000
+        }
+    };
+    const difficultyJson = {
+        '매우 어려움': 100,
+        '어려움': 200,
+        '보통': 300,
+        '쉬움': 200,
+        '매움 쉬움': 100
+    };
+    const waterMarkText = '';
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.height = 300;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.globalAlpha = 0.08;
+    ctx.font = '20px Microsoft Yahei';
+    ctx.translate(50, 50);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillText(waterMarkText, 0, 0);
+    option = {
+        backgroundColor: {
+            type: 'pattern',
+            image: canvas,
+            repeat: 'repeat'
+        },
+        tooltip: {},
+        title: [
+            {
+                text: '요구사항',
+                subtext: '전체 ' + requirementPriceJson.all +'원',
+                left: '25%',
+                textAlign: 'center'
+            },
+            {
+                text: '난이도 별 통계',
+                subtext:
+                    '요구사항 난이도 ' +
+                    Object.keys(difficultyJson).reduce(function (all, key) {
+                        return all + difficultyJson[key];
+                    }, 0) + '개',
+                left: '75%',
+                bottom: '0%',
+                textAlign: 'center'
+            },
+        ],
+        grid: [
+            {
+                top: 50,
+                width: '50%',
+                bottom: '5%',
+                left: 10,
+                containLabel: true
+            },
+/*            {
+                top: '55%',
+                width: '100%',
+                bottom: 0,
+                left: 10,
+                containLabel: true
+            }*/
+        ],
+        xAxis: [
+            {
+                type: 'value',
+                max: requirementPriceJson.all,
+                splitLine: {
+                    show: false
+                }
+            },
+        ],
+        yAxis: [
+            {
+                type: 'category',
+                data: Object.keys(requirementPriceJson.requirementList),
+                axisLabel: {
+                    interval: 0,
+                    rotate: 30
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+        ],
+        series: [
+            {
+                type: 'bar',
+                stack: 'chart',
+                z: 3,
+                label: {
+                    position: 'right',
+                    show: true
+                },
+                data: Object.keys(requirementPriceJson.requirementList).map(function (key) {
+                    return requirementPriceJson.requirementList[key];
+                })
+            },
+            {
+                type: 'bar',
+                stack: 'chart',
+                silent: true,
+                itemStyle: {
+                    color: '#eee'
+                },
+                data: Object.keys(requirementPriceJson.requirementList).map(function (key) {
+                    return requirementPriceJson.all - requirementPriceJson.requirementList[key];
+                })
+            },
+            {
+                type: 'pie',
+                radius: [0, '30%'],
+                center: ['75%', '25%'],
+                data: Object.keys(difficultyJson).map(function (key) {
+                    return {
+                        name: key.replace('.js', ''),
+                        value: difficultyJson[key]
+                    };
+                })
+            },
+            {
+                type: 'pie',
+                radius: [0, '30%'],
+                center: ['75%', '65%'],
+                data: Object.keys(difficultyJson).map(function (key) {
+                    return {
+                        name: key.replace('.js', ''),
+                        value: difficultyJson[key]
+                    };
+                })
+            }
+        ]
+    };
+
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}
+
+function manPowerAnalysisChart() {
+    var dom = document.getElementById('manpower-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+
+    var option;
+
+    var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
+    var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
+
+    var maxArr = salaryArr.map(function(salary, i) {
+        return {
+            value: Math.max(salary, revenueArr[i]),
+            symbolSize: [0, 0]
+        };
+    });
+
+    option = {
+        grid: {
+            top: 50,
+            bottom: '5%',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'none'
+            },
+        },
+        xAxis: {
+            data: ['사슴', '로켓', '비행기', '기차', '배', '자동차', '달리기', '걷기'],
+            axisTick: { show: false },
+            axisLine: { show: false },
+            axisLabel: {
+                color: '#ffffff'
+            },
+        },
+        yAxis: {
+            splitLine: { show: false },
+            axisTick: { show: false },
+            axisLine: { show: false },
+            axisLabel: { show: false }
+        },
+        /*color: ['#e54035'],*/
+        series: [
+            {
+                name: 'glyph',
+                type: 'pictorialBar',
+                barGap: '-100%',
+                symbolPosition: 'end',
+                symbolSize: 50,
+                symbolOffset: [0, '-120%'],
+                barCategoryGap: '40%',
+                label: {
+                    show: true,
+                    position: 'outside'
+                },
+                data: maxArr,
+                tooltip: {
+                    show: false
+                }
+            },
+            {
+                name: '연봉',
+                type: 'pictorialBar',
+                barCategoryGap: '-130%',
+                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
+                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
+                itemStyle: {
+                    opacity: 0.5
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1
+                    }
+                },
+                data: salaryArr,
+                z: 10
+            },
+            {
+                name: '벌어들인 수익',
+                type: 'pictorialBar',
+                barCategoryGap: '-100%',
+                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
+                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
+                itemStyle: {
+                    opacity: 0.5,
+                    /*color: "blue"*/
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1,
+
+                    }
+                },
+                data: revenueArr,
+                z: 10
+            },
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
