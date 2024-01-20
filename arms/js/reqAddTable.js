@@ -12,6 +12,8 @@ class Table {
 	makeRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
+			$tr.setAttribute("data-id", cur.id);
+
 			Object.keys(this.options.content).forEach((key) => {
 				const $col = this.makeElement(tag);
 				$col.className = key;
@@ -36,10 +38,38 @@ class Table {
 		return $tbody;
 	}
 
+	removeInput(input, node) {
+		const { origin } = this.$data.find((item) => item.id === Number(node.parentElement.dataset.id));
+		origin.data = input.value;
+		node.textContent = input.value;
+
+		console.log("#### update ", origin);
+	}
+
+	addInput(node) {
+		const uuid = crypto.randomUUID();
+		const text = node.textContent;
+		const $input = document.createElement("input");
+		$input.id = uuid;
+		$input.addEventListener("blur", () => this.removeInput($input, node));
+
+		node.textContent = "";
+		node.appendChild($input);
+		document.getElementById(uuid).value = text;
+		document.getElementById(uuid).focus();
+	}
+
 	makeSection(rowData, name, col) {
 		const $el = this.makeElement(name);
 		$el.className = name;
 		this.makeRow(rowData, col).forEach((r) => $el.append(r));
+
+		$el.addEventListener("click", (e) => {
+			if (e.target.tagName !== "TD") return;
+			if (e.target.classList.contains("content")) {
+				this.addInput(e.target);
+			}
+		});
 
 		return $el;
 	}

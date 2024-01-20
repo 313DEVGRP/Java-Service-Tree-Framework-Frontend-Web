@@ -1538,7 +1538,7 @@ svg .ghostCircle.show {
 #reqDataTable {
 	margin-bottom: 0;
 	min-height: 300px;
-	max-height: 800px;
+	max-height: 721px;
 	overflow: auto;
 }
 
@@ -1562,6 +1562,12 @@ svg .ghostCircle.show {
 #reqDataTable .reqTable td.depth3,
 #reqDataTable .reqTable td.content {
 	text-align: left;
+}
+
+#reqDataTable .reqTable .tbody input {
+	width: 100%;
+	border: 0 none;
+	background: 0 none;
 }
 
 #reqDataTable .reqTable .tbody tr:nth-child(odd) {
