@@ -1100,7 +1100,7 @@ function autoCompleteForUser() {
 		width: "resolve",
 		ajax: {
 			url: function (params) {
-				return "/auth-check/getUsers/" + params.term;
+				return "/auth-user/search-user/" + params.term;
 			},
 			dataType: "json",
 			delay: 250,
