@@ -216,7 +216,7 @@ function draw_card_deck(cardInfo) {
 // 데이터 테이블을 사용하지 않으므로, 쓰지 않아도 된다.
 function dataTableClick(tempDataTable, selectedData) {
 	// => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
-	console.log(selectedData);
+	console.log("[ jiraServer :: dataTableClick] :: selectedData =>  " + selectedData);
 	selectId = selectedData.c_id;
 	// c_id로 getNode 실행
 
@@ -749,7 +749,7 @@ function set_renew_btn_3rd_grid(selectdTab, selectProjectId) {
 function tab_click_event() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
-		console.log(target);
+		console.log("[ jiraServer :: tab_click_event ] :: target => " + target);
 
 		if (target === "#dropdown1") { // 삭제하기
 			$("#jira_default_update_div").addClass("hidden");

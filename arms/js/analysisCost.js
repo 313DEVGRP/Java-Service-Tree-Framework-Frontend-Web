@@ -57,10 +57,6 @@ function execDocReady() {
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js",
 
-            // 버전 별 요구사항 현황 (RadialPolarBarChart)
-            "js/analysis/resource/chart/nightingaleRosePieChart.js",
-            "js/analysis/resource/chart/RadialPolarBarChart.js",
-
             //CirclePacking with d3 Chart
             "js/analysis/resource/chart/circularPackingChart.js"
         ],
@@ -89,6 +85,9 @@ function execDocReady() {
             $(".widget").widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_cost");
 
+            costAnalysisChart();
+
+            manPowerAnalysisChart();
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();
 
@@ -183,12 +182,8 @@ function makeVersionMultiSelectBox() {
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
-            // 네트워크 차트
-            statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
-            getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
-
-            // 나이팅게일로즈 차트(pie) - 버전별 요구사항
-            getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+            // Circular Packing with D3 차트
+            getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
             treeBar();
 
@@ -232,12 +227,6 @@ function bind_VersionData_By_PdService() {
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
                 // Circular Packing with D3 차트
                 getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
-                // 네트워크 차트
-                statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
-                getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
-
-                // 나이팅게일로즈 차트(pie) - 버전별 요구사항
-                getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -543,377 +532,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
     });
 }
 
-function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
-        type: "GET",
-        data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        async: true,
-        statusCode: {
-            200: function (data) {
-                // 버전 선택 시 데이터 파싱
-
-                setTimeout(function () {
-                    networkChart(pdServiceVersions, data);
-                }, 1000);
-            }
-        }
-    });
-}
-
-function networkChart(pdServiceVersions, jiraIssueData) {
-    d3.select("#NETWORK_GRAPH").remove();
-
-    var NETWORK_DATA = {
-        nodes: [],
-        links: []
-    };
-
-    pdServiceData.id = pdServiceData.c_id;
-    pdServiceData.type = "pdService";
-    NETWORK_DATA.nodes.push(pdServiceData);
-
-    var targetIds = pdServiceVersions.split(",").map(Number);
-    var versionList = pdServiceData.pdServiceVersionEntities;
-
-    versionList.forEach((item) => {
-        if (targetIds.includes(item.c_id)) {
-            item.id = item.c_id;
-            item.type = "version";
-            NETWORK_DATA.nodes.push(item);
-
-            console.log(typeof item.id);
-            var link = {
-                source: item.id,
-                target: pdServiceData.c_id
-            };
-            NETWORK_DATA.links.push(link);
-        }
-    });
-
-    var index = {};
-
-    jiraIssueData.forEach(function (item) {
-        NETWORK_DATA.nodes.push(item);
-        index[item.key] = item;
-    });
-
-    jiraIssueData.forEach(function (item) {
-        if (item.isReq === true) {
-            var versionLink = {
-                source: item.id,
-                target: item.pdServiceVersion
-            };
-
-            NETWORK_DATA.links.push(versionLink);
-        }
-
-        var parentItem = index[item.parentReqKey];
-
-        if (parentItem) {
-            var link = {
-                source: item.id,
-                target: parentItem.id
-            };
-            NETWORK_DATA.links.push(link);
-        }
-    });
-
-    if (NETWORK_DATA.nodes.length === 0) {
-        // 데이터가 없는 경우를 체크
-        d3.select("#NETWORK_GRAPH").remove();
-        d3.select(".network-graph").append("p").text("데이터가 없습니다.");
-        return;
-    }
-
-    // $('#notifyNoVersion').show();
-    d3.select(".network-graph").append("svg").attr("id", "NETWORK_GRAPH");
-
-    /******** network graph config ********/
-    var networkGraph = {
-        createGraph: function () {
-            let links = NETWORK_DATA.links.map(function (d) {
-                return Object.create(d);
-            });
-            let nodes = NETWORK_DATA.nodes.map(function (d) {
-                return Object.create(d);
-            });
-
-            var fillCircle = function (g) {
-                if (g.type === "pdService") {
-                    return "#c67cff";
-                } else if (g.type === "version") {
-                    return "rgb(255,127,14)";
-                } else if (g.isReq === true) {
-                    return "rgb(214,39,40)";
-                } else if (g.isReq === false) {
-                    return "rgb(31,119,180)";
-                } else {
-                    return "rgb(44,160,44)";
-                }
-            };
-
-            var typeBinding = function (g) {
-                let name = "";
-
-                if (g.type === "pdService") {
-                    name = "제품(서비스)";
-                } else if (g.type === "version") {
-                    name = "버전";
-                } else if (g.isReq === true) {
-                    name = "요구사항";
-                } else if (g.isReq === false) {
-                    name = "연결된 이슈";
-                }
-
-                return "[" + name + "]";
-            };
-
-            var nameBinding = function (g) {
-                let name = "";
-
-                if (g.type === "pdService") {
-                    return g.c_title;
-                } else if (g.type === "version") {
-                    return g.c_title;
-                } else {
-                    return g.key;
-                }
-            };
-
-            let baseWidth = 400;
-            let baseHeight = 400;
-            let nodeCount = nodes.length;
-
-            let increaseFactor = Math.floor(nodeCount / 100);
-            if (nodeCount % 100 !== 0) {
-                increaseFactor++;
-            }
-            baseWidth += increaseFactor * 100;
-            baseHeight += increaseFactor * 100;
-
-            let width = baseWidth;
-            let height = baseHeight;
-
-            let initScale = 1;
-
-            if (increaseFactor !== 0) {
-                initScale = initScale / increaseFactor;
-            }
-
-            let simulation = d3
-                .forceSimulation(nodes)
-                .force(
-                    "link",
-                    d3
-                        .forceLink(links)
-                        .id(function (d) {
-                            return d.id;
-                        })
-                        .distance(30)
-                )
-                .force("charge", d3.forceManyBody().strength(-1000))
-                .force("center", d3.forceCenter(width / 3, height / 3))
-                .force("collide", d3.forceCollide().radius(20))
-                .force(
-                    "radial",
-                    d3
-                        .forceRadial()
-                        .radius(10)
-                        .x(width / 3)
-                        .y(height / 3)
-                        .strength(0.5)
-                );
-            //.force("center", d3.forceCenter(width / 3, height / 3));
-            // .force("collide", d3.forceCollide()
-            // 	.radius(function(node) {
-            // 		var linkCount = countLinks(node, links	);
-            // 		return 5 * linkCount;
-            // 	})
-            // );
-            // .force("collide",d3.forceCollide().radius( function(d){
-            // 	console.log(d);
-            // 	return 20;
-            // }));
-
-            //simulation.stop();
-
-            let svg = d3.select("#NETWORK_GRAPH").attr("viewBox", [0, 0, width, height]);
-
-            let initialTransform = d3.zoomIdentity
-                .translate(width / 3, height / 3) // 초기 위치 설정
-                .scale(initScale); // 초기 줌 레벨 설정
-
-            let zoom = d3
-                .zoom()
-                .scaleExtent([0.1, 5]) // 줌 가능한 최소/최대 줌 레벨 설정
-                .on("zoom", zoomed); // 줌 이벤트 핸들러 설정
-
-            // SVG에 확대/축소 기능 적용
-            svg.call(zoom);
-
-            // 초기 줌 설정
-            svg.transition().duration(500).call(zoom.transform, initialTransform);
-
-            let gHolder = svg.append("g").attr("class", "g-holder");
-
-            let link = gHolder
-                .append("g")
-                .attr("fill", "none")
-                .attr("stroke", "gray")
-                .attr("stroke-opacity", 1)
-                .selectAll("path")
-                .data(links)
-                .join("path")
-                .attr("stroke-width", 1.5);
-
-            /*
-            var node = svg.append("g")
-                        .selectAll("circle")
-                            .data(nodes)
-                            .enter()
-                            .append("circle")
-                                .attr("r", 8)
-                                .attr("fill", color)
-                                .call(drag(simulation));  // text 라벨 추가를 위해 g로 그룹핑
-
-            node.append("text")
-              .text(function(d){ return d.id })
-              .style("font-size", "12px") */
-
-            let node = gHolder
-                .append("g")
-                .attr("class", "circle-node-holder")
-                .attr("stroke", "white")
-                .attr("stroke-width", 1)
-                .selectAll("g")
-                .data(nodes)
-                .enter()
-                .append("g")
-                .each(function (d) {
-                    d3.select(this).append("circle").attr("r", 10).attr("fill", fillCircle(d));
-                    /*d3.select(this)
-                        .append("text").text(d.id)
-                        .attr("dy",6)
-                        .style("text-anchor","middle")
-                        .attr("class", "node-label");*/
-                })
-                .call(networkGraph.drag(simulation));
-
-            node
-                .append("text")
-                .attr("x", 11)
-                .attr("dy", ".31em")
-                .style("font-size", "9px")
-                .style("fill", (d) => fillCircle(d))
-                .style("font-weight", "5")
-                .attr("stroke", "white")
-                .attr("stroke-width", "0.3")
-                .text((d) => typeBinding(d));
-
-            node
-                .append("text")
-                .attr("x", 12)
-                .attr("dy", "1.5em")
-                .style("font-family", "Arial")
-                .style("font-size", "10px")
-                .style("font-weight", "10")
-                .text((d) => nameBinding(d));
-
-            simulation.on("tick", function () {
-                link
-                    .attr("x1", function (d) {
-                        return d.source.x;
-                    })
-                    .attr("y1", function (d) {
-                        return d.source.y;
-                    })
-                    .attr("x2", function (d) {
-                        return d.target.x;
-                    })
-                    .attr("y2", function (d) {
-                        return d.target.y;
-                    });
-
-                /*node
-                    .attr("cx", function(d){ return d.x; })
-                    .attr("cy", function(d){ return d.y; });*/
-
-                //circle 노드에서 g 노드로 변경
-                node.attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                });
-
-                link.attr("d", function (d) {
-                    var dx = d.target.x - d.source.x,
-                        dy = d.target.y - d.source.y,
-                        dr = Math.sqrt(dx * dx + dy * dy);
-                    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-                });
-            });
-
-            // d3-5.16.0
-            // function zoomed() {
-            // 	let transform = d3.event.transform;
-            function zoomed() {
-                // 현재 확대/축소 변환을 얻음
-                let transform = d3.event.transform;
-
-                // 모든 노드 및 링크를 현재 확대/축소 변환으로 이동/확대/축소
-                gHolder.attr("transform", transform);
-            }
-
-            //invalidation.then(() => simulation.stop());
-
-            return svg.node();
-        },
-        drag: function (simulation) {
-            // d3-5.16.0
-            // function dragstarted(d) {
-            // 	if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-            // 	d.fx = d.x;
-            // 	d.fy = d.y;
-            // }
-            //
-            // function dragged(d) {
-            // 	d.fx = d3.event.x;
-            // 	d.fy = d3.event.y;
-            // }
-            //
-            // function dragended(d) {
-            // 	if (!d3.event.active) simulation.alphaTarget(0);
-            // 	d.fx = null;
-            // 	d.fy = null;
-            // }
-
-            function dragstarted(d) {
-                if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-
-            function dragged(d) {
-                d.fx = d3.event.x;
-                d.fy = d3.event.y;
-            }
-
-            function dragended(d) {
-                if (!d3.event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-            }
-
-            return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
-        }
-    };
-
-    /******** network graph create ********/
-    networkGraph.createGraph();
-}
-
 function versionUpdateIssueScatterChart(pdservice_id, pdservice_version_id, versionData) {
     console.log("[ analysisScope :: versionUpdateIssueScatterChart ] :: 버전별 요구사항 업데이트 상태 스캐터 차트 버전데이터 = ");
     console.log(versionData);
@@ -1120,7 +738,6 @@ function versionUpdateIssueScatterChart(pdservice_id, pdservice_version_id, vers
     });
 }
 
-
 function formatDate(date) {
     var year = date.getFullYear().toString().slice(-2); // 연도의 마지막 두 자리를 얻습니다.
     var month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -1183,85 +800,6 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
                 }
                 issueStatusSet.forEach(e=>issueStatusList.push(e));
                 drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
-            }
-        }
-    });
-}
-
-
-/////////////////////////////////////////////////////////
-// Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
-/////////////////////////////////////////////////////////
-function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/scope/getReqPerVersion/" + pdService_id,
-        type: "GET",
-        data: {
-            서비스아이디: pdService_id,
-            메인그룹필드: "pdServiceVersion",
-            하위그룹필드들: "isReq",
-            컨텐츠보기여부: true,
-            pdServiceVersionLinks: pdServiceVersionLinks
-        },
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (result) {
-                console.log("[ analysisScope :: getReqPerVersion ] :: result");
-                console.log(result);
-                let reqPerVersionDataArr = [];
-
-                // 집계 데이터 바탕
-                if (result["전체합계"] !== 0) {
-                    let 버전별집계 = result["검색결과"]["group_by_pdServiceVersion"];
-                    for (let i = 0; i < 버전별집계.length; i++) {
-                        let mandatoryDataList = {
-                            versionId: "",
-                            title: "",
-                            req: ""
-                        };
-                        mandatoryDataList.versionId = 버전별집계[i]["필드명"];
-                        let isReqArr = 버전별집계[i]["하위검색결과"]["group_by_isReq"];
-                        isReqArr.forEach((target) => {
-                            if (target["필드명"] === "true") {
-                                mandatoryDataList.req = target["개수"];
-                            }
-                        });
-                        reqPerVersionDataArr.push(mandatoryDataList);
-                    }
-                }
-
-                //1.선택한 제품서비스의 버전과, ES 조회결과 가져온 버전의 갯수가 다른지 확인
-                //2.없는 버전의 경우, versionId만 넣어주고 나머지는 자료구조만 세팅.
-                let versionIdSet = new Set();
-                versionTag.forEach((e) => versionIdSet.add(e));
-                reqPerVersionDataArr.forEach((e) => {
-                    if (versionIdSet.has(e.versionId)) {
-                        versionIdSet.delete(e.versionId);
-                    }
-                });
-                for (let value of versionIdSet) {
-                    reqPerVersionDataArr.push({ versionId: value, title: "", req: 0 });
-                }
-
-                // 만든 버전데이터배열에 버전의 title 매핑.
-                for (let i = 0; i < versionListData.length; i++) {
-                    reqPerVersionDataArr.forEach((e) => {
-                        if (e.versionId == versionListData[i]["c_id"]) {
-                            //e.title = (versionListData[i].versionTitle).replaceAll(".","_");
-                            e.title = versionListData[i].c_title;
-                        }
-                    });
-                }
-
-                let chartDataArr = [];
-
-                reqPerVersionDataArr.forEach((e) => {
-                    chartDataArr.push({ name: e.title, value: e.req });
-                });
-                let colorArr = dashboardColor.nightingaleRose;
-                drawRadialPolarBarChart("reqPerVersionRoseChart", chartDataArr, colorArr);
             }
         }
     });
@@ -1798,7 +1336,6 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
     );
 }
 
-
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
 
@@ -2028,4 +1565,285 @@ function getLinkedIssueAndSubtask(endPointUrl) {
         buttonList,
         isServerSide
     );
+}
+
+function costAnalysisChart() {
+    var dom = document.getElementById('cost-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    const requirementPriceJson = {
+        all: 600000000,
+        requirementList: {
+            요구사항1: 10000000,
+            요구사항2: 20000000,
+            요구사항3: 30000000,
+            요구사항4: 40000000,
+            요구사항5: 50000000,
+            요구사항6: 60000000,
+            요구사항7: 30000000,
+            요구사항8: 30000000,
+            요구사항9: 30000000,
+            요구사항11: 10000000,
+            요구사항12: 20000000,
+            요구사항13: 30000000,
+            요구사항14: 40000000,
+            요구사항15: 50000000,
+            요구사항16: 60000000,
+            요구사항17: 30000000,
+            요구사항18: 30000000,
+            요구사항19: 30000000
+        }
+    };
+    const difficultyJson = {
+        '매우 어려움': 100,
+        '어려움': 200,
+        '보통': 300,
+        '쉬움': 200,
+        '매움 쉬움': 100
+    };
+    const waterMarkText = '';
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.height = 300;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.globalAlpha = 0.08;
+    ctx.font = '20px Microsoft Yahei';
+    ctx.translate(50, 50);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillText(waterMarkText, 0, 0);
+    option = {
+        backgroundColor: {
+            type: 'pattern',
+            image: canvas,
+            repeat: 'repeat'
+        },
+        tooltip: {},
+        title: [
+            {
+                text: '요구사항',
+                subtext: '전체 ' + requirementPriceJson.all +'원',
+                left: '25%',
+                textAlign: 'center'
+            },
+            {
+                text: '난이도 별 통계',
+                subtext:
+                    '요구사항 난이도 ' +
+                    Object.keys(difficultyJson).reduce(function (all, key) {
+                        return all + difficultyJson[key];
+                    }, 0) + '개',
+                left: '75%',
+                bottom: '0%',
+                textAlign: 'center'
+            },
+        ],
+        grid: [
+            {
+                top: 50,
+                width: '50%',
+                bottom: '5%',
+                left: 10,
+                containLabel: true
+            },
+/*            {
+                top: '55%',
+                width: '100%',
+                bottom: 0,
+                left: 10,
+                containLabel: true
+            }*/
+        ],
+        xAxis: [
+            {
+                type: 'value',
+                max: requirementPriceJson.all,
+                splitLine: {
+                    show: false
+                }
+            },
+        ],
+        yAxis: [
+            {
+                type: 'category',
+                data: Object.keys(requirementPriceJson.requirementList),
+                axisLabel: {
+                    interval: 0,
+                    rotate: 30
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+        ],
+        series: [
+            {
+                type: 'bar',
+                stack: 'chart',
+                z: 3,
+                label: {
+                    position: 'right',
+                    show: true
+                },
+                data: Object.keys(requirementPriceJson.requirementList).map(function (key) {
+                    return requirementPriceJson.requirementList[key];
+                })
+            },
+            {
+                type: 'bar',
+                stack: 'chart',
+                silent: true,
+                itemStyle: {
+                    color: '#eee'
+                },
+                data: Object.keys(requirementPriceJson.requirementList).map(function (key) {
+                    return requirementPriceJson.all - requirementPriceJson.requirementList[key];
+                })
+            },
+            {
+                type: 'pie',
+                radius: [0, '30%'],
+                center: ['75%', '25%'],
+                data: Object.keys(difficultyJson).map(function (key) {
+                    return {
+                        name: key.replace('.js', ''),
+                        value: difficultyJson[key]
+                    };
+                })
+            },
+            {
+                type: 'pie',
+                radius: [0, '30%'],
+                center: ['75%', '65%'],
+                data: Object.keys(difficultyJson).map(function (key) {
+                    return {
+                        name: key.replace('.js', ''),
+                        value: difficultyJson[key]
+                    };
+                })
+            }
+        ]
+    };
+
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}
+
+function manPowerAnalysisChart() {
+    var dom = document.getElementById('manpower-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+
+    var option;
+
+    var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
+    var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
+
+    var maxArr = salaryArr.map(function(salary, i) {
+        return {
+            value: Math.max(salary, revenueArr[i]),
+            symbolSize: [0, 0]
+        };
+    });
+
+    option = {
+        grid: {
+            top: 50,
+            bottom: '5%',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'none'
+            },
+        },
+        xAxis: {
+            data: ['사슴', '로켓', '비행기', '기차', '배', '자동차', '달리기', '걷기'],
+            axisTick: { show: false },
+            axisLine: { show: false },
+            axisLabel: {
+                color: '#ffffff'
+            },
+        },
+        yAxis: {
+            splitLine: { show: false },
+            axisTick: { show: false },
+            axisLine: { show: false },
+            axisLabel: { show: false }
+        },
+        /*color: ['#e54035'],*/
+        series: [
+            {
+                name: 'glyph',
+                type: 'pictorialBar',
+                barGap: '-100%',
+                symbolPosition: 'end',
+                symbolSize: 50,
+                symbolOffset: [0, '-120%'],
+                barCategoryGap: '40%',
+                label: {
+                    show: true,
+                    position: 'outside'
+                },
+                data: maxArr,
+                tooltip: {
+                    show: false
+                }
+            },
+            {
+                name: '연봉',
+                type: 'pictorialBar',
+                barCategoryGap: '-130%',
+                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
+                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
+                itemStyle: {
+                    opacity: 0.5
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1
+                    }
+                },
+                data: salaryArr,
+                z: 10
+            },
+            {
+                name: '벌어들인 수익',
+                type: 'pictorialBar',
+                barCategoryGap: '-100%',
+                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
+                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
+                itemStyle: {
+                    opacity: 0.5,
+                    /*color: "blue"*/
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1,
+
+                    }
+                },
+                data: revenueArr,
+                z: 10
+            },
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
