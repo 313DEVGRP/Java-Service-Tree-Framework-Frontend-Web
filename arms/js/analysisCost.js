@@ -185,7 +185,6 @@ function makeVersionMultiSelectBox() {
             // Circular Packing with D3 차트
             getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
-            treeBar();
 
             //요구사항 현황 데이터 테이블 로드
             // console.log(" ============ makeVersionMultiSelectBox ============= ");
@@ -219,7 +218,7 @@ function bind_VersionData_By_PdService() {
                     $(".multiple-select").append(newOption);
                 }
                 var versionTag = $(".multiple-select").val();
-                console.log("[ analysisScope :: bind_VersionData_By_PdService ] :: versionTag");
+                console.log("[ analysisCost :: bind_VersionData_By_PdService ] :: versionTag");
 
                 수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(",");
@@ -228,10 +227,14 @@ function bind_VersionData_By_PdService() {
                 // Circular Packing with D3 차트
                 getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
+                // 투자 대비 소모 비용 차트
+			    compareCostsChart(selectedPdServiceId, selectedVersionId);
+                // 수익 현황 차트
+			    incomeStatusChart();
+
                 if (data.length > 0) {
                     console.log("display 재설정.");
                 }
-                treeBar();
                 //$('#multiversion').multipleSelect('refresh');
                 //$('#edit_multi_version').multipleSelect('refresh');
                 $(".multiple-select").multipleSelect("refresh");
@@ -750,59 +753,72 @@ function formatDate(date) {
 /////////////////////////////////////////////////////////
 function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees2",
-        type: "GET",
-        data: {
-            pdServiceLink: pdServiceLink,
-            pdServiceVersionLinks: pdServiceVersionLinks,
-            메인그룹필드: "pdServiceVersion",
-            하위그룹필드들: "isReq",
-            컨텐츠보기여부: true
-        },
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (result) {
-                console.log("[ analysisScope :: getReqStatusAndAssignees ] :: result");
-                console.log(result);
-                let pdServiceName;
-                pdServiceListData.forEach(elements => {
-                    if (elements["pdServiceId"] === +pdServiceLink) {
-                        pdServiceName = elements["pdServiceName"];
-                    }
-                });
-                let dataObject = {};
-                let issueStatusSet = new Set();
-                let issueStatusList = [];
-                if (result.length > 0) {
-                    for (let i = 0; i < result.length; i++) {
-                        // 버전이름 가져오기
-                        let versionName ="";
-                        for (let j = 0; j < versionListData.length; j++) {
-                            if(result[i]["제품_서비스_버전"] === versionListData[j]["c_id"]){
-                                versionName = versionListData[j]["c_title"].replaceAll(".","_");
-                                break;
-                            }
-                        }
-                        let verSubObject = {};
-                        result[i]["요구사항들"].forEach((element) => {
-                            // 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
-                            if (element["작업자수"] !== 0) {
-                                verSubObject[element["요구_사항_번호"]] =
-                                    {"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
-                                issueStatusSet.add(element["요구_사항_상태"]);
-                            }
-                        });
-                        dataObject[versionName] = verSubObject;
-                    }
-                }
-                issueStatusSet.forEach(e=>issueStatusList.push(e));
-                drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
-            }
-        }
-    });
+	const url = new UrlBuilder()
+		.setBaseUrl("/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees")
+		.addQueryParam("요구_사항.isReqType","REQUIREMENT")
+		.addQueryParam("요구_사항.pdServiceLink", selectedPdServiceId)
+		.addQueryParam("요구_사항.pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('요구_사항.메인그룹필드', "pdServiceVersion")
+		.addQueryParam('요구_사항.컨텐츠보기여부', false)
+		.addQueryParam('요구_사항.크기', 10000)
+		.addQueryParam('요구_사항.하위그룹필드들', "key,assignee.assignee_emailAddress.keyword")
+		.addQueryParam('요구_사항.하위크기', 10000)
+		.addQueryParam("하위_이슈_사항.isReqType","ISSUE")
+		.addQueryParam("하위_이슈_사항.pdServiceLink", selectedPdServiceId)
+		.addQueryParam("하위_이슈_사항.pdServiceVersionLinks", selectedVersionId)
+		.addQueryParam('하위_이슈_사항.메인그룹필드', "parentReqKey")
+		.addQueryParam('하위_이슈_사항.컨텐츠보기여부', false)
+		.addQueryParam('하위_이슈_사항.크기', 10000)
+		.addQueryParam('하위_이슈_사항.하위그룹필드들', "assignee.assignee_emailAddress.keyword")
+		.addQueryParam('하위_이슈_사항.하위크기', 10000)
+		.build();
+
+	$.ajax({
+		url: url,
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (result) {
+				console.log("[ analysisScope :: getReqStatusAndAssignees ] :: result");
+				console.log(result);
+				let pdServiceName;
+				pdServiceListData.forEach(elements => {
+					if (elements["pdServiceId"] === +pdServiceLink) {
+						pdServiceName = elements["pdServiceName"];
+					}
+				});
+				let dataObject = {};
+				let issueStatusSet = new Set();
+				let issueStatusList = [];
+				if (result.length > 0) {
+					for (let i = 0; i < result.length; i++) {
+						// 버전이름 가져오기
+						let versionName ="";
+						for (let j = 0; j < versionListData.length; j++) {
+							if(result[i]["제품_서비스_버전"] === versionListData[j]["c_id"]){
+								versionName = versionListData[j]["c_title"].replaceAll(".","_");
+								break;
+							}
+						}
+						let verSubObject = {};
+						result[i]["요구사항들"].forEach((element) => {
+							// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
+							if (element["작업자수"] !== 0) {
+								verSubObject[element["요구_사항_번호"]] =
+									{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
+								issueStatusSet.add(element["요구_사항_상태"]);
+							}
+						});
+						dataObject[versionName] = verSubObject;
+					}
+				}
+				issueStatusSet.forEach(e=>issueStatusList.push(e));
+				drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
+			}
+		}
+	});
 }
 
 function chord(data) {
@@ -903,171 +919,157 @@ function groupTicks(d, step) {
         return { value: value, angle: value * k + d.startAngle };
     });
 }
+/////////////////////////////////////////////////////////
+// 요구사항 별 수익 현황 그래프
+/////////////////////////////////////////////////////////
+function incomeStatusChart(){
+var chartDom = document.getElementById('income_status_chart');
+var myChart = echarts.init(chartDom);
+var option;
 
-function treeBar() {
-    const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/analysis/scope/tree-bar-top10")
-        .addQueryParam("pdServiceLink", selectedPdServiceId)
-        .addQueryParam("pdServiceVersionLinks", selectedVersionId)
-        .addQueryParam('메인그룹필드', "parentReqKey")
-        .addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
-        .addQueryParam('컨텐츠보기여부', true)
-        .addQueryParam("isReqType", "ISSUE")
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true
-    })
-        .done(function (apiResponse) {
-            const data = apiResponse.response;
-
-            d3.select("#tree_bar_container svg").selectAll("*").remove();
-
-            let assigneeData = data.filter(item => item.type === 'assignee');
-
-            if(assigneeData.length === 0) {
-                return;
-            }
-
-            if (assigneeData.length === 1 && assigneeData[0].name === "No Data") {
-                return;
-            }
-
-            let maxValue = Math.max(...assigneeData.map(item => item.value));
-
-            renderTreeBar(data, assigneeData, maxValue);
-        })
-        .fail(function (e) {})
-        .always(function () {});
-}
-
-function renderTreeBar(data, assigneeData, maxValue) {
-    const charts = document.getElementById("tree_bar_container");
-    const $container = document.getElementById("tree_bar_container"),
-        width = $container.offsetWidth,
-        height = $container.offsetHeight,
-        svg = d3.select("#tree_bar_container svg"),
-        g = svg.append("g").attr("transform", "translate(10,10)").attr('width', width)
-            .attr('height', height)
-            .call(responsiveTreeBar),
-        experienceName = Array(maxValue).fill("").map((_, i) => (i+1 === maxValue ? maxValue.toString() : "")),
-        formatSkillPoints = function (d) {
-            return experienceName[d % maxValue];
-        },
-        xScale = d3.scaleLinear().domain([0, maxValue]).range([0, 100]),
-        xAxis = d3.axisTop().scale(xScale).ticks(maxValue).tickFormat(formatSkillPoints),
-        tree = d3.cluster().size([height, width - 145]),
-        stratify = d3
-            .stratify()
-            .id((d) => d.id)
-            .parentId((d) => d.parent),
-        root = stratify(data);
-
-    tree(root);
-
-    const link = g
-        .selectAll(".link")
-        .data(root.descendants().slice(1))
-        .enter()
-        .append("path")
-        .attr("class", "link")
-        .attr("d", function (d) {
-            return `M${d.y},${d.x}C${d.parent.y + 100},${d.x} ${d.parent.y + 100},${d.parent.x} ${d.parent.y},${d.parent.x}`;
-        });
-
-    const node = g
-        .selectAll(".node")
-        .data(root.descendants())
-        .enter()
-        .append("g")
-        .attr("class", function (d) {
-            return `node${d.children ? " node--internal" : " node--leaf"}`;
-        })
-        .attr("transform", function (d) {
-            return `translate(${d.y}, ${d.x})`;
-        });
-
-    node.append("circle").attr("r", 4);
-
-    const leafNodeG = g
-        .selectAll(".node--leaf")
-        .append("g")
-        .attr("class", "node--leaf-g")
-        .attr("transform", "translate(" + 8 + "," + -13 + ")");
-
-    leafNodeG
-        .append("rect")
-        .style("fill", function (d) {
-            return d.data.color;
-        })
-        .attr("width", 2)
-        .attr("height", 20)
-        .attr("rx", 2)
-        .attr("ry", 2)
-        .transition()
-        .duration(800)
-        .attr("width", function (d) {
-            return xScale(d.data.value);
-        });
-
-    leafNodeG
-        .append("text")
-        .attr("dy", 14)
-        .attr("x", 8)
-        .style("text-anchor", "start")
-        .text(function (d) {
-            return d.data.name;
-        });
-
-    const internalNode = g.selectAll(".node--internal");
-    internalNode
-        .append("text")
-        .attr("class", (d) => d.data.id === "1" && "root")
-        .attr("y", -10)
-        .style("text-anchor", "middle")
-        .text(function (d) {
-            return d.data.name;
-        });
-
-    const firstEndNode = g.select(".node--leaf");
-    firstEndNode
-        .insert("g")
-        .attr("class", "xAxis")
-        .attr("transform", "translate(" + 7 + "," + -14 + ")")
-        .call(xAxis);
-
-    firstEndNode
-        .insert("g")
-        .attr("class", "grid")
-        .attr("transform", "translate(7," + (height - 15) + ")")
-        .call(d3.axisBottom().scale(xScale).ticks(5).tickSize(-height, 0, 0).tickFormat(""));
-
-    svg.selectAll(".grid").select("line").style("stroke-dasharray", "1,1").style("stroke", "white");
-    responsiveTreeBar(svg);
-}
-function responsiveTreeBar(svg) {
-    const container = d3.select(svg.node().parentNode),
-        width = parseInt(svg.style('width'), 10),
-        height = parseInt(svg.style('height'), 10),
-        aspect = width / height;
-
-    svg.attr('viewBox', `0 0 ${width} ${height}`)
-        .attr('preserveAspectRatio', 'xMinYMid')
-        .call(resize);
-
-    d3.select(window).on(
-        'resize.' + container.attr('id'),
-        resize
-    );
-    function resize() {
-        const w = parseInt(container.style('width')) + 50;
-        svg.attr('width', w);
-        svg.attr('height', Math.round(w / aspect));
+option = {
+  xAxis: {
+    type: 'category',
+    data: [
+      '2024-01-01',
+      '2024-01-11',
+      '2024-01-12',
+      '2024-01-17',
+      '2024-01-23',
+      '2024-02-12',
+      '2024-02-11'
+    ],
+    axisLabel: {
+        color: '#FFFFFF'
     }
+  },
+  yAxis: {
+    type: 'value',
+    axisLabel: {
+        color: '#FFFFFF'
+    }
+  },
+  legend: {
+    data: ['예상', '소모 비용', '투자비용'] ,
+    textStyle: {
+          color: '#FFFFFF' // 범례 텍스트 색상 변경
+        }
+  },
+  series: [
+    {
+      data: [0, 50, 100, 150, 200, 250, 300],
+      type: 'line',
+      name: '예상', // 첫 번째 선에 대한 라벨
+      lineStyle: {
+        type: 'dashed' // 선의 스타일을 점선으로 변경
+      },
+      markLine: {
+        lineStyle: {
+          color: 'red', // line color
+          type: 'dashed', // line style
+          width: 3 // line width
+        },
+        label: {
+          position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+          formatter: '투자 비용', // label의 텍스트 설정
+          fontSize: 15, // label의 폰트 크기 설정
+          color: '#FFFFFF'
+        },
+        data: [
+          {
+            yAxis: 300,
+            name: '투자비용' // line label
+          }
+        ]
+      }
+    },
+    {
+      data: [0, 100, 120, 120, 280, 320, 320],
+      type: 'line',
+      name: '소모 비용',
+      markLine: {
+        lineStyle: {
+          color: 'red', // line color
+          type: 'dashed', // line style
+          width: 3 // line width
+        },
+        label: {
+          position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+          formatter: '요구사항 기한', // label의 텍스트 설정
+          fontSize: 15, // label의 폰트 크기 설정
+          color: '#FFFFFF'
+        },
+        data: [
+          {
+            xAxis: 6,
+            name: '투자비용' // line label
+          }
+        ]
+      }
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+}
+
+
+/////////////////////////////////////////////////////////
+// 투입 비용 현황 차트
+/////////////////////////////////////////////////////////
+function compareCostsChart(selectedPdServiceId, selectedVersionId){
+var chartDom = document.getElementById("compare_costs");
+var myChart = echarts.init(chartDom);
+var option;
+var titles = versionListData.map(item => item.c_title);
+
+option = {
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  legend: {
+    textStyle: {
+        color: '#FFFFFF'
+    }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  xAxis: {
+    type: 'value',
+    boundaryGap: [0, 0.01],
+    axisLabel: {
+        color: '#FFFFFF'
+    }
+  },
+  yAxis: {
+    type: 'category',
+    data: titles,
+    axisLabel: {
+        color: '#FFFFFF'
+    }
+  },
+  series: [
+    {
+      name: '투자 비용',
+      type: 'bar',
+      data: [18203, 23489, 29034, 104970]
+    },
+    {
+      name: '소모 비용',
+      type: 'bar',
+      data: [19325, 23438, 31000, 121594]
+    }
+  ]
+};
+
+option && myChart.setOption(option);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
