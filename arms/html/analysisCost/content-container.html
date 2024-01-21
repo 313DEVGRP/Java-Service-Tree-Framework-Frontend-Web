@@ -474,7 +474,7 @@
                 <blockquote
                         class="font13"
                         style="margin-top: 5px">
-                    선택한 제품(서비스)의 버전에 프로젝트 비용과 인력별 단가를 산정
+                    선택한 제품(서비스) 버전 비용과 투입된 인력의 연봉 정보를 입력합니다.
                     <div style="float: right">
                         <button
                                 class="btn btn-transparent btn-xs"
@@ -561,10 +561,71 @@
                                         </button>
                                     </div>
                                 </blockquote>
-                                <div class="network-graph">
-                                    <svg id="NETWORK_GRAPH"></svg>
+
+                                <div>
+                                    <div class="cost-versions">
+                                        <button class="cost-version">BaseVersion</button>
+                                        <button class="cost-version">1.0.0</button>
+                                        <button class="cost-version">1.0.1</button>
+                                        <button class="cost-version">24.01</button>
+                                    </div>
+
+                                    <div class="cost-input-version">
+                                        <span>
+                                            <i class="fa fa-asterisk"></i>
+                                            버전 정보
+                                        </span>
+                                        <div style="width: 100%; height: 10px;"></div>
+                                        <div class="cost-version-info">
+                                            <span>
+                                                <i class="fa fa-check"></i>
+                                                버전 기간
+                                            </span>
+                                            <div>
+                                                2024-01-01 ~ 2024-01-31
+                                            </div>
+                                        </div>
+                                        <div class="cost-version-info">
+                                            <span>
+                                                <i class="fa fa-check"></i>
+                                                버전 설명
+                                            </span>
+                                            <div>
+                                                버전 설명입니다.
+                                            </div>
+                                        </div>
+                                        <div class="cost-version-info">
+                                            <span>
+                                                <i class="fa fa-check"></i>
+                                                버전 비용
+                                            </span>
+                                            <div>
+                                                <input type="text" class="version-input"> 만원
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="cost-input-manpower">
+                                        <span>
+                                            <i class="fa fa-asterisk"></i>
+                                            연봉 정보
+                                        </span>
+                                        <div style="width: 100%; height: 10px;"></div>
+                                        <table
+                                                id="manpower-annual-income"
+                                                style="width: 100%;
+                                                       border-top: 1px dashed rgba(51, 51, 51, 0.3);">
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div style="display: flex; justify-content: space-evenly;">
+                                <button class="cost-input-complete">
+                                    입력 완료
+                                </button>
+                            </div>
+
                         </section>
                     </div>
                 </div>

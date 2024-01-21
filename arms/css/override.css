@@ -1579,3 +1579,68 @@ svg .ghostCircle.show {
 #reqDataTable .reqTable .tbody tr td {
 	border-right: 2px solid #515256;
 }
+
+/* cost 분석 */
+
+/* 비용 입력 */
+.cost-versions {
+	margin: 30px 0;
+	/*padding-left: 20px;*/
+}
+
+.cost-version, .cost-input-complete {
+	margin-right: 10px;
+	padding: 3px 7px;
+	font-size: 11px;
+	font-weight: bold;
+	background-color: #5470c6ff;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.cost-input-complete {
+	font-size: 13px;
+	background-color: rgb(51, 51, 51);
+	box-shadow: none;
+	margin: 0;
+}
+
+.cost-version:hover, .cost-input-complete:hover {
+	background-color: #39393b
+}
+
+.cost-input-version, .cost-input-manpower {
+	margin-bottom: 20px;
+	border-radius: 3px;
+	padding: 5px;
+	margin-bottom: 30px;
+	background: rgba(51,51,51,.425);
+	color: #f8f8f8;
+}
+
+.cost-version-info {
+	margin: 10px 0 10px 0;
+}
+
+.cost-version-info div {
+	padding: 5px 0 0 17px;
+}
+
+.version-input, .salary-input {
+	color: black;
+	width: 30%;
+	text-align: center;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	background: rgba(157, 156, 156, 0.22);
+}
+
+select[name="manpower-annual-income_length"] {
+	color: black;
+}
+
+.dt-center {
+	text-align: center;
+}
