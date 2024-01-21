@@ -390,7 +390,7 @@ function authUserCheck() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function getUserInfo() {
 	$.ajax({
-		url: "/auth-check/getUsers/" + userName,
+		url: "/auth-user/search-user/" + userName,
 		data: {
 			sendData: ""
 		},

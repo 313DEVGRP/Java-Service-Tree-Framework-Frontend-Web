@@ -565,6 +565,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 }
 
 function networkChart(pdServiceVersions, jiraIssueData) {
+	$('.network-graph').removeClass('show');
 	d3.select("#NETWORK_GRAPH").remove();
 
 	var NETWORK_DATA = {
@@ -698,12 +699,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			let width = baseWidth;
 			let height = baseHeight;
 
-			let initScale = 1;
-
-			if (increaseFactor !== 0) {
-				initScale = initScale / increaseFactor;
-			}
-
 			let simulation = d3
 				.forceSimulation(nodes)
 				.force(
@@ -739,24 +734,9 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			// 	return 20;
 			// }));
 
-			//simulation.stop();
+			// simulation.stop();
 
 			let svg = d3.select("#NETWORK_GRAPH").attr("viewBox", [0, 0, width, height]);
-
-			let initialTransform = d3.zoomIdentity
-				.translate(width / 3, height / 3) // 초기 위치 설정
-				.scale(initScale); // 초기 줌 레벨 설정
-
-			let zoom = d3
-				.zoom()
-				.scaleExtent([0.1, 5]) // 줌 가능한 최소/최대 줌 레벨 설정
-				.on("zoom", zoomed); // 줌 이벤트 핸들러 설정
-
-			// SVG에 확대/축소 기능 적용
-			svg.call(zoom);
-
-			// 초기 줌 설정
-			svg.transition().duration(500).call(zoom.transform, initialTransform);
 
 			let gHolder = svg.append("g").attr("class", "g-holder");
 
@@ -853,11 +833,42 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 						dr = Math.sqrt(dx * dx + dy * dy);
 					return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
 				});
+
+				simulation.on("end", () => {
+
+					// 노드 위치의 최소값과 최대값을 구합니다.
+					let xExtent = d3.extent(nodes, d => d.x);
+					let yExtent = d3.extent(nodes, d => d.y);
+
+					// 노드 위치에 따라 차트의 크기를 설정합니다.
+					let chartWidth = xExtent[1] - xExtent[0] + 20;
+					let chartHeight = yExtent[1] - yExtent[0] + 20;
+
+					// 화면 크기에 따라 초기 줌 레벨을 설정합니다.
+					let scaleX = width / chartWidth;
+					let scaleY = height / chartHeight;
+					let initScale = Math.min(scaleX, scaleY);
+					console.log("initScale : " + initScale);
+
+					let initialTransform = d3.zoomIdentity
+						.translate(width / 3, height / 3) // 초기 위치 설정
+						.scale(initScale); // 초기 줌 레벨 설정
+
+					let zoom = d3
+						.zoom()
+						.scaleExtent([0.1, 5]) // 줌 가능한 최소/최대 줌 레벨 설정
+						.on("zoom", zoomed); // 줌 이벤트 핸들러 설정
+
+					// SVG에 확대/축소 기능 적용
+					svg.call(zoom);
+
+					// 초기 줌 설정
+					svg.transition().duration(500).call(zoom.transform, initialTransform);
+
+					$('.network-graph').addClass('show');
+				});
 			});
 
-			// d3-5.16.0
-			// function zoomed() {
-			// 	let transform = d3.event.transform;
 			function zoomed() {
 				// 현재 확대/축소 변환을 얻음
 				let transform = d3.event.transform;
@@ -871,24 +882,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			return svg.node();
 		},
 		drag: function (simulation) {
-			// d3-5.16.0
-			// function dragstarted(d) {
-			// 	if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-			// 	d.fx = d.x;
-			// 	d.fy = d.y;
-			// }
-			//
-			// function dragged(d) {
-			// 	d.fx = d3.event.x;
-			// 	d.fy = d3.event.y;
-			// }
-			//
-			// function dragended(d) {
-			// 	if (!d3.event.active) simulation.alphaTarget(0);
-			// 	d.fx = null;
-			// 	d.fy = null;
-			// }
-
 			function dragstarted(d) {
 				if (!d3.event.active) simulation.alphaTarget(0.3).restart();
 				d.fx = d.x;

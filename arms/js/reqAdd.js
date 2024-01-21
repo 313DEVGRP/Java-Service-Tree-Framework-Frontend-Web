@@ -1,10 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
+
 var selectedJsTreeId; // 요구사항 아이디
 var selectedJsTreeName; // 요구사항 이름
 var tempDataTable;
-var isChecked = [];   // 지라 프로젝트 연결 목록 체크
+var isChecked = []; // 지라 프로젝트 연결 목록 체크
 var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
 
 function execDocReady() {
@@ -55,8 +56,9 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
-		]
+		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+		["js/reqAddTable.js"]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -137,7 +139,7 @@ function execDocReady() {
 			save_req();
 			//jiraProjectConnectionInfo();
 
- 			// 스크립트 실행 로직을 이곳에 추가합니다.
+			// 스크립트 실행 로직을 이곳에 추가합니다.
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
@@ -165,6 +167,8 @@ function makePdServiceSelectBox() {
 				//////////////////////////////////////////////////////////
 				for (var k in data.response) {
 					var obj = data.response[k];
+					$("#reqAddTableSelect").append(tableSelectOption(obj));
+
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
 					$("#selected_pdService").append(newOption).trigger("change");
 				}
@@ -203,8 +207,9 @@ function makePdServiceSelectBox() {
 					<span class="arrow" style="top: 35% !important;"></span>
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
 				<span class="text" style="color: #a4c6ff;">
-				` + selectedService +
-				`
+				` +
+			selectedService +
+			`
 				</span>
 				</div>
 				</div>
@@ -447,7 +452,7 @@ function dataTableLoad(selectId, selectRel) {
 			buttonList,
 			isServerSide
 		);
-	} else if(selectRel !== "folder") {
+	} else if (selectRel !== "folder") {
 		//select node 정보를 가져온다.
 		console.log("tableName:: " + tableName);
 		$.ajax({
@@ -493,7 +498,7 @@ function dataTableLoad(selectId, selectRel) {
 			.done(function (data) {})
 			.fail(function (e) {})
 			.always(function () {});
-	}else{
+	} else {
 		console.log("folder clicked");
 		var columnList = [
 			{ data: "c_id", defaultContent: "-" },
@@ -507,7 +512,7 @@ function dataTableLoad(selectId, selectRel) {
 		var buttonList = [];
 
 		var jquerySelector = "#req_table";
-		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do?c_id="+selectId;
+		var ajaxUrl = "/auth-user/api/arms/reqAdd/" + tableName + "/getChildNodeWithParent.do?c_id=" + selectId;
 		var jsonRoot = "";
 		var isServerSide = false;
 
@@ -523,14 +528,13 @@ function dataTableLoad(selectId, selectRel) {
 			buttonList,
 			isServerSide
 		);
-
 	}
 }
 
 // --- 데이터 테이블 설정 --- // getConnectionInfo.do
 function datatables_jira_project() {
 	// jiraProjectConnectionInfo();
- 	// 데이터 테이블 컬럼 및 열그룹 구성
+	// 데이터 테이블 컬럼 및 열그룹 구성
 	var columnList = [
 		{
 			data: "c_id",
@@ -544,10 +548,10 @@ function datatables_jira_project() {
 					var checkboxHtml = '<input type="checkbox" class="editor-active" name="jiraVerList" value="' + data + '"';
 					// 배열에 현재 data가 포함되어 있는지 확인
 					if (jiraCheckId.includes(data)) {
-						checkboxHtml += ' checked'; // 체크된 상태로 설정
+						checkboxHtml += " checked"; // 체크된 상태로 설정
 						console.log("jira jiraCheckId" + jiraCheckId);
 					}
-					checkboxHtml += '>';
+					checkboxHtml += ">";
 					return checkboxHtml;
 				}
 				console.log("jira type" + type);
@@ -617,7 +621,7 @@ function datatables_jira_project() {
 // -------------------- checkbox 가 들어가야 하는 데이터테이블 이므로 row code를 사용함 ------------------ //
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 function defaultType_dataTableLoad() {
-	console.log("defaultType_dataTableLoad:::"  );
+	console.log("defaultType_dataTableLoad:::");
 	// 데이터 테이블 컬럼 및 열그룹 구성
 
 	//여기는 데이터 가져와서 체크박스 처리 해야 하는 로직
@@ -701,8 +705,8 @@ function jiraProjectConnectionInfo() {
 		url: "/auth-user/api/arms/jiraProject/getConnectionInfo.do",
 		type: "GET",
 		data: {
-			pdservice_link: $("#selected_pdService").val(),
- 		},
+			pdservice_link: $("#selected_pdService").val()
+		},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
@@ -722,22 +726,21 @@ function jiraProjectConnectionInfo() {
 				console.table(obj);
 				console.log(obj.c_id);
 				console.log(jiraCheckId);
-  			}
-		},
-	})
+			}
+		}
+	});
 }
 
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
-
 	// 기존 클릭 이벤트 리스너 제거
-	$('input[name="jiraVerList"]').off('click');
+	$('input[name="jiraVerList"]').off("click");
 
 	// 새로운 클릭 이벤트 리스너 추가
-	$('input[name="jiraVerList"]').on('click', function () {
-		var isChecked = $(this).prop('checked');
+	$('input[name="jiraVerList"]').on("click", function () {
+		var isChecked = $(this).prop("checked");
 		// var checkboxValue = $(this).val();
 		var checkboxValue = parseInt($(this).val()); // 문자열을 정수로 변환
 
@@ -752,7 +755,6 @@ function dataTableClick(tempDataTable, selectedData) {
 				jiraCheckId.splice(index, 1);
 			}
 			console.log("isChecked::delete:" + isChecked);
-
 		}
 
 		// 배열에 담긴 정보 확인
@@ -762,7 +764,7 @@ function dataTableClick(tempDataTable, selectedData) {
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(settings, json) {
-	console.log("데이터테이블콜백")
+	console.log("데이터테이블콜백");
 	setDocViewTab();
 	//상세보기 탭 셋팅
 	//setDetailAndEditViewTab();
@@ -774,8 +776,8 @@ function dataTableCallBack(settings, json) {
 	// 	}
 	// });
 
-	$('input[name="jiraVerList"]').on('click', function () {
-		var isChecked = $(this).prop('checked');
+	$('input[name="jiraVerList"]').on("click", function () {
+		var isChecked = $(this).prop("checked");
 		var checkboxValue = parseInt($(this).val()); // 문자열을 정수로 변환
 
 		if (isChecked) {
@@ -794,7 +796,6 @@ function dataTableCallBack(settings, json) {
 	});
 }
 
-
 function dataTableDrawCallback(tableInfo) {
 	$("#" + tableInfo.sInstance)
 		.DataTable()
@@ -806,7 +807,7 @@ function dataTableDrawCallback(tableInfo) {
 //상세 보기 탭 & 편집 탭
 ////////////////////////////////////////////////////////////////////////////////////////
 function setDetailAndEditViewTab() {
-	console.log("Detail Tab ::::")
+	console.log("Detail Tab ::::");
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
@@ -827,7 +828,7 @@ function setDetailAndEditViewTab() {
 
 // ------------------ 편집하기 ------------------ //
 function bindDataEditlTab(ajaxData) {
-	console.log("checl edit data" + ajaxData.c_req_reviewer01)
+	console.log("checl edit data" + ajaxData.c_req_reviewer01);
 	console.table(ajaxData);
 
 	//제품(서비스) 데이터 바인딩
@@ -853,13 +854,13 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_difficulty label").removeClass("active");
 	$("#editview_req_state_options label").removeClass("active");
 	//radio 버튼 - 상태 초기화
-	$("input[name='editview_req_priority_options']:checked").prop('checked', false);
-	$("input[name='editview_req_difficulty_options']:checked").prop('checked', false);
-	$("input[name='popup_req_state_options']:checked").prop('checked', false);
+	$("input[name='editview_req_priority_options']:checked").prop("checked", false);
+	$("input[name='editview_req_difficulty_options']:checked").prop("checked", false);
+	$("input[name='popup_req_state_options']:checked").prop("checked", false);
 
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");
-	priorityRadioButtons.each(function() {
+	priorityRadioButtons.each(function () {
 		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
@@ -869,7 +870,7 @@ function bindDataEditlTab(ajaxData) {
 	});
 	//상세보기 - 난이도 버튼
 	let difficultRadioButtons = $("#editview_req_difficulty input[type='radio']");
-	difficultRadioButtons.each(function() {
+	difficultRadioButtons.each(function () {
 		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
@@ -879,7 +880,7 @@ function bindDataEditlTab(ajaxData) {
 	});
 	//상세보기 - 상태 버튼
 	let stateRadioButtons = $("#editview_req_state input[type='radio']");
-	stateRadioButtons.each(function() {
+	stateRadioButtons.each(function () {
 		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
@@ -967,7 +968,7 @@ function bindDataEditlTab(ajaxData) {
 
 	// ------------------------- reviewer end --------------------------------//
 	$("#editview_req_status").val(ajaxData.c_req_status);
-	$("#editview_req_writer").val(ajaxData.c_req_writer);  //ajaxData.c_req_reviewer01
+	$("#editview_req_writer").val(ajaxData.c_req_writer); //ajaxData.c_req_reviewer01
 	$("#editview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
 	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_req_contents);
 }
@@ -999,13 +1000,13 @@ function bindDataDetailTab(ajaxData) {
 	$("#detailview_req_difficulty label").removeClass("active");
 	$("#detailview_req_state label").removeClass("active");
 	//radio 버튼 - 상태 초기화
-	$("input[name='detailview_req_priority_options']:checked").prop('checked', false);
-	$("input[name='detailview_req_difficulty_options']:checked").prop('checked', false);
-	$("input[name='detailview_req_state_options']:checked").prop('checked', false);
+	$("input[name='detailview_req_priority_options']:checked").prop("checked", false);
+	$("input[name='detailview_req_difficulty_options']:checked").prop("checked", false);
+	$("input[name='detailview_req_state_options']:checked").prop("checked", false);
 
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
-	priorityRadioButtons.each(function() {
+	priorityRadioButtons.each(function () {
 		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
@@ -1015,7 +1016,7 @@ function bindDataDetailTab(ajaxData) {
 	});
 	//상세보기 - 난이도 버튼
 	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
-	difficultRadioButtons.each(function() {
+	difficultRadioButtons.each(function () {
 		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
@@ -1025,7 +1026,7 @@ function bindDataDetailTab(ajaxData) {
 	});
 	//상세보기 - 상태 버튼
 	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
-	stateRadioButtons.each(function() {
+	stateRadioButtons.each(function () {
 		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
@@ -1168,7 +1169,7 @@ function autoCompleteForUser() {
 		width: "resolve",
 		ajax: {
 			url: function (params) {
-				return "/auth-check/getUsers/" + params.term;
+				return "/auth-user/search-user/" + params.term;
 			},
 			dataType: "json",
 			delay: 250,
@@ -1270,9 +1271,9 @@ function registNewPopup() {
 	$("#popup_req_difficulty label").removeClass("active");
 	$("#popup_req_state label").removeClass("active");
 	//radio 버튼 - 상태 초기화
-	$("input[name='popup_req_priority_options']:checked").prop('checked', false);
-	$("input[name='popup_req_difficulty_options']:checked").prop('checked', false);
-	$("input[name='popup_req_state_options']:checked").prop('checked', false);
+	$("input[name='popup_req_priority_options']:checked").prop("checked", false);
+	$("input[name='popup_req_difficulty_options']:checked").prop("checked", false);
+	$("input[name='popup_req_state_options']:checked").prop("checked", false);
 
 	//리뷰어 셋팅
 	$.ajax({
@@ -1409,15 +1410,23 @@ function save_req() {
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
 		var c_type_value;
-		if ( isEmpty( $("input[name=reqType]:checked").val() )){
+		if (isEmpty($("input[name=reqType]:checked").val())) {
 			c_type_value = "default";
-		}else{
+		} else {
 			c_type_value = $("input[name=reqType]:checked").val();
 		}
 
-		console.log("save_req :: popup_req_priority  -> " + $("#popup_req_priority input[name='popup_req_priority_options']:checked").val());
-		console.log("save_req :: popup_req_difficulty  -> " + $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val());
-		console.log("save_req :: popup_req_state  -> " + $("#popup_req_state input[name='popup_req_state_options']:checked").val());
+		console.log(
+			"save_req :: popup_req_priority  -> " +
+				$("#popup_req_priority input[name='popup_req_priority_options']:checked").val()
+		);
+		console.log(
+			"save_req :: popup_req_difficulty  -> " +
+				$("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val()
+		);
+		console.log(
+			"save_req :: popup_req_state  -> " + $("#popup_req_state input[name='popup_req_state_options']:checked").val()
+		);
 		let selectedReqPriorityLink = $("#popup_req_priority input[name='popup_req_priority_options']:checked").val();
 		let selectedReqDifficultLink = $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val();
 		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
@@ -1429,9 +1438,9 @@ function save_req() {
 			c_req_pdservice_link: $("#selected_pdService").val(),
 			c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
 			c_req_writer: "[" + userName + "]" + " - " + userID,
-			c_req_priority_link: (selectedReqPriorityLink === undefined ? "5" : selectedReqPriorityLink), // 5 - 중간
-			c_req_difficulty_link: (selectedReqDifficultLink === undefined ? "5" : selectedReqDifficultLink), // 5 - 보통
-			c_req_state_link: (selectedReqStateLink === undefined ? "10" : selectedReqStateLink), //10 - 열림
+			c_req_priority_link: selectedReqPriorityLink === undefined ? "5" : selectedReqPriorityLink, // 5 - 중간
+			c_req_difficulty_link: selectedReqDifficultLink === undefined ? "5" : selectedReqDifficultLink, // 5 - 보통
+			c_req_state_link: selectedReqStateLink === undefined ? "10" : selectedReqStateLink, //10 - 열림
 			c_req_reviewer01: reviewers01,
 			c_req_reviewer02: reviewers02,
 			c_req_reviewer03: reviewers03,
@@ -1448,8 +1457,8 @@ function save_req() {
 		};
 		console.log(dataObjectParam);
 
-		if($("#popup_version").val().length >= 1) {
-			if($("#req_title").val().trim() !== "" ) {
+		if ($("#popup_version").val().length >= 1) {
+			if ($("#req_title").val().trim() !== "") {
 				/*
 				$.ajax({
 					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
@@ -1503,22 +1512,35 @@ function click_btn_for_req_update() {
 		if ($("#editview_req_reviewers").select2("data")[4] != undefined) {
 			reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
 		}
-		console.log("click_btn_for_req_update :: editview_req_priority  -> " + $("#editview_req_priority input[name='editview_req_priority_options']:checked").val());
-		console.log("click_btn_for_req_update :: editview_req_difficulty  -> " + $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val());
-		console.log("click_btn_for_req_update :: editview_req_state  -> " + $("#editview_req_state input[name='editview_req_state_options']:checked").val());
+		console.log(
+			"click_btn_for_req_update :: editview_req_priority  -> " +
+				$("#editview_req_priority input[name='editview_req_priority_options']:checked").val()
+		);
+		console.log(
+			"click_btn_for_req_update :: editview_req_difficulty  -> " +
+				$("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val()
+		);
+		console.log(
+			"click_btn_for_req_update :: editview_req_state  -> " +
+				$("#editview_req_state input[name='editview_req_state_options']:checked").val()
+		);
 
-		let selectedEditReqPriorityLink = $("#editview_req_priority input[name='editview_req_priority_options']:checked").val();
-		let selectedEditReqDifficultyLink = $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val();
+		let selectedEditReqPriorityLink = $(
+			"#editview_req_priority input[name='editview_req_priority_options']:checked"
+		).val();
+		let selectedEditReqDifficultyLink = $(
+			"#editview_req_difficulty input[name='editview_req_difficulty_options']:checked"
+		).val();
 		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
-		
+
 		let dataObjectParam = {
 			c_id: $("#editview_req_id").val(),
 			c_title: $("#editview_req_name").val(),
 			c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
 			// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
-			c_req_priority_link: (selectedEditReqPriorityLink === undefined? "5" : selectedEditReqPriorityLink), // 5 - 중간
-			c_req_difficulty_link: (selectedEditReqDifficultyLink === undefined? "5" : selectedEditReqDifficultyLink),// 5 - 보통
-			c_req_state_link: (selectedEditReqStateLink === undefined? "10" : selectedEditReqStateLink), //10 - 열림
+			c_req_priority_link: selectedEditReqPriorityLink === undefined ? "5" : selectedEditReqPriorityLink, // 5 - 중간
+			c_req_difficulty_link: selectedEditReqDifficultyLink === undefined ? "5" : selectedEditReqDifficultyLink, // 5 - 보통
+			c_req_state_link: selectedEditReqStateLink === undefined ? "10" : selectedEditReqStateLink, //10 - 열림
 			c_req_update_date: new Date(),
 			c_req_reviewer01: reviewers01,
 			c_req_reviewer02: reviewers02,
@@ -1797,13 +1819,10 @@ function change_tab_action() {
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-
-
 		} else if (target == "#edit") {
 			$(".edit_btn_group").removeClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-
 		} else if (target == "#jira") {
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
@@ -1811,7 +1830,7 @@ function change_tab_action() {
 
 			console.log("jira tab click event");
 			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#selected_pdService').val()
-			console.log("selected_pdService::::" + $('#selected_pdService').val());  // service id
+			console.log("selected_pdService::::" + $("#selected_pdService").val()); // service id
 			console.log("selectedJsTreeId::::" + selectedJsTreeId); //  jsTree ID
 
 			//1-2. 요구사항 jsTree ID 가져와서 -- selectedJsTreeId
@@ -1820,25 +1839,21 @@ function change_tab_action() {
 			//제품 서비스 셀렉트 박스 데이터 바인딩
 			//요구사항 클릭하면 자세히보기 탭으로 가니까 이 로직은 유효하다.
 
-
 			var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 			console.log("jira selectedJsTreeId" + selectedJsTreeId);
 			console.log("jira tableName" + tableName);
-			console.log("jira datatables_jira_project 완료 " );
-
+			console.log("jira datatables_jira_project 완료 ");
 		} else if (target == "#report") {
 			$(".newReqDiv").show();
 			$(".edit_btn_group").addClass("hidden");
-		}else if (target == "#doc") {
+		} else if (target == "#doc") {
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-
 		} else if (target == "#history") {
 			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-
 		}
 	});
 }
@@ -1855,18 +1870,18 @@ function click_btn_for_connect_req_jira() {
 		// $("input:checkbox[name=jiraVerList]:checked").each(function (i, iVal) {
 		// 	chk_Val.push(iVal.value);
 		// });
-		console.log(" jiraCheckId :: "+JSON.stringify(jiraCheckId));
+		console.log(" jiraCheckId :: " + JSON.stringify(jiraCheckId));
 
 		//반영할 테이블 네임 값 셋팅
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-       // check box 값 = jiraCheckId
+		// check box 값 = jiraCheckId
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
 			data: {
-				c_id: selectedJsTreeId,   // reqAdd id
-				c_req_pdservice_versionset_link: "[]",  //c_req_pdservice_versionset_link
+				c_id: selectedJsTreeId, // reqAdd id
+				c_req_pdservice_versionset_link: "[]", //c_req_pdservice_versionset_link
 				c_jira_link: "independent",
-				c_req_etc: JSON.stringify(jiraCheckId)  //c_req_etc, c_jira_ver_link
+				c_req_etc: JSON.stringify(jiraCheckId) //c_req_etc, c_jira_ver_link
 			},
 			type: "POST",
 			progress: true
@@ -1887,7 +1902,37 @@ function click_btn_for_connect_req_jira() {
 	});
 }
 
-$('#text').on('input', function() {
+$("#text").on("input", function () {
 	var searchString = $(this).val();
-	$('#req_tree').jstree('search', searchString);
+	$("#req_tree").jstree("search", searchString);
 });
+
+function tableSelectOption(obj) {
+	const $li = document.createElement("li");
+
+	$li.innerHTML = `<a href="#reqTable" data-toggle="tab" onclick="tableSelect(${obj.c_id})">${obj.c_title}</a>`;
+
+	return $li;
+}
+
+function tableSelect(id) {
+	makeTable(id, "reqDataTable", {
+		content: {
+			version: "Version",
+			category: "구분",
+			id: "TASK NO",
+			manager: "TASK OWNER",
+			status: "Status",
+			depth1: "Depth 1",
+			depth2: "Depth 2",
+			depth3: "Depth 3",
+			content: "기능",
+			priority: "우선순위",
+			difficulty: "난이도",
+			createDate: "생성일",
+			startDate: "시작일",
+			endDate: "종료일",
+			progress: "진행률"
+		}
+	});
+}
