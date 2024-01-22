@@ -1515,6 +1515,147 @@ svg .ghostCircle.show {
 	opacity: 1;
 }
 
-/*
-* community
-*/
+.req-table,
+.req-select {
+	background: rgba(51, 51, 51, 0.8) !important;
+	border: 1px solid rgba(51, 51, 51, 0.825) !important;
+}
+
+.req-table.dropdown-menu a:hover,
+.req-table.dropdown-menu .active a,
+.req-select.dropdown-menu a:hover,
+.req-select.dropdown-menu .active a {
+	background: none;
+}
+
+.req-table.dropdown-menu a:hover,
+.req-select.dropdown-menu a:hover,
+#select2-selected_pdService-container .select2-selection__placeholder,
+.multiple-select .ms-choice > span.placeholder {
+	color: #f8f8f8;
+}
+.req-table.dropdown-menu .active a,
+.req-select.dropdown-menu .active a,
+#disabled_input_pdservice.form-control {
+	color: #a4c6ff;
+}
+
+.req-select {
+	min-width: auto;
+}
+
+#reqDataTable {
+	padding-top: 0;
+	margin-bottom: 0;
+	max-height: 745px;
+	background: 0 none;
+	overflow: auto;
+}
+
+#reqDataTable .reqTable {
+	width: max-content;
+	table-layout: fixed;
+}
+
+#reqDataTable .reqTable th {
+	padding: 20px 10px 10px;
+	text-align: center;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background-color: rgba(51, 51, 51, 0.9);
+}
+
+#reqDataTable .reqTable td {
+	padding: 5px 10px;
+	text-align: center;
+}
+
+#reqDataTable .reqTable td.depth1,
+#reqDataTable .reqTable td.depth2,
+#reqDataTable .reqTable td.depth3,
+#reqDataTable .reqTable td.content {
+	text-align: left;
+}
+
+#reqDataTable .reqTable .tbody input {
+	width: 100%;
+	border: 0 none;
+	background: 0 none;
+}
+
+#reqDataTable .reqTable .tbody tr:nth-child(even) {
+	background-color: rgba(51, 51, 51, 0.325);
+}
+#reqDataTable .reqTable .tbody tr:first-child {
+	height: 37px !important;
+}
+#reqDataTable .reqTable .tbody tr td {
+	position: relative;
+	border-right: 2px solid #515256;
+}
+
+/* cost 분석 */
+
+/* 비용 입력 */
+.cost-versions {
+	margin: 30px 0;
+	/*padding-left: 20px;*/
+}
+
+.cost-version, .cost-input-complete {
+	margin-right: 10px;
+	padding: 3px 7px;
+	font-size: 11px;
+	font-weight: bold;
+	background-color: #5470c6ff;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.cost-input-complete {
+	font-size: 13px;
+	background-color: rgb(51, 51, 51);
+	box-shadow: none;
+	margin: 0;
+}
+
+.cost-version:hover, .cost-input-complete:hover {
+	background-color: #39393b
+}
+
+.cost-input-version, .cost-input-manpower {
+	margin-bottom: 20px;
+	border-radius: 3px;
+	padding: 5px;
+	margin-bottom: 30px;
+	background: rgba(51,51,51,.425);
+	color: #f8f8f8;
+}
+
+.cost-version-info {
+	margin: 10px 0 10px 0;
+}
+
+.cost-version-info div {
+	padding: 5px 0 0 17px;
+}
+
+.version-input, .salary-input {
+	color: black;
+	width: 30%;
+	text-align: center;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	background: rgba(157, 156, 156, 0.22);
+}
+
+select[name="manpower-annual-income_length"] {
+	color: black;
+}
+
+.dt-center {
+	text-align: center;
+}

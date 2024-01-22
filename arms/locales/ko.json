@@ -16,7 +16,8 @@
 			"g": "간트 차트. Gantt",
 			"t": "일정 분석. Time",
 			"s": "범위 분석. Scope",
-			"r": "자원 분석. Resource"
+			"r": "자원 분석. Resource",
+			"c": "비용 분석. Cost"
 		},
 		"community": {
 			"n": "공지 사항",

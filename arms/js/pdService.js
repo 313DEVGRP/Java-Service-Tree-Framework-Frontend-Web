@@ -423,7 +423,7 @@ function select2_setting() {
 		width: "resolve",
 		ajax: {
 			url: function (params) {
-				return "/auth-check/getUsers/" + params.term;
+				return "/auth-user/search-user/" + params.term;
 			},
 			dataType: "json",
 			delay: 250,
@@ -456,10 +456,12 @@ function select2_setting() {
 	});
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////¸////////////////////
 // --- select2 (사용자 자동완성 검색 ) templateResult 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function formatUser(jsonData) {
+	console.log("formatUser");
+	console.log(jsonData)
 	var $container = $(
 		"<div class='select2-result-jsonData clearfix'>" +
 			"<div class='select2-result-jsonData__meta'>" +
@@ -479,6 +481,8 @@ function formatUser(jsonData) {
 // --- select2 (사용자 자동완성 검색 ) templateSelection 설정 --- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function formatUserSelection(jsonData) {
+	console.log("formatUserSelection");
+	console.log(jsonData)
 	if (jsonData.id == "") {
 		jsonData.text = "placeholder";
 	} else {

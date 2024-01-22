@@ -16,7 +16,8 @@
 			"g": "Gantt Chart",
 			"t": "Time Analysis",
 			"s": "Scope Analysis",
-			"r": "Resource Analysis"
+			"r": "Resource Analysis",
+			"c": "Cost Analysis"
 		},
 		"community": {
 			"n": "Notice",

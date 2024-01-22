@@ -1,1336 +1,1714 @@
-<div class="col-lg-5 col-layer">
-	<section class="widget">
+<div class="col-md-12">
+	<section
+		class="widget"
+		style="margin-bottom: 1em">
 		<header>
-			<h4>
-				<span
-					class="font13"
-					style="font-weight: bold">
-					<i class="fa fa-sort-amount-asc"></i>
-					요구사항 조회
-				</span>
-			</h4>
-			<div class="widget-controls">
-				<a
-					data-widgster="toleft"
-					title="change width to left"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-left"></i>
-				</a>
-				<a
-					data-widgster="expand"
-					title="Expand"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-up"></i>
-				</a>
-				<a
-					data-widgster="collapse"
-					title="Collapse"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-down"></i>
-				</a>
-				<a
-					data-widgster="toright"
-					title="change width to right"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-right"></i>
-				</a>
-				<a
-					data-widgster="restore"
-					title="Restore"
-					href="#">
-					<span class="glyphicon glyphicon-repeat"></span>
-				</a>
-				<a
-					data-widgster="fullscreen"
-					title="Fullscreen"
-					href="#">
-					<i
-						class="glyphicon glyphicon-fullscreen"
-						style="font-size: 11px"></i>
-				</a>
-			</div>
+			<ul class="nav nav-tabs select-view">
+				<li class="active">
+					<a
+						href="#reqAddDefault"
+						data-toggle="tab"
+						id="req_default">
+						<strong>요구관리 보기</strong>
+					</a>
+				</li>
+				<li class="dropdown">
+					<a
+						href="#"
+						class="dropdown-toggle"
+						data-toggle="dropdown">
+						테이블 보기
+						<i class="fa fa-caret-down"></i>
+					</a>
+					<ul
+						id="reqAddTableSelect"
+						class="dropdown-menu req-table"></ul>
+				</li>
+			</ul>
 		</header>
-		<div class="body">
-			<div
-				class="gradient_middle_border"
-				style="width: 100%; height: 2px"></div>
-			<blockquote
-				class="font13"
-				style="margin-top: 5px">
-				1. 제품
-				<sup>서비스</sup>
-				선택 → 버전 선택 → 요구사항 선택
-				<div style="float: right">
-					<button
-						class="btn btn-transparent btn-xs"
-						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-						onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
-						Help
-						<i
-							class="fa fa-question"
-							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-					</button>
-				</div>
-			</blockquote>
-			<div class="clearfix widget-content">
-				<!-- 컴포넌트 대상 -->
-				<div id="selected_info">
-					<div
-						class="panel-group json-menu"
-						id="versionAccordion"
-						style="margin-bottom: 0px !important">
-						<li
-							class="list-group-item json-menu-header"
-							style="padding: 0px">
-							<div class="chat-message">
-								<div
-									class="chat-message-body"
-									style="margin-left: 0px !important; border-right: 2px solid #e5603b; border-left: 0px">
-									<span
-										id="toRight"
-										class="arrow"
-										style="
-											top: 10px !important;
-											right: -7px;
-											border-top: 5px solid transparent;
-											border-bottom: 5px solid transparent;
-											border-left: 5px solid #e5603b;
-											border-right: 0px;
-											left: unset;
-										"></span>
-									<div
-										class="sender"
-										style="padding-bottom: 5px; padding-top: 3px">
-										<i class="fa fa-check"></i>
-										선택된 제품
-										<sup>서비스</sup>
-										:
-										<span
-											id="select_PdService"
-											style="color: #a4c6ff">
-											선택되지 않음
-										</span>
-									</div>
-									<div
-										class="sender"
-										style="padding-bottom: 5px; padding-top: 3px">
-										<i class="fa fa-check"></i>
-										선택된 버전 :
-										<span
-											id="select_Version"
-											style="color: #a4c6ff">
-											선택되지 않음
-										</span>
-									</div>
-									<div
-										class="sender"
-										style="padding-bottom: 5px; padding-top: 3px">
-										<i class="fa fa-check"></i>
-										선택된 요구사항 :
-										<span
-											id="select_Req"
-											style="color: #a4c6ff">
-											선택되지 않음
-										</span>
-									</div>
-								</div>
-							</div>
-						</li>
-					</div>
-				</div>
-			</div>
-			<div class="wrapper">
-				<div
-					class="control-group"
-					style="border: dashed; border-width: thin; border-color: lightsteelblue; margin-bottom: 10px">
-					<div
-						class="controls form-group darkBack"
-						style="margin-bottom: 15px !important">
-						<!--  select proeduct list-->
-						<select
-							id="selected_pdService"
-							required="required"
-							data-placeholder="Select Product(Service)"
-							class="select-block-level chzn-select darkBack"
-							tabindex="-1"
-							style="width: 100% !important"
-							name="selected_pdService">
-							<option value=""></option>
-						</select>
-					</div>
-					<div
-						class="controls form-group darkBack"
-						style="margin-bottom: 5px !important">
-						<select
-							multiple="multiple"
-							id="multiversion"
-							class="multiple-select btn-block darkBack"
-							onchange="changeMultipleSelected()"
-							placeholder="&nbsp;&nbsp;Select Version"></select>
-					</div>
-				</div>
-				<div
-					class="gradient_bottom_border"
-					style="width: 100%; height: 2px"></div>
-				<div
-					id="mmenu"
-					style="padding-bottom: 5px; padding-top: 15px">
-					<form
-						class="form-search no-margin"
-						role="form">
-						<div class="input-group">
-							<input
-								type="search"
-								id="text"
-								class="form-control searchDarkBack"
-								style="color: #f8f8f8"
-								placeholder="찾을 노드 이름 입력"
-								data-tooltip="Press Enter To Node To Search" />
-							<span class="input-group-btn">
-								<button
-									type="button"
-									id="search"
-									title="Search"
-									class="btn btn-default btn-sm"
-									style="line-height: 1.63">
-									Search
-								</button>
-							</span>
-						</div>
-					</form>
-				</div>
-				<div
-					id="req_tree"
-					style="padding-top: 5px; overflow: hidden"
-					class="darkBack"></div>
-				<div
-					style="margin-top: 10px"
-					class="darkBack">
-					설명
-				</div>
-			</div>
-		</div>
-	</section>
-</div>
 
-<div class="col-lg-7 col-layer">
-	<section class="widget">
-		<header>
-			<h4>
-				<span
-					class="font13"
-					style="font-weight: bold">
-					<i class="fa fa-edit"></i>
-					요구사항 내용
-				</span>
-			</h4>
-			<div class="widget-controls">
-				<a
-					data-widgster="toleft"
-					title="change width to left"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-left"></i>
-				</a>
-				<a
-					data-widgster="expand"
-					title="Expand"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-up"></i>
-				</a>
-				<a
-					data-widgster="collapse"
-					title="Collapse"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-down"></i>
-				</a>
-				<a
-					data-widgster="toright"
-					title="change width to right"
-					href="#">
-					<i class="glyphicon glyphicon-chevron-right"></i>
-				</a>
-				<a
-					data-widgster="restore"
-					title="Restore"
-					href="#">
-					<span class="glyphicon glyphicon-repeat"></span>
-				</a>
-				<a
-					data-widgster="fullscreen"
-					title="Fullscreen"
-					href="#">
-					<i
-						class="glyphicon glyphicon-fullscreen"
-						style="font-size: 11px"></i>
-				</a>
-			</div>
-		</header>
-		<div class="body">
+		<div
+			class="tab-content"
+			style="padding: 10px 0; background: none">
 			<div
-				class="gradient_middle_border"
-				style="width: 100%; height: 2px"></div>
-			<blockquote
-				class="font13"
-				style="margin-top: 5px">
-				2. 요구사항 세부 내용 조회
-				<div style="float: right">
-					<button
-						class="btn btn-transparent btn-xs"
-						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-						onclick="window.open('docs/guide.html#requirement_regist_content')">
-						Help
-						<i
-							class="fa fa-question"
-							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-					</button>
-				</div>
-			</blockquote>
-			<div class="clearfix widget-content">
-				<!-- 컴포넌트 대상 -->
+				id="reqAddDefault"
+				class="tab-pane active">
 				<div
-					id="selected_info"
-					style="float: left">
-					<div
-						class="panel-group json-menu"
-						id="versionAccordion"
-						style="margin-bottom: 0px !important">
-						<li
-							id="reqSender"
-							class="list-group-item json-menu-header">
-							<div class="chat-message">
-								<div
-									class="chat-message-body"
-									style="
-										margin-left: 0px !important;
-										padding: 0px 10px 0px 10px !important;
-										border-left: 2px solid #a4c6ff;
-									">
-									<span
-										class="arrow"
-										style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
-									<div
-										class="sender"
-										style="padding-bottom: 5px; padding-top: 5px">
-										선택된 제품(서비스) :
-										<span
-											id="select_Service"
-											style="color: #a4c6ff">
-											선택되지 않음
-										</span>
-									</div>
-								</div>
-							</div>
-						</li>
-					</div>
-				</div>
-
-				<div
-					style="float: right; border: 1px solid #0b67ff !important"
-					class="newReqDiv darkBack">
-					<label
-						id="new_req_regist02"
-						class="btn btn-primary btn-transparent btn-sm active"
-						data-target="#my_modal1"
-						data-toggle="modal"
-						style="width: 100%; background-color: #2477ff !important">
-						A-RMS의 신규 요구사항 등록하기
-					</label>
-				</div>
-				<div
-					style="float: right"
-					class="edit_btn_group hidden">
-					<button
-						type="button"
-						id="edit_tab_req_update"
-						class="btn btn-success btn-sm">
-						요구사항 변경 저장
-					</button>
-				</div>
-				<div
-					style="float: right"
-					class="jira_btn_group hidden">
-					<button
-						id="req_jiraver_connect_change"
-						class="btn btn-success btn-sm">
-						지라 프로젝트 연결설정 변경
-					</button>
-				</div>
-				<div
-					style="float: right"
-					class="delete_btn_group hidden">
-					<button
-						id="delete_pdservice"
-						class="btn btn-danger btn-sm">
-						요구사항 삭제
-					</button>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<section class="widget widget-tabs">
+					class="col-lg-5 col-layer"
+					style="padding-left: 0">
+					<section class="widget">
 						<header>
-							<ul class="nav nav-tabs">
-								<li class="active">
-									<a
-										href="#stats"
-										data-toggle="tab"
-										id="default_tab">
-										<strong>상세 보기</strong>
-									</a>
-								</li>
-								<li>
-									<a
-										href="#edit"
-										data-toggle="tab"
-										id="edit_tab">
-										<strong>편집 하기</strong>
-									</a>
-								</li>
-								<li>
-									<a
-										href="#report"
-										data-toggle="tab"
-										id="folder_tab">
-										<strong>리스트로 보기</strong>
-									</a>
-								</li>
-								<li>
-									<a
-										href="#doc"
-										data-toggle="tab"
-										id="docu_tab">
-										<strong>문서로 보기</strong>
-									</a>
-								</li>
-								<li class="hidden">
-									<a
-										href="#history"
-										data-toggle="tab"
-										id="history_tab">
-										<strong>History(이력)</strong>
-									</a>
-								</li>
-							</ul>
+							<h4>
+								<span
+									class="font13"
+									style="font-weight: bold">
+									<i class="fa fa-sort-amount-asc"></i>
+									요구사항 조회
+								</span>
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
 						</header>
-						<div class="body tab-content">
+						<div class="body">
 							<div
-								id="stats"
-								class="tab-pane active clearfix"
-								style="padding-top: 10px !important">
-								<form
-									class="form-horizontal"
-									method="post">
-									<fieldset>
-										<div
-											class="control-group"
-											for="detailview_req_pdservice_name">
-											<label class="control-label font13">
-												요구사항 제품
-												<sup>서비스</sup>
-												:
-											</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-th-list"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_pdservice_name"
-													name="detailview_req_pdservice_name"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-													required="required"
-													style="color: #a4c6ff"
-													placeholder="Service Name" />
-											</div>
-										</div>
-										<div
-											class="control-group"
-											for="detailview_req_pdservice_version">
-											<label class="control-label font13">요구사항 버전 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_pdservice_version"
-													name="detailview_req_pdservice_version"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-													required="required"
-													style="color: #a4c6ff"
-													placeholder="Service Version" />
-											</div>
-										</div>
-										<div
-											class="control-group"
-											for="detailview_req_id">
-											<label class="control-label font13">요구사항 아이디 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-phone"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_id"
-													name="detailview_req_id"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-													required="required"
-													style="color: #a4c6ff"
-													placeholder="Requirement ID" />
-											</div>
-										</div>
-										<div
-											class="control-group"
-											for="detailview_req_name">
-											<label class="control-label font13">요구사항 제목 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-list-alt"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_name"
-													name="detailview_req_name"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-													required="required"
-													style="color: #a4c6ff"
-													placeholder="Requirement Title" />
-											</div>
-										</div>
-										<div
-											class="control-group"
-											for="detailview_req_writer">
-											<label class="control-label font13">요구사항 요청자 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-user"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_writer"
-													name="detailview_req_writer"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-													required="required"
-													style="color: #a4c6ff"
-													placeholder="Requirements Author" />
-											</div>
-										</div>
-										<div
-											class="control-group"
-											for="detailview_req_write_date">
-											<label class="control-label font13">요구사항 요청일 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-envelope"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_write_date"
-													name="detailview_req_write_date"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
-													required="required"
-													style="color: #a4c6ff"
-													placeholder="Requirements Last Created Date" />
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label font13">제품(서비스) 리뷰어 :</label>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_reviewer01"
-													name="detailview_req_reviewer01"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="Product (Service) Reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_reviewer02"
-													name="detailview_req_reviewer02"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="Product (Service) Reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_reviewer03"
-													name="detailview_req_reviewer03"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="Product (Service) Reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_reviewer04"
-													name="detailview_req_reviewer04"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="Product (Service) Reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_req_reviewer05"
-													name="detailview_req_reviewer05"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="Product (Service) Reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-										</div>
-										<div class="control-group">
-											<label
-												class="control-label"
-												style="margin-top: 10px">
-												요구사항 내용 :
-											</label>
-											<div
-												class="col-sm-8"
-												style="margin-top: 16px; margin-bottom: 10px">
-												<i class="fa fa-level-down"></i>
-												하단 영역 참조
-											</div>
-											<br />
-											<br />
-											<br />
-											<div
-												class="col-sm-12 darkBack"
-												id="detailview_req_contents"
-												style="padding-top: 7px"></div>
-										</div>
-									</fieldset>
-								</form>
-							</div>
-							<div
-								id="edit"
-								class="tab-pane"
-								style="padding-top: 10px !important">
-								<div
-									class="form-group"
-									style="padding-top: 10px">
-									<div class="control-group">
-										<label
-											class="control-label"
-											style="vertical-align: center">
-											요구사항 등록 모드 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div
-												class="input-group"
-												style="text-align: left">
-												<span class="input-group-addon">
-													<i class="fa fa-sliders"></i>
-												</span>
-												<div
-													class="btn-group"
-													data-toggle="buttons">
-													<label
-														class="btn btn-transparent btn-sm active"
-														style="color: #f8f8f8 !important">
-														<input type="radio" />
-														요구사항 변경 모드
-													</label>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<!--										<label  class="control-label"-->
-										<!--										    	for="editview_req_pdservice_name">-->
-										<!--										    	요구사항 제품(서비스) :-->
-										<!--										</label>-->
-										<label
-											class="control-label"
-											for="editview_req_pdservice_name">
-											요구사항 제품
-											<sup>서비스</sup>
-											:
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-th-list"></i>
-												</span>
-												<input
-													id="editview_req_pdservice_name"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="제품(서비스)명을 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="edit_multi_version">
-											요구사항 버전 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
-												</span>
-												<select
-													multiple="multiple"
-													id="edit_multi_version"
-													class="multiple-select btn-block darkBack"
-													placeholder="&nbsp;버전을 선택해주세요"
-													style="color: #a4c6ff"></select>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_id">
-											요구사항 아이디 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-phone"></i>
-												</span>
-												<input
-													id="editview_req_id"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 아이디를 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_name">
-											요구사항 제목 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-list-alt"></i>
-												</span>
-												<input
-													id="editview_req_name"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 제목을 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_writer">
-											요구사항 요청자 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-user"></i>
-												</span>
-												<input
-													id="editview_req_writer"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 요청자를 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_write_date">
-											요구사항 요청일 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-envelope"></i>
-												</span>
-												<input
-													id="editview_req_write_date"
-													disabled="disabled"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													size="16"
-													type="text"
-													placeholder="요구사항 요청일을 입력해 주세요" />
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="editview_req_reviewers">
-											요구사항 리뷰어 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<select
-													id="editview_req_reviewers"
-													class="js-data-example-ajax form-control font13 darkBack"
-													name="selectedReviewers[]"
-													multiple="multiple"
-													style="width: 100%; color: #a4c6ff"></select>
-											</div>
-										</div>
-									</div>
-									<div class="control-group">
-										<label
-											class="control-label"
-											for="edit_tabmodal_editor">
-											요구사항 내용 :
-										</label>
-										<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-											<div
-												class="input-group"
-												style="padding-top: 5px">
-												<code>
-													입력 창이 좁다면 하단의
-													<span class="glyphicon glyphicon-fullscreen"></span>
-													( 풀스크린 편집 ) 아이콘을 클릭하세요
-												</code>
-											</div>
-										</div>
-										<div
-											class="col-sm-12 darkBack"
-											id="edit_tabmodal_editor">
-											<p>요구사항 내용을 기록합니다.</p>
-										</div>
-									</div>
+								class="gradient_middle_border"
+								style="width: 100%; height: 2px"></div>
+							<blockquote
+								class="font13"
+								style="margin-top: 5px">
+								1. 제품
+								<sup>서비스</sup>
+								선택 → 버전 선택 → 요구사항 선택
+								<div style="float: right">
+									<button
+										class="btn btn-transparent btn-xs"
+										style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+										onclick="window.open('docs/guide.html#requirement_regist_inquiry')">
+										Help
+										<i
+											class="fa fa-question"
+											style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+									</button>
 								</div>
-							</div>
-							<div
-								id="report"
-								class="tab-pane"
-								style="padding-top: 10px !important">
-								<table
-									class="display"
-									id="req_table"
-									style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
-									<thead>
-										<tr>
-											<th>c_id</th>
-											<th>c_left</th>
-											<th>c_title</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
-							<div
-								id="doc"
-								class="tab-pane"
-								style="padding-top: 10px !important">
-								<!--								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"-->
-								<!--                                        class="newReqDiv darkBack">-->
-								<!--									<label  id="new_req_regist03"-->
-								<!--                                            class="btn btn-primary btn-transparent btn-sm active"-->
-								<!--                                            data-target="#my_modal1"-->
-								<!--                                            data-toggle="modal"-->
-								<!--                                            style="width: 100%; background-color: #2477ff !important">-->
-								<!--										    A-RMS의 신규 요구사항 등록하기-->
-								<!--									</label>-->
-								<!--								</div>-->
-								<div class="col-md-12">
+							</blockquote>
+							<div class="clearfix widget-content">
+								<!-- 컴포넌트 대상 -->
+								<div id="selected_info">
 									<div
-										class="dd"
-										id="nestable1">
-										<ol class="dd-list"></ol>
+										class="panel-group json-menu"
+										id="versionAccordion"
+										style="margin-bottom: 0px !important">
+										<li
+											class="list-group-item json-menu-header"
+											style="padding: 0px">
+											<div class="chat-message">
+												<div
+													class="chat-message-body"
+													style="margin-left: 0px !important; border-right: 2px solid #e5603b; border-left: 0px">
+													<span
+														id="toRight"
+														class="arrow"
+														style="
+															top: 10px !important;
+															right: -7px;
+															border-top: 5px solid transparent;
+															border-bottom: 5px solid transparent;
+															border-left: 5px solid #e5603b;
+															border-right: 0px;
+															left: unset;
+														"></span>
+													<div
+														class="sender"
+														style="padding-bottom: 5px; padding-top: 3px">
+														<i class="fa fa-check"></i>
+														선택된 제품
+														<sup>서비스</sup>
+														:
+														<span
+															id="select_PdService"
+															style="color: #a4c6ff">
+															선택되지 않음
+														</span>
+													</div>
+													<div
+														class="sender"
+														style="padding-bottom: 5px; padding-top: 3px">
+														<i class="fa fa-check"></i>
+														선택된 버전 :
+														<span
+															id="select_Version"
+															style="color: #a4c6ff">
+															선택되지 않음
+														</span>
+													</div>
+													<div
+														class="sender"
+														style="padding-bottom: 5px; padding-top: 3px">
+														<i class="fa fa-check"></i>
+														선택된 요구사항 :
+														<span
+															id="select_Req"
+															style="color: #a4c6ff">
+															선택되지 않음
+														</span>
+													</div>
+												</div>
+											</div>
+										</li>
 									</div>
 								</div>
 							</div>
-							<div
-								id="jira"
-								class="tab-pane"
-								style="padding-top: 10px !important">
-								<table
-									class="display"
-									id="jira_project_table"
-									style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
-							</div>
-
-							<div
-								id="history"
-								class="tab-pane"
-								style="padding-top: 10px !important">
-								<!-- The timeline -->
-								<ul class="timeline timeline-inverse">
-									<!-- timeline time label -->
-									<li class="time-label">
-										<a class="btn btn-danger btn-sm">
-											A-RMS 모든 이력을 시간순으로 표시 :
-											<i class="fa fa-check"></i>
-										</a>
-									</li>
-									<!-- /.timeline-label -->
-									<!-- timeline item -->
-									<li class="timeline-item-head">
-										<i class="fa fa-search bg-maroon"></i>
-										<div
-											class="timeline-item"
-											style="line-height: 2 !important">
-											<span class="arrow"></span>
-											<div
-												class="col-sm-5"
-												style="padding-top: 12px">
-												<div class="input-group">
-													<span class="input-group-btn">
-														<a
-															href="#"
-															id="btn_start_calendar_popup"
-															class="btn btn-warning"
-															data-date-format="yyyy/mm/dd"
-															data-date="2022/11/11">
-															<i class="fa fa-calendar"></i>
-														</a>
-													</span>
-													<input
-														id="input_req_start_date"
-														class="form-control"
-														type="text"
-														name="btn_enabled_date"
-														value="검색 시작 날짜"
-														pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
-												</div>
-											</div>
-											<div
-												class="col-sm-5"
-												style="padding-top: 12px">
-												<div class="input-group">
-													<span class="input-group-btn">
-														<a
-															href="#"
-															id="btn_end_calendar_popup"
-															class="btn btn-warning"
-															data-date-format="yyyy/mm/dd"
-															data-date="2022/11/11">
-															<i class="fa fa-calendar"></i>
-														</a>
-													</span>
-													<input
-														id="input_req_end_date"
-														class="form-control"
-														type="text"
-														name="btn_enabled_date"
-														value="검색 종료 날짜"
-														pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
-												</div>
-											</div>
-											<div
-												class="col-sm-2"
-												style="padding-top: 12px">
+							<div class="wrapper">
+								<div
+									class="control-group"
+									style="border: dashed; border-width: thin; border-color: lightsteelblue; margin-bottom: 10px">
+									<div
+										class="controls form-group darkBack"
+										style="margin-bottom: 15px !important">
+										<!--  select proeduct list-->
+										<select
+											id="selected_pdService"
+											required="required"
+											data-placeholder="Select Product(Service)"
+											class="select-block-level chzn-select darkBack"
+											tabindex="-1"
+											style="width: 100% !important"
+											name="selected_pdService">
+											<option value=""></option>
+										</select>
+									</div>
+									<div
+										class="controls form-group darkBack"
+										style="margin-bottom: 5px !important">
+										<select
+											multiple="multiple"
+											id="multiversion"
+											class="multiple-select btn-block darkBack"
+											onchange="changeMultipleSelected()"
+											placeholder="&nbsp;&nbsp;Select Version"></select>
+									</div>
+								</div>
+								<div
+									class="gradient_bottom_border"
+									style="width: 100%; height: 2px"></div>
+								<div
+									id="mmenu"
+									style="padding-bottom: 5px; padding-top: 15px">
+									<form
+										class="form-search no-margin"
+										role="form">
+										<div class="input-group">
+											<input
+												type="search"
+												id="text"
+												class="form-control searchDarkBack"
+												style="color: #f8f8f8"
+												placeholder="찾을 노드 이름 입력"
+												data-tooltip="Press Enter To Node To Search" />
+											<span class="input-group-btn">
 												<button
 													type="button"
-													class="btn btn-warning"
-													id="logsearch">
+													id="search"
+													title="Search"
+													class="btn btn-default btn-sm"
+													style="line-height: 1.63">
 													Search
 												</button>
-											</div>
-											<h3
-												class="timeline-header"
-												style="padding: 0px !important; font-size: 11px"></h3>
-										</div>
-									</li>
-									<!-- END timeline item -->
-									<!-- timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-balance-scale bg-maroon"></i>
-										<div class="timeline-item">
-											<span class="arrow"></span>
-											<span class="time">
-												<i class="fa fa-clock-o"></i>
-												09:00 (MON)
 											</span>
-
-											<h3 class="timeline-header">
-												<a
-													href="http://www.313.co.kr/confluence"
-													target="_blank">
-													착수
-												</a>
-												<small class="font11">제품(서비스) 등록, 버전 등록</small>
-											</h3>
-
-											<div class="timeline-body col-md-4 font11">
-												<a
-													href="http://www.313.co.kr/confluence"
-													target="_blank"
-													class="btn bg-maroon btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Confluence by 313 DEV GRP
-												</a>
-											</div>
-											<div class="timeline-footer col-md-8 font12 fontw600">
-												Input : Plan & Opinion & Idea
-												<br />
-												Skill : Negotiation
-												<br />
-												Output : Requirements
-												<br />
-												System : Atlassian Confluence ( Online Document System )
-											</div>
 										</div>
-									</li>
-									<!-- END timeline item -->
-									<!-- timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-check-square-o bg-yellow"></i>
-
-										<div class="timeline-item">
-											<span class="time">
-												<i class="fa fa-clock-o"></i>
-												10:00 (TUE)
-											</span>
-
-											<h3 class="timeline-header">
-												<a
-													href="http://www.313.co.kr/confluence"
-													target="_blank">
-													기획
-												</a>
-												<small class="font11">요구사항 등록</small>
-											</h3>
-
-											<div class="timeline-body col-md-4 font11">
-												<a
-													href="http://www.313.co.kr/confluence"
-													target="_blank"
-													class="btn bg-yellow btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Confluence by 313 DEV GRP
-												</a>
-											</div>
-											<div class="timeline-footer col-md-8 font12 fontw600">
-												Input : Requirements
-												<br />
-												Skill : Requirements engineering
-												<br />
-												Output : SRS ( Software Requirements Specification )
-												<br />
-												System : Atlassian Confluence ( Online Document System )
-											</div>
-										</div>
-									</li>
-									<!-- END timeline item -->
-									<!-- timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-cubes bg-teal"></i>
-
-										<div class="timeline-item">
-											<span class="time">
-												<i class="fa fa-clock-o"></i>
-												12:00 (WED)
-											</span>
-
-											<h3 class="timeline-header">
-												<a
-													href="http://www.313.co.kr/jira"
-													target="_blank">
-													실행 및 이행
-												</a>
-												<small class="font11">JIRA 전파</small>
-											</h3>
-
-											<div class="timeline-body col-md-4 font11">
-												<a
-													href="http://www.313.co.kr/jira"
-													target="_blank"
-													class="btn bg-teal btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Jira by 313 DEV GRP
-												</a>
-											</div>
-											<div class="timeline-footer col-md-8 font12 fontw600">
-												Input : SRS ( Software Requirements Specification )
-												<br />
-												Skill : Architecture design
-												<br />
-												Output : SDS ( Software Design Specification )
-												<br />
-												System : Atlassian Jira ( Issue Management System )
-											</div>
-										</div>
-									</li>
-									<!-- END timeline item -->
-									<!-- timeline time label -->
-									<!-- /.timeline-label -->
-									<!-- timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-sitemap bg-light-blue"></i>
-
-										<div class="timeline-item">
-											<span class="time">
-												<i class="fa fa-clock-o"></i>
-												15:00 (THU)
-											</span>
-
-											<h3 class="timeline-header">
-												<a
-													href="https://github.com/jstree"
-													target="_blank">
-													실행 및 이행
-												</a>
-												<small class="font11">Developers 개발</small>
-											</h3>
-
-											<div class="timeline-body col-md-4 font11">
-												<a
-													href="https://github.com/jstree"
-													target="_blank"
-													class="btn bg-light-blue btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													GitHub by 313 DEV GRP
-												</a>
-												<a
-													href="http://www.313.co.kr/fecru"
-													target="_blank"
-													class="btn bg-light-blue btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Fecru by 313 DEV GRP
-												</a>
-												<a
-													href="http://www.313.co.kr/bamboo"
-													target="_blank"
-													class="btn bg-light-blue btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Bamboo by 313 DEV GRP
-												</a>
-											</div>
-											<div class="timeline-footer col-md-8 font12 fon">
-												Input : SDS ( Software Design Specification )
-												<br />
-												Skill : Coding
-												<br />
-												Output : Source Code & Artifacts
-												<br />
-												System : GitHub ( Software Version Management )
-											</div>
-										</div>
-									</li>
-									<!-- END timeline item -->
-									<!-- timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-bug bg-purple"></i>
-
-										<div class="timeline-item">
-											<span class="time">
-												<i class="fa fa-clock-o"></i>
-												17:00 (FRI)
-											</span>
-
-											<h3 class="timeline-header">
-												<a
-													href="https://github.com/jstree"
-													target="_blank">
-													감시 및 통제
-												</a>
-												<small class="font11">QA 및 체크리스트</small>
-											</h3>
-
-											<div class="timeline-body col-md-4 font11">
-												<a
-													href="http://www.313.co.kr/analysis"
-													target="_blank"
-													class="btn bg-purple btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Project Analysis by 313 DEV GRP
-												</a>
-												<a
-													href="http://www.313.co.kr/nexus"
-													target="_blank"
-													class="btn bg-purple btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Nexus by 313 DEV GRP
-												</a>
-												<a
-													href="http://www.313.co.kr/sonar"
-													target="_blank"
-													class="btn bg-purple btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													Sonar by 313 DEV GRP
-												</a>
-											</div>
-											<div class="timeline-footer col-md-8 font12 fontw600">
-												Input : Source Code & Artifacts
-												<br />
-												Skill : Quality Assurance
-												<br />
-												Output : TCR ( Test Case Result )
-												<br />
-												System : SonarQube
-											</div>
-										</div>
-									</li>
-									<!-- END timeline item -->
-									<!-- timeline time label -->
-									<!-- /.timeline-label -->
-									<!-- timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-train bg-black"></i>
-
-										<div class="timeline-item">
-											<span class="time">
-												<i class="fa fa-clock-o"></i>
-												18:00 (SAT)
-											</span>
-
-											<h3 class="timeline-header">
-												<a
-													href="https://github.com/jstree"
-													target="_blank">
-													종료
-												</a>
-												<small class="font11">보고</small>
-											</h3>
-
-											<div class="timeline-body col-md-4 font11">
-												<a
-													href="https://hub.docker.com/u/313devgrp/"
-													target="_blank"
-													class="btn bg-black btn-xs"
-													style="font-size: 11px">
-													<i class="fa fa-share"></i>
-													DockerHub by 313 DEV GRP
-												</a>
-											</div>
-											<div class="timeline-footer col-md-8 font12 fontw600">
-												Input : TCR ( Test Case Result )
-												<br />
-												Skill : Lessons learned and retrospective
-												<br />
-												Output : Container
-												<br />
-												System : Docker ( Cloud Operating system )
-											</div>
-										</div>
-									</li>
-									<!-- END timeline item -->
-									<li class="timeline-item-body">
-										<i class="fa fa-clock-o bg-gray"></i>
-									</li>
-								</ul>
+									</form>
+								</div>
+								<div
+									id="req_tree"
+									style="padding-top: 5px; overflow: hidden"
+									class="darkBack"></div>
+								<div
+									style="margin-top: 10px"
+									class="darkBack">
+									설명
+								</div>
 							</div>
 						</div>
 					</section>
 				</div>
+
+				<div
+					class="col-lg-7 col-layer"
+					style="padding-right: 0">
+					<section class="widget">
+						<header>
+							<h4>
+								<span
+									class="font13"
+									style="font-weight: bold">
+									<i class="fa fa-edit"></i>
+									요구사항 내용
+								</span>
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div class="body">
+							<div
+								class="gradient_middle_border"
+								style="width: 100%; height: 2px"></div>
+							<blockquote
+								class="font13"
+								style="margin-top: 5px">
+								2. 요구사항 세부 내용 조회
+								<div style="float: right">
+									<button
+										class="btn btn-transparent btn-xs"
+										style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+										onclick="window.open('docs/guide.html#requirement_regist_content')">
+										Help
+										<i
+											class="fa fa-question"
+											style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+									</button>
+								</div>
+							</blockquote>
+							<div class="clearfix widget-content">
+								<!-- 컴포넌트 대상 -->
+								<div
+									id="selected_info"
+									style="float: left">
+									<div
+										class="panel-group json-menu"
+										id="versionAccordion"
+										style="margin-bottom: 0px !important">
+										<li
+											id="reqSender"
+											class="list-group-item json-menu-header">
+											<div class="chat-message">
+												<div
+													class="chat-message-body"
+													style="
+														margin-left: 0px !important;
+														padding: 0px 10px 0px 10px !important;
+														border-left: 2px solid #a4c6ff;
+													">
+													<span
+														class="arrow"
+														style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
+													<div
+														class="sender"
+														style="padding-bottom: 5px; padding-top: 5px">
+														선택된 제품(서비스) :
+														<span
+															id="select_Service"
+															style="color: #a4c6ff">
+															선택되지 않음
+														</span>
+													</div>
+												</div>
+											</div>
+										</li>
+									</div>
+								</div>
+
+								<div
+									style="float: right; border: 1px solid #0b67ff !important"
+									class="newReqDiv darkBack">
+									<label
+										id="new_req_regist02"
+										class="btn btn-primary btn-transparent btn-sm active"
+										data-target="#my_modal1"
+										data-toggle="modal"
+										style="width: 100%; background-color: #2477ff !important">
+										A-RMS의 신규 요구사항 등록하기
+									</label>
+								</div>
+								<div
+									style="float: right"
+									class="edit_btn_group hidden">
+									<button
+										type="button"
+										id="edit_tab_req_update"
+										class="btn btn-success btn-sm">
+										요구사항 변경 저장
+									</button>
+								</div>
+								<div
+									style="float: right"
+									class="jira_btn_group hidden">
+									<button
+										id="req_jiraver_connect_change"
+										class="btn btn-success btn-sm">
+										지라 프로젝트 연결설정 변경
+									</button>
+								</div>
+								<div
+									style="float: right"
+									class="delete_btn_group hidden">
+									<button
+										id="delete_pdservice"
+										class="btn btn-danger btn-sm">
+										요구사항 삭제
+									</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<section class="widget widget-tabs">
+										<header>
+											<ul class="nav nav-tabs">
+												<li class="active">
+													<a
+														href="#stats"
+														data-toggle="tab"
+														id="default_tab">
+														<strong>상세 보기</strong>
+													</a>
+												</li>
+												<li>
+													<a
+														href="#edit"
+														data-toggle="tab"
+														id="edit_tab">
+														<strong>편집 하기</strong>
+													</a>
+												</li>
+												<li>
+													<a
+														href="#report"
+														data-toggle="tab"
+														id="folder_tab">
+														<strong>리스트로 보기</strong>
+													</a>
+												</li>
+												<li>
+													<a
+														href="#doc"
+														data-toggle="tab"
+														id="docu_tab">
+														<strong>문서로 보기</strong>
+													</a>
+												</li>
+												<li class="hidden">
+													<a
+														href="#history"
+														data-toggle="tab"
+														id="history_tab">
+														<strong>History(이력)</strong>
+													</a>
+												</li>
+											</ul>
+										</header>
+										<div class="body tab-content">
+											<div
+												id="stats"
+												class="tab-pane active clearfix"
+												style="padding-top: 10px !important">
+												<form
+													class="form-horizontal"
+													method="post">
+													<fieldset>
+														<div
+															class="control-group"
+															for="detailview_req_pdservice_name">
+															<label class="control-label font13">
+																요구사항 제품
+																<sup>서비스</sup>
+																:
+															</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-th-list"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_pdservice_name"
+																	name="detailview_req_pdservice_name"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+																	required="required"
+																	style="color: #a4c6ff"
+																	placeholder="Service Name" />
+															</div>
+														</div>
+														<div
+															class="control-group"
+															for="detailview_req_pdservice_version">
+															<label class="control-label font13">요구사항 버전 :</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-gift"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_pdservice_version"
+																	name="detailview_req_pdservice_version"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+																	required="required"
+																	style="color: #a4c6ff"
+																	placeholder="Service Version" />
+															</div>
+														</div>
+														<div
+															class="control-group"
+															for="detailview_req_id">
+															<label class="control-label font13">요구사항 아이디 :</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-phone"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_id"
+																	name="detailview_req_id"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+																	required="required"
+																	style="color: #a4c6ff"
+																	placeholder="Requirement ID" />
+															</div>
+														</div>
+														<div
+															class="control-group"
+															for="detailview_req_name">
+															<label class="control-label font13">요구사항 제목 :</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_name"
+																	name="detailview_req_name"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+																	required="required"
+																	style="color: #a4c6ff"
+																	placeholder="Requirement Title" />
+															</div>
+														</div>
+														<div class="control-group">
+															<label
+																for="detailview_req_priority"
+																class="control-label font13">
+																요구사항 우선순위 :
+															</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+																<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																	<div
+																		id="detailview_req_priority"
+																		class="btn-group"
+																		data-toggle="buttons">
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_priority_options"
+																				value="7" />
+																			매우 높음
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_priority_options"
+																				value="6" />
+																			높음
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_priority_options"
+																				value="5" />
+																			중간
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_priority_options"
+																				value="4" />
+																			낮음
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_priority_options"
+																				value="3" />
+																			매우 낮음
+																		</label>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="control-group">
+															<label
+																for="detailview_req_difficulty"
+																class="control-label font13">
+																요구사항 난이도 :
+															</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+																<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																	<div
+																		id="detailview_req_difficulty"
+																		class="btn-group"
+																		data-toggle="buttons">
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_difficulty_options"
+																				value="3" />
+																			매우 어려움
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_difficulty_options"
+																				value="4" />
+																			어려움
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_difficulty_options"
+																				value="5" />
+																			보통
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_difficulty_options"
+																				value="6" />
+																			쉬움
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_difficulty_options"
+																				value="7" />
+																			매우 쉬움
+																		</label>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="control-group">
+															<label
+																for="detailview_req_state"
+																class="control-label font13">
+																요구사항 상태 :
+															</label>
+															<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+																<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																	<div
+																		id="detailview_req_state"
+																		class="btn-group"
+																		data-toggle="buttons">
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_state_options"
+																				value="10" />
+																			열림
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_state_options"
+																				value="11" />
+																			진행중
+																		</label>
+																		<label class="btn btn-warning btn-disabled">
+																			<input
+																				type="radio"
+																				name="detailview_req_state_options"
+																				value="12" />
+																			해결됨
+																		</label>
+																		<!--                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="detailview_req_state_options"
+                                                                    value="13"/>
+                                                            닫힘
+                                                        </label>-->
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div
+															class="control-group"
+															for="detailview_req_writer">
+															<label class="control-label font13">요구사항 요청자 :</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-user"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_writer"
+																	name="detailview_req_writer"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+																	required="required"
+																	style="color: #a4c6ff"
+																	placeholder="Requirements Author" />
+															</div>
+														</div>
+														<div
+															class="control-group"
+															for="detailview_req_write_date">
+															<label class="control-label font13">요구사항 요청일 :</label>
+															<div
+																class="controls form-group input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-envelope"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_write_date"
+																	name="detailview_req_write_date"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+																	required="required"
+																	style="color: #a4c6ff"
+																	placeholder="Requirements Last Created Date" />
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label font13">제품(서비스) 리뷰어 :</label>
+															<div
+																class="controls input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-inbox"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_reviewer01"
+																	name="detailview_req_reviewer01"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="공동 책임자"
+																	required="required"
+																	placeholder="Product (Service) Reviewer"
+																	disabled="disabled"
+																	style="border: 0px !important; color: #a4c6ff !important" />
+																<span class="input-group-addon font11">INFO : 공동 책임자</span>
+															</div>
+															<div
+																class="controls input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-inbox"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_reviewer02"
+																	name="detailview_req_reviewer02"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="공동 책임자"
+																	required="required"
+																	placeholder="Product (Service) Reviewer"
+																	disabled="disabled"
+																	style="border: 0px !important; color: #a4c6ff !important" />
+																<span class="input-group-addon font11">INFO : 공동 책임자</span>
+															</div>
+															<div
+																class="controls input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-inbox"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_reviewer03"
+																	name="detailview_req_reviewer03"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="공동 책임자"
+																	required="required"
+																	placeholder="Product (Service) Reviewer"
+																	disabled="disabled"
+																	style="border: 0px !important; color: #a4c6ff !important" />
+																<span class="input-group-addon font11">INFO : 공동 책임자</span>
+															</div>
+															<div
+																class="controls input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-inbox"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_reviewer04"
+																	name="detailview_req_reviewer04"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="공동 책임자"
+																	required="required"
+																	placeholder="Product (Service) Reviewer"
+																	disabled="disabled"
+																	style="border: 0px !important; color: #a4c6ff !important" />
+																<span class="input-group-addon font11">INFO : 공동 책임자</span>
+															</div>
+															<div
+																class="controls input-group"
+																style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-inbox"></i>
+																</span>
+																<input
+																	type="text"
+																	id="detailview_req_reviewer05"
+																	name="detailview_req_reviewer05"
+																	class="form-control parsley-validated font13 darkBack"
+																	data-placement="top"
+																	data-original-title="공동 책임자"
+																	required="required"
+																	placeholder="Product (Service) Reviewer"
+																	disabled="disabled"
+																	style="border: 0px !important; color: #a4c6ff !important" />
+																<span class="input-group-addon font11">INFO : 공동 책임자</span>
+															</div>
+														</div>
+														<div class="control-group">
+															<label
+																class="control-label"
+																style="margin-top: 10px">
+																요구사항 내용 :
+															</label>
+															<div
+																class="col-sm-8"
+																style="margin-top: 16px; margin-bottom: 10px">
+																<i class="fa fa-level-down"></i>
+																하단 영역 참조
+															</div>
+															<br />
+															<br />
+															<br />
+															<div
+																class="col-sm-12 darkBack"
+																id="detailview_req_contents"
+																style="padding-top: 7px"></div>
+														</div>
+													</fieldset>
+												</form>
+											</div>
+											<div
+												id="edit"
+												class="tab-pane"
+												style="padding-top: 10px !important">
+												<form
+													class="form-horizontal"
+													method="post">
+													<fieldset>
+														<div
+															class="form-group"
+															style="padding-top: 10px">
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	style="vertical-align: center">
+																	요구사항 등록 모드 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div
+																		class="input-group"
+																		style="text-align: left">
+																		<span class="input-group-addon">
+																			<i class="fa fa-sliders"></i>
+																		</span>
+																		<div
+																			class="btn-group"
+																			data-toggle="buttons">
+																			<label
+																				class="btn btn-transparent btn-sm active"
+																				style="color: #f8f8f8 !important">
+																				<input type="radio" />
+																				요구사항 변경 모드
+																			</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<!--										<label  class="control-label"-->
+																<!--										    	for="editview_req_pdservice_name">-->
+																<!--										    	요구사항 제품(서비스) :-->
+																<!--										</label>-->
+																<label
+																	class="control-label"
+																	for="editview_req_pdservice_name">
+																	요구사항 제품
+																	<sup>서비스</sup>
+																	:
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-th-list"></i>
+																		</span>
+																		<input
+																			id="editview_req_pdservice_name"
+																			disabled="disabled"
+																			class="form-control font13 darkBack"
+																			style="color: #a4c6ff"
+																			size="16"
+																			type="text"
+																			placeholder="제품(서비스)명을 입력해 주세요" />
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="edit_multi_version">
+																	요구사항 버전 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-gift"></i>
+																		</span>
+																		<select
+																			multiple="multiple"
+																			id="edit_multi_version"
+																			class="multiple-select btn-block darkBack"
+																			placeholder="&nbsp;버전을 선택해주세요"
+																			style="color: #a4c6ff"></select>
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="editview_req_id">
+																	요구사항 아이디 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-phone"></i>
+																		</span>
+																		<input
+																			id="editview_req_id"
+																			disabled="disabled"
+																			class="form-control font13 darkBack"
+																			style="color: #a4c6ff"
+																			size="16"
+																			type="text"
+																			placeholder="요구사항 아이디를 입력해 주세요" />
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="editview_req_name">
+																	요구사항 제목 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-list-alt"></i>
+																		</span>
+																		<input
+																			id="editview_req_name"
+																			class="form-control font13 darkBack"
+																			style="color: #a4c6ff"
+																			size="16"
+																			type="text"
+																			placeholder="요구사항 제목을 입력해 주세요" />
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	for="editview_req_priority"
+																	class="control-label font13">
+																	요구사항 우선순위 :
+																</label>
+																<div
+																	class="controls form-group input-group"
+																	style="margin-left: 180px">
+																	<span class="input-group-addon">
+																		<i class="glyphicon glyphicon-list-alt"></i>
+																	</span>
+																	<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																		<div
+																			id="editview_req_priority"
+																			class="btn-group"
+																			data-toggle="buttons">
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_priority_options"
+																					value="7" />
+																				매우 높음
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_priority_options"
+																					value="6" />
+																				높음
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_priority_options"
+																					value="5" />
+																				중간
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_priority_options"
+																					value="4" />
+																				낮음
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_priority_options"
+																					value="3" />
+																				매우 낮음
+																			</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	for="editview_req_difficulty"
+																	class="control-label font13">
+																	요구사항 난이도 :
+																</label>
+																<div
+																	class="controls form-group input-group"
+																	style="margin-left: 180px">
+																	<span class="input-group-addon">
+																		<i class="glyphicon glyphicon-list-alt"></i>
+																	</span>
+																	<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																		<div
+																			id="editview_req_difficulty"
+																			class="btn-group"
+																			data-toggle="buttons">
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_difficulty_options"
+																					value="3" />
+																				매우 어려움
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_difficulty_options"
+																					value="4" />
+																				어려움
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_difficulty_options"
+																					value="5" />
+																				보통
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_difficulty_options"
+																					value="6" />
+																				쉬움
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_difficulty_options"
+																					value="7" />
+																				매우 쉬움
+																			</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	for="editview_req_state"
+																	class="control-label font13">
+																	요구사항 상태 :
+																</label>
+																<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+																<div
+																	class="controls form-group input-group"
+																	style="margin-left: 180px">
+																	<span class="input-group-addon">
+																		<i class="glyphicon glyphicon-list-alt"></i>
+																	</span>
+																	<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																		<div
+																			id="editview_req_state"
+																			class="btn-group"
+																			data-toggle="buttons">
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_state_options"
+																					value="10" />
+																				열림
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_state_options"
+																					value="11" />
+																				진행중
+																			</label>
+																			<label class="btn btn-warning">
+																				<input
+																					type="radio"
+																					name="editview_req_state_options"
+																					value="12" />
+																				해결됨
+																			</label>
+																			<!--                                                            <label class="btn btn-warning">
+                                                                <input  type="radio"
+                                                                        name="editview_req_state_options"
+                                                                        value="13"/>
+                                                                닫힘
+                                                            </label>-->
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="editview_req_writer">
+																	요구사항 요청자 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-user"></i>
+																		</span>
+																		<input
+																			id="editview_req_writer"
+																			disabled="disabled"
+																			class="form-control font13 darkBack"
+																			style="color: #a4c6ff"
+																			size="16"
+																			type="text"
+																			placeholder="요구사항 요청자를 입력해 주세요" />
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="editview_req_write_date">
+																	요구사항 요청일 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-envelope"></i>
+																		</span>
+																		<input
+																			id="editview_req_write_date"
+																			disabled="disabled"
+																			class="form-control font13 darkBack"
+																			style="color: #a4c6ff"
+																			size="16"
+																			type="text"
+																			placeholder="요구사항 요청일을 입력해 주세요" />
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="editview_req_reviewers">
+																	요구사항 리뷰어 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			<i class="glyphicon glyphicon-inbox"></i>
+																		</span>
+																		<select
+																			id="editview_req_reviewers"
+																			class="js-data-example-ajax form-control font13 darkBack"
+																			name="selectedReviewers[]"
+																			multiple="multiple"
+																			style="width: 100%; color: #a4c6ff"></select>
+																	</div>
+																</div>
+															</div>
+															<div class="control-group">
+																<label
+																	class="control-label"
+																	for="edit_tabmodal_editor">
+																	요구사항 내용 :
+																</label>
+																<div
+																	class="controls form-group"
+																	style="margin-bottom: 10px; margin-left: 180px">
+																	<div
+																		class="input-group"
+																		style="padding-top: 5px">
+																		<code>
+																			입력 창이 좁다면 하단의
+																			<span class="glyphicon glyphicon-fullscreen"></span>
+																			( 풀스크린 편집 ) 아이콘을 클릭하세요
+																		</code>
+																	</div>
+																</div>
+																<div
+																	class="col-sm-12 darkBack"
+																	id="edit_tabmodal_editor">
+																	<p>요구사항 내용을 기록합니다.</p>
+																</div>
+															</div>
+														</div>
+													</fieldset>
+												</form>
+											</div>
+											<div
+												id="report"
+												class="tab-pane"
+												style="padding-top: 10px !important">
+												<table
+													class="display"
+													id="req_table"
+													style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
+													<thead>
+														<tr>
+															<th>c_id</th>
+															<th>c_left</th>
+															<th>c_title</th>
+														</tr>
+													</thead>
+												</table>
+											</div>
+											<div
+												id="doc"
+												class="tab-pane"
+												style="padding-top: 10px !important">
+												<!--								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"-->
+												<!--                                        class="newReqDiv darkBack">-->
+												<!--									<label  id="new_req_regist03"-->
+												<!--                                            class="btn btn-primary btn-transparent btn-sm active"-->
+												<!--                                            data-target="#my_modal1"-->
+												<!--                                            data-toggle="modal"-->
+												<!--                                            style="width: 100%; background-color: #2477ff !important">-->
+												<!--										    A-RMS의 신규 요구사항 등록하기-->
+												<!--									</label>-->
+												<!--								</div>-->
+												<div class="col-md-12">
+													<div
+														class="dd"
+														id="nestable1">
+														<ol class="dd-list"></ol>
+													</div>
+												</div>
+											</div>
+											<div
+												id="jira"
+												class="tab-pane"
+												style="padding-top: 10px !important">
+												<table
+													class="display"
+													id="jira_project_table"
+													style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
+											</div>
+
+											<div
+												id="history"
+												class="tab-pane"
+												style="padding-top: 10px !important">
+												<!-- The timeline -->
+												<ul class="timeline timeline-inverse">
+													<!-- timeline time label -->
+													<li class="time-label">
+														<a class="btn btn-danger btn-sm">
+															A-RMS 모든 이력을 시간순으로 표시 :
+															<i class="fa fa-check"></i>
+														</a>
+													</li>
+													<!-- /.timeline-label -->
+													<!-- timeline item -->
+													<li class="timeline-item-head">
+														<i class="fa fa-search bg-maroon"></i>
+														<div
+															class="timeline-item"
+															style="line-height: 2 !important">
+															<span class="arrow"></span>
+															<div
+																class="col-sm-5"
+																style="padding-top: 12px">
+																<div class="input-group">
+																	<span class="input-group-btn">
+																		<a
+																			href="#"
+																			id="btn_start_calendar_popup"
+																			class="btn btn-warning"
+																			data-date-format="yyyy/mm/dd"
+																			data-date="2022/11/11">
+																			<i class="fa fa-calendar"></i>
+																		</a>
+																	</span>
+																	<input
+																		id="input_req_start_date"
+																		class="form-control"
+																		type="text"
+																		name="btn_enabled_date"
+																		value="검색 시작 날짜"
+																		pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+																</div>
+															</div>
+															<div
+																class="col-sm-5"
+																style="padding-top: 12px">
+																<div class="input-group">
+																	<span class="input-group-btn">
+																		<a
+																			href="#"
+																			id="btn_end_calendar_popup"
+																			class="btn btn-warning"
+																			data-date-format="yyyy/mm/dd"
+																			data-date="2022/11/11">
+																			<i class="fa fa-calendar"></i>
+																		</a>
+																	</span>
+																	<input
+																		id="input_req_end_date"
+																		class="form-control"
+																		type="text"
+																		name="btn_enabled_date"
+																		value="검색 종료 날짜"
+																		pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/" />
+																</div>
+															</div>
+															<div
+																class="col-sm-2"
+																style="padding-top: 12px">
+																<button
+																	type="button"
+																	class="btn btn-warning"
+																	id="logsearch">
+																	Search
+																</button>
+															</div>
+															<h3
+																class="timeline-header"
+																style="padding: 0px !important; font-size: 11px"></h3>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<!-- timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-balance-scale bg-maroon"></i>
+														<div class="timeline-item">
+															<span class="arrow"></span>
+															<span class="time">
+																<i class="fa fa-clock-o"></i>
+																09:00 (MON)
+															</span>
+
+															<h3 class="timeline-header">
+																<a
+																	href="http://www.313.co.kr/confluence"
+																	target="_blank">
+																	착수
+																</a>
+																<small class="font11">제품(서비스) 등록, 버전 등록</small>
+															</h3>
+
+															<div class="timeline-body col-md-4 font11">
+																<a
+																	href="http://www.313.co.kr/confluence"
+																	target="_blank"
+																	class="btn bg-maroon btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Confluence by 313 DEV GRP
+																</a>
+															</div>
+															<div class="timeline-footer col-md-8 font12 fontw600">
+																Input : Plan & Opinion & Idea
+																<br />
+																Skill : Negotiation
+																<br />
+																Output : Requirements
+																<br />
+																System : Atlassian Confluence ( Online Document System )
+															</div>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<!-- timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-check-square-o bg-yellow"></i>
+
+														<div class="timeline-item">
+															<span class="time">
+																<i class="fa fa-clock-o"></i>
+																10:00 (TUE)
+															</span>
+
+															<h3 class="timeline-header">
+																<a
+																	href="http://www.313.co.kr/confluence"
+																	target="_blank">
+																	기획
+																</a>
+																<small class="font11">요구사항 등록</small>
+															</h3>
+
+															<div class="timeline-body col-md-4 font11">
+																<a
+																	href="http://www.313.co.kr/confluence"
+																	target="_blank"
+																	class="btn bg-yellow btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Confluence by 313 DEV GRP
+																</a>
+															</div>
+															<div class="timeline-footer col-md-8 font12 fontw600">
+																Input : Requirements
+																<br />
+																Skill : Requirements engineering
+																<br />
+																Output : SRS ( Software Requirements Specification )
+																<br />
+																System : Atlassian Confluence ( Online Document System )
+															</div>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<!-- timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-cubes bg-teal"></i>
+
+														<div class="timeline-item">
+															<span class="time">
+																<i class="fa fa-clock-o"></i>
+																12:00 (WED)
+															</span>
+
+															<h3 class="timeline-header">
+																<a
+																	href="http://www.313.co.kr/jira"
+																	target="_blank">
+																	실행 및 이행
+																</a>
+																<small class="font11">JIRA 전파</small>
+															</h3>
+
+															<div class="timeline-body col-md-4 font11">
+																<a
+																	href="http://www.313.co.kr/jira"
+																	target="_blank"
+																	class="btn bg-teal btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Jira by 313 DEV GRP
+																</a>
+															</div>
+															<div class="timeline-footer col-md-8 font12 fontw600">
+																Input : SRS ( Software Requirements Specification )
+																<br />
+																Skill : Architecture design
+																<br />
+																Output : SDS ( Software Design Specification )
+																<br />
+																System : Atlassian Jira ( Issue Management System )
+															</div>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<!-- timeline time label -->
+													<!-- /.timeline-label -->
+													<!-- timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-sitemap bg-light-blue"></i>
+
+														<div class="timeline-item">
+															<span class="time">
+																<i class="fa fa-clock-o"></i>
+																15:00 (THU)
+															</span>
+
+															<h3 class="timeline-header">
+																<a
+																	href="https://github.com/jstree"
+																	target="_blank">
+																	실행 및 이행
+																</a>
+																<small class="font11">Developers 개발</small>
+															</h3>
+
+															<div class="timeline-body col-md-4 font11">
+																<a
+																	href="https://github.com/jstree"
+																	target="_blank"
+																	class="btn bg-light-blue btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	GitHub by 313 DEV GRP
+																</a>
+																<a
+																	href="http://www.313.co.kr/fecru"
+																	target="_blank"
+																	class="btn bg-light-blue btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Fecru by 313 DEV GRP
+																</a>
+																<a
+																	href="http://www.313.co.kr/bamboo"
+																	target="_blank"
+																	class="btn bg-light-blue btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Bamboo by 313 DEV GRP
+																</a>
+															</div>
+															<div class="timeline-footer col-md-8 font12 fon">
+																Input : SDS ( Software Design Specification )
+																<br />
+																Skill : Coding
+																<br />
+																Output : Source Code & Artifacts
+																<br />
+																System : GitHub ( Software Version Management )
+															</div>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<!-- timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-bug bg-purple"></i>
+
+														<div class="timeline-item">
+															<span class="time">
+																<i class="fa fa-clock-o"></i>
+																17:00 (FRI)
+															</span>
+
+															<h3 class="timeline-header">
+																<a
+																	href="https://github.com/jstree"
+																	target="_blank">
+																	감시 및 통제
+																</a>
+																<small class="font11">QA 및 체크리스트</small>
+															</h3>
+
+															<div class="timeline-body col-md-4 font11">
+																<a
+																	href="http://www.313.co.kr/analysis"
+																	target="_blank"
+																	class="btn bg-purple btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Project Analysis by 313 DEV GRP
+																</a>
+																<a
+																	href="http://www.313.co.kr/nexus"
+																	target="_blank"
+																	class="btn bg-purple btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Nexus by 313 DEV GRP
+																</a>
+																<a
+																	href="http://www.313.co.kr/sonar"
+																	target="_blank"
+																	class="btn bg-purple btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	Sonar by 313 DEV GRP
+																</a>
+															</div>
+															<div class="timeline-footer col-md-8 font12 fontw600">
+																Input : Source Code & Artifacts
+																<br />
+																Skill : Quality Assurance
+																<br />
+																Output : TCR ( Test Case Result )
+																<br />
+																System : SonarQube
+															</div>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<!-- timeline time label -->
+													<!-- /.timeline-label -->
+													<!-- timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-train bg-black"></i>
+
+														<div class="timeline-item">
+															<span class="time">
+																<i class="fa fa-clock-o"></i>
+																18:00 (SAT)
+															</span>
+
+															<h3 class="timeline-header">
+																<a
+																	href="https://github.com/jstree"
+																	target="_blank">
+																	종료
+																</a>
+																<small class="font11">보고</small>
+															</h3>
+
+															<div class="timeline-body col-md-4 font11">
+																<a
+																	href="https://hub.docker.com/u/313devgrp/"
+																	target="_blank"
+																	class="btn bg-black btn-xs"
+																	style="font-size: 11px">
+																	<i class="fa fa-share"></i>
+																	DockerHub by 313 DEV GRP
+																</a>
+															</div>
+															<div class="timeline-footer col-md-8 font12 fontw600">
+																Input : TCR ( Test Case Result )
+																<br />
+																Skill : Lessons learned and retrospective
+																<br />
+																Output : Container
+																<br />
+																System : Docker ( Cloud Operating system )
+															</div>
+														</div>
+													</li>
+													<!-- END timeline item -->
+													<li class="timeline-item-body">
+														<i class="fa fa-clock-o bg-gray"></i>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</section>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+			<div
+				id="reqTable"
+				class="tab-pane">
+				<section
+					id="reqDataTable"
+					class="widget"></section>
 			</div>
 		</div>
 	</section>
@@ -1526,6 +1904,182 @@
 									name="title"
 									class="form-control parsley-validated darkBack"
 									required="required" />
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label
+								for="popup_req_priority"
+								class="control-label"
+								style="color: #f8f8f8">
+								요구사항 우선순위
+								<span class="required">*</span>
+								<span
+									class="input-group-addon"
+									style="display: inline !important">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</span>
+							</label>
+							<div
+								class="controls form-group input-group"
+								style="margin-left: 130px">
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+									<div
+										id="popup_req_priority"
+										class="btn-group"
+										data-toggle="buttons">
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_priority_options"
+												value="7" />
+											매우 높음
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_priority_options"
+												value="6" />
+											높음
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_priority_options"
+												value="5" />
+											중간
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_priority_options"
+												value="4" />
+											낮음
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_priority_options"
+												value="3" />
+											매우 낮음
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label
+								for="popup_req_difficulty"
+								class="control-label"
+								style="color: #f8f8f8">
+								요구사항 난이도
+								<span class="required">*</span>
+								<span
+									class="input-group-addon"
+									style="display: inline !important">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</span>
+							</label>
+							<div
+								class="controls form-group input-group"
+								style="margin-left: 130px">
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+									<div
+										id="popup_req_difficulty"
+										class="btn-group"
+										data-toggle="buttons">
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_difficulty_options"
+												value="3" />
+											매우 어려움
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_difficulty_options"
+												value="4" />
+											어려움
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_difficulty_options"
+												value="5" />
+											보통
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_difficulty_options"
+												value="6" />
+											쉬움
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_difficulty_options"
+												value="7" />
+											매우 쉬움
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label
+								for="popup_req_state"
+								class="control-label"
+								style="color: #f8f8f8">
+								요구사항 상태
+								<span class="required">*</span>
+								<span
+									class="input-group-addon"
+									style="display: inline !important">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</span>
+							</label>
+							<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+							<div
+								class="controls form-group input-group"
+								style="margin-left: 130px">
+								<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+									<div
+										id="popup_req_state"
+										class="btn-group"
+										data-toggle="buttons">
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_state_options"
+												value="10" />
+											열림
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_state_options"
+												value="11" />
+											진행중
+										</label>
+										<label class="btn btn-warning">
+											<input
+												type="radio"
+												name="popup_req_state_options"
+												value="12" />
+											해결됨
+										</label>
+										<!--                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="popup_req_state_options"
+                                                    value="13"/>
+                                            닫힘
+                                        </label>-->
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="control-group col-sm-12">
