@@ -100,6 +100,10 @@ function execDocReady() {
             $.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
                 initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
             });
+
+            // 비용 입력
+            costInput();
+
         })
         .catch(function () {
             console.error("플러그인 로드 중 오류 발생");
@@ -247,6 +251,47 @@ function bind_VersionData_By_PdService() {
                 요구사항_현황_데이터_테이블($("#selected_pdService").val(), endPointUrl);
                 //////////////////////////////////////////////////////////
             }
+        }
+    });
+}
+
+// 비용 입력
+function costInput() {
+    
+    // 버전 정보
+
+
+    // 연봉 정보
+    var mockData = [
+        {
+            "name": "홍길동",
+            "salary": ""
+        },
+        {
+            "name": "이순신",
+            "salary": ""
+        },
+        // 추가적인 데이터 객체...
+    ];
+
+    $('#manpower-annual-income').DataTable({
+        "data": mockData,
+        "columns": [
+            { "data": "name", "title": "투입 인력", "className": "dt-center" },
+            {
+                "data": "salary",
+                "title": "연봉 (입력)",
+                "className": "dt-center",
+                "render": function(data, type, row) {
+                    return '<input type="text" class="salary-input"value="' + data + '"> 만원';
+                }
+            }
+        ],
+        "drawCallback": function(settings) {
+            $('.salary-input').on('input', function() {
+                var value = this.value.replace(/,/g, '');
+                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            });
         }
     });
 }
