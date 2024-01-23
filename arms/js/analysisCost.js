@@ -10,6 +10,14 @@ var pdServiceData;
 var pdServiceListData;
 var versionListData;
 
+const personData = {
+    "홍길동": { total: 2000000, salary: 1400000, performance: 600000 },
+    "이순신": { total: 3000000, salary: 1800000, performance: 1200000 },
+    "유관순": { total: 1500000, salary: 600000, performance: 900000 },
+    "안중근": { total: 1200000, salary: 480000, performance: 720000 },
+    "세종대왕": { total: 1800000, salary: 720000, performance: 1080000 }
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +95,8 @@ function execDocReady() {
 
             costAnalysisChart();
 
+            candleStickChart();
+
             manPowerAnalysisChart();
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();
@@ -96,14 +106,28 @@ function execDocReady() {
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
-            //d3Chart 그리기
-            $.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
-                initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
-            });
-
             // 비용 입력
             costInput();
 
+            const selectElement = document.getElementById('person-select');
+
+            for (const person in personData) {
+                const optionElement = document.createElement('option');
+                optionElement.value = person;
+                optionElement.text = person;
+                selectElement.appendChild(optionElement);
+            }
+
+            let firstPerson = selectElement.options[0].value; // 첫번째 option의 value를 가져옵니다.
+            console.log(firstPerson);
+            gaugeRingManPowerAnalysisChart(firstPerson);
+
+            document.getElementById('person-select').addEventListener('change', function() {
+                let selectedPerson = this.value;
+                console.log(selectedPerson);
+
+                gaugeRingManPowerAnalysisChart(selectedPerson);
+            });
         })
         .catch(function () {
             console.error("플러그인 로드 중 오류 발생");
@@ -1893,4 +1917,165 @@ function manPowerAnalysisChart() {
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+
+function gaugeRingManPowerAnalysisChart(selectedPerson) {
+
+    let manPowerData = personData[selectedPerson];
+    console.log(manPowerData);
+
+    var dom = document.getElementById('gauge-ring-container');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    const gaugeData = [
+        {
+            value: (manPowerData.salary / manPowerData.salary) * 100,
+            name: '연봉',
+            title: {
+                offsetCenter: ['0%', '0%'],
+                color: '#fff'
+            },
+            detail: {
+                valueAnimation: true,
+                offsetCenter: ['0%', '10%']
+            }
+        },
+        {
+            value: (manPowerData.performance / manPowerData.salary) * 100,
+            name: '성과',
+            title: {
+                offsetCenter: ['0%', '-30%'],
+                color: '#fff'
+            },
+            detail: {
+                valueAnimation: true,
+                offsetCenter: ['0%', '-20%']
+            }
+        }
+    ];
+    option = {
+        series: [
+            {
+                type: 'gauge',
+                startAngle: 90,
+                endAngle: -270,
+                pointer: {
+                    show: false
+                },
+                progress: {
+                    show: true,
+                    overlap: false,
+                    roundCap: true,
+                    clip: false,
+                    itemStyle: {
+                        borderWidth: 1,
+                        borderColor: '#464646'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        width: 50
+                    }
+                },
+                splitLine: {
+                    show: false,
+                    distance: 0,
+                    length: 10
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false,
+                    distance: 50
+                },
+                data: gaugeData,
+                title: {
+                    fontSize: 14
+                },
+                detail: {
+                    width: 50,
+                    height: 14,
+                    fontSize: 14,
+                    color: 'white',
+                    borderColor: 'inherit',
+                    borderRadius: 20,
+                    borderWidth: 1,
+                    valueAnimation: true,
+                    offsetCenter: ['0%', '10%'],
+                    formatter: function(params) {
+                        return (params * manPowerData.salary / 100).toFixed(0); // 실제 금액 표시
+                    }
+                }
+            }
+        ]
+    };
+
+// myChart.setOption(option);
+    myChart.setOption({
+        series: [
+            {
+                data: gaugeData,
+                pointer: {
+                    show: false
+                }
+            }
+        ]
+    });
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}
+
+// 주식차트
+function candleStickChart() {
+	var dom = document.getElementById("candlestick-chart-container");
+	var myChart = echarts.init(dom, "dark", {
+		renderer: "canvas",
+		useDirtyRect: false
+	});
+
+	var option;
+
+	option = {
+		xAxis: {
+			data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27"]
+		},
+		yAxis: {},
+		series: [
+			{
+				type: "candlestick",
+				data: [
+					[20, 34, 10, 38],
+					[40, 35, 30, 50],
+					[31, 38, 33, 44],
+					[38, 15, 5, 42]
+				]
+			}
+		],
+		tooltip: {
+			trigger: "axis",
+			position: "top",
+			borderWidth: 1,
+			axisPointer: {
+				type: "cross"
+			}
+		},
+		backgroundColor: "rgba(255,255,255,0)"
+	};
+
+	if (option && typeof option === "object") {
+		myChart.setOption(option, true);
+	}
+
+	window.addEventListener("resize", myChart.resize);
 }

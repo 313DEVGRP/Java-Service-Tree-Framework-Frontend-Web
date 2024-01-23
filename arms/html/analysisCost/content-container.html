@@ -1153,6 +1153,227 @@
         </section>
     </div>
 
+    <div class="col-lg-12 col-layer">
+        <section class="widget">
+            <header>
+                <h4>
+					<span
+                            class="font13"
+                            style="font-weight: bold">
+						<i class="fa fa-calendar-o"></i>
+						비용 분석
+					</span>
+                </h4>
+                <div class="widget-controls">
+                    <a
+                            data-widgster="toleft"
+                            title="change width to left"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a
+                            data-widgster="expand"
+                            title="Expand"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a
+                            data-widgster="toright"
+                            title="change width to right"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a
+                            data-widgster="restore"
+                            title="Restore"
+                            href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                </div>
+            </header>
+            <div class="body">
+                <div
+                        class="gradient_middle_border"
+                        style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+                <blockquote
+                        class="font13"
+                        style="margin-top: 5px">
+                    입력된 프로젝트 버전별 비용과 인력별 비용 산정으로 분석된 데이터입니다.
+                    <div style="float: right">
+                        <button
+                                class="btn btn-transparent btn-xs"
+                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
+                            Help
+                            <i
+                                    class="fa fa-question"
+                                    style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                        </button>
+                    </div>
+                </blockquote>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <section class="widget">
+                            <header>
+                                <h4>
+									<span
+                                            class="font13"
+                                            style="font-weight: bold">
+										<i class="fa fa-pie-chart"></i>
+										요구사항 비용 분석
+									</span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toleft"
+                                            title="change width to left"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toright"
+                                            title="change width to right"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+                            <div class="body">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    요구사항의 난이도와 우선순위를 기준으로 요구사항의 단가가 측정됩니다.
+                                </blockquote>
+                                <div
+                                        class="body"
+                                        id="candlestick-chart-container"
+                                        style="min-height: 500px"></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- 요구사항 현황 시작 -->
+                    <div class="col-md-6">
+                        <section class="widget">
+                            <header>
+                                <h4>
+									<span
+                                            class="font13"
+                                            style="font-weight: bold">
+										<i class="fa fa-dot-circle-o"></i>
+										인력별 비용 분석 파이차트
+									</span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toleft"
+                                            title="change width to left"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toright"
+                                            title="change width to right"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+                            <div class="body">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    인력 각각의 연봉과 성과를 측정하는 게이지 차트입니다.
+                                </blockquote>
+                                <select id="person-select"></select>
+
+                                <div class="body">
+                                    <div    id="gauge-ring-container"
+                                            style="height: 500px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- 요구사항 현황 종료 -->
+
+                </div>
+
+            </div>
+        </section>
+    </div>
 </div>
 
 <div
