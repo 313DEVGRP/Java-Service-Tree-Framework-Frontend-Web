@@ -1916,7 +1916,35 @@ function tableSelectOption(obj) {
 }
 
 function tableSelect(id) {
-	makeTable(id, "reqDataTable", {
+	makeTable("reqDataTable", {
+		id,
+		onGetData: async function (id) {
+			return await $.ajax({
+				url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/getMonitor.do`,
+				type: "GET",
+				dataType: "json",
+				progress: true,
+				statusCode: {
+					200: function (data) {
+						if (!isEmpty(data)) {
+							return data;
+						}
+					}
+				}
+			});
+		},
+		onUpdate: function (id, params) {
+			$.ajax({
+				url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/updateNode.do`,
+				type: "POST",
+				data: params,
+				statusCode: {
+					200: function () {
+						jSuccess(params.c_title + "의 데이터가 변경되었습니다.");
+					}
+				}
+			});
+		},
 		content: {
 			version: "Version",
 			category: "구분",
