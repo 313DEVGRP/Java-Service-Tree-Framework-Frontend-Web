@@ -1459,7 +1459,6 @@ function save_req() {
 
 		if ($("#popup_version").val().length >= 1) {
 			if ($("#req_title").val().trim() !== "") {
-				/*
 				$.ajax({
 					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 					type: "POST",
@@ -1472,7 +1471,6 @@ function save_req() {
 						}
 					}
 				});
-				*/
 			} else {
 				alert("요구사항 제목이 없습니다.");
 				return false;
