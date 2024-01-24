@@ -10,6 +10,8 @@ var pdServiceData;
 var pdServiceListData;
 var versionListData;
 
+var personData = {};
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +89,8 @@ function execDocReady() {
 
             costAnalysisChart();
 
-            manPowerAnalysisChart();
+            candleStickChart();
+
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();
 
@@ -96,17 +99,13 @@ function execDocReady() {
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
-            //d3Chart 그리기
-            $.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
-                initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
-            });
-
             // 비용 입력
             costInput();
 
         })
-        .catch(function () {
+        .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
+            console.error(e);
         });
 }
 
@@ -189,7 +188,7 @@ function makeVersionMultiSelectBox() {
             // Circular Packing with D3 차트
             getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
-
+            담당자목록_조회();
             //요구사항 현황 데이터 테이블 로드
             // console.log(" ============ makeVersionMultiSelectBox ============= ");
             // endPointUrl =
@@ -232,10 +231,11 @@ function bind_VersionData_By_PdService() {
                 getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
                 // 투자 대비 소모 비용 차트
-			    compareCostsChart(selectedPdServiceId, selectedVersionId);
+                compareCostsChart(selectedPdServiceId, selectedVersionId);
                 // 수익 현황 차트
-			    incomeStatusChart();
+                incomeStatusChart();
 
+                담당자목록_조회();
                 if (data.length > 0) {
                     console.log("display 재설정.");
                 }
@@ -968,94 +968,94 @@ function groupTicks(d, step) {
 // 요구사항 별 수익 현황 그래프
 /////////////////////////////////////////////////////////
 function incomeStatusChart(){
-var chartDom = document.getElementById('income_status_chart');
-var myChart = echarts.init(chartDom);
-var option;
+    var chartDom = document.getElementById('income_status_chart');
+    var myChart = echarts.init(chartDom);
+    var option;
 
-option = {
-  xAxis: {
-    type: 'category',
-    data: [
-      '2024-01-01',
-      '2024-01-11',
-      '2024-01-12',
-      '2024-01-17',
-      '2024-01-23',
-      '2024-02-12',
-      '2024-02-11'
-    ],
-    axisLabel: {
-        color: '#FFFFFF'
-    }
-  },
-  yAxis: {
-    type: 'value',
-    axisLabel: {
-        color: '#FFFFFF'
-    }
-  },
-  legend: {
-    data: ['예상', '소모 비용', '투자비용'] ,
-    textStyle: {
-          color: '#FFFFFF' // 범례 텍스트 색상 변경
-        }
-  },
-  series: [
-    {
-      data: [0, 50, 100, 150, 200, 250, 300],
-      type: 'line',
-      name: '예상', // 첫 번째 선에 대한 라벨
-      lineStyle: {
-        type: 'dashed' // 선의 스타일을 점선으로 변경
-      },
-      markLine: {
-        lineStyle: {
-          color: 'red', // line color
-          type: 'dashed', // line style
-          width: 3 // line width
+    option = {
+        xAxis: {
+            type: 'category',
+            data: [
+                '2024-01-01',
+                '2024-01-11',
+                '2024-01-12',
+                '2024-01-17',
+                '2024-01-23',
+                '2024-02-12',
+                '2024-02-11'
+            ],
+            axisLabel: {
+                color: '#FFFFFF'
+            }
         },
-        label: {
-          position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-          formatter: '투자 비용', // label의 텍스트 설정
-          fontSize: 15, // label의 폰트 크기 설정
-          color: '#FFFFFF'
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                color: '#FFFFFF'
+            }
         },
-        data: [
-          {
-            yAxis: 300,
-            name: '투자비용' // line label
-          }
+        legend: {
+            data: ['예상', '소모 비용', '투자비용'] ,
+            textStyle: {
+                color: '#FFFFFF' // 범례 텍스트 색상 변경
+            }
+        },
+        series: [
+            {
+                data: [0, 50, 100, 150, 200, 250, 300],
+                type: 'line',
+                name: '예상', // 첫 번째 선에 대한 라벨
+                lineStyle: {
+                    type: 'dashed' // 선의 스타일을 점선으로 변경
+                },
+                markLine: {
+                    lineStyle: {
+                        color: 'red', // line color
+                        type: 'dashed', // line style
+                        width: 3 // line width
+                    },
+                    label: {
+                        position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+                        formatter: '투자 비용', // label의 텍스트 설정
+                        fontSize: 15, // label의 폰트 크기 설정
+                        color: '#FFFFFF'
+                    },
+                    data: [
+                        {
+                            yAxis: 300,
+                            name: '투자비용' // line label
+                        }
+                    ]
+                }
+            },
+            {
+                data: [0, 100, 120, 120, 280, 320, 320],
+                type: 'line',
+                name: '소모 비용',
+                markLine: {
+                    lineStyle: {
+                        color: 'red', // line color
+                        type: 'dashed', // line style
+                        width: 3 // line width
+                    },
+                    label: {
+                        position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+                        formatter: '요구사항 기한', // label의 텍스트 설정
+                        fontSize: 15, // label의 폰트 크기 설정
+                        color: '#FFFFFF'
+                    },
+                    data: [
+                        {
+                            xAxis: 6,
+                            name: '투자비용' // line label
+                        }
+                    ]
+                }
+            }
         ]
-      }
-    },
-    {
-      data: [0, 100, 120, 120, 280, 320, 320],
-      type: 'line',
-      name: '소모 비용',
-      markLine: {
-        lineStyle: {
-          color: 'red', // line color
-          type: 'dashed', // line style
-          width: 3 // line width
-        },
-        label: {
-          position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-          formatter: '요구사항 기한', // label의 텍스트 설정
-          fontSize: 15, // label의 폰트 크기 설정
-          color: '#FFFFFF'
-        },
-        data: [
-          {
-            xAxis: 6,
-            name: '투자비용' // line label
-          }
-        ]
-      }
-    }
-  ]
-};
+    };
 
-option && myChart.setOption(option);
+    option && myChart.setOption(option);
 }
 
 
@@ -1063,58 +1063,58 @@ option && myChart.setOption(option);
 // 투입 비용 현황 차트
 /////////////////////////////////////////////////////////
 function compareCostsChart(selectedPdServiceId, selectedVersionId){
-var chartDom = document.getElementById("compare_costs");
-var myChart = echarts.init(chartDom);
-var option;
-var titles = versionListData.map(item => item.c_title);
+    var chartDom = document.getElementById("compare_costs");
+    var myChart = echarts.init(chartDom);
+    var option;
+    var titles = versionListData.map(item => item.c_title);
 
-option = {
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'shadow'
-    }
-  },
-  legend: {
-    textStyle: {
-        color: '#FFFFFF'
-    }
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: {
-    type: 'value',
-    boundaryGap: [0, 0.01],
-    axisLabel: {
-        color: '#FFFFFF'
-    }
-  },
-  yAxis: {
-    type: 'category',
-    data: titles,
-    axisLabel: {
-        color: '#FFFFFF'
-    }
-  },
-  series: [
-    {
-      name: '투자 비용',
-      type: 'bar',
-      data: [18203, 23489, 29034, 104970]
-    },
-    {
-      name: '소모 비용',
-      type: 'bar',
-      data: [19325, 23438, 31000, 121594]
-    }
-  ]
-};
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: '#FFFFFF'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+            axisLabel: {
+                color: '#FFFFFF'
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: titles,
+            axisLabel: {
+                color: '#FFFFFF'
+            }
+        },
+        series: [
+            {
+                name: '투자 비용',
+                type: 'bar',
+                data: [18203, 23489, 29034, 104970]
+            },
+            {
+                name: '소모 비용',
+                type: 'bar',
+                data: [19325, 23438, 31000, 121594]
+            }
+        ]
+    };
 
-option && myChart.setOption(option);
+    option && myChart.setOption(option);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1699,13 +1699,13 @@ function costAnalysisChart() {
                 left: 10,
                 containLabel: true
             },
-/*            {
-                top: '55%',
-                width: '100%',
-                bottom: 0,
-                left: 10,
-                containLabel: true
-            }*/
+            /*            {
+                            top: '55%',
+                            width: '100%',
+                            bottom: 0,
+                            left: 10,
+                            containLabel: true
+                        }*/
         ],
         xAxis: [
             {
@@ -1786,7 +1786,12 @@ function costAnalysisChart() {
     window.addEventListener('resize', myChart.resize);
 }
 
-function manPowerAnalysisChart() {
+function manPowerAnalysisChart(selectedPerson) {
+
+    let manPowerData = personData[selectedPerson];
+    console.log(selectedPerson);
+    console.log(manPowerData);
+
     var dom = document.getElementById('manpower-analysis-chart');
     var myChart = echarts.init(dom, null, {
         renderer: 'canvas',
@@ -1795,19 +1800,20 @@ function manPowerAnalysisChart() {
 
     var option;
 
-    var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
-    var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
-
-    var maxArr = salaryArr.map(function(salary, i) {
-        return {
-            value: Math.max(salary, revenueArr[i]),
-            symbolSize: [0, 0]
-        };
-    });
+    // var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
+    // var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
+    //
+    // var maxArr = salaryArr.map(function(salary, i) {
+    //     return {
+    //         value: Math.max(salary, revenueArr[i]),
+    //         symbolSize: [0, 0]
+    //     };
+    // });
 
     option = {
         grid: {
             top: 50,
+            left: '20   %',
             bottom: '5%',
         },
         tooltip: {
@@ -1817,7 +1823,7 @@ function manPowerAnalysisChart() {
             },
         },
         xAxis: {
-            data: ['사슴', '로켓', '비행기', '기차', '배', '자동차', '달리기', '걷기'],
+            data: [selectedPerson],
             axisTick: { show: false },
             axisLine: { show: false },
             axisLabel: {
@@ -1826,33 +1832,19 @@ function manPowerAnalysisChart() {
         },
         yAxis: {
             splitLine: { show: false },
-            axisTick: { show: false },
-            axisLine: { show: false },
-            axisLabel: { show: false }
+            axisTick: { show: true },
+            axisLine: { show: true },
+            axisLabel: {
+                show: true,
+                color: '#ffffff'
+            }
         },
         /*color: ['#e54035'],*/
         series: [
             {
-                name: 'glyph',
-                type: 'pictorialBar',
-                barGap: '-100%',
-                symbolPosition: 'end',
-                symbolSize: 50,
-                symbolOffset: [0, '-120%'],
-                barCategoryGap: '40%',
-                label: {
-                    show: true,
-                    position: 'outside'
-                },
-                data: maxArr,
-                tooltip: {
-                    show: false
-                }
-            },
-            {
                 name: '연봉',
                 type: 'pictorialBar',
-                barCategoryGap: '-130%',
+                barCategoryGap: '0%',
                 // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
                 symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
                 itemStyle: {
@@ -1860,16 +1852,21 @@ function manPowerAnalysisChart() {
                 },
                 emphasis: {
                     itemStyle: {
-                        opacity: 1
+                        opacity: 0.7
                     }
                 },
-                data: salaryArr,
-                z: 10
+                data: [manPowerData.salary],
+                z: 10,
+                label: {
+                    show: true,
+                    position: 'outside',
+                    color: "white",  // 여기에 'color' 속성을 추가해주세요.
+                },
             },
             {
                 name: '벌어들인 수익',
                 type: 'pictorialBar',
-                barCategoryGap: '-100%',
+                barCategoryGap: '0%',
                 // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
                 symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
                 itemStyle: {
@@ -1878,12 +1875,17 @@ function manPowerAnalysisChart() {
                 },
                 emphasis: {
                     itemStyle: {
-                        opacity: 1,
+                        opacity: 0.7,
 
                     }
                 },
-                data: revenueArr,
-                z: 10
+                data: [manPowerData.performance],
+                z: 10,
+                label: {
+                    show: true,
+                    position: 'outside',
+                    color: "white",  // 여기에 'color' 속성을 추가해주세요.
+                },
             },
         ]
     };
@@ -1893,4 +1895,92 @@ function manPowerAnalysisChart() {
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+
+// 주식차트
+function candleStickChart() {
+    var dom = document.getElementById("candlestick-chart-container");
+    var myChart = echarts.init(dom, "dark", {
+        renderer: "canvas",
+        useDirtyRect: false
+    });
+
+    var option;
+
+    option = {
+        xAxis: {
+            data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27"]
+        },
+        yAxis: {},
+        series: [
+            {
+                type: "candlestick",
+                data: [
+                    [20, 34, 10, 38],
+                    [40, 35, 30, 50],
+                    [31, 38, 33, 44],
+                    [38, 15, 5, 42]
+                ]
+            }
+        ],
+        tooltip: {
+            trigger: "axis",
+            position: "top",
+            borderWidth: 1,
+            axisPointer: {
+                type: "cross"
+            }
+        },
+        backgroundColor: "rgba(255,255,255,0)"
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener("resize", myChart.resize);
+}
+
+function 담당자목록_조회() {
+    // 초기화 로직
+    $("#person-select-box").hide();
+    $('.person-data + .bootstrap-select .dropdown-menu').empty();
+    $('.person-data + .bootstrap-select .filter-option').text("");
+
+    var data = {
+        "홍길동": { total: 2000000, salary: 1400000, performance: 600000 },
+        "이순신": { total: 3000000, salary: 1800000, performance: 1200000 },
+        "유관순": { total: 1500000, salary: 600000, performance: 900000 },
+        "안중근": { total: 1200000, salary: 480000, performance: 720000 },
+        "세종대왕": { total: 1800000, salary: 720000, performance: 1080000 }
+    };
+
+    personData = data;
+
+    var options = Object.keys(personData);
+    if (options.length > 0) {
+        $("#person-select-box").show();
+        $("#first-person-select").text(options[0]);
+        manPowerAnalysisChart(options[0]);
+
+        $.each(options, function(index, option) {
+            $('.person-data').append($('<option>', {
+                value: option,
+                text : option
+            }));
+
+            var li = $('<li>', { 'rel': index }).append($('<a>', { 'tabindex': '-1', 'class': '', 'text': option }));
+            $('.person-data + .bootstrap-select .dropdown-menu').append(li);
+        });
+    }
+    else {
+        // 데이터 없을 떄 처리
+    }
+
+    $('.person-data + .bootstrap-select .dropdown-menu').on('click', 'li', function() {
+        var selectedOption = $(this).text();
+
+        manPowerAnalysisChart(selectedOption);
+        $('.person-data + .bootstrap-select .filter-option').text(selectedOption);
+    });
 }
