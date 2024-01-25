@@ -599,12 +599,14 @@ function update_btn_click(){
 		console.log($("#editview_jira_server_type input[name='options']:checked").val());
 
 		$.ajax({
-			url: "/auth-user/api/arms/jiraServer/updateNode.do",
+			url: "/auth-user/api/arms/jiraServer/updateNodeAndEngineServerInfoUpdate.do",
 			type: "put",
 			data: {
 				c_id: selectServerId,
 				c_title: $("#editview_jira_server_name").val(),
 				c_jira_server_name: $("#editview_jira_server_name").val(),
+				c_jira_server_type: $("#editview_jira_server_type input[name='options']:checked").val(),
+				c_jira_server_base_url: $("#editview_jira_server_base_url").val(),
 				c_jira_server_connect_id: $("#editview_jira_server_connect_id").val(),
 				c_jira_server_connect_pw: $("#editview_jira_pass_token").val(),
 				c_jira_server_contents: CKEDITOR.instances.input_jira_server_editor.getData()
@@ -626,12 +628,14 @@ function popup_update_btn_click() {
 	$("#extendupdate_jira_server").click( function () {
 
 		$.ajax({
-			url: "/auth-user/api/arms/jiraServer/updateNode.do",
+			url: "/auth-user/api/arms/jiraServer/updateNodeAndEngineServerInfoUpdate.do",
 			type: "put",
 			data: {
 				c_id: selectServerId,
 				c_title: $("#extend_editview_jira_server_name").val(),
 				c_jira_server_name: $("#extend_editview_jira_server_name").val(),
+				c_jira_server_type: $("#extend_editview_jira_server_type input[name='options']:checked").val(),
+				c_jira_server_base_url: $("#extend_editview_jira_server_base_url").val(),
 				c_jira_server_connect_id: $("#extend_editview_jira_server_connect_id").val(),
 				c_jira_server_connect_pw: $("#editview_jira_pass_token").val(),
 				c_jira_server_contents: CKEDITOR.instances.extend_modal_editor.getData()
