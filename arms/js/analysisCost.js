@@ -57,10 +57,7 @@ function execDocReady() {
             "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
             // 생성한 차트 import
             "js/analysis/topmenu/basicRadar.js",
-            "js/analysis/topmenu/topMenu.js",
-
-            //CirclePacking with d3 Chart
-            "js/analysis/resource/chart/circularPackingChart.js"
+            "js/analysis/topmenu/topMenu.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -185,9 +182,6 @@ function makeVersionMultiSelectBox() {
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
-            // Circular Packing with D3 차트
-            getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
-
             담당자목록_조회();
             //요구사항 현황 데이터 테이블 로드
             // console.log(" ============ makeVersionMultiSelectBox ============= ");
@@ -227,8 +221,6 @@ function bind_VersionData_By_PdService() {
                 selectedVersionId = pdServiceVersionIds.join(",");
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
-                // Circular Packing with D3 차트
-                getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
                 // 투자 대비 소모 비용 차트
                 compareCostsChart(selectedPdServiceId, selectedVersionId);
@@ -791,79 +783,6 @@ function formatDate(date) {
     var month = (date.getMonth() + 1).toString().padStart(2, "0");
     var day = date.getDate().toString().padStart(2, "0");
     return year + "-" + month + "-" + day;
-}
-
-/////////////////////////////////////////////////////////
-// Circular Packing Chart
-/////////////////////////////////////////////////////////
-function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
-
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees")
-		.addQueryParam("요구_사항.isReqType","REQUIREMENT")
-		.addQueryParam("요구_사항.pdServiceLink", selectedPdServiceId)
-		.addQueryParam("요구_사항.pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('요구_사항.메인그룹필드', "pdServiceVersion")
-		.addQueryParam('요구_사항.컨텐츠보기여부', false)
-		.addQueryParam('요구_사항.크기', 10000)
-		.addQueryParam('요구_사항.하위그룹필드들', "key,assignee.assignee_emailAddress.keyword")
-		.addQueryParam('요구_사항.하위크기', 10000)
-		.addQueryParam("하위_이슈_사항.isReqType","ISSUE")
-		.addQueryParam("하위_이슈_사항.pdServiceLink", selectedPdServiceId)
-		.addQueryParam("하위_이슈_사항.pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('하위_이슈_사항.메인그룹필드', "parentReqKey")
-		.addQueryParam('하위_이슈_사항.컨텐츠보기여부', false)
-		.addQueryParam('하위_이슈_사항.크기', 10000)
-		.addQueryParam('하위_이슈_사항.하위그룹필드들', "assignee.assignee_emailAddress.keyword")
-		.addQueryParam('하위_이슈_사항.하위크기', 10000)
-		.build();
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (result) {
-				console.log("[ analysisScope :: getReqStatusAndAssignees ] :: result");
-				console.log(result);
-				let pdServiceName;
-				pdServiceListData.forEach(elements => {
-					if (elements["pdServiceId"] === +pdServiceLink) {
-						pdServiceName = elements["pdServiceName"];
-					}
-				});
-				let dataObject = {};
-				let issueStatusSet = new Set();
-				let issueStatusList = [];
-				if (result.length > 0) {
-					for (let i = 0; i < result.length; i++) {
-						// 버전이름 가져오기
-						let versionName ="";
-						for (let j = 0; j < versionListData.length; j++) {
-							if(result[i]["제품_서비스_버전"] === versionListData[j]["c_id"]){
-								versionName = versionListData[j]["c_title"].replaceAll(".","_");
-								break;
-							}
-						}
-						let verSubObject = {};
-						result[i]["요구사항들"].forEach((element) => {
-							// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
-							if (element["작업자수"] !== 0) {
-								verSubObject[element["요구_사항_번호"]] =
-									{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
-								issueStatusSet.add(element["요구_사항_상태"]);
-							}
-						});
-						dataObject[versionName] = verSubObject;
-					}
-				}
-				issueStatusSet.forEach(e=>issueStatusList.push(e));
-				drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
-			}
-		}
-	});
 }
 
 function chord(data) {
