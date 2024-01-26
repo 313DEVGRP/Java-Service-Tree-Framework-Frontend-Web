@@ -176,7 +176,9 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
             dataset: {
                 source: seriesData
             },
-            tooltip: {},
+            tooltip: {
+                confine: true
+            },
             visualMap: [
                 {
                     show: false,
