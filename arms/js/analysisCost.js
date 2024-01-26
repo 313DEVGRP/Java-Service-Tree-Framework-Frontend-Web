@@ -84,7 +84,7 @@ function execDocReady() {
             $(".widget").widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_cost");
 
-            costAnalysisChart();
+            reqCostAnalysisChart();
 
             candleStickChart();
 
@@ -1534,8 +1534,52 @@ function getLinkedIssueAndSubtask(endPointUrl) {
     );
 }
 
-function costAnalysisChart() {
-    var dom = document.getElementById('cost-analysis-chart');
+function reqCostAnalysisChart() {
+
+    let requirementPriceList = {
+        요구사항1: 10000000,
+        요구사항2: 20000000,
+        요구사항3: 30000000,
+        요구사항4: 40000000,
+        요구사항5: 50000000,
+        요구사항6: 60000000,
+        요구사항7: 30000000,
+        요구사항8: 30000000,
+        요구사항9: 30000000,
+        요구사항11: 10000000,
+        요구사항12: 20000000,
+        요구사항13: 30000000,
+        요구사항14: 40000000,
+        요구사항15: 50000000,
+        요구사항16: 60000000,
+        요구사항17: 30000000,
+        요구사항18: 30000000,
+        요구사항19: 30000000
+    };
+
+    let reqTotalPrice = 0;
+    for (let key in requirementPriceList) {
+        reqTotalPrice += requirementPriceList[key];
+    }
+    console.log(reqTotalPrice);
+
+    let difficultyJson = {
+        '매우 어려움': 100,
+        '어려움': 200,
+        '보통': 300,
+        '쉬움': 200,
+        '매움 쉬움': 100
+    };
+
+    let priorityJson = {
+        '1순위': 10,
+        '2순위': 20,
+        '3순위': 30,
+        '4순위': 20,
+        '5순위': 10
+    };
+
+    var dom = document.getElementById('req-cost-analysis-chart');
     var myChart = echarts.init(dom, null, {
         renderer: 'canvas',
         useDirtyRect: false
@@ -1544,36 +1588,6 @@ function costAnalysisChart() {
 
     var option;
 
-    const requirementPriceJson = {
-        all: 600000000,
-        requirementList: {
-            요구사항1: 10000000,
-            요구사항2: 20000000,
-            요구사항3: 30000000,
-            요구사항4: 40000000,
-            요구사항5: 50000000,
-            요구사항6: 60000000,
-            요구사항7: 30000000,
-            요구사항8: 30000000,
-            요구사항9: 30000000,
-            요구사항11: 10000000,
-            요구사항12: 20000000,
-            요구사항13: 30000000,
-            요구사항14: 40000000,
-            요구사항15: 50000000,
-            요구사항16: 60000000,
-            요구사항17: 30000000,
-            요구사항18: 30000000,
-            요구사항19: 30000000
-        }
-    };
-    const difficultyJson = {
-        '매우 어려움': 100,
-        '어려움': 200,
-        '보통': 300,
-        '쉬움': 200,
-        '매움 쉬움': 100
-    };
     const waterMarkText = '';
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -1595,7 +1609,7 @@ function costAnalysisChart() {
         title: [
             {
                 text: '요구사항',
-                subtext: '전체 ' + requirementPriceJson.all +'원',
+                subtext: '전체 ' + reqTotalPrice +'원',
                 left: '25%',
                 textAlign: 'center'
             },
@@ -1630,7 +1644,7 @@ function costAnalysisChart() {
         xAxis: [
             {
                 type: 'value',
-                max: requirementPriceJson.all,
+                max: reqTotalPrice,
                 splitLine: {
                     show: false
                 }
@@ -1639,7 +1653,7 @@ function costAnalysisChart() {
         yAxis: [
             {
                 type: 'category',
-                data: Object.keys(requirementPriceJson.requirementList),
+                data: Object.keys(requirementPriceList),
                 axisLabel: {
                     interval: 0,
                     rotate: 30
@@ -1658,8 +1672,8 @@ function costAnalysisChart() {
                     position: 'right',
                     show: true
                 },
-                data: Object.keys(requirementPriceJson.requirementList).map(function (key) {
-                    return requirementPriceJson.requirementList[key];
+                data: Object.keys(requirementPriceList).map(function (key) {
+                    return requirementPriceList[key];
                 })
             },
             {
@@ -1669,8 +1683,8 @@ function costAnalysisChart() {
                 itemStyle: {
                     color: '#eee'
                 },
-                data: Object.keys(requirementPriceJson.requirementList).map(function (key) {
-                    return requirementPriceJson.all - requirementPriceJson.requirementList[key];
+                data: Object.keys(requirementPriceList).map(function (key) {
+                    return reqTotalPrice - requirementPriceList[key];
                 })
             },
             {
@@ -1688,10 +1702,10 @@ function costAnalysisChart() {
                 type: 'pie',
                 radius: [0, '30%'],
                 center: ['75%', '65%'],
-                data: Object.keys(difficultyJson).map(function (key) {
+                data: Object.keys(priorityJson).map(function (key) {
                     return {
                         name: key.replace('.js', ''),
-                        value: difficultyJson[key]
+                        value: priorityJson[key]
                     };
                 })
             }
@@ -1733,7 +1747,7 @@ function manPowerAnalysisChart(selectedPerson) {
     option = {
         grid: {
             top: 50,
-            left: '20   %',
+            left: '20%',
             bottom: '5%',
         },
         tooltip: {
@@ -1829,9 +1843,20 @@ function candleStickChart() {
 
     option = {
         xAxis: {
-            data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27"]
+            data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27", "2017-10-30"],
+            scale: true, // 축의 스케일을 자동으로 조정합니다.
         },
-        yAxis: {},
+        yAxis: {
+            // 상한선을 나타내는 라인을 추가합니다.
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed' // or 'solid'
+                }
+            },
+            min: 0,  // y축의 최소값을 설정합니다.
+            max: 70,  // y축의 최대값을 설정합니다.
+            scale: true, // 축의 스케일을 자동으로 조정합니다.
+        },
         series: [
             {
                 type: "candlestick",
@@ -1840,7 +1865,14 @@ function candleStickChart() {
                     [40, 35, 30, 50],
                     [31, 38, 33, 44],
                     [38, 15, 5, 42]
-                ]
+                ],
+                // 상한선을 나타내는 markLine을 추가합니다.
+                markLine: {
+                    data: [
+                        {xAxis: "2017-10-30"}, // 마감일을 나타냅니다.
+                        {yAxis: 60} // 상한선을 나타냅니다.
+                    ],
+                }
             }
         ],
         tooltip: {
