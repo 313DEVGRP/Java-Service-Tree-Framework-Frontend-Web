@@ -84,10 +84,6 @@ function execDocReady() {
             $(".widget").widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_cost");
 
-            reqCostAnalysisChart();
-
-            candleStickChart();
-
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();
 
@@ -99,6 +95,9 @@ function execDocReady() {
             // 비용 입력
             costInput();
 
+            reqCostAnalysisChart();
+
+            candleStickChart();
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
@@ -133,7 +132,7 @@ function makePdServiceSelectBox() {
                     $("#selected_pdService").append(newOption).trigger("change");
                 }
                 //////////////////////////////////////////////////////////
-                console.log("[analysisScope :: makePdServiceSelectBox] :: pdServiceListData => " );
+                console.log("[analysisCost :: makePdServiceSelectBox] :: pdServiceListData => " );
                 console.log(pdServiceListData);
             }
         }
@@ -168,7 +167,7 @@ function makeVersionMultiSelectBox() {
             var checked = $("#checkbox1").is(":checked");
             var endPointUrl = "";
             var versionTag = $(".multiple-select").val();
-            console.log("[ analysisScope :: makeVersionMultiSelectBox ] :: versionTag");
+            console.log("[ analysisCost :: makeVersionMultiSelectBox ] :: versionTag");
             console.log(versionTag);
             selectedVersionId = versionTag.join(",");
 
@@ -221,6 +220,8 @@ function bind_VersionData_By_PdService() {
                 selectedVersionId = pdServiceVersionIds.join(",");
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+                // Circular Packing with D3 차트
+                // getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
                 // 투자 대비 소모 비용 차트
                 compareCostsChart(selectedPdServiceId, selectedVersionId);
@@ -228,6 +229,7 @@ function bind_VersionData_By_PdService() {
                 incomeStatusChart();
 
                 담당자목록_조회();
+
                 if (data.length > 0) {
                     console.log("display 재설정.");
                 }
@@ -249,7 +251,7 @@ function bind_VersionData_By_PdService() {
 
 // 비용 입력
 function costInput() {
-    
+
     // 버전 정보
 
 
@@ -288,601 +290,6 @@ function costInput() {
     });
 }
 
-// 도넛차트
-function donutChart(pdServiceLink, pdServiceVersionLinks) {
-    console.log("pdServiceId : " + pdServiceLink);
-    console.log("pdService Version : " + pdServiceVersionLinks);
-    function donutChartNoData() {
-        c3.generate({
-            bindto: "#donut-chart",
-            data: {
-                columns: [],
-                type: "donut"
-            },
-            donut: {
-                title: "Total : 0"
-            }
-        });
-    }
-
-    if (pdServiceLink === "" || pdServiceVersionLinks === "") {
-        donutChartNoData();
-        return;
-    }
-
-    const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/dashboard/aggregation/flat")
-        .addQueryParam("pdServiceLink", pdServiceLink)
-        .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-        .addQueryParam("메인그룹필드", "status.status_name.keyword")
-        .addQueryParam("하위그룹필드들", "")
-        .addQueryParam("크기", 1000)
-        .addQueryParam("하위크기", 1000)
-        .addQueryParam("컨텐츠보기여부", true)
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (apiResponse) {
-                const data = apiResponse.response;
-                let 검색결과 = data["검색결과"]["group_by_status.status_name.keyword"];
-                if (
-                    (Array.isArray(data) && data.length === 0) ||
-                    (typeof data === "object" && Object.keys(data).length === 0) ||
-                    (typeof data === "string" && data === "{}")
-                ) {
-                    donutChartNoData();
-                    return;
-                }
-
-                const columnsData = [];
-
-                검색결과.forEach((status) => {
-                    columnsData.push([status.필드명, status.개수]);
-                });
-
-                let totalDocCount = data.전체합계;
-
-                const chart = c3.generate({
-                    bindto: "#donut-chart",
-                    data: {
-                        columns: columnsData,
-                        type: "donut"
-                    },
-                    donut: {
-                        title: "Total : " + totalDocCount
-                    },
-                    color: {
-                        pattern: dashboardColor.issueStatusColor
-                    },
-                    tooltip: {
-                        format: {
-                            value: function (value, ratio, id, index) {
-                                return value;
-                            }
-                        }
-                    }
-                });
-
-                $(document).on("click", "#donut-chart .c3-legend-item", function () {
-                    const id = $(this).text();
-                    const isHidden = $(this).hasClass("c3-legend-item-hidden");
-                    let docCount = 0;
-
-                    for (const status of 검색결과) {
-                        if (status.필드명 === id) {
-                            docCount = status.개수;
-                            break;
-                        }
-                    }
-                    if (docCount) {
-                        if (isHidden) {
-                            totalDocCount -= docCount;
-                        } else {
-                            totalDocCount += docCount;
-                        }
-                    }
-                    $("#donut-chart .c3-chart-arcs-title").text("Total : " + totalDocCount);
-                });
-            }
-        }
-    });
-}
-
-// 바차트
-function combinationChart(pdServiceLink, pdServiceVersionLinks) {
-    function combinationChartNoData() {
-        c3.generate({
-            bindto: "#combination-chart",
-            data: {
-                x: "x",
-                columns: [],
-                type: "bar",
-                types: {}
-            }
-        });
-    }
-
-    if (pdServiceLink === "" || pdServiceVersionLinks === "") {
-        combinationChartNoData();
-        return;
-    }
-
-    const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/dashboard/requirements-jira-issue-statuses")
-        .addQueryParam("pdServiceLink", pdServiceLink)
-        .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-        .addQueryParam("메인그룹필드", "pdServiceVersion")
-        .addQueryParam("하위그룹필드들", "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
-        .addQueryParam("크기", 1000)
-        .addQueryParam("하위크기", 1000)
-        .addQueryParam("컨텐츠보기여부", true)
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (apiResponse) {
-                const data = apiResponse.response;
-                if (
-                    (Array.isArray(data) && data.length === 0) ||
-                    (typeof data === "object" && Object.keys(data).length === 0) ||
-                    (typeof data === "string" && data === "{}")
-                ) {
-                    combinationChartNoData();
-                    return;
-                }
-
-                const issueStatusTypesSet = new Set();
-                for (const month in data) {
-                    for (const status in data[month].statuses) {
-                        issueStatusTypesSet.add(status);
-                    }
-                }
-                const issueStatusTypes = [...issueStatusTypesSet];
-
-                let columnsData = [];
-
-                issueStatusTypes.forEach((status) => {
-                    const columnData = [status];
-                    for (const month in data) {
-                        const count = data[month].statuses[status] || 0;
-                        columnData.push(count);
-                    }
-                    columnsData.push(columnData);
-                });
-
-                const requirementCounts = ["요구사항"];
-                for (const month in data) {
-                    requirementCounts.push(data[month].totalRequirements);
-                }
-                columnsData.push(requirementCounts);
-
-                let monthlyTotals = {};
-
-                for (const month in data) {
-                    monthlyTotals[month] = data[month].totalIssues + data[month].totalRequirements;
-                }
-
-                const chart = c3.generate({
-                    bindto: "#combination-chart",
-                    data: {
-                        x: "x",
-                        columns: [["x", ...Object.keys(data)], ...columnsData],
-                        type: "bar",
-                        types: {
-                            요구사항: "area"
-                        },
-                        groups: [issueStatusTypes]
-                    },
-                    color: {
-                        pattern: dashboardColor.accumulatedIssueStatusColor
-                    },
-                    onrendered: function () {
-                        d3.selectAll(".c3-line, .c3-bar, .c3-arc").style("stroke", "white").style("stroke-width", "0.3px");
-                    },
-                    axis: {
-                        x: {
-                            type: "category"
-                        }
-                    },
-                    tooltip: {
-                        format: {
-                            title: function (index) {
-                                const month = Object.keys(data)[index];
-                                const total = monthlyTotals[month];
-                                return `${month} | Total : ${total}`;
-                            }
-                        }
-                    }
-                });
-
-                $(document).on("click", "#combination-chart .c3-legend-item", function () {
-                    const id = $(this).text();
-                    const isHidden = $(this).hasClass("c3-legend-item-hidden");
-                    let docCount = 0;
-
-                    for (const month in data) {
-                        if (data[month].statuses.hasOwnProperty(id)) {
-                            docCount = data[month].statuses[id];
-                        } else if (id === "요구사항") {
-                            docCount = data[month].totalRequirements;
-                        }
-                    }
-
-                    // 월별 통계 값 업데이트
-                    for (const month in data) {
-                        if (isHidden) {
-                            monthlyTotals[month] -= docCount;
-                        } else {
-                            monthlyTotals[month] += docCount;
-                        }
-                    }
-                });
-            }
-        }
-    });
-}
-
-function statisticsMonitor(pdservice_id, pdservice_version_id) {
-    console.log("[ analysisScope :: statisticsMonitor ] :: pdservice_id => " + pdservice_id);
-    console.log("[ analysisScope :: statisticsMonitor ] :: pdservice_version_id => " + pdservice_version_id);
-
-    //1. 좌상 게이지 차트 및 타임라인
-    //2. Time ( 작업일정 ) - 버전 개수 삽입
-    $.ajax({
-        url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + pdservice_id,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (json) {
-                pdServiceData = json;
-                let versionData = json.pdServiceVersionEntities;
-                let versionCustomTimeline = [];
-
-                let today = new Date();
-                versionData.sort((a, b) => a.c_id - b.c_id);
-
-                versionData.forEach(function (versionElement, idx) {
-                    var versionTimelineCustomData = {
-                        "c_id": versionElement.c_id,
-                        "title" : versionElement.c_title,
-                        "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                        "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                    };
-                    versionCustomTimeline.push(versionTimelineCustomData);
-                });
-
-                let version_count = versionData.length;
-
-                console.log("등록된 버전 개수 = " + version_count);
-            }
-        }
-    });
-}
-
-function versionUpdateIssueScatterChart(pdservice_id, pdservice_version_id, versionData) {
-    console.log("[ analysisScope :: versionUpdateIssueScatterChart ] :: 버전별 요구사항 업데이트 상태 스캐터 차트 버전데이터 = ");
-    console.log(versionData);
-
-    var yVersionData = [];
-    var xVesrionStartEndData = [];
-    var yearData = new Set();
-    versionData.forEach(version => {
-        yVersionData.push(version.title);
-        var arrayData = [version.title, +new Date(version.startDate), +new Date(version.endDate)];
-        yearData.add(new Date(version.startDate).getFullYear());
-        yearData.add(new Date(version.endDate).getFullYear());
-        xVesrionStartEndData.push(arrayData);
-    });
-
-    var versionDataMap = versionData.reduce(function(map, obj) {
-        map[obj.c_id] = obj;
-        return map;
-    }, {});
-
-    var dom = document.getElementById('boxplot-scatter-chart-container');
-
-    let myChart = echarts.init(dom, null, {
-        renderer: 'canvas',
-        useDirtyRect: false
-    });
-
-    let colorList = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC'];
-    let scatterData = [];
-
-    const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
-        .addQueryParam("pdServiceLink", pdservice_id)
-        .addQueryParam("pdServiceVersionLinks", pdservice_version_id)
-        .addQueryParam("일자기준", "updated")
-        .addQueryParam("메인그룹필드", "isReq")
-        .addQueryParam("하위그룹필드들", "pdServiceVersion")
-        .addQueryParam("크기", 1000)
-        .addQueryParam("하위크기", 1000)
-        .addQueryParam("컨텐츠보기여부", true)
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                console.log("[ analysisScope :: versionUpdateIssueScatterChart ] :: 버전별 요구사항 업데이트 상태 스캐터 차트데이터 = ");
-                console.log(data);
-
-                let result = Object.keys(data).reduce(
-                    (acc, date) => {
-
-                        if (data[date].requirementStatuses !== null) {
-                            Object.keys(data[date].requirementStatuses).forEach((versionId) => {
-                                if (data[date].requirementStatuses[versionId] !== 0) {
-                                    acc.versionScatterData.push([versionDataMap[versionId].title, new Date(date).getTime(), data[date].requirementStatuses[versionId]]);
-                                }
-                            });
-                        }
-
-                        return acc;
-                    },
-                    {
-                        versionScatterData: []
-                    }
-                );
-                scatterData = result.versionScatterData;
-
-                var option = {
-                    legend: {
-                        data: ['요구사항'],
-                        textStyle: {
-                            color: '#fff'  // 범례의 텍스트 색상을 설정합니다.
-                        }
-                    },
-                    yAxis: {
-                        type: 'time',
-                        axisLabel: {
-                            interval: 0,
-                            textStyle: {
-                                color: "white"
-                            },
-                            fontSize: 9,
-                            rotate: 0,
-                            formatter: function(params) {
-                                return formatDate(new Date(params));
-                            }
-                        },
-                        axisTick: { show: false },
-                        splitLine: {
-                            show: true,
-                            lineStyle: {
-                                color: "rgba(255,255,255,0.2)",
-                                width: 1,
-                                type: "dashed"
-                            }
-                        },
-                        // splitNumber: 5, // 라벨의 간격을 조절합니다. 이 값은 원하는 간격에 따라 조절할 수 있습니다.
-                    },
-                    xAxis: {
-                        data: yVersionData.reverse(),
-                        inverse: true,
-                        axisLabel: {
-                            interval: 0,
-                            textStyle: {
-                                color: "white"
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Versions',
-                            type: 'custom',
-                            itemStyle: {
-                                color: function(params) {
-                                    return colorList[params.dataIndex % colorList.length];
-                                }
-                            },
-                            renderItem: function(params, api) {
-                                var categoryIndex = api.value(0);
-                                var start = api.coord([categoryIndex, api.value(1)]);
-                                var end = api.coord([categoryIndex, api.value(2)]);
-                                var gap = 40; // 간격의 크기를 설정
-                                var width  = (params.coordSys.width - gap * (yVersionData.length - 1)) / yVersionData.length; // 간격을 고려하여 사각형의 너비를 계산합니다.
-
-                                if (width > 90) {
-                                    width = 90;
-                                }
-
-                                return {
-                                    type: 'rect',
-                                    shape: {
-                                        x: start[0] - width / 2,
-                                        y: start[1],
-                                        width: width,
-                                        height: end[1] - start[1]
-                                    },
-                                    style: api.style(params.dataIndex) // apply color here
-                                };
-                            },
-                            encode: {
-                                y: [1, 2],
-                                x: 0
-                            },
-                            data: xVesrionStartEndData
-                        },
-                        {
-                            name: '요구사항',
-                            type: 'scatter',
-                            encode: {
-                                y: 1,
-                                x: 0
-                            },
-                            itemStyle: {
-                                color: "rgba(255,106,0,0.82)",
-                                borderColor: '#fff',
-                                borderWidth: 1
-                            },
-                            label: {
-                                normal: {
-                                    show: true,
-                                    color: "#FFFFFF"
-                                },
-                            },
-                            symbolSize: function (data) {
-                                let sSize = Math.sqrt(data[2]) * 3;
-                                if (sSize < 5) {
-                                    sSize = 5;
-                                }
-                                return sSize;
-                            },
-                            data: scatterData
-                        }
-                    ],
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: function (params) {
-                            if (params.seriesType === 'scatter') {
-                                return params.marker + params.name + '<br/>' + new Date(params.value[1]).toLocaleDateString() + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + params.value[2] + '개<br/>';
-                            } else {
-                                var tooltipText = '';
-                                tooltipText += params.marker + params.name + '<br/><span style="float: right;">' + new Date(params.value[1]).toLocaleDateString()+ " ~ " + new Date(params.value[2]).toLocaleDateString() + '</span>' + '<br/>';
-                                return tooltipText;
-                            }
-                        }
-                    },
-                    grid: {
-                        left: '15%',
-                        containLabel: false
-                    }
-                };
-
-                if (option && typeof option === 'object') {
-                    myChart.setOption(option, true);
-                }
-
-                window.addEventListener('resize', myChart.resize);
-            }
-        }
-    });
-}
-
-function formatDate(date) {
-    var year = date.getFullYear().toString().slice(-2); // 연도의 마지막 두 자리를 얻습니다.
-    var month = (date.getMonth() + 1).toString().padStart(2, "0");
-    var day = date.getDate().toString().padStart(2, "0");
-    return year + "-" + month + "-" + day;
-}
-
-function chord(data) {
-    const $container = document.getElementById("circular_sankey");
-    const $chart = makeChart(data);
-
-    $container.append($chart);
-}
-
-function makeChart(data) {
-    const width = 640;
-    const height = width;
-    const outerRadius = Math.min(width, height) * 0.5 - 30;
-    const innerRadius = outerRadius - 20;
-    const { names, colors } = data;
-    const sum = d3.sum(data.flat());
-    const tickStep = d3.tickStep(0, sum, 100);
-    const tickStepMajor = d3.tickStep(0, sum, 20);
-    const formatValue = d3.formatPrefix(",.0", tickStep);
-
-    const chord = d3
-        .chord()
-        .padAngle(20 / innerRadius)
-        .sortSubgroups(d3.descending);
-
-    const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
-
-    const ribbon = d3.ribbon().radius(innerRadius);
-
-    const svg = d3
-        .create("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
-
-    const chords = chord(data);
-
-    const group = svg.append("g").selectAll().data(chords.groups).join("g");
-
-    group
-        .append("path")
-        .attr("fill", (d) => colors[d.index])
-        .attr("d", arc)
-        .append("title")
-        .text((d) => `${d.value.toLocaleString("en-US")} ${names[d.index]}`);
-
-    const groupTick = group
-        .append("g")
-        .selectAll()
-        .data((d) => groupTicks(d, tickStep))
-        .join("g")
-        .attr("transform", (d) => `rotate(${(d.angle * 180) / Math.PI - 90}) translate(${outerRadius},0)`);
-
-    groupTick.append("line").attr("stroke", "currentColor").attr("x2", 6);
-
-    groupTick
-        .filter((d) => d.value % tickStepMajor === 0)
-        .append("text")
-        .attr("x", 8)
-        .attr("dy", ".35em")
-        .attr("transform", (d) => (d.angle > Math.PI ? "rotate(180) translate(-16)" : null))
-        .attr("text-anchor", (d) => (d.angle > Math.PI ? "end" : null))
-        .text((d) => formatValue(d.value));
-
-    svg
-        .append("g")
-        .attr("fill-opacity", 0.7)
-        .selectAll()
-        .data(chords)
-        .join("path")
-        .attr("d", ribbon)
-        .attr("fill", (d) => colors[d.target.index])
-        .attr("opacity", 0.6)
-        .on("mouseenter", function (d) {
-            d3.select(this).transition().attr("opacity", 1);
-        })
-        .on("mouseout", function () {
-            d3.select(this).transition().attr("opacity", 0.6);
-        })
-        .attr("stroke", "white")
-        .append("title")
-        .text(
-            (d) =>
-                `${d.source.value.toLocaleString("en-US")} ${names[d.source.index]} → ${names[d.target.index]}${
-                    d.source.index !== d.target.index
-                        ? `\n${d.target.value.toLocaleString("en-US")} ${names[d.target.index]} → ${names[d.source.index]}`
-                        : ``
-                }`
-        );
-
-    return svg.node();
-}
-
-function groupTicks(d, step) {
-    const k = (d.endAngle - d.startAngle) / d.value;
-    return d3.range(0, d.value, step).map((value) => {
-        return { value: value, angle: value * k + d.startAngle };
-    });
-}
 /////////////////////////////////////////////////////////
 // 요구사항 별 수익 현황 그래프
 /////////////////////////////////////////////////////////
@@ -976,7 +383,6 @@ function incomeStatusChart(){
 
     option && myChart.setOption(option);
 }
-
 
 /////////////////////////////////////////////////////////
 // 투입 비용 현황 차트
@@ -1560,7 +966,8 @@ function reqCostAnalysisChart() {
     for (let key in requirementPriceList) {
         reqTotalPrice += requirementPriceList[key];
     }
-    console.log(reqTotalPrice);
+
+    console.log(" [ analysisCost :: reqCostAnalysisChart :: requirement total price -> " + reqTotalPrice);
 
     let difficultyJson = {
         '매우 어려움': 100,
@@ -1719,117 +1126,6 @@ function reqCostAnalysisChart() {
     window.addEventListener('resize', myChart.resize);
 }
 
-function manPowerAnalysisChart(selectedPerson) {
-
-    let manPowerData = personData[selectedPerson];
-    console.log(selectedPerson);
-    console.log(manPowerData);
-
-    var dom = document.getElementById('manpower-analysis-chart');
-    var myChart = echarts.init(dom, null, {
-        renderer: 'canvas',
-        useDirtyRect: false
-    });
-
-    var option;
-
-    // var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
-    // var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
-    //
-    // var maxArr = salaryArr.map(function(salary, i) {
-    //     return {
-    //         value: Math.max(salary, revenueArr[i]),
-    //         symbolSize: [0, 0]
-    //     };
-    // });
-
-    option = {
-        grid: {
-            top: 50,
-            left: '20%',
-            bottom: '5%',
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'none'
-            },
-        },
-        xAxis: {
-            data: [selectedPerson],
-            axisTick: { show: false },
-            axisLine: { show: false },
-            axisLabel: {
-                color: '#ffffff'
-            },
-        },
-        yAxis: {
-            splitLine: { show: false },
-            axisTick: { show: true },
-            axisLine: { show: true },
-            axisLabel: {
-                show: true,
-                color: '#ffffff'
-            }
-        },
-        /*color: ['#e54035'],*/
-        series: [
-            {
-                name: '연봉',
-                type: 'pictorialBar',
-                barCategoryGap: '0%',
-                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
-                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
-                itemStyle: {
-                    opacity: 0.5
-                },
-                emphasis: {
-                    itemStyle: {
-                        opacity: 0.7
-                    }
-                },
-                data: [manPowerData.salary],
-                z: 10,
-                label: {
-                    show: true,
-                    position: 'outside',
-                    color: "white",  // 여기에 'color' 속성을 추가해주세요.
-                },
-            },
-            {
-                name: '벌어들인 수익',
-                type: 'pictorialBar',
-                barCategoryGap: '0%',
-                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
-                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
-                itemStyle: {
-                    opacity: 0.5,
-                    /*color: "blue"*/
-                },
-                emphasis: {
-                    itemStyle: {
-                        opacity: 0.7,
-
-                    }
-                },
-                data: [manPowerData.performance],
-                z: 10,
-                label: {
-                    show: true,
-                    position: 'outside',
-                    color: "white",  // 여기에 'color' 속성을 추가해주세요.
-                },
-            },
-        ]
-    };
-
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
-
-    window.addEventListener('resize', myChart.resize);
-}
-
 // 주식차트
 function candleStickChart() {
     var dom = document.getElementById("candlestick-chart-container");
@@ -1934,4 +1230,159 @@ function 담당자목록_조회() {
         manPowerAnalysisChart(selectedOption);
         $('.person-data + .bootstrap-select .filter-option').text(selectedOption);
     });
+}
+
+function manPowerAnalysisChart(selectedPerson) {
+
+    let manPowerData = personData[selectedPerson];
+
+    console.log(" [ analysisCost :: manPowerAnalysisChart :: selected person name -> " + selectedPerson);
+
+    console.log(" [ analysisCost :: manPowerAnalysisChart :: selected person data -> ");
+    console.log(manPowerData);
+
+    var dom = document.getElementById('manpower-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+
+    var option;
+
+    // var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
+    // var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
+    //
+    // var maxArr = salaryArr.map(function(salary, i) {
+    //     return {
+    //         value: Math.max(salary, revenueArr[i]),
+    //         symbolSize: [0, 0]
+    //     };
+    // });
+
+    option = {
+        grid: {
+            top: 50,
+            left: '20%',
+            bottom: '5%',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'none'
+            },
+            confine: true
+        },
+        xAxis: {
+            data: [selectedPerson],
+            axisTick: { show: false },
+            axisLine: { show: false },
+            axisLabel: {
+                color: '#FFFFFFFF',
+                opacity: 1
+            },
+        },
+        yAxis: {
+            splitLine: { show: false },
+            axisTick: { show: true },
+            axisLine: { show: true },
+            axisLabel: {
+                show: true,
+                color: '#FFFFFFFF',
+                opacity: 1
+            }
+        },
+        /*color: ['#e54035'],*/
+        series: [
+            {
+                name: '연봉',
+                type: 'pictorialBar',
+                barCategoryGap: '0%',
+                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
+                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
+                itemStyle: {
+                    opacity: 0.5
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 0.7
+                    }
+                },
+                data: [manPowerData.salary],
+                z: 10,
+                label: {
+                    show: false,
+                },
+            },
+            {
+                name: '벌어들인 수익',
+                type: 'pictorialBar',
+                barCategoryGap: '0%',
+                // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
+                symbol: 'path://M0,10 C10,10 10,0 20,0 C30,0 30,10 40,10',
+                itemStyle: {
+                    opacity: 0.5,
+                    /*color: "blue"*/
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 0.7,
+
+                    }
+                },
+                data: [manPowerData.performance],
+                z: 10,
+                label: {
+                    show: true,
+                    position: 'outside',
+                    color: "#FFFFFFFF"
+                },
+            },
+            {
+                name: '연봉 라벨',
+                type: 'pictorialBar',
+                barCategoryGap: '0%',
+                symbol: 'path://M0,0',  // 심볼을 비워서 별도의 바가 보이지 않도록 합니다.
+                data: [manPowerData.salary],
+                z: 11,  // z 값을 더 크게 설정하여 라벨이 다른 요소들 위에 오도록 합니다.
+                label: {
+                    show: true,
+                    position: 'outside',
+                    color: "white",
+                    formatter: function(params)
+                    {
+                        return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                },
+                tooltip: {
+                    show: false
+                }
+            },
+            {
+                name: '벌어들인 수익',
+                type: 'pictorialBar',
+                barCategoryGap: '0%',
+                symbol: 'path://M0,0',  // 심볼을 비워서 별도의 바가 보이지 않도록 합니다.
+                data: [manPowerData.performance],
+                z: 11,  // z 값을 더 크게 설정하여 라벨이 다른 요소들 위에 오도록 합니다.
+                label: {
+                    show: true,
+                    position: 'outside',
+                    color: "white",
+                    formatter: function(params)
+                    {
+                        return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                },
+                tooltip: {
+                    show: false
+                }
+            },
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
