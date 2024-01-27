@@ -29,7 +29,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
 			"../reference/lightblue4/docs/lib/widgster/widgster.js"],
 
-		[	"../reference/jquery-plugins/select2-4.0.2/dist/css/jira_server_connection.css",
+		[	"css/jiraServerCustom.css",
 			"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
 			"../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
 			"../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
