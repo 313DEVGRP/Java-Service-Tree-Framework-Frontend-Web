@@ -905,7 +905,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 		}
 	};
-
+	console.log("@@@@@@@@@@@@@@@#################")
 	/******** network graph create ********/
 	networkGraph.createGraph();
 }
@@ -1134,7 +1134,7 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 			'isReqType': 'REQUIREMENT',
 			'pdServiceLink' : selectedPdServiceId,
 			'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-			'메인그룹필드' : 'pdServiceVersion',
+			'메인그룹필드' : 'pdServiceVersions',
 			'컨텐츠보기여부' : false,
 			'크기' : 10000,
 			'하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
@@ -1225,7 +1225,7 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 
 				// 집계 데이터 바탕
 				if (result["전체합계"] !== 0) {
-					let 버전별집계 = result["검색결과"]["group_by_pdServiceVersion"];
+					let 버전별집계 = result["검색결과"]["group_by_pdServiceVersions"];
 					for (let i = 0; i < 버전별집계.length; i++) {
 						let mandatoryDataList = {
 							versionId: "",
