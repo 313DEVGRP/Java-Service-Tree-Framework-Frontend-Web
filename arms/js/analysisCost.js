@@ -11,6 +11,7 @@ var pdServiceListData;
 var versionListData;
 
 var personData = {};
+var 인력맵 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -93,9 +94,7 @@ function execDocReady() {
             dashboardColor = dashboardPalette.dashboardPalette01;
 
             // 비용 입력
-            costInput();
-
-            reqCostAnalysisChart();
+            // costInput();
 
             candleStickChart();
         })
@@ -181,7 +180,13 @@ function makeVersionMultiSelectBox() {
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
+            reqCostAnalysisChart();
+
             담당자목록_조회();
+
+            costInput();
+
+            버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
             //요구사항 현황 데이터 테이블 로드
             // console.log(" ============ makeVersionMultiSelectBox ============= ");
             // endPointUrl =
@@ -228,7 +233,14 @@ function bind_VersionData_By_PdService() {
                 // 수익 현황 차트
                 incomeStatusChart();
 
+                reqCostAnalysisChart();
+
                 담당자목록_조회();
+
+                costInput();
+
+                버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
+
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -250,11 +262,9 @@ function bind_VersionData_By_PdService() {
 }
 
 // 비용 입력
-function costInput() {
+async function costInput() {
 
     // 버전 정보
-
-
     // 연봉 정보
     var mockData = [
         {
@@ -1062,24 +1072,23 @@ function reqCostAnalysisChart() {
                 max: reqTotalPrice,
                 splitLine: {
                     show: false
-                }
+                },
+                axisLabel: {
+                    rotate: 45,
+                    color: '#FFFFFFFF',
+                },
             },
         ],
         yAxis: [
             {
                 type: 'category',
                 data: Object.keys(requirementPriceList),
-                axisLabel: {
-                    interval: 0,
-                    rotate: 45,
-                    margin: 10
-                },
                 splitLine: {
                     show: false
                 },
                 axisLabel: {
                     color: '#FFFFFFFF',
-                    opacity: 1
+                    rotate: 45,
                 },
             },
         ],
@@ -1101,7 +1110,7 @@ function reqCostAnalysisChart() {
                 stack: 'chart',
                 silent: true,
                 itemStyle: {
-                    color: '#eee'
+                    color: '#FFFFFF'
                 },
                 data: Object.keys(requirementPriceList).map(function (key) {
                     return reqTotalPrice - requirementPriceList[key];
@@ -1116,7 +1125,7 @@ function reqCostAnalysisChart() {
                         name: key.replace('.js', ''),
                         value: difficultyJson[key]
                     };
-                })
+                }),
             },
             {
                 type: 'pie',
@@ -1221,27 +1230,71 @@ function candleStickChart() {
     window.addEventListener("resize", myChart.resize);
 }
 
-function 담당자목록_조회() {
+function waitForPersonData() {
+    return new Promise(resolve => {
+        let intervalId = setInterval(() => {
+            if (personData.length > 0 ) {
+                console.log(personData);
+                clearInterval(intervalId);
+                resolve(personData);
+            }
+        }, 500);  // 100ms마다 globalDeadline 값 확인
+    });
+}
+
+function 전역인력맵확인() {
+    return new Promise(resolve => {
+        let intervalId = setInterval(() => {
+            console.log(인력맵);
+            if (인력맵.length > 0 ) {
+                clearInterval(intervalId);
+                resolve(인력맵);
+            }
+        }, 500);  // 100ms마다 globalDeadline 값 확인
+    });
+}
+
+async function 담당자목록_조회() {
     // 초기화 로직
     $("#person-select-box").hide();
     $('.person-data + .bootstrap-select .dropdown-menu').empty();
     $('.person-data + .bootstrap-select .filter-option').text("");
 
+    let personData = await waitForPersonData();
+
+    console.log(" [ analysisCost :: reqCostAnalysisChart ] :: personData -> ");
+    console.log(personData);
+
+    인력맵 = personData.reduce((map, item) => {
+        map[item.필드명] = {
+            salary: null,
+            performance: null
+        };
+        return map;
+    }, {});
+
+    console.log(" [ analysisCost :: reqCostAnalysisChart ] :: 인력맵 -> ");
+    console.log(인력맵);
+
+    // 샘플 데이터
     var data = {
-        "홍길동": { total: 2000000, salary: 1400000, performance: 600000 },
-        "이순신": { total: 3000000, salary: 1800000, performance: 1200000 },
-        "유관순": { total: 1500000, salary: 600000, performance: 900000 },
-        "안중근": { total: 1200000, salary: 480000, performance: 720000 },
-        "세종대왕": { total: 1800000, salary: 720000, performance: 1080000 }
+        "313cokr@gmail.com": {salary: 1400000, performance: 600000 },
+        "chanho9611@gmail.com": {salary: 1800000, performance: 1200000 },
+        "chltngus129@gmail.com": {salary: 600000, performance: 900000 },
+        "dumbbelloper@gmail.com": {salary: 480000, performance: 720000 },
+        "gkfn185@gmail.com": {salary: 720000, performance: 1080000 },
+        "gudtjr4662@gmail.com": {salary: 720000, performance: 1080000 },
     };
 
-    personData = data;
+    console.log(" [ analysisCost :: 담당자목록_조회 ] :: 인력맵 -> ");
+    console.log(인력맵);
+    인력맵 = data;
 
-    var options = Object.keys(personData);
+    var options = Object.keys(인력맵);
     if (options.length > 0) {
         $("#person-select-box").show();
         $("#first-person-select").text(options[0]);
-        manPowerAnalysisChart(options[0]);
+        인력별_연봉대비_성과차트(options[0]);
 
         $.each(options, function(index, option) {
             $('.person-data').append($('<option>', {
@@ -1260,18 +1313,17 @@ function 담당자목록_조회() {
     $('.person-data + .bootstrap-select .dropdown-menu').on('click', 'li', function() {
         var selectedOption = $(this).text();
 
-        manPowerAnalysisChart(selectedOption);
+        인력별_연봉대비_성과차트(selectedOption);
         $('.person-data + .bootstrap-select .filter-option').text(selectedOption);
     });
 }
 
-function manPowerAnalysisChart(selectedPerson) {
+function 인력별_연봉대비_성과차트(selectedPerson) {
 
-    let manPowerData = personData[selectedPerson];
+    let manPowerData = 인력맵[selectedPerson];
 
-    console.log(" [ analysisCost :: manPowerAnalysisChart :: selected person name -> " + selectedPerson);
-
-    console.log(" [ analysisCost :: manPowerAnalysisChart :: selected person data -> ");
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트 :: selected person name -> " + selectedPerson);
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트 :: selected person data -> ");
     console.log(manPowerData);
 
     var dom = document.getElementById('manpower-analysis-chart');
@@ -1365,7 +1417,7 @@ function manPowerAnalysisChart(selectedPerson) {
                 data: [manPowerData.performance],
                 z: 10,
                 label: {
-                    show: true,
+                    show: false,
                     position: 'outside',
                     color: "#FFFFFFFF"
                 },
@@ -1418,4 +1470,54 @@ function manPowerAnalysisChart(selectedPerson) {
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+
+function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('isReqType', "REQUIREMENT")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (apiResponse) {
+                console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
+                console.log(apiResponse.response);
+            }
+        }
+    });
+
+    const url2 = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('isReqType', "ISSUE")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+    $.ajax({
+        url: url2,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (apiResponse) {
+                console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
+                console.log(apiResponse.response);
+            }
+        }
+    });
 }
