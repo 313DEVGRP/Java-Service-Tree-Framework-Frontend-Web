@@ -224,9 +224,9 @@ function bind_VersionData_By_PdService() {
                 // getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
 
                 // 투자 대비 소모 비용 차트
-			    compareCostsChart(selectedPdServiceId, selectedVersionId);
+                compareCostsChart(selectedPdServiceId, selectedVersionId);
                 // 수익 현황 차트
-			    incomeStatusChart();
+                incomeStatusChart();
 
                 담당자목록_조회();
 
@@ -251,7 +251,7 @@ function bind_VersionData_By_PdService() {
 
 // 비용 입력
 function costInput() {
-    
+
     // 버전 정보
 
 
@@ -951,15 +951,15 @@ function reqCostAnalysisChart() {
         요구사항7: 30000000,
         요구사항8: 30000000,
         요구사항9: 30000000,
-        요구사항11: 10000000,
-        요구사항12: 20000000,
-        요구사항13: 30000000,
-        요구사항14: 40000000,
-        요구사항15: 50000000,
-        요구사항16: 60000000,
-        요구사항17: 30000000,
-        요구사항18: 30000000,
-        요구사항19: 30000000
+        // 요구사항11: 10000000,
+        // 요구사항12: 20000000,
+        // 요구사항13: 30000000,
+        // 요구사항14: 40000000,
+        // 요구사항15: 50000000,
+        // 요구사항16: 60000000,
+        // 요구사항17: 30000000,
+        // 요구사항18: 30000000,
+        // 요구사항19: 30000000
     };
 
     let reqTotalPrice = 0;
@@ -1014,29 +1014,38 @@ function reqCostAnalysisChart() {
         tooltip: {},
         title: [
             {
-                text: '요구사항',
-                subtext: '전체 ' + reqTotalPrice +'원',
+                // text: '요구사항',
+                subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
                 left: '25%',
-                textAlign: 'center'
+                textAlign: 'center',
+                textStyle: {
+                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                },
+                subtextStyle: {
+                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                }
             },
             {
-                text: '난이도 별 통계',
-                subtext:
-                    '요구사항 난이도 ' +
-                    Object.keys(difficultyJson).reduce(function (all, key) {
-                        return all + difficultyJson[key];
-                    }, 0) + '개',
+                text: '난이도 및 우선순위 통계',
+                subtext: '',
                 left: '75%',
                 bottom: '0%',
-                textAlign: 'center'
+                textAlign: 'center',
+                textStyle: {
+                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                },
+                subtextStyle: {
+                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                }
             },
         ],
         grid: [
             {
                 top: 50,
+                left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
+                right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
                 width: '50%',
                 bottom: '5%',
-                left: 10,
                 containLabel: true
             },
             /*            {
@@ -1062,11 +1071,16 @@ function reqCostAnalysisChart() {
                 data: Object.keys(requirementPriceList),
                 axisLabel: {
                     interval: 0,
-                    rotate: 30
+                    rotate: 45,
+                    margin: 10
                 },
                 splitLine: {
                     show: false
-                }
+                },
+                axisLabel: {
+                    color: '#FFFFFFFF',
+                    opacity: 1
+                },
             },
         ],
         series: [
@@ -1115,7 +1129,26 @@ function reqCostAnalysisChart() {
                     };
                 })
             }
-        ]
+        ],
+        dataZoom: [
+            {
+                type: 'inside',
+                yAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                start: 0,
+                end: 100
+            },
+            {
+                show: true,
+                type: 'slider',
+                left: '0%',
+                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
+                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                yAxisIndex: [0],
+                start: 0,
+                end: 100
+            }
+        ],
+
     };
 
 
@@ -1349,9 +1382,9 @@ function manPowerAnalysisChart(selectedPerson) {
                     position: 'outside',
                     color: "white",
                     formatter: function(params)
-                                {
-                                    return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                }
+                    {
+                        return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
                 },
                 tooltip: {
                     show: false
@@ -1369,9 +1402,9 @@ function manPowerAnalysisChart(selectedPerson) {
                     position: 'outside',
                     color: "white",
                     formatter: function(params)
-                                {
-                                    return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                }
+                    {
+                        return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
                 },
                 tooltip: {
                     show: false

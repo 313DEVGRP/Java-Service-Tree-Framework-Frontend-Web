@@ -34,11 +34,11 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
                 } else {
                     statusCounts[status]++;
                 }
-            } 
+            }
         });
         //자료 구조 변경
         statusDataArr = Object.entries(statusCounts).map(([key, value]) => ({ name: key, value }));
-        
+
         initChart(dataWrap.seriesData, dataWrap.maxDepth);
     }
     function prepareData(rawData) {

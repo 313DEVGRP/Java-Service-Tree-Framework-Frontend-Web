@@ -483,7 +483,8 @@
 																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
 																	required="required"
 																	style="color: #a4c6ff"
-																	placeholder="Service Name" />
+																	placeholder="Service Name"
+                                                                    readonly/>
 															</div>
 														</div>
 														<div
@@ -505,7 +506,8 @@
 																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
 																	required="required"
 																	style="color: #a4c6ff"
-																	placeholder="Service Version" />
+																	placeholder="Service Version"
+                                                                    readonly/>
 															</div>
 														</div>
 														<div
@@ -524,10 +526,10 @@
 																	name="detailview_req_id"
 																	class="form-control parsley-validated font13 darkBack"
 																	data-placement="top"
-																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
 																	required="required"
 																	style="color: #a4c6ff"
-																	placeholder="Requirement ID" />
+																	placeholder="Requirement ID"
+                                                                    readonly/>
 															</div>
 														</div>
 														<div
@@ -549,7 +551,8 @@
 																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
 																	required="required"
 																	style="color: #a4c6ff"
-																	placeholder="Requirement Title" />
+																	placeholder="Requirement Title"
+                                                                    readonly/>
 															</div>
 														</div>
 														<div class="control-group">
@@ -703,16 +706,38 @@
 																				value="12" />
 																			해결됨
 																		</label>
-																		<!--                                                        <label class="btn btn-warning btn-disabled">
-                                                            <input  type="radio"
-                                                                    name="detailview_req_state_options"
-                                                                    value="13"/>
-                                                            닫힘
-                                                        </label>-->
+																		<label class="btn btn-warning btn-disabled">
+                                                                            <input  type="radio"
+                                                                                    name="detailview_req_state_options"
+                                                                                    value="13"/>
+                                                                            닫힘
+                                                                        </label>
 																	</div>
 																</div>
 															</div>
 														</div>
+                                                        <div
+                                                                class="control-group"
+                                                                for="detailview_req_plan_time">
+                                                            <label class="control-label font13">예상 일정(일) :</label>
+                                                            <div
+                                                                    class="controls form-group input-group"
+                                                                    style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+                                                                <input
+                                                                        type="text"
+                                                                        id="detailview_req_plan_time"
+                                                                        name="detailview_req_plan_time"
+                                                                        class="form-control parsley-validated font13 darkBack"
+                                                                        data-placement="top"
+                                                                        required="required"
+                                                                        style="color: #a4c6ff"
+                                                                        placeholder="Requirement Plan Day"
+                                                                        readonly/>
+                                                            </div>
+                                                        </div>
 														<div
 															class="control-group"
 															for="detailview_req_writer">
@@ -732,7 +757,8 @@
 																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
 																	required="required"
 																	style="color: #a4c6ff"
-																	placeholder="Requirements Author" />
+																	placeholder="Requirements Author"
+                                                                    readonly/>
 															</div>
 														</div>
 														<div
@@ -743,7 +769,7 @@
 																class="controls form-group input-group"
 																style="margin-left: 180px">
 																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
+																	<i class="fa fa-calendar"></i>
 																</span>
 																<input
 																	type="text"
@@ -754,7 +780,8 @@
 																	data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
 																	required="required"
 																	style="color: #a4c6ff"
-																	placeholder="Requirements Last Created Date" />
+																	placeholder="Requirements Last Created Date"
+                                                                    readonly/>
 															</div>
 														</div>
 														<div class="control-group">
@@ -1167,16 +1194,37 @@
 																					value="12" />
 																				해결됨
 																			</label>
-																			<!--                                                            <label class="btn btn-warning">
-                                                                <input  type="radio"
-                                                                        name="editview_req_state_options"
-                                                                        value="13"/>
-                                                                닫힘
-                                                            </label>-->
+																			<label class="btn btn-warning">
+                                                                                <input  type="radio"
+                                                                                        name="editview_req_state_options"
+                                                                                        value="13"/>
+                                                                                닫힘
+                                                                            </label>
 																		</div>
 																	</div>
 																</div>
 															</div>
+                                                            <div
+                                                                    class="control-group"
+                                                                    for="editview_req_plan_time">
+                                                                <label class="control-label font13">예상 일정(일) :</label>
+                                                                <div
+                                                                        class="controls form-group input-group"
+                                                                        style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+                                                                    <input
+                                                                            type="text"
+                                                                            id="editview_req_plan_time"
+                                                                            name="editview_req_plan_time"
+                                                                            class="form-control parsley-validated font13 darkBack"
+                                                                            data-placement="top"
+                                                                            required="required"
+                                                                            style="color: #a4c6ff"
+                                                                            placeholder="숫자만 입력해주세요( 10일 → 10 )" />
+                                                                </div>
+                                                            </div>
 															<div class="control-group">
 																<label
 																	class="control-label"
@@ -1212,7 +1260,7 @@
 																	style="margin-bottom: 10px; margin-left: 180px">
 																	<div class="input-group">
 																		<span class="input-group-addon">
-																			<i class="glyphicon glyphicon-envelope"></i>
+																			<i class="fa fa-calendar"></i>
 																		</span>
 																		<input
 																			id="editview_req_write_date"
@@ -2042,7 +2090,6 @@
 									<i class="glyphicon glyphicon-list-alt"></i>
 								</span>
 							</label>
-							<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
 							<div
 								class="controls form-group input-group"
 								style="margin-left: 130px">
@@ -2082,6 +2129,30 @@
 								</div>
 							</div>
 						</div>
+                        <div class="control-group col-sm-12">
+                            <div class="controls form-group col-sm-1">&nbsp;</div>
+                            <label
+                                    for="popup_req_plan_time"
+                                    class="control-label"
+                                    style="color: #f8f8f8">
+                                예상 일정(일)
+                                <span class="required">*</span>
+                                <span
+                                        class="input-group-addon"
+                                        style="display: inline !important">
+									<i class="glyphicon glyphicon-time"></i>
+								</span>
+                            </label>
+                            <div class="controls form-group col-sm-8">
+                                <input
+                                        type="text"
+                                        id="popup_req_plan_time"
+                                        pattern="[0-9]"
+                                        class="form-control parsley-validated darkBack"
+                                        placeholder="숫자만 입력해주세요( 10일 → 10 )"
+                                        required="required" />
+                            </div>
+                        </div>
 						<div class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label
