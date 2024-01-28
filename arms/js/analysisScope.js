@@ -1209,7 +1209,7 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 		type: "GET",
 		data: {
 			서비스아이디: pdService_id,
-			메인그룹필드: "pdServiceVersion",
+			메인그룹필드: "pdServiceVersions",
 			하위그룹필드들: "isReq",
 			컨텐츠보기여부: true,
 			pdServiceVersionLinks: pdServiceVersionLinks
