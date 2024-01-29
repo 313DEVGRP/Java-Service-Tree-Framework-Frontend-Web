@@ -415,6 +415,7 @@
             </div>
         </section>
     </div>
+
     <div class="col-lg-12 col-layer">
         <section class="widget">
             <header>
@@ -487,7 +488,7 @@
                     </div>
                 </blockquote>
                 <div class="row">
-                    <div class="col-lg-12 color-legend-widget">
+                    <div class="col-lg-6">
                         <section class="widget">
                             <header style="margin-bottom: 15px">
                                 <h4>
@@ -495,7 +496,7 @@
                                             class="font13"
                                             style="font-weight: bold">
 										<i class="fa fa-asterisk"></i>
-										프로젝트 비용 예측
+										버전 비용
 									</span>
                                 </h4>
                                 <div class="widget-controls">
@@ -549,85 +550,97 @@
                                 <blockquote
                                         class="font13"
                                         style="margin-top: 5px">
-                                    제품(서비스) - 버전 - 요구사항 - 인력별 예산을 계산할 수 있습니다.
-                                    <div style="float: right">
-                                        <button
-                                                class="btn btn-transparent btn-xs"
-                                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
-                                            Help
-                                            <i
-                                                    class="fa fa-question"
-                                                    style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                                        </button>
-                                    </div>
+                                    각 버전에 투자한 비용을 입력합니다.
                                 </blockquote>
-
-                                <div>
-                                    <div class="cost-versions">
-                                        <button class="cost-version">BaseVersion</button>
-                                        <button class="cost-version">1.0.0</button>
-                                        <button class="cost-version">1.0.1</button>
-                                        <button class="cost-version">24.01</button>
-                                    </div>
-
-                                    <div class="cost-input-version">
-                                        <span>
-                                            <i class="fa fa-asterisk"></i>
-                                            버전 정보
-                                        </span>
-                                        <div style="width: 100%; height: 10px;"></div>
-                                        <div class="cost-version-info">
-                                            <span>
-                                                <i class="fa fa-check"></i>
-                                                버전 기간
-                                            </span>
-                                            <div>
-                                                2024-01-01 ~ 2024-01-31
-                                            </div>
-                                        </div>
-                                        <div class="cost-version-info">
-                                            <span>
-                                                <i class="fa fa-check"></i>
-                                                버전 설명
-                                            </span>
-                                            <div>
-                                                버전 설명입니다.
-                                            </div>
-                                        </div>
-                                        <div class="cost-version-info">
-                                            <span>
-                                                <i class="fa fa-check"></i>
-                                                버전 비용
-                                            </span>
-                                            <div>
-                                                <input type="text" class="version-input"> 만원
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="cost-input-manpower">
-                                        <span>
-                                            <i class="fa fa-asterisk"></i>
-                                            연봉 정보
-                                        </span>
-                                        <div style="width: 100%; height: 10px;"></div>
-                                        <table
-                                                id="manpower-annual-income"
-                                                style="width: 100%;
-                                                       border-top: 1px dashed rgba(51, 51, 51, 0.3);">
-                                        </table>
-                                    </div>
-                                </div>
+                                <table
+                                        id="version-cost"
+                                        style="width: 100%;
+                                        border-top: 1px dashed rgba(51, 51, 51, 0.3);">
+                                </table>
                             </div>
-
-                            <div style="display: flex; justify-content: space-evenly;">
-                                <button class="cost-input-complete">
-                                    입력 완료
-                                </button>
-                            </div>
-
                         </section>
                     </div>
+
+                    <div class="col-lg-6">
+                        <section class="widget">
+                            <header style="margin-bottom: 15px">
+                                <h4>
+									<span
+                                            class="font13"
+                                            style="font-weight: bold">
+										<i class="fa fa-asterisk"></i>
+										연봉 정보
+									</span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toleft"
+                                            title="change width to left"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toright"
+                                            title="change width to right"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+
+                            <div class="body">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; margin-top: 8px"></div>
+                                <blockquote
+                                        class="font13"
+                                        style="margin-top: 5px">
+                                    각 버전에 투입된 인력의 연봉 정보를 입력합니다.
+                                </blockquote>
+                                <table
+                                        id="manpower-annual-income"
+                                        style="width: 100%;
+                                        border-top: 1px dashed rgba(51, 51, 51, 0.3);">
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- 입력 완료 버튼 -->
+                    <div style="text-align: center;">
+                        <button class="cost-input-complete">
+                            입력 완료
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </section>

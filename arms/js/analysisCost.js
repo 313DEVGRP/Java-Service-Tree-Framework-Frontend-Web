@@ -253,41 +253,192 @@ function bind_VersionData_By_PdService() {
 function costInput() {
 
     // 버전 정보
-
-
-    // 연봉 정보
-    var mockData = [
+    var mockVersionData = [
         {
-            "name": "홍길동",
-            "salary": ""
+            "version": "BaseVersion",
+            "period": "2023-10-01 ~ 2023-10-31",
+            "cost": ""
         },
         {
-            "name": "이순신",
-            "salary": ""
+            "version": "1.0.0",
+            "period": "2023-11-01 ~ 2023-11-30",
+            "cost": ""
         },
-        // 추가적인 데이터 객체...
+        {
+            "version": "1.0.1",
+            "period": "2023-12-01 ~ 2023-12-31",
+            "cost": ""
+        },
+        {
+            "version": "24.01",
+            "period": "2024-01-01 ~ 2024-01-30",
+            "cost": ""
+        },
+        {
+            "version": "24.02",
+            "period": "2024-02-01 ~ 2024-02-29",
+            "cost": ""
+        }
     ];
 
-    $('#manpower-annual-income').DataTable({
-        "data": mockData,
-        "columns": [
-            { "data": "name", "title": "투입 인력", "className": "dt-center" },
+    $('#version-cost').DataTable({
+        data: mockVersionData,
+        columns: [
+            { data: "version", title: "버전", className: "dt-center" },
+            { data: "period", title: "기간", className: "dt-center" },
             {
-                "data": "salary",
-                "title": "연봉 (입력)",
-                "className": "dt-center",
-                "render": function(data, type, row) {
-                    return '<input type="text" class="salary-input"value="' + data + '"> 만원';
+                data: "cost",
+                title: "비용 (입력)",
+                className: "dt-center",
+                render: function(data, type, row) {
+                    return '<input type="text" class="cost-input"value="' + data + '"> 만원';
                 }
             }
         ],
-        "drawCallback": function(settings) {
-            $('.salary-input').on('input', function() {
+        drawCallback: function(settings) {
+            $('.cost-input').on('input', function() {
                 var value = this.value.replace(/,/g, '');
                 this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             });
         }
     });
+
+    // 연봉 정보
+    var mockManpowerData = [
+        {
+            "name": "홍길동",
+            "version": "1.0.0",
+            "salary": ""
+        },
+        {
+            "name": "홍길동",
+            "version": "1.0.1",
+            "salary": ""
+        },
+        {
+            "name": "이순신",
+            "version": "BaseVersion",
+            "salary": ""
+        },
+        {
+            "name": "이순신",
+            "version": "1.0.0",
+            "salary": ""
+        },
+        {
+            "name": "이순신",
+            "version": "24.01",
+            "salary": ""
+        },
+        {
+            "name": "유관순",
+            "version": "24.01",
+            "salary": ""
+        },
+        {
+            "name": "안중근",
+            "version": "BaseVersion",
+            "salary": ""
+        },
+        {
+            "name": "안중근",
+            "version": "1.0.0",
+            "salary": ""
+        },
+        {
+            "name": "안중근",
+            "version": "1.0.1",
+            "salary": ""
+        },
+        {
+            "name": "세종대왕",
+            "version": "BaseVersion",
+            "salary": ""
+        },
+        {
+            "name": "세종대왕",
+            "version": "1.0.1",
+            "salary": ""
+        },
+        {
+            "name": "세종대왕",
+            "version": "24.01",
+            "salary": ""
+        }
+        /*['홍길동', '1.0', ''],
+        ['홍길동', '1.1', ''],
+        ['이순신', 'BaseVersion', ''],
+        ['이순신', '1.0', ''],
+        ['이순신', '24.01', ''],
+        ['유관순', '24.01', '']*/
+    ];
+
+    $('#manpower-annual-income').DataTable({
+        data: mockManpowerData,
+        columns: [
+            {
+                name: "name",
+                data: "name",
+                title: "투입 인력",
+                className: "dt-center"
+            },
+            {
+                title: "버전",
+                data: "version",
+                className: "dt-center"
+            },
+            {
+                title: "연봉 (입력)",
+                data: "salary",
+                className: "dt-center",
+                render: function(data, type, row) {
+                    return '<input type="text" class="salary-input"value="' + data + '"> 만원';
+                }
+            }
+        ],
+        drawCallback: function(settings) {
+            $('.salary-input').on('input', function() {
+                var value = this.value.replace(/,/g, '');
+                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                // 같은 그룹의 모든 연봉 입력 필드를 찾아 값 업데이트
+                var name = $(this).parents('tr').find('td').first().text();
+                var salaryInputs = $('td:contains("' + name + '")').siblings().find('.salary-input');
+                salaryInputs.val(this.value);
+            });
+        },
+        rowsGroup: [
+            "name:name",
+        ]
+    });
+
+    /*var data = [
+        ['11111', '010-1111-1111', '33333'],
+        ['11111', '02-2222-2222', '33333'],
+        ['aaa', '010-3333-3333', 'bbb'],
+        ['aaa', '02-4444-4444', 'bbb'],
+        ['ㄱㄱㄱ', '010-5555-5555', 'ㅎㅎㅎ'],
+        ['ㄱㄱㄱ', '02-5555-5555', 'ㅎㅎㅎ']
+    ];
+
+    var table = $('#manpower-annual-income').DataTable({
+        columns: [
+            {
+                name: 'rowspan',
+                title: 'First group',
+            },
+            {
+                title: 'Second group',
+            },
+            {
+                title: 'Third group',
+            }
+        ],
+        data: data,
+        rowsGroup: [
+            'rowspan:name'
+        ]
+    });*/
 }
 
 /////////////////////////////////////////////////////////
