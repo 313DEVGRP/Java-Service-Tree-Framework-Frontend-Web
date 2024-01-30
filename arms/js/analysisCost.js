@@ -10,7 +10,8 @@ var pdServiceData;
 var pdServiceListData;
 var versionListData;
 
-var personData = {};
+var 버전별요구사항별 = {};
+var 인력맵 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -92,12 +93,6 @@ function execDocReady() {
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
-            // 비용 입력
-            costInput();
-
-            reqCostAnalysisChart();
-
-            candleStickChart();
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
@@ -181,7 +176,7 @@ function makeVersionMultiSelectBox() {
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
-            담당자목록_조회();
+            버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
             //요구사항 현황 데이터 테이블 로드
             // console.log(" ============ makeVersionMultiSelectBox ============= ");
             // endPointUrl =
@@ -227,8 +222,9 @@ function bind_VersionData_By_PdService() {
                 compareCostsChart(selectedPdServiceId, selectedVersionId);
                 // 수익 현황 차트
                 incomeStatusChart();
+                
+                버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
 
-                담당자목록_조회();
 
                 if (data.length > 0) {
                     console.log("display 재설정.");
@@ -250,7 +246,10 @@ function bind_VersionData_By_PdService() {
 }
 
 // 비용 입력
-function costInput() {
+function costInput(인력맵) {
+
+    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
+    console.log(인력맵);
 
     // 버전 정보
     var mockVersionData = [
@@ -304,65 +303,35 @@ function costInput() {
     });
 
     // 연봉 정보
+    let mockManpowerData2 = Object.keys(인력맵).map((key) => {
+        return 인력맵[key];
+    });
+
+    console.log(mockManpowerData2);
+
     var mockManpowerData = [
         {
             "name": "홍길동",
-            "version": "1.0.0",
-            "salary": ""
-        },
-        {
-            "name": "홍길동",
-            "version": "1.0.1",
             "salary": ""
         },
         {
             "name": "이순신",
-            "version": "BaseVersion",
             "salary": ""
         },
         {
             "name": "이순신",
-            "version": "1.0.0",
-            "salary": ""
-        },
-        {
-            "name": "이순신",
-            "version": "24.01",
             "salary": ""
         },
         {
             "name": "유관순",
-            "version": "24.01",
             "salary": ""
         },
         {
             "name": "안중근",
-            "version": "BaseVersion",
-            "salary": ""
-        },
-        {
-            "name": "안중근",
-            "version": "1.0.0",
-            "salary": ""
-        },
-        {
-            "name": "안중근",
-            "version": "1.0.1",
             "salary": ""
         },
         {
             "name": "세종대왕",
-            "version": "BaseVersion",
-            "salary": ""
-        },
-        {
-            "name": "세종대왕",
-            "version": "1.0.1",
-            "salary": ""
-        },
-        {
-            "name": "세종대왕",
-            "version": "24.01",
             "salary": ""
         }
         /*['홍길동', '1.0', ''],
@@ -372,24 +341,20 @@ function costInput() {
         ['이순신', '24.01', ''],
         ['유관순', '24.01', '']*/
     ];
+    console.log(mockManpowerData);
 
     $('#manpower-annual-income').DataTable({
-        data: mockManpowerData,
+        data: mockManpowerData2,
         columns: [
             {
-                name: "name",
-                data: "name",
+                name: "이름",
+                data: "이름",
                 title: "투입 인력",
                 className: "dt-center"
             },
             {
-                title: "버전",
-                data: "version",
-                className: "dt-center"
-            },
-            {
                 title: "연봉 (입력)",
-                data: "salary",
+                data: "연봉",
                 className: "dt-center",
                 render: function(data, type, row) {
                     return '<input type="text" class="salary-input"value="' + data + '"> 만원';
@@ -407,9 +372,9 @@ function costInput() {
                 salaryInputs.val(this.value);
             });
         },
-        rowsGroup: [
+        /*rowsGroup: [
             "name:name",
-        ]
+        ]*/
     });
 
     /*var data = [
@@ -446,7 +411,10 @@ function costInput() {
 /////////////////////////////////////////////////////////
 function incomeStatusChart(){
     var chartDom = document.getElementById('income_status_chart');
-    var myChart = echarts.init(chartDom);
+    var myChart = echarts.init(chartDom, null, {
+        renderer: "canvas",
+        useDirtyRect: false
+    });
     var option;
 
     option = {
@@ -463,13 +431,15 @@ function incomeStatusChart(){
             ],
             axisLabel: {
                 color: '#FFFFFF'
-            }
+            },
+            scale: true
         },
         yAxis: {
             type: 'value',
             axisLabel: {
                 color: '#FFFFFF'
-            }
+            },
+            scale: true,
         },
         legend: {
             data: ['예상', '소모 비용', '투자비용'] ,
@@ -528,11 +498,34 @@ function incomeStatusChart(){
                         }
                     ]
                 }
+            },
+            {
+                type: "candlestick",
+                data: [
+                    [120, 134, 110, 138],
+                    [138, 144, 150, 178],
+                    [120, 134, 110, 138],
+                    [120, 134, 110, 138],
+                    [120, 134, 110, 138],
+                    [120, 134, 110, 138]
+                ],
             }
-        ]
+        ],
+        tooltip: {
+            trigger: "axis",
+            position: "top",
+            borderWidth: 1,
+            axisPointer: {
+                type: "shadow"
+            }
+        },
     };
 
-    option && myChart.setOption(option);
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener("resize", myChart.resize);
 }
 
 /////////////////////////////////////////////////////////
@@ -590,7 +583,11 @@ function compareCostsChart(selectedPdServiceId, selectedVersionId){
         ]
     };
 
-    option && myChart.setOption(option);
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener("resize", myChart.resize);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1090,7 +1087,10 @@ function getLinkedIssueAndSubtask(endPointUrl) {
     );
 }
 
-function reqCostAnalysisChart() {
+function reqCostAnalysisChart(버전별요구사항별) {
+
+    console.log(" [ analysisCost :: reqCostAnalysisChart :: 버전별요구사항별 data -> ");
+    console.log(버전별요구사항별);
 
     let requirementPriceList = {
         요구사항1: 10000000,
@@ -1102,20 +1102,57 @@ function reqCostAnalysisChart() {
         요구사항7: 30000000,
         요구사항8: 30000000,
         요구사항9: 30000000,
-        // 요구사항11: 10000000,
-        // 요구사항12: 20000000,
-        // 요구사항13: 30000000,
-        // 요구사항14: 40000000,
-        // 요구사항15: 50000000,
-        // 요구사항16: 60000000,
-        // 요구사항17: 30000000,
-        // 요구사항18: 30000000,
-        // 요구사항19: 30000000
+        요구사항11: 10000000,
+        요구사항12: 20000000,
+        요구사항13: 30000000,
+        요구사항14: 40000000,
+        요구사항15: 50000000,
+        요구사항16: 60000000,
+        요구사항17: 30000000,
+        요구사항18: 30000000,
+        요구사항19: 30000000,
+        요구사항11: 10000000,
+        요구사항12: 20000000,
+        요구사항13: 30000000,
+        요구사항14: 40000000,
+        요구사항15: 50000000,
+        요구사항16: 60000000,
+        요구사항17: 30000000,
+        요구사항18: 30000000,
+        요구사항19: 30000000,
+        요구사항20: 10000000,
+        요구사항21: 20000000,
+        요구사항22: 30000000,
+        요구사항23: 40000000,
+        요구사항24: 50000000,
+        요구사항25: 60000000,
+        요구사항26: 30000000,
+        요구사항27: 30000000,
+        요구사항28: 30000000,
+        요구사항29: 10000000,
+        요구사항30: 20000000,
+        요구사항31: 30000000,
+        요구사항32: 40000000,
+        요구사항33: 50000000,
+        요구사항34: 60000000,
+        요구사항35: 30000000,
+        요구사항36: 30000000,
+        요구사항37: 30000000,
+        요구사항38: 10000000,
+        요구사항39: 20000000,
+        요구사항40: 30000000
     };
 
     let reqTotalPrice = 0;
     for (let key in requirementPriceList) {
         reqTotalPrice += requirementPriceList[key];
+    }
+
+    let size = Object.keys(requirementPriceList).length;
+    let x = 1;
+
+    if (size > 0) {
+        x = (15 / size) * 100;
     }
 
     console.log(" [ analysisCost :: reqCostAnalysisChart :: requirement total price -> " + reqTotalPrice);
@@ -1213,24 +1250,23 @@ function reqCostAnalysisChart() {
                 max: reqTotalPrice,
                 splitLine: {
                     show: false
-                }
+                },
+                axisLabel: {
+                    rotate: 45,
+                    color: '#FFFFFFFF',
+                },
             },
         ],
         yAxis: [
             {
                 type: 'category',
                 data: Object.keys(requirementPriceList),
-                axisLabel: {
-                    interval: 0,
-                    rotate: 45,
-                    margin: 10
-                },
                 splitLine: {
                     show: false
                 },
                 axisLabel: {
                     color: '#FFFFFFFF',
-                    opacity: 1
+                    rotate: 45,
                 },
             },
         ],
@@ -1252,7 +1288,7 @@ function reqCostAnalysisChart() {
                 stack: 'chart',
                 silent: true,
                 itemStyle: {
-                    color: '#eee'
+                    color: '#FFFFFF'
                 },
                 data: Object.keys(requirementPriceList).map(function (key) {
                     return reqTotalPrice - requirementPriceList[key];
@@ -1267,7 +1303,7 @@ function reqCostAnalysisChart() {
                         name: key.replace('.js', ''),
                         value: difficultyJson[key]
                     };
-                })
+                }),
             },
             {
                 type: 'pie',
@@ -1286,7 +1322,7 @@ function reqCostAnalysisChart() {
                 type: 'inside',
                 yAxisIndex: [0], // y축에만 dataZoom 기능 적용
                 start: 0,
-                end: 100
+                end: x
             },
             {
                 show: true,
@@ -1296,7 +1332,7 @@ function reqCostAnalysisChart() {
                 dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
                 yAxisIndex: [0],
                 start: 0,
-                end: 100
+                end: x
             }
         ],
 
@@ -1310,89 +1346,65 @@ function reqCostAnalysisChart() {
     window.addEventListener('resize', myChart.resize);
 }
 
-// 주식차트
-function candleStickChart() {
-    var dom = document.getElementById("candlestick-chart-container");
-    var myChart = echarts.init(dom, "dark", {
-        renderer: "canvas",
-        useDirtyRect: false
+function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
+    const url = new UrlBuilder()
+        .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
+        .addQueryParam('pdServiceLink', pdServiceLink)
+        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+        .addQueryParam('isReqType', "REQUIREMENT")
+        .addQueryParam('크기', 1000)
+        .addQueryParam('하위크기', 1000)
+        .addQueryParam('컨텐츠보기여부', true)
+        .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (apiResponse) {
+                console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
+                console.log(apiResponse.response.전체담당자목록);
+                버전별요구사항별 = apiResponse.response.버전;
+                인력맵 = apiResponse.response.전체담당자목록;
+
+                담당자목록_조회(인력맵);
+                costInput(인력맵);
+                reqCostAnalysisChart(버전별요구사항별);
+            }
+        }
     });
 
-    var option;
-
-    option = {
-        xAxis: {
-            data: ["2017-10-24", "2017-10-25", "2017-10-26", "2017-10-27", "2017-10-30"],
-            scale: true, // 축의 스케일을 자동으로 조정합니다.
-        },
-        yAxis: {
-            // 상한선을 나타내는 라인을 추가합니다.
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed' // or 'solid'
-                }
-            },
-            min: 0,  // y축의 최소값을 설정합니다.
-            max: 70,  // y축의 최대값을 설정합니다.
-            scale: true, // 축의 스케일을 자동으로 조정합니다.
-        },
-        series: [
-            {
-                type: "candlestick",
-                data: [
-                    [20, 34, 10, 38],
-                    [40, 35, 30, 50],
-                    [31, 38, 33, 44],
-                    [38, 15, 5, 42]
-                ],
-                // 상한선을 나타내는 markLine을 추가합니다.
-                markLine: {
-                    data: [
-                        {xAxis: "2017-10-30"}, // 마감일을 나타냅니다.
-                        {yAxis: 60} // 상한선을 나타냅니다.
-                    ],
-                }
-            }
-        ],
-        tooltip: {
-            trigger: "axis",
-            position: "top",
-            borderWidth: 1,
-            axisPointer: {
-                type: "cross"
-            }
-        },
-        backgroundColor: "rgba(255,255,255,0)"
-    };
-
-    if (option && typeof option === "object") {
-        myChart.setOption(option, true);
-    }
-
-    window.addEventListener("resize", myChart.resize);
 }
 
-function 담당자목록_조회() {
+async function 담당자목록_조회(인력맵) {
     // 초기화 로직
     $("#person-select-box").hide();
     $('.person-data + .bootstrap-select .dropdown-menu').empty();
     $('.person-data + .bootstrap-select .filter-option').text("");
 
-    var data = {
-        "홍길동": { total: 2000000, salary: 1400000, performance: 600000 },
-        "이순신": { total: 3000000, salary: 1800000, performance: 1200000 },
-        "유관순": { total: 1500000, salary: 600000, performance: 900000 },
-        "안중근": { total: 1200000, salary: 480000, performance: 720000 },
-        "세종대왕": { total: 1800000, salary: 720000, performance: 1080000 }
-    };
+    let 연봉 = 20000000;
+    let 성과 = 10000000;
 
-    personData = data;
+    Object.keys(인력맵).forEach((key) => {
+        인력맵[key].연봉 = 연봉;
+        인력맵[key].성과 = 성과;
+        연봉 -= 1000000;
+        성과 += 1000000;
+    });
 
-    var options = Object.keys(personData);
+    console.log(" [ analysisCost :: 담당자목록_조회 ] :: 인력맵 -> ");
+    console.log(인력맵);
+
+    var options = Object.keys(인력맵);
+
+    console.log(options);
     if (options.length > 0) {
         $("#person-select-box").show();
         $("#first-person-select").text(options[0]);
-        manPowerAnalysisChart(options[0]);
+        인력별_연봉대비_성과차트(options[0]);
 
         $.each(options, function(index, option) {
             $('.person-data').append($('<option>', {
@@ -1406,23 +1418,23 @@ function 담당자목록_조회() {
     }
     else {
         // 데이터 없을 떄 처리
+        console.log("담당자가 하나도 없습니다.");
     }
 
     $('.person-data + .bootstrap-select .dropdown-menu').on('click', 'li', function() {
         var selectedOption = $(this).text();
 
-        manPowerAnalysisChart(selectedOption);
+        인력별_연봉대비_성과차트(selectedOption);
         $('.person-data + .bootstrap-select .filter-option').text(selectedOption);
     });
 }
 
-function manPowerAnalysisChart(selectedPerson) {
+function 인력별_연봉대비_성과차트(selectedPerson) {
 
-    let manPowerData = personData[selectedPerson];
+    let manPowerData = 인력맵[selectedPerson];
 
-    console.log(" [ analysisCost :: manPowerAnalysisChart :: selected person name -> " + selectedPerson);
-
-    console.log(" [ analysisCost :: manPowerAnalysisChart :: selected person data -> ");
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트 :: selected person name -> " + selectedPerson);
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트 :: selected person data -> ");
     console.log(manPowerData);
 
     var dom = document.getElementById('manpower-analysis-chart');
@@ -1432,16 +1444,6 @@ function manPowerAnalysisChart(selectedPerson) {
     });
 
     var option;
-
-    // var salaryArr = [200, 100, 66, 200, 150, 150, 77, 23];
-    // var revenueArr = [100, 50, 30, 20, 10, 5, 3, 66];
-    //
-    // var maxArr = salaryArr.map(function(salary, i) {
-    //     return {
-    //         value: Math.max(salary, revenueArr[i]),
-    //         symbolSize: [0, 0]
-    //     };
-    // });
 
     option = {
         grid: {
@@ -1457,18 +1459,19 @@ function manPowerAnalysisChart(selectedPerson) {
             confine: true
         },
         xAxis: {
-            data: [selectedPerson],
+            data: [manPowerData.이름],
             axisTick: { show: false },
             axisLine: { show: false },
             axisLabel: {
                 color: '#FFFFFFFF',
                 opacity: 1
             },
+            scale: true,
         },
         yAxis: {
             splitLine: { show: false },
             axisTick: { show: true },
-            axisLine: { show: true },
+            axisLine: { show: false },
             axisLabel: {
                 show: true,
                 color: '#FFFFFFFF',
@@ -1491,7 +1494,7 @@ function manPowerAnalysisChart(selectedPerson) {
                         opacity: 0.7
                     }
                 },
-                data: [manPowerData.salary],
+                data: [manPowerData.연봉],
                 z: 10,
                 label: {
                     show: false,
@@ -1513,10 +1516,10 @@ function manPowerAnalysisChart(selectedPerson) {
 
                     }
                 },
-                data: [manPowerData.performance],
+                data: [manPowerData.성과],
                 z: 10,
                 label: {
-                    show: true,
+                    show: false,
                     position: 'outside',
                     color: "#FFFFFFFF"
                 },
@@ -1526,7 +1529,7 @@ function manPowerAnalysisChart(selectedPerson) {
                 type: 'pictorialBar',
                 barCategoryGap: '0%',
                 symbol: 'path://M0,0',  // 심볼을 비워서 별도의 바가 보이지 않도록 합니다.
-                data: [manPowerData.salary],
+                data: [manPowerData.연봉],
                 z: 11,  // z 값을 더 크게 설정하여 라벨이 다른 요소들 위에 오도록 합니다.
                 label: {
                     show: true,
@@ -1546,7 +1549,7 @@ function manPowerAnalysisChart(selectedPerson) {
                 type: 'pictorialBar',
                 barCategoryGap: '0%',
                 symbol: 'path://M0,0',  // 심볼을 비워서 별도의 바가 보이지 않도록 합니다.
-                data: [manPowerData.performance],
+                data: [manPowerData.성과],
                 z: 11,  // z 값을 더 크게 설정하여 라벨이 다른 요소들 위에 오도록 합니다.
                 label: {
                     show: true,
@@ -1569,4 +1572,16 @@ function manPowerAnalysisChart(selectedPerson) {
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+
+function 전역인력맵확인() {
+    return new Promise(resolve => {
+        let intervalId = setInterval(() => {
+            console.log(인력맵);
+            if (인력맵.length > 0 ) {
+                clearInterval(intervalId);
+                resolve(인력맵);
+            }
+        }, 500);  // 100ms마다 globalDeadline 값 확인
+    });
 }
