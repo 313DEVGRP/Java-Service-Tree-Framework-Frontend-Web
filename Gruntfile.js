@@ -1,4 +1,3 @@
-const {proxyRequest: proxy} = require("grunt-connect-proxy/lib/utils");
 module.exports = function (grunt) {
 	"use strict";
 
