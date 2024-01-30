@@ -1615,7 +1615,7 @@ svg .ghostCircle.show {
 }
 
 .cost-input-complete {
-	font-size: 13px;
+	font-size: 15px;
 	background-color: rgb(51, 51, 51);
 	box-shadow: none;
 	margin: 0;
@@ -1635,14 +1635,18 @@ svg .ghostCircle.show {
 }
 
 .cost-version-info {
+	width: 30%;
 	margin: 10px 0 10px 0;
+	padding: 20px;
+	border-radius: 7px;
+	background-color: #4b4a4a;
 }
 
 .cost-version-info div {
-	padding: 5px 0 0 17px;
+	padding-top: 10px;
 }
 
-.version-input, .salary-input {
+.cost-input, .salary-input {
 	color: black;
 	width: 30%;
 	text-align: center;
@@ -1652,7 +1656,11 @@ svg .ghostCircle.show {
 	background: rgba(157, 156, 156, 0.22);
 }
 
-select[name="manpower-annual-income_length"] {
+.version-input {
+	width: 70%;
+}
+
+select[name="version-cost_length"], select[name="manpower-annual-income_length"] {
 	color: black;
 }
 
