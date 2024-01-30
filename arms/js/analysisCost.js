@@ -58,7 +58,10 @@ function execDocReady() {
             "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
             // 생성한 차트 import
             "js/analysis/topmenu/basicRadar.js",
-            "js/analysis/topmenu/topMenu.js"
+            "js/analysis/topmenu/topMenu.js",
+
+		    //CirclePacking with d3 Chart
+		    "js/analysis/Cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -176,6 +179,9 @@ function makeVersionMultiSelectBox() {
             // 요구사항 및 연결이슈 통계
             getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 
+            //Circular Packing with D3 차트
+            getReqCostRatio(selectedPdServiceId, versionTag);
+
             버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
             //요구사항 현황 데이터 테이블 로드
             // console.log(" ============ makeVersionMultiSelectBox ============= ");
@@ -216,13 +222,11 @@ function bind_VersionData_By_PdService() {
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
                 // Circular Packing with D3 차트
-                // getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
-
+				getReqCostRatio(selectedPdServiceId, pdServiceVersionIds);
                 // 투자 대비 소모 비용 차트
                 compareCostsChart(selectedPdServiceId, selectedVersionId);
                 // 수익 현황 차트
                 incomeStatusChart();
-                
                 버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
 
 
@@ -404,6 +408,90 @@ function costInput(인력맵) {
             'rowspan:name'
         ]
     });*/
+}
+/////////////////////////////////////////////////////////
+// 요구사항 단가 기반 크기 확인 차트
+/////////////////////////////////////////////////////////
+function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
+
+	let paramData = {
+		"요구_사항" : {
+			'isReqType': 'REQUIREMENT',
+			'pdServiceLink' : selectedPdServiceId,
+			'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
+			'메인그룹필드' : 'pdServiceVersion',
+			'컨텐츠보기여부' : false,
+			'크기' : 10000,
+			'하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
+			'하위크기' : 10000
+		},
+		"하위_이슈_사항" : {
+			'isReqType': 'ISSUE',
+			'pdServiceLink': selectedPdServiceId,
+			'pdServiceVersionLinks': pdServiceVersionLinks,
+			'메인그룹필드': 'parentReqKey',
+			'컨텐츠보기여부': false,
+			'크기': 10000,
+			'하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
+			'하위크기': 10000
+		}
+	}
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
+		type: "POST",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		data: JSON.stringify(paramData),
+		progress: true,
+		statusCode: {
+			200: function (result) {
+//				console.log("[ analysisScope :: getReqCostRatio ] :: result");
+//				console.log(result);
+				let pdServiceName;
+				pdServiceListData.forEach(elements => {
+					if (elements["pdServiceId"] === +pdServiceLink) {
+						pdServiceName = elements["pdServiceName"];
+					}
+				});
+
+				let data = {
+                  "1_0_1": [
+                    {
+                      "요구사항": [
+                        { "project": "TE-1", "cost": 400 },
+                        { "project": "TE-2", "cost": 400 },
+                        { "project": "TE-3", "cost": 400 }
+                      ]
+                    },
+                    {
+                      "요구사항2": [
+                        { "project": "TT-1", "cost": 300 },
+                        { "project": "TT-2", "cost": 300 },
+                        { "project": "TT-3", "cost": 300 }
+                      ]
+                    }
+                  ],
+                  "1_0_2": [
+                    {
+                      "요구사항3": [
+                        { "project": "TE-4", "cost": 100 },
+                        { "project": "TE-5", "cost": 100 },
+                        { "project": "TE-6", "cost": 100 }
+                      ]
+                    },
+                    {
+                      "요구사항4": [
+                        { "project": "TT-4", "cost": 300 },
+                        { "project": "TT-5", "cost": 300 },
+                        { "project": "TT-6", "cost": 300 }
+                      ]
+                    }
+                  ]
+                };
+                drawCircularPacking("circularPacking",pdServiceName,data);
+			}
+		}
+	});
 }
 
 /////////////////////////////////////////////////////////
