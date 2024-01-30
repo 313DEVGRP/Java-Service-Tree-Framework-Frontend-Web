@@ -192,7 +192,7 @@ function makeVersionMultiSelectBox() {
 			// 나이팅게일로즈 차트(pie) - 버전별 요구사항
 			getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
 
-			treeBar();
+			//treeBar();
 
 			//요구사항 현황 데이터 테이블 로드
 			// console.log(" ============ makeVersionMultiSelectBox ============= ");
@@ -245,7 +245,7 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				treeBar();
+				//treeBar();
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
@@ -522,6 +522,8 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		statusCode: {
 			200: function (json) {
 				pdServiceData = json;
+				console.log("[ analysisScope :: statisticsMonitor ] pdServiceData");
+				console.log(json);
 				let versionData = json.pdServiceVersionEntities;
 				let versionCustomTimeline = [];
 
@@ -560,8 +562,10 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 				// 버전 선택 시 데이터 파싱
 
 				setTimeout(function () {
+					console.log("[ analysisScope :: getRelationJiraIssueByPdServiceAndVersions ] 네트워크차트 - 가져온  데이터")
+					console.log(data);
 					networkChart(pdServiceVersions, data);
-				}, 1000);
+				}, 1500);
 			}
 		}
 	});
@@ -581,13 +585,15 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 	NETWORK_DATA.nodes.push(pdServiceData);
 
 	var targetIds = pdServiceVersions.split(",").map(Number);
+	console.log(" networkChart :: targetIds => " + targetIds);
+	console.log(targetIds);
 	var versionList = pdServiceData.pdServiceVersionEntities;
 
 	versionList.forEach((item) => {
 		if (targetIds.includes(item.c_id)) {
 			item.id = item.c_id;
 			item.type = "version";
-			NETWORK_DATA.nodes.push(item);
+			NETWORK_DATA.nodes.push(item); // 버전 노드 삽입
 
 			console.log(typeof item.id);
 			var link = {
@@ -606,26 +612,32 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 	});
 
 	jiraIssueData.forEach(function (item) {
-		if (item.isReq === true) {
-			var versionLink = {
-				source: item.id,
-				target: item.pdServiceVersion
-			};
-
-			NETWORK_DATA.links.push(versionLink);
+		if (item.isReq === true) { // 요구사항 이슈일 때
+			var 버전수 = item.pdServiceVersions.length;
+			if (버전수 && 버전수 > 0) {
+				for (let i =0; i<버전수; i++) {
+					console.log("pdServiceVersioins["+i+"]= " + pdServiceVersions[i]);
+					var reqToVersionLink = {
+						source: item.id,
+						target: item.pdServiceVersions[i]
+					}
+					NETWORK_DATA.links.push(reqToVersionLink);
+				}
+			}
 		}
-
 		var parentItem = index[item.parentReqKey];
-
 		if (parentItem) {
-			var link = {
+			var subtaskToReqLink = {
 				source: item.id,
 				target: parentItem.id
-			};
-			NETWORK_DATA.links.push(link);
+			}
+			console.log(parentItem.id);
+			NETWORK_DATA.links.push(subtaskToReqLink);
 		}
 	});
-
+	console.log(" networkChart :: NETWORK_DATA ");
+	console.log(NETWORK_DATA);
+	console.log(" --- --- --- --- ---");
 	if (NETWORK_DATA.nodes.length === 0) {
 		// 데이터가 없는 경우를 체크
 		d3.select("#NETWORK_GRAPH").remove();
@@ -646,6 +658,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				return Object.create(d);
 			});
 
+			// 확인
 			var fillCircle = function (g) {
 				if (g.type === "pdService") {
 					return "#c67cff";
@@ -660,6 +673,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				}
 			};
 
+			// 확인
 			var typeBinding = function (g) {
 				let name = "";
 
@@ -715,7 +729,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				)
 				.force("charge", d3.forceManyBody().strength(-1000))
 				.force("center", d3.forceCenter(width / 3, height / 3))
-				.force("collide", d3.forceCollide().radius(20))
+				.force("collide", d3.forceCollide().radius(30))
 				.force(
 					"radial",
 					d3
@@ -905,7 +919,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 		}
 	};
-	console.log("@@@@@@@@@@@@@@@#################")
+
 	/******** network graph create ********/
 	networkGraph.createGraph();
 }
@@ -1397,7 +1411,8 @@ function treeBar() {
 	})
 		.done(function (apiResponse) {
 			const data = apiResponse.response;
-
+			console.log("[ analysisScope :: treeBar ] data");
+			console.log(data);
 			d3.select("#tree_bar_container svg").selectAll("*").remove();
 
 			let assigneeData = data.filter(item => item.type === 'assignee');
