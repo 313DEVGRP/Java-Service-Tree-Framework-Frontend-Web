@@ -175,6 +175,7 @@ function makeVersionMultiSelectBox() {
                 alert("버전이 선택되지 않았습니다.");
                 return;
             }
+            차트초기화();
 
             //분석메뉴 상단 수치 초기화
             수치_초기화();
@@ -443,6 +444,25 @@ function 비용분석계산() {
         $("#manpower-analysis-chart").height("500px");
         인력별_연봉대비_성과차트_기본세팅(인력맵);
     });
+}
+
+function 차트초기화() {
+    $("#person-select-box").hide();
+    clearChart('compare_costs');
+    clearChart('circularPacking');
+    clearChart('income_status_chart');
+    clearChart('req-cost-analysis-chart');
+    clearChart('manpower-analysis-chart');
+
+    $("#compare_costs").height("0px");
+    $("#circularPacking").height("0px");
+    $("#income_status_chart").height("0px");
+    $("#req-cost-analysis-chart").height("0px");
+    $("#manpower-analysis-chart").height("0px");
+}
+
+function clearChart(elementId) {
+    return echarts.init(document.getElementById(elementId)).clear();
 }
 
 /////////////////////////////////////////////////////////
