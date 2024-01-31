@@ -271,7 +271,6 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
             }
         }
     });
-
 }
 
 // 버전 비용 및 인력 비용 입력
@@ -279,6 +278,11 @@ function costInput(인력맵) {
 
     console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
     console.log(인력맵);
+    console.log(versionListData);
+
+    if ($.fn.dataTable.isDataTable('#version-cost')) {
+        $('#version-cost').DataTable().clear().destroy();
+    }
 
     // 버전 정보
     var mockVersionData = [
@@ -372,6 +376,10 @@ function costInput(인력맵) {
     ];
     console.log(mockManpowerData);
 
+    if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
+        $('#manpower-annual-income').DataTable().clear().destroy();
+    }
+
     $('#manpower-annual-income').DataTable({
         data: mockManpowerData2,
         columns: [
@@ -409,7 +417,6 @@ function costInput(인력맵) {
 
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
-        alert("비용 분석 계산 시작");
 
         /*var inputValues = $('input[name="yourName"]').map(function() {
             return $(this).val();
