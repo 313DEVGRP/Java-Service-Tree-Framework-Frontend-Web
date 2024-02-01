@@ -571,6 +571,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 	});
 }
 
+//네트워크차트
 function networkChart(pdServiceVersions, jiraIssueData) {
 	$('.network-graph').removeClass('show');
 	d3.select("#NETWORK_GRAPH").remove();
@@ -584,13 +585,13 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 	pdServiceData.type = "pdService";
 	NETWORK_DATA.nodes.push(pdServiceData);
 
-	var targetIds = pdServiceVersions.split(",").map(Number);
-	console.log(" networkChart :: targetIds => " + targetIds);
-	console.log(targetIds);
+	var 선택한버전 = pdServiceVersions.split(",").map(Number);
+	console.log(" networkChart :: 선택한버전 => " + 선택한버전);
+	console.log(선택한버전);
 	var versionList = pdServiceData.pdServiceVersionEntities;
 
 	versionList.forEach((item) => {
-		if (targetIds.includes(item.c_id)) {
+		if (선택한버전.includes(item.c_id)) {
 			item.id = item.c_id;
 			item.type = "version";
 			NETWORK_DATA.nodes.push(item); // 버전 노드 삽입
@@ -606,22 +607,26 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
 	var index = {};
 
+	// 지라이슈 노드추가
 	jiraIssueData.forEach(function (item) {
 		NETWORK_DATA.nodes.push(item);
 		index[item.key] = item;
 	});
 
+	// 지라이슈 링크추가
 	jiraIssueData.forEach(function (item) {
 		if (item.isReq === true) { // 요구사항 이슈일 때
 			var 버전수 = item.pdServiceVersions.length;
 			if (버전수 && 버전수 > 0) {
 				for (let i =0; i<버전수; i++) {
 					console.log("pdServiceVersioins["+i+"]= " + pdServiceVersions[i]);
-					var reqToVersionLink = {
-						source: item.id,
-						target: item.pdServiceVersions[i]
+					if(선택한버전.includes(item.pdServiceVersions[i])) {
+						var reqToVersionLink = {
+							source: item.id,
+							target: item.pdServiceVersions[i]
+						}
+						NETWORK_DATA.links.push(reqToVersionLink);
 					}
-					NETWORK_DATA.links.push(reqToVersionLink);
 				}
 			}
 		}
@@ -635,6 +640,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			NETWORK_DATA.links.push(subtaskToReqLink);
 		}
 	});
+	
 	console.log(" networkChart :: NETWORK_DATA ");
 	console.log(NETWORK_DATA);
 	console.log(" --- --- --- --- ---");
