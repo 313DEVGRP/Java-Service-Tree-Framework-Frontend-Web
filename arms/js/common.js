@@ -9,16 +9,6 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
-
-	window.addEventListener(
-		"error",
-		function (event) {
-			console.error("페이지 로드 중 에러 발생 :: " + event.message);
-
-			window.location.reload();
-		},
-		{ once: true }
-	);
 });
 
 function runScript() {
