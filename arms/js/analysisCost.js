@@ -324,7 +324,7 @@ function costInput(인력맵) {
                 title: "비용 (입력)",
                 className: "dt-center",
                 render: function(data, type, row) {
-                    return '<input type="text" class="cost-input"value="' + data + '"> 만원';
+                    return '<input type="text" name="version-cost" class="cost-input" value="' + data + '"> 만원';
                 }
             }
         ],
@@ -338,7 +338,11 @@ function costInput(인력맵) {
 
     // 연봉 정보
     let mockManpowerData2 = Object.keys(인력맵).map((key) => {
-        return 인력맵[key];
+        let data = {};
+        data.이름 = key;
+        data.연봉 = 인력맵[key].연봉;
+        data.성과 = 인력맵[key].성과;
+        return data;
     });
 
     console.log(mockManpowerData2);
@@ -395,7 +399,7 @@ function costInput(인력맵) {
                 data: "연봉",
                 className: "dt-center",
                 render: function(data, type, row) {
-                    return '<input type="text" class="salary-input"value="' + data + '"> 만원';
+                    return '<input type="text" name="person-salary" class="salary-input" value="' + data + '" data-owner="' + row.이름 + '"> 만원';
                 }
             }
         ],
@@ -419,26 +423,56 @@ function costInput(인력맵) {
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
-        /*var inputValues = $('input[name="yourName"]').map(function() {
-            return $(this).val();
-        }).get();*/
-
+        // 버전 비용 계산 샘플
+        versionListData = versionListData.map(item => {
+            item.versionCost = 10000000;
+            item.consumptionCost = 9000000;
+            return item;
+        });
         $("#compare_costs").height("620px");
         // 버전별 투자 대비 소모 비용 차트
         compareCostsChart(selectedPdServiceId, selectedVersionId);
+
+
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
         var versionTag = $(".multiple-select").val();
         getReqCostRatio(selectedPdServiceId, versionTag);
-        
+
+
+
+
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
         incomeStatusChart();
 
+
+
+
         // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
         $("#req-cost-analysis-chart").height("500px");
         reqCostAnalysisChart(버전별요구사항별);
+
+
+
+        let inputVersionValues = $('input[name="version-cost"]').map(function() {
+            return $(this).val();
+        }).get();
+
+        console.log(inputVersionValues);
+
+        let inputSalaryValues = $('input[name="person-salary"]').map(function() {
+            let data = {};
+
+            let owner = $(this).data('owner');
+            console.log(owner);
+            data.사용자 = owner;
+            data.연봉 = $(this).val();
+            return data;
+        }).get();
+
+        console.log(inputSalaryValues);
 
         // 인력별 성과 측정 차트
         $("#manpower-analysis-chart").height("500px");
@@ -469,10 +503,14 @@ function clearChart(elementId) {
 // 투입 비용 현황 차트
 /////////////////////////////////////////////////////////
 function compareCostsChart(selectedPdServiceId, selectedVersionId){
-    var chartDom = document.getElementById("compare_costs");
-    var myChart = echarts.init(chartDom);
-    var option;
-    var titles = versionListData.map(item => item.c_title);
+    let chartDom = document.getElementById("compare_costs");
+    let myChart = echarts.init(chartDom);
+    let option;
+    let titles = versionListData.map(item => item.c_title);
+
+    let versionCosts = versionListData.map(item => item.versionCost);
+
+    let consumptionCosts = versionListData.map(item => item.consumptionCost);
 
     option = {
         tooltip: {
@@ -510,12 +548,12 @@ function compareCostsChart(selectedPdServiceId, selectedVersionId){
             {
                 name: '투자 비용',
                 type: 'bar',
-                data: [1234567, 18203, 23489, 29034, 104970]
+                data: versionCosts
             },
             {
                 name: '소모 비용',
                 type: 'bar',
-                data: [234567, 19325, 23438, 31000, 121594]
+                data: consumptionCosts
             }
         ]
     };
@@ -738,6 +776,7 @@ function reqCostAnalysisChart(버전별요구사항별) {
 
     console.log(" [ analysisCost :: reqCostAnalysisChart :: 버전별요구사항별 data -> ");
     console.log(버전별요구사항별);
+    console.log(selectedVersionId);
 
     let requirementPriceList = {
         요구사항1: 10000000,
