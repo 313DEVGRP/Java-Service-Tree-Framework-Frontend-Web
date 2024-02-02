@@ -90,6 +90,13 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
             200: function (data) {
                 let assigneesArr = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
 
+                console.log(" [ topMenu :: getAssigneeInfo ] :: assigneesArr -> ");
+                console.log(assigneesArr);
+
+                if (assigneesArr.length > 0) {
+                    personData = assigneesArr;
+                }
+
                 //제품(서비스)에 투입된 총 인원수
                 resource_count = assigneesArr.length;
                 if (data["전체합계"] === 0) { //담당자(작업자) 없음.

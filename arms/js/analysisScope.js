@@ -182,6 +182,8 @@ function makeVersionMultiSelectBox() {
 
 			// 요구사항 및 연결이슈 통계
 			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+			// Circular Packing with D3 차트
+			getReqStatusAndAssignees(selectedPdServiceId, versionTag);
 
 			// 네트워크 차트
 			statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
@@ -227,11 +229,12 @@ function bind_VersionData_By_PdService() {
 				console.log("[ analysisScope :: bind_VersionData_By_PdService ] :: versionTag");
 
 				수치_초기화();
+				console.log(pdServiceVersionIds);
 				selectedVersionId = pdServiceVersionIds.join(",");
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 				// Circular Packing with D3 차트
-				getReqStatusAndAssignees(selectedPdServiceId, selectedVersionId);
+				getReqStatusAndAssignees(selectedPdServiceId, pdServiceVersionIds);
 				// 네트워크 차트
 				statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
@@ -1126,31 +1129,34 @@ function formatDate(date) {
 /////////////////////////////////////////////////////////
 function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees")
-		.addQueryParam("요구_사항.isReqType","REQUIREMENT")
-		.addQueryParam("요구_사항.pdServiceLink", selectedPdServiceId)
-		.addQueryParam("요구_사항.pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('요구_사항.메인그룹필드', "pdServiceVersion")
-		.addQueryParam('요구_사항.컨텐츠보기여부', false)
-		.addQueryParam('요구_사항.크기', 10000)
-		.addQueryParam('요구_사항.하위그룹필드들', "key,assignee.assignee_emailAddress.keyword")
-		.addQueryParam('요구_사항.하위크기', 10000)
-		.addQueryParam("하위_이슈_사항.isReqType","ISSUE")
-		.addQueryParam("하위_이슈_사항.pdServiceLink", selectedPdServiceId)
-		.addQueryParam("하위_이슈_사항.pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('하위_이슈_사항.메인그룹필드', "parentReqKey")
-		.addQueryParam('하위_이슈_사항.컨텐츠보기여부', false)
-		.addQueryParam('하위_이슈_사항.크기', 10000)
-		.addQueryParam('하위_이슈_사항.하위그룹필드들', "assignee.assignee_emailAddress.keyword")
-		.addQueryParam('하위_이슈_사항.하위크기', 10000)
-		.build();
-
+	let paramData = {
+		"요구_사항" : {
+			'isReqType': 'REQUIREMENT',
+			'pdServiceLink' : selectedPdServiceId,
+			'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
+			'메인그룹필드' : 'pdServiceVersion',
+			'컨텐츠보기여부' : false,
+			'크기' : 10000,
+			'하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
+			'하위크기' : 10000
+		},
+		"하위_이슈_사항" : {
+			'isReqType': 'ISSUE',
+			'pdServiceLink': selectedPdServiceId,
+			'pdServiceVersionLinks': pdServiceVersionLinks,
+			'메인그룹필드': 'parentReqKey',
+			'컨텐츠보기여부': false,
+			'크기': 10000,
+			'하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
+			'하위크기': 10000
+		}
+	}
 	$.ajax({
-		url: url,
-		type: "GET",
+		url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
+		type: "POST",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
+		data: JSON.stringify(paramData),
 		progress: true,
 		statusCode: {
 			200: function (result) {

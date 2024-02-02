@@ -55,6 +55,7 @@ function drawSimplePieChart(target,seriesName,dataArr) {
             left: 'center'
         },
         tooltip: {
+            confine: true,
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },

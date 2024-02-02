@@ -58,7 +58,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-		["js/reqAddTable.js"]
+		["js/reqAddTable.js",
+		 "css/jiraServerCustom.css"]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -889,6 +890,8 @@ function bindDataEditlTab(ajaxData) {
 		}
 	});
 
+	$("#editview_req_plan_time").val(ajaxData.c_req_plan_time);
+
 	// -------------------- reviewer setting -------------------- //
 	//reviewer clear
 	$("#editview_req_reviewers").val(null).trigger("change");
@@ -971,6 +974,7 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_writer").val(ajaxData.c_req_writer); //ajaxData.c_req_reviewer01
 	$("#editview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
 	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_req_contents);
+	CKEDITOR.instances.edit_tabmodal_editor.setReadOnly(false);
 }
 
 // ------------------ 상세보기 ------------------ //
@@ -1035,6 +1039,8 @@ function bindDataDetailTab(ajaxData) {
 		}
 	});
 
+	$("#detailview_req_plan_time").val(ajaxData.c_req_plan_time);
+
 	$("#detailview_req_writer").val(ajaxData.c_req_writer);
 	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
 
@@ -1066,6 +1072,7 @@ function bindDataDetailTab(ajaxData) {
 	//$("#detailview_req_contents").html(ajaxData.c_req_contents);
 
 	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
+	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1275,6 +1282,9 @@ function registNewPopup() {
 	$("input[name='popup_req_difficulty_options']:checked").prop("checked", false);
 	$("input[name='popup_req_state_options']:checked").prop("checked", false);
 
+	//예상 일정 초기화
+	$("#my_modal1 #req_plan_time").val(null);
+	
 	//리뷰어 셋팅
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + $("#selected_pdService").val(),
@@ -1427,9 +1437,13 @@ function save_req() {
 		console.log(
 			"save_req :: popup_req_state  -> " + $("#popup_req_state input[name='popup_req_state_options']:checked").val()
 		);
+		console.log(
+			"save_req :: popup_req_plan_time  -> " + $("#popup_req_plan_time").val()
+		);
 		let selectedReqPriorityLink = $("#popup_req_priority input[name='popup_req_priority_options']:checked").val();
 		let selectedReqDifficultLink = $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val();
 		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
+		let selectedplanTime = $("#popup_req_plan_time").val();
 
 		let dataObjectParam = {
 			ref: selectedJsTreeId,
@@ -1441,6 +1455,7 @@ function save_req() {
 			c_req_priority_link: selectedReqPriorityLink === undefined ? "5" : selectedReqPriorityLink, // 5 - 중간
 			c_req_difficulty_link: selectedReqDifficultLink === undefined ? "5" : selectedReqDifficultLink, // 5 - 보통
 			c_req_state_link: selectedReqStateLink === undefined ? "10" : selectedReqStateLink, //10 - 열림
+			c_req_plan_time: selectedplanTime,
 			c_req_reviewer01: reviewers01,
 			c_req_reviewer02: reviewers02,
 			c_req_reviewer03: reviewers03,
@@ -1459,7 +1474,6 @@ function save_req() {
 
 		if ($("#popup_version").val().length >= 1) {
 			if ($("#req_title").val().trim() !== "") {
-				/*
 				$.ajax({
 					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 					type: "POST",
@@ -1472,7 +1486,6 @@ function save_req() {
 						}
 					}
 				});
-				*/
 			} else {
 				alert("요구사항 제목이 없습니다.");
 				return false;
@@ -1524,14 +1537,15 @@ function click_btn_for_req_update() {
 			"click_btn_for_req_update :: editview_req_state  -> " +
 				$("#editview_req_state input[name='editview_req_state_options']:checked").val()
 		);
+		console.log(
+			"click_btn_for_req_update :: editview_req_plan_time  -> " +
+				$("#editview_req_plan_time").val()
+		);
 
-		let selectedEditReqPriorityLink = $(
-			"#editview_req_priority input[name='editview_req_priority_options']:checked"
-		).val();
-		let selectedEditReqDifficultyLink = $(
-			"#editview_req_difficulty input[name='editview_req_difficulty_options']:checked"
-		).val();
+		let selectedEditReqPriorityLink = $("#editview_req_priority input[name='editview_req_priority_options']:checked").val();
+		let selectedEditReqDifficultyLink = $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val();
 		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
+		let selectedEditReqPlanTime = $("#editview_req_plan_time").val();
 
 		let dataObjectParam = {
 			c_id: $("#editview_req_id").val(),
@@ -1541,6 +1555,7 @@ function click_btn_for_req_update() {
 			c_req_priority_link: selectedEditReqPriorityLink === undefined ? "5" : selectedEditReqPriorityLink, // 5 - 중간
 			c_req_difficulty_link: selectedEditReqDifficultyLink === undefined ? "5" : selectedEditReqDifficultyLink, // 5 - 보통
 			c_req_state_link: selectedEditReqStateLink === undefined ? "10" : selectedEditReqStateLink, //10 - 열림
+			c_req_plan_time: selectedEditReqPlanTime,
 			c_req_update_date: new Date(),
 			c_req_reviewer01: reviewers01,
 			c_req_reviewer02: reviewers02,
@@ -1552,34 +1567,7 @@ function click_btn_for_req_update() {
 		};
 
 		console.log(dataObjectParam);
-		/*
-		if (selectedEditReqPriorityLink === undefined || selectedEditReqDifficultyLink === undefined || selectedEditReqStateLink === undefined) {
-			let checkUndefiend = [];
-			if (selectedEditReqPriorityLink === undefined) {
-				checkUndefiend.push("우선순위");
-			}
-			if (selectedEditReqDifficultyLink === undefined) {
-				checkUndefiend.push("난이도");
-			}
-			if (selectedEditReqStateLink === undefined) {
-				checkUndefiend.push("상태");
-			}
 
-			let content = "";
-			checkUndefiend.forEach((e)=>{content += " "+e});
-			$.confirm({
-				title: "확인해주세요.",
-				content: "요구사항의 우선순위 난이도 상태 중" +content+ "를 설정하지 않았습니다. 설정하지 않은 항목은 기본값으로 저장됩니다. 다시 수정하시겠습니까?",
-				buttons: {
-					confirm: function () {
-						return false;
-					},
-					cancel: function () {
-
-					}
-				}
-			})
-		}*/
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
 			type: "POST",
@@ -1591,6 +1579,7 @@ function click_btn_for_req_update() {
 				}
 			}
 		});
+
 	});
 }
 
