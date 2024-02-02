@@ -175,6 +175,7 @@ function makeVersionMultiSelectBox() {
                 alert("버전이 선택되지 않았습니다.");
                 return;
             }
+
             차트초기화();
 
             //분석메뉴 상단 수치 초기화
@@ -268,54 +269,37 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                     성과 += 100;
                 });
 
-                costInput(인력맵);
+                costInput(인력맵, pdServiceVersionLinks);
             }
         }
     });
 }
 
 // 버전 비용 및 인력 비용 입력
-function costInput(인력맵) {
+function costInput(인력맵, pdServiceVersionLinks) {
 
     console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
     console.log(인력맵);
-    console.log(versionListData);
 
     if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
     }
 
-    // 버전 정보
-    var mockVersionData = [
-        {
-            "version": "BaseVersion",
-            "period": "2023-10-01 ~ 2023-10-31",
-            "cost": ""
-        },
-        {
-            "version": "1.0.0",
-            "period": "2023-11-01 ~ 2023-11-30",
-            "cost": ""
-        },
-        {
-            "version": "1.0.1",
-            "period": "2023-12-01 ~ 2023-12-31",
-            "cost": ""
-        },
-        {
-            "version": "24.01",
-            "period": "2024-01-01 ~ 2024-01-30",
-            "cost": ""
-        },
-        {
-            "version": "24.02",
-            "period": "2024-02-01 ~ 2024-02-29",
-            "cost": ""
+    let selectedVersions = pdServiceVersionLinks.split(','); // 문자열을 배열로 변환
+
+    let versionTableData = versionListData.reduce((acc, item) => {
+        if (selectedVersions.includes(String(item.c_id))) { // item.c_id가 선택된 버전에 포함되면
+            acc.push({ // 배열에 새로운 객체를 추가
+                version: item.c_title,
+                period: item.c_pds_version_start_date + " ~ " + item.c_pds_version_end_date,
+                cost: 0
+            });
         }
-    ];
+        return acc;
+    }, []);
 
     $('#version-cost').DataTable({
-        data: mockVersionData,
+        data: versionTableData,
         columns: [
             { data: "version", title: "버전", className: "dt-center" },
             { data: "period", title: "기간", className: "dt-center" },
@@ -379,7 +363,6 @@ function costInput(인력맵) {
         ['이순신', '24.01', ''],
         ['유관순', '24.01', '']*/
     ];
-    console.log(mockManpowerData);
 
     if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
         $('#manpower-annual-income').DataTable().clear().destroy();
@@ -423,12 +406,31 @@ function costInput(인력맵) {
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
+        /*$.ajax({
+            url:
+                "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" +
+                selectedPdServiceId +
+                "/getReqStatusListByFilter.do?c_req_pdservice_versionset_link=" +
+                selectedVersionId,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (data) {
+                    console.log(" [ analysisCost :: 비용분석계산 ] :: data => " );
+                    console.log(data);
+                }
+            }
+        });*/
+
         // 버전 비용 계산 샘플
         versionListData = versionListData.map(item => {
             item.versionCost = 10000000;
             item.consumptionCost = 9000000;
             return item;
         });
+
         $("#compare_costs").height("620px");
         // 버전별 투자 대비 소모 비용 차트
         compareCostsChart(selectedPdServiceId, selectedVersionId);
@@ -453,7 +455,6 @@ function 비용분석계산() {
         // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
         $("#req-cost-analysis-chart").height("500px");
         reqCostAnalysisChart(버전별요구사항별);
-
 
 
         let inputVersionValues = $('input[name="version-cost"]').map(function() {
