@@ -1205,15 +1205,9 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 /////////////////////////////////////////////////////////
 function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/getReqPerVersion/" + pdService_id,
+		url: "/auth-user/api/arms/analysis/scope/pdservice-id/"+pdService_id+"/req-per-version",
 		type: "GET",
-		data: {
-			서비스아이디: pdService_id,
-			메인그룹필드: "pdServiceVersion",
-			하위그룹필드들: "isReq",
-			컨텐츠보기여부: true,
-			pdServiceVersionLinks: pdServiceVersionLinks
-		},
+		data: {	pdServiceVersionLinks: pdServiceVersionLinks },
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
