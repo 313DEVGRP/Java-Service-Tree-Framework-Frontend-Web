@@ -146,6 +146,7 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function (e) {
         selectedPdServiceId = $("#selected_pdService").val();
+        차트초기화();
         //refreshDetailChart(); 변수값_초기화();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
@@ -201,12 +202,13 @@ function bind_VersionData_By_PdService() {
                 //////////////////////////////////////////////////////////
                 //console.log(data.response);
                 var pdServiceVersionIds = [];
-                versionListData = [];
+                versionListData = {};
 
                 for (var k in data.response) {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
-                    versionListData.push(obj);
+                    console.log(obj);
+                    versionListData[obj.c_id] = obj;
                     // versionListData.push({ c_id: obj.c_id, versionTitle: obj.c_title });
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
@@ -216,6 +218,7 @@ function bind_VersionData_By_PdService() {
 
                 수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(",");
+                console.log(selectedVersionId);
 
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
@@ -255,7 +258,7 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
         statusCode: {
             200: function (apiResponse) {
                 console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
-                console.log(apiResponse.response.전체담당자목록);
+                console.log(apiResponse.response);
                 버전별요구사항별 = apiResponse.response.버전;
                 인력맵 = apiResponse.response.전체담당자목록;
 
@@ -275,6 +278,10 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
     });
 }
 
+function formatDate(date) {
+    return new Date(date).toISOString().split('T')[0];
+}
+
 // 버전 비용 및 인력 비용 입력
 function costInput(인력맵, pdServiceVersionLinks) {
 
@@ -285,18 +292,19 @@ function costInput(인력맵, pdServiceVersionLinks) {
         $('#version-cost').DataTable().clear().destroy();
     }
 
-    let selectedVersions = pdServiceVersionLinks.split(','); // 문자열을 배열로 변환
+    let selectedVersions = pdServiceVersionLinks.split(',');
 
-    let versionTableData = versionListData.reduce((acc, item) => {
-        if (selectedVersions.includes(String(item.c_id))) { // item.c_id가 선택된 버전에 포함되면
-            acc.push({ // 배열에 새로운 객체를 추가
-                version: item.c_title,
-                period: item.c_pds_version_start_date + " ~ " + item.c_pds_version_end_date,
-                cost: 0
-            });
-        }
-        return acc;
-    }, []);
+    let versionTableData = selectedVersions.map(versionId => {
+        let item = versionListData[versionId];
+        let startDate = item.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(item.c_pds_version_start_date);
+        let endDate = item.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(item.c_pds_version_end_date);
+        return { // 객체를 바로 반환
+            version: item.c_title,
+            period: startDate + " ~ " + endDate,
+            cost: 0,
+            c_id: item.c_id
+        };
+    });
 
     $('#version-cost').DataTable({
         data: versionTableData,
@@ -308,7 +316,7 @@ function costInput(인력맵, pdServiceVersionLinks) {
                 title: "비용 (입력)",
                 className: "dt-center",
                 render: function(data, type, row) {
-                    return '<input type="text" name="version-cost" class="cost-input" value="' + data + '"> 만원';
+                    return '<input type="text" name="version-cost" class="cost-input" value="' + data + '" data-owner="' + row.c_id + '"> 만원';
                 }
             }
         ],
@@ -321,7 +329,7 @@ function costInput(인력맵, pdServiceVersionLinks) {
     });
 
     // 연봉 정보
-    let mockManpowerData2 = Object.keys(인력맵).map((key) => {
+    let manpowerData = Object.keys(인력맵).map((key) => {
         let data = {};
         data.이름 = key;
         data.연봉 = 인력맵[key].연봉;
@@ -329,47 +337,12 @@ function costInput(인력맵, pdServiceVersionLinks) {
         return data;
     });
 
-    console.log(mockManpowerData2);
-
-    var mockManpowerData = [
-        {
-            "name": "홍길동",
-            "salary": ""
-        },
-        {
-            "name": "이순신",
-            "salary": ""
-        },
-        {
-            "name": "이순신",
-            "salary": ""
-        },
-        {
-            "name": "유관순",
-            "salary": ""
-        },
-        {
-            "name": "안중근",
-            "salary": ""
-        },
-        {
-            "name": "세종대왕",
-            "salary": ""
-        }
-        /*['홍길동', '1.0', ''],
-        ['홍길동', '1.1', ''],
-        ['이순신', 'BaseVersion', ''],
-        ['이순신', '1.0', ''],
-        ['이순신', '24.01', ''],
-        ['유관순', '24.01', '']*/
-    ];
-
     if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
         $('#manpower-annual-income').DataTable().clear().destroy();
     }
 
     $('#manpower-annual-income').DataTable({
-        data: mockManpowerData2,
+        data: manpowerData,
         columns: [
             {
                 name: "이름",
@@ -406,36 +379,28 @@ function costInput(인력맵, pdServiceVersionLinks) {
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
-        /*$.ajax({
-            url:
-                "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" +
-                selectedPdServiceId +
-                "/getReqStatusListByFilter.do?c_req_pdservice_versionset_link=" +
-                selectedVersionId,
-            type: "GET",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function (data) {
-                    console.log(" [ analysisCost :: 비용분석계산 ] :: data => " );
-                    console.log(data);
-                }
-            }
-        });*/
+        let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
 
-        // 버전 비용 계산 샘플
-        versionListData = versionListData.map(item => {
-            item.versionCost = 10000000;
+        let selectVersionData = [];
+        for (let i = 0; i < selectedVersions.length; i++) {
+            let item = versionListData[selectedVersions[i]];
+            let inputVersionValue = $(`input[name="version-cost"][data-owner=${selectedVersions[i]}]`).val();
+            let number = Number(inputVersionValue.replace(/,/g, ''));
+
+            if (isNaN(Number(number))) {
+                alert("버전 비용 입력란에 숫자를 입력하여주세요.");
+                return;
+            }
+
+            item.versionCost = number * 10000;
             item.consumptionCost = 9000000;
-            return item;
-        });
+
+            selectVersionData.push(item);
+        }
 
         $("#compare_costs").height("620px");
         // 버전별 투자 대비 소모 비용 차트
-        compareCostsChart(selectedPdServiceId, selectedVersionId);
-
-
+        compareCostsChart(selectVersionData);
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
@@ -457,17 +422,12 @@ function 비용분석계산() {
         reqCostAnalysisChart(버전별요구사항별);
 
 
-        let inputVersionValues = $('input[name="version-cost"]').map(function() {
-            return $(this).val();
-        }).get();
 
-        console.log(inputVersionValues);
 
         let inputSalaryValues = $('input[name="person-salary"]').map(function() {
             let data = {};
 
             let owner = $(this).data('owner');
-            console.log(owner);
             data.사용자 = owner;
             data.연봉 = $(this).val();
             return data;
@@ -497,21 +457,27 @@ function 차트초기화() {
 }
 
 function clearChart(elementId) {
-    return echarts.init(document.getElementById(elementId)).clear();
+    var element = document.getElementById(elementId);
+    if (element) {
+        var chartInstance = echarts.getInstanceByDom(element);
+        if (chartInstance) {
+            chartInstance.clear();
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////
 // 투입 비용 현황 차트
 /////////////////////////////////////////////////////////
-function compareCostsChart(selectedPdServiceId, selectedVersionId){
+function compareCostsChart(selectVersionData){
     let chartDom = document.getElementById("compare_costs");
     let myChart = echarts.init(chartDom);
     let option;
-    let titles = versionListData.map(item => item.c_title);
+    let titles = selectVersionData.map(item => item.c_title);
 
-    let versionCosts = versionListData.map(item => item.versionCost);
+    let versionCosts = selectVersionData.map(item => item.versionCost);
 
-    let consumptionCosts = versionListData.map(item => item.consumptionCost);
+    let consumptionCosts = selectVersionData.map(item => item.consumptionCost);
 
     option = {
         tooltip: {
@@ -775,262 +741,208 @@ function incomeStatusChart(){
 
 function reqCostAnalysisChart(버전별요구사항별) {
 
-    console.log(" [ analysisCost :: reqCostAnalysisChart :: 버전별요구사항별 data -> ");
-    console.log(버전별요구사항별);
-    console.log(selectedVersionId);
+    $.ajax({
+        url: "/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId
+            + "/req-difficulty-priority-list?c_req_pdservice_versionset_link=" + selectedVersionId,
+        type: "GET",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                console.log(" [ analysisCost :: reqCostAnalysisChart :: data -> ");
+                console.log(data);
+                let requirementJson = data.requirement;
+                let difficultyJson = data.difficulty;
+                let priorityJson = data. priority;
 
-    let requirementPriceList = {
-        요구사항1: 10000000,
-        요구사항2: 20000000,
-        요구사항3: 30000000,
-        요구사항4: 40000000,
-        요구사항5: 50000000,
-        요구사항6: 60000000,
-        요구사항7: 30000000,
-        요구사항8: 30000000,
-        요구사항9: 30000000,
-        요구사항11: 10000000,
-        요구사항12: 20000000,
-        요구사항13: 30000000,
-        요구사항14: 40000000,
-        요구사항15: 50000000,
-        요구사항16: 60000000,
-        요구사항17: 30000000,
-        요구사항18: 30000000,
-        요구사항19: 30000000,
-        요구사항11: 10000000,
-        요구사항12: 20000000,
-        요구사항13: 30000000,
-        요구사항14: 40000000,
-        요구사항15: 50000000,
-        요구사항16: 60000000,
-        요구사항17: 30000000,
-        요구사항18: 30000000,
-        요구사항19: 30000000,
-        요구사항20: 10000000,
-        요구사항21: 20000000,
-        요구사항22: 30000000,
-        요구사항23: 40000000,
-        요구사항24: 50000000,
-        요구사항25: 60000000,
-        요구사항26: 30000000,
-        요구사항27: 30000000,
-        요구사항28: 30000000,
-        요구사항29: 10000000,
-        요구사항30: 20000000,
-        요구사항31: 30000000,
-        요구사항32: 40000000,
-        요구사항33: 50000000,
-        요구사항34: 60000000,
-        요구사항35: 30000000,
-        요구사항36: 30000000,
-        요구사항37: 30000000,
-        요구사항38: 10000000,
-        요구사항39: 20000000,
-        요구사항40: 30000000
-    };
+                let requirementList = {};
+                requirementJson.map(item => {
+                    requirementList[item.c_title] = 1000000;
+                });
 
-    let reqTotalPrice = 0;
-    for (let key in requirementPriceList) {
-        reqTotalPrice += requirementPriceList[key];
-    }
-
-    let size = Object.keys(requirementPriceList).length;
-    let x = 1;
-
-    if (size > 0) {
-        x = (15 / size) * 100;
-    }
-
-    console.log(" [ analysisCost :: reqCostAnalysisChart :: requirement total price -> " + reqTotalPrice);
-
-    let difficultyJson = {
-        '매우 어려움': 100,
-        '어려움': 200,
-        '보통': 300,
-        '쉬움': 200,
-        '매움 쉬움': 100
-    };
-
-    let priorityJson = {
-        '1순위': 10,
-        '2순위': 20,
-        '3순위': 30,
-        '4순위': 20,
-        '5순위': 10
-    };
-
-    var dom = document.getElementById('req-cost-analysis-chart');
-    var myChart = echarts.init(dom, null, {
-        renderer: 'canvas',
-        useDirtyRect: false
-    });
-    var app = {};
-
-    var option;
-
-    const waterMarkText = '';
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.height = 300;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.globalAlpha = 0.08;
-    ctx.font = '20px Microsoft Yahei';
-    ctx.translate(50, 50);
-    ctx.rotate(-Math.PI / 4);
-    ctx.fillText(waterMarkText, 0, 0);
-    option = {
-        backgroundColor: {
-            type: 'pattern',
-            image: canvas,
-            repeat: 'repeat'
-        },
-        tooltip: {},
-        title: [
-            {
-                // text: '요구사항',
-                subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
-                left: '25%',
-                textAlign: 'center',
-                textStyle: {
-                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
-                },
-                subtextStyle: {
-                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                let reqTotalPrice = 0;
+                for (let key in requirementList) {
+                    reqTotalPrice += requirementList[key];
                 }
-            },
-            {
-                text: '난이도 및 우선순위 통계',
-                subtext: '',
-                left: '75%',
-                bottom: '0%',
-                textAlign: 'center',
-                textStyle: {
-                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
-                },
-                subtextStyle: {
-                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+
+                let requirementKeys = Object.keys(requirementList);
+                let requirementData = requirementKeys.map(key => requirementList[key]);
+                let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
+
+                let difficultyData = Object.keys(difficultyJson).map(key => ({
+                    name: key.replace('.js', ''),
+                    value: difficultyJson[key]
+                }));
+
+                let priorityData = Object.keys(priorityJson).map(key => ({
+                    name: key.replace('.js', ''),
+                    value: priorityJson[key]
+                }));
+
+                let size = requirementKeys.length;
+                let x = 1;
+
+                if (size > 0) {
+                    x = (15 / size) * 100;
                 }
-            },
-        ],
-        grid: [
-            {
-                top: 50,
-                left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
-                right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
-                width: '50%',
-                bottom: '5%',
-                containLabel: true
-            },
-            /*            {
-                            top: '55%',
-                            width: '100%',
-                            bottom: 0,
-                            left: 10,
+
+                var dom = document.getElementById('req-cost-analysis-chart');
+                var myChart = echarts.init(dom, null, {
+                    renderer: 'canvas',
+                    useDirtyRect: false
+                });
+                var app = {};
+
+                var option;
+
+                option = {
+                    tooltip: {
+                        confine: true
+                    },
+                    title: [
+                        {
+                            // text: '요구사항',
+                            subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
+                            left: '25%',
+                            textAlign: 'center',
+                            textStyle: {
+                                color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                            },
+                            subtextStyle: {
+                                color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                            }
+                        },
+                        {
+                            text: '',
+                            subtext: '난이도 및 우선순위 분포',
+                            left: '80%',
+                            bottom: '0%',
+                            textAlign: 'center',
+                            textStyle: {
+                                color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                            },
+                            subtextStyle: {
+                                color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                            }
+                        },
+                    ],
+                    grid: [
+                        {
+                            top: 50,
+                            left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
+                            right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
+                            width: '50%',
+                            bottom: '5%',
                             containLabel: true
-                        }*/
-        ],
-        xAxis: [
-            {
-                type: 'value',
-                max: reqTotalPrice,
-                splitLine: {
-                    show: false
-                },
-                axisLabel: {
-                    rotate: 45,
-                    color: '#FFFFFFFF',
-                },
-            },
-        ],
-        yAxis: [
-            {
-                type: 'category',
-                data: Object.keys(requirementPriceList),
-                splitLine: {
-                    show: false
-                },
-                axisLabel: {
-                    color: '#FFFFFFFF',
-                    rotate: 45,
-                },
-            },
-        ],
-        series: [
-            {
-                type: 'bar',
-                stack: 'chart',
-                z: 3,
-                label: {
-                    position: 'right',
-                    show: true
-                },
-                data: Object.keys(requirementPriceList).map(function (key) {
-                    return requirementPriceList[key];
-                })
-            },
-            {
-                type: 'bar',
-                stack: 'chart',
-                silent: true,
-                itemStyle: {
-                    color: '#FFFFFF'
-                },
-                data: Object.keys(requirementPriceList).map(function (key) {
-                    return reqTotalPrice - requirementPriceList[key];
-                })
-            },
-            {
-                type: 'pie',
-                radius: [0, '30%'],
-                center: ['75%', '25%'],
-                data: Object.keys(difficultyJson).map(function (key) {
-                    return {
-                        name: key.replace('.js', ''),
-                        value: difficultyJson[key]
-                    };
-                }),
-            },
-            {
-                type: 'pie',
-                radius: [0, '30%'],
-                center: ['75%', '65%'],
-                data: Object.keys(priorityJson).map(function (key) {
-                    return {
-                        name: key.replace('.js', ''),
-                        value: priorityJson[key]
-                    };
-                })
+                        },
+                        /*            {
+                                        top: '55%',
+                                        width: '100%',
+                                        bottom: 0,
+                                        left: 10,
+                                        containLabel: true
+                                    }*/
+                    ],
+                    xAxis: [
+                        {
+                            type: 'value',
+                            max: reqTotalPrice,
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                rotate: 45,
+                                color: '#FFFFFFFF',
+                            },
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            type: 'category',
+                            data: requirementKeys,
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                color: '#FFFFFFFF',
+                                rotate: 45,
+                                formatter: function(value) {
+                                    // 최대 10자까지 표시
+                                    if (value.length > 6) {
+                                        return value.substring(0, 6) + '...';
+                                    } else {
+                                        return value;
+                                    }
+                                },
+                            },
+                        },
+                    ],
+                    series: [
+                        {
+                            type: 'bar',
+                            stack: 'chart',
+                            z: 3,
+                            label: {
+                                position: 'right',
+                                show: true
+                            },
+                            data: requirementData
+                        },
+                        {
+                            type: 'bar',
+                            stack: 'chart',
+                            silent: true,
+                            itemStyle: {
+                                color: '#FFFFFF'
+                            },
+                            data: requirementTotalData
+                        },
+                        {
+                            type: 'pie',
+                            radius: [0, '25%'],
+                            center: ['80%', '25%'],
+                            data: difficultyData,
+                        },
+                        {
+                            type: 'pie',
+                            radius: [0, '25%'],
+                            center: ['80%', '65%'],
+                            data: priorityData
+                        }
+                    ],
+                    dataZoom: [
+                        {
+                            type: 'inside',
+                            yAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                            start: 0,
+                            end: x
+                        },
+                        {
+                            show: true,
+                            type: 'slider',
+                            left: '0%',
+                            backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
+                            dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                            yAxisIndex: [0],
+                            start: 0,
+                            end: x
+                        }
+                    ],
+
+                };
+
+
+                if (option && typeof option === 'object') {
+                    myChart.setOption(option);
+                }
+
+                window.addEventListener('resize', myChart.resize);
             }
-        ],
-        dataZoom: [
-            {
-                type: 'inside',
-                yAxisIndex: [0], // y축에만 dataZoom 기능 적용
-                start: 0,
-                end: x
-            },
-            {
-                show: true,
-                type: 'slider',
-                left: '0%',
-                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
-                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
-                yAxisIndex: [0],
-                start: 0,
-                end: x
-            }
-        ],
-
-    };
-
-
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
-
-    window.addEventListener('resize', myChart.resize);
+        },
+        error: function (e) {
+            jError("버전 조회 중 에러가 발생했습니다.");
+        }
+    });
 }
 
 function 인력별_연봉대비_성과차트_기본세팅(인력맵) {
