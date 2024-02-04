@@ -31,12 +31,54 @@ class Table {
 		return document.createElement(name);
 	}
 
+	sortData(key, type) {
+		if (["id", "progress"].includes(key)) {
+			type === "asc" && this.$data.sort((a, b) => a[key] - b[key]);
+			type === "desc" && this.$data.sort((a, b) => b[key] - a[key]);
+		} else if (["createDate", "startDate", "endDate"].includes(key)) {
+			type === "asc" && this.$data.sort((a, b) => (a[key] ? (b[key] ? new Date(a[key]) - new Date(b[key]) : -1) : 1));
+			type === "desc" && this.$data.sort((a, b) => (a[key] ? (b[key] ? new Date(b[key]) - new Date(a[key]) : -1) : 1));
+		} else {
+			type === "asc" &&
+				this.$data.sort((a, b) => (a[`_${key}`] ? (b[`_${key}`] ? a[`_${key}`] - b[`_${key}`] : -1) : 1));
+			type === "desc" &&
+				this.$data.sort((a, b) => (a[`_${key}`] ? (b[`_${key}`] ? b[`_${key}`] - a[`_${key}`] : -1) : 1));
+		}
+
+		const $tbody = document.getElementById("req_tbody");
+		$tbody.replaceChildren();
+		this.makeRow(this.$data, "td").forEach((r) => $tbody.append(r));
+	}
+
+	handleSorting(e, key) {
+		[...e.target.parentNode.childNodes]
+			.filter((node) => !node.classList.contains(key))
+			.forEach((node) => {
+				node.classList.remove("asc");
+				node.classList.remove("desc");
+			});
+
+		if (e.target.classList.contains("asc")) {
+			e.target.classList.remove("asc");
+			e.target.classList.add("desc");
+
+			this.sortData(key, "desc");
+		} else {
+			e.target.classList.remove("desc");
+			e.target.classList.add("asc");
+
+			this.sortData(key, "asc");
+		}
+	}
+
 	makeRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
 			$tr.setAttribute("data-id", cur.id);
 
 			Object.keys(this.options.content).forEach((key) => {
+				if ([`_${key}`].includes(key)) return;
+
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
@@ -56,18 +98,6 @@ class Table {
 
 			return [...acc, $tr];
 		}, []);
-	}
-	makeHead() {
-		const $thead = this.makeElement("thead");
-		this.makeRow([this.options.content], "th").forEach((r) => $thead.append(r));
-
-		return $thead;
-	}
-	makeBody() {
-		const $tbody = this.makeElement("tbody");
-		this.makeRow(this.$data, "td").forEach((r) => $tbody.append(r));
-
-		return $tbody;
 	}
 
 	getOriginData(id) {
@@ -91,29 +121,26 @@ class Table {
 				c_req_reviewer05
 			}
 		} = this.$data.find((item) => item.id === Number(id));
+		const params = {
+			c_id,
+			c_title,
+			c_req_pdservice_versionset_link,
+			c_req_priority_link: reqPriorityEntity?.c_id ?? null, // 5 - 중간
+			c_req_difficulty_link: reqDifficultyEntity?.c_id ?? null, // 5 - 보통
+			c_req_state_link: reqStateEntity?.c_id ?? null, //10 - 열림
+			c_req_update_date: new Date(),
+			c_req_reviewer01,
+			c_req_reviewer02,
+			c_req_reviewer03,
+			c_req_reviewer04,
+			c_req_reviewer05,
+			c_req_status: "ChangeReq",
+			c_req_contents
+		};
 
-		this.options.onUpdate(
-			this.options.id,
-			Object.assign(
-				{
-					c_id,
-					c_title,
-					c_req_pdservice_versionset_link,
-					c_req_priority_link: reqPriorityEntity?.c_id ?? null, // 5 - 중간
-					c_req_difficulty_link: reqDifficultyEntity?.c_id ?? null, // 5 - 보통
-					c_req_state_link: reqStateEntity?.c_id ?? null, //10 - 열림
-					c_req_update_date: new Date(),
-					c_req_reviewer01,
-					c_req_reviewer02,
-					c_req_reviewer03,
-					c_req_reviewer04,
-					c_req_reviewer05,
-					c_req_status: "ChangeReq",
-					c_req_contents
-				},
-				obj
-			)
-		);
+		if (Object.keys(obj).every((k) => obj[k] === params[k])) return;
+
+		this.options.onUpdate(this.options.id, Object.assign(params, obj));
 	}
 
 	addInput(node) {
@@ -180,11 +207,14 @@ class Table {
 		node.parentElement.appendChild($ul);
 	}
 
-	makeSection(rowData, name, col) {
-		const $el = this.makeElement(name);
-		$el.className = name;
-		this.makeRow(rowData, col).forEach((r) => $el.append(r));
+	bindHeadEvent($el) {
+		$el.addEventListener("click", (e) => {
+			!["manager", "depth1", "depth2", "depth3", "content"].includes(e.target.className) &&
+				this.handleSorting(e, e.target.classList.item(0));
+		});
+	}
 
+	bindBodyEvent($el) {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
 			// input
@@ -198,20 +228,36 @@ class Table {
 				tagName === "I" && this.addSelect(parentElement);
 			}
 		});
+	}
+
+	makeSection(rowData, name, col) {
+		const $el = this.makeElement(name);
+		$el.id = `req_${name}`;
+		$el.className = name;
+		this.makeRow(rowData, col).forEach((r) => $el.append(r));
+
+		if ("thead" === name) this.bindHeadEvent($el);
+		else this.bindBodyEvent($el);
 
 		return $el;
 	}
 
-	get template() {
+	makeTable() {
 		this.$table.className = "reqTable";
 		this.$table.appendChild(this.makeSection([this.options.content], "thead", "th"));
 		this.$table.appendChild(this.makeSection(this.$data, "tbody", "td"));
 		return this.$table;
 	}
+
+	rendering() {
+		const $wrapper = document.getElementById(this.options.wrapper);
+		$wrapper.innerHTML = "";
+		$wrapper.appendChild(this.makeTable());
+	}
 }
 
 const getDate = (stamp) => {
-	if (!stamp || stamp < 0) return "-";
+	if (!stamp || stamp < 0) return "";
 	const time = new Date(stamp);
 	return `${time.getFullYear()}-${addZero(time.getMonth() + 1)}-${addZero(time.getDate())}`;
 };
@@ -275,7 +321,10 @@ const setTableData = (data) => {
 					startDate: getDate(c_req_start_date),
 					endDate: getDate(c_req_end_date),
 					progress: c_req_plan_progress || 0,
-					origin: cur
+					origin: cur,
+					_status: reqStateEntity?.c_id,
+					_priority: reqPriorityEntity?.c_id,
+					_difficulty: reqDifficultyEntity?.c_id
 				}
 			];
 		}, []);
@@ -297,10 +346,13 @@ const setTableData = (data) => {
 // 	});
 // };
 
-const makeTable = async (wrapper, options) => {
+const makeTable = async (options) => {
 	const res = await options.onGetData(options.id);
-	const $wrapper = document.getElementById(wrapper);
+	// const $wrapper = document.getElementById(wrapper);
 	const table = new Table(options, setTableData(res));
 
-	$wrapper.appendChild(table.template);
+	table.rendering();
+
+	// $wrapper.innerHTML = "";
+	// $wrapper.appendChild(table.template);
 };

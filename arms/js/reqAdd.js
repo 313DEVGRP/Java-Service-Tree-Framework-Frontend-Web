@@ -58,8 +58,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-		["js/reqAddTable.js",
-		 "css/jiraServerCustom.css"]
+		["js/reqAddTable.js", "css/jiraServerCustom.css"]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -1284,7 +1283,7 @@ function registNewPopup() {
 
 	//예상 일정 초기화
 	$("#my_modal1 #req_plan_time").val(null);
-	
+
 	//리뷰어 셋팅
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getNodeWithVersionOrderByCidDesc.do?c_id=" + $("#selected_pdService").val(),
@@ -1437,9 +1436,7 @@ function save_req() {
 		console.log(
 			"save_req :: popup_req_state  -> " + $("#popup_req_state input[name='popup_req_state_options']:checked").val()
 		);
-		console.log(
-			"save_req :: popup_req_plan_time  -> " + $("#popup_req_plan_time").val()
-		);
+		console.log("save_req :: popup_req_plan_time  -> " + $("#popup_req_plan_time").val());
 		let selectedReqPriorityLink = $("#popup_req_priority input[name='popup_req_priority_options']:checked").val();
 		let selectedReqDifficultLink = $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val();
 		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
@@ -1537,13 +1534,14 @@ function click_btn_for_req_update() {
 			"click_btn_for_req_update :: editview_req_state  -> " +
 				$("#editview_req_state input[name='editview_req_state_options']:checked").val()
 		);
-		console.log(
-			"click_btn_for_req_update :: editview_req_plan_time  -> " +
-				$("#editview_req_plan_time").val()
-		);
+		console.log("click_btn_for_req_update :: editview_req_plan_time  -> " + $("#editview_req_plan_time").val());
 
-		let selectedEditReqPriorityLink = $("#editview_req_priority input[name='editview_req_priority_options']:checked").val();
-		let selectedEditReqDifficultyLink = $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val();
+		let selectedEditReqPriorityLink = $(
+			"#editview_req_priority input[name='editview_req_priority_options']:checked"
+		).val();
+		let selectedEditReqDifficultyLink = $(
+			"#editview_req_difficulty input[name='editview_req_difficulty_options']:checked"
+		).val();
 		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
 		let selectedEditReqPlanTime = $("#editview_req_plan_time").val();
 
@@ -1579,7 +1577,6 @@ function click_btn_for_req_update() {
 				}
 			}
 		});
-
 	});
 }
 
@@ -1905,7 +1902,8 @@ function tableSelectOption(obj) {
 }
 
 function tableSelect(id) {
-	makeTable("reqDataTable", {
+	makeTable({
+		wrapper: "reqDataTable",
 		id,
 		onGetData: async function (id) {
 			return await $.ajax({
