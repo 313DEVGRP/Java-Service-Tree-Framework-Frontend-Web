@@ -1674,8 +1674,7 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 						'<div style=\'white-space: nowrap; color: #a4c6ff\'>' + data +
 						'<button data-target="#my_modal2" data-toggle="modal" style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_issue_key('
 						+ '\'' + row.c_jira_server_link + '\','
-						+ '\'' + row.c_issue_key + '\','
-						+ '\'' + row.c_pds_version_link + '\')"><i class="fa fa-list-alt"></i></button>'+
+						+ '\'' + row.c_issue_key + '\')"><i class="fa fa-list-alt"></i></button>'+
 						"</div>";
 					return _render;
 				}
@@ -1859,7 +1858,7 @@ $("#pdfchecker").on("click", function () {
 	reqStatusDataTable.button(".buttons-pdf").trigger();
 });
 
-function click_issue_key(c_jira_server_link, c_issue_key, c_pds_version_link) {
+function click_issue_key(c_jira_server_link, c_issue_key) {
 
 	console.log("clicked_issue_name ==> " + c_issue_key);
 	if (c_issue_key !== "" || c_issue_key !== undefined) {
@@ -1868,8 +1867,7 @@ function click_issue_key(c_jira_server_link, c_issue_key, c_pds_version_link) {
 
 	var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val()
 		+ "/getIssueAndSubLinks.do?serverId=" + c_jira_server_link
-		+ "&issueKey=" + c_issue_key
-		+ "&versionId=" + c_pds_version_link;
+		+ "&issueKey=" + c_issue_key;
 	getLinkedIssueAndSubtask(endPointUrl); // 데이터테이블 그리기
 }
 
