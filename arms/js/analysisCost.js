@@ -285,10 +285,12 @@ function formatDate(date) {
 // 버전 비용 및 인력 비용 입력
 function costInput(인력맵, pdServiceVersionLinks) {
 
-    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
-    console.log(인력맵);
+    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(인력맵));
 
-    if ($.fn.dataTable.isDataTable('#version-cost')) {
+    versionInput();
+    manpowerInput(인력맵);
+
+    /*if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
     }
 
@@ -370,16 +372,224 @@ function costInput(인력맵, pdServiceVersionLinks) {
                 salaryInputs.val(this.value);
             });
         },
-        /*rowsGroup: [
+        /!*rowsGroup: [
             "name:name",
-        ]*/
+        ]*!/
+    });*/
+}
+
+function versionInput() {
+
+    if ($.fn.dataTable.isDataTable('#version-cost')) {
+        $('#version-cost').DataTable().clear().destroy();
+    }
+
+    var columnList = [
+        {
+            name: "versionId",
+            title: "버전아이디",
+            data: "c_id",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: false
+        },
+        {
+            name: "version",
+            title: "버전",
+            data: "c_title",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "period",
+            title: "기간",
+            data: "c_pds_version_start_date",
+            render: function (data, type, row, meta) {
+                let startDate = row.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(row.c_pds_version_start_date);
+                let endDate = row.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(row.c_pds_version_end_date);
+                return startDate + ' ~ ' + endDate;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "cost",
+            title: "비용 (입력)",
+            data: "",
+            render: function(data, type, row) {
+                return '<input type="text" name="version-cost" class="cost-input" value="0" data-owner="' + row.c_id + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [[2, "desc"]];
+    var jquerySelector = "#version-cost";
+    var ajaxUrl = "/auth-user/api/arms/pdServiceVersion/getVersionListBy.do?c_ids=" + selectedVersionId;
+    var jsonRoot = "";
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide
+    );
+}
+
+function manpowerInput(인력맵) {
+
+    if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
+        $('#manpower-annual-income').DataTable().clear().destroy();
+    }
+
+    let manpowerData = Object.keys(인력맵).map((key) => {
+        let data = {};
+        data.이름 = key;
+        data.연봉 = 인력맵[key].연봉;
+        data.성과 = 인력맵[key].성과;
+        return data;
     });
+    console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
+
+    var columnList = [
+        {
+            name: "name",
+            title: "투입 인력",
+            data: "이름",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "annualIncome",
+            title: "연봉 (입력)",
+            data: "",
+            render: function(data, type, row) {
+                return '<input type="text" name="annual-income" class="annual-income-input" value="0" data-owner="' + row.이름 + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [[1, "asc"]];
+    var jquerySelector = "#manpower-annual-income";
+    var ajaxUrl = null;
+    var jsonRoot = null;
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = manpowerData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+
+    excel_download();
+}
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(tempDataTable, selectedData) {
+
+}
+
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
+function dataTableCallBack(settings, json) {
+    $('.cost-input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+
+    $('.annual-income-input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+}
+
+function dataTableDrawCallback(tableInfo) {
+    $("#" + tableInfo.sInstance)
+        .DataTable()
+        .columns.adjust()
+        .responsive.recalc();
+}
+
+function excel_download() {
+
+   /* var tempDataTable = $("#manpower-annual-income").DataTable();
+    var data = tempDataTable.rows().data().toArray();
+    var json = JSON.stringify(data);
+    console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+
+
+    $("#excel-annual-income-template-download").click(function () {
+        $.ajax({
+            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+            type: "POST",
+            data: json,
+            contentType: "application/json",
+            statusCode: {
+                200: function (data) {
+                    console.log("success");
+                }
+            }
+        })
+    });*/
 }
 
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
-        let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
+        /*let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
 
         let selectVersionData = [];
         for (let i = 0; i < selectedVersions.length; i++) {
@@ -396,11 +606,66 @@ function 비용분석계산() {
             item.consumptionCost = 9000000;
 
             selectVersionData.push(item);
+            console.log("***** " + JSON.stringify(selectVersionData));
+        }*/
+
+        let isNumber = true;
+
+        // 버전 비용
+        var versionCost = [];
+
+        var table = $('#version-cost').DataTable();
+        // DataTable의 모든 행에 대해 반복
+        table.rows().every(function() {
+            var versionId = this.data()['c_id']; // 버전 아이디
+            var versionName = this.data()['c_title']; // 버전 이름
+            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
+
+            if (isNaN(Number(cost))) {
+                isNumber = false;
+                return;
+            }
+
+            versionCost.push({
+                c_id: versionId,
+                c_title: versionName,
+                versionCost: cost * 10000,
+                consumptionCost: 9000000
+            });
+        });
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));
+
+
+        // 인력별 연봉
+        var annualIncome = [];
+
+        var table = $('#manpower-annual-income').DataTable();
+        // DataTable의 모든 행에 대해 반복
+        table.rows().every(function() {
+            var name = this.data()['이름']; // 인력
+            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
+
+            if (isNaN(Number(cost))) {
+                isNumber = false;
+                return;
+            }
+
+            annualIncome.push({
+                사용자: name,
+                연봉: cost
+            });
+        });
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: annualIncome -> " + JSON.stringify(annualIncome));
+
+        if (!isNumber) {
+            alert("비용 입력란에 숫자를 입력해 주세요.");
+            return;
         }
 
         $("#compare_costs").height("620px");
         // 버전별 투자 대비 소모 비용 차트
-        compareCostsChart(selectVersionData);
+        //compareCostsChart(selectVersionData);
+        compareCostsChart(versionCost);
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
@@ -424,7 +689,7 @@ function 비용분석계산() {
 
 
 
-        let inputSalaryValues = $('input[name="person-salary"]').map(function() {
+        /*let inputSalaryValues = $('input[name="annual-income"]').map(function() {
             let data = {};
 
             let owner = $(this).data('owner');
@@ -432,9 +697,7 @@ function 비용분석계산() {
             data.연봉 = $(this).val();
             return data;
         }).get();
-
-        console.log(inputSalaryValues);
-
+        */
         // 인력별 성과 측정 차트
         $("#manpower-analysis-chart").height("500px");
         인력별_연봉대비_성과차트_기본세팅(인력맵);
