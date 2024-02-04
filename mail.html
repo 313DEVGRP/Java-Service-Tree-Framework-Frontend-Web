@@ -1,0 +1,1630 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+
+    .gradient_middle_border {
+        border-bottom: 1px solid transparent;
+        border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #c3c3c3, rgb(0 0 0 / 0%));
+        border-image-slice: 1;
+    }
+
+
+    /*--------------------------------------------------------------
+    # 버튼 에니메이션
+    --------------------------------------------------------------*/
+    .more {
+        display: inline-block;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        letter-spacing: 0;
+        z-index: 1;
+        position: relative;
+        margin-top: 10px;
+        color: #fff;
+        font-size: 13px;
+    }
+
+    .animated-button1 {
+        display: inline-block;
+        -webkit-transform: translate(0%, 0%);
+        transform: translate(0%, 0%);
+        overflow: hidden;
+        color: #fff;
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+    .animated-button1::before {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #8593ad;
+        opacity: 0;
+        -webkit-transition: 0.2s opacity ease-in-out;
+        transition: 0.2s opacity ease-in-out;
+    }
+
+    .animated-button1 span {
+        position: absolute;
+    }
+
+    @keyframes animateTop {
+        0% {
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+
+        100% {
+            -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+        }
+    }
+
+    .animated-button1 span:nth-child(1) {
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 1px;
+        background: -webkit-gradient(linear, right top, left top, from(rgba(43, 8, 8, 0)), to(#fff));
+        background: linear-gradient(to left, rgba(43, 8, 8, 0), #fff);
+        -webkit-animation: 2s animateTop linear infinite;
+        animation: 2s animateTop linear infinite;
+    }
+
+    @keyframes animateRight {
+        0% {
+            -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+        }
+
+        100% {
+            -webkit-transform: translateY(-100%);
+            transform: translateY(-100%);
+        }
+    }
+
+    .animated-button1 span:nth-child(2) {
+        top: 0px;
+        right: 0px;
+        height: 100%;
+        width: 1px;
+        background: -webkit-gradient(linear, left bottom, left top, from(rgba(43, 8, 8, 0)), to(#fff));
+        background: linear-gradient(to top, rgba(43, 8, 8, 0), #fff);
+        -webkit-animation: 2s animateRight linear -1s infinite;
+        animation: 2s animateRight linear -1s infinite;
+    }
+
+    @keyframes animateBottom {
+        0% {
+            -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+        }
+
+        100% {
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+    }
+
+    .animated-button1 span:nth-child(3) {
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+        height: 1px;
+        background: -webkit-gradient(linear, left top, right top, from(rgba(43, 8, 8, 0)), to(#fff));
+        background: linear-gradient(to right, rgba(43, 8, 8, 0), #fff);
+        -webkit-animation: 2s animateBottom linear infinite;
+        animation: 2s animateBottom linear infinite;
+    }
+
+    @keyframes animateLeft {
+        0% {
+            -webkit-transform: translateY(-100%);
+            transform: translateY(-100%);
+        }
+
+        100% {
+            -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+        }
+    }
+
+    .animated-button1 span:nth-child(4) {
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 1px;
+        background: -webkit-gradient(linear, left top, left bottom, from(rgba(43, 8, 8, 0)), to(#fff));
+        background: linear-gradient(to bottom, rgba(43, 8, 8, 0), #fff);
+        -webkit-animation: 2s animateLeft linear -1s infinite;
+        animation: 2s animateLeft linear -1s infinite;
+    }
+
+
+    @media only screen and (max-width: 480px) {
+        .oEQ55c {
+            width: 100% !important;
+        }
+
+        .zhwgeb {
+            width: auto !important;
+        }
+
+        .MHCHNe {
+            max-width: 100% !important;
+        }
+
+    }
+    </style>
+</head>
+<body>
+<div dir="ltr">
+
+    <table style="background-color:#404249;padding:0 20px!important" role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <td align="center" valign="top" width="600">
+                <table width="600" border="0" cellspacing="0" cellpadding="0"
+                       style="width:100%;max-width:600px;background-color:#404249" bgcolor="#404249"
+                       role="presentation">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <!-- 로고 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                               role="presentation" style="border-collapse:collapse; background:#404249; background-color:#404249;width:100%" bgcolor="#3b3b3b" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="border-collapse:collapse;direction:ltr;font-size:0;text-align:center" align="center">
+                                                    <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%">
+                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                               style="border-collapse:collapse;background-color:#404249;vertical-align:top"
+                                                               width="100%" bgcolor="#3b3b3b" valign="top">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td align="center"
+                                                                    style="border-collapse:collapse;font-size:0;padding:26px 20px;word-break:break-word">
+                                                                    <img src="http://313.co.kr/arms/img/313_logo.png" alt="test" height="150"
+                                                                         style="-ms-interpolation-mode: bicubic; display: block; width: auto; height: auto; max-height: 150px; outline: none; text-decoration: none;">
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                               style="border-collapse:collapse;background-color:#404249;vertical-align:top"
+                                                               width="100%" bgcolor="#3b3b3b" valign="top">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td align="center"
+                                                                    style="border-collapse:collapse;font-size:0;padding:0px 0px 20px 0px;word-break:break-word">
+                                                                    <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
+
+                                                                        <p style="margin-top: 0.75rem; line-height: 1.714; letter-spacing: -0.005em;">
+                                                                            <span role="img" aria-label=":checkered_flag:" title=":checkered_flag:"
+                                                                                  style="font-size: small; letter-spacing: -0.08px; background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                <img src="http://www.313.co.kr/arms/img/commonIconPack/star.png"
+                                                                                     alt=":checkered_flag:"
+                                                                                     width="20"
+                                                                                     height="20"
+                                                                                     class="CToWUd"
+                                                                                     data-bit="iit"
+                                                                                     style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                            </span>
+                                                                            <b>
+                                                                                <span style="font-size: small; letter-spacing: -0.08px;color: #f8f8f8;vertical-align:middle">&nbsp;안녕하세요 Project 313 의 대표. 이동민 입니다.</span>
+                                                                            </b>
+                                                                            <br>
+                                                                            <span style="font-size: small; letter-spacing: -0.08px;color: #f8f8f8;vertical-align:middle">
+                                                                                <br>
+                                                                                저는 16년동안 . Daum - Ahnlab - NC 등에서 제품(서비스) 개발 및 구축을 업으로 삼는 개발자 입니다.<br>
+                                                                                다양한 프로젝트, 제품, 솔루션, 서비스를 관리해오며, ALM ( Jira, Redmine, Gitlab )을 사용해 왔습니다.<br>
+                                                                                ALM 의 다양한 문제점 중에, <span style="color: #a4c6ff">가장 크리티컬한 문제를 발견하여, 이를 해결하고자 솔루션을 만들었습니다.</span><br>
+                                                                                <br>
+                                                                                Atlassian Jira 및 Tool Chain 의 <span style="color: #a4c6ff">총판 여러분들에게 저희 솔루션을 소개하고 싶습니다.</span><br>
+                                                                                <span style="color: #E49400;">이 솔루션이 대한민국 위기의 IT에 기회를 만들 수 있다고 자부합니다.</span><br>
+                                                                                <br>
+                                                                                <span style="color: #E49400;">대표님께서 작은 시간을 주신다면, 시연과 설명을 드리기 위해, 찾아뵙고 싶습니다. 감사합니다.</span>
+                                                                            </span>
+                                                                        </p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- //로고 영역 -->
+
+                            <!-- 메인 스크린샷 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                               style="border-collapse:collapse;background:#3b3b3b; background-color:#3b3b3b;width:100%;" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:30px 0;text-align:center" align="center">
+
+                                                    <!-- 2024. 01. A-RMS inform you 영역 -->
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                           style="border-collapse:collapse;display:inline-table;" width="90%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center" align="center">
+                                                                <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="border-collapse:collapse">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td style="border-collapse:collapse;vertical-align:middle" align="center" valign="middle">
+                                                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse" width="100%">
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center" style="border-collapse:collapse;font-size:0;padding-bottom:20px;word-break:break-word">
+                                                                                            <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:normal;text-align:center;">
+                                                                                                <img src="http://313.co.kr/arms/img/new_icon.png"
+                                                                                                     alt="313_logo.png" height="60px" width="66px"
+                                                                                                     data-image-whitelisted="" class="CToWUd"
+                                                                                                     data-bit="iit">
+                                                                                                &nbsp;
+                                                                                                <span style="font-size: 12pt; line-height: 60px; vertical-align: text-bottom; font-weight: bold; color: #f8f8f8;">
+                                                                                                    2024. 02. A-RMS inform you
+                                                                                                </span>
+                                                                                            </div>
+
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- //2024. 01. A-RMS inform you 영역 -->
+
+                                                    <!-- 메인 이미지 영역 -->
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation" style="border-collapse:collapse;display:inline-table" width="90%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center" align="center">
+                                                                <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                           style="border-collapse:collapse;vertical-align:middle" width="100%" valign="middle">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td align="center"
+                                                                                style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                       style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center" style="border-collapse:collapse;width:540px"
+                                                                                            class="zhwgeb" width="540">
+                                                                                            <img class="MHCHNe"
+                                                                                                 src="http://www.313.co.kr/arms/img/screenshot/dashboard.png"
+                                                                                                 style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; text-decoration: none;
+                                                                                                 display: block; font-size: 13px;height: auto; width: 100%; max-width: 540px; " width="540" height="300">
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- //메인 이미지 영역 -->
+
+                                                    <!-- 알림 내용 영역 -->
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                           style="border-collapse:collapse;display:inline-table" width="90%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center" align="center">
+                                                                <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="border-collapse:collapse">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;vertical-align:middle" align="center" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td align="center"
+                                                                                                    style="border-collapse:collapse;font-size:0;padding:0 10px;padding-top:20px;word-break:break-word">
+                                                                                                    <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
+
+                                                                                                        <p style="margin-top: 0.75rem; line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                            <span role="img" aria-label=":checkered_flag:" title=":checkered_flag:"
+                                                                                                                  style="font-size: small; letter-spacing: -0.08px; background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                <img src="http://www.313.co.kr/arms/img/commonIconPack/flag.png"
+                                                                                                                     alt=":checkered_flag:"
+                                                                                                                     width="20"
+                                                                                                                     height="20"
+                                                                                                                     class="CToWUd"
+                                                                                                                     data-bit="iit"
+                                                                                                                     style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                            </span>
+                                                                                                            <b>
+                                                                                                                <span style="font-size: small; letter-spacing: -0.08px;color: #f8f8f8;vertical-align:middle">&nbsp;A-RMS에서 알려드립니다 ^^/</span>
+                                                                                                            </b>
+                                                                                                        </p>
+
+                                                                                                        <blockquote style="font-size: 16px; margin: 0.75rem; border-top: none; border-right: none;
+                                                                                                        border-bottom: none; border-left: 1px dashed rgb(204, 204, 204);  border-color: #f8f8f8;
+                                                                                                        padding: 10px 20px; box-sizing: border-box; clear: both;
+                                                                                                        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+                                                                                                        text-align: start;">
+                                                                                                            <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;솔루션 A-RMS 1.0 을 런칭해요.! :&nbsp;<strong style="color:#a4c6ff">2024년 03월 13일 공식 런칭해요.</strong>
+                                                                                                                </span>
+                                                                                                            </p>
+                                                                                                            <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;법인 설립을 준비 중이에요.!  :&nbsp;<strong style="color:#a4c6ff">(주) Project 313</strong>
+                                                                                                                </span>
+                                                                                                            </p>
+                                                                                                            <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;A-RMS 는 이미 고객사를 확보했어요.! :&nbsp;<strong style="color:#a4c6ff">총 3곳의 고객사와 함께하고 있어요</strong>
+                                                                                                                </span>
+                                                                                                            </p>
+                                                                                                            <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_no.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요.! :&nbsp;<strong style="color:#a4c6ff">인력 효율화 문제를 해결해요.</strong>
+                                                                                                                </span>
+                                                                                                            </p>
+                                                                                                            <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_no.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요.! :&nbsp;<strong style="color:#a4c6ff">제품(서비스) 출시 지연을 해결해요.</strong>
+                                                                                                                </span>
+                                                                                                            </p>
+                                                                                                            <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_no.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요.! :&nbsp;<strong style="color:#a4c6ff">제품(서비스) 비용 문제를 해결해요.</strong>
+                                                                                                                </span>
+                                                                                                            </p>
+
+                                                                                                        </blockquote>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- //알림 내용 영역 -->
+
+                                                    <!-- demo 버튼 -->
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation"
+                                                           style="border-collapse:collapse;display:inline-table"
+                                                           width="90%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center" align="center">
+                                                                <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                                           role="presentation"
+                                                                           style="border-collapse:collapse;vertical-align:top"
+                                                                           width="100%" valign="top">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:0;padding-top:30px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                           style="border-collapse:separate;background:#3b3b3b;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td align="center" bgcolor="#3b3b3b" role="presentation"
+                                                                                                    style="border-collapse:collapse;background:#3b3b3b;border:none;border-radius:3px" valign="middle">
+                                                                                                    <div>
+                                                                                                        <a href="https://a-rms.net" class="more animated-button1" style="color:#E49400; padding: 28px 72px; text-decoration: none; font-size: 15px;">
+                                                                                                            <span></span>
+                                                                                                            <span></span>
+                                                                                                            <span></span>
+                                                                                                            <span></span>
+                                                                                                            Request Live
+                                                                                                            <strong>Demo</strong>
+                                                                                                        </a>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- //demo 버튼 -->
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- //메인 스크린샷 영역 -->
+
+                            <!-- 가로 줄 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                   role="presentation"
+                                                   style="border-collapse:collapse;background:#3b3b3b; background-color:#3b3b3b;width:100%"
+                                                    width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="direction:ltr;font-size:0;padding:0 5px;text-align:center">
+                                                            <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%"
+                                                                 role="presentation">
+                                                                <table border="0" cellpadding="0" cellspacing="0"
+                                                                       role="presentation"
+                                                                       style="border-collapse:collapse;vertical-align:top"
+                                                                       width="100%" valign="top">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td style="border-collapse:collapse;font-size:0;padding:10px 25px;word-break:break-word">
+                                                                            <div class="gradient_middle_border" style="width: 100%; height: 1px; border-top: 1px solid lightgrey;"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- //가로 줄 영역 -->
+
+                            <!-- 업데이트 노트 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                               role="presentation"
+                                               style="border-collapse:collapse;background:#3b3b3b; background-color:#3b3b3b;width:100%" bgcolor="#3b3b3b" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:20px 0;text-align:center" align="center">
+
+                                                            <!-- 2024. 01. Update Note 헤더 영역 -->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                                   role="presentation" style="border-collapse:collapse;display:inline-table" width="90%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center" align="center">
+                                                                            <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%">
+                                                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="border-collapse:collapse">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="border-collapse:collapse;vertical-align:top" valign="top">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse" width="100%">
+                                                                                                    <tbody>
+                                                                                                        <tr>
+                                                                                                            <td align="center"
+                                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                                <div style="font-family:arial,sans-serif;font-size:32px;font-weight:400;letter-spacing:0;line-height:1.5;text-align:center;color:#202124">
+                                                                                                                    <img src="http://313.co.kr/arms/img/available_now.png" alt="313_logo.png" height="60px" width="60px" data-image-whitelisted=""
+                                                                                                                         class="CToWUd" data-bit="iit">
+                                                                                                                    <span style="font-size: 12pt; line-height: 60px; vertical-align: text-bottom; font-weight: bold; color: #f8f8f8;">
+                                                                                                                        &nbsp;2024. 01. Update Note
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- //2024. 01. Update Note 헤더 영역 -->
+
+                                                            <!-- 이미지와 아티클 섹터 단독-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:10px;padding-top:10px;text-align:center" align="center">
+
+                                                                        <!-- 이미지 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                               style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/gannt.png"
+                                                                                                     alt=""
+                                                                                                     style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;" width="250" height="175">
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //이미지 -->
+
+                                                                        <!-- 글 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                               style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                    <br>
+                                                                                                    <br>
+                                                                                                    Lorem ipsum dolor sit amet
+                                                                                                    consectetur adipisicing
+                                                                                                    elit. Quasi pariatur dicta
+                                                                                                    non nobis!
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                       style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                            </a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //글 -->
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 단독-->
+
+                                                            <!-- 이미지와 아티클 섹터 1-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:0px;padding-top:10px;text-align:center" align="center">
+
+                                                                            <!-- 이미지 -->
+                                                                            <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                   style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                                   style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                            <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/time1.png"
+                                                                                                                 alt=""
+                                                                                                                 style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;"
+                                                                                                                 width="250" height="175">
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <!-- //이미지 -->
+
+                                                                            <!-- 글 -->
+                                                                            <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                                   style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                                   style="border-collapse:collapse" width="100%">
+                                                                                                <tbody>
+                                                                                                    <tr role="presentation">
+                                                                                                        <td align="left"
+                                                                                                            style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                            <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                                <br>
+                                                                                                                Lorem ipsum dolor sit amet
+                                                                                                                consectetur adipisicing
+                                                                                                                elit. Quasi pariatur dicta
+                                                                                                                non nobis!
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr role="presentation">
+                                                                                                        <td align="left"
+                                                                                                            style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                            <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                                   style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                                <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                                            </a>
+                                                                                                                        </td>
+                                                                                                                    </tr>
+                                                                                                                </tbody>
+                                                                                                            </table>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <!-- //글 -->
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 1-->
+
+                                                            <!-- 이미지와 아티클 섹터 2-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:10px;padding-top:0px;text-align:center" align="center">
+
+                                                                        <!-- 이미지 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                               style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/time2.png"
+                                                                                                     alt=""
+                                                                                                     style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;"
+                                                                                                     width="250" height="175">
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //이미지 -->
+
+                                                                        <!-- 글 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                               style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                    <br>
+                                                                                                    Lorem ipsum dolor sit amet
+                                                                                                    consectetur adipisicing
+                                                                                                    elit. Quasi pariatur dicta
+                                                                                                    non nobis!
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                       style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                            </a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //글 -->
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 2-->
+
+
+
+                                                            <!-- 이미지와 아티클 섹터 3-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:0px;padding-top:10px;text-align:center" align="center">
+
+                                                                        <!-- 이미지 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                               style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/scope1.png"
+                                                                                                     alt=""
+                                                                                                     style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;"
+                                                                                                     width="250" height="175">
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //이미지 -->
+
+                                                                        <!-- 글 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                               style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                    <br>
+                                                                                                    Lorem ipsum dolor sit amet
+                                                                                                    consectetur adipisicing
+                                                                                                    elit. Quasi pariatur dicta
+                                                                                                    non nobis!
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                       style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                            </a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //글 -->
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 3-->
+
+                                                            <!-- 이미지와 아티클 섹터 4-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:10px;padding-top:0px;text-align:center" align="center">
+
+                                                                        <!-- 이미지 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                               style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/scope2.png"
+                                                                                                     alt=""
+                                                                                                     style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;"
+                                                                                                     width="250" height="175">
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //이미지 -->
+
+                                                                        <!-- 글 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                               style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                    <br>
+                                                                                                    Lorem ipsum dolor sit amet
+                                                                                                    consectetur adipisicing
+                                                                                                    elit. Quasi pariatur dicta
+                                                                                                    non nobis!
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                       style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                            </a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //글 -->
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 4-->
+
+
+
+                                                            <!-- 이미지와 아티클 섹터 5-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:0px;padding-top:10px;text-align:center" align="center">
+
+                                                                        <!-- 이미지 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                               style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/resource1.png"
+                                                                                                     alt=""
+                                                                                                     style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;"
+                                                                                                     width="250" height="175">
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //이미지 -->
+
+                                                                        <!-- 글 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                               style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                    <br>
+                                                                                                    Lorem ipsum dolor sit amet
+                                                                                                    consectetur adipisicing
+                                                                                                    elit. Quasi pariatur dicta
+                                                                                                    non nobis!
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                       style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                            </a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //글 -->
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 5-->
+
+                                                            <!-- 이미지와 아티클 섹터 6-->
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                   style="border-collapse:collapse;display:inline-table" width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;padding-bottom:10px;padding-top:0px;text-align:center" align="center">
+
+                                                                        <!-- 이미지 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                               style="border-collapse:collapse;vertical-align:middle;display:inline-table" width="50%" valign="middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td align="center" style="border-collapse:collapse;font-size:0;padding:10px;word-break:break-word">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse;border-spacing:0" class="oEQ55c">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td align="center" style="border-collapse:collapse;width:250px" class="zhwgeb" width="250">
+                                                                                                <img class="MHCHNe" src="http://www.313.co.kr/arms/img/screenshot/resource2.png"
+                                                                                                     alt=""
+                                                                                                     style="-ms-interpolation-mode: bicubic; border:3px solid #878585; line-height: 100%; outline: none; ext-decoration: none;
+                                                                                                                 display: block; font-size: 13px; height: auto; width: 100%; max-width: 250px;"
+                                                                                                     width="250" height="175">
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //이미지 -->
+
+                                                                        <!-- 글 -->
+                                                                        <table class="oEQ55c" border="0" cellpadding="0" cellspacing="0" role="presentation" width="50%"
+                                                                               style="border-collapse:collapse;display:inline-table;vertical-align:middle">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="border-collapse:collapse;padding:10px;vertical-align:middle" valign="middle">
+                                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                                                           style="border-collapse:collapse" width="100%">
+                                                                                        <tbody>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                                <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
+                                                                                                                    Lorem ipsum
+                                                                                                                </span>
+                                                                                                    <br>
+                                                                                                    Lorem ipsum dolor sit amet
+                                                                                                    consectetur adipisicing
+                                                                                                    elit. Quasi pariatur dicta
+                                                                                                    non nobis!
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr role="presentation">
+                                                                                            <td align="left"
+                                                                                                style="border-collapse:collapse;font-size:0;padding:0;padding-top:10px;word-break:break-word">
+                                                                                                <table border="0" cellpadding="0" cellspacing="0" role="button"
+                                                                                                       style="border-collapse:separate;background:transparent;border:1px solid #878585;border-radius:4px;line-height:100%;padding:8px 24px">
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td align="center" bgcolor="transparent" role="presentation"
+                                                                                                            style="border-collapse:collapse;background:transparent" valign="middle">
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                                font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
+                                                                                                                target="_blank">
+                                                                                                                                <span style="display:block;min-width:10px">
+                                                                                                                                    일정 분석 바로 가기
+                                                                                                                                </span>
+                                                                                                            </a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <!-- //글 -->
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!-- // 이미지와 아티클 섹터 6-->
+
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- //업데이트 노트 영역 -->
+
+                            <!-- 가로 줄 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                               role="presentation"
+                                               style="border-collapse:collapse;background:#3b3b3b; background-color:#3b3b3b;width:100%"
+                                                width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="direction:ltr;font-size:0;padding:0 5px;text-align:center">
+                                                    <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%"
+                                                         role="presentation">
+                                                        <table border="0" cellpadding="0" cellspacing="0"
+                                                               role="presentation"
+                                                               style="border-collapse:collapse;vertical-align:top"
+                                                               width="100%" valign="top">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td style="border-collapse:collapse;font-size:0;padding:10px 25px;word-break:break-word">
+                                                                    <div class="gradient_middle_border" style="width: 100%; height: 1px; border-top: 1px solid lightgrey;"></div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- //가로 줄 영역 -->
+
+                            <!-- More Info 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                               role="presentation"
+                                               style="border-collapse:collapse;background:#3b3b3b; background-color:#3b3b3b;width:100%" bgcolor="#3b3b3b" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:20px 0;text-align:center" align="center">
+
+                                                    <!-- 2024. 01. Update Note 헤더 영역 -->
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation" style="border-collapse:collapse;display:inline-table" width="80%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center" align="center">
+                                                                <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="border-collapse:collapse">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td style="border-collapse:collapse;vertical-align:top" valign="top">
+                                                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse" width="100%">
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center"
+                                                                                            style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
+                                                                                            <div style="font-family:arial,sans-serif;font-size:32px;font-weight:400;letter-spacing:0;line-height:1.5;text-align:center;color:#202124">
+                                                                                                <img src="http://313.co.kr/arms/img/more_info.png" alt="313_logo.png" height="60px" width="60" data-image-whitelisted=""
+                                                                                                     class="CToWUd" data-bit="iit">
+                                                                                                <span style="font-size: 12pt; line-height: 60px; vertical-align: text-bottom; font-weight: bold; color: #f8f8f8;">
+                                                                                                    &nbsp;Project 313. tell you a another info
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- //2024. 01. Update Note 헤더 영역 -->
+
+                                                    <!-- 알림 내용 영역 -->
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation"
+                                                           style="border-collapse:collapse;display:inline-table"
+                                                           width="90%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="border-collapse:collapse;direction:ltr;font-size:0;padding:0;text-align:center"
+                                                                align="center">
+                                                                <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%">
+                                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                                           role="presentation" width="100%"
+                                                                           style="border-collapse:collapse">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td style="border-collapse:collapse;vertical-align:middle"
+                                                                                align="center" valign="middle">
+                                                                                <table border="0" cellpadding="0"
+                                                                                       cellspacing="0" role="presentation"
+                                                                                       style="border-collapse:collapse" width="100%">
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center"
+                                                                                            style="border-collapse:collapse;font-size:0;padding:0 10px;padding-top:20px;word-break:break-word">
+                                                                                            <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
+
+                                                                                                <p style="margin-top: 0.75rem; line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                            <span role="img"
+                                                                                                                  aria-label=":checkered_flag:"
+                                                                                                                  title=":checkered_flag:"
+                                                                                                                  style="font-size: small; letter-spacing: -0.08px; background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                <img src="http://www.313.co.kr/arms/img/commonIconPack/developer.png"
+                                                                                                                     alt=":checkered_flag:"
+                                                                                                                     width="20"
+                                                                                                                     height="20"
+                                                                                                                     class="CToWUd"
+                                                                                                                     data-bit="iit"
+                                                                                                                     style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                            </span>
+                                                                                                    <b>
+                                                                                                        <span style="font-size: small; letter-spacing: -0.08px;color: #f8f8f8;vertical-align:middle">&nbsp;A-RMS의 알림 사항</span>
+                                                                                                    </b>
+                                                                                                </p>
+
+                                                                                                <blockquote style="font-size: 16px; margin: 0.75rem 0px 0px 19px; border-top: none; border-right: none;
+                                                                                                        border-bottom: none; border-left: 1px dashed rgb(204, 204, 204); border-color: #f8f8f8;
+                                                                                                        padding: 10px 20px; box-sizing: border-box; clear: both;
+                                                                                                        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+                                                                                                        text-align: start;">
+                                                                                                    <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;법인 설립 및 제품의 상표권이 등록 되었어요 ! :&nbsp;<strong style="color:#a4c6ff">2024-03-13</strong>
+                                                                                                                </span>
+                                                                                                    </p>
+                                                                                                    <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;법인 설립 및 제품의 상표권이 등록 되었어요 ! :&nbsp;<strong style="color:#a4c6ff">2024-03-13</strong>
+                                                                                                                </span>
+                                                                                                    </p>
+                                                                                                    <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;법인 설립 및 제품의 상표권이 등록 되었어요 ! :&nbsp;<strong style="color:#a4c6ff">2024-03-13</strong>
+                                                                                                                </span>
+                                                                                                    </p>
+                                                                                                    <p style="line-height: 1.714; letter-spacing: -0.005em;">
+                                                                                                                <span style="font-size: 10pt; color:#f8f8f8;">
+                                                                                                                    <span role="img"
+                                                                                                                          aria-label=":sparkles:"
+                                                                                                                          title=":sparkles:"
+                                                                                                                          style="background-color: transparent; display: inline-block; vertical-align: middle;">
+                                                                                                                        <img src="http://www.313.co.kr/arms/img/checkmark_ok.png"
+                                                                                                                             alt=":sparkles:"
+                                                                                                                             width="15"
+                                                                                                                             height="15"
+                                                                                                                             class="CToWUd"
+                                                                                                                             data-bit="iit"
+                                                                                                                             style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                                                                                                    </span>
+                                                                                                                &nbsp;법인 설립 및 제품의 상표권이 등록 되었어요 ! :&nbsp;<strong style="color:#a4c6ff">2024-03-13</strong>
+                                                                                                                </span>
+                                                                                                    </p>
+                                                                                                </blockquote>
+
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- //알림 내용 영역 -->
+
+
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- //More Info 영역 -->
+
+                            <!-- 명함 영역 -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0"
+                                               role="presentation"
+                                               style="border-collapse:collapse;background:#3b3b3b; background-color:#3b3b3b;width:100%"
+                                                width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="direction:ltr;font-size:0;padding:0 5px;text-align:center">
+                                                    <div style="font-size:0;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%"
+                                                         role="presentation">
+                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                               style="border-collapse:collapse;vertical-align:top" width="100%" valign="top">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td style="border-collapse:collapse;font-size:0;padding:10px 25px;word-break:break-word">
+                                                                    <table  border="0" cellspacing="0" cellpadding="0"
+                                                                            style="border-bottom-style:solid;border-bottom-width:1px;border-top-style:solid;border-top-color:#7faddd;width:600px;
+                                                                            font-family:Gulim;margin:0px;padding:15px 0px 15px 0px;border-bottom-color:#7faddd;border-top-width:1px;">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td width="176" align="center"><img src="http://www.313.co.kr/arms/img/313.png" alt="" border="0" width="140"></td>
+                                                                            <td style="font-family:'Malgun Gothic';color:#f8f8f8;font-size:12px;">
+                                                                                <p>
+                                                                                    <span style="font-weight:bold;vertical-align:baseline;white-space:pre-wrap;">이동민</span>
+                                                                                    <span style="vertical-align:baseline;white-space:pre-wrap;">Dongmin.Lee (Eng Name : tes) / Product Owner</span>
+                                                                                </p>
+                                                                                <p style="margin-bottom:22px;">
+                                                                                    <span style="vertical-align:baseline;white-space:pre-wrap;">A-RMS / Project 313</span>
+                                                                                </p>
+                                                                                <p style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;">
+                                                                                    <span style="vertical-align:baseline;">Solution Development & Consulting</span>
+                                                                                </p>
+                                                                                <p>PaaS+SaaS Web Services / Mobile / Engine / <br> Platform  / Cloud / BigData / Machine learning</p>
+                                                                                <p style="margin-bottom:22px;"><strong>국가 공인 오픈소스 프런티어 인증, 스타트업 시리즈 C</strong></p>
+                                                                                <p>
+                                                                                    <span style="padding-right: 12px;">
+                                                                                        <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Email</strong>
+                                                                                        <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
+                                                                                        313cokr@gmail.com
+                                                                                    </span>
+                                                                                    <br>
+                                                                                    <span>
+                                                                                        <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Mobile</strong>
+                                                                                        <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
+                                                                                        +82-10-5093-7313
+                                                                                    </span>
+                                                                                    <br>
+                                                                                    <span>
+                                                                                        <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Website</strong>
+                                                                                        <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
+                                                                                        <a href="https://www.313.co.kr" target="_blank" style="color:#f8f8f8;">313.co.kr</a>
+                                                                                        <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> / </span>
+                                                                                        <a href="http://www.a-rms.net" target="_blank" style="color:#f8f8f8;">a-rms.net</a>
+                                                                                    </span>
+                                                                                </p>
+                                                                                <p style="margin-bottom:4px">
+                                                                                    <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">AD</strong>
+                                                                                    <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
+                                                                                    <span style="vertical-align:baseline;white-space:pre-wrap;">313 B/D Dosan-daero, Gangnam-gu, Seoul, Republic of Korea (06021)</span>
+                                                                                </p>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- //명함 영역 -->
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

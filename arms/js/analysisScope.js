@@ -245,7 +245,7 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				//treeBar();
+				treeBar();
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
@@ -522,8 +522,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		statusCode: {
 			200: function (json) {
 				pdServiceData = json;
-				console.log("[ analysisScope :: statisticsMonitor ] pdServiceData");
-				console.log(json);
 				let versionData = json.pdServiceVersionEntities;
 				let versionCustomTimeline = [];
 
@@ -562,16 +560,13 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 				// 버전 선택 시 데이터 파싱
 
 				setTimeout(function () {
-					console.log("[ analysisScope :: getRelationJiraIssueByPdServiceAndVersions ] 네트워크차트 - 가져온  데이터")
-					console.log(data);
 					networkChart(pdServiceVersions, data);
-				}, 1500);
+				}, 1000);
 			}
 		}
 	});
 }
 
-//네트워크차트
 function networkChart(pdServiceVersions, jiraIssueData) {
 	$('.network-graph').removeClass('show');
 	d3.select("#NETWORK_GRAPH").remove();
@@ -585,16 +580,14 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 	pdServiceData.type = "pdService";
 	NETWORK_DATA.nodes.push(pdServiceData);
 
-	var 선택한버전 = pdServiceVersions.split(",").map(Number);
-	console.log(" networkChart :: 선택한버전 => " + 선택한버전);
-	console.log(선택한버전);
+	var targetIds = pdServiceVersions.split(",").map(Number);
 	var versionList = pdServiceData.pdServiceVersionEntities;
 
 	versionList.forEach((item) => {
-		if (선택한버전.includes(item.c_id)) {
+		if (targetIds.includes(item.c_id)) {
 			item.id = item.c_id;
 			item.type = "version";
-			NETWORK_DATA.nodes.push(item); // 버전 노드 삽입
+			NETWORK_DATA.nodes.push(item);
 
 			console.log(typeof item.id);
 			var link = {
@@ -607,43 +600,32 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
 	var index = {};
 
-	// 지라이슈 노드추가
 	jiraIssueData.forEach(function (item) {
 		NETWORK_DATA.nodes.push(item);
 		index[item.key] = item;
 	});
 
-	// 지라이슈 링크추가
 	jiraIssueData.forEach(function (item) {
-		if (item.isReq === true) { // 요구사항 이슈일 때
-			var 버전수 = item.pdServiceVersions.length;
-			if (버전수 && 버전수 > 0) {
-				for (let i =0; i<버전수; i++) {
-					console.log("pdServiceVersioins["+i+"]= " + pdServiceVersions[i]);
-					if(선택한버전.includes(item.pdServiceVersions[i])) {
-						var reqToVersionLink = {
-							source: item.id,
-							target: item.pdServiceVersions[i]
-						}
-						NETWORK_DATA.links.push(reqToVersionLink);
-					}
-				}
-			}
+		if (item.isReq === true) {
+			var versionLink = {
+				source: item.id,
+				target: item.pdServiceVersion
+			};
+
+			NETWORK_DATA.links.push(versionLink);
 		}
+
 		var parentItem = index[item.parentReqKey];
+
 		if (parentItem) {
-			var subtaskToReqLink = {
+			var link = {
 				source: item.id,
 				target: parentItem.id
-			}
-			console.log(parentItem.id);
-			NETWORK_DATA.links.push(subtaskToReqLink);
+			};
+			NETWORK_DATA.links.push(link);
 		}
 	});
-	
-	console.log(" networkChart :: NETWORK_DATA ");
-	console.log(NETWORK_DATA);
-	console.log(" --- --- --- --- ---");
+
 	if (NETWORK_DATA.nodes.length === 0) {
 		// 데이터가 없는 경우를 체크
 		d3.select("#NETWORK_GRAPH").remove();
@@ -664,7 +646,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				return Object.create(d);
 			});
 
-			// 확인
 			var fillCircle = function (g) {
 				if (g.type === "pdService") {
 					return "#c67cff";
@@ -679,7 +660,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				}
 			};
 
-			// 확인
 			var typeBinding = function (g) {
 				let name = "";
 
@@ -735,7 +715,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				)
 				.force("charge", d3.forceManyBody().strength(-1000))
 				.force("center", d3.forceCenter(width / 3, height / 3))
-				.force("collide", d3.forceCollide().radius(30))
+				.force("collide", d3.forceCollide().radius(20))
 				.force(
 					"radial",
 					d3
@@ -1154,7 +1134,7 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 			'isReqType': 'REQUIREMENT',
 			'pdServiceLink' : selectedPdServiceId,
 			'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-			'메인그룹필드' : 'pdServiceVersions',
+			'메인그룹필드' : 'pdServiceVersion',
 			'컨텐츠보기여부' : false,
 			'크기' : 10000,
 			'하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
@@ -1229,7 +1209,7 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 		type: "GET",
 		data: {
 			서비스아이디: pdService_id,
-			메인그룹필드: "pdServiceVersions",
+			메인그룹필드: "pdServiceVersion",
 			하위그룹필드들: "isReq",
 			컨텐츠보기여부: true,
 			pdServiceVersionLinks: pdServiceVersionLinks
@@ -1245,7 +1225,7 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 
 				// 집계 데이터 바탕
 				if (result["전체합계"] !== 0) {
-					let 버전별집계 = result["검색결과"]["group_by_pdServiceVersions"];
+					let 버전별집계 = result["검색결과"]["group_by_pdServiceVersion"];
 					for (let i = 0; i < 버전별집계.length; i++) {
 						let mandatoryDataList = {
 							versionId: "",
@@ -1417,8 +1397,7 @@ function treeBar() {
 	})
 		.done(function (apiResponse) {
 			const data = apiResponse.response;
-			console.log("[ analysisScope :: treeBar ] data");
-			console.log(data);
+
 			d3.select("#tree_bar_container svg").selectAll("*").remove();
 
 			let assigneeData = data.filter(item => item.type === 'assignee');
