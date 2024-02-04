@@ -9,7 +9,7 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
-
+	//해당 이벤트리스너 메인에서 지워져있음.
 	window.addEventListener(
 		"error",
 		function (event) {
