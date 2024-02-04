@@ -60,8 +60,8 @@ function execDocReady() {
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js",
 
-            //CirclePacking with d3 Chart
-            "js/analysis/Cost/circularPackingChart.js"
+		    //CirclePacking with d3 Chart
+		    "js/analysis/Cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -268,8 +268,8 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 Object.keys(인력맵).forEach((key) => {
                     인력맵[key].연봉 = 연봉;
                     인력맵[key].성과 = 성과;
-                    /*연봉 -= 100;
-                    성과 += 100;*/
+                    연봉 -= 100;
+                    성과 += 100;
                 });
 
                 costInput(인력맵, pdServiceVersionLinks);
@@ -603,25 +603,25 @@ function dataTableDrawCallback(tableInfo) {
 
 function excel_download() {
 
-    /* var tempDataTable = $("#manpower-annual-income").DataTable();
-     var data = tempDataTable.rows().data().toArray();
-     var json = JSON.stringify(data);
-     console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+   /* var tempDataTable = $("#manpower-annual-income").DataTable();
+    var data = tempDataTable.rows().data().toArray();
+    var json = JSON.stringify(data);
+    console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
 
 
-     $("#excel-annual-income-template-download").click(function () {
-         $.ajax({
-             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
-             type: "POST",
-             data: json,
-             contentType: "application/json",
-             statusCode: {
-                 200: function (data) {
-                     console.log("success");
-                 }
-             }
-         })
-     });*/
+    $("#excel-annual-income-template-download").click(function () {
+        $.ajax({
+            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+            type: "POST",
+            data: json,
+            contentType: "application/json",
+            statusCode: {
+                200: function (data) {
+                    console.log("success");
+                }
+            }
+        })
+    });*/
 }
 
 function 비용분석계산() {

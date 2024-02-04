@@ -1896,13 +1896,17 @@ $("#text").on("input", function () {
 function tableSelectOption(obj) {
 	const $li = document.createElement("li");
 
-	$li.innerHTML = `<a href="#reqTable" data-toggle="tab" onclick="tableSelect(${obj.c_id})">${obj.c_title}</a>`;
+	$li.innerHTML = `<a href="#reqTable" data-toggle="tab">${obj.c_title}</a>`;
+
+	$li.addEventListener("click", (e) => {
+		tableSelect(obj.c_id);
+	});
 
 	return $li;
 }
 
 function tableSelect(id) {
-	makeTable({
+	makeReqTable({
 		wrapper: "reqDataTable",
 		id,
 		onGetData: async function (id) {

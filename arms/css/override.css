@@ -1700,9 +1700,9 @@ svg .ghostCircle.show {
 }
 
 .cost-input,
-.salary-input {
+.annual-income-input {
 	color: black;
-	width: 30%;
+	width: 50%;
 	text-align: center;
 	border: none;
 	border-radius: 5px;
@@ -1712,11 +1712,6 @@ svg .ghostCircle.show {
 
 .version-input {
 	width: 70%;
-}
-
-select[name="version-cost_length"],
-select[name="manpower-annual-income_length"] {
-	color: black;
 }
 
 .dt-center {
