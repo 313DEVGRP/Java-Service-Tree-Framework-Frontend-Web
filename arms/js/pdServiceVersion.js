@@ -116,6 +116,11 @@ function execDocReady() {
 			init_versionList();
 
 			tab_click_event();
+
+			//라따 버튼 설정
+			var 라따적용_클래스이름_배열 = ['.ladda-new-pdservice-version','.ladda-update-pdservice-version','.ladda_delete_pdservice_version'];
+			laddaBtnSetting(라따적용_클래스이름_배열);
+
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
@@ -238,7 +243,7 @@ function modalPopup(popupName) {
 		$("#modal_title").text("제품(서비스) 신규 버전 등록 팝업");
 		$("#modal_sub").text("선택한 제품(서비스)에 버전을 등록합니다.");
 		$("#extendupdate_pdservice_version").attr("onClick", "modalPopupNewUpdate()");
-		$("#extendupdate_pdservice_version").text("Save");
+		$("#extendupdate_pdservice_version").text("신규 버전 등록");
 
 		$("#tooltip_enabled_service_version").val("");
 		$("#btn_enabled_date").val("");
@@ -249,7 +254,7 @@ function modalPopup(popupName) {
 		$("#modal_title").text("제품(서비스) 버전 등록 / 변경");
 		$("#modal_sub").text("선택한 제품(서비스)에 버전을 등록/변경 합니다.");
 		$("#extendupdate_pdservice_version").attr("onClick", "modalPopupUpdate()");
-		$("#extendupdate_pdservice_version").text("Save Changes");
+		$("#extendupdate_pdservice_version").text("버전 정보 변경");
 
 		//팝업 데이터
 		$("#tooltip_enabled_service_version").val($("#input_pdservice_version").val());

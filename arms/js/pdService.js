@@ -115,8 +115,11 @@ function execDocReady() {
 			update_btn_click();
 
 			popup_update_btn_click();
+
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			//editorReadOnly();
+			var 라따적용_클래스이름_배열 = ['.ladda-new-pdservice','.ladda-delete-pdservice'];
+			laddaBtnSetting(라따적용_클래스이름_배열);
 		})
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');

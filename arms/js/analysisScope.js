@@ -245,7 +245,7 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				//treeBar();
+				treeBar();
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
