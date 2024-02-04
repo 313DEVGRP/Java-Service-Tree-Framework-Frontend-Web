@@ -245,7 +245,7 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				treeBar();
+				//treeBar();
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
@@ -1235,6 +1235,7 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 			200: function (result) {
 				console.log("[ analysisScope :: getReqPerVersion ] :: result");
 				console.log(result);
+				console.log("해당 결과는 ES에서 가져온 결과 입니다.");
 				let reqPerVersionDataArr = [];
 
 				// 집계 데이터 바탕
