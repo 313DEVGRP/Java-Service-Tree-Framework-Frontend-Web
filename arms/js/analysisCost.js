@@ -60,8 +60,8 @@ function execDocReady() {
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js",
 
-		    //CirclePacking with d3 Chart
-		    "js/analysis/Cost/circularPackingChart.js"
+            //CirclePacking with d3 Chart
+            "js/analysis/Cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -268,8 +268,8 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 Object.keys(인력맵).forEach((key) => {
                     인력맵[key].연봉 = 연봉;
                     인력맵[key].성과 = 성과;
-                    연봉 -= 100;
-                    성과 += 100;
+                    /*연봉 -= 100;
+                    성과 += 100;*/
                 });
 
                 costInput(인력맵, pdServiceVersionLinks);
@@ -285,10 +285,12 @@ function formatDate(date) {
 // 버전 비용 및 인력 비용 입력
 function costInput(인력맵, pdServiceVersionLinks) {
 
-    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
-    console.log(인력맵);
+    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(인력맵));
 
-    if ($.fn.dataTable.isDataTable('#version-cost')) {
+    versionInput(pdServiceVersionLinks);
+    manpowerInput(인력맵);
+
+    /*if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
     }
 
@@ -370,15 +372,264 @@ function costInput(인력맵, pdServiceVersionLinks) {
                 salaryInputs.val(this.value);
             });
         },
-        /*rowsGroup: [
+        /!*rowsGroup: [
             "name:name",
-        ]*/
+        ]*!/
+    });*/
+}
+
+function versionInput(pdServiceVersionLinks) {
+
+    if ($.fn.dataTable.isDataTable('#version-cost')) {
+        $('#version-cost').DataTable().clear().destroy();
+    }
+
+    let selectedVersions = pdServiceVersionLinks.split(',');
+
+    let versionTableData = selectedVersions.map(versionId => {
+        let item = versionListData[versionId];
+        let startDate = item.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(item.c_pds_version_start_date);
+        let endDate = item.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(item.c_pds_version_end_date);
+        return { // 객체를 바로 반환
+            version: item.c_title,
+            period: startDate + " ~ " + endDate,
+            cost: 0,
+            c_id: item.c_id
+        };
     });
+
+    var columnList = [
+        {
+            name: "versionId",
+            title: "버전아이디",
+            data: "c_id",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: false
+        },
+        {
+            name: "version",
+            title: "버전",
+            data: "version",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "period",
+            title: "기간",
+            data: "period",
+            render: function (data, type, row, meta) {
+                var dates = data.split(' ~ ');
+                if(type === 'sort' || type === 'type'){
+                    return dates[0]; // startDate로 정렬
+                }
+                return data; // 원래 형태로 표시
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "cost",
+            title: "비용 (입력)",
+            data: "cost",
+            render: function(data, type, row) {
+                return '<input type="text" name="version-cost" class="cost-input" value="0" data-owner="' + row.c_id + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [[2, "desc"]];
+    var jquerySelector = "#version-cost";
+    var ajaxUrl = "";
+    var jsonRoot = "";
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = versionTableData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+}
+
+function manpowerInput(인력맵) {
+
+    if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
+        $('#manpower-annual-income').DataTable().clear().destroy();
+    }
+
+    let manpowerData = Object.keys(인력맵).map((key) => {
+        let data = {};
+        data.이름 = 인력맵[key].이름;
+        data.키 = key;
+        data.연봉 = 인력맵[key].연봉;
+        return data;
+    });
+    console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
+
+    var columnList = [
+        {
+            name: "name",
+            title: "이름",
+            data: "이름",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "key",
+            title: "고유 키",
+            data: "키",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "annualIncome",
+            title: "연봉 (입력)",
+            data: "연봉",
+            render: function(data, type, row) {
+                var formattedData = parseInt(data).toLocaleString();
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.이름 + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [];
+    var jquerySelector = "#manpower-annual-income";
+    var ajaxUrl = null;
+    var jsonRoot = null;
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = manpowerData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+
+    excel_download();
+}
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(tempDataTable, selectedData) {
+
+}
+
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
+function dataTableCallBack(settings, json) {
+    $('.cost-input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+
+    $('.annual-income-input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+}
+
+function dataTableDrawCallback(tableInfo) {
+    $("#" + tableInfo.sInstance)
+        .DataTable()
+        .columns.adjust()
+        .responsive.recalc();
+}
+
+function excel_download() {
+
+    /* var tempDataTable = $("#manpower-annual-income").DataTable();
+     var data = tempDataTable.rows().data().toArray();
+     var json = JSON.stringify(data);
+     console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+
+
+     $("#excel-annual-income-template-download").click(function () {
+         $.ajax({
+             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+             type: "POST",
+             data: json,
+             contentType: "application/json",
+             statusCode: {
+                 200: function (data) {
+                     console.log("success");
+                 }
+             }
+         })
+     });*/
 }
 
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
+        let isNumber = true;
+
+        // 버전 비용
         let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
 
         let selectVersionData = [];
@@ -388,14 +639,69 @@ function 비용분석계산() {
             let number = Number(inputVersionValue.replace(/,/g, ''));
 
             if (isNaN(Number(number))) {
-                alert("버전 비용 입력란에 숫자를 입력하여주세요.");
-                return;
+                isNumber = false;
+                break;
             }
 
             item.versionCost = number * 10000;
             item.consumptionCost = 9000000;
 
             selectVersionData.push(item);
+        }
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
+
+
+        /*
+        // 버전 비용
+        var versionCost = [];
+
+        var table = $('#version-cost').DataTable();
+        // DataTable의 모든 행에 대해 반복
+        table.rows().every(function() {
+            var versionId = this.data()['c_id']; // 버전 아이디
+            var versionName = this.data()['c_title']; // 버전 이름
+            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
+
+            if (isNaN(Number(cost))) {
+                isNumber = false;
+                return;
+            }
+
+            versionCost.push({
+                c_id: versionId,
+                c_title: versionName,
+                versionCost: cost * 10000,
+                consumptionCost: 9000000
+            });
+        });
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));*/
+
+
+        // 인력별 연봉
+        var annualIncome = [];
+
+        var table = $('#manpower-annual-income').DataTable();
+        // DataTable의 모든 행에 대해 반복
+        table.rows().every(function() {
+            var name = this.data()['이름']; // 인력
+            var key = this.data()['키']; // 키
+            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
+
+            if (isNaN(Number(cost))) {
+                isNumber = false;
+                return;
+            }
+
+            annualIncome.push({
+                사용자: name,
+                키: key,
+                연봉: cost * 10000
+            });
+        });
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: annualIncome -> " + JSON.stringify(annualIncome));
+
+        if (!isNumber) {
+            alert("비용 입력란에 숫자를 입력해 주세요.");
         }
 
         $("#compare_costs").height("620px");
@@ -424,7 +730,7 @@ function 비용분석계산() {
 
 
 
-        let inputSalaryValues = $('input[name="person-salary"]').map(function() {
+        /*let inputSalaryValues = $('input[name="annual-income"]').map(function() {
             let data = {};
 
             let owner = $(this).data('owner');
@@ -432,12 +738,22 @@ function 비용분석계산() {
             data.연봉 = $(this).val();
             return data;
         }).get();
+        */
+        $('input[name="person-salary"]').map(function() {
+            let owner = $(this).data('owner');
+            인력맵[owner].연봉 = $(this).val();
+        });
 
-        console.log(inputSalaryValues);
+        /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
+            let owner = $(cur).data('owner');
+            acc[owner] = $(cur).val();
+            return acc;
+        }, {});*/
 
         // 인력별 성과 측정 차트
-        $("#manpower-analysis-chart").height("500px");
-        인력별_연봉대비_성과차트_기본세팅(인력맵);
+        $("#manpower-analysis-chart2").height("500px");
+        성과차트2();
+        // 인력별_연봉대비_성과차트_기본세팅(인력맵);
     });
 }
 
@@ -1140,4 +1456,151 @@ function 전역인력맵확인() {
             }
         }, 500);  // 100ms마다 globalDeadline 값 확인
     });
+}
+
+
+function 성과차트2() {
+
+    const tooltipFormatter = function (params) {
+
+        let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
+        let tooltipContent = '';
+
+        if (data.length > 1) {
+            for (let i = 0; i < data.length; i++) {
+                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0]  + ", </span><strong>성과</strong> : " + data[i][1] + '<br>';
+            }
+        }
+        else if (data.length === 1) {
+            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0]  + "</span><br><strong>성과</strong> : " + data[0][1];
+        }
+
+        return tooltipContent;
+    };
+
+    let dataAll = Object.entries(인력맵).map(([key, value]) => {
+        return [Number(value.연봉)*10000, Number(value.성과)*10000, value.이름+"["+key+"]"];
+    });
+
+    var dom = document.getElementById('manpower-analysis-chart2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    let maxX = Math.max(...dataAll.map(item => item[0]));
+    let maxX2 = Math.max(...dataAll.map(item => item[1]));
+
+    let max = Math.max(maxX, maxX2);
+
+    const markLineOpt = {
+        animation: false,
+        label: {
+            formatter: '성과기준선',
+            align: 'right',
+            color: 'white'
+        },
+        lineStyle: {
+            type: 'dashed',
+            color: '#EE6666',
+            width: 2
+        },
+        tooltip: {
+            formatter: '성과기준선'
+        },
+        data: [
+            [
+                {
+                    coord: [0, 0],
+                    symbol: 'none'
+                },
+                {
+                    coord: [max, max],
+                    symbol: 'none'
+                }
+            ]
+        ]
+    };
+    option = {
+        grid: [
+            { left: '15%', top: '5%'}
+        ],
+        tooltip: {
+            confine: true,
+            /*            formatter: function (params) {
+                            return params.value[2] + "<br><strong>연봉</strong> : <span style=''>" + params.value[0]  + "</span><br><strong>성과</strong> : " + params.value[1];
+                        },*/
+            formatter: tooltipFormatter
+        },
+        xAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                    formatter: function (value) {
+                        return value === 0 ? '' : value;
+                    },
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        yAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: 'I',
+                type: 'scatter',
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                data: dataAll,
+                markLine: markLineOpt
+            }
+        ],
+        toolbox: {
+            show: true,
+            orient: "vertical",
+            left: "right",
+            bottom: "50px",
+            feature: {
+                mark: { show: true },
+                dataView: {show: true, readOnly: true},
+            },
+            iconStyle: {
+                borderColor: "white"
+            }
+        },
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
