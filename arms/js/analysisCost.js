@@ -287,7 +287,7 @@ function costInput(인력맵, pdServiceVersionLinks) {
 
     console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(인력맵));
 
-    versionInput();
+    versionInput(pdServiceVersionLinks);
     manpowerInput(인력맵);
 
     /*if ($.fn.dataTable.isDataTable('#version-cost')) {
@@ -378,11 +378,25 @@ function costInput(인력맵, pdServiceVersionLinks) {
     });*/
 }
 
-function versionInput() {
+function versionInput(pdServiceVersionLinks) {
 
     if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
     }
+
+    let selectedVersions = pdServiceVersionLinks.split(',');
+
+    let versionTableData = selectedVersions.map(versionId => {
+        let item = versionListData[versionId];
+        let startDate = item.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(item.c_pds_version_start_date);
+        let endDate = item.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(item.c_pds_version_end_date);
+        return { // 객체를 바로 반환
+            version: item.c_title,
+            period: startDate + " ~ " + endDate,
+            cost: 0,
+            c_id: item.c_id
+        };
+    });
 
     var columnList = [
         {
@@ -403,7 +417,7 @@ function versionInput() {
         {
             name: "version",
             title: "버전",
-            data: "c_title",
+            data: "version",
             render: function (data, type, row, meta) {
                 if (isEmpty(data) || data === "unknown") {
                     return "<div style='color: #808080'>N/A</div>";
@@ -418,11 +432,13 @@ function versionInput() {
         {
             name: "period",
             title: "기간",
-            data: "c_pds_version_start_date",
+            data: "period",
             render: function (data, type, row, meta) {
-                let startDate = row.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(row.c_pds_version_start_date);
-                let endDate = row.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(row.c_pds_version_end_date);
-                return startDate + ' ~ ' + endDate;
+                var dates = data.split(' ~ ');
+                if(type === 'sort' || type === 'type'){
+                    return dates[0]; // startDate로 정렬
+                }
+                return data; // 원래 형태로 표시
             },
             className: "dt-center",
             visible: true
@@ -430,7 +446,7 @@ function versionInput() {
         {
             name: "cost",
             title: "비용 (입력)",
-            data: "",
+            data: "cost",
             render: function(data, type, row) {
                 return '<input type="text" name="version-cost" class="cost-input" value="0" data-owner="' + row.c_id + '"> 만원';
             },
@@ -443,11 +459,14 @@ function versionInput() {
     var columnDefList = [];
     var orderList = [[2, "desc"]];
     var jquerySelector = "#version-cost";
-    var ajaxUrl = "/auth-user/api/arms/pdServiceVersion/getVersionListBy.do?c_ids=" + selectedVersionId;
+    var ajaxUrl = "";
     var jsonRoot = "";
     var buttonList = [];
     var selectList = {};
     var isServerSide = false;
+    var scrollY = false;
+    var data = versionTableData;
+    var isAjax = false;
 
     dataTableRef = dataTable_build(
         jquerySelector,
@@ -459,7 +478,10 @@ function versionInput() {
         selectList,
         orderList,
         buttonList,
-        isServerSide
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
     );
 }
 
@@ -471,9 +493,9 @@ function manpowerInput(인력맵) {
 
     let manpowerData = Object.keys(인력맵).map((key) => {
         let data = {};
-        data.이름 = key;
+        data.이름 = 인력맵[key].이름;
+        data.키 = key;
         data.연봉 = 인력맵[key].연봉;
-        data.성과 = 인력맵[key].성과;
         return data;
     });
     console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
@@ -481,8 +503,23 @@ function manpowerInput(인력맵) {
     var columnList = [
         {
             name: "name",
-            title: "투입 인력",
+            title: "이름",
             data: "이름",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "key",
+            title: "고유 키",
+            data: "키",
             render: function (data, type, row, meta) {
                 if (isEmpty(data) || data === "unknown") {
                     return "<div style='color: #808080'>N/A</div>";
@@ -497,9 +534,10 @@ function manpowerInput(인력맵) {
         {
             name: "annualIncome",
             title: "연봉 (입력)",
-            data: "",
+            data: "연봉",
             render: function(data, type, row) {
-                return '<input type="text" name="annual-income" class="annual-income-input" value="0" data-owner="' + row.이름 + '"> 만원';
+                var formattedData = parseInt(data).toLocaleString();
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.이름 + '"> 만원';
             },
             className: "dt-center",
             visible: true
@@ -508,7 +546,7 @@ function manpowerInput(인력맵) {
 
     var rowsGroupList = [];
     var columnDefList = [];
-    var orderList = [[1, "asc"]];
+    var orderList = [];
     var jquerySelector = "#manpower-annual-income";
     var ajaxUrl = null;
     var jsonRoot = null;
@@ -589,7 +627,10 @@ function excel_download() {
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
-        /*let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
+        let isNumber = true;
+
+        // 버전 비용
+        let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
 
         let selectVersionData = [];
         for (let i = 0; i < selectedVersions.length; i++) {
@@ -598,19 +639,19 @@ function 비용분석계산() {
             let number = Number(inputVersionValue.replace(/,/g, ''));
 
             if (isNaN(Number(number))) {
-                alert("버전 비용 입력란에 숫자를 입력하여주세요.");
-                return;
+                isNumber = false;
+                break;
             }
 
             item.versionCost = number * 10000;
             item.consumptionCost = 9000000;
 
             selectVersionData.push(item);
-            console.log("***** " + JSON.stringify(selectVersionData));
-        }*/
+        }
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
 
-        let isNumber = true;
 
+        /*
         // 버전 비용
         var versionCost = [];
 
@@ -633,7 +674,7 @@ function 비용분석계산() {
                 consumptionCost: 9000000
             });
         });
-        console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));*/
 
 
         // 인력별 연봉
@@ -643,6 +684,7 @@ function 비용분석계산() {
         // DataTable의 모든 행에 대해 반복
         table.rows().every(function() {
             var name = this.data()['이름']; // 인력
+            var key = this.data()['키']; // 키
             var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
 
             if (isNaN(Number(cost))) {
@@ -652,20 +694,19 @@ function 비용분석계산() {
 
             annualIncome.push({
                 사용자: name,
-                연봉: cost
+                키: key,
+                연봉: cost * 10000
             });
         });
         console.log(" [ analysisCost :: 비용 분석 계산 ] :: annualIncome -> " + JSON.stringify(annualIncome));
 
         if (!isNumber) {
             alert("비용 입력란에 숫자를 입력해 주세요.");
-            return;
         }
 
         $("#compare_costs").height("620px");
         // 버전별 투자 대비 소모 비용 차트
-        //compareCostsChart(selectVersionData);
-        compareCostsChart(versionCost);
+        compareCostsChart(selectVersionData);
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
