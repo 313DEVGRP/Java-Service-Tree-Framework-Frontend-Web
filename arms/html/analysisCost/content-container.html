@@ -625,6 +625,23 @@
                                         style="margin-top: 5px">
                                     각 버전에 투입된 인력의 연봉 정보를 입력합니다.
                                 </blockquote>
+                                <div style="float: right; display: flex; margin-bottom: 5px;">
+                                    <button
+                                            class="btn btn-primary btn-block btn-sm"
+                                            id="excel-annual-income-template-download"
+                                            type="button"
+                                            style="margin-right: 5px;">
+                                        Excel 템플릿 다운로드
+                                    </button>
+                                    <button
+                                            class="btn btn-primary btn-block btn-sm"
+                                            data-target="#excel-annual-income-upload-modal"
+                                            data-toggle="modal"
+                                            id="modal_popup_id"
+                                            type="button">
+                                        Excel 데이터 업로드
+                                    </button>
+                                </div>
                                 <table
                                         id="manpower-annual-income"
                                         style="width: 100%;
@@ -1237,6 +1254,169 @@
                 <button
                         type="button"
                         id="extendclose_jira_server"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- 연봉 정보 엑셀 파일 업로드 모달 -->
+<div
+        id="excel-annual-income-upload-modal"
+        class="modal fade"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+        style="display: none; border-radius: 10px">
+    <div
+            class="modal-dialog"
+            style="width: 80%; height: 80%">
+        <div class="modal-content modalDarkBack">
+            <div
+                    class="modal-header"
+                    style="padding: 0px; border-bottom: 1px">
+                <h4
+                        class="modal-title font14"
+                        id="my_modal_label2"
+                        style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+                            class="font13"
+                            style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						연봉 정보 엑셀 파일 업로드 팝업
+					</span>
+                    <div
+                            class="gradient_middle_border"
+                            style="margin-top: 10px; width: 100%; height: 2px"></div>
+                    <blockquote
+                            class="search-result"
+                            style="border-left: 5px solid #e5603b">
+                        <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+                            입력한 연봉 정보 엑셀 파일을 업로드합니다.
+                        </p>
+                    </blockquote>
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="padding-top: 10px">
+                    <a
+                            title="Options"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-cog"></i>
+                    </a>
+                    <a
+                            data-widgster="expand"
+                            class="hidden"
+                            title="Expand"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a
+                            data-widgster="collapse"
+                            class="hidden"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <div
+                    class="modal-body"
+                    style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+                <div class="body-middle">
+                    <form
+                            id="fileupload"
+                            action="uploadFileToNode.do"
+                            method="POST"
+                            enctype="multipart/form-data">
+                        <input
+                                type="hidden"
+                                id="fileIdlink"
+                                value="" />
+                        <div class="row pdservice-image-row">
+                            <div class="col-md-12">
+                                <div
+                                        id="dropzone"
+                                        class="dropzone">
+                                    <i class="fa fa-cloud-upload"></i>
+                                    Drop files here
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 fileupload-progress fade font12">
+                                <!-- The global progress bar -->
+                                <div
+                                        class="progress progress-success progress-striped active font12"
+                                        role="progressbar"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100">
+                                    <div
+                                            class="bar"
+                                            style="width: 0%"></div>
+                                </div>
+                                <!-- The extended global progress information -->
+                                <div class="progress-extended font12">&nbsp;</div>
+                            </div>
+                        </div>
+                        <div class="form-actions fileupload-buttonbar no-margin pdservice-image-row">
+                                                                    <span class="btn btn-sm btn-inverse fileinput-button">
+                                                                        <i class="fa fa-plus"></i>
+                                                                        <span>Add files...</span>
+                                                                        <input
+                                                                                type="file"
+                                                                                name="files[]"
+                                                                                multiple="" />
+                                                                    </span>
+                            <button
+                                    type="submit"
+                                    class="btn btn-inverse btn-sm start">
+                                <i class="fa fa-upload"></i>
+                                <span>Start upload</span>
+                            </button>
+                            <button
+                                    type="reset"
+                                    class="btn btn-inverse btn-sm cancel">
+                                <i class="fa fa-ban"></i>
+                                <span>Cancel upload</span>
+                            </button>
+                        </div>
+                        <div class="fileupload-loading">
+                            <i class="fa fa-spin fa-spinner"></i>
+                        </div>
+                        <!-- The table listing the files available for upload/download -->
+                        <table
+                                role="presentation"
+                                class="table table-striped"
+                                style="margin-bottom: 5px">
+                            <tbody
+                                    class="files"
+                                    data-toggle="modal-gallery"
+                                    data-target="#modal-gallery"></tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div
+                    class="modal-footer"
+                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button
+                        type="button"
+                        id="close_pdservice"
                         class="btn btn-default"
                         data-dismiss="modal">
                     Close
