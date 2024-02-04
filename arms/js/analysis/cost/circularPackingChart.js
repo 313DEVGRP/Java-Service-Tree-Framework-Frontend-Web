@@ -8,9 +8,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
     let statusDataArr = [];
 
     var colorPalette = [ //e chart 컬러 팔레트
-            '#d48265','#91c7ae',
-            '#749f83','#ca8622','#bda29a','#6e7074','#546570',
-            '#c4ccd3'
+            '#546570', '#c4ccd3' , '#749f83','#91c7ae'
         ];
 
     if(rawData) {
@@ -24,76 +22,98 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
 
         initChart(dataWrap.seriesData, dataWrap.maxDepth);
     }
+
     function prepareData(rawData) {
         const seriesData = [];
         let maxDepth = 0;
-        let totalValue = 0;
+        let index = 0;
 
         function convert(source, basePath, depth) {
+            maxDepth = Math.max(maxDepth, depth);
             let value = 0;
+            let version, req_name; // version과 req_name을 선언
 
-            if(Array.isArray(source)) {
-                source.forEach(item => {
-                    for(let key in item) {
-                        if(Array.isArray(item[key])) {
-                            let subValue = 0;
-                            item[key].forEach(subItem => {
-                                subValue += subItem.cost;
-                                if(subValue !== 0) {
-                                    seriesData.push({
-                                        id: basePath + '.' + key + '.' + subItem.project,
-                                        value: subItem.cost,
-                                        depth: depth + 2,
-                                        index: seriesData.length
-                                    });
-                                }
-                            });
-                            if(subValue !== 0) {
-                                value += subValue;
+            for (let key in source) {
+                let path = `${basePath}.${key}`;
+                if (Array.isArray(source[key])) {
+                    let subValue = 0;
+                    source[key].forEach(item => {
+                        for(let subkey in item) {
+                            let subPath = `${path}.${subkey}`;
+                            let subsubValue = 0;
+                            item[subkey].forEach(subItem => {
+                                version = subItem.version; // version 업데이트
+                                req_name = subItem.req_name; // req_name 업데이트
+                                let itemPath = `${subPath}.${subItem.project}`;
+                                subsubValue += subItem.cost;
                                 seriesData.push({
-                                    id: basePath + '.' + key,
-                                    value: subValue,
-                                    depth: depth + 1,
-                                    index: seriesData.length
-                                });
+                                    id: itemPath,
+                                    value: subItem.cost,
+                                    depth: depth + 3,
+                                    index: index++,
+                                    version: version,
+                                    req_name: req_name
+                                }); // 3 depth
+                            });
+                            if (subsubValue !== 0) {
+                                subValue += subsubValue;
+                                seriesData.push({
+                                    id: subPath,
+                                    value: subsubValue,
+                                    depth: depth + 2,
+                                    index: index++,
+                                    version: version,
+                                    req_name: req_name
+                                });  // 2 depth
                             }
                         }
+                    });
+                    if (subValue !== 0) {
+                        value += subValue;
+                        seriesData.push({
+                            id: path,
+                            value: subValue,
+                            depth: depth + 1,
+                            index: index++,
+                            version: version,
+                            req_name: req_name
+                        });
                     }
-                });
+                } else if (typeof source[key] === 'object' && source[key] !== null) {
+                    value += convert(source[key], path, depth + 1);
+                }
             }
 
-            if(value !== 0 || depth === 0) {
+            if (depth > 0) {
                 seriesData.push({
                     id: basePath,
                     value: value,
                     depth: depth,
-                    index: seriesData.length
+                    index: index++,
+                    version: version,
+                    req_name: req_name
                 });
-                if(depth === 0) {
-                    totalValue = value;
-                }
             }
 
-            maxDepth = Math.max(maxDepth, depth);
-
-            for (var key in source) {
-                if (source.hasOwnProperty(key) && !key.match(/^\$/)) {
-                    var path = basePath + '.' + key;
-                    if (typeof source[key] === 'object' && source[key] !== null) {
-                        convert(source[key], path, depth + 1);
-                    }
-                }
-            }
+            return value;
         }
 
-        convert(rawData, psServiceName, 0);
-        seriesData[0].value = totalValue;
+        let totalValue = convert(rawData, psServiceName, 0);
+
+        // 최상단 노드의 value를 업데이트
+        seriesData.push({
+            id: psServiceName,
+            value: totalValue,
+            depth: 0,
+            index: index
+        });
 
         return {
             seriesData: seriesData,
             maxDepth: maxDepth
         };
     }
+
 
     function initChart(seriesData, maxDepth) {
         console.log("seriesData ===> ")
@@ -195,6 +215,9 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
             };
         }
 
+       let productCost = seriesData.find(function(data) {
+           return data.depth === 0;
+       }).value;
         option = {
             dataset: {
                 source: seriesData
@@ -229,9 +252,19 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                 tooltip: {
                     formatter: function(params) {
                         // params.value에는 원본 값이 들어있을 것입니다. 여기에 단위를 붙여 반환하면 됩니다.
+                        let id = params.data.id;
+                        let parts = id.split('.');
+
                         if(params.data.value) {
-                            return `${params.data.id} </br>
-                            - 비용 : ${params.data.value} `;
+                            if(params.data.depth === 0){
+                                return "제품(서비스) 정보 </br>● 제품(서비스) :"+ parts[0] +" </br>● 비용 :"+params.data.value ;
+                            }else if(params.data.depth === 1){
+                                return "버전 정보 </br>● 버전 :"+ params.data.version +" </br>● 비용 :"+params.data.value ;
+                            }else if(params.data.depth === 2){
+                                return "요구사항 정보 </br>● 버전 :"+ params.data.version +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 비용 :"+params.data.value ;
+                            }else if(params.data.depth === 3){
+                                return "요구사항 키 정보 </br>● 버전 :"+ params.data.version +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 요구사항 키 :"+ parts[3] +" </br>● 비용 :"+params.data.value ;
+                            }
                         } else {
                             return `${params.data.id}`;
                         }
@@ -252,7 +285,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                             style: {
                                 text: [
                                     '{a| 제품 비용 }',
-                                    '{a| ' + reqCount + '}'
+                                    '{a| ' + productCost + '}'
                                 ].join('\n'),
                                 rich: {
                                     a: {
@@ -298,6 +331,9 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
         });
     }
 
+
+
+
     function replaceNaN(value) {
         if (isNaN(value)) {
             return " - ";
@@ -310,4 +346,3 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
         myChart.resize();
     });
 }
-

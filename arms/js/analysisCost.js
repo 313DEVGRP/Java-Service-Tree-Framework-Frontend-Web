@@ -61,7 +61,7 @@ function execDocReady() {
             "js/analysis/topmenu/topMenu.js",
 
 		    //CirclePacking with d3 Chart
-		    "js/analysis/Cost/circularPackingChart.js"
+		    "js/analysis/cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -841,81 +841,54 @@ function compareCostsChart(selectVersionData){
 /////////////////////////////////////////////////////////
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
-    let paramData = {
-        "요구_사항" : {
-            'isReqType': 'REQUIREMENT',
-            'pdServiceLink' : selectedPdServiceId,
-            'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-            '메인그룹필드' : 'pdServiceVersion',
-            '컨텐츠보기여부' : false,
-            '크기' : 10000,
-            '하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
-            '하위크기' : 10000
-        },
-        "하위_이슈_사항" : {
-            'isReqType': 'ISSUE',
-            'pdServiceLink': selectedPdServiceId,
-            'pdServiceVersionLinks': pdServiceVersionLinks,
-            '메인그룹필드': 'parentReqKey',
-            '컨텐츠보기여부': false,
-            '크기': 10000,
-            '하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
-            '하위크기': 10000
-        }
-    }
+    const url = new UrlBuilder()
+    		.setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
+    		.addQueryParam("pdServiceLink", pdServiceLink)
+    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+    		.build();
+
     $.ajax({
-        url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
-        type: "POST",
+        url: url,
+        type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
-        data: JSON.stringify(paramData),
         progress: true,
         statusCode: {
             200: function (result) {
-//				console.log("[ analysisScope :: getReqCostRatio ] :: result");
-//				console.log(result);
+                console.log("[ analysisCost :: getReqCostRatio ] :: = ");
+                console.log(result);
+                let 변환된_데이터 = {};
+
+                Object.keys(result.버전별_그룹).forEach((버전) => {
+                    let 요구사항별_그룹 = result.버전별_그룹[버전].요구사항별_그룹;
+                    let 변환된_요구사항들 = [];
+                    Object.keys(요구사항별_그룹).forEach((요구사항) => {
+                        let 변환된_요구사항 = {};
+                        변환된_요구사항[요구사항] = 요구사항별_그룹[요구사항].map((데이터) => {
+                            let 치환된_버전 = 데이터.c_pds_version_name;
+                            let 치환된_요구사항 = 데이터.c_req_name;
+                            return {
+                                project: 데이터.c_issue_key,
+                                cost: 300, // 임시데이터
+                                version: 데이터.c_pds_version_name,
+                                req_name : 데이터.c_req_name
+                            };
+                        });
+                        변환된_요구사항들.push(변환된_요구사항);
+                    });
+
+                    변환된_데이터[버전] = 변환된_요구사항들;
+                });
+
+                console.log(변환된_데이터);
+
                 let pdServiceName;
                 pdServiceListData.forEach(elements => {
                     if (elements["pdServiceId"] === +pdServiceLink) {
-                        pdServiceName = elements["pdServiceName"];
+                    pdServiceName = elements["pdServiceName"];
                     }
                 });
-
-                let data = {
-                    "1_0_1": [
-                        {
-                            "요구사항": [
-                                { "project": "TE-1", "cost": 400 },
-                                { "project": "TE-2", "cost": 400 },
-                                { "project": "TE-3", "cost": 400 }
-                            ]
-                        },
-                        {
-                            "요구사항2": [
-                                { "project": "TT-1", "cost": 300 },
-                                { "project": "TT-2", "cost": 300 },
-                                { "project": "TT-3", "cost": 300 }
-                            ]
-                        }
-                    ],
-                    "1_0_2": [
-                        {
-                            "요구사항3": [
-                                { "project": "TE-4", "cost": 100 },
-                                { "project": "TE-5", "cost": 100 },
-                                { "project": "TE-6", "cost": 100 }
-                            ]
-                        },
-                        {
-                            "요구사항4": [
-                                { "project": "TT-4", "cost": 300 },
-                                { "project": "TT-5", "cost": 300 },
-                                { "project": "TT-6", "cost": 300 }
-                            ]
-                        }
-                    ]
-                };
-                drawCircularPacking("circularPacking",pdServiceName,data);
+                drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
             }
         }
     });
