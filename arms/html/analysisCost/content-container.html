@@ -722,8 +722,8 @@
                 <blockquote
                         class="font13"
                         style="margin-top: 5px">
-                    입력된 프로젝트 버전별 비용과 인력별 비용 산정으로 분석된 데이터입니다.
-                    <div style="float: right">
+                    입력된 인력별 연봉과 연결된 요구사항 정보를 바탕으로 분석된 데이터입니다.
+                    <!--<div style="float: right">
                         <button
                                 class="btn btn-transparent btn-xs"
                                 style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
@@ -732,7 +732,7 @@
                                     class="fa fa-question"
                                     style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
                         </button>
-                    </div>
+                    </div>-->
                 </blockquote>
 
                 <div class="row" style="margin-top: 20px;">
@@ -744,7 +744,7 @@
                                             class="font13"
                                             style="font-weight: bold">
 										<i class="fa fa-dot-circle-o"></i>
-										버전 별 투자 비용 대비 소모 비용
+										요구사항 비용 분석
 									</span>
                                 </h4>
                                 <div class="widget-controls">
@@ -795,11 +795,12 @@
                                         class="gradient_middle_border"
                                         style="width: 100%; margin-top: 8px"></div>
                                 <blockquote class="font12">
-                                    버전별 투자된 금액 대비 소모된 비용을 확인할 수 있습니다.
+                                    요구사항의 현재 추정 금액과 금액 측정 및 난이도와 우선순위 통계를 확인할 수 있습니다.
+                                    요구사항 금액은 슬라이드 바 및 스크롤로 확대하여 확인할 수 있습니다.
                                 </blockquote>
-                                <div class="body">
-                                    <div id="compare_costs"></div>
-                                </div>
+                                <div
+                                        class="body"
+                                        id="req-cost-analysis-chart"></div>
                             </div>
                         </section>
                     </div>
@@ -1007,7 +1008,8 @@
                         class="font13"
                         style="margin-top: 5px">
                     입력된 프로젝트 버전별 비용과 인력별 비용 산정으로 분석된 데이터입니다.
-                    <div style="float: right">
+
+                    <!--<div style="float: right">
                         <button
                                 class="btn btn-transparent btn-xs"
                                 style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
@@ -1016,11 +1018,11 @@
                                     class="fa fa-question"
                                     style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
                         </button>
-                    </div>
+                    </div>-->
                 </blockquote>
 
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <section class="widget">
                             <header>
                                 <h4>
@@ -1028,7 +1030,7 @@
                                             class="font13"
                                             style="font-weight: bold">
 										<i class="fa fa-pie-chart"></i>
-										요구사항 비용 분석
+										 버전 별 투자 비용 대비 소모 비용
 									</span>
                                 </h4>
                                 <div class="widget-controls">
@@ -1079,29 +1081,101 @@
                                         class="gradient_middle_border"
                                         style="width: 100%; margin-top: 8px"></div>
                                 <blockquote class="font12">
-                                    요구사항의 예상 금액 측정 및 난이도와 우선순위 통계를 확인할 수 있습니다.<br>
-                                    요구사항 금액은 슬라이드 바 및 스크롤로 확대하여 확인할 수 있습니다.
+                                    버전별 투자된 금액 대비 소모된 비용을 확인할 수 있습니다.
                                 </blockquote>
-                                <div
-                                        class="body"
-                                        id="req-cost-analysis-chart"></div>
+                                <div class="body">
+                                    <div id="compare_costs"></div>
+                                </div>
                             </div>
                         </section>
                     </div>
 
-                    <!-- 요구사항 현황 시작 -->
-                    <div class="col-lg-4">
+                    <!--                    <div class="col-lg-4">
+                                            <section
+                                                    class="widget"
+                                                    style="margin-bottom: 0px !important">
+                                                <header>
+                                                    <h4>
+                            <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                              <i class="fa fa-edit"></i>
+                              인력별 비용 분석
+                            </span>
+                                                    </h4>
+                                                    <div class="widget-controls">
+                                                        <a
+                                                                data-widgster="expand"
+                                                                title="Expand"
+                                                                href="#">
+                                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                                        </a>
+                                                        <a
+                                                                data-widgster="collapse"
+                                                                title="Collapse"
+                                                                href="#">
+                                                            <i class="glyphicon glyphicon-chevron-down"></i>
+                                                        </a>
+                                                        <a
+                                                                data-widgster="restore"
+                                                                title="Restore"
+                                                                href="#">
+                                                            <span class="glyphicon glyphicon-repeat"></span>
+                                                        </a>
+                                                        <a
+                                                                data-widgster="fullscreen"
+                                                                title="Fullscreen"
+                                                                href="#">
+                                                            <i
+                                                                    class="glyphicon glyphicon-fullscreen"
+                                                                    style="font-size: 11px"></i>
+                                                        </a>
+                                                    </div>
+                                                </header>
+                                                <div
+                                                        class="body"
+                                                        style="overflow: hidden">
+                                                    <div
+                                                            class="gradient_middle_border"
+                                                            style="width: 100%; height: 2px"></div>
+                                                    <blockquote
+                                                            class="font13"
+                                                            style="margin-top: 5px">
+                                                        인력별 요구사항 투입된 정보로 분석된 데이터입니다.
+                                                        <div style="float: right">
+                                                        </div>
+                                                    </blockquote>
+                                                    <div class="input-group" id="person-select-box" style="display:none;">
+                                                        <span class="input-group-btn">
+                                                                    <select class="selectpicker person-data" data-style="btn-default" style="display: none;">
+                                                                        <option>박현기</option>
+                                                                    </select>
+                                                            <div class="btn-group bootstrap-select" style="float: right;">
+                                                                <button class="btn dropdown-toggle clearfix btn-default" data-toggle="dropdown" >
+                                                                    <span class="filter-option" id="first-person-select">박현기</span>&nbsp;<i class="fa fa-caret-down"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu" style="max-height: 128.75px; overflow-y: auto; min-height: 60px;">
+                                                                </ul>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                    <div
+                                                            id="manpower-analysis-chart"></div>
+                                                </div>
+                                            </section>
+                                        </div>-->
+                    <div class="col-lg-6">
                         <section
                                 class="widget"
                                 style="margin-bottom: 0px !important">
                             <header>
                                 <h4>
-				<span
-                        class="font13"
-                        style="font-weight: bold">
-					<i class="fa fa-edit"></i>
-					인력별 비용 분석
-				</span>
+                                    <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-edit"></i>
+                                        인력별 성과 분석
+                                    </span>
                                 </h4>
                                 <div class="widget-controls">
                                     <a
@@ -1141,31 +1215,15 @@
                                 <blockquote
                                         class="font13"
                                         style="margin-top: 5px">
-                                    인력별 요구사항 투입된 정보로 분석된 데이터입니다.
+                                    인력별 연봉 대비 요구사항 투입된 정보로 성과를 분석한 자료입니다.
                                     <div style="float: right">
                                     </div>
                                 </blockquote>
-                                <div class="input-group" id="person-select-box" style="display:none;">
-                                    <span class="input-group-btn">
-                                                <select class="selectpicker person-data" data-style="btn-default" style="display: none;">
-                                                    <option>박현기</option>
-                                                </select>
-                                        <div class="btn-group bootstrap-select" style="float: right;">
-                                            <button class="btn dropdown-toggle clearfix btn-default" data-toggle="dropdown" >
-                                                <span class="filter-option" id="first-person-select">박현기</span>&nbsp;<i class="fa fa-caret-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu" style="max-height: 128.75px; overflow-y: auto; min-height: 60px;">
-                                            </ul>
-                                        </div>
-                                    </span>
-                                </div>
                                 <div
-                                        id="manpower-analysis-chart"></div>
+                                        id="manpower-analysis-chart2"></div>
                             </div>
                         </section>
                     </div>
-                    <!-- 요구사항 현황 종료 -->
-
                 </div>
 
             </div>

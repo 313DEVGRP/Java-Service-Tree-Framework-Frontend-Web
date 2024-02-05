@@ -689,7 +689,6 @@ function 비용분석계산() {
 
             if (isNaN(Number(cost))) {
                 isNumber = false;
-                return;
             }
 
             annualIncome.push({
@@ -702,19 +701,18 @@ function 비용분석계산() {
 
         if (!isNumber) {
             alert("비용 입력란에 숫자를 입력해 주세요.");
+            return;
         }
 
-        $("#compare_costs").height("620px");
-        // 버전별 투자 대비 소모 비용 차트
-        compareCostsChart(selectVersionData);
+
+        // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
+        $("#req-cost-analysis-chart").height("500px");
+        reqCostAnalysisChart(버전별요구사항별);
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
         var versionTag = $(".multiple-select").val();
         getReqCostRatio(selectedPdServiceId, versionTag);
-
-
-
 
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
@@ -723,10 +721,12 @@ function 비용분석계산() {
 
 
 
-        // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
-        $("#req-cost-analysis-chart").height("500px");
-        reqCostAnalysisChart(버전별요구사항별);
 
+
+
+        $("#compare_costs").height("500px");
+        // 버전별 투자 대비 소모 비용 차트
+        compareCostsChart(selectVersionData);
 
 
 
@@ -739,9 +739,21 @@ function 비용분석계산() {
             return data;
         }).get();
         */
+        $('input[name="person-salary"]').map(function() {
+            let owner = $(this).data('owner');
+            인력맵[owner].연봉 = $(this).val();
+        });
+
+        /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
+            let owner = $(cur).data('owner');
+            acc[owner] = $(cur).val();
+            return acc;
+        }, {});*/
+
         // 인력별 성과 측정 차트
-        $("#manpower-analysis-chart").height("500px");
-        인력별_연봉대비_성과차트_기본세팅(인력맵);
+        $("#manpower-analysis-chart2").height("500px");
+        성과차트2();
+        // 인력별_연봉대비_성과차트_기본세팅(인력맵);
     });
 }
 
@@ -797,7 +809,7 @@ function compareCostsChart(selectVersionData){
         },
         grid: {
             left: '3%',
-            right: '4%',
+            right: '10%',
             bottom: '3%',
             containLabel: true
         },
@@ -1417,4 +1429,153 @@ function 전역인력맵확인() {
             }
         }, 500);  // 100ms마다 globalDeadline 값 확인
     });
+}
+
+
+function 성과차트2() {
+
+    const tooltipFormatter = function (params) {
+
+        let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
+        let tooltipContent = '';
+
+        if (data.length > 1) {
+            for (let i = 0; i < data.length; i++) {
+                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
+            }
+        }
+        else if (data.length === 1) {
+            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + "</span><br><strong>성과</strong> : " + data[0][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+        }
+
+        return tooltipContent;
+    };
+
+    let dataAll = Object.entries(인력맵).map(([key, value]) => {
+        return [Number(value.연봉)*10000, Number(value.성과)*10000, value.이름+"["+key+"]"];
+    });
+
+    var dom = document.getElementById('manpower-analysis-chart2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    let maxX = Math.max(...dataAll.map(item => item[0]));
+    let maxX2 = Math.max(...dataAll.map(item => item[1]));
+
+    let max = Math.max(maxX, maxX2);
+
+    const markLineOpt = {
+        animation: false,
+        label: {
+            formatter: '성과 기준선',
+            align: 'right',
+            color: 'white'
+        },
+        lineStyle: {
+            type: 'dashed',
+            color: '#EE6666',
+            width: 2
+        },
+        tooltip: {
+            formatter: '성과 기준선'
+        },
+        data: [
+            [
+                {
+                    coord: [0, 0],
+                    symbol: 'none'
+                },
+                {
+                    coord: [max, max],
+                    symbol: 'none'
+                }
+            ]
+        ]
+    };
+    option = {
+        grid: [
+            { left: '15%', top: '5%'}
+        ],
+        tooltip: {
+            confine: true,
+            /*            formatter: function (params) {
+                            return params.value[2] + "<br><strong>연봉</strong> : <span style=''>" + params.value[0]  + "</span><br><strong>성과</strong> : " + params.value[1];
+                        },*/
+            formatter: tooltipFormatter
+        },
+        xAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                    formatter: function (value) {
+                        return value === 0 ? '' : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    },
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        yAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: 'I',
+                type: 'scatter',
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                data: dataAll,
+                markLine: markLineOpt
+            }
+        ],
+        toolbox: {
+            show: true,
+            orient: "vertical",
+            left: "right",
+            bottom: "50px",
+            feature: {
+                mark: { show: true },
+                dataView: {show: true, readOnly: true},
+                dataZoom: {show: true}
+            },
+            iconStyle: {
+                borderColor: "white"
+            }
+        },
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
