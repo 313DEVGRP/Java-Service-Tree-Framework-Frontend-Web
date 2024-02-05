@@ -1595,6 +1595,56 @@ svg .ghostCircle.show {
 	border-right: 2px solid #515256;
 }
 
+#reqDataTable .reqTable {
+	cursor: default;
+}
+
+#reqDataTable .reqTable th.version,
+#reqDataTable .reqTable th.category,
+#reqDataTable .reqTable th.id,
+#reqDataTable .reqTable th.status,
+#reqDataTable .reqTable th.priority,
+#reqDataTable .reqTable th.difficulty,
+#reqDataTable .reqTable th.createDate,
+#reqDataTable .reqTable th.startDate,
+#reqDataTable .reqTable th.endDate,
+#reqDataTable .reqTable th.progress {
+	cursor: pointer;
+}
+
+#reqDataTable .reqTable td.content {
+	cursor: text;
+}
+
+#reqDataTable .reqTable th.version:after,
+#reqDataTable .reqTable th.category:after,
+#reqDataTable .reqTable th.id:after,
+#reqDataTable .reqTable th.status:after,
+#reqDataTable .reqTable th.priority:after,
+#reqDataTable .reqTable th.difficulty:after,
+#reqDataTable .reqTable th.createDate:after,
+#reqDataTable .reqTable th.startDate:after,
+#reqDataTable .reqTable th.endDate:after,
+#reqDataTable .reqTable th.progress:after {
+	content: "";
+	display: inline-block;
+	width: 19px;
+	height: 19px;
+	margin-left: 10px;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(../img/datatable/sort_both.png);
+}
+
+#reqDataTable .reqTable th.asc:after {
+	background-image: url(../img/datatable/sort_asc.png);
+}
+
+#reqDataTable .reqTable th.desc:after {
+	background-image: url(../img/datatable/sort_desc.png);
+}
+
 /* cost 분석 */
 
 /* 비용 입력 */
@@ -1603,7 +1653,8 @@ svg .ghostCircle.show {
 	/*padding-left: 20px;*/
 }
 
-.cost-version, .cost-input-complete {
+.cost-version,
+.cost-input-complete {
 	margin-right: 10px;
 	padding: 3px 7px;
 	font-size: 11px;
@@ -1621,16 +1672,18 @@ svg .ghostCircle.show {
 	margin: 0;
 }
 
-.cost-version:hover, .cost-input-complete:hover {
-	background-color: #39393b
+.cost-version:hover,
+.cost-input-complete:hover {
+	background-color: #39393b;
 }
 
-.cost-input-version, .cost-input-manpower {
+.cost-input-version,
+.cost-input-manpower {
 	margin-bottom: 20px;
 	border-radius: 3px;
 	padding: 5px;
 	margin-bottom: 30px;
-	background: rgba(51,51,51,.425);
+	background: rgba(51, 51, 51, 0.425);
 	color: #f8f8f8;
 }
 
@@ -1646,9 +1699,10 @@ svg .ghostCircle.show {
 	padding-top: 10px;
 }
 
-.cost-input, .salary-input {
+.cost-input,
+.annual-income-input {
 	color: black;
-	width: 30%;
+	width: 50%;
 	text-align: center;
 	border: none;
 	border-radius: 5px;
@@ -1658,10 +1712,6 @@ svg .ghostCircle.show {
 
 .version-input {
 	width: 70%;
-}
-
-select[name="version-cost_length"], select[name="manpower-annual-income_length"] {
-	color: black;
 }
 
 .dt-center {

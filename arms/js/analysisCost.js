@@ -61,7 +61,7 @@ function execDocReady() {
             "js/analysis/topmenu/topMenu.js",
 
 		    //CirclePacking with d3 Chart
-		    "js/analysis/Cost/circularPackingChart.js"
+		    "js/analysis/cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -285,10 +285,12 @@ function formatDate(date) {
 // 버전 비용 및 인력 비용 입력
 function costInput(인력맵, pdServiceVersionLinks) {
 
-    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
-    console.log(인력맵);
+    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(인력맵));
 
-    if ($.fn.dataTable.isDataTable('#version-cost')) {
+    versionInput(pdServiceVersionLinks);
+    manpowerInput(인력맵);
+
+    /*if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
     }
 
@@ -370,15 +372,264 @@ function costInput(인력맵, pdServiceVersionLinks) {
                 salaryInputs.val(this.value);
             });
         },
-        /*rowsGroup: [
+        /!*rowsGroup: [
             "name:name",
-        ]*/
+        ]*!/
+    });*/
+}
+
+function versionInput(pdServiceVersionLinks) {
+
+    if ($.fn.dataTable.isDataTable('#version-cost')) {
+        $('#version-cost').DataTable().clear().destroy();
+    }
+
+    let selectedVersions = pdServiceVersionLinks.split(',');
+
+    let versionTableData = selectedVersions.map(versionId => {
+        let item = versionListData[versionId];
+        let startDate = item.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(item.c_pds_version_start_date);
+        let endDate = item.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(item.c_pds_version_end_date);
+        return { // 객체를 바로 반환
+            version: item.c_title,
+            period: startDate + " ~ " + endDate,
+            cost: 0,
+            c_id: item.c_id
+        };
     });
+
+    var columnList = [
+        {
+            name: "versionId",
+            title: "버전아이디",
+            data: "c_id",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: false
+        },
+        {
+            name: "version",
+            title: "버전",
+            data: "version",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "period",
+            title: "기간",
+            data: "period",
+            render: function (data, type, row, meta) {
+                var dates = data.split(' ~ ');
+                if(type === 'sort' || type === 'type'){
+                    return dates[0]; // startDate로 정렬
+                }
+                return data; // 원래 형태로 표시
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "cost",
+            title: "비용 (입력)",
+            data: "cost",
+            render: function(data, type, row) {
+                return '<input type="text" name="version-cost" class="cost-input" value="0" data-owner="' + row.c_id + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [[2, "desc"]];
+    var jquerySelector = "#version-cost";
+    var ajaxUrl = "";
+    var jsonRoot = "";
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = versionTableData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+}
+
+function manpowerInput(인력맵) {
+
+    if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
+        $('#manpower-annual-income').DataTable().clear().destroy();
+    }
+
+    let manpowerData = Object.keys(인력맵).map((key) => {
+        let data = {};
+        data.이름 = 인력맵[key].이름;
+        data.키 = key;
+        data.연봉 = 인력맵[key].연봉;
+        return data;
+    });
+    console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
+
+    var columnList = [
+        {
+            name: "name",
+            title: "이름",
+            data: "이름",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "key",
+            title: "고유 키",
+            data: "키",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "annualIncome",
+            title: "연봉 (입력)",
+            data: "연봉",
+            render: function(data, type, row) {
+                var formattedData = parseInt(data).toLocaleString();
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.이름 + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [];
+    var jquerySelector = "#manpower-annual-income";
+    var ajaxUrl = null;
+    var jsonRoot = null;
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = manpowerData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+
+    excel_download();
+}
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(tempDataTable, selectedData) {
+
+}
+
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
+function dataTableCallBack(settings, json) {
+    $('.cost-input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+
+    $('.annual-income-input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+}
+
+function dataTableDrawCallback(tableInfo) {
+    $("#" + tableInfo.sInstance)
+        .DataTable()
+        .columns.adjust()
+        .responsive.recalc();
+}
+
+function excel_download() {
+
+   /* var tempDataTable = $("#manpower-annual-income").DataTable();
+    var data = tempDataTable.rows().data().toArray();
+    var json = JSON.stringify(data);
+    console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+
+
+    $("#excel-annual-income-template-download").click(function () {
+        $.ajax({
+            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+            type: "POST",
+            data: json,
+            contentType: "application/json",
+            statusCode: {
+                200: function (data) {
+                    console.log("success");
+                }
+            }
+        })
+    });*/
 }
 
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
+        let isNumber = true;
+
+        // 버전 비용
         let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
 
         let selectVersionData = [];
@@ -388,14 +639,69 @@ function 비용분석계산() {
             let number = Number(inputVersionValue.replace(/,/g, ''));
 
             if (isNaN(Number(number))) {
-                alert("버전 비용 입력란에 숫자를 입력하여주세요.");
-                return;
+                isNumber = false;
+                break;
             }
 
             item.versionCost = number * 10000;
             item.consumptionCost = 9000000;
 
             selectVersionData.push(item);
+        }
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
+
+
+        /*
+        // 버전 비용
+        var versionCost = [];
+
+        var table = $('#version-cost').DataTable();
+        // DataTable의 모든 행에 대해 반복
+        table.rows().every(function() {
+            var versionId = this.data()['c_id']; // 버전 아이디
+            var versionName = this.data()['c_title']; // 버전 이름
+            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
+
+            if (isNaN(Number(cost))) {
+                isNumber = false;
+                return;
+            }
+
+            versionCost.push({
+                c_id: versionId,
+                c_title: versionName,
+                versionCost: cost * 10000,
+                consumptionCost: 9000000
+            });
+        });
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));*/
+
+
+        // 인력별 연봉
+        var annualIncome = [];
+
+        var table = $('#manpower-annual-income').DataTable();
+        // DataTable의 모든 행에 대해 반복
+        table.rows().every(function() {
+            var name = this.data()['이름']; // 인력
+            var key = this.data()['키']; // 키
+            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
+
+            if (isNaN(Number(cost))) {
+                isNumber = false;
+                return;
+            }
+
+            annualIncome.push({
+                사용자: name,
+                키: key,
+                연봉: cost * 10000
+            });
+        });
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: annualIncome -> " + JSON.stringify(annualIncome));
+
+        if (!isNumber) {
+            alert("비용 입력란에 숫자를 입력해 주세요.");
         }
 
         $("#compare_costs").height("620px");
@@ -424,7 +730,7 @@ function 비용분석계산() {
 
 
 
-        let inputSalaryValues = $('input[name="person-salary"]').map(function() {
+        /*let inputSalaryValues = $('input[name="annual-income"]').map(function() {
             let data = {};
 
             let owner = $(this).data('owner');
@@ -432,9 +738,7 @@ function 비용분석계산() {
             data.연봉 = $(this).val();
             return data;
         }).get();
-
-        console.log(inputSalaryValues);
-
+        */
         // 인력별 성과 측정 차트
         $("#manpower-analysis-chart").height("500px");
         인력별_연봉대비_성과차트_기본세팅(인력맵);
@@ -537,81 +841,54 @@ function compareCostsChart(selectVersionData){
 /////////////////////////////////////////////////////////
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
-    let paramData = {
-        "요구_사항" : {
-            'isReqType': 'REQUIREMENT',
-            'pdServiceLink' : selectedPdServiceId,
-            'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-            '메인그룹필드' : 'pdServiceVersion',
-            '컨텐츠보기여부' : false,
-            '크기' : 10000,
-            '하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
-            '하위크기' : 10000
-        },
-        "하위_이슈_사항" : {
-            'isReqType': 'ISSUE',
-            'pdServiceLink': selectedPdServiceId,
-            'pdServiceVersionLinks': pdServiceVersionLinks,
-            '메인그룹필드': 'parentReqKey',
-            '컨텐츠보기여부': false,
-            '크기': 10000,
-            '하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
-            '하위크기': 10000
-        }
-    }
+    const url = new UrlBuilder()
+    		.setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
+    		.addQueryParam("pdServiceLink", pdServiceLink)
+    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+    		.build();
+
     $.ajax({
-        url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
-        type: "POST",
+        url: url,
+        type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
-        data: JSON.stringify(paramData),
         progress: true,
         statusCode: {
             200: function (result) {
-//				console.log("[ analysisScope :: getReqCostRatio ] :: result");
-//				console.log(result);
+                console.log("[ analysisCost :: getReqCostRatio ] :: = ");
+                console.log(result);
+                let 변환된_데이터 = {};
+
+                Object.keys(result.버전별_그룹).forEach((버전) => {
+                    let 요구사항별_그룹 = result.버전별_그룹[버전].요구사항별_그룹;
+                    let 변환된_요구사항들 = [];
+                    Object.keys(요구사항별_그룹).forEach((요구사항) => {
+                        let 변환된_요구사항 = {};
+                        변환된_요구사항[요구사항] = 요구사항별_그룹[요구사항].map((데이터) => {
+                            let 치환된_버전 = 데이터.c_pds_version_name;
+                            let 치환된_요구사항 = 데이터.c_req_name;
+                            return {
+                                project: 데이터.c_issue_key,
+                                cost: 300, // 임시데이터
+                                version: 데이터.c_pds_version_name,
+                                req_name : 데이터.c_req_name
+                            };
+                        });
+                        변환된_요구사항들.push(변환된_요구사항);
+                    });
+
+                    변환된_데이터[버전] = 변환된_요구사항들;
+                });
+
+                console.log(변환된_데이터);
+
                 let pdServiceName;
                 pdServiceListData.forEach(elements => {
                     if (elements["pdServiceId"] === +pdServiceLink) {
-                        pdServiceName = elements["pdServiceName"];
+                    pdServiceName = elements["pdServiceName"];
                     }
                 });
-
-                let data = {
-                    "1_0_1": [
-                        {
-                            "요구사항": [
-                                { "project": "TE-1", "cost": 400 },
-                                { "project": "TE-2", "cost": 400 },
-                                { "project": "TE-3", "cost": 400 }
-                            ]
-                        },
-                        {
-                            "요구사항2": [
-                                { "project": "TT-1", "cost": 300 },
-                                { "project": "TT-2", "cost": 300 },
-                                { "project": "TT-3", "cost": 300 }
-                            ]
-                        }
-                    ],
-                    "1_0_2": [
-                        {
-                            "요구사항3": [
-                                { "project": "TE-4", "cost": 100 },
-                                { "project": "TE-5", "cost": 100 },
-                                { "project": "TE-6", "cost": 100 }
-                            ]
-                        },
-                        {
-                            "요구사항4": [
-                                { "project": "TT-4", "cost": 300 },
-                                { "project": "TT-5", "cost": 300 },
-                                { "project": "TT-6", "cost": 300 }
-                            ]
-                        }
-                    ]
-                };
-                drawCircularPacking("circularPacking",pdServiceName,data);
+                drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
             }
         }
     });
