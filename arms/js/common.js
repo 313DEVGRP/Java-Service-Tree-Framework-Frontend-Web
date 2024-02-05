@@ -9,16 +9,6 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
-
-	window.addEventListener(
-		"error",
-		function (event) {
-			console.error("페이지 로드 중 에러 발생 :: " + event.message);
-
-			window.location.reload();
-		},
-		{ once: true }
-	);
 });
 
 function runScript() {
@@ -964,7 +954,9 @@ function dataTable_build(
 	orderList,
 	buttonList,
 	isServerSide,
-	scrollY
+	scrollY,
+	data,
+	isAjax = true
 ) {
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
@@ -1008,7 +1000,54 @@ function dataTable_build(
 	console.log("[ common :: dataTableBuild ] :: port → " + $(location).attr("port"));
 	console.log("[ common :: dataTableBuild ] :: ajaxUrl → " + ajaxUrl);
 
-	var tempDataTable = $(jQueryElementID).DataTable({
+	var options = {
+		serverSide: isServerSide,
+		stateSave: false,
+		stateDuration: -1,
+		destroy: true,
+		processing: true,
+		responsive: false,
+		columns: columnList,
+		rowsGroup: rowsGroupList,
+		columnDefs: columnDefList,
+		select: selectList,
+		order: orderList,
+		buttons: buttonList,
+		scrollX: true,
+		scrollY: scrollY,
+		language: {
+			processing: "",
+			loadingRecords:
+				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>'
+		},
+		initComplete: function (settings, json) {
+			console.log("dataTableBuild :: drawCallmakeSlimScrollback");
+			if ($.isFunction(dataTableCallBack)) {
+				//데이터 테이블 그리고 난 후 시퀀스 이벤트
+				dataTableCallBack(settings, json);
+			}
+		},
+		drawCallback: function (tableInfo) {
+			console.log("dataTableBuild :: drawCallback");
+			if ($.isFunction(dataTableDrawCallback)) {
+				//데이터 테이블 그리고 난 후 시퀀스 이벤트
+				dataTableDrawCallback(tableInfo);
+			}
+		}
+	};
+
+	if (isAjax) {
+		options.ajax = {
+			url: ajaxUrl,
+			dataSrc: jsonRoot
+		};
+	} else {
+		options.data = data;
+	}
+
+	var tempDataTable = $(jQueryElementID).DataTable(options);
+
+	/*var tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {
 			url: ajaxUrl,
 			dataSrc: jsonRoot
@@ -1046,7 +1085,7 @@ function dataTable_build(
 				dataTableDrawCallback(tableInfo);
 			}
 		}
-	});
+	});*/
 
 	$(jQueryElementID + " tbody").on("click", "tr", function () {
 		if ($(this).hasClass("selected")) {

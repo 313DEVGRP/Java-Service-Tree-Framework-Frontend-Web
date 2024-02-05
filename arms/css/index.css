@@ -91,17 +91,17 @@ section .heading-img {
 
 .first .bg {
 	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-		url("../img/index/background/oneth.jpg");
+		url("../img/index/background/first.jpg");
 }
 
 .second .bg {
 	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-		url("../img/index/background/twoth.jpg");
+		url("../img/index/background/second.jpg");
 }
 
 .third .bg {
 	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-		url("../img/index/background/threeth.jpg");
+		url("../img/index/background/third.jpg");
 }
 
 .fourth .bg {
@@ -111,13 +111,19 @@ section .heading-img {
 
 .fifth .bg {
 	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-		url("../img/index/background/four.jpg");
+		url("../img/index/background/fifth.jpg");
 	background-position: 50% 45%;
 }
 
 .sixth .bg {
 	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-		url("../img/index/background/five.jpg");
+		url("../img/index/background/sixth.jpg");
+	background-position: 50% 45%;
+}
+
+.seventh .bg {
+	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
+	url("../img/index/background/seventh.jpg");
 	background-position: 50% 45%;
 }
 
