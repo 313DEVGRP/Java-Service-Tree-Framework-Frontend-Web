@@ -739,9 +739,21 @@ function 비용분석계산() {
             return data;
         }).get();
         */
+        $('input[name="person-salary"]').map(function() {
+            let owner = $(this).data('owner');
+            인력맵[owner].연봉 = $(this).val();
+        });
+
+        /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
+            let owner = $(cur).data('owner');
+            acc[owner] = $(cur).val();
+            return acc;
+        }, {});*/
+
         // 인력별 성과 측정 차트
-        $("#manpower-analysis-chart").height("500px");
-        인력별_연봉대비_성과차트_기본세팅(인력맵);
+        $("#manpower-analysis-chart2").height("500px");
+        성과차트2();
+        // 인력별_연봉대비_성과차트_기본세팅(인력맵);
     });
 }
 
@@ -841,54 +853,81 @@ function compareCostsChart(selectVersionData){
 /////////////////////////////////////////////////////////
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
-    const url = new UrlBuilder()
-    		.setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
-    		.addQueryParam("pdServiceLink", pdServiceLink)
-    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-    		.build();
-
+    let paramData = {
+        "요구_사항" : {
+            'isReqType': 'REQUIREMENT',
+            'pdServiceLink' : selectedPdServiceId,
+            'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
+            '메인그룹필드' : 'pdServiceVersion',
+            '컨텐츠보기여부' : false,
+            '크기' : 10000,
+            '하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
+            '하위크기' : 10000
+        },
+        "하위_이슈_사항" : {
+            'isReqType': 'ISSUE',
+            'pdServiceLink': selectedPdServiceId,
+            'pdServiceVersionLinks': pdServiceVersionLinks,
+            '메인그룹필드': 'parentReqKey',
+            '컨텐츠보기여부': false,
+            '크기': 10000,
+            '하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
+            '하위크기': 10000
+        }
+    }
     $.ajax({
-        url: url,
-        type: "GET",
+        url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
+        type: "POST",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
+        data: JSON.stringify(paramData),
         progress: true,
         statusCode: {
             200: function (result) {
-                console.log("[ analysisCost :: getReqCostRatio ] :: = ");
-                console.log(result);
-                let 변환된_데이터 = {};
-
-                Object.keys(result.버전별_그룹).forEach((버전) => {
-                    let 요구사항별_그룹 = result.버전별_그룹[버전].요구사항별_그룹;
-                    let 변환된_요구사항들 = [];
-                    Object.keys(요구사항별_그룹).forEach((요구사항) => {
-                        let 변환된_요구사항 = {};
-                        변환된_요구사항[요구사항] = 요구사항별_그룹[요구사항].map((데이터) => {
-                            let 치환된_버전 = 데이터.c_pds_version_name;
-                            let 치환된_요구사항 = 데이터.c_req_name;
-                            return {
-                                project: 데이터.c_issue_key,
-                                cost: 300, // 임시데이터
-                                version: 데이터.c_pds_version_name,
-                                req_name : 데이터.c_req_name
-                            };
-                        });
-                        변환된_요구사항들.push(변환된_요구사항);
-                    });
-
-                    변환된_데이터[버전] = 변환된_요구사항들;
-                });
-
-                console.log(변환된_데이터);
-
+//				console.log("[ analysisScope :: getReqCostRatio ] :: result");
+//				console.log(result);
                 let pdServiceName;
                 pdServiceListData.forEach(elements => {
                     if (elements["pdServiceId"] === +pdServiceLink) {
-                    pdServiceName = elements["pdServiceName"];
+                        pdServiceName = elements["pdServiceName"];
                     }
                 });
-                drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
+
+                let data = {
+                    "1_0_1": [
+                        {
+                            "요구사항": [
+                                { "project": "TE-1", "cost": 400 },
+                                { "project": "TE-2", "cost": 400 },
+                                { "project": "TE-3", "cost": 400 }
+                            ]
+                        },
+                        {
+                            "요구사항2": [
+                                { "project": "TT-1", "cost": 300 },
+                                { "project": "TT-2", "cost": 300 },
+                                { "project": "TT-3", "cost": 300 }
+                            ]
+                        }
+                    ],
+                    "1_0_2": [
+                        {
+                            "요구사항3": [
+                                { "project": "TE-4", "cost": 100 },
+                                { "project": "TE-5", "cost": 100 },
+                                { "project": "TE-6", "cost": 100 }
+                            ]
+                        },
+                        {
+                            "요구사항4": [
+                                { "project": "TT-4", "cost": 300 },
+                                { "project": "TT-5", "cost": 300 },
+                                { "project": "TT-6", "cost": 300 }
+                            ]
+                        }
+                    ]
+                };
+                drawCircularPacking("circularPacking",pdServiceName,data);
             }
         }
     });
@@ -1417,4 +1456,151 @@ function 전역인력맵확인() {
             }
         }, 500);  // 100ms마다 globalDeadline 값 확인
     });
+}
+
+
+function 성과차트2() {
+
+    const tooltipFormatter = function (params) {
+
+        let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
+        let tooltipContent = '';
+
+        if (data.length > 1) {
+            for (let i = 0; i < data.length; i++) {
+                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0]  + ", </span><strong>성과</strong> : " + data[i][1] + '<br>';
+            }
+        }
+        else if (data.length === 1) {
+            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0]  + "</span><br><strong>성과</strong> : " + data[0][1];
+        }
+
+        return tooltipContent;
+    };
+
+    let dataAll = Object.entries(인력맵).map(([key, value]) => {
+        return [Number(value.연봉)*10000, Number(value.성과)*10000, value.이름+"["+key+"]"];
+    });
+
+    var dom = document.getElementById('manpower-analysis-chart2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    let maxX = Math.max(...dataAll.map(item => item[0]));
+    let maxX2 = Math.max(...dataAll.map(item => item[1]));
+
+    let max = Math.max(maxX, maxX2);
+
+    const markLineOpt = {
+        animation: false,
+        label: {
+            formatter: '성과기준선',
+            align: 'right',
+            color: 'white'
+        },
+        lineStyle: {
+            type: 'dashed',
+            color: '#EE6666',
+            width: 2
+        },
+        tooltip: {
+            formatter: '성과기준선'
+        },
+        data: [
+            [
+                {
+                    coord: [0, 0],
+                    symbol: 'none'
+                },
+                {
+                    coord: [max, max],
+                    symbol: 'none'
+                }
+            ]
+        ]
+    };
+    option = {
+        grid: [
+            { left: '15%', top: '5%'}
+        ],
+        tooltip: {
+            confine: true,
+            /*            formatter: function (params) {
+                            return params.value[2] + "<br><strong>연봉</strong> : <span style=''>" + params.value[0]  + "</span><br><strong>성과</strong> : " + params.value[1];
+                        },*/
+            formatter: tooltipFormatter
+        },
+        xAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                    formatter: function (value) {
+                        return value === 0 ? '' : value;
+                    },
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        yAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: 'I',
+                type: 'scatter',
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                data: dataAll,
+                markLine: markLineOpt
+            }
+        ],
+        toolbox: {
+            show: true,
+            orient: "vertical",
+            left: "right",
+            bottom: "50px",
+            feature: {
+                mark: { show: true },
+                dataView: {show: true, readOnly: true},
+            },
+            iconStyle: {
+                borderColor: "white"
+            }
+        },
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
