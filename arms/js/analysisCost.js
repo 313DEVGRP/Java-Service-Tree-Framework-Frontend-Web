@@ -60,8 +60,8 @@ function execDocReady() {
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js",
 
-		    //CirclePacking with d3 Chart
-		    "js/analysis/Cost/circularPackingChart.js"
+            //CirclePacking with d3 Chart
+            "js/analysis/cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -603,25 +603,25 @@ function dataTableDrawCallback(tableInfo) {
 
 function excel_download() {
 
-   /* var tempDataTable = $("#manpower-annual-income").DataTable();
-    var data = tempDataTable.rows().data().toArray();
-    var json = JSON.stringify(data);
-    console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+    /* var tempDataTable = $("#manpower-annual-income").DataTable();
+     var data = tempDataTable.rows().data().toArray();
+     var json = JSON.stringify(data);
+     console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
 
 
-    $("#excel-annual-income-template-download").click(function () {
-        $.ajax({
-            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
-            type: "POST",
-            data: json,
-            contentType: "application/json",
-            statusCode: {
-                200: function (data) {
-                    console.log("success");
-                }
-            }
-        })
-    });*/
+     $("#excel-annual-income-template-download").click(function () {
+         $.ajax({
+             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+             type: "POST",
+             data: json,
+             contentType: "application/json",
+             statusCode: {
+                 200: function (data) {
+                     console.log("success");
+                 }
+             }
+         })
+     });*/
 }
 
 function 비용분석계산() {
@@ -689,7 +689,6 @@ function 비용분석계산() {
 
             if (isNaN(Number(cost))) {
                 isNumber = false;
-                return;
             }
 
             annualIncome.push({
@@ -702,19 +701,18 @@ function 비용분석계산() {
 
         if (!isNumber) {
             alert("비용 입력란에 숫자를 입력해 주세요.");
+            return;
         }
 
-        $("#compare_costs").height("620px");
-        // 버전별 투자 대비 소모 비용 차트
-        compareCostsChart(selectVersionData);
+
+        // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
+        $("#req-cost-analysis-chart").height("500px");
+        reqCostAnalysisChart(버전별요구사항별);
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
         var versionTag = $(".multiple-select").val();
         getReqCostRatio(selectedPdServiceId, versionTag);
-
-
-
 
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
@@ -723,10 +721,12 @@ function 비용분석계산() {
 
 
 
-        // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
-        $("#req-cost-analysis-chart").height("500px");
-        reqCostAnalysisChart(버전별요구사항별);
 
+
+
+        $("#compare_costs").height("500px");
+        // 버전별 투자 대비 소모 비용 차트
+        compareCostsChart(selectVersionData);
 
 
 
@@ -809,7 +809,7 @@ function compareCostsChart(selectVersionData){
         },
         grid: {
             left: '3%',
-            right: '4%',
+            right: '10%',
             bottom: '3%',
             containLabel: true
         },
@@ -853,81 +853,54 @@ function compareCostsChart(selectVersionData){
 /////////////////////////////////////////////////////////
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
-    let paramData = {
-        "요구_사항" : {
-            'isReqType': 'REQUIREMENT',
-            'pdServiceLink' : selectedPdServiceId,
-            'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-            '메인그룹필드' : 'pdServiceVersion',
-            '컨텐츠보기여부' : false,
-            '크기' : 10000,
-            '하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
-            '하위크기' : 10000
-        },
-        "하위_이슈_사항" : {
-            'isReqType': 'ISSUE',
-            'pdServiceLink': selectedPdServiceId,
-            'pdServiceVersionLinks': pdServiceVersionLinks,
-            '메인그룹필드': 'parentReqKey',
-            '컨텐츠보기여부': false,
-            '크기': 10000,
-            '하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
-            '하위크기': 10000
-        }
-    }
+    const url = new UrlBuilder()
+        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
+        .addQueryParam("pdServiceLink", pdServiceLink)
+        .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+        .build();
+
     $.ajax({
-        url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
-        type: "POST",
+        url: url,
+        type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
-        data: JSON.stringify(paramData),
         progress: true,
         statusCode: {
             200: function (result) {
-//				console.log("[ analysisScope :: getReqCostRatio ] :: result");
-//				console.log(result);
+                console.log("[ analysisCost :: getReqCostRatio ] :: = ");
+                console.log(result);
+                let 변환된_데이터 = {};
+
+                Object.keys(result.버전별_그룹).forEach((버전) => {
+                    let 요구사항별_그룹 = result.버전별_그룹[버전].요구사항별_그룹;
+                    let 변환된_요구사항들 = [];
+                    Object.keys(요구사항별_그룹).forEach((요구사항) => {
+                        let 변환된_요구사항 = {};
+                        변환된_요구사항[요구사항] = 요구사항별_그룹[요구사항].map((데이터) => {
+                            let 치환된_버전 = 데이터.c_pds_version_name;
+                            let 치환된_요구사항 = 데이터.c_req_name;
+                            return {
+                                project: 데이터.c_issue_key,
+                                cost: 300, // 임시데이터
+                                version: 데이터.c_pds_version_name,
+                                req_name : 데이터.c_req_name
+                            };
+                        });
+                        변환된_요구사항들.push(변환된_요구사항);
+                    });
+
+                    변환된_데이터[버전] = 변환된_요구사항들;
+                });
+
+                console.log(변환된_데이터);
+
                 let pdServiceName;
                 pdServiceListData.forEach(elements => {
                     if (elements["pdServiceId"] === +pdServiceLink) {
                         pdServiceName = elements["pdServiceName"];
                     }
                 });
-
-                let data = {
-                    "1_0_1": [
-                        {
-                            "요구사항": [
-                                { "project": "TE-1", "cost": 400 },
-                                { "project": "TE-2", "cost": 400 },
-                                { "project": "TE-3", "cost": 400 }
-                            ]
-                        },
-                        {
-                            "요구사항2": [
-                                { "project": "TT-1", "cost": 300 },
-                                { "project": "TT-2", "cost": 300 },
-                                { "project": "TT-3", "cost": 300 }
-                            ]
-                        }
-                    ],
-                    "1_0_2": [
-                        {
-                            "요구사항3": [
-                                { "project": "TE-4", "cost": 100 },
-                                { "project": "TE-5", "cost": 100 },
-                                { "project": "TE-6", "cost": 100 }
-                            ]
-                        },
-                        {
-                            "요구사항4": [
-                                { "project": "TT-4", "cost": 300 },
-                                { "project": "TT-5", "cost": 300 },
-                                { "project": "TT-6", "cost": 300 }
-                            ]
-                        }
-                    ]
-                };
-                drawCircularPacking("circularPacking",pdServiceName,data);
+                drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
             }
         }
     });
@@ -1468,11 +1441,11 @@ function 성과차트2() {
 
         if (data.length > 1) {
             for (let i = 0; i < data.length; i++) {
-                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0]  + ", </span><strong>성과</strong> : " + data[i][1] + '<br>';
+                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
             }
         }
         else if (data.length === 1) {
-            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0]  + "</span><br><strong>성과</strong> : " + data[0][1];
+            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + "</span><br><strong>성과</strong> : " + data[0][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
         }
 
         return tooltipContent;
@@ -1499,7 +1472,7 @@ function 성과차트2() {
     const markLineOpt = {
         animation: false,
         label: {
-            formatter: '성과기준선',
+            formatter: '성과 기준선',
             align: 'right',
             color: 'white'
         },
@@ -1509,7 +1482,7 @@ function 성과차트2() {
             width: 2
         },
         tooltip: {
-            formatter: '성과기준선'
+            formatter: '성과 기준선'
         },
         data: [
             [
@@ -1545,7 +1518,7 @@ function 성과차트2() {
                     interval: 1,
                     rotate: 45,
                     formatter: function (value) {
-                        return value === 0 ? '' : value;
+                        return value === 0 ? '' : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     },
                 },
                 splitLine: {
@@ -1564,6 +1537,7 @@ function 성과차트2() {
                 axisLabel: {
                     color: 'white',
                     interval: 1,
+                    rotate: 45,
                 },
                 splitLine: {
                     lineStyle: {
@@ -1591,6 +1565,7 @@ function 성과차트2() {
             feature: {
                 mark: { show: true },
                 dataView: {show: true, readOnly: true},
+                dataZoom: {show: true}
             },
             iconStyle: {
                 borderColor: "white"
