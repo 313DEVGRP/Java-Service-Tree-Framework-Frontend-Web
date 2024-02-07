@@ -10,8 +10,8 @@ var pdServiceData;
 var pdServiceListData;
 var versionListData;
 
-var 버전별요구사항별 = {};
-var 인력맵 = {};
+var 버전_요구사항_담당자 = {};
+var 전체담당자목록 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -60,8 +60,8 @@ function execDocReady() {
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js",
 
-		    //CirclePacking with d3 Chart
-		    "js/analysis/cost/circularPackingChart.js"
+            //CirclePacking with d3 Chart
+            "js/analysis/cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -259,20 +259,20 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
             200: function (apiResponse) {
                 console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
                 console.log(apiResponse.response);
-                버전별요구사항별 = apiResponse.response.버전;
-                인력맵 = apiResponse.response.전체담당자목록;
+                버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
+                전체담당자목록 = apiResponse.response.전체담당자목록;
 
                 let 연봉 = 3000;
                 let 성과 = 1000;
 
-                Object.keys(인력맵).forEach((key) => {
-                    인력맵[key].연봉 = 연봉;
-                    인력맵[key].성과 = 성과;
+                Object.keys(전체담당자목록).forEach((key) => {
+                    전체담당자목록[key].연봉 = 연봉;
+                    전체담당자목록[key].성과 = 성과;
                     연봉 -= 100;
                     성과 += 100;
                 });
 
-                costInput(인력맵, pdServiceVersionLinks);
+                costInput(전체담당자목록, pdServiceVersionLinks);
             }
         }
     });
@@ -283,12 +283,12 @@ function formatDate(date) {
 }
 
 // 버전 비용 및 인력 비용 입력
-function costInput(인력맵, pdServiceVersionLinks) {
+function costInput(전체담당자목록, pdServiceVersionLinks) {
 
-    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(인력맵));
+    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(전체담당자목록));
 
     versionInput(pdServiceVersionLinks);
-    manpowerInput(인력맵);
+    manpowerInput(전체담당자목록);
 
     /*if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
@@ -331,11 +331,11 @@ function costInput(인력맵, pdServiceVersionLinks) {
     });
 
     // 연봉 정보
-    let manpowerData = Object.keys(인력맵).map((key) => {
+    let manpowerData = Object.keys(전체담당자목록).map((key) => {
         let data = {};
         data.이름 = key;
-        data.연봉 = 인력맵[key].연봉;
-        data.성과 = 인력맵[key].성과;
+        data.연봉 = 전체담당자목록[key].연봉;
+        data.성과 = 전체담당자목록[key].성과;
         return data;
     });
 
@@ -485,17 +485,17 @@ function versionInput(pdServiceVersionLinks) {
     );
 }
 
-function manpowerInput(인력맵) {
+function manpowerInput(전체담당자목록) {
 
     if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
         $('#manpower-annual-income').DataTable().clear().destroy();
     }
 
-    let manpowerData = Object.keys(인력맵).map((key) => {
+    let manpowerData = Object.keys(전체담당자목록).map((key) => {
         let data = {};
-        data.이름 = 인력맵[key].이름;
+        data.이름 = 전체담당자목록[key].이름;
         data.키 = key;
-        data.연봉 = 인력맵[key].연봉;
+        data.연봉 = 전체담당자목록[key].연봉;
         return data;
     });
     console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
@@ -603,29 +603,34 @@ function dataTableDrawCallback(tableInfo) {
 
 function excel_download() {
 
-   /* var tempDataTable = $("#manpower-annual-income").DataTable();
-    var data = tempDataTable.rows().data().toArray();
-    var json = JSON.stringify(data);
-    console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+    /* var tempDataTable = $("#manpower-annual-income").DataTable();
+     var data = tempDataTable.rows().data().toArray();
+     var json = JSON.stringify(data);
+     console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
 
 
-    $("#excel-annual-income-template-download").click(function () {
-        $.ajax({
-            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
-            type: "POST",
-            data: json,
-            contentType: "application/json",
-            statusCode: {
-                200: function (data) {
-                    console.log("success");
-                }
-            }
-        })
-    });*/
+     $("#excel-annual-income-template-download").click(function () {
+         $.ajax({
+             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+             type: "POST",
+             data: json,
+             contentType: "application/json",
+             statusCode: {
+                 200: function (data) {
+                     console.log("success");
+                 }
+             }
+         })
+     });*/
 }
 
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
+
+        if(!selectedPdServiceId || !selectedVersionId) {
+            alert("제품(서비스), 버전을 선택해주세요.");
+            return;
+        }
 
         let isNumber = true;
 
@@ -648,7 +653,7 @@ function 비용분석계산() {
 
             selectVersionData.push(item);
         }
-        console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
+        // console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
 
 
         /*
@@ -705,9 +710,29 @@ function 비용분석계산() {
         }
 
 
+        $.ajax({
+            url: "/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId
+                + "/req-difficulty-priority-list?c_req_pdservice_versionset_link=" + selectedVersionId,
+            type: "GET",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (data) {
+                    let requirementJson = data.requirement;
+                    console.log(requirementJson);
+                    console.log(버전_요구사항_담당자);
+
+                    $("#req-cost-analysis-chart").height("500px");
+                    reqCostAnalysisChart(data);
+                }
+            },
+            error: function (e) {
+                jError("버전 조회 중 에러가 발생했습니다.");
+            }
+        });
+
         // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
-        $("#req-cost-analysis-chart").height("500px");
-        reqCostAnalysisChart(버전별요구사항별);
+
 
         $("#circularPacking").height("620px");
         // Circular Packing with D3 차트
@@ -741,7 +766,7 @@ function 비용분석계산() {
         */
         $('input[name="person-salary"]').map(function() {
             let owner = $(this).data('owner');
-            인력맵[owner].연봉 = $(this).val();
+            전체담당자목록[owner].연봉 = $(this).val();
         });
 
         /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
@@ -752,8 +777,8 @@ function 비용분석계산() {
 
         // 인력별 성과 측정 차트
         $("#manpower-analysis-chart2").height("500px");
-        성과차트2();
-        // 인력별_연봉대비_성과차트_기본세팅(인력맵);
+        인력_연봉대비_성과차트();
+        // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
     });
 }
 
@@ -764,12 +789,14 @@ function 차트초기화() {
     clearChart('income_status_chart');
     clearChart('req-cost-analysis-chart');
     clearChart('manpower-analysis-chart');
+    clearChart('manpower-analysis-chart2');
 
     $("#compare_costs").height("0px");
     $("#circularPacking").height("0px");
     $("#income_status_chart").height("0px");
     $("#req-cost-analysis-chart").height("0px");
     $("#manpower-analysis-chart").height("0px");
+    $("#manpower-analysis-chart2").height("0px");
 }
 
 function clearChart(elementId) {
@@ -780,6 +807,201 @@ function clearChart(elementId) {
             chartInstance.clear();
         }
     }
+}
+
+/////////////////////////////////////////////////////////
+// 요구사항 금액 분석 그래프
+/////////////////////////////////////////////////////////
+function reqCostAnalysisChart(data) {
+
+    console.log(" [ analysisCost :: reqCostAnalysisChart :: data -> ");
+    console.log(data);
+    let requirementJson = data.requirement;
+    let difficultyJson = data.difficulty;
+    let priorityJson = data. priority;
+
+    let requirementList = {};
+    Object.values(requirementJson).forEach(item => {
+        requirementList[item.c_title] = 1000000;
+    });
+
+    let reqTotalPrice = 0;
+    for (let key in requirementList) {
+        reqTotalPrice += requirementList[key];
+    }
+
+    let requirementKeys = Object.keys(requirementList);
+    let requirementData = requirementKeys.map(key => requirementList[key]);
+    let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
+
+    let difficultyData = Object.keys(difficultyJson).map(key => ({
+        name: key.replace('.js', ''),
+        value: difficultyJson[key]
+    }));
+
+    let priorityData = Object.keys(priorityJson).map(key => ({
+        name: key.replace('.js', ''),
+        value: priorityJson[key]
+    }));
+
+    let size = requirementKeys.length;
+    let x = 1;
+
+    if (size > 0) {
+        x = (15 / size) * 100;
+    }
+
+    var dom = document.getElementById('req-cost-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        tooltip: {
+            confine: true
+        },
+        title: [
+            {
+                // text: '요구사항',
+                subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
+                left: '25%',
+                textAlign: 'center',
+                textStyle: {
+                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                },
+                subtextStyle: {
+                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                }
+            },
+            {
+                text: '',
+                subtext: '난이도 및 우선순위 분포',
+                left: '80%',
+                bottom: '0%',
+                textAlign: 'center',
+                textStyle: {
+                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                },
+                subtextStyle: {
+                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                }
+            },
+        ],
+        grid: [
+            {
+                top: 50,
+                left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
+                right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
+                width: '50%',
+                bottom: '5%',
+                containLabel: true
+            },
+            /*            {
+                            top: '55%',
+                            width: '100%',
+                            bottom: 0,
+                            left: 10,
+                            containLabel: true
+                        }*/
+        ],
+        xAxis: [
+            {
+                type: 'value',
+                max: reqTotalPrice,
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    rotate: 45,
+                    color: '#FFFFFFFF',
+                },
+            },
+        ],
+        yAxis: [
+            {
+                type: 'category',
+                data: requirementKeys,
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    color: '#FFFFFFFF',
+                    rotate: 45,
+                    formatter: function(value) {
+                        // 최대 10자까지 표시
+                        if (value.length > 6) {
+                            return value.substring(0, 6) + '...';
+                        } else {
+                            return value;
+                        }
+                    },
+                },
+            },
+        ],
+        series: [
+            {
+                type: 'bar',
+                stack: 'chart',
+                z: 3,
+                label: {
+                    position: 'right',
+                    show: true
+                },
+                data: requirementData
+            },
+            {
+                type: 'bar',
+                stack: 'chart',
+                silent: true,
+                itemStyle: {
+                    color: '#FFFFFF'
+                },
+                data: requirementTotalData
+            },
+            {
+                type: 'pie',
+                radius: [0, '25%'],
+                center: ['80%', '25%'],
+                data: difficultyData,
+            },
+            {
+                type: 'pie',
+                radius: [0, '25%'],
+                center: ['80%', '65%'],
+                data: priorityData
+            }
+        ],
+        dataZoom: [
+            {
+                type: 'inside',
+                yAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                start: 0,
+                end: x
+            },
+            {
+                show: true,
+                type: 'slider',
+                left: '0%',
+                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
+                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                yAxisIndex: [0],
+                start: 0,
+                end: x
+            }
+        ],
+
+    };
+
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
 
 /////////////////////////////////////////////////////////
@@ -854,10 +1076,10 @@ function compareCostsChart(selectVersionData){
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
     const url = new UrlBuilder()
-    		.setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
-    		.addQueryParam("pdServiceLink", pdServiceLink)
-    		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-    		.build();
+        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
+        .addQueryParam("pdServiceLink", pdServiceLink)
+        .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+        .build();
 
     $.ajax({
         url: url,
@@ -897,7 +1119,7 @@ function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
                 let pdServiceName;
                 pdServiceListData.forEach(elements => {
                     if (elements["pdServiceId"] === +pdServiceLink) {
-                    pdServiceName = elements["pdServiceName"];
+                        pdServiceName = elements["pdServiceName"];
                     }
                 });
                 drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
@@ -907,7 +1129,7 @@ function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 }
 
 /////////////////////////////////////////////////////////
-// 요구사항 별 수익 현황 그래프
+// 요구사항 상세 차트
 /////////////////////////////////////////////////////////
 function incomeStatusChart(){
     var chartDom = document.getElementById('income_status_chart');
@@ -1028,222 +1250,167 @@ function incomeStatusChart(){
     window.addEventListener("resize", myChart.resize);
 }
 
-function reqCostAnalysisChart(버전별요구사항별) {
+/////////////////////////////////////////////////////////
+// 인력 연봉 대비 성과 차트
+/////////////////////////////////////////////////////////
+function 인력_연봉대비_성과차트() {
 
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId
-            + "/req-difficulty-priority-list?c_req_pdservice_versionset_link=" + selectedVersionId,
-        type: "GET",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                console.log(" [ analysisCost :: reqCostAnalysisChart :: data -> ");
-                console.log(data);
-                let requirementJson = data.requirement;
-                let difficultyJson = data.difficulty;
-                let priorityJson = data. priority;
+    const tooltipFormatter = function (params) {
 
-                let requirementList = {};
-                requirementJson.map(item => {
-                    requirementList[item.c_title] = 1000000;
-                });
+        let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
+        let tooltipContent = '';
 
-                let reqTotalPrice = 0;
-                for (let key in requirementList) {
-                    reqTotalPrice += requirementList[key];
+        if (data.length > 1) {
+            for (let i = 0; i < data.length; i++) {
+                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
+            }
+        }
+        else if (data.length === 1) {
+            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + "</span><br><strong>성과</strong> : " + data[0][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+        }
+
+        return tooltipContent;
+    };
+
+    let dataAll = Object.entries(전체담당자목록).map(([key, value]) => {
+        return [Number(value.연봉)*10000, Number(value.성과)*10000, value.이름+"["+key+"]"];
+    });
+
+    var dom = document.getElementById('manpower-analysis-chart2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    let maxX = Math.max(...dataAll.map(item => item[0]));
+    let maxX2 = Math.max(...dataAll.map(item => item[1]));
+
+    let max = Math.max(maxX, maxX2);
+
+    const markLineOpt = {
+        animation: false,
+        label: {
+            formatter: '성과 기준선',
+            align: 'right',
+            color: 'white'
+        },
+        lineStyle: {
+            type: 'dashed',
+            color: '#EE6666',
+            width: 2
+        },
+        tooltip: {
+            formatter: '성과 기준선'
+        },
+        data: [
+            [
+                {
+                    coord: [0, 0],
+                    symbol: 'none'
+                },
+                {
+                    coord: [max, max],
+                    symbol: 'none'
                 }
-
-                let requirementKeys = Object.keys(requirementList);
-                let requirementData = requirementKeys.map(key => requirementList[key]);
-                let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
-
-                let difficultyData = Object.keys(difficultyJson).map(key => ({
-                    name: key.replace('.js', ''),
-                    value: difficultyJson[key]
-                }));
-
-                let priorityData = Object.keys(priorityJson).map(key => ({
-                    name: key.replace('.js', ''),
-                    value: priorityJson[key]
-                }));
-
-                let size = requirementKeys.length;
-                let x = 1;
-
-                if (size > 0) {
-                    x = (15 / size) * 100;
-                }
-
-                var dom = document.getElementById('req-cost-analysis-chart');
-                var myChart = echarts.init(dom, null, {
-                    renderer: 'canvas',
-                    useDirtyRect: false
-                });
-                var app = {};
-
-                var option;
-
-                option = {
-                    tooltip: {
-                        confine: true
+            ]
+        ]
+    };
+    option = {
+        grid: [
+            { left: '15%', top: '5%'}
+        ],
+        tooltip: {
+            confine: true,
+            /*            formatter: function (params) {
+                            return params.value[2] + "<br><strong>연봉</strong> : <span style=''>" + params.value[0]  + "</span><br><strong>성과</strong> : " + params.value[1];
+                        },*/
+            formatter: tooltipFormatter
+        },
+        xAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                    formatter: function (value) {
+                        return value === 0 ? '' : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     },
-                    title: [
-                        {
-                            // text: '요구사항',
-                            subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
-                            left: '25%',
-                            textAlign: 'center',
-                            textStyle: {
-                                color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
-                            },
-                            subtextStyle: {
-                                color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
-                            }
-                        },
-                        {
-                            text: '',
-                            subtext: '난이도 및 우선순위 분포',
-                            left: '80%',
-                            bottom: '0%',
-                            textAlign: 'center',
-                            textStyle: {
-                                color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
-                            },
-                            subtextStyle: {
-                                color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
-                            }
-                        },
-                    ],
-                    grid: [
-                        {
-                            top: 50,
-                            left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
-                            right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
-                            width: '50%',
-                            bottom: '5%',
-                            containLabel: true
-                        },
-                        /*            {
-                                        top: '55%',
-                                        width: '100%',
-                                        bottom: 0,
-                                        left: 10,
-                                        containLabel: true
-                                    }*/
-                    ],
-                    xAxis: [
-                        {
-                            type: 'value',
-                            max: reqTotalPrice,
-                            splitLine: {
-                                show: false
-                            },
-                            axisLabel: {
-                                rotate: 45,
-                                color: '#FFFFFFFF',
-                            },
-                        },
-                    ],
-                    yAxis: [
-                        {
-                            type: 'category',
-                            data: requirementKeys,
-                            splitLine: {
-                                show: false
-                            },
-                            axisLabel: {
-                                color: '#FFFFFFFF',
-                                rotate: 45,
-                                formatter: function(value) {
-                                    // 최대 10자까지 표시
-                                    if (value.length > 6) {
-                                        return value.substring(0, 6) + '...';
-                                    } else {
-                                        return value;
-                                    }
-                                },
-                            },
-                        },
-                    ],
-                    series: [
-                        {
-                            type: 'bar',
-                            stack: 'chart',
-                            z: 3,
-                            label: {
-                                position: 'right',
-                                show: true
-                            },
-                            data: requirementData
-                        },
-                        {
-                            type: 'bar',
-                            stack: 'chart',
-                            silent: true,
-                            itemStyle: {
-                                color: '#FFFFFF'
-                            },
-                            data: requirementTotalData
-                        },
-                        {
-                            type: 'pie',
-                            radius: [0, '25%'],
-                            center: ['80%', '25%'],
-                            data: difficultyData,
-                        },
-                        {
-                            type: 'pie',
-                            radius: [0, '25%'],
-                            center: ['80%', '65%'],
-                            data: priorityData
-                        }
-                    ],
-                    dataZoom: [
-                        {
-                            type: 'inside',
-                            yAxisIndex: [0], // y축에만 dataZoom 기능 적용
-                            start: 0,
-                            end: x
-                        },
-                        {
-                            show: true,
-                            type: 'slider',
-                            left: '0%',
-                            backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
-                            dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
-                            yAxisIndex: [0],
-                            start: 0,
-                            end: x
-                        }
-                    ],
-
-                };
-
-
-                if (option && typeof option === 'object') {
-                    myChart.setOption(option);
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
                 }
-
-                window.addEventListener('resize', myChart.resize);
+            }
+        ],
+        yAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: 'I',
+                type: 'scatter',
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                data: dataAll,
+                markLine: markLineOpt
+            }
+        ],
+        toolbox: {
+            show: true,
+            orient: "vertical",
+            left: "right",
+            bottom: "50px",
+            feature: {
+                mark: { show: true },
+                dataView: {show: true, readOnly: true},
+                dataZoom: {show: true}
+            },
+            iconStyle: {
+                borderColor: "white"
             }
         },
-        error: function (e) {
-            jError("버전 조회 중 에러가 발생했습니다.");
-        }
-    });
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
 
-function 인력별_연봉대비_성과차트_기본세팅(인력맵) {
+function 인력별_연봉대비_성과차트_기본세팅(전체담당자목록) {
     // 초기화 로직
     $("#person-select-box").hide();
     $('.person-data + .bootstrap-select .dropdown-menu').empty();
     $('.person-data + .bootstrap-select .filter-option').text("");
 
-    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_기본세팅 ] :: 인력맵 -> ");
-    console.log(인력맵);
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_기본세팅 ] :: 전체담당자목록 -> ");
+    console.log(전체담당자목록);
 
-    var options = Object.keys(인력맵);
+    var options = Object.keys(전체담당자목록);
 
     console.log(options);
     if (options.length > 0) {
@@ -1276,7 +1443,7 @@ function 인력별_연봉대비_성과차트_기본세팅(인력맵) {
 
 function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
 
-    let manPowerData = 인력맵[selectedPerson];
+    let manPowerData = 전체담당자목록[selectedPerson];
 
     console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: selected person name -> " + selectedPerson);
     console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: selected person data -> ");
@@ -1422,160 +1589,11 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
 function 전역인력맵확인() {
     return new Promise(resolve => {
         let intervalId = setInterval(() => {
-            console.log(인력맵);
-            if (인력맵.length > 0 ) {
+            console.log(전체담당자목록);
+            if (전체담당자목록.length > 0 ) {
                 clearInterval(intervalId);
-                resolve(인력맵);
+                resolve(전체담당자목록);
             }
         }, 500);  // 100ms마다 globalDeadline 값 확인
     });
-}
-
-
-function 성과차트2() {
-
-    const tooltipFormatter = function (params) {
-
-        let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
-        let tooltipContent = '';
-
-        if (data.length > 1) {
-            for (let i = 0; i < data.length; i++) {
-                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
-            }
-        }
-        else if (data.length === 1) {
-            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + "</span><br><strong>성과</strong> : " + data[0][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
-        }
-
-        return tooltipContent;
-    };
-
-    let dataAll = Object.entries(인력맵).map(([key, value]) => {
-        return [Number(value.연봉)*10000, Number(value.성과)*10000, value.이름+"["+key+"]"];
-    });
-
-    var dom = document.getElementById('manpower-analysis-chart2');
-    var myChart = echarts.init(dom, null, {
-        renderer: 'canvas',
-        useDirtyRect: false
-    });
-    var app = {};
-
-    var option;
-
-    let maxX = Math.max(...dataAll.map(item => item[0]));
-    let maxX2 = Math.max(...dataAll.map(item => item[1]));
-
-    let max = Math.max(maxX, maxX2);
-
-    const markLineOpt = {
-        animation: false,
-        label: {
-            formatter: '성과 기준선',
-            align: 'right',
-            color: 'white'
-        },
-        lineStyle: {
-            type: 'dashed',
-            color: '#EE6666',
-            width: 2
-        },
-        tooltip: {
-            formatter: '성과 기준선'
-        },
-        data: [
-            [
-                {
-                    coord: [0, 0],
-                    symbol: 'none'
-                },
-                {
-                    coord: [max, max],
-                    symbol: 'none'
-                }
-            ]
-        ]
-    };
-    option = {
-        grid: [
-            { left: '15%', top: '5%'}
-        ],
-        tooltip: {
-            confine: true,
-            /*            formatter: function (params) {
-                            return params.value[2] + "<br><strong>연봉</strong> : <span style=''>" + params.value[0]  + "</span><br><strong>성과</strong> : " + params.value[1];
-                        },*/
-            formatter: tooltipFormatter
-        },
-        xAxis: [
-            {
-                gridIndex: 0,
-                min: 0,
-                max: max,
-                axisLabel: {
-                    color: 'white',
-                    interval: 1,
-                    rotate: 45,
-                    formatter: function (value) {
-                        return value === 0 ? '' : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    },
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: 'gray',
-                        type: 'dashed'
-                    }
-                }
-            }
-        ],
-        yAxis: [
-            {
-                gridIndex: 0,
-                min: 0,
-                max: max,
-                axisLabel: {
-                    color: 'white',
-                    interval: 1,
-                    rotate: 45,
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: 'gray',
-                        type: 'dashed'
-                    }
-                }
-            }
-        ],
-        series: [
-            {
-                name: 'I',
-                type: 'scatter',
-                xAxisIndex: 0,
-                yAxisIndex: 0,
-                data: dataAll,
-                markLine: markLineOpt
-            }
-        ],
-        toolbox: {
-            show: true,
-            orient: "vertical",
-            left: "right",
-            bottom: "50px",
-            feature: {
-                mark: { show: true },
-                dataView: {show: true, readOnly: true},
-                dataZoom: {show: true}
-            },
-            iconStyle: {
-                borderColor: "white"
-            }
-        },
-    };
-
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
-
-    window.addEventListener('resize', myChart.resize);
 }
