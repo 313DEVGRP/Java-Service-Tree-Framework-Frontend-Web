@@ -1076,7 +1076,7 @@ function compareCostsChart(selectVersionData){
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
     const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
+        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
         .addQueryParam("pdServiceLink", pdServiceLink)
         .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
         .build();
@@ -1088,33 +1088,11 @@ function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (result) {
+            200: function (data) {
                 console.log("[ analysisCost :: getReqCostRatio ] :: = ");
-                console.log(result);
-                let 변환된_데이터 = {};
 
-                Object.keys(result.버전별_그룹).forEach((버전) => {
-                    let 요구사항별_그룹 = result.버전별_그룹[버전].요구사항별_그룹;
-                    let 변환된_요구사항들 = [];
-                    Object.keys(요구사항별_그룹).forEach((요구사항) => {
-                        let 변환된_요구사항 = {};
-                        변환된_요구사항[요구사항] = 요구사항별_그룹[요구사항].map((데이터) => {
-                            let 치환된_버전 = 데이터.c_pds_version_name;
-                            let 치환된_요구사항 = 데이터.c_req_name;
-                            return {
-                                project: 데이터.c_issue_key,
-                                cost: 300, // 임시데이터
-                                version: 데이터.c_pds_version_name,
-                                req_name : 데이터.c_req_name
-                            };
-                        });
-                        변환된_요구사항들.push(변환된_요구사항);
-                    });
-
-                    변환된_데이터[버전] = 변환된_요구사항들;
-                });
-
-                console.log(변환된_데이터);
+                let 필요_데이터 = data.버전별_요구사항별_연결된지_지라이슈;
+                console.log(필요_데이터); // 결과 출력
 
                 let pdServiceName;
                 pdServiceListData.forEach(elements => {
@@ -1122,7 +1100,7 @@ function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
                         pdServiceName = elements["pdServiceName"];
                     }
                 });
-                drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
+                drawCircularPacking("circularPacking",pdServiceName,필요_데이터);
             }
         }
     });
