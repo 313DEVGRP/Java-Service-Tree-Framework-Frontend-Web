@@ -12,6 +12,8 @@ var versionListData;
 
 var 버전_요구사항_담당자 = {};
 var 전체담당자목록 = {};
+var 요구사항별_키목록 = {};
+var 요구사항전체목록 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -208,6 +210,7 @@ function bind_VersionData_By_PdService() {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
                     console.log(obj);
+                    obj.소모비용 = 0;
                     versionListData[obj.c_id] = obj;
                     // versionListData.push({ c_id: obj.c_id, versionTitle: obj.c_title });
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
@@ -262,14 +265,10 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
                 전체담당자목록 = apiResponse.response.전체담당자목록;
 
-                let 연봉 = 3000;
-                let 성과 = 1000;
+                let 연봉 = 5000;
 
                 Object.keys(전체담당자목록).forEach((key) => {
                     전체담당자목록[key].연봉 = 연봉;
-                    전체담당자목록[key].성과 = 성과;
-                    연봉 -= 100;
-                    성과 += 100;
                 });
 
                 costInput(전체담당자목록, pdServiceVersionLinks);
@@ -634,25 +633,6 @@ function 비용분석계산() {
 
         let isNumber = true;
 
-        // 버전 비용
-        let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
-
-        let selectVersionData = [];
-        for (let i = 0; i < selectedVersions.length; i++) {
-            let item = versionListData[selectedVersions[i]];
-            let inputVersionValue = $(`input[name="version-cost"][data-owner=${selectedVersions[i]}]`).val();
-            let number = Number(inputVersionValue.replace(/,/g, ''));
-
-            if (isNaN(Number(number))) {
-                isNumber = false;
-                break;
-            }
-
-            item.versionCost = number * 10000;
-            item.consumptionCost = 9000000;
-
-            selectVersionData.push(item);
-        }
         // console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
 
 
@@ -696,6 +676,8 @@ function 비용분석계산() {
                 isNumber = false;
             }
 
+            전체담당자목록[key].연봉 = cost * 10000;
+
             annualIncome.push({
                 사용자: name,
                 키: key,
@@ -709,6 +691,10 @@ function 비용분석계산() {
             return;
         }
 
+        $("#circularPacking").height("620px");
+        // Circular Packing with D3 차트
+        var versionTag = $(".multiple-select").val();
+        getReqCostRatio(selectedPdServiceId, versionTag);
 
         $.ajax({
             url: "/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId
@@ -719,11 +705,85 @@ function 비용분석계산() {
             statusCode: {
                 200: function (data) {
                     let requirementJson = data.requirement;
-                    console.log(requirementJson);
-                    console.log(버전_요구사항_담당자);
 
+                    요구사항전체목록 = requirementJson;
+                    console.log(버전_요구사항_담당자);
+                    console.log(전체담당자목록);
+                    console.log(요구사항전체목록);
+                    console.log(요구사항별_키목록);
+
+                    Object.values(요구사항전체목록).forEach((요구사항) => {
+                       요구사항.단가 = 0;
+                       let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
+                       요구사항이포함된버전목록.forEach((버전) => {
+                            let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
+                            let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
+                            if (요구사항_키목록 == null) {
+                                console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+                            }
+                            else {
+                                요구사항_키목록.forEach((요구사항키) => {
+                                    let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
+                                    let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
+                                    if (담당자목록 == null) {
+
+                                    }
+                                    else {
+                                        console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
+                                        Object.entries(담당자목록).forEach(([key, value]) => {
+                                            // console.log(key);
+                                            let 일급 = Math.round((전체담당자목록[key].연봉 / 365) / 10000) * 10000;
+
+                                            if (요구사항.reqStateEntity.c_id === 11) {
+                                                let startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                                let endDate = new Date(formatDate(new Date()));
+
+                                                startDate.setHours(0,0,0,0);
+                                                endDate.setHours(0,0,0,0);
+
+                                                let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+
+//                                                    console.log(일급);
+//                                                    console.log(업무일수);
+
+                                                요구사항.단가 += 업무일수 * 일급;
+                                                전체담당자목록[key].성과 += 업무일수 * 일급;
+                                                versionListData[버전].소모비용 += 업무일수 * 일급;
+                                            }
+                                            else if (요구사항.reqStateEntity.c_id === 12) {
+                                                let startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                                let endDate = new Date(formatDate(요구사항.c_req_end_date));
+
+                                                startDate.setHours(0,0,0,0);
+                                                endDate.setHours(0,0,0,0);
+
+                                                let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+
+                                                요구사항.단가 += 업무일수 * 일급;
+                                                전체담당자목록[key].성과 += 업무일수 * 일급;
+
+                                                versionListData[버전].소모비용 += 업무일수 * 일급;
+                                            }
+                                        });
+                                    }
+                                })
+                            }
+                       });
+                    });
+
+                    data.requirement = 요구사항전체목록;
+                    console.log(data.requirement);
                     $("#req-cost-analysis-chart").height("500px");
                     reqCostAnalysisChart(data);
+
+                    // 인력별 성과 측정 차트
+                    $("#manpower-analysis-chart2").height("500px");
+                    인력_연봉대비_성과차트();
+                    // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
+
+                    // 버전별 투자 대비 소모 비용 차트
+                    $("#compare_costs").height("500px");
+                    compareCostsChart();
                 }
             },
             error: function (e) {
@@ -734,26 +794,9 @@ function 비용분석계산() {
         // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
 
 
-        $("#circularPacking").height("620px");
-        // Circular Packing with D3 차트
-        var versionTag = $(".multiple-select").val();
-        getReqCostRatio(selectedPdServiceId, versionTag);
-
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
         incomeStatusChart();
-
-
-
-
-
-
-
-        $("#compare_costs").height("500px");
-        // 버전별 투자 대비 소모 비용 차트
-        compareCostsChart(selectVersionData);
-
-
 
         /*let inputSalaryValues = $('input[name="annual-income"]').map(function() {
             let data = {};
@@ -764,10 +807,10 @@ function 비용분석계산() {
             return data;
         }).get();
         */
-        $('input[name="person-salary"]').map(function() {
-            let owner = $(this).data('owner');
-            전체담당자목록[owner].연봉 = $(this).val();
-        });
+//        $('input[name="person-salary"]').map(function() {
+//            let owner = $(this).data('owner');
+//            전체담당자목록[owner].연봉 = $(this).val() * 10000;
+//        });
 
         /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
             let owner = $(cur).data('owner');
@@ -775,10 +818,7 @@ function 비용분석계산() {
             return acc;
         }, {});*/
 
-        // 인력별 성과 측정 차트
-        $("#manpower-analysis-chart2").height("500px");
-        인력_연봉대비_성과차트();
-        // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
+
     });
 }
 
@@ -822,7 +862,7 @@ function reqCostAnalysisChart(data) {
 
     let requirementList = {};
     Object.values(requirementJson).forEach(item => {
-        requirementList[item.c_title] = 1000000;
+        requirementList[item.c_title] = item.단가;
     });
 
     let reqTotalPrice = 0;
@@ -1007,15 +1047,33 @@ function reqCostAnalysisChart(data) {
 /////////////////////////////////////////////////////////
 // 투입 비용 현황 차트
 /////////////////////////////////////////////////////////
-function compareCostsChart(selectVersionData){
+function compareCostsChart(){
+
+    console.log(" [ analysisCost :: compareCostsChart :: data -> ");
+    console.log(versionListData);
+
+    let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
+
+    let selectVersionData = [];
+    for (let i = 0; i < selectedVersions.length; i++) {
+        let item = versionListData[selectedVersions[i]];
+        let inputVersionValue = $(`input[name="version-cost"][data-owner=${selectedVersions[i]}]`).val();
+        let number = Number(inputVersionValue.replace(/,/g, ''));
+
+        if (isNaN(Number(number))) {
+            isNumber = false;
+            break;
+        }
+
+        selectVersionData.push(item);
+    }
+
     let chartDom = document.getElementById("compare_costs");
     let myChart = echarts.init(chartDom);
     let option;
+
     let titles = selectVersionData.map(item => item.c_title);
-
-    let versionCosts = selectVersionData.map(item => item.versionCost);
-
-    let consumptionCosts = selectVersionData.map(item => item.consumptionCost);
+    let consumptionCosts = selectVersionData.map(item => item.소모비용);
 
     option = {
         tooltip: {
@@ -1051,11 +1109,6 @@ function compareCostsChart(selectVersionData){
         },
         series: [
             {
-                name: '투자 비용',
-                type: 'bar',
-                data: versionCosts
-            },
-            {
                 name: '소모 비용',
                 type: 'bar',
                 data: consumptionCosts
@@ -1076,7 +1129,7 @@ function compareCostsChart(selectVersionData){
 function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
 
     const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-activated-issue")
+        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
         .addQueryParam("pdServiceLink", pdServiceLink)
         .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
         .build();
@@ -1087,10 +1140,13 @@ function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function (result) {
                 console.log("[ analysisCost :: getReqCostRatio ] :: = ");
-                console.log(result);
+                console.log(result.버전별_요구사항별_연결된지_지라이슈);
+                요구사항별_키목록 = result.버전별_요구사항별_연결된지_지라이슈;
+
                 let 변환된_데이터 = {};
 
                 Object.keys(result.버전별_그룹).forEach((버전) => {
@@ -1273,7 +1329,7 @@ function 인력_연봉대비_성과차트() {
     };
 
     let dataAll = Object.entries(전체담당자목록).map(([key, value]) => {
-        return [Number(value.연봉)*10000, Number(value.성과)*10000, value.이름+"["+key+"]"];
+        return [Number(value.연봉), Number(value.성과), value.이름+"["+key+"]"];
     });
 
     var dom = document.getElementById('manpower-analysis-chart2');
