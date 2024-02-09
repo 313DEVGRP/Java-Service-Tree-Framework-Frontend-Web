@@ -15,9 +15,10 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
         "rgba(255,127,0,0.7)",
         "rgba(55,125,184,0.62)",
         "rgba(166,86,40,0.7)",
-        "rgba(227,26,27,0.66)"*/
-        '#546570', '#c4ccd3' , '#749f83','#91c7ae'
-        ];
+        "rgba(227,26,27,0.66)" */
+        '#546570', '#c4ccd3' , '#749f83','#91c7ae',
+        // '#028090', '#EAE2B7', '#84A07C', '#F2CC8F'
+    ];
 
     if(rawData) {
         run(rawData);
@@ -220,9 +221,9 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
             };
         }
 
-       let productCost = seriesData.find(function(data) {
-           return data.depth === 0;
-       }).value;
+        let productCost = seriesData.find(function(data) {
+            return data.depth === 0;
+        }).value;
         option = {
             dataset: {
                 source: seriesData
@@ -246,14 +247,14 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                 progressive: 0,
                 coordinateSystem: 'none',
                 itemStyle: {
-                   color: function(params) {
-                    var colorIndex;
-                    if (params.data.value) {
-                                                return colorPalette[params.value.depth];
-                                            }  else {// 기본 색상 사용
-                        return "rgba(55,125,184,0.62)"; // 파란색
-                    }
-                    return colorPalette[colorIndex];
+                    color: function(params) {
+                        var colorIndex;
+                        if (params.data.value) {
+                            return colorPalette[params.value.depth];
+                        }  else {// 기본 색상 사용
+                            return "rgba(55,125,184,0.62)"; // 파란색
+                        }
+                        return colorPalette[colorIndex];
                     }
                 },
                 tooltip: {
@@ -261,15 +262,15 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                         // params.value에는 원본 값이 들어있을 것입니다. 여기에 단위를 붙여 반환하면 됩니다.
                         let id = params.data.id;
                         let parts = id.split('.');
-                         if(params.data.depth === 0){
+                        if(params.data.depth === 0){
                             return "제품(서비스) 정보 </br>● 제품(서비스) :"+ parts[0] +" </br>● 비용 :"+params.data.value ;
-                         }else if(params.data.depth === 1){
+                        }else if(params.data.depth === 1){
                             return "버전 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 비용 :"+params.data.value ;
-                         }else if(params.data.depth === 2){
+                        }else if(params.data.depth === 2){
                             return "요구사항 정보 </br>● 버전 :"+ params.data.version_name  +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 비용 :"+params.data.value ;
-                         }else if(params.data.depth === 3){
+                        }else if(params.data.depth === 3){
                             return "요구사항 키 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 요구사항 키 :"+ parts[3] ;
-                         }
+                        }
                         else {
                             return `${params.data.id}`;
                         }
