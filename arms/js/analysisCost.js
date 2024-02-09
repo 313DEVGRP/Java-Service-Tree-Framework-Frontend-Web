@@ -263,11 +263,12 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
                 전체담당자목록 = apiResponse.response.전체담당자목록;
 
-                let 연봉 = 5000;
-
-                Object.keys(전체담당자목록).forEach((key) => {
-                    전체담당자목록[key].연봉 = 연봉;
-                });
+                // let 연봉 = 5000;
+                //
+                // Object.keys(전체담당자목록).forEach((key) => {
+                //     전체담당자목록[key].연봉 = 연봉;
+                //     전체담당자목록
+                // });
 
                 costInput(전체담당자목록, pdServiceVersionLinks);
             }
@@ -556,8 +557,10 @@ function manpowerInput(전체담당자목록) {
             title: "연봉 (입력)",
             data: "연봉",
             render: function(data, type, row) {
+                console.log("dataTable data => ");
+                console.log(data);
                 var formattedData = parseInt(data).toLocaleString();
-                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.키 + '"> 만원';
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + 5000 + '" data-owner="' + row.키 + '"> 만원';
             },
             className: "dt-center",
             visible: true
@@ -634,6 +637,7 @@ function dataTableDrawCallback(tableInfo) {
 
         let owner = $(this).data('owner');
         전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
+        전체담당자목록[owner].성과 = 0;
     });
 }
 
@@ -694,7 +698,6 @@ function 비용분석계산() {
             .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
             .build();
 
-
         Promise.all([
             $.ajax({ url: url, type: "GET", dataType: "json" }),
             $.ajax({ url: url2, type: "GET", dataType: "json" })
@@ -740,7 +743,14 @@ function 비용분석계산() {
                                     let startDate, endDate;
 
                                     if (요구사항.reqStateEntity == null) {
+                                        startDate = new Date(formatDate(요구사항.c_req_create_date));
+                                        endDate = new Date(formatDate(요구사항.c_req_create_date));
+                                        if (요구사항.c_req_plan_time == null) {
 
+                                        }
+                                        else {
+                                            endDate.setDate(startDate.getDate() + 요구사항.c_req_plan_time);
+                                        }
                                     }
                                     else {
                                         if (요구사항.reqStateEntity.c_id === 11) {
@@ -752,28 +762,26 @@ function 비용분석계산() {
                                             endDate = new Date(formatDate(요구사항.c_req_end_date));
                                         }
                                         else {
-                                            console.log("요구사항.c_req_create_date -> " + 요구사항.c_req_create_date);
-                                            console.log("요구사항.c_req_plan_time -> " + 요구사항.c_req_plan_time);
                                             startDate = new Date(formatDate(요구사항.c_req_create_date));
                                             if (요구사항.c_req_plan_time == null) {
 
                                             }
                                             else {
-                                                endDate = startDate.addDays(요구사항.c_req_plan_time);
+                                                endDate = new Date(startDate.setDate(요구사항.c_req_plan_time));
                                             }
                                         }
+                                    }
 
-                                        if (startDate && endDate) {
-                                            startDate.setHours(0,0,0,0);
-                                            endDate.setHours(0,0,0,0);
+                                    if (startDate && endDate) {
+                                        startDate.setHours(0,0,0,0);
+                                        endDate.setHours(0,0,0,0);
 
-                                            let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-                                            let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
+                                        let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+                                        let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
 
-                                            요구사항.단가 += 업무일수 * 일급;
-                                            전체담당자목록[key].성과 += 업무일수 * 일급;
-                                            versionListData[버전].소모비용 += 업무일수 * 일급;
-                                        }
+                                        요구사항.단가 += 업무일수 * 일급;
+                                        전체담당자목록[key].성과 += 업무일수 * 일급;
+                                        versionListData[버전].소모비용 += 업무일수 * 일급;
                                     }
                                 });
                             }
