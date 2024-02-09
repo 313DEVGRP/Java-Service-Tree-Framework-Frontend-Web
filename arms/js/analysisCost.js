@@ -746,24 +746,29 @@ function 비용분석계산() {
 
                                     let startDate, endDate;
 
-                                    if (요구사항.reStateEntity != null && 요구사항.reqStateEntity.c_id === 11) {
-                                        startDate = new Date(formatDate(요구사항.c_req_start_date));
-                                        endDate = new Date(formatDate(new Date()));
-                                    } else if (요구사항.reStateEntity != null && 요구사항.reqStateEntity.c_id === 12) {
-                                        startDate = new Date(formatDate(요구사항.c_req_start_date));
-                                        endDate = new Date(formatDate(요구사항.c_req_end_date));
+                                    if (요구사항.reqStateEntity == null) {
+
                                     }
+                                    else {
+                                        if (요구사항.reqStateEntity.c_id === 11) {
+                                            startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                            endDate = new Date(formatDate(new Date()));
+                                        } else if (요구사항.reqStateEntity.c_id === 12) {
+                                            startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                            endDate = new Date(formatDate(요구사항.c_req_end_date));
+                                        }
 
-                                    if (startDate && endDate) {
-                                        startDate.setHours(0,0,0,0);
-                                        endDate.setHours(0,0,0,0);
+                                        if (startDate && endDate) {
+                                            startDate.setHours(0,0,0,0);
+                                            endDate.setHours(0,0,0,0);
 
-                                        let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-                                        let 일급 = Math.round((전체담당자목록[key].연봉 / 365) / 10000) * 10000;
+                                            let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+                                            let 일급 = Math.round((전체담당자목록[key].연봉 / 365) / 10000) * 10000;
 
-                                        요구사항.단가 += 업무일수 * 일급;
-                                        전체담당자목록[key].성과 += 업무일수 * 일급;
-                                        versionListData[버전].소모비용 += 업무일수 * 일급;
+                                            요구사항.단가 += 업무일수 * 일급;
+                                            전체담당자목록[key].성과 += 업무일수 * 일급;
+                                            versionListData[버전].소모비용 += 업무일수 * 일급;
+                                        }
                                     }
                                 });
                             }
