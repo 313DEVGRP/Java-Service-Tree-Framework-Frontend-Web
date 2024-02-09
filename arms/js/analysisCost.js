@@ -699,14 +699,15 @@ function 비용분석계산() {
             $.ajax({ url: url, type: "GET", dataType: "json" }),
             $.ajax({ url: url2, type: "GET", dataType: "json" })
         ]).then(function([data1, data2]) {
-            console.log("[ analysisCost :: 비용분석계산 API 1 ] :: = ");
+            console.log("[ analysisCost :: 비용분석계산 API 1 ] :: data1 => ");
             console.log(data1);
-            console.log("[ analysisCost :: 비용분석계산 API 2 ] :: = ");
+            console.log("[ analysisCost :: 비용분석계산 API 2 ] :: data2 => ");
             console.log(data2);
 
             요구사항별_키목록 = data1.버전별_요구사항별_연결된지_지라이슈;
             요구사항전체목록 = data2.requirement;
 
+            console.log("[ analysisCost :: 비용분석계산 ] :: 게산을 위한 데이터들 => ");
             console.log(버전_요구사항_담당자);
             console.log(전체담당자목록);
             console.log(요구사항전체목록);
@@ -722,17 +723,17 @@ function 비용분석계산() {
                     let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
                     let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
                     if (요구사항_키목록 == null) {
-                        console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+                        // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
                     }
                     else {
                         요구사항_키목록.forEach((요구사항키) => {
                             let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
                             let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
                             if (담당자목록 == null) {
-
+                                // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "n\요구사항_담당자목록 -> " +요구사항.c_id);
                             }
                             else {
-                                console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
+                                // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
                                 Object.entries(담당자목록).forEach(([key, value]) => {
                                     // console.log(key);
 
@@ -745,9 +746,21 @@ function 비용분석계산() {
                                         if (요구사항.reqStateEntity.c_id === 11) {
                                             startDate = new Date(formatDate(요구사항.c_req_start_date));
                                             endDate = new Date(formatDate(new Date()));
-                                        } else if (요구사항.reqStateEntity.c_id === 12) {
+                                        }
+                                        else if (요구사항.reqStateEntity.c_id === 12) {
                                             startDate = new Date(formatDate(요구사항.c_req_start_date));
                                             endDate = new Date(formatDate(요구사항.c_req_end_date));
+                                        }
+                                        else {
+                                            console.log("요구사항.c_req_create_date -> " + 요구사항.c_req_create_date);
+                                            console.log("요구사항.c_req_plan_time -> " + 요구사항.c_req_plan_time);
+                                            startDate = new Date(formatDate(요구사항.c_req_create_date));
+                                            if (요구사항.c_req_plan_time == null) {
+
+                                            }
+                                            else {
+                                                endDate = startDate.addDays(요구사항.c_req_plan_time);
+                                            }
                                         }
 
                                         if (startDate && endDate) {
@@ -755,7 +768,7 @@ function 비용분석계산() {
                                             endDate.setHours(0,0,0,0);
 
                                             let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-                                            let 일급 = Math.round((전체담당자목록[key].연봉 / 365) / 10000) * 10000;
+                                            let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
 
                                             요구사항.단가 += 업무일수 * 일급;
                                             전체담당자목록[key].성과 += 업무일수 * 일급;
@@ -770,7 +783,6 @@ function 비용분석계산() {
             });
 
             data2.requirement = 요구사항전체목록;
-            console.log(data2.requirement);
             $("#req-cost-analysis-chart").height("500px");
             reqCostAnalysisChart(data2);
 
@@ -1058,14 +1070,6 @@ function compareCostsChart(){
     let selectVersionData = [];
     for (let i = 0; i < selectedVersions.length; i++) {
         let item = versionListData[selectedVersions[i]];
-        let inputVersionValue = $(`input[name="version-cost"][data-owner=${selectedVersions[i]}]`).val();
-        let number = Number(inputVersionValue.replace(/,/g, ''));
-
-        if (isNaN(Number(number))) {
-            isNumber = false;
-            break;
-        }
-
         selectVersionData.push(item);
     }
 
@@ -1270,7 +1274,7 @@ function 인력_연봉대비_성과차트() {
     };
 
     let dataAll = Object.entries(전체담당자목록).map(([key, value]) => {
-        return [Number(value.연봉), Number(value.성과), value.이름+"["+key+"]"];
+        return [Number(value.연봉) *10000, Number(value.성과), value.이름+"["+key+"]"];
     });
 
     var dom = document.getElementById('manpower-analysis-chart2');
