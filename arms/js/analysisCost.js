@@ -12,8 +12,6 @@ var versionListData;
 
 var 버전_요구사항_담당자 = {};
 var 전체담당자목록 = {};
-var 요구사항별_키목록 = {};
-var 요구사항전체목록 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -281,103 +279,126 @@ function formatDate(date) {
     return new Date(date).toISOString().split('T')[0];
 }
 
+// 엑셀 파일 업로드
+function file_upload_setting() {
+
+    // 업로드 영역 로드
+    $('.body-middle').html(`
+        <button
+                class="btn btn-primary btn-block btn-sm"
+                id="excel-annual-income-template-download"
+                type="button"
+                style="margin-right: 5px;">
+            Excel 템플릿 다운로드
+        </button>
+        
+        <form
+                id="fileupload"
+                action="excel-upload.do"
+                method="POST"
+                enctype="multipart/form-data">
+            <input
+                    type="hidden"
+                    id="fileIdlink"
+                    value="" />
+            <div class="row analysis-cost-image-row">
+                <div class="col-md-12">
+                    <div
+                            id="dropzone"
+                            class="dropzone">
+                        <i class="fa fa-cloud-upload"></i>
+                        Drop files here
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 fileupload-progress fade font12">
+                    <!-- The global progress bar -->
+                    <div
+                            class="progress progress-success progress-striped active font12"
+                            role="progressbar"
+                            aria-valuemin="0"
+                            aria-valuemax="100">
+                        <div
+                                class="bar"
+                                style="width: 0%"></div>
+                    </div>
+                    <!-- The extended global progress information -->
+                    <div class="progress-extended font12">&nbsp;</div>
+                </div>
+            </div>
+            <div class="form-actions fileupload-buttonbar no-margin analysis-cost-image-row">
+                                        <span class="btn btn-sm btn-inverse fileinput-button">
+                                            <i class="fa fa-plus"></i>
+                                            <span>Add files...</span>
+                                            <input
+                                                    type="file"
+                                                    name="files[]"
+                                                    multiple="" />
+                                        </span>
+                <button
+                        type="submit"
+                        class="btn btn-inverse btn-sm start">
+                    <i class="fa fa-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button
+                        type="reset"
+                        class="btn btn-inverse btn-sm cancel">
+                    <i class="fa fa-ban"></i>
+                    <span>Cancel upload</span>
+                </button>
+            </div>
+            <div class="fileupload-loading">
+                <i class="fa fa-spin fa-spinner"></i>
+            </div>
+            <!-- The table listing the files available for upload/download -->
+            <table
+                    role="presentation"
+                    class="table table-striped"
+                    style="margin-bottom: 5px">
+                <tbody
+                        class="files"
+                        data-toggle="modal-gallery"
+                        data-target="#modal-gallery"></tbody>
+            </table>
+        </form>
+    `);
+
+    // Initialize the jQuery File Upload widget:
+    var $fileupload = $("#fileupload");
+    $fileupload.fileupload({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        autoUpload: true,
+        url: "/auth-user/api/arms/analysis/cost/excel-upload.do",
+        dropZone: $("#dropzone")
+    });
+
+
+    $("#fileupload").bind("fileuploadsubmit", function (e, data) {
+        // The example input, doesn't have to be part of the upload form:
+        var input = $("#fileIdlink");
+        data.formData = { pdservice_link: input.val() };
+        if (!data.formData.pdservice_link) {
+            data.context.find("button").prop("disabled", false);
+            input.focus();
+            return false;
+        }
+    });
+}
+
 // 버전 비용 및 인력 비용 입력
 function costInput(전체담당자목록, pdServiceVersionLinks) {
 
     console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(전체담당자목록));
 
-    versionInput(pdServiceVersionLinks);
+    file_upload_setting();
+    //versionInput(pdServiceVersionLinks);
     manpowerInput(전체담당자목록);
-
-    /*if ($.fn.dataTable.isDataTable('#version-cost')) {
-        $('#version-cost').DataTable().clear().destroy();
-    }
-
-    let selectedVersions = pdServiceVersionLinks.split(',');
-
-    let versionTableData = selectedVersions.map(versionId => {
-        let item = versionListData[versionId];
-        let startDate = item.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(item.c_pds_version_start_date);
-        let endDate = item.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(item.c_pds_version_end_date);
-        return { // 객체를 바로 반환
-            version: item.c_title,
-            period: startDate + " ~ " + endDate,
-            cost: 0,
-            c_id: item.c_id
-        };
-    });
-
-    $('#version-cost').DataTable({
-        data: versionTableData,
-        columns: [
-            { data: "version", title: "버전", className: "dt-center" },
-            { data: "period", title: "기간", className: "dt-center" },
-            {
-                data: "cost",
-                title: "비용 (입력)",
-                className: "dt-center",
-                render: function(data, type, row) {
-                    return '<input type="text" name="version-cost" class="cost-input" value="' + data + '" data-owner="' + row.c_id + '"> 만원';
-                }
-            }
-        ],
-        drawCallback: function(settings) {
-            $('.cost-input').on('input', function() {
-                var value = this.value.replace(/,/g, '');
-                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            });
-        }
-    });
-
-    // 연봉 정보
-    let manpowerData = Object.keys(전체담당자목록).map((key) => {
-        let data = {};
-        data.이름 = key;
-        data.연봉 = 전체담당자목록[key].연봉;
-        data.성과 = 전체담당자목록[key].성과;
-        return data;
-    });
-
-    if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
-        $('#manpower-annual-income').DataTable().clear().destroy();
-    }
-
-    $('#manpower-annual-income').DataTable({
-        data: manpowerData,
-        columns: [
-            {
-                name: "이름",
-                data: "이름",
-                title: "투입 인력",
-                className: "dt-center"
-            },
-            {
-                title: "연봉 (입력)",
-                data: "연봉",
-                className: "dt-center",
-                render: function(data, type, row) {
-                    return '<input type="text" name="person-salary" class="salary-input" value="' + data + '" data-owner="' + row.이름 + '"> 만원';
-                }
-            }
-        ],
-        drawCallback: function(settings) {
-            $('.salary-input').on('input', function() {
-                var value = this.value.replace(/,/g, '');
-                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                // 같은 그룹의 모든 연봉 입력 필드를 찾아 값 업데이트
-                var name = $(this).parents('tr').find('td').first().text();
-                var salaryInputs = $('td:contains("' + name + '")').siblings().find('.salary-input');
-                salaryInputs.val(this.value);
-            });
-        },
-        /!*rowsGroup: [
-            "name:name",
-        ]*!/
-    });*/
 }
 
-function versionInput(pdServiceVersionLinks) {
+/*function versionInput(pdServiceVersionLinks) {
 
     if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
@@ -482,7 +503,7 @@ function versionInput(pdServiceVersionLinks) {
         data,
         isAjax
     );
-}
+}*/
 
 function manpowerInput(전체담당자목록) {
 
@@ -536,7 +557,7 @@ function manpowerInput(전체담당자목록) {
             data: "연봉",
             render: function(data, type, row) {
                 var formattedData = parseInt(data).toLocaleString();
-                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.이름 + '"> 만원';
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.키 + '"> 만원';
             },
             className: "dt-center",
             visible: true
@@ -576,20 +597,27 @@ function manpowerInput(전체담당자목록) {
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(tempDataTable, selectedData) {
+function dataTableClick(tempDataTable, selectedData) {}
 
-}
-
-// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수
 function dataTableCallBack(settings, json) {
-    $('.cost-input').on('input', function() {
-        var value = this.value.replace(/,/g, '');
-        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    });
+    $("#fileIdlink").val(selectedPdServiceId);
 
-    $('.annual-income-input').on('input', function() {
-        var value = this.value.replace(/,/g, '');
-        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //파일 리스트 초기화
+    $("table tbody.files").empty();
+    // Load existing files:
+    var $fileupload = $("#fileupload");
+
+    $.ajax({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
+        data: { fileIdLink: selectedPdServiceId },
+        dataType: "json",
+        context: $fileupload[0]
+    }).done(function (result) {
+        $(this).fileupload("option", "done").call(this, null, { result: result });
+        $(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리
     });
 }
 
@@ -598,6 +626,15 @@ function dataTableDrawCallback(tableInfo) {
         .DataTable()
         .columns.adjust()
         .responsive.recalc();
+
+    // 연봉 포맷 설정 및 연봉 정보 저장
+    $('.annual-income-input').off('input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        let owner = $(this).data('owner');
+        전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
+    });
 }
 
 function excel_download() {
@@ -636,60 +673,15 @@ function 비용분석계산() {
         // console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
 
 
-        /*
-        // 버전 비용
-        var versionCost = [];
+        // 연봉 정보 유효성 체크 및 세팅
+        for (let owner in 전체담당자목록) {
 
-        var table = $('#version-cost').DataTable();
-        // DataTable의 모든 행에 대해 반복
-        table.rows().every(function() {
-            var versionId = this.data()['c_id']; // 버전 아이디
-            var versionName = this.data()['c_title']; // 버전 이름
-            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
-
-            if (isNaN(Number(cost))) {
-                isNumber = false;
+            if (isNaN(전체담당자목록[owner].연봉)) {
+                alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
                 return;
             }
-
-            versionCost.push({
-                c_id: versionId,
-                c_title: versionName,
-                versionCost: cost * 10000,
-                consumptionCost: 9000000
-            });
-        });
-        console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));*/
-
-        // 인력별 연봉
-        var annualIncome = [];
-
-        var table = $('#manpower-annual-income').DataTable();
-        // DataTable의 모든 행에 대해 반복
-        table.rows().every(function() {
-            var name = this.data()['이름']; // 인력
-            var key = this.data()['키']; // 키
-            var cost = Number(this.nodes().to$().find('td:last input').val().replace(/,/g, '')); // 비용
-
-            if (isNaN(Number(cost))) {
-                isNumber = false;
-            }
-
-            전체담당자목록[key].연봉 = cost * 10000;
-
-            annualIncome.push({
-                사용자: name,
-                키: key,
-                연봉: cost * 10000
-            });
-        });
-        console.log(" [ analysisCost :: 비용 분석 계산 ] :: annualIncome -> " + JSON.stringify(annualIncome));
-
-        if (!isNumber) {
-            alert("비용 입력란에 숫자를 입력해 주세요.");
-            return;
         }
-
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: 전체담당자목록 -> " + JSON.stringify(전체담당자목록));
 
         const url = new UrlBuilder()
             .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
