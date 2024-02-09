@@ -661,7 +661,6 @@ function 비용분석계산() {
         });
         console.log(" [ analysisCost :: 비용 분석 계산 ] :: versionCost -> " + JSON.stringify(versionCost));*/
 
-
         // 인력별 연봉
         var annualIncome = [];
 
@@ -691,108 +690,115 @@ function 비용분석계산() {
             return;
         }
 
-        $("#circularPacking").height("620px");
-        // Circular Packing with D3 차트
-        var versionTag = $(".multiple-select").val();
-        getReqCostRatio(selectedPdServiceId, versionTag);
 
-        $.ajax({
-            url: "/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId
-                + "/req-difficulty-priority-list?c_req_pdservice_versionset_link=" + selectedVersionId,
-            type: "GET",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function (data) {
-                    let requirementJson = data.requirement;
+        const url = new UrlBuilder()
+            .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
+            .addQueryParam("pdServiceLink", selectedPdServiceId)
+            .addQueryParam("pdServiceVersionLinks", selectedVersionId)
+            .build();
 
-                    요구사항전체목록 = requirementJson;
-                    console.log(버전_요구사항_담당자);
-                    console.log(전체담당자목록);
-                    console.log(요구사항전체목록);
-                    console.log(요구사항별_키목록);
+        const url2 = new UrlBuilder()
+            .setBaseUrl("/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_"+ selectedPdServiceId + "/req-difficulty-priority-list")
+            .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
+            .build();
 
-                    Object.values(요구사항전체목록).forEach((요구사항) => {
-                       요구사항.단가 = 0;
-                       let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
-                       요구사항이포함된버전목록.forEach((버전) => {
-                            let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
-                            let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
-                            if (요구사항_키목록 == null) {
-                                console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+
+        Promise.all([
+            $.ajax({ url: url, type: "GET", dataType: "json" }),
+            $.ajax({ url: url2, type: "GET", dataType: "json" })
+        ]).then(function([data1, data2]) {
+            console.log("[ analysisCost :: 비용분석계산 API 1 ] :: = ");
+            console.log(data1);
+            console.log("[ analysisCost :: 비용분석계산 API 2 ] :: = ");
+            console.log(data2);
+
+            요구사항별_키목록 = data1.버전별_요구사항별_연결된지_지라이슈;
+            요구사항전체목록 = data2.requirement;
+
+            console.log(버전_요구사항_담당자);
+            console.log(전체담당자목록);
+            console.log(요구사항전체목록);
+            console.log(요구사항별_키목록);
+
+            /////////////////////////////////////////////////////////////////////
+            ////////////////////////// 비용 분석 계산 /////////////////////////////
+            /////////////////////////////////////////////////////////////////////
+            Object.values(요구사항전체목록).forEach((요구사항) => {
+                요구사항.단가 = 0;
+                let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
+                요구사항이포함된버전목록.forEach((버전) => {
+                    let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
+                    let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
+                    if (요구사항_키목록 == null) {
+                        console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+                    }
+                    else {
+                        요구사항_키목록.forEach((요구사항키) => {
+                            let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
+                            let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
+                            if (담당자목록 == null) {
+
                             }
                             else {
-                                요구사항_키목록.forEach((요구사항키) => {
-                                    let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
-                                    let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
-                                    if (담당자목록 == null) {
+                                console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
+                                Object.entries(담당자목록).forEach(([key, value]) => {
+                                    // console.log(key);
 
+                                    let startDate, endDate;
+
+                                    if (요구사항.reStateEntity != null && 요구사항.reqStateEntity.c_id === 11) {
+                                        startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                        endDate = new Date(formatDate(new Date()));
+                                    } else if (요구사항.reStateEntity != null && 요구사항.reqStateEntity.c_id === 12) {
+                                        startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                        endDate = new Date(formatDate(요구사항.c_req_end_date));
                                     }
-                                    else {
-                                        console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
-                                        Object.entries(담당자목록).forEach(([key, value]) => {
-                                            // console.log(key);
-                                            let 일급 = Math.round((전체담당자목록[key].연봉 / 365) / 10000) * 10000;
 
-                                            if (요구사항.reqStateEntity.c_id === 11) {
-                                                let startDate = new Date(formatDate(요구사항.c_req_start_date));
-                                                let endDate = new Date(formatDate(new Date()));
+                                    if (startDate && endDate) {
+                                        startDate.setHours(0,0,0,0);
+                                        endDate.setHours(0,0,0,0);
 
-                                                startDate.setHours(0,0,0,0);
-                                                endDate.setHours(0,0,0,0);
+                                        let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+                                        let 일급 = Math.round((전체담당자목록[key].연봉 / 365) / 10000) * 10000;
 
-                                                let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-
-//                                                    console.log(일급);
-//                                                    console.log(업무일수);
-
-                                                요구사항.단가 += 업무일수 * 일급;
-                                                전체담당자목록[key].성과 += 업무일수 * 일급;
-                                                versionListData[버전].소모비용 += 업무일수 * 일급;
-                                            }
-                                            else if (요구사항.reqStateEntity.c_id === 12) {
-                                                let startDate = new Date(formatDate(요구사항.c_req_start_date));
-                                                let endDate = new Date(formatDate(요구사항.c_req_end_date));
-
-                                                startDate.setHours(0,0,0,0);
-                                                endDate.setHours(0,0,0,0);
-
-                                                let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-
-                                                요구사항.단가 += 업무일수 * 일급;
-                                                전체담당자목록[key].성과 += 업무일수 * 일급;
-
-                                                versionListData[버전].소모비용 += 업무일수 * 일급;
-                                            }
-                                        });
+                                        요구사항.단가 += 업무일수 * 일급;
+                                        전체담당자목록[key].성과 += 업무일수 * 일급;
+                                        versionListData[버전].소모비용 += 업무일수 * 일급;
                                     }
-                                })
+                                });
                             }
-                       });
-                    });
+                        });
+                    }
+                });
+            });
 
-                    data.requirement = 요구사항전체목록;
-                    console.log(data.requirement);
-                    $("#req-cost-analysis-chart").height("500px");
-                    reqCostAnalysisChart(data);
+            data2.requirement = 요구사항전체목록;
+            console.log(data2.requirement);
+            $("#req-cost-analysis-chart").height("500px");
+            reqCostAnalysisChart(data2);
 
-                    // 인력별 성과 측정 차트
-                    $("#manpower-analysis-chart2").height("500px");
-                    인력_연봉대비_성과차트();
-                    // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
+            // 인력별 성과 측정 차트
+            $("#manpower-analysis-chart2").height("500px");
+            인력_연봉대비_성과차트();
+            // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
 
-                    // 버전별 투자 대비 소모 비용 차트
-                    $("#compare_costs").height("500px");
-                    compareCostsChart();
+            // 버전별 투자 대비 소모 비용 차트
+            $("#compare_costs").height("500px");
+            compareCostsChart();
+
+            let pdServiceName;
+            pdServiceListData.forEach(elements => {
+                if (elements["pdServiceId"] === +selectedPdServiceId) {
+                    pdServiceName = elements["pdServiceName"];
                 }
-            },
-            error: function (e) {
-                jError("버전 조회 중 에러가 발생했습니다.");
-            }
+            });
+
+            $("#circularPacking").height("620px");
+            drawCircularPacking("circularPacking",pdServiceName, 요구사항별_키목록);
+        }).catch(function(error) {
+            console.log('Error:', error);
+            jError("비용 분석 계산 중 에러가 발생했습니다.");
         });
-
-        // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
-
 
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
@@ -817,8 +823,6 @@ function 비용분석계산() {
             acc[owner] = $(cur).val();
             return acc;
         }, {});*/
-
-
     });
 }
 
@@ -1097,7 +1101,8 @@ function compareCostsChart(){
             type: 'value',
             boundaryGap: [0, 0.01],
             axisLabel: {
-                color: '#FFFFFF'
+                color: '#FFFFFF',
+                rotate: 45
             }
         },
         yAxis: {
@@ -1121,67 +1126,6 @@ function compareCostsChart(){
     }
 
     window.addEventListener("resize", myChart.resize);
-}
-
-/////////////////////////////////////////////////////////
-// 요구사항 단가 기반 크기 확인 차트
-/////////////////////////////////////////////////////////
-function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
-
-    const url = new UrlBuilder()
-        .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
-        .addQueryParam("pdServiceLink", pdServiceLink)
-        .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        async: false,
-        statusCode: {
-            200: function (result) {
-                console.log("[ analysisCost :: getReqCostRatio ] :: = ");
-                console.log(result.버전별_요구사항별_연결된지_지라이슈);
-                요구사항별_키목록 = result.버전별_요구사항별_연결된지_지라이슈;
-
-                let 변환된_데이터 = {};
-
-                Object.keys(result.버전별_그룹).forEach((버전) => {
-                    let 요구사항별_그룹 = result.버전별_그룹[버전].요구사항별_그룹;
-                    let 변환된_요구사항들 = [];
-                    Object.keys(요구사항별_그룹).forEach((요구사항) => {
-                        let 변환된_요구사항 = {};
-                        변환된_요구사항[요구사항] = 요구사항별_그룹[요구사항].map((데이터) => {
-                            let 치환된_버전 = 데이터.c_pds_version_name;
-                            let 치환된_요구사항 = 데이터.c_req_name;
-                            return {
-                                project: 데이터.c_issue_key,
-                                cost: 300, // 임시데이터
-                                version: 데이터.c_pds_version_name,
-                                req_name : 데이터.c_req_name
-                            };
-                        });
-                        변환된_요구사항들.push(변환된_요구사항);
-                    });
-
-                    변환된_데이터[버전] = 변환된_요구사항들;
-                });
-
-                console.log(변환된_데이터);
-
-                let pdServiceName;
-                pdServiceListData.forEach(elements => {
-                    if (elements["pdServiceId"] === +pdServiceLink) {
-                        pdServiceName = elements["pdServiceName"];
-                    }
-                });
-                drawCircularPacking("circularPacking",pdServiceName,변환된_데이터);
-            }
-        }
-    });
 }
 
 /////////////////////////////////////////////////////////
