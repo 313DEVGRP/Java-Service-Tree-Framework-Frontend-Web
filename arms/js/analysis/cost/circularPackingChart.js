@@ -52,18 +52,21 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                     req_name = source[key][0].c_req_name;
                     source[key].forEach(item => {
                         let project = item.c_issue_key;
-                        let cost = 300; // 임시 설정
-                        subValue += cost;
-                        seriesData.push({
-                            id: `${path}.${project}`,
-                            value: cost,
-                            depth: newDepth +2 ,
-                            index: index++,
-                            version_id: item.c_pds_version_link,
-                            version_name: item.c_pds_version_name,
-                            req_id : item.c_req_link,
-                            req_name: item.c_req_name
-                        });
+                        //let cost = 300; // 임시 설정
+                        let cost = item.cost;
+                        if(cost !== null){
+                            subValue += cost;
+                            seriesData.push({
+                                id: `${path}.${project}`,
+                                value: cost,
+                                depth: newDepth +2 ,
+                                index: index++,
+                                version_id: item.c_pds_version_link,
+                                version_name: item.c_pds_version_name,
+                                req_id : item.c_req_link,
+                                req_name: item.c_req_name
+                            });
+                        }
                     });
 
                     if (subValue !== 0) {
