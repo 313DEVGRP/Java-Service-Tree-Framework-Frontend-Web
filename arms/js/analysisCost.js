@@ -557,10 +557,9 @@ function manpowerInput(전체담당자목록) {
             title: "연봉 (입력)",
             data: "연봉",
             render: function(data, type, row) {
-                console.log("dataTable data => ");
-                console.log(data);
-                var formattedData = parseInt(data).toLocaleString();
-                return '<input type="text" name="annual-income" class="annual-income-input" value="' + 5000 + '" data-owner="' + row.키 + '"> 만원';
+                // var formattedData = parseInt(data).toLocaleString();
+                let 연봉 = 5000;
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + 연봉  + '" data-owner="' + row.키 + '"> 만원';
             },
             className: "dt-center",
             visible: true
@@ -676,10 +675,18 @@ function 비용분석계산() {
 
         // console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
 
+        var inputs = $('.annual-income-input');
+
+        // 각 input 요소의 value 값을 가져와 출력합니다.
+        inputs.each(function() {
+            let owner = $(this).data('owner');
+            let value = $(this).val();
+            전체담당자목록[owner].연봉 = value;
+            전체담당자목록[owner].성과 = 0;
+        });
 
         // 연봉 정보 유효성 체크 및 세팅
         for (let owner in 전체담당자목록) {
-
             if (isNaN(전체담당자목록[owner].연봉)) {
                 alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
                 return;
@@ -726,34 +733,34 @@ function 비용분석계산() {
                     let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
                     let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
 
-                    var 버전별_요구사항별_단가 =
-                    {
-                        "35":{
-                            "10": 400,
-                            "68": 500,
-                            "70": 100,
-                            "113": 800
-                        },
-                        "36":{
-                            "11": 400,
-                            "67": 800,
-                            "102": 0
-                        },
-                        "37":{
-                            "73":900,
-                            "104":1200,
-                            "111":2000,
-                            "112":200
-                        }
-                    };
+                    // var 버전별_요구사항별_단가 =
+                    // {
+                    //     "35":{
+                    //         "10": 400,
+                    //         "68": 500,
+                    //         "70": 100,
+                    //         "113": 800
+                    //     },
+                    //     "36":{
+                    //         "11": 400,
+                    //         "67": 800,
+                    //         "102": 0
+                    //     },
+                    //     "37":{
+                    //         "73":900,
+                    //         "104":1200,
+                    //         "111":2000,
+                    //         "112":200
+                    //     }
+                    // };
 
-                    var 요구사항별_단가 = 버전별_요구사항별_단가[버전]; // 요구사항 단가 맵
-                    if (요구사항별_단가 && 요구사항별_단가[요구사항.c_id]) {
-                        var 단가 = 요구사항별_단가[요구사항.c_id];
-                        요구사항_키목록.forEach(function(item) {
-                            item.cost = 단가 / 요구사항_키목록.length;  // 리스트 크기로 나눠 각각에 넣기
-                        });
-                    }
+                    // var 요구사항별_단가 = 버전별_요구사항별_단가[버전]; // 요구사항 단가 맵
+                    // if (요구사항별_단가 && 요구사항별_단가[요구사항.c_id]) {
+                    //     var 단가 = 요구사항별_단가[요구사항.c_id];
+                    //     요구사항_키목록.forEach(function(item) {
+                    //         // item.cost = 10;
+                    //     });
+                    // }
 
                     if (요구사항_키목록 == null) {
                         // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
@@ -773,13 +780,16 @@ function 비용분석계산() {
                                     let startDate, endDate;
 
                                     if (요구사항.reqStateEntity == null) {
-                                        startDate = new Date(formatDate(요구사항.c_req_create_date));
-                                        endDate = new Date(formatDate(요구사항.c_req_create_date));
-                                        if (요구사항.c_req_plan_time == null) {
+                                        if (요구사항.c_req_create_date !== null) {
+                                            startDate = new Date(formatDate(요구사항.c_req_create_date));
+                                        }
 
+                                        if (요구사항.c_req_plan_time == null) {
+                                            endDate = null;
                                         }
                                         else {
-                                            endDate.setDate(startDate.getDate() + 요구사항.c_req_plan_time);
+                                            endDate = new Date(formatDate(요구사항.c_req_create_date));
+                                            endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
                                         }
                                     }
                                     else {
@@ -797,7 +807,8 @@ function 비용분석계산() {
 
                                             }
                                             else {
-                                                endDate = new Date(startDate.setDate(요구사항.c_req_plan_time));
+                                                endDate = new Date(formatDate(요구사항.c_req_create_date));
+                                                endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
                                             }
                                         }
                                     }
@@ -812,6 +823,7 @@ function 비용분석계산() {
                                         요구사항.단가 += 업무일수 * 일급;
                                         전체담당자목록[key].성과 += 업무일수 * 일급;
                                         versionListData[버전].소모비용 += 업무일수 * 일급;
+                                        요구사항키.cost += 업무일수 * 일급;
                                     }
                                 });
                             }
@@ -1327,16 +1339,18 @@ function 인력_연봉대비_성과차트() {
     const tooltipFormatter = function (params) {
 
         let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
-        let tooltipContent = '';
+        let tooltipContent = '<div style="font-size: 12px;">';
 
         if (data.length > 1) {
             for (let i = 0; i < data.length; i++) {
-                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
+                tooltipContent += data[i][2] + "<br><strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
             }
         }
         else if (data.length === 1) {
             tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + "</span><br><strong>성과</strong> : " + data[0][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
         }
+
+        tooltipContent += "</div>";
 
         return tooltipContent;
     };
