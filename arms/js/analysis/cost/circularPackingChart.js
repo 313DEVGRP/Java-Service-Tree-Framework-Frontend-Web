@@ -8,10 +8,17 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
     let statusDataArr = [];
 
     var colorPalette = [ //e chart 컬러 팔레트
-            '#d48265','#91c7ae',
-            '#749f83','#ca8622','#bda29a','#6e7074','#546570',
-            '#c4ccd3'
-        ];
+        /*"rgba(55,125,184,0.62)",
+        "rgba(255,255,51,0.71)",
+        "rgba(151,78,163,0.73)",
+        "rgba(77,175,74,0.65)",
+        "rgba(255,127,0,0.7)",
+        "rgba(55,125,184,0.62)",
+        "rgba(166,86,40,0.7)",
+        "rgba(227,26,27,0.66)" */
+        '#546570', '#c4ccd3' , '#749f83','#91c7ae',
+        // '#028090', '#EAE2B7', '#84A07C', '#F2CC8F'
+    ];
 
     if(rawData) {
         run(rawData);
@@ -20,80 +27,99 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
     function run(rawData) {
         const dataWrap = prepareData(rawData);
 
-        console.log(dataWrap);
-
         initChart(dataWrap.seriesData, dataWrap.maxDepth);
     }
+
     function prepareData(rawData) {
         const seriesData = [];
         let maxDepth = 0;
-        let totalValue = 0;
+        let index = 0;
 
         function convert(source, basePath, depth) {
+            maxDepth = Math.max(maxDepth, depth);
             let value = 0;
+            let version_id, version_name,req_id, req_name;
 
-            if(Array.isArray(source)) {
-                source.forEach(item => {
-                    for(let key in item) {
-                        if(Array.isArray(item[key])) {
-                            let subValue = 0;
-                            item[key].forEach(subItem => {
-                                subValue += subItem.cost;
-                                if(subValue !== 0) {
-                                    seriesData.push({
-                                        id: basePath + '.' + key + '.' + subItem.project,
-                                        value: subItem.cost,
-                                        depth: depth + 2,
-                                        index: seriesData.length
-                                    });
-                                }
-                            });
-                            if(subValue !== 0) {
-                                value += subValue;
-                                seriesData.push({
-                                    id: basePath + '.' + key,
-                                    value: subValue,
-                                    depth: depth + 1,
-                                    index: seriesData.length
-                                });
-                            }
-                        }
+            for (let key in source) {
+                let path = `${basePath}.${key}`;
+                let newDepth = depth;
+
+                if (Array.isArray(source[key])) {
+                    let subValue = 0;
+                    version_id = source[key][0].c_pds_version_link;
+                    version_name = source[key][0].c_pds_version_name;
+                    req_id = source[key][0].c_req_link;
+                    req_name = source[key][0].c_req_name;
+                    source[key].forEach(item => {
+                        let project = item.c_issue_key;
+                        let cost = 300; // 임시 설정
+                        subValue += cost;
+                        seriesData.push({
+                            id: `${path}.${project}`,
+                            value: cost,
+                            depth: newDepth +2 ,
+                            index: index++,
+                            version_id: item.c_pds_version_link,
+                            version_name: item.c_pds_version_name,
+                            req_id : item.c_req_link,
+                            req_name: item.c_req_name
+                        });
+                    });
+
+                    if (subValue !== 0) {
+                        value += subValue;
+                        seriesData.push({
+                            id: path,
+                            value: subValue,
+                            depth: newDepth+1,
+                            index: index++,
+                            version_id: version_id,
+                            version_name: version_name,
+                            req_id : req_id,
+                            req_name: req_name
+                        });
                     }
-                });
+                } else if (typeof source[key] === 'object' && source[key] !== null) {
+                    version_id = source[key].c_pds_version_link;
+                    version_name = source[key].c_pds_version_name;
+                    req_id = source[key].c_req_link;
+                    req_name = source[key].c_req_name;
+                    value += convert(source[key], path, newDepth+1);
+                }
             }
 
-            if(value !== 0 || depth === 0) {
+            if (depth > 0) {
                 seriesData.push({
                     id: basePath,
                     value: value,
                     depth: depth,
-                    index: seriesData.length
+                    index: index++,
+                    version_id:version_id,
+                    version_name:version_name,
+                    req_id:req_id,
+                    req_name:req_name
                 });
-                if(depth === 0) {
-                    totalValue = value;
-                }
             }
 
-            maxDepth = Math.max(maxDepth, depth);
-
-            for (var key in source) {
-                if (source.hasOwnProperty(key) && !key.match(/^\$/)) {
-                    var path = basePath + '.' + key;
-                    if (typeof source[key] === 'object' && source[key] !== null) {
-                        convert(source[key], path, depth + 1);
-                    }
-                }
-            }
+            return value;
         }
 
-        convert(rawData, psServiceName, 0);
-        seriesData[0].value = totalValue;
+        let totalValue = convert(rawData, psServiceName, 0);
+
+        // 최상단 노드의 value를 업데이트
+        seriesData.push({
+            id: psServiceName,
+            value: totalValue,
+            depth: 0,
+            index: index
+        });
 
         return {
             seriesData: seriesData,
             maxDepth: maxDepth
         };
     }
+
 
     function initChart(seriesData, maxDepth) {
         console.log("seriesData ===> ")
@@ -195,6 +221,9 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
             };
         }
 
+        let productCost = seriesData.find(function(data) {
+            return data.depth === 0;
+        }).value;
         option = {
             dataset: {
                 source: seriesData
@@ -219,20 +248,30 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                 coordinateSystem: 'none',
                 itemStyle: {
                     color: function(params) {
+                        var colorIndex;
                         if (params.data.value) {
                             return colorPalette[params.value.depth];
-                        } else {
-                            return "rgba(55,125,184,0.62)";
+                        }  else {// 기본 색상 사용
+                            return "rgba(55,125,184,0.62)"; // 파란색
                         }
+                        return colorPalette[colorIndex];
                     }
                 },
                 tooltip: {
                     formatter: function(params) {
                         // params.value에는 원본 값이 들어있을 것입니다. 여기에 단위를 붙여 반환하면 됩니다.
-                        if(params.data.value) {
-                            return `${params.data.id} </br>
-                            - 비용 : ${params.data.value} `;
-                        } else {
+                        let id = params.data.id;
+                        let parts = id.split('.');
+                        if(params.data.depth === 0){
+                            return "제품(서비스) 정보 </br>● 제품(서비스) :"+ parts[0] +" </br>● 비용 :"+params.data.value ;
+                        }else if(params.data.depth === 1){
+                            return "버전 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 비용 :"+params.data.value ;
+                        }else if(params.data.depth === 2){
+                            return "요구사항 정보 </br>● 버전 :"+ params.data.version_name  +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 비용 :"+params.data.value ;
+                        }else if(params.data.depth === 3){
+                            return "요구사항 키 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 요구사항 키 :"+ parts[3] ;
+                        }
+                        else {
                             return `${params.data.id}`;
                         }
                     }
@@ -252,7 +291,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                             style: {
                                 text: [
                                     '{a| 제품 비용 }',
-                                    '{a| ' + reqCount + '}'
+                                    '{a| ' + productCost + '}'
                                 ].join('\n'),
                                 rich: {
                                     a: {
@@ -272,7 +311,10 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
 
         option && myChart.setOption(option, true);
         myChart.on('click', { seriesIndex: 0 }, function (params) {
-            drillDown(params.data.id);
+            if(params.data.depth != 3){
+                drillDown(params.data.id);
+            }
+
         });
 
         function drillDown(targetNodeId) {
@@ -310,4 +352,3 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
         myChart.resize();
     });
 }
-

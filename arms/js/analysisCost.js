@@ -10,8 +10,8 @@ var pdServiceData;
 var pdServiceListData;
 var versionListData;
 
-var 버전별요구사항별 = {};
-var 인력맵 = {};
+var 버전_요구사항_담당자 = {};
+var 전체담당자목록 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -60,8 +60,8 @@ function execDocReady() {
             "js/analysis/topmenu/basicRadar.js",
             "js/analysis/topmenu/topMenu.js",
 
-		    //CirclePacking with d3 Chart
-		    "js/analysis/Cost/circularPackingChart.js"
+            //CirclePacking with d3 Chart
+            "js/analysis/cost/circularPackingChart.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -208,6 +208,7 @@ function bind_VersionData_By_PdService() {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
                     console.log(obj);
+                    obj.소모비용 = 0;
                     versionListData[obj.c_id] = obj;
                     // versionListData.push({ c_id: obj.c_id, versionTitle: obj.c_title });
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
@@ -259,20 +260,17 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
             200: function (apiResponse) {
                 console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
                 console.log(apiResponse.response);
-                버전별요구사항별 = apiResponse.response.버전;
-                인력맵 = apiResponse.response.전체담당자목록;
+                버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
+                전체담당자목록 = apiResponse.response.전체담당자목록;
 
-                let 연봉 = 3000;
-                let 성과 = 1000;
+                // let 연봉 = 5000;
+                //
+                // Object.keys(전체담당자목록).forEach((key) => {
+                //     전체담당자목록[key].연봉 = 연봉;
+                //     전체담당자목록
+                // });
 
-                Object.keys(인력맵).forEach((key) => {
-                    인력맵[key].연봉 = 연봉;
-                    인력맵[key].성과 = 성과;
-                    연봉 -= 100;
-                    성과 += 100;
-                });
-
-                costInput(인력맵, pdServiceVersionLinks);
+                costInput(전체담당자목록, pdServiceVersionLinks);
             }
         }
     });
@@ -282,11 +280,126 @@ function formatDate(date) {
     return new Date(date).toISOString().split('T')[0];
 }
 
-// 버전 비용 및 인력 비용 입력
-function costInput(인력맵, pdServiceVersionLinks) {
+// 엑셀 파일 업로드
+function file_upload_setting() {
 
-    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => ");
-    console.log(인력맵);
+    // 업로드 영역 로드
+    $('.body-middle').html(`
+        <button
+                class="btn btn-primary btn-block btn-sm"
+                id="excel-annual-income-template-download"
+                type="button"
+                style="margin-right: 5px;">
+            Excel 템플릿 다운로드
+        </button>
+        
+        <form
+                id="fileupload"
+                action="excel-upload.do"
+                method="POST"
+                enctype="multipart/form-data">
+            <input
+                    type="hidden"
+                    id="fileIdlink"
+                    value="" />
+            <div class="row analysis-cost-image-row">
+                <div class="col-md-12">
+                    <div
+                            id="dropzone"
+                            class="dropzone">
+                        <i class="fa fa-cloud-upload"></i>
+                        Drop files here
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 fileupload-progress fade font12">
+                    <!-- The global progress bar -->
+                    <div
+                            class="progress progress-success progress-striped active font12"
+                            role="progressbar"
+                            aria-valuemin="0"
+                            aria-valuemax="100">
+                        <div
+                                class="bar"
+                                style="width: 0%"></div>
+                    </div>
+                    <!-- The extended global progress information -->
+                    <div class="progress-extended font12">&nbsp;</div>
+                </div>
+            </div>
+            <div class="form-actions fileupload-buttonbar no-margin analysis-cost-image-row">
+                                        <span class="btn btn-sm btn-inverse fileinput-button">
+                                            <i class="fa fa-plus"></i>
+                                            <span>Add files...</span>
+                                            <input
+                                                    type="file"
+                                                    name="files[]"
+                                                    multiple="" />
+                                        </span>
+                <button
+                        type="submit"
+                        class="btn btn-inverse btn-sm start">
+                    <i class="fa fa-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button
+                        type="reset"
+                        class="btn btn-inverse btn-sm cancel">
+                    <i class="fa fa-ban"></i>
+                    <span>Cancel upload</span>
+                </button>
+            </div>
+            <div class="fileupload-loading">
+                <i class="fa fa-spin fa-spinner"></i>
+            </div>
+            <!-- The table listing the files available for upload/download -->
+            <table
+                    role="presentation"
+                    class="table table-striped"
+                    style="margin-bottom: 5px">
+                <tbody
+                        class="files"
+                        data-toggle="modal-gallery"
+                        data-target="#modal-gallery"></tbody>
+            </table>
+        </form>
+    `);
+
+    // Initialize the jQuery File Upload widget:
+    var $fileupload = $("#fileupload");
+    $fileupload.fileupload({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        autoUpload: true,
+        url: "/auth-user/api/arms/analysis/cost/excel-upload.do",
+        dropZone: $("#dropzone")
+    });
+
+
+    $("#fileupload").bind("fileuploadsubmit", function (e, data) {
+        // The example input, doesn't have to be part of the upload form:
+        var input = $("#fileIdlink");
+        data.formData = { pdservice_link: input.val() };
+        if (!data.formData.pdservice_link) {
+            data.context.find("button").prop("disabled", false);
+            input.focus();
+            return false;
+        }
+    });
+}
+
+// 버전 비용 및 인력 비용 입력
+function costInput(전체담당자목록, pdServiceVersionLinks) {
+
+    console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(전체담당자목록));
+
+    file_upload_setting();
+    //versionInput(pdServiceVersionLinks);
+    manpowerInput(전체담당자목록);
+}
+
+/*function versionInput(pdServiceVersionLinks) {
 
     if ($.fn.dataTable.isDataTable('#version-cost')) {
         $('#version-cost').DataTable().clear().destroy();
@@ -306,125 +419,409 @@ function costInput(인력맵, pdServiceVersionLinks) {
         };
     });
 
-    $('#version-cost').DataTable({
-        data: versionTableData,
-        columns: [
-            { data: "version", title: "버전", className: "dt-center" },
-            { data: "period", title: "기간", className: "dt-center" },
-            {
-                data: "cost",
-                title: "비용 (입력)",
-                className: "dt-center",
-                render: function(data, type, row) {
-                    return '<input type="text" name="version-cost" class="cost-input" value="' + data + '" data-owner="' + row.c_id + '"> 만원';
+    var columnList = [
+        {
+            name: "versionId",
+            title: "버전아이디",
+            data: "c_id",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
                 }
-            }
-        ],
-        drawCallback: function(settings) {
-            $('.cost-input').on('input', function() {
-                var value = this.value.replace(/,/g, '');
-                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            });
+                return data;
+            },
+            className: "dt-center",
+            visible: false
+        },
+        {
+            name: "version",
+            title: "버전",
+            data: "version",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "period",
+            title: "기간",
+            data: "period",
+            render: function (data, type, row, meta) {
+                var dates = data.split(' ~ ');
+                if(type === 'sort' || type === 'type'){
+                    return dates[0]; // startDate로 정렬
+                }
+                return data; // 원래 형태로 표시
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "cost",
+            title: "비용 (입력)",
+            data: "cost",
+            render: function(data, type, row) {
+                return '<input type="text" name="version-cost" class="cost-input" value="0" data-owner="' + row.c_id + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
         }
-    });
+    ];
 
-    // 연봉 정보
-    let manpowerData = Object.keys(인력맵).map((key) => {
-        let data = {};
-        data.이름 = key;
-        data.연봉 = 인력맵[key].연봉;
-        data.성과 = 인력맵[key].성과;
-        return data;
-    });
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [[2, "desc"]];
+    var jquerySelector = "#version-cost";
+    var ajaxUrl = "";
+    var jsonRoot = "";
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = versionTableData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+}*/
+
+function manpowerInput(전체담당자목록) {
 
     if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
         $('#manpower-annual-income').DataTable().clear().destroy();
     }
 
-    $('#manpower-annual-income').DataTable({
-        data: manpowerData,
-        columns: [
-            {
-                name: "이름",
-                data: "이름",
-                title: "투입 인력",
-                className: "dt-center"
-            },
-            {
-                title: "연봉 (입력)",
-                data: "연봉",
-                className: "dt-center",
-                render: function(data, type, row) {
-                    return '<input type="text" name="person-salary" class="salary-input" value="' + data + '" data-owner="' + row.이름 + '"> 만원';
-                }
-            }
-        ],
-        drawCallback: function(settings) {
-            $('.salary-input').on('input', function() {
-                var value = this.value.replace(/,/g, '');
-                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                // 같은 그룹의 모든 연봉 입력 필드를 찾아 값 업데이트
-                var name = $(this).parents('tr').find('td').first().text();
-                var salaryInputs = $('td:contains("' + name + '")').siblings().find('.salary-input');
-                salaryInputs.val(this.value);
-            });
-        },
-        /*rowsGroup: [
-            "name:name",
-        ]*/
+    let manpowerData = Object.keys(전체담당자목록).map((key) => {
+        let data = {};
+        data.이름 = 전체담당자목록[key].이름;
+        data.키 = key;
+        data.연봉 = 전체담당자목록[key].연봉;
+        return data;
     });
+    console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
+
+    var columnList = [
+        {
+            name: "name",
+            title: "이름",
+            data: "이름",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "key",
+            title: "고유 키",
+            data: "키",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "unknown") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-center",
+            visible: true
+        },
+        {
+            name: "annualIncome",
+            title: "연봉 (입력)",
+            data: "연봉",
+            render: function(data, type, row) {
+                console.log("dataTable data => ");
+                console.log(data);
+                var formattedData = parseInt(data).toLocaleString();
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + 5000 + '" data-owner="' + row.키 + '"> 만원';
+            },
+            className: "dt-center",
+            visible: true
+        }
+    ];
+
+    var rowsGroupList = [];
+    var columnDefList = [];
+    var orderList = [];
+    var jquerySelector = "#manpower-annual-income";
+    var ajaxUrl = null;
+    var jsonRoot = null;
+    var buttonList = [];
+    var selectList = {};
+    var isServerSide = false;
+    var scrollY = false;
+    var data = manpowerData;
+    var isAjax = false;
+
+    dataTableRef = dataTable_build(
+        jquerySelector,
+        ajaxUrl,
+        jsonRoot,
+        columnList,
+        rowsGroupList,
+        columnDefList,
+        selectList,
+        orderList,
+        buttonList,
+        isServerSide,
+        scrollY,
+        data,
+        isAjax
+    );
+
+    excel_download();
+}
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+function dataTableClick(tempDataTable, selectedData) {}
+
+// 데이터 테이블 데이터 렌더링 이후 콜백 함수
+function dataTableCallBack(settings, json) {
+    $("#fileIdlink").val(selectedPdServiceId);
+
+    //파일 리스트 초기화
+    $("table tbody.files").empty();
+    // Load existing files:
+    var $fileupload = $("#fileupload");
+
+    $.ajax({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
+        data: { fileIdLink: selectedPdServiceId },
+        dataType: "json",
+        context: $fileupload[0]
+    }).done(function (result) {
+        $(this).fileupload("option", "done").call(this, null, { result: result });
+        $(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리
+    });
+}
+
+function dataTableDrawCallback(tableInfo) {
+    $("#" + tableInfo.sInstance)
+        .DataTable()
+        .columns.adjust()
+        .responsive.recalc();
+
+    // 연봉 포맷 설정 및 연봉 정보 저장
+    $('.annual-income-input').off('input').on('input', function() {
+        var value = this.value.replace(/,/g, '');
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        let owner = $(this).data('owner');
+        전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
+        전체담당자목록[owner].성과 = 0;
+    });
+}
+
+function excel_download() {
+
+    /* var tempDataTable = $("#manpower-annual-income").DataTable();
+     var data = tempDataTable.rows().data().toArray();
+     var json = JSON.stringify(data);
+     console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+
+
+     $("#excel-annual-income-template-download").click(function () {
+         $.ajax({
+             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
+             type: "POST",
+             data: json,
+             contentType: "application/json",
+             statusCode: {
+                 200: function (data) {
+                     console.log("success");
+                 }
+             }
+         })
+     });*/
 }
 
 function 비용분석계산() {
     $("#cost-analysis-calculation").click(function() {
 
-        let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
-
-        let selectVersionData = [];
-        for (let i = 0; i < selectedVersions.length; i++) {
-            let item = versionListData[selectedVersions[i]];
-            let inputVersionValue = $(`input[name="version-cost"][data-owner=${selectedVersions[i]}]`).val();
-            let number = Number(inputVersionValue.replace(/,/g, ''));
-
-            if (isNaN(Number(number))) {
-                alert("버전 비용 입력란에 숫자를 입력하여주세요.");
-                return;
-            }
-
-            item.versionCost = number * 10000;
-            item.consumptionCost = 9000000;
-
-            selectVersionData.push(item);
+        if(!selectedPdServiceId || !selectedVersionId) {
+            alert("제품(서비스), 버전을 선택해주세요.");
+            return;
         }
 
-        $("#compare_costs").height("620px");
-        // 버전별 투자 대비 소모 비용 차트
-        compareCostsChart(selectVersionData);
+        let isNumber = true;
 
-        $("#circularPacking").height("620px");
-        // Circular Packing with D3 차트
-        var versionTag = $(".multiple-select").val();
-        getReqCostRatio(selectedPdServiceId, versionTag);
+        // console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
 
 
+        // 연봉 정보 유효성 체크 및 세팅
+        for (let owner in 전체담당자목록) {
 
+            if (isNaN(전체담당자목록[owner].연봉)) {
+                alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
+                return;
+            }
+        }
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: 전체담당자목록 -> " + JSON.stringify(전체담당자목록));
+
+        const url = new UrlBuilder()
+            .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
+            .addQueryParam("pdServiceLink", selectedPdServiceId)
+            .addQueryParam("pdServiceVersionLinks", selectedVersionId)
+            .build();
+
+        const url2 = new UrlBuilder()
+            .setBaseUrl("/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_"+ selectedPdServiceId + "/req-difficulty-priority-list")
+            .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
+            .build();
+
+        Promise.all([
+            $.ajax({ url: url, type: "GET", dataType: "json" }),
+            $.ajax({ url: url2, type: "GET", dataType: "json" })
+        ]).then(function([data1, data2]) {
+            console.log("[ analysisCost :: 비용분석계산 API 1 ] :: data1 => ");
+            console.log(data1);
+            console.log("[ analysisCost :: 비용분석계산 API 2 ] :: data2 => ");
+            console.log(data2);
+
+            요구사항별_키목록 = data1.버전별_요구사항별_연결된지_지라이슈;
+            요구사항전체목록 = data2.requirement;
+
+            console.log("[ analysisCost :: 비용분석계산 ] :: 게산을 위한 데이터들 => ");
+            console.log(버전_요구사항_담당자);
+            console.log(전체담당자목록);
+            console.log(요구사항전체목록);
+            console.log(요구사항별_키목록);
+
+            /////////////////////////////////////////////////////////////////////
+            ////////////////////////// 비용 분석 계산 /////////////////////////////
+            /////////////////////////////////////////////////////////////////////
+            Object.values(요구사항전체목록).forEach((요구사항) => {
+                요구사항.단가 = 0;
+                let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
+                요구사항이포함된버전목록.forEach((버전) => {
+                    let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
+                    let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
+                    if (요구사항_키목록 == null) {
+                        // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+                    }
+                    else {
+                        요구사항_키목록.forEach((요구사항키) => {
+                            let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
+                            let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
+                            if (담당자목록 == null) {
+                                // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "n\요구사항_담당자목록 -> " +요구사항.c_id);
+                            }
+                            else {
+                                // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
+                                Object.entries(담당자목록).forEach(([key, value]) => {
+                                    // console.log(key);
+
+                                    let startDate, endDate;
+
+                                    if (요구사항.reqStateEntity == null) {
+                                        startDate = new Date(formatDate(요구사항.c_req_create_date));
+                                        endDate = new Date(formatDate(요구사항.c_req_create_date));
+                                        if (요구사항.c_req_plan_time == null) {
+
+                                        }
+                                        else {
+                                            endDate.setDate(startDate.getDate() + 요구사항.c_req_plan_time);
+                                        }
+                                    }
+                                    else {
+                                        if (요구사항.reqStateEntity.c_id === 11) {
+                                            startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                            endDate = new Date(formatDate(new Date()));
+                                        }
+                                        else if (요구사항.reqStateEntity.c_id === 12) {
+                                            startDate = new Date(formatDate(요구사항.c_req_start_date));
+                                            endDate = new Date(formatDate(요구사항.c_req_end_date));
+                                        }
+                                        else {
+                                            startDate = new Date(formatDate(요구사항.c_req_create_date));
+                                            if (요구사항.c_req_plan_time == null) {
+
+                                            }
+                                            else {
+                                                endDate = new Date(startDate.setDate(요구사항.c_req_plan_time));
+                                            }
+                                        }
+                                    }
+
+                                    if (startDate && endDate) {
+                                        startDate.setHours(0,0,0,0);
+                                        endDate.setHours(0,0,0,0);
+
+                                        let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+                                        let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
+
+                                        요구사항.단가 += 업무일수 * 일급;
+                                        전체담당자목록[key].성과 += 업무일수 * 일급;
+                                        versionListData[버전].소모비용 += 업무일수 * 일급;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            data2.requirement = 요구사항전체목록;
+            $("#req-cost-analysis-chart").height("500px");
+            reqCostAnalysisChart(data2);
+
+            // 인력별 성과 측정 차트
+            $("#manpower-analysis-chart2").height("500px");
+            인력_연봉대비_성과차트();
+            // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
+
+            // 버전별 투자 대비 소모 비용 차트
+            $("#compare_costs").height("500px");
+            compareCostsChart();
+
+            let pdServiceName;
+            pdServiceListData.forEach(elements => {
+                if (elements["pdServiceId"] === +selectedPdServiceId) {
+                    pdServiceName = elements["pdServiceName"];
+                }
+            });
+
+            $("#circularPacking").height("620px");
+            drawCircularPacking("circularPacking",pdServiceName, 요구사항별_키목록);
+        }).catch(function(error) {
+            console.log('Error:', error);
+            jError("비용 분석 계산 중 에러가 발생했습니다.");
+        });
 
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
         incomeStatusChart();
 
-
-
-
-        // 요구사항 가격 바 차트 및 난이도, 우선순위 분포 차트
-        $("#req-cost-analysis-chart").height("500px");
-        reqCostAnalysisChart(버전별요구사항별);
-
-
-
-
-        let inputSalaryValues = $('input[name="person-salary"]').map(function() {
+        /*let inputSalaryValues = $('input[name="annual-income"]').map(function() {
             let data = {};
 
             let owner = $(this).data('owner');
@@ -432,12 +829,17 @@ function 비용분석계산() {
             data.연봉 = $(this).val();
             return data;
         }).get();
+        */
+//        $('input[name="person-salary"]').map(function() {
+//            let owner = $(this).data('owner');
+//            전체담당자목록[owner].연봉 = $(this).val() * 10000;
+//        });
 
-        console.log(inputSalaryValues);
-
-        // 인력별 성과 측정 차트
-        $("#manpower-analysis-chart").height("500px");
-        인력별_연봉대비_성과차트_기본세팅(인력맵);
+        /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
+            let owner = $(cur).data('owner');
+            acc[owner] = $(cur).val();
+            return acc;
+        }, {});*/
     });
 }
 
@@ -448,12 +850,14 @@ function 차트초기화() {
     clearChart('income_status_chart');
     clearChart('req-cost-analysis-chart');
     clearChart('manpower-analysis-chart');
+    clearChart('manpower-analysis-chart2');
 
     $("#compare_costs").height("0px");
     $("#circularPacking").height("0px");
     $("#income_status_chart").height("0px");
     $("#req-cost-analysis-chart").height("0px");
     $("#manpower-analysis-chart").height("0px");
+    $("#manpower-analysis-chart2").height("0px");
 }
 
 function clearChart(elementId) {
@@ -467,17 +871,222 @@ function clearChart(elementId) {
 }
 
 /////////////////////////////////////////////////////////
+// 요구사항 금액 분석 그래프
+/////////////////////////////////////////////////////////
+function reqCostAnalysisChart(data) {
+
+    console.log(" [ analysisCost :: reqCostAnalysisChart :: data -> ");
+    console.log(data);
+    let requirementJson = data.requirement;
+    let difficultyJson = data.difficulty;
+    let priorityJson = data. priority;
+
+    let requirementList = {};
+    Object.values(requirementJson).forEach(item => {
+        requirementList[item.c_title] = item.단가;
+    });
+
+    let reqTotalPrice = 0;
+    for (let key in requirementList) {
+        reqTotalPrice += requirementList[key];
+    }
+
+    let requirementKeys = Object.keys(requirementList);
+    let requirementData = requirementKeys.map(key => requirementList[key]);
+    let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
+
+    let difficultyData = Object.keys(difficultyJson).map(key => ({
+        name: key.replace('.js', ''),
+        value: difficultyJson[key]
+    }));
+
+    let priorityData = Object.keys(priorityJson).map(key => ({
+        name: key.replace('.js', ''),
+        value: priorityJson[key]
+    }));
+
+    let size = requirementKeys.length;
+    let x = 1;
+
+    if (size > 0) {
+        x = (15 / size) * 100;
+    }
+
+    var dom = document.getElementById('req-cost-analysis-chart');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        tooltip: {
+            confine: true
+        },
+        title: [
+            {
+                // text: '요구사항',
+                subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
+                left: '25%',
+                textAlign: 'center',
+                textStyle: {
+                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                },
+                subtextStyle: {
+                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                }
+            },
+            {
+                text: '',
+                subtext: '난이도 및 우선순위 분포',
+                left: '80%',
+                bottom: '0%',
+                textAlign: 'center',
+                textStyle: {
+                    color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
+                },
+                subtextStyle: {
+                    color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
+                }
+            },
+        ],
+        grid: [
+            {
+                top: 50,
+                left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
+                right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
+                width: '50%',
+                bottom: '5%',
+                containLabel: true
+            },
+            /*            {
+                            top: '55%',
+                            width: '100%',
+                            bottom: 0,
+                            left: 10,
+                            containLabel: true
+                        }*/
+        ],
+        xAxis: [
+            {
+                type: 'value',
+                max: reqTotalPrice,
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    rotate: 45,
+                    color: '#FFFFFFFF',
+                },
+            },
+        ],
+        yAxis: [
+            {
+                type: 'category',
+                data: requirementKeys,
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    color: '#FFFFFFFF',
+                    rotate: 45,
+                    formatter: function(value) {
+                        // 최대 10자까지 표시
+                        if (value.length > 6) {
+                            return value.substring(0, 6) + '...';
+                        } else {
+                            return value;
+                        }
+                    },
+                },
+            },
+        ],
+        series: [
+            {
+                type: 'bar',
+                stack: 'chart',
+                z: 3,
+                label: {
+                    position: 'right',
+                    show: true
+                },
+                data: requirementData
+            },
+            {
+                type: 'bar',
+                stack: 'chart',
+                silent: true,
+                itemStyle: {
+                    color: '#FFFFFF'
+                },
+                data: requirementTotalData
+            },
+            {
+                type: 'pie',
+                radius: [0, '25%'],
+                center: ['80%', '25%'],
+                data: difficultyData,
+            },
+            {
+                type: 'pie',
+                radius: [0, '25%'],
+                center: ['80%', '65%'],
+                data: priorityData
+            }
+        ],
+        dataZoom: [
+            {
+                type: 'inside',
+                yAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                start: 0,
+                end: x
+            },
+            {
+                show: true,
+                type: 'slider',
+                left: '0%',
+                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
+                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                yAxisIndex: [0],
+                start: 0,
+                end: x
+            }
+        ],
+
+    };
+
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+}
+
+/////////////////////////////////////////////////////////
 // 투입 비용 현황 차트
 /////////////////////////////////////////////////////////
-function compareCostsChart(selectVersionData){
+function compareCostsChart(){
+
+    console.log(" [ analysisCost :: compareCostsChart :: data -> ");
+    console.log(versionListData);
+
+    let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
+
+    let selectVersionData = [];
+    for (let i = 0; i < selectedVersions.length; i++) {
+        let item = versionListData[selectedVersions[i]];
+        selectVersionData.push(item);
+    }
+
     let chartDom = document.getElementById("compare_costs");
     let myChart = echarts.init(chartDom);
     let option;
+
     let titles = selectVersionData.map(item => item.c_title);
-
-    let versionCosts = selectVersionData.map(item => item.versionCost);
-
-    let consumptionCosts = selectVersionData.map(item => item.consumptionCost);
+    let consumptionCosts = selectVersionData.map(item => item.소모비용);
 
     option = {
         tooltip: {
@@ -493,7 +1102,7 @@ function compareCostsChart(selectVersionData){
         },
         grid: {
             left: '3%',
-            right: '4%',
+            right: '10%',
             bottom: '3%',
             containLabel: true
         },
@@ -501,7 +1110,8 @@ function compareCostsChart(selectVersionData){
             type: 'value',
             boundaryGap: [0, 0.01],
             axisLabel: {
-                color: '#FFFFFF'
+                color: '#FFFFFF',
+                rotate: 45
             }
         },
         yAxis: {
@@ -512,11 +1122,6 @@ function compareCostsChart(selectVersionData){
             }
         },
         series: [
-            {
-                name: '투자 비용',
-                type: 'bar',
-                data: versionCosts
-            },
             {
                 name: '소모 비용',
                 type: 'bar',
@@ -533,92 +1138,7 @@ function compareCostsChart(selectVersionData){
 }
 
 /////////////////////////////////////////////////////////
-// 요구사항 단가 기반 크기 확인 차트
-/////////////////////////////////////////////////////////
-function getReqCostRatio(pdServiceLink, pdServiceVersionLinks) {
-
-    let paramData = {
-        "요구_사항" : {
-            'isReqType': 'REQUIREMENT',
-            'pdServiceLink' : selectedPdServiceId,
-            'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-            '메인그룹필드' : 'pdServiceVersion',
-            '컨텐츠보기여부' : false,
-            '크기' : 10000,
-            '하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
-            '하위크기' : 10000
-        },
-        "하위_이슈_사항" : {
-            'isReqType': 'ISSUE',
-            'pdServiceLink': selectedPdServiceId,
-            'pdServiceVersionLinks': pdServiceVersionLinks,
-            '메인그룹필드': 'parentReqKey',
-            '컨텐츠보기여부': false,
-            '크기': 10000,
-            '하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
-            '하위크기': 10000
-        }
-    }
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
-        type: "POST",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        data: JSON.stringify(paramData),
-        progress: true,
-        statusCode: {
-            200: function (result) {
-//				console.log("[ analysisScope :: getReqCostRatio ] :: result");
-//				console.log(result);
-                let pdServiceName;
-                pdServiceListData.forEach(elements => {
-                    if (elements["pdServiceId"] === +pdServiceLink) {
-                        pdServiceName = elements["pdServiceName"];
-                    }
-                });
-
-                let data = {
-                    "1_0_1": [
-                        {
-                            "요구사항": [
-                                { "project": "TE-1", "cost": 400 },
-                                { "project": "TE-2", "cost": 400 },
-                                { "project": "TE-3", "cost": 400 }
-                            ]
-                        },
-                        {
-                            "요구사항2": [
-                                { "project": "TT-1", "cost": 300 },
-                                { "project": "TT-2", "cost": 300 },
-                                { "project": "TT-3", "cost": 300 }
-                            ]
-                        }
-                    ],
-                    "1_0_2": [
-                        {
-                            "요구사항3": [
-                                { "project": "TE-4", "cost": 100 },
-                                { "project": "TE-5", "cost": 100 },
-                                { "project": "TE-6", "cost": 100 }
-                            ]
-                        },
-                        {
-                            "요구사항4": [
-                                { "project": "TT-4", "cost": 300 },
-                                { "project": "TT-5", "cost": 300 },
-                                { "project": "TT-6", "cost": 300 }
-                            ]
-                        }
-                    ]
-                };
-                drawCircularPacking("circularPacking",pdServiceName,data);
-            }
-        }
-    });
-}
-
-/////////////////////////////////////////////////////////
-// 요구사항 별 수익 현황 그래프
+// 요구사항 상세 차트
 /////////////////////////////////////////////////////////
 function incomeStatusChart(){
     var chartDom = document.getElementById('income_status_chart');
@@ -739,222 +1259,167 @@ function incomeStatusChart(){
     window.addEventListener("resize", myChart.resize);
 }
 
-function reqCostAnalysisChart(버전별요구사항별) {
+/////////////////////////////////////////////////////////
+// 인력 연봉 대비 성과 차트
+/////////////////////////////////////////////////////////
+function 인력_연봉대비_성과차트() {
 
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId
-            + "/req-difficulty-priority-list?c_req_pdservice_versionset_link=" + selectedVersionId,
-        type: "GET",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                console.log(" [ analysisCost :: reqCostAnalysisChart :: data -> ");
-                console.log(data);
-                let requirementJson = data.requirement;
-                let difficultyJson = data.difficulty;
-                let priorityJson = data. priority;
+    const tooltipFormatter = function (params) {
 
-                let requirementList = {};
-                requirementJson.map(item => {
-                    requirementList[item.c_title] = 1000000;
-                });
+        let data = dataAll.filter(item => item[0] === params.value[0] && item[1] === params.value[1]);
+        let tooltipContent = '';
 
-                let reqTotalPrice = 0;
-                for (let key in requirementList) {
-                    reqTotalPrice += requirementList[key];
+        if (data.length > 1) {
+            for (let i = 0; i < data.length; i++) {
+                tooltipContent += data[i][2] + ", <strong>연봉</strong> : <span style=''>" + data[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원'  + ", </span><strong>성과</strong> : " + data[i][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + '<br>';
+            }
+        }
+        else if (data.length === 1) {
+            tooltipContent = data[0][2] + "<br><strong>연봉</strong> : <span style=''>" + data[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원' + "</span><br><strong>성과</strong> : " + data[0][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+        }
+
+        return tooltipContent;
+    };
+
+    let dataAll = Object.entries(전체담당자목록).map(([key, value]) => {
+        return [Number(value.연봉) *10000, Number(value.성과), value.이름+"["+key+"]"];
+    });
+
+    var dom = document.getElementById('manpower-analysis-chart2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    let maxX = Math.max(...dataAll.map(item => item[0]));
+    let maxX2 = Math.max(...dataAll.map(item => item[1]));
+
+    let max = Math.max(maxX, maxX2);
+
+    const markLineOpt = {
+        animation: false,
+        label: {
+            formatter: '성과 기준선',
+            align: 'right',
+            color: 'white'
+        },
+        lineStyle: {
+            type: 'dashed',
+            color: '#EE6666',
+            width: 2
+        },
+        tooltip: {
+            formatter: '성과 기준선'
+        },
+        data: [
+            [
+                {
+                    coord: [0, 0],
+                    symbol: 'none'
+                },
+                {
+                    coord: [max, max],
+                    symbol: 'none'
                 }
-
-                let requirementKeys = Object.keys(requirementList);
-                let requirementData = requirementKeys.map(key => requirementList[key]);
-                let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
-
-                let difficultyData = Object.keys(difficultyJson).map(key => ({
-                    name: key.replace('.js', ''),
-                    value: difficultyJson[key]
-                }));
-
-                let priorityData = Object.keys(priorityJson).map(key => ({
-                    name: key.replace('.js', ''),
-                    value: priorityJson[key]
-                }));
-
-                let size = requirementKeys.length;
-                let x = 1;
-
-                if (size > 0) {
-                    x = (15 / size) * 100;
-                }
-
-                var dom = document.getElementById('req-cost-analysis-chart');
-                var myChart = echarts.init(dom, null, {
-                    renderer: 'canvas',
-                    useDirtyRect: false
-                });
-                var app = {};
-
-                var option;
-
-                option = {
-                    tooltip: {
-                        confine: true
+            ]
+        ]
+    };
+    option = {
+        grid: [
+            { left: '15%', top: '5%'}
+        ],
+        tooltip: {
+            confine: true,
+            /*            formatter: function (params) {
+                            return params.value[2] + "<br><strong>연봉</strong> : <span style=''>" + params.value[0]  + "</span><br><strong>성과</strong> : " + params.value[1];
+                        },*/
+            formatter: tooltipFormatter
+        },
+        xAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                    formatter: function (value) {
+                        return value === 0 ? '' : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     },
-                    title: [
-                        {
-                            // text: '요구사항',
-                            subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
-                            left: '25%',
-                            textAlign: 'center',
-                            textStyle: {
-                                color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
-                            },
-                            subtextStyle: {
-                                color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
-                            }
-                        },
-                        {
-                            text: '',
-                            subtext: '난이도 및 우선순위 분포',
-                            left: '80%',
-                            bottom: '0%',
-                            textAlign: 'center',
-                            textStyle: {
-                                color: '#ffffff'  // 제목의 색상을 하얀색으로 변경
-                            },
-                            subtextStyle: {
-                                color: '#ffffff'  // 부제목의 색상을 하얀색으로 변경
-                            }
-                        },
-                    ],
-                    grid: [
-                        {
-                            top: 50,
-                            left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
-                            right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
-                            width: '50%',
-                            bottom: '5%',
-                            containLabel: true
-                        },
-                        /*            {
-                                        top: '55%',
-                                        width: '100%',
-                                        bottom: 0,
-                                        left: 10,
-                                        containLabel: true
-                                    }*/
-                    ],
-                    xAxis: [
-                        {
-                            type: 'value',
-                            max: reqTotalPrice,
-                            splitLine: {
-                                show: false
-                            },
-                            axisLabel: {
-                                rotate: 45,
-                                color: '#FFFFFFFF',
-                            },
-                        },
-                    ],
-                    yAxis: [
-                        {
-                            type: 'category',
-                            data: requirementKeys,
-                            splitLine: {
-                                show: false
-                            },
-                            axisLabel: {
-                                color: '#FFFFFFFF',
-                                rotate: 45,
-                                formatter: function(value) {
-                                    // 최대 10자까지 표시
-                                    if (value.length > 6) {
-                                        return value.substring(0, 6) + '...';
-                                    } else {
-                                        return value;
-                                    }
-                                },
-                            },
-                        },
-                    ],
-                    series: [
-                        {
-                            type: 'bar',
-                            stack: 'chart',
-                            z: 3,
-                            label: {
-                                position: 'right',
-                                show: true
-                            },
-                            data: requirementData
-                        },
-                        {
-                            type: 'bar',
-                            stack: 'chart',
-                            silent: true,
-                            itemStyle: {
-                                color: '#FFFFFF'
-                            },
-                            data: requirementTotalData
-                        },
-                        {
-                            type: 'pie',
-                            radius: [0, '25%'],
-                            center: ['80%', '25%'],
-                            data: difficultyData,
-                        },
-                        {
-                            type: 'pie',
-                            radius: [0, '25%'],
-                            center: ['80%', '65%'],
-                            data: priorityData
-                        }
-                    ],
-                    dataZoom: [
-                        {
-                            type: 'inside',
-                            yAxisIndex: [0], // y축에만 dataZoom 기능 적용
-                            start: 0,
-                            end: x
-                        },
-                        {
-                            show: true,
-                            type: 'slider',
-                            left: '0%',
-                            backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
-                            dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
-                            yAxisIndex: [0],
-                            start: 0,
-                            end: x
-                        }
-                    ],
-
-                };
-
-
-                if (option && typeof option === 'object') {
-                    myChart.setOption(option);
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
                 }
-
-                window.addEventListener('resize', myChart.resize);
+            }
+        ],
+        yAxis: [
+            {
+                gridIndex: 0,
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'white',
+                    interval: 1,
+                    rotate: 45,
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'gray',
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: 'I',
+                type: 'scatter',
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                data: dataAll,
+                markLine: markLineOpt
+            }
+        ],
+        toolbox: {
+            show: true,
+            orient: "vertical",
+            left: "right",
+            bottom: "50px",
+            feature: {
+                mark: { show: true },
+                dataView: {show: true, readOnly: true},
+                dataZoom: {show: true}
+            },
+            iconStyle: {
+                borderColor: "white"
             }
         },
-        error: function (e) {
-            jError("버전 조회 중 에러가 발생했습니다.");
-        }
-    });
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
 }
 
-function 인력별_연봉대비_성과차트_기본세팅(인력맵) {
+function 인력별_연봉대비_성과차트_기본세팅(전체담당자목록) {
     // 초기화 로직
     $("#person-select-box").hide();
     $('.person-data + .bootstrap-select .dropdown-menu').empty();
     $('.person-data + .bootstrap-select .filter-option').text("");
 
-    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_기본세팅 ] :: 인력맵 -> ");
-    console.log(인력맵);
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_기본세팅 ] :: 전체담당자목록 -> ");
+    console.log(전체담당자목록);
 
-    var options = Object.keys(인력맵);
+    var options = Object.keys(전체담당자목록);
 
     console.log(options);
     if (options.length > 0) {
@@ -987,7 +1452,7 @@ function 인력별_연봉대비_성과차트_기본세팅(인력맵) {
 
 function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
 
-    let manPowerData = 인력맵[selectedPerson];
+    let manPowerData = 전체담당자목록[selectedPerson];
 
     console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: selected person name -> " + selectedPerson);
     console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: selected person data -> ");
@@ -1133,10 +1598,10 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
 function 전역인력맵확인() {
     return new Promise(resolve => {
         let intervalId = setInterval(() => {
-            console.log(인력맵);
-            if (인력맵.length > 0 ) {
+            console.log(전체담당자목록);
+            if (전체담당자목록.length > 0 ) {
                 clearInterval(intervalId);
-                resolve(인력맵);
+                resolve(전체담당자목록);
             }
         }, 500);  // 100ms마다 globalDeadline 값 확인
     });

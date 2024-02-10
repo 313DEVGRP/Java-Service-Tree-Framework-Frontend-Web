@@ -100,47 +100,29 @@ class Table {
 		}, []);
 	}
 
-	getOriginData(id) {
-		return origin;
-	}
+	updateData(id, key, value) {
+		const task = this.$data.find((item) => item.id === Number(id));
 
-	updateData(id, obj) {
-		const {
-			origin: {
-				c_id,
-				c_title,
-				c_req_contents,
-				c_req_pdservice_versionset_link,
-				reqDifficultyEntity,
-				reqPriorityEntity,
-				reqStateEntity,
-				c_req_reviewer01,
-				c_req_reviewer02,
-				c_req_reviewer03,
-				c_req_reviewer04,
-				c_req_reviewer05
-			}
-		} = this.$data.find((item) => item.id === Number(id));
-		const params = {
-			c_id,
-			c_title,
-			c_req_pdservice_versionset_link,
-			c_req_priority_link: reqPriorityEntity?.c_id ?? null, // 5 - 중간
-			c_req_difficulty_link: reqDifficultyEntity?.c_id ?? null, // 5 - 보통
-			c_req_state_link: reqStateEntity?.c_id ?? null, //10 - 열림
+		if (task[key] === value) return;
+
+		task[key] = value;
+
+		this.options.onUpdate(this.options.id, {
+			c_id: task.id,
+			c_title: task.content,
+			c_req_pdservice_versionset_link: task.origin.c_req_pdservice_versionset_link,
+			c_req_priority_link: task._priority ?? null, // 5 - 중간
+			c_req_difficulty_link: task._difficulty ?? null, // 5 - 보통
+			c_req_state_link: task._status ?? null, //10 - 열림
 			c_req_update_date: new Date(),
-			c_req_reviewer01,
-			c_req_reviewer02,
-			c_req_reviewer03,
-			c_req_reviewer04,
-			c_req_reviewer05,
+			c_req_reviewer01: task.origin.c_req_reviewer01,
+			c_req_reviewer02: task.origin.c_req_reviewer02,
+			c_req_reviewer03: task.origin.c_req_reviewer03,
+			c_req_reviewer04: task.origin.c_req_reviewer04,
+			c_req_reviewer05: task.origin.c_req_reviewer05,
 			c_req_status: "ChangeReq",
-			c_req_contents
-		};
-
-		if (Object.keys(obj).every((k) => obj[k] === params[k])) return;
-
-		this.options.onUpdate(this.options.id, Object.assign(params, obj));
+			c_req_contents: task.origin.c_req_contents
+		});
 	}
 
 	addInput(node) {
@@ -150,7 +132,7 @@ class Table {
 
 		$input.id = uuid;
 		$input.addEventListener("blur", () => {
-			this.updateData(node.parentElement.dataset.id, { c_title: $input.value });
+			this.updateData(node.parentElement.dataset.id, "content", $input.value);
 			node.textContent = $input.value;
 		});
 
@@ -166,16 +148,16 @@ class Table {
 		switch (name) {
 			case "difficulty":
 				options = ReqDifficulty;
-				keyname = "c_req_difficulty_link";
+				keyname = "_difficulty";
 				break;
 			case "priority":
 				options = ReqPriority;
-				keyname = "c_req_priority_link";
+				keyname = "_priority";
 				break;
 			case "status":
 			default:
 				options = ReqStatus;
-				keyname = "c_req_state_link";
+				keyname = "_status";
 				break;
 		}
 
@@ -185,9 +167,7 @@ class Table {
 			$li.className = text.trim() === label ? "active" : "";
 			$li.innerHTML = `<a href="#resSelectOption" data-toggle="tab">${label}</a>`;
 			$li.addEventListener("click", (e) => {
-				const result = {};
-				result[keyname] = value;
-				this.updateData($li.parentElement.parentElement.parentElement.dataset.id, result);
+				this.updateData($li.parentElement.parentElement.parentElement.dataset.id, keyname, value);
 				$li.parentElement.previousElementSibling.innerHTML = `${e.target.textContent} <i class="fa fa-caret-down"></i>`;
 
 				document.getElementById(uuid).remove();
@@ -330,29 +310,9 @@ const setTableData = (data) => {
 		}, []);
 };
 
-// const getMonitorData = async (id) => {
-// 	return await $.ajax({
-// 		url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/getMonitor.do`,
-// 		type: "GET",
-// 		dataType: "json",
-// 		progress: true,
-// 		statusCode: {
-// 			200: function (data) {
-// 				if (!isEmpty(data)) {
-// 					return data;
-// 				}
-// 			}
-// 		}
-// 	});
-// };
-
-const makeTable = async (options) => {
+const makeReqTable = async (options) => {
 	const res = await options.onGetData(options.id);
-	// const $wrapper = document.getElementById(wrapper);
 	const table = new Table(options, setTableData(res));
 
 	table.rendering();
-
-	// $wrapper.innerHTML = "";
-	// $wrapper.appendChild(table.template);
 };
