@@ -2,7 +2,6 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
     var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
     var option;
-    // ChartWithFooter 관련
     let reqCount = 0; // total
     let statusCounts = {};
     let statusDataArr = [];
@@ -26,8 +25,15 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
 
     function run(rawData) {
         const dataWrap = prepareData(rawData);
-
-        initChart(dataWrap.seriesData, dataWrap.maxDepth);
+        console.log(dataWrap.maxDepth);
+        if(dataWrap.maxDepth === 1){
+            chartDom.style.display = 'flex';
+            chartDom.style.justifyContent = 'center';
+            chartDom.style.alignItems = 'center';
+            chartDom.innerHTML = '<p>데이터가 없습니다.</p>';
+        }else{
+            initChart(dataWrap.seriesData, dataWrap.maxDepth);
+        }
     }
 
     function prepareData(rawData) {
@@ -54,7 +60,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                         let project = item.c_issue_key;
                         //let cost = 300; // 임시 설정
                         let cost = item.cost;
-                        if(cost !== null){
+                        if(cost !== null  && cost !== 0){
                             subValue += cost;
                             seriesData.push({
                                 id: `${path}.${project}`,
@@ -316,6 +322,9 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
         myChart.on('click', { seriesIndex: 0 }, function (params) {
             if(params.data.depth != 3){
                 drillDown(params.data.id);
+            }
+            if(params.data.depth === 2){
+                incomeStatusChart(params.data);
             }
 
         });
