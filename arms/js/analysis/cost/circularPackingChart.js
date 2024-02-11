@@ -25,8 +25,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
 
     function run(rawData) {
         const dataWrap = prepareData(rawData);
-        console.log(dataWrap.maxDepth);
-        if(dataWrap.maxDepth === 1){
+        if(dataWrap.maxDepth === 1){ // 요구사항 값이 0이면 버전까지만 그려지기 때문
             chartDom.style.display = 'flex';
             chartDom.style.justifyContent = 'center';
             chartDom.style.alignItems = 'center';
@@ -42,13 +41,12 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
         let index = 0;
 
         function convert(source, basePath, depth) {
-            maxDepth = Math.max(maxDepth, depth);
             let value = 0;
             let version_id, version_name,req_id, req_name;
 
             for (let key in source) {
                 let path = `${basePath}.${key}`;
-                let newDepth = depth;
+                let newDepth = depth+1;
 
                 if (Array.isArray(source[key])) {
                     let subValue = 0;
@@ -56,7 +54,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                     version_name = source[key][0].c_pds_version_name;
                     req_id = source[key][0].c_req_link;
                     req_name = source[key][0].c_req_name;
-                    source[key].forEach(item => {
+                    source[key].forEach(item => { // 요구사항 키 일때
                         let project = item.c_issue_key;
                         //let cost = 300; // 임시 설정
                         let cost = item.cost;
@@ -65,35 +63,38 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                             seriesData.push({
                                 id: `${path}.${project}`,
                                 value: cost,
-                                depth: newDepth +2 ,
+                                depth: newDepth +1,
                                 index: index++,
                                 version_id: item.c_pds_version_link,
                                 version_name: item.c_pds_version_name,
                                 req_id : item.c_req_link,
                                 req_name: item.c_req_name
                             });
+                            maxDepth = Math.max(maxDepth, newDepth + 1); // maxDepth를 갱신.
                         }
                     });
 
-                    if (subValue !== 0) {
+                    if (subValue !== 0) { //요구사항일 때
                         value += subValue;
                         seriesData.push({
                             id: path,
                             value: subValue,
-                            depth: newDepth+1,
+                            depth: newDepth,
                             index: index++,
                             version_id: version_id,
                             version_name: version_name,
                             req_id : req_id,
                             req_name: req_name
                         });
+                        maxDepth = Math.max(maxDepth, newDepth);// maxDepth를 갱신.
                     }
-                } else if (typeof source[key] === 'object' && source[key] !== null) {
+                } else if (typeof source[key] === 'object' && source[key] !== null) { // 버전일 때
                     version_id = source[key].c_pds_version_link;
                     version_name = source[key].c_pds_version_name;
                     req_id = source[key].c_req_link;
                     req_name = source[key].c_req_name;
-                    value += convert(source[key], path, newDepth+1);
+                    value += convert(source[key], path, newDepth);
+                    maxDepth = Math.max(maxDepth, newDepth );// maxDepth를 갱신.
                 }
             }
 
@@ -109,11 +110,10 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                     req_name:req_name
                 });
             }
-
             return value;
         }
 
-        let totalValue = convert(rawData, psServiceName, 0);
+       let totalValue = convert(rawData, psServiceName, 0);
 
         // 최상단 노드의 value를 업데이트
         seriesData.push({
