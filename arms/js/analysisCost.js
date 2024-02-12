@@ -12,6 +12,8 @@ var versionListData;
 
 var 버전_요구사항_담당자 = {};
 var 전체담당자목록 = {};
+var 요구사항전체목록 = {};
+var 요구사항별_키목록 = {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -207,7 +209,6 @@ function bind_VersionData_By_PdService() {
                 for (var k in data.response) {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
-                    console.log(obj);
                     obj.소모비용 = 0;
                     versionListData[obj.c_id] = obj;
                     // versionListData.push({ c_id: obj.c_id, versionTitle: obj.c_title });
@@ -263,12 +264,12 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
                 전체담당자목록 = apiResponse.response.전체담당자목록;
 
-                // let 연봉 = 5000;
-                //
-                // Object.keys(전체담당자목록).forEach((key) => {
-                //     전체담당자목록[key].연봉 = 연봉;
-                //     전체담당자목록
-                // });
+                let 연봉 = 5000;
+
+                Object.keys(전체담당자목록).forEach((key) => {
+                    전체담당자목록[key].연봉 = 연봉;
+                    전체담당자목록[key].성과 = 0;
+                });
 
                 costInput(전체담당자목록, pdServiceVersionLinks);
             }
@@ -557,9 +558,8 @@ function manpowerInput(전체담당자목록) {
             title: "연봉 (입력)",
             data: "연봉",
             render: function(data, type, row) {
-                // var formattedData = parseInt(data).toLocaleString();
-                let 연봉 = 5000;
-                return '<input type="text" name="annual-income" class="annual-income-input" value="' + 연봉  + '" data-owner="' + row.키 + '"> 만원';
+                var formattedData = parseInt(data).toLocaleString();
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData  + '" data-owner="' + row.키 + '"> 만원';
             },
             className: "dt-center",
             visible: true
@@ -638,6 +638,34 @@ function dataTableDrawCallback(tableInfo) {
         전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
         전체담당자목록[owner].성과 = 0;
     });
+
+    // 모든 input 박스 체크하도록 하는 함수 리팩토링 필요
+    // $("#" + tableInfo.sInstance).on('input', 'input[type="text"]', function() {
+    //     if (checkAllInputsFilled()) {
+    //         // 모든 input 박스가 채워져 있다면 버튼 클릭 이벤트를 발생시키거나,
+    //         // 여기에서 바로 계산을 시작하는 함수를 호출합니다.
+    //         $('#cost-analysis-calculation').click(); // 예시로 버튼 클릭 이벤트를 발생시킴
+    //     }
+    // });
+}
+
+
+// 모든 input 박스에 데이터가 입력되었는지 확인하는 함수 리팩톨이 필요,,,
+function checkAllInputsFilled() {
+    let table = $('#manpower-annual-income').DataTable();
+
+    let allFilled = true;
+
+    table
+        .cells(null, ':has(input[type="text"])') // input 박스가 있는 모든 셀 선택
+        .every(function(rowIdx, colIdx) {
+            let inputVal = this.data().find('input[type="text"]').val();
+            if (inputVal === '') {
+                allFilled = false;
+                return false;
+            }
+        });
+    return allFilled;
 }
 
 function excel_download() {
@@ -671,28 +699,23 @@ function 비용분석계산() {
             return;
         }
 
-        let isNumber = true;
-
-        // console.log(" [ analysisCost :: 비용 분석 계산 ] :: selectVersionData -> " + JSON.stringify(selectVersionData));
-
-        var inputs = $('.annual-income-input');
-
-        // 각 input 요소의 value 값을 가져와 출력합니다.
-        inputs.each(function() {
-            let owner = $(this).data('owner');
-            let value = $(this).val();
-            전체담당자목록[owner].연봉 = value;
-            전체담당자목록[owner].성과 = 0;
+        // 버전 소모비용 초기화
+        let 선택된_버전아이디목록 = selectedVersionId.split(',');
+        선택된_버전아이디목록.forEach((아이디) => {
+            versionListData[아이디].소모비용 = 0;
         });
 
-        // 연봉 정보 유효성 체크 및 세팅
+        // 연봉 정보 유효성 체크 및 세팅, 담당자목록 성과 초기화
         for (let owner in 전체담당자목록) {
+            전체담당자목록[owner].성과 = 0;
             if (isNaN(전체담당자목록[owner].연봉)) {
                 alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
                 return;
             }
         }
-        console.log(" [ analysisCost :: 비용 분석 계산 ] :: 전체담당자목록 -> " + JSON.stringify(전체담당자목록));
+
+        console.log(" [ analysisCost :: 비용 분석 계산 ] :: 전체담당자목록 -> ");
+        console.log(전체담당자목록);
 
         const url = new UrlBuilder()
             .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
@@ -727,79 +750,61 @@ function 비용분석계산() {
             ////////////////////////// 비용 분석 계산 /////////////////////////////
             /////////////////////////////////////////////////////////////////////
             Object.values(요구사항전체목록).forEach((요구사항) => {
+                // 요구사항 전체목록을 반복문 돌기 및 요구사항별 단가 초기화
                 요구사항.단가 = 0;
+
+                // 해당 요구사항이 멀티 버전일 수 있으니 버전목록을 가져옴
                 let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
+                
+                // 요구사항의 버전목록을 반복문 돌기 
                 요구사항이포함된버전목록.forEach((버전) => {
+                    // 해당 버전에 요구사항 키 목록을 가져옴
                     let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
-                    let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
 
-
-                    if (요구사항_키목록 == null) {
-                        // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+                    // 버전의 요구사항 목록 유무 확인
+                    if (버전_요구사항_키목록 == null) {
                     }
                     else {
-                        요구사항_키목록.forEach((요구사항키) => {
-                            let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
-                            let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
-                            if (담당자목록 == null) {
-                                // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "n\요구사항_담당자목록 -> " +요구사항.c_id);
-                            }
-                            else {
-                                // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
-                                Object.entries(담당자목록).forEach(([key, value]) => {
-                                    // console.log(key);
+                        // 있을 시 계산, 버전과 요구사항 c_id로 해당 요구사항이 가진 키목록 데이터 가져오기
+                        let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
 
-                                    let startDate, endDate;
+                        // 요구사항 키 목록 유무 확인
+                        if (요구사항_키목록 == null) {
+                            // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
+                        }
+                        else {
+                            // 있을 시 키목록을 반목문 돌기
+                            요구사항_키목록.forEach((요구사항키) => {
 
-                                    if (요구사항.reqStateEntity == null) {
-                                        if (요구사항.c_req_create_date !== null) {
-                                            startDate = new Date(formatDate(요구사항.c_req_create_date));
-                                        }
+                                // 키 별 담당자목록 조회를 위한 버전_요구사항_담당자 중 버전 유무 확인
+                                let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
+                                if (요구사항_담당자목록 == null) {
 
-                                        if (요구사항.c_req_plan_time == null) {
-                                            endDate = null;
-                                        }
-                                        else {
-                                            endDate = new Date(formatDate(요구사항.c_req_create_date));
-                                            endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
-                                        }
+                                }
+                                else {
+                                    // 있으면 버전_요구사항_담당자 중 담당자목록 유무 확인
+                                    let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
+                                    if (담당자목록 == null) {
+                                        // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "n\요구사항_담당자목록 -> " +요구사항.c_id);
                                     }
                                     else {
-                                        if (요구사항.reqStateEntity.c_id === 11) {
-                                            startDate = new Date(formatDate(요구사항.c_req_start_date));
-                                            endDate = new Date(formatDate(new Date()));
-                                        }
-                                        else if (요구사항.reqStateEntity.c_id === 12) {
-                                            startDate = new Date(formatDate(요구사항.c_req_start_date));
-                                            endDate = new Date(formatDate(요구사항.c_req_end_date));
-                                        }
-                                        else {
-                                            startDate = new Date(formatDate(요구사항.c_req_create_date));
-                                            if (요구사항.c_req_plan_time == null) {
+                                        // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
 
+                                        // 있으면 담당자목록을 반목문 돌기
+                                        Object.entries(담당자목록).forEach(([key, value]) => {
+
+                                            // 요구사항의 비용 계산을 위한 날짜 카운팅 ****** 수정필요(정책) ******
+                                            let {startDate, endDate} = 날짜계산(요구사항);
+
+                                            // 요구사항 단가 계산 및 인력 성과 계산 등
+                                            if (startDate && endDate) {
+                                                최종비용분석계산(key, startDate, endDate, 요구사항, 버전, 요구사항키);
                                             }
-                                            else {
-                                                endDate = new Date(formatDate(요구사항.c_req_create_date));
-                                                endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
-                                            }
-                                        }
+                                        });
                                     }
-
-                                    if (startDate && endDate) {
-                                        startDate.setHours(0,0,0,0);
-                                        endDate.setHours(0,0,0,0);
-
-                                        let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-                                        let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
-
-                                        요구사항.단가 += 업무일수 * 일급;
-                                        전체담당자목록[key].성과 += 업무일수 * 일급;
-                                        versionListData[버전].소모비용 += 업무일수 * 일급;
-                                        요구사항키.cost += 업무일수 * 일급;
-                                    }
-                                });
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -856,6 +861,75 @@ function 비용분석계산() {
             return acc;
         }, {});*/
     });
+}
+
+//////////////////////////////////////////////////////////////
+/////////////// 요구사항의 일수 계산을 위한 함수///////////////////
+//////////////////////////////////////////////////////////////
+function 날짜계산(요구사항) {
+    let startDate, endDate;
+
+    if (요구사항.reqStateEntity == null) {
+        if (요구사항.c_req_create_date !== null) {
+            startDate = new Date(formatDate(요구사항.c_req_create_date));
+        }
+
+        if (요구사항.c_req_plan_time == null) {
+            endDate = null;
+        }
+        else {
+            endDate = new Date(formatDate(요구사항.c_req_create_date));
+            endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
+        }
+    }
+    else {
+        if (요구사항.reqStateEntity.c_id === 11) {
+            startDate = new Date(formatDate(요구사항.c_req_start_date));
+            endDate = new Date(formatDate(new Date()));
+        }
+        else if (요구사항.reqStateEntity.c_id === 12) {
+            startDate = new Date(formatDate(요구사항.c_req_start_date));
+            endDate = new Date(formatDate(요구사항.c_req_end_date));
+        }
+        else {
+            startDate = new Date(formatDate(요구사항.c_req_create_date));
+            if (요구사항.c_req_plan_time == null) {
+
+            }
+            else {
+                endDate = new Date(formatDate(요구사항.c_req_create_date));
+                endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
+            }
+        }
+    }
+
+    return {startDate, endDate};
+}
+
+function 최종비용분석계산(key, startDate, endDate, 요구사항, 버전, 요구사항키) {
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);
+
+    // startDate와 endDate를 통한 요구사항 진행일자를 가지고 업무일수 카운팅
+    let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    // 담당자 데이터의 연봉을 가져와 365로 나누어 일급 계산 * 10000은 단위(만원)
+    let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
+
+    // 요구사항별 금액 측정 차트 데이터
+    요구사항.단가 += 업무일수 * 일급;
+
+    // 인력별 성과 차트 데이터
+    전체담당자목록[key].성과 += 업무일수 * 일급;
+
+    // 버전별 소모비용 차트 데이터
+    versionListData[버전].소모비용 += 업무일수 * 일급;
+
+    // 요구사항 금액별 버블 차트 데이터
+    요구사항키.cost += 업무일수 * 일급;
+
+    // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
+    버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 += 업무일수 * 일급;
+    // console.log(버전_요구사항_담당자[버전][요구사항키.c_issue_key][key]);
 }
 
 function 차트초기화() {
