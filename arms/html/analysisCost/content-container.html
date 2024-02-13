@@ -632,9 +632,19 @@
 
                     <!-- 입력 완료 버튼 -->
                     <div style="text-align: center;">
-                        <button id="cost-analysis-calculation" class="cost-input-complete">
+                        <a      id="cost-analysis-calculation"
+                                class="more animated-button1"
+                                style="padding: 14px 36px; text-decoration: none; cursor: pointer;">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                            <strong>비용 분석 계산</strong>
+                        </a>
+<!--                        <button id="cost-analysis-calculation" class="cost-input-complete">
                             입력 완료
-                        </button>
+                        </button>-->
                     </div>
 
                 </div>
@@ -1000,212 +1010,7 @@
                 </blockquote>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <section class="widget">
-                            <header>
-                                <h4>
-									<span
-                                            class="font13"
-                                            style="font-weight: bold">
-										<i class="fa fa-stack-overflow"></i>
-										 버전 별 총 인력 비용
-									</span>
-                                </h4>
-                                <div class="widget-controls">
-                                    <a
-                                            class="hidden"
-                                            data-widgster="toleft"
-                                            title="change width to left"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-left"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="expand"
-                                            title="Expand"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="collapse"
-                                            title="Collapse"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                    </a>
-                                    <a
-                                            class="hidden"
-                                            data-widgster="toright"
-                                            title="change width to right"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-right"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="restore"
-                                            title="Restore"
-                                            href="#">
-                                        <span class="glyphicon glyphicon-repeat"></span>
-                                    </a>
-                                    <a
-                                            data-widgster="fullscreen"
-                                            title="Fullscreen"
-                                            href="#">
-                                        <i
-                                                class="glyphicon glyphicon-fullscreen"
-                                                style="font-size: 11px"></i>
-                                    </a>
-                                </div>
-                            </header>
-                            <div class="body">
-                                <div
-                                        class="gradient_middle_border"
-                                        style="width: 100%; margin-top: 8px"></div>
-                                <blockquote class="font12">
-                                    버전별 소모된 총 인력 비용을 확인할 수 있습니다.
-                                </blockquote>
-                                <div class="body">
-                                    <div id="compare_costs"></div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!--                    <div class="col-lg-4">
-                                            <section
-                                                    class="widget"
-                                                    style="margin-bottom: 0px !important">
-                                                <header>
-                                                    <h4>
-                            <span
-                                            class="font13"
-                                            style="font-weight: bold">
-                              <i class="fa fa-edit"></i>
-                              인력별 비용 분석
-                            </span>
-                                                    </h4>
-                                                    <div class="widget-controls">
-                                                        <a
-                                                                data-widgster="expand"
-                                                                title="Expand"
-                                                                href="#">
-                                                            <i class="glyphicon glyphicon-chevron-up"></i>
-                                                        </a>
-                                                        <a
-                                                                data-widgster="collapse"
-                                                                title="Collapse"
-                                                                href="#">
-                                                            <i class="glyphicon glyphicon-chevron-down"></i>
-                                                        </a>
-                                                        <a
-                                                                data-widgster="restore"
-                                                                title="Restore"
-                                                                href="#">
-                                                            <span class="glyphicon glyphicon-repeat"></span>
-                                                        </a>
-                                                        <a
-                                                                data-widgster="fullscreen"
-                                                                title="Fullscreen"
-                                                                href="#">
-                                                            <i
-                                                                    class="glyphicon glyphicon-fullscreen"
-                                                                    style="font-size: 11px"></i>
-                                                        </a>
-                                                    </div>
-                                                </header>
-                                                <div
-                                                        class="body"
-                                                        style="overflow: hidden">
-                                                    <div
-                                                            class="gradient_middle_border"
-                                                            style="width: 100%; height: 2px"></div>
-                                                    <blockquote
-                                                            class="font13"
-                                                            style="margin-top: 5px">
-                                                        인력별 요구사항 투입된 정보로 분석된 데이터입니다.
-                                                        <div style="float: right">
-                                                        </div>
-                                                    </blockquote>
-                                                    <div class="input-group" id="person-select-box" style="display:none;">
-                                                        <span class="input-group-btn">
-                                                                    <select class="selectpicker person-data" data-style="btn-default" style="display: none;">
-                                                                        <option>박현기</option>
-                                                                    </select>
-                                                            <div class="btn-group bootstrap-select" style="float: right;">
-                                                                <button class="btn dropdown-toggle clearfix btn-default" data-toggle="dropdown" >
-                                                                    <span class="filter-option" id="first-person-select">박현기</span>&nbsp;<i class="fa fa-caret-down"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu" role="menu" style="max-height: 128.75px; overflow-y: auto; min-height: 60px;">
-                                                                </ul>
-                                                            </div>
-                                                        </span>
-                                                    </div>
-                                                    <div
-                                                            id="manpower-analysis-chart"></div>
-                                                </div>
-                                            </section>
-                                        </div>-->
-                    <div class="col-md-6">
-                        <section
-                                class="widget"
-                                style="margin-bottom: 0px !important">
-                            <header>
-                                <h4>
-                                    <span
-                                            class="font13"
-                                            style="font-weight: bold">
-                                        <i class="fa fa-users"></i>
-                                        인력별 성과 분석
-                                    </span>
-                                </h4>
-                                <div class="widget-controls">
-                                    <a
-                                            data-widgster="expand"
-                                            title="Expand"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="collapse"
-                                            title="Collapse"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="restore"
-                                            title="Restore"
-                                            href="#">
-                                        <span class="glyphicon glyphicon-repeat"></span>
-                                    </a>
-                                    <a
-                                            data-widgster="fullscreen"
-                                            title="Fullscreen"
-                                            href="#">
-                                        <i
-                                                class="glyphicon glyphicon-fullscreen"
-                                                style="font-size: 11px"></i>
-                                    </a>
-                                </div>
-                            </header>
-                            <div
-                                    class="body"
-                                    style="overflow: hidden">
-                                <div
-                                        class="gradient_middle_border"
-                                        style="width: 100%; height: 2px"></div>
-                                <blockquote
-                                        class="font13"
-                                        style="margin-top: 5px">
-                                    인력별 연봉 대비 요구사항 투입된 정보로 성과를 분석한 자료입니다.
-                                    <div style="float: right">
-                                    </div>
-                                </blockquote>
-                                <div
-                                        id="manpower-analysis-chart2"></div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <section class="widget">
                             <header>
                                 <h4>
@@ -1272,7 +1077,271 @@
                             </div>
                         </section>
                     </div>
+<!--                    <div class="col-md-6">
+                        <section class="widget">
+                            <header>
+                                <h4>
+									<span
+                                            class="font13"
+                                            style="font-weight: bold">
+										<i class="fa fa-stack-overflow"></i>
+										 버전 별 총 인력 비용
+									</span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toleft"
+                                            title="change width to left"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            class="hidden"
+                                            data-widgster="toright"
+                                            title="change width to right"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+                            <div class="body">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; margin-top: 8px"></div>
+                                <blockquote class="font12">
+                                    버전별 소모된 총 인력 비용을 확인할 수 있습니다.
+                                </blockquote>
+                                <div class="body">
+                                    <div id="compare_costs"></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>-->
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <section
+                                class="widget"
+                                style="margin-bottom: 0px !important">
+                            <header>
+                                <h4>
+                                    <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-users"></i>
+                                        연봉기준 성과 분포
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+                            <div
+                                    class="body"
+                                    style="overflow: hidden">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; height: 2px"></div>
+                                <blockquote
+                                        class="font13"
+                                        style="margin-top: 5px">
+                                    전체 인력 연봉 대비 성과 분포를 확인할 수 있습니다.
+                                    <div style="float: right">
+                                    </div>
+                                </blockquote>
+                                <div id="manpower-analysis-chart2"></div>
+                                <!--                                <div id="manpower-analysis-chart2"></div>-->
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section
+                                class="widget"
+                                style="margin-bottom: 0px !important">
+                            <header>
+                                <h4>
+                                    <span
+                                            class="font13"
+                                            style="font-weight: bold">
+                                        <i class="fa fa-users"></i>
+                                        인력별 성과 분석
+                                    </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+                            <div
+                                    class="body"
+                                    style="overflow: hidden">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; height: 2px"></div>
+                                <blockquote
+                                        class="font13"
+                                        style="margin-top: 5px">
+                                    인력별 연봉 대비 성과를 한눈에 확인할 수 있니다.
+                                    <div style="float: right">
+                                    </div>
+                                </blockquote>
+                                <div id="manpower-analysis-chart"></div>
+                                <!--                                <div id="manpower-analysis-chart2"></div>-->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+<!--                <div class="row">
+                    <div class="col-lg-12">
+                        <section
+                                class="widget"
+                                style="margin-bottom: 0px !important">
+                            <header>
+                                <h4>
+                                <span
+                                                class="font13"
+                                                style="font-weight: bold">
+                                  <i class="fa fa-edit"></i>
+                                  인력별 비용 분석
+                                </span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
+                            </header>
+                            <div
+                                    class="body"
+                                    style="overflow: hidden">
+                                <div
+                                        class="gradient_middle_border"
+                                        style="width: 100%; height: 2px"></div>
+                                <blockquote
+                                        class="font13"
+                                        style="margin-top: 5px">
+                                    인력별 요구사항 투입된 정보로 분석된 데이터입니다.
+                                    <div style="float: right">
+                                    </div>
+                                </blockquote>
+                                <div class="input-group" id="person-select-box" style="display:none;">
+                                    <span class="input-group-btn">
+                                                <select class="selectpicker person-data" data-style="btn-default" style="display: none;">
+                                                    <option>박현기</option>
+                                                </select>
+                                        <div class="btn-group bootstrap-select" style="float: right;">
+                                            <button class="btn dropdown-toggle clearfix btn-default" data-toggle="dropdown" >
+                                                <span class="filter-option" id="first-person-select">박현기</span>&nbsp;<i class="fa fa-caret-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu" style="max-height: 128.75px; overflow-y: auto; min-height: 60px;">
+                                            </ul>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div id="manpower-analysis-chart"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>-->
             </div>
         </section>
     </div>
