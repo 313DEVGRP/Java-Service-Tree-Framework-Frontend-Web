@@ -190,7 +190,8 @@ function makeVersionMultiSelectBox() {
 			getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
 			// 나이팅게일로즈 차트(pie) - 버전별 요구사항
-			getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+			//getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+			getReqPerMappedVersions(selectedPdServiceId, selectedVersionId, versionTag);
 
 			//treeBar();
 
@@ -240,7 +241,7 @@ function bind_VersionData_By_PdService() {
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
 				// 나이팅게일로즈 차트(pie) - 버전별 요구사항
-				getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
+				getReqPerMappedVersions(selectedPdServiceId, selectedVersionId, versionTag);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -1220,6 +1221,34 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 	});
 }
 
+function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks, versionTag) {
+	let reqAddUrl = "/T_ARMS_REQADD_"+ pdService_id +"/getReqAddListByFilter.do?";
+
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/scope/req-per-version" +reqAddUrl,
+		type: "GET",
+		data: {	pdServiceId: pdService_id, pdServiceVersionLinks: pdServiceVersionLinks },
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function (result) {
+				console.log("[ analysisScope :: getReqPerMappedVersions ] :: result");
+				console.log(result);
+				console.log("해당 결과는 ReqAdd에서 가져온 결과 입니다.");
+				const versionNameCountMap = result;
+				const outputArray = [];
+				for(const key in versionNameCountMap) {
+					const value = versionNameCountMap[key];
+					outputArray.push({ "name": key, "value": value});
+				}
+				let colorArr = dashboardColor.nightingaleRose;
+				drawRadialPolarBarChart("reqPerVersionRoseChart", outputArray, colorArr);
+			}
+		}
+	});
+}
+
 /////////////////////////////////////////////////////////
 // Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
 /////////////////////////////////////////////////////////
@@ -1281,12 +1310,15 @@ function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 					});
 				}
 
-				let chartDataArr = [];
+				let chartDataArr = []; // 결국 버전명과 수치만 들어갑니다. [{버전명
 
 				reqPerVersionDataArr.forEach((e) => {
 					chartDataArr.push({ name: e.title, value: e.req });
 				});
 				let colorArr = dashboardColor.nightingaleRose;
+				console.log("[ analysisScope :: getReqPerVersion ] :: chartDataArr")
+				console.log(chartDataArr);
+				console.log("====== ====== ====== ====== ======")
 				drawRadialPolarBarChart("reqPerVersionRoseChart", chartDataArr, colorArr);
 			}
 		}
