@@ -220,7 +220,6 @@ function bind_VersionData_By_PdService() {
 
                 수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(",");
-                console.log(selectedVersionId);
 
                 // 요구사항 및 연결이슈 통계
                 getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
@@ -649,7 +648,6 @@ function dataTableDrawCallback(tableInfo) {
     // });
 }
 
-
 // 모든 input 박스에 데이터가 입력되었는지 확인하는 함수 리팩톨이 필요,,,
 function checkAllInputsFilled() {
     let table = $('#manpower-annual-income').DataTable();
@@ -699,12 +697,6 @@ function 비용분석계산() {
             return;
         }
 
-        // 버전 소모비용 초기화
-        let 선택된_버전아이디목록 = selectedVersionId.split(',');
-        선택된_버전아이디목록.forEach((아이디) => {
-            versionListData[아이디].소모비용 = 0;
-        });
-
         // 연봉 정보 유효성 체크 및 세팅, 담당자목록 성과 초기화
         for (let owner in 전체담당자목록) {
             전체담당자목록[owner].성과 = 0;
@@ -713,6 +705,8 @@ function 비용분석계산() {
                 return;
             }
         }
+
+        비용계산데이터_초기화();
 
         console.log(" [ analysisCost :: 비용 분석 계산 ] :: 전체담당자목록 -> ");
         console.log(전체담당자목록);
@@ -741,10 +735,12 @@ function 비용분석계산() {
             요구사항전체목록 = data2.requirement;
 
             console.log("[ analysisCost :: 비용분석계산 ] :: 게산을 위한 데이터들 => ");
+            console.log(요구사항별_키목록);
+            console.log(요구사항전체목록);
+
             console.log(버전_요구사항_담당자);
             console.log(전체담당자목록);
-            console.log(요구사항전체목록);
-            console.log(요구사항별_키목록);
+
 
             /////////////////////////////////////////////////////////////////////
             ////////////////////////// 비용 분석 계산 /////////////////////////////
@@ -832,6 +828,9 @@ function 비용분석계산() {
             $("#circularPacking").height("620px");
 
             drawCircularPacking("circularPacking",pdServiceName, 요구사항별_키목록);
+
+            $("#version-stack-container").height("620px");
+            버전소모비용스택차트();
         }).catch(function(error) {
             console.log('Error:', error);
             jError("비용 분석 계산 중 에러가 발생했습니다.");
@@ -840,27 +839,25 @@ function 비용분석계산() {
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
         incomeStatusChart();
-
-        /*let inputSalaryValues = $('input[name="annual-income"]').map(function() {
-            let data = {};
-
-            let owner = $(this).data('owner');
-            data.사용자 = owner;
-            data.연봉 = $(this).val();
-            return data;
-        }).get();
-        */
-//        $('input[name="person-salary"]').map(function() {
-//            let owner = $(this).data('owner');
-//            전체담당자목록[owner].연봉 = $(this).val() * 10000;
-//        });
-
-        /*let inputSalaryValues = $('input[name="person-salary"]').toArray().reduce(function(acc, cur) {
-            let owner = $(cur).data('owner');
-            acc[owner] = $(cur).val();
-            return acc;
-        }, {});*/
     });
+}
+
+
+function 비용계산데이터_초기화() {
+    // 버전 소모비용 초기화
+    let 선택된_버전아이디목록 = selectedVersionId.split(',');
+    선택된_버전아이디목록.forEach((아이디) => {
+        versionListData[아이디].소모비용 = 0;
+    });
+
+    // 버전 요구사항별 담당자별 금액 초기화
+    for (let 버전 in 버전_요구사항_담당자) {
+        for (let 요구사항키 in 버전_요구사항_담당자[버전]) {
+            for (let key in 버전_요구사항_담당자[버전][요구사항키]) {
+                버전_요구사항_담당자[버전][요구사항키][key].단가 = 0;
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////
@@ -928,7 +925,13 @@ function 최종비용분석계산(key, startDate, endDate, 요구사항, 버전,
     요구사항키.cost += 업무일수 * 일급;
 
     // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
-    버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 += 업무일수 * 일급;
+    if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 == null) {
+        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 = 0;
+        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 += 업무일수 * 일급;
+    }
+    else {
+        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 += 업무일수 * 일급;
+    }
     // console.log(버전_요구사항_담당자[버전][요구사항키.c_issue_key][key]);
 }
 
@@ -940,6 +943,8 @@ function 차트초기화() {
     clearChart('req-cost-analysis-chart');
     clearChart('manpower-analysis-chart');
     clearChart('manpower-analysis-chart2');
+    clearChart('version-stack-container');
+
 
     $("#compare_costs").height("0px");
     $("#circularPacking").height("0px");
@@ -947,6 +952,7 @@ function 차트초기화() {
     $("#req-cost-analysis-chart").height("0px");
     $("#manpower-analysis-chart").height("0px");
     $("#manpower-analysis-chart2").height("0px");
+    $("#version-stack-container").height("0px");
 }
 
 function clearChart(elementId) {
@@ -995,10 +1001,10 @@ function reqCostAnalysisChart(data) {
     }));
 
     let size = requirementKeys.length;
-    let x = 1;
+    let zoomPersent = 1;
 
     if (size > 0) {
-        x = (15 / size) * 100;
+        zoomPersent = (15 / size) * 100;
     }
 
     var dom = document.getElementById('req-cost-analysis-chart');
@@ -1130,7 +1136,7 @@ function reqCostAnalysisChart(data) {
                 type: 'inside',
                 yAxisIndex: [0], // y축에만 dataZoom 기능 적용
                 start: 0,
-                end: x
+                end: zoomPersent
             },
             {
                 show: true,
@@ -1140,7 +1146,7 @@ function reqCostAnalysisChart(data) {
                 dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
                 yAxisIndex: [0],
                 start: 0,
-                end: x
+                end: zoomPersent
             }
         ],
 
@@ -1224,6 +1230,173 @@ function compareCostsChart(){
     }
 
     window.addEventListener("resize", myChart.resize);
+}
+
+
+function 버전소모비용스택차트(){
+
+    const defaultValue = 0;
+
+    let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
+    let stackVersionList = {};
+
+    for (let i = 0; i < selectedVersions.length; i++) {
+        let 버전별_담당자데이터 = {};
+        let item = versionListData[selectedVersions[i]];
+        for (let 요구사항_담당자목록 in 버전_요구사항_담당자[selectedVersions[i]]) {
+            for (let key in 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록]) {
+                if (버전별_담당자데이터[key] == null) {
+                    버전별_담당자데이터[key] = 0;
+                    버전별_담당자데이터[key] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
+                }
+                else {
+                    버전별_담당자데이터[key] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
+                }
+                // console.log(key)
+                // console.log(요구사항_담당자목록);
+                // console.log(selectedVersions[i]);
+            }
+        }
+        stackVersionList[item.c_title] = 버전별_담당자데이터;
+    }
+
+
+
+    let stackTypeList = Object.keys(전체담당자목록);
+
+    let chartDom = document.getElementById('version-stack-container');
+
+    let myChart = echarts.init(chartDom);
+
+    console.log(" [ analysisCost :: 버전소모비용스택차트 ] :: 버전 데이터 -> ");
+    console.log(stackVersionList);
+
+    console.log(" [ analysisCost :: 버전소모비용스택차트 ] :: 버전별 담당자 성과 누적 데이터  -> ");
+    console.log(stackTypeList);
+
+    let size = stackTypeList.length;
+    let zoomPersent = 1;
+
+    if (size > 0) {
+        zoomPersent = (10 / size) * 100;
+    }
+
+    const option = {
+        tooltip: {
+            confine: true,
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow' // 'line' or 'shadow'. 기본값은 'shadow'
+            },
+            formatter: function (params) {
+                const tooltip = params.reduce((acc, param) => {
+                    const { marker, seriesName, value } = param;
+                    if (param.value > 0) {
+                        acc += `${marker}${seriesName}: ${value}<br/>`;
+                    }
+                    return acc;
+                }, '');
+
+                const totalCount = params.reduce((acc, param) => acc + param.value, 0);
+                const totalTooltip = `Total: ${totalCount}<br/>`;
+
+                return totalTooltip + tooltip;
+            }
+        },
+        legend: {
+            type: 'scroll',
+            orient: 'horizontal',
+            scrollDataIndex: 0,
+            pageIconColor: '#2477ff',  // 활성화된 페이지 버튼의 아이콘 색상
+            pageIconInactiveColor: '#aaa',  // 비활성화된 페이지 버튼의 아이콘 색상
+            pageTextStyle: {
+                color: '#fff'
+            },
+            pageButtonPosition: 'end',
+            left: 'left',
+            data: stackTypeList,
+            textStyle: {
+                color: 'white',
+                fontSize: 11
+            },
+
+        },
+        grid: {
+            left: '10%',
+            right: '0%',
+            bottom: '0%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            axisLabel: {
+                textStyle: {
+                    color: 'white',
+                    fontWeight: "",
+                    fontSize: "11"
+                },
+                rotate: 45
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: 'white',
+                    width: 0.2,
+                    opacity: 0.5
+                }
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: Object.keys(stackVersionList),
+            axisLabel: {
+                textStyle: {
+                    color: 'white',
+                    fontWeight: "",
+                    fontSize: "11"
+                }
+            }
+        },
+        series: stackTypeList.map(stackTypeData => {
+            const data = Object.values(stackVersionList).map(stackVersionData => stackVersionData[stackTypeData] || defaultValue);
+            return {
+                name: stackTypeData,
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: false
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: data
+            };
+        }),
+        dataZoom: [
+            {
+                type: 'inside',
+                yAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                start: 0,
+                end: zoomPersent
+            },
+            {
+                show: true,
+                type: 'slider',
+                left: '0%',
+                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
+                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                yAxisIndex: [0],
+                start: 0,
+                end: zoomPersent
+            }
+        ],
+    };
+
+    option && myChart.setOption(option);
+
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
 }
 
 /////////////////////////////////////////////////////////
