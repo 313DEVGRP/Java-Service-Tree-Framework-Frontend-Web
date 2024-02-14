@@ -812,11 +812,12 @@ function 비용분석계산() {
             // 인력별 성과 측정 차트
             $("#manpower-analysis-chart2").height("500px");
             인력_연봉대비_성과차트();
-            // 인력별_연봉대비_성과차트_기본세팅(전체담당자목록);
+            $("#manpower-analysis-chart").height("500px");
+            인력별_연봉대비_성과차트_그리기(전체담당자목록);
 
             // 버전별 투자 대비 소모 비용 차트
-            $("#compare_costs").height("500px");
-            compareCostsChart();
+            // $("#compare_costs").height("500px");
+            // compareCostsChart();
 
             let pdServiceName;
             pdServiceListData.forEach(elements => {
@@ -829,7 +830,7 @@ function 비용분석계산() {
 
             drawCircularPacking("circularPacking",pdServiceName, 요구사항별_키목록);
 
-            $("#version-stack-container").height("620px");
+            $("#version-stack-container").height("500px");
             버전소모비용스택차트();
         }).catch(function(error) {
             console.log('Error:', error);
@@ -1260,8 +1261,6 @@ function 버전소모비용스택차트(){
         stackVersionList[item.c_title] = 버전별_담당자데이터;
     }
 
-
-
     let stackTypeList = Object.keys(전체담당자목록);
 
     let chartDom = document.getElementById('version-stack-container');
@@ -1322,7 +1321,7 @@ function 버전소모비용스택차트(){
 
         },
         grid: {
-            left: '10%',
+            left: '0%',
             right: '0%',
             bottom: '0%',
             containLabel: true
@@ -1714,13 +1713,30 @@ function 인력별_연봉대비_성과차트_기본세팅(전체담당자목록)
     });
 }
 
-function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
+function 인력별_연봉대비_성과차트_그리기(전체담당자목록) {
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: data -> ");
+    console.log(전체담당자목록);
 
-    let manPowerData = 전체담당자목록[selectedPerson];
+    let xData = Object.keys(전체담당자목록).map((key) => {
+        let data = {};
+        data.사용자 = 전체담당자목록[key].이름+"[" + key + "]";
+        data.연봉 = 전체담당자목록[key].연봉 * 10000;
+        data.성과 = 전체담당자목록[key].성과;
+        return data;
+    });
 
-    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: selected person name -> " + selectedPerson);
-    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: selected person data -> ");
-    console.log(manPowerData);
+    console.log(xData);
+
+    let userData = xData.map(item => item.사용자);
+    let salaryData = xData.map(item => item.연봉);
+    let performanceData = xData.map(item => item.성과);
+
+    let size = userData.length;
+    let zoomPersent = 1;
+
+    if (size > 0) {
+        zoomPersent = (5 / size) * 100;
+    }
 
     var dom = document.getElementById('manpower-analysis-chart');
     var myChart = echarts.init(dom, null, {
@@ -1732,9 +1748,9 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
 
     option = {
         grid: {
-            top: 50,
-            left: '20%',
-            bottom: '5%',
+            top: '5%',
+            left: '15%',
+            bottom: '15%',
         },
         tooltip: {
             trigger: 'axis',
@@ -1744,12 +1760,21 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
             confine: true
         },
         xAxis: {
-            data: [manPowerData.이름],
+            data: userData,
             axisTick: { show: false },
             axisLine: { show: false },
             axisLabel: {
                 color: '#FFFFFFFF',
-                opacity: 1
+                opacity: 1,
+                fontSize: 11,
+                formatter: function(value) {
+                    // 최대 10자까지 표시
+                    if (value.length > 7) {
+                        return value.substring(0, 7) + '...';
+                    } else {
+                        return value;
+                    }
+                },
             },
             scale: true,
         },
@@ -1760,7 +1785,8 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
             axisLabel: {
                 show: true,
                 color: '#FFFFFFFF',
-                opacity: 1
+                opacity: 1,
+                rotate: 45
             }
         },
         /*color: ['#e54035'],*/
@@ -1779,14 +1805,14 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
                         opacity: 0.7
                     }
                 },
-                data: [manPowerData.연봉],
+                data: salaryData,
                 z: 10,
                 label: {
                     show: false,
                 },
             },
             {
-                name: '벌어들인 수익',
+                name: '성과',
                 type: 'pictorialBar',
                 barCategoryGap: '0%',
                 // symbol: 'path://M0,10 L10,10 L5,0 L0,10 z',
@@ -1801,7 +1827,7 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
 
                     }
                 },
-                data: [manPowerData.성과],
+                data: performanceData,
                 z: 10,
                 label: {
                     show: false,
@@ -1810,11 +1836,12 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
                 },
             },
             {
+                show: false,
                 name: '연봉 라벨',
                 type: 'pictorialBar',
                 barCategoryGap: '0%',
                 symbol: 'path://M0,0',  // 심볼을 비워서 별도의 바가 보이지 않도록 합니다.
-                data: [manPowerData.연봉],
+                data: salaryData,
                 z: 11,  // z 값을 더 크게 설정하여 라벨이 다른 요소들 위에 오도록 합니다.
                 label: {
                     show: true,
@@ -1830,11 +1857,12 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
                 }
             },
             {
-                name: '벌어들인 수익',
+                show: false,
+                name: '성과 라벨',
                 type: 'pictorialBar',
                 barCategoryGap: '0%',
                 symbol: 'path://M0,0',  // 심볼을 비워서 별도의 바가 보이지 않도록 합니다.
-                data: [manPowerData.성과],
+                data: performanceData,
                 z: 11,  // z 값을 더 크게 설정하여 라벨이 다른 요소들 위에 오도록 합니다.
                 label: {
                     show: true,
@@ -1849,7 +1877,38 @@ function 인력별_연봉대비_성과차트_그리기(selectedPerson) {
                     show: false
                 }
             },
-        ]
+        ],
+        toolbox: {
+            show: true,
+            orient: "vertical",
+            left: "right",
+            bottom: "50px",
+            feature: {
+                // mark: { show: true },
+                dataZoom: {show: true}
+            },
+            iconStyle: {
+                borderColor: "white"
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside',
+                xAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                start: 0,
+                end: zoomPersent
+            },
+            {
+                show: true,
+                type: 'slider',
+                bottom: '3%',
+                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
+                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                xAxisIndex: [0],
+                start: 0,
+                end: zoomPersent
+            }
+        ],
     };
 
     if (option && typeof option === 'object') {
