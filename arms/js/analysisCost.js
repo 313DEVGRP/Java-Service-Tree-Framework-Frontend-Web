@@ -697,6 +697,7 @@ function 비용분석계산() {
             return;
         }
 
+        let isEmpty = true;
         // 연봉 정보 유효성 체크 및 세팅, 담당자목록 성과 초기화
         for (let owner in 전체담당자목록) {
             전체담당자목록[owner].성과 = 0;
@@ -704,6 +705,12 @@ function 비용분석계산() {
                 alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
                 return;
             }
+            isEmpty = false;
+        }
+
+        if (isEmpty) {
+            alert("요구사항에 할당된 담당자가 없습니다.");
+            return;
         }
 
         비용계산데이터_초기화();
@@ -1241,17 +1248,20 @@ function 버전소모비용스택차트(){
     let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
     let stackVersionList = {};
 
+    console.log(버전_요구사항_담당자);
     for (let i = 0; i < selectedVersions.length; i++) {
         let 버전별_담당자데이터 = {};
         let item = versionListData[selectedVersions[i]];
         for (let 요구사항_담당자목록 in 버전_요구사항_담당자[selectedVersions[i]]) {
             for (let key in 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록]) {
-                if (버전별_담당자데이터[key] == null) {
-                    버전별_담당자데이터[key] = 0;
-                    버전별_담당자데이터[key] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
+                console.log(key);
+                let newKey = 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].이름 + "[" + key + "]";
+                if (버전별_담당자데이터[newKey] == null) {
+                    버전별_담당자데이터[newKey] = 0;
+                    버전별_담당자데이터[newKey] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
                 }
                 else {
-                    버전별_담당자데이터[key] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
+                    버전별_담당자데이터[newKey] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
                 }
                 // console.log(key)
                 // console.log(요구사항_담당자목록);
@@ -1261,7 +1271,11 @@ function 버전소모비용스택차트(){
         stackVersionList[item.c_title] = 버전별_담당자데이터;
     }
 
-    let stackTypeList = Object.keys(전체담당자목록);
+    let stackTypeList = Object.keys(전체담당자목록).map(key => {
+        let data;
+        data = 전체담당자목록[key].이름 + "["+key+"]";
+        return data;
+    });
 
     let chartDom = document.getElementById('version-stack-container');
 
@@ -1318,7 +1332,14 @@ function 버전소모비용스택차트(){
                 color: 'white',
                 fontSize: 11
             },
-
+            formatter: function(value) {
+                // 최대 10자까지 표시
+                if (value.length > 15) {
+                    return value.substring(0, 15) + '...';
+                } else {
+                    return value;
+                }
+            },
         },
         grid: {
             left: '0%',
@@ -1673,63 +1694,21 @@ function 인력_연봉대비_성과차트() {
     window.addEventListener('resize', myChart.resize);
 }
 
-function 인력별_연봉대비_성과차트_기본세팅(전체담당자목록) {
-    // 초기화 로직
-    $("#person-select-box").hide();
-    $('.person-data + .bootstrap-select .dropdown-menu').empty();
-    $('.person-data + .bootstrap-select .filter-option').text("");
-
-    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_기본세팅 ] :: 전체담당자목록 -> ");
-    console.log(전체담당자목록);
-
-    var options = Object.keys(전체담당자목록);
-
-    console.log(options);
-    if (options.length > 0) {
-        $("#person-select-box").show();
-        $("#first-person-select").text(options[0]);
-        인력별_연봉대비_성과차트_그리기(options[0]);
-
-        $.each(options, function(index, option) {
-            $('.person-data').append($('<option>', {
-                value: option,
-                text : option
-            }));
-
-            var li = $('<li>', { 'rel': index }).append($('<a>', { 'tabindex': '-1', 'class': '', 'text': option }));
-            $('.person-data + .bootstrap-select .dropdown-menu').append(li);
-        });
-    }
-    else {
-        // 데이터 없을 떄 처리
-        console.log("담당자가 하나도 없습니다.");
-    }
-
-    $('.person-data + .bootstrap-select .dropdown-menu').on('click', 'li', function() {
-        var selectedOption = $(this).text();
-
-        인력별_연봉대비_성과차트_그리기(selectedOption);
-        $('.person-data + .bootstrap-select .filter-option').text(selectedOption);
-    });
-}
-
 function 인력별_연봉대비_성과차트_그리기(전체담당자목록) {
     console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: data -> ");
     console.log(전체담당자목록);
 
-    let xData = Object.keys(전체담당자목록).map((key) => {
-        let data = {};
-        data.사용자 = 전체담당자목록[key].이름+"[" + key + "]";
-        data.연봉 = 전체담당자목록[key].연봉 * 10000;
-        data.성과 = 전체담당자목록[key].성과;
-        return data;
+    let userData = [];
+    let salaryData = [];
+    let performanceData = [];
+
+    Object.keys(전체담당자목록).forEach((key) => {
+        userData.push(전체담당자목록[key].이름 + "[" + key + "]");
+        salaryData.push(전체담당자목록[key].연봉 * 10000);
+        performanceData.push(전체담당자목록[key].성과);
     });
 
-    console.log(xData);
-
-    let userData = xData.map(item => item.사용자);
-    let salaryData = xData.map(item => item.연봉);
-    let performanceData = xData.map(item => item.성과);
+    console.log(userData, salaryData, performanceData);
 
     let size = userData.length;
     let zoomPersent = 1;
@@ -1769,8 +1748,8 @@ function 인력별_연봉대비_성과차트_그리기(전체담당자목록) {
                 fontSize: 11,
                 formatter: function(value) {
                     // 최대 10자까지 표시
-                    if (value.length > 7) {
-                        return value.substring(0, 7) + '...';
+                    if (value.length > 10) {
+                        return value.substring(0, 10) + '...';
                     } else {
                         return value;
                     }
