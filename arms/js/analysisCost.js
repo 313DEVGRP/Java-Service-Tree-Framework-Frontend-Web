@@ -209,9 +209,8 @@ function bind_VersionData_By_PdService() {
                 for (var k in data.response) {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
-                    obj.소모비용 = 0;
+                    obj.버전비용 = 0;
                     versionListData[obj.c_id] = obj;
-                    // versionListData.push({ c_id: obj.c_id, versionTitle: obj.c_title });
                     var newOption = new Option(obj.c_title, obj.c_id, true, false);
                     $(".multiple-select").append(newOption);
                 }
@@ -744,7 +743,6 @@ function 비용분석계산() {
             console.log("[ analysisCost :: 비용분석계산 ] :: 게산을 위한 데이터들 => ");
             console.log(요구사항별_키목록);
             console.log(요구사항전체목록);
-
             console.log(버전_요구사항_담당자);
             console.log(전체담당자목록);
 
@@ -754,7 +752,7 @@ function 비용분석계산() {
             /////////////////////////////////////////////////////////////////////
             Object.values(요구사항전체목록).forEach((요구사항) => {
                 // 요구사항 전체목록을 반복문 돌기 및 요구사항별 단가 초기화
-                요구사항.단가 = 0;
+                요구사항.요구사항금액 = 0;
 
                 // 해당 요구사항이 멀티 버전일 수 있으니 버전목록을 가져옴
                 let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
@@ -814,13 +812,13 @@ function 비용분석계산() {
 
             data2.requirement = 요구사항전체목록;
             $("#req-cost-analysis-chart").height("500px");
-            reqCostAnalysisChart(data2);
+            요구사항비용분석차트(data2);
 
             // 인력별 성과 측정 차트
             $("#manpower-analysis-chart2").height("500px");
-            인력_연봉대비_성과차트();
+            인력_연봉성과분포차트(전체담당자목록);
             $("#manpower-analysis-chart").height("500px");
-            인력별_연봉대비_성과차트_그리기(전체담당자목록);
+            인력별_연봉대비_성과차트(전체담당자목록);
 
             // 버전별 투자 대비 소모 비용 차트
             // $("#compare_costs").height("500px");
@@ -855,14 +853,14 @@ function 비용계산데이터_초기화() {
     // 버전 소모비용 초기화
     let 선택된_버전아이디목록 = selectedVersionId.split(',');
     선택된_버전아이디목록.forEach((아이디) => {
-        versionListData[아이디].소모비용 = 0;
+        versionListData[아이디].버전비용 = 0;
     });
 
     // 버전 요구사항별 담당자별 금액 초기화
     for (let 버전 in 버전_요구사항_담당자) {
         for (let 요구사항키 in 버전_요구사항_담당자[버전]) {
             for (let key in 버전_요구사항_담당자[버전][요구사항키]) {
-                버전_요구사항_담당자[버전][요구사항키][key].단가 = 0;
+                버전_요구사항_담당자[버전][요구사항키][key].버전별담당자성과 = 0;
             }
         }
     }
@@ -875,36 +873,15 @@ function 날짜계산(요구사항) {
     let startDate, endDate;
 
     if (요구사항.reqStateEntity == null) {
-        if (요구사항.c_req_create_date !== null) {
-            startDate = new Date(formatDate(요구사항.c_req_create_date));
-        }
-
-        if (요구사항.c_req_plan_time == null) {
-            endDate = null;
-        }
-        else {
-            endDate = new Date(formatDate(요구사항.c_req_create_date));
-            endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
-        }
     }
     else {
-        if (요구사항.reqStateEntity.c_id === 11) {
-            startDate = new Date(formatDate(요구사항.c_req_start_date));
-            endDate = new Date(formatDate(new Date()));
-        }
-        else if (요구사항.reqStateEntity.c_id === 12) {
+        if (요구사항.reqStateEntity.c_id === 12) {
             startDate = new Date(formatDate(요구사항.c_req_start_date));
             endDate = new Date(formatDate(요구사항.c_req_end_date));
         }
         else {
-            startDate = new Date(formatDate(요구사항.c_req_create_date));
-            if (요구사항.c_req_plan_time == null) {
-
-            }
-            else {
-                endDate = new Date(formatDate(요구사항.c_req_create_date));
-                endDate.setDate(endDate.getDate() + 요구사항.c_req_plan_time);
-            }
+            startDate = new Date(formatDate(요구사항.c_req_start_date));
+            endDate = new Date(formatDate(new Date()));
         }
     }
 
@@ -921,24 +898,24 @@ function 최종비용분석계산(key, startDate, endDate, 요구사항, 버전,
     let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
 
     // 요구사항별 금액 측정 차트 데이터
-    요구사항.단가 += 업무일수 * 일급;
+    요구사항.요구사항금액 += 업무일수 * 일급;
 
     // 인력별 성과 차트 데이터
     전체담당자목록[key].성과 += 업무일수 * 일급;
 
     // 버전별 소모비용 차트 데이터
-    versionListData[버전].소모비용 += 업무일수 * 일급;
+    versionListData[버전].버전비용 += 업무일수 * 일급;
 
     // 요구사항 금액별 버블 차트 데이터
     요구사항키.cost += 업무일수 * 일급;
 
     // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
-    if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 == null) {
-        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 = 0;
-        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 += 업무일수 * 일급;
+    if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 == null) {
+        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 = 0;
+        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 += 업무일수 * 일급;
     }
     else {
-        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].단가 += 업무일수 * 일급;
+        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 += 업무일수 * 일급;
     }
     // console.log(버전_요구사항_담당자[버전][요구사항키.c_issue_key][key]);
 }
@@ -976,9 +953,9 @@ function clearChart(elementId) {
 /////////////////////////////////////////////////////////
 // 요구사항 금액 분석 그래프
 /////////////////////////////////////////////////////////
-function reqCostAnalysisChart(data) {
+function 요구사항비용분석차트(data) {
 
-    console.log(" [ analysisCost :: reqCostAnalysisChart :: data -> ");
+    console.log(" [ analysisCost :: 요구사항비용분석차트 :: data -> ");
     console.log(data);
     let requirementJson = data.requirement;
     let difficultyJson = data.difficulty;
@@ -986,7 +963,7 @@ function reqCostAnalysisChart(data) {
 
     let requirementList = {};
     Object.values(requirementJson).forEach(item => {
-        requirementList[item.c_title] = item.단가;
+        requirementList[item.c_title] = item.요구사항금액;
     });
 
     let reqTotalPrice = 0;
@@ -1189,7 +1166,7 @@ function compareCostsChart(){
     let option;
 
     let titles = selectVersionData.map(item => item.c_title);
-    let consumptionCosts = selectVersionData.map(item => item.소모비용);
+    let consumptionCosts = selectVersionData.map(item => item.버전비용);
 
     option = {
         tooltip: {
@@ -1248,26 +1225,27 @@ function 버전소모비용스택차트(){
     let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
     let stackVersionList = {};
 
-    console.log(버전_요구사항_담당자);
     for (let i = 0; i < selectedVersions.length; i++) {
-        let 버전별_담당자데이터 = {};
-        let item = versionListData[selectedVersions[i]];
-        for (let 요구사항_담당자목록 in 버전_요구사항_담당자[selectedVersions[i]]) {
-            for (let key in 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록]) {
-                console.log(key);
-                let newKey = 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].이름 + "[" + key + "]";
+        const selectedVersion = selectedVersions[i];
+        const 버전별_담당자데이터 = {};
+        const item = versionListData[selectedVersion];
+        const 요구사항_담당자목록들 = 버전_요구사항_담당자[selectedVersion];
+
+        for (let 요구사항_담당자목록 in 요구사항_담당자목록들) {
+            const 담당자목록 = 요구사항_담당자목록들[요구사항_담당자목록];
+
+            for (let key in 담당자목록) {
+                const 담당자 = 담당자목록[key];
+                const newKey = `${담당자.이름}[${key}]`;
+
                 if (버전별_담당자데이터[newKey] == null) {
                     버전별_담당자데이터[newKey] = 0;
-                    버전별_담당자데이터[newKey] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
                 }
-                else {
-                    버전별_담당자데이터[newKey] += 버전_요구사항_담당자[selectedVersions[i]][요구사항_담당자목록][key].단가;
-                }
-                // console.log(key)
-                // console.log(요구사항_담당자목록);
-                // console.log(selectedVersions[i]);
+
+                버전별_담당자데이터[newKey] += 담당자.버전별담당자성과;
             }
         }
+
         stackVersionList[item.c_title] = 버전별_담당자데이터;
     }
 
@@ -1305,13 +1283,15 @@ function 버전소모비용스택차트(){
                 const tooltip = params.reduce((acc, param) => {
                     const { marker, seriesName, value } = param;
                     if (param.value > 0) {
-                        acc += `${marker}${seriesName}: ${value}<br/>`;
+                        let data = param.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+                        acc += `${marker}${seriesName}: ${data}<br/>`;
                     }
                     return acc;
                 }, '');
 
-                const totalCount = params.reduce((acc, param) => acc + param.value, 0);
-                const totalTooltip = `Total: ${totalCount}<br/>`;
+                const totalCount = params.reduce((acc, param) => acc + param.value, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+                const versionName = params[0].name;
+                const totalTooltip = `[${versionName}] - Total: ${totalCount}<br/>`;
 
                 return totalTooltip + tooltip;
             }
@@ -1340,9 +1320,12 @@ function 버전소모비용스택차트(){
                     return value;
                 }
             },
+            tooltip: {
+                show: true, // tooltip 활성화
+            }
         },
         grid: {
-            left: '0%',
+            left: '5%',
             right: '0%',
             bottom: '0%',
             containLabel: true
@@ -1396,8 +1379,8 @@ function 버전소모비용스택차트(){
             {
                 type: 'inside',
                 yAxisIndex: [0], // y축에만 dataZoom 기능 적용
-                start: 0,
-                end: zoomPersent
+                start: (100-zoomPersent),
+                end: 100
             },
             {
                 show: true,
@@ -1406,8 +1389,8 @@ function 버전소모비용스택차트(){
                 backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
                 dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
                 yAxisIndex: [0],
-                start: 0,
-                end: zoomPersent
+                start: (100-zoomPersent),
+                end: 100
             }
         ],
     };
@@ -1544,7 +1527,7 @@ function incomeStatusChart(){
 /////////////////////////////////////////////////////////
 // 인력 연봉 대비 성과 차트
 /////////////////////////////////////////////////////////
-function 인력_연봉대비_성과차트() {
+function 인력_연봉성과분포차트() {
 
     const tooltipFormatter = function (params) {
 
@@ -1694,8 +1677,8 @@ function 인력_연봉대비_성과차트() {
     window.addEventListener('resize', myChart.resize);
 }
 
-function 인력별_연봉대비_성과차트_그리기(전체담당자목록) {
-    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트_그리기 :: data -> ");
+function 인력별_연봉대비_성과차트(전체담당자목록) {
+    console.log(" [ analysisCost :: 인력별_연봉대비_성과차트 :: data -> ");
     console.log(전체담당자목록);
 
     let userData = [];
