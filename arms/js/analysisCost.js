@@ -1291,7 +1291,7 @@ function 버전소모비용스택차트(){
     let zoomPersent = 1;
 
     if (size > 0) {
-        zoomPersent = (10 / size) * 100;
+        zoomPersent = (8 / size) * 100;
     }
 
     const option = {
