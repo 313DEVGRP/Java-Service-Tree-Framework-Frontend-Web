@@ -5,15 +5,14 @@ var mailAddressList; // 투입 작업자 메일
 var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
 
 var dashboardColor;
-var pdServiceData;
 
 var pdServiceListData;
 var versionListData;
 
-var 버전_요구사항_담당자 = {};
-var 전체담당자목록 = {};
-var 요구사항전체목록 = {};
-var 요구사항별_키목록 = {};
+var 버전_요구사항_담당자 = {};   // 버전 - 요구사항 - 담당자 데이터
+var 전체담당자목록 = {};        // 선택된 버전의 전체 담당자 목록
+var 요구사항전체목록 = {};      // 선택된 버전의 요구사항 전체목록
+var 요구사항별_키목록 = {};     // 버전 - 요구사항 cid - 요구사항 키 데이터
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -206,6 +205,7 @@ function bind_VersionData_By_PdService() {
                 var pdServiceVersionIds = [];
                 versionListData = {};
 
+                // 버전 목록 데이터 및 비용 초기화
                 for (var k in data.response) {
                     var obj = data.response[k];
                     pdServiceVersionIds.push(obj.c_id);
@@ -241,9 +241,9 @@ function bind_VersionData_By_PdService() {
 function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
     const url = new UrlBuilder()
         .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
+        // .setBaseUrl('/auth-user/api/arms/analysis/cost/all-assignees')
         .addQueryParam('pdServiceLink', pdServiceLink)
         .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-        .addQueryParam('isReqType', "REQUIREMENT")
         .addQueryParam('크기', 1000)
         .addQueryParam('하위크기', 1000)
         .addQueryParam('컨텐츠보기여부', true)
@@ -636,33 +636,6 @@ function dataTableDrawCallback(tableInfo) {
         전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
         전체담당자목록[owner].성과 = 0;
     });
-
-    // 모든 input 박스 체크하도록 하는 함수 리팩토링 필요
-    // $("#" + tableInfo.sInstance).on('input', 'input[type="text"]', function() {
-    //     if (checkAllInputsFilled()) {
-    //         // 모든 input 박스가 채워져 있다면 버튼 클릭 이벤트를 발생시키거나,
-    //         // 여기에서 바로 계산을 시작하는 함수를 호출합니다.
-    //         $('#cost-analysis-calculation').click(); // 예시로 버튼 클릭 이벤트를 발생시킴
-    //     }
-    // });
-}
-
-// 모든 input 박스에 데이터가 입력되었는지 확인하는 함수 리팩톨이 필요,,,
-function checkAllInputsFilled() {
-    let table = $('#manpower-annual-income').DataTable();
-
-    let allFilled = true;
-
-    table
-        .cells(null, ':has(input[type="text"])') // input 박스가 있는 모든 셀 선택
-        .every(function(rowIdx, colIdx) {
-            let inputVal = this.data().find('input[type="text"]').val();
-            if (inputVal === '') {
-                allFilled = false;
-                return false;
-            }
-        });
-    return allFilled;
 }
 
 function excel_download() {
@@ -848,7 +821,6 @@ function 비용분석계산() {
     });
 }
 
-
 function 비용계산데이터_초기화() {
     // 버전 소모비용 초기화
     let 선택된_버전아이디목록 = selectedVersionId.split(',');
@@ -961,19 +933,33 @@ function 요구사항비용분석차트(data) {
     let difficultyJson = data.difficulty;
     let priorityJson = data. priority;
 
-    let requirementList = {};
-    Object.values(requirementJson).forEach(item => {
-        requirementList[item.c_title] = item.요구사항금액;
-    });
+    // let requirementList = {};
+    // Object.values(requirementJson).forEach(item => {
+    //     requirementList[item.c_title] = item.요구사항금액;
+    // });
+    //
+    // let reqTotalPrice = 0;
+    // for (let key in requirementList) {
+    //     reqTotalPrice += requirementList[key];
+    // }
+    //
+    // let requirementKeys = Object.keys(requirementList);
+    // let requirementData = requirementKeys.map(key => requirementList[key]);
+    // let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
 
-    let reqTotalPrice = 0;
-    for (let key in requirementList) {
-        reqTotalPrice += requirementList[key];
-    }
+    let requirementList = Object.values(requirementJson).reduce((result, item) => {
+        result[item.c_title] = item.요구사항금액;
+        return result;
+    }, {});
 
-    let requirementKeys = Object.keys(requirementList);
-    let requirementData = requirementKeys.map(key => requirementList[key]);
-    let requirementTotalData = requirementKeys.map(key => reqTotalPrice - requirementList[key]);
+    let reqTotalPrice = Object.values(requirementList).reduce((total, amount) => total + amount, 0);
+
+    let sortedRequirementList = Object.entries(requirementList).sort((a, b) => b[1] - a[1]);
+
+    let requirementKeys = sortedRequirementList.map(entry => entry[0]);
+    let requirementData = sortedRequirementList.map(entry => entry[1]);
+    let requirementTotalData = sortedRequirementList.map(entry => reqTotalPrice - entry[1]);
+
 
     let difficultyData = Object.keys(difficultyJson).map(key => ({
         name: key.replace('.js', ''),
@@ -1035,19 +1021,12 @@ function 요구사항비용분석차트(data) {
         grid: [
             {
                 top: 50,
-                left: '5%',  // 차트의 왼쪽 여백을 늘려 슬라이더와 겹치지 않게 함
-                right: '0%', // 차트의 오른쪽 여백 (필요에 따라 조정)
-                width: '50%',
+                left: '5%',
+                right: '0%', 
+                width: '55%',
                 bottom: '5%',
                 containLabel: true
             },
-            /*            {
-                            top: '55%',
-                            width: '100%',
-                            bottom: 0,
-                            left: 10,
-                            containLabel: true
-                        }*/
         ],
         xAxis: [
             {
@@ -1074,8 +1053,8 @@ function 요구사항비용분석차트(data) {
                     rotate: 45,
                     formatter: function(value) {
                         // 최대 10자까지 표시
-                        if (value.length > 6) {
-                            return value.substring(0, 6) + '...';
+                        if (value.length > 9) {
+                            return value.substring(0, 9) + '...';
                         } else {
                             return value;
                         }
@@ -1105,14 +1084,14 @@ function 요구사항비용분석차트(data) {
             },
             {
                 type: 'pie',
-                radius: [0, '25%'],
+                radius: [0, '30%'],
                 center: ['80%', '25%'],
                 data: difficultyData,
             },
             {
                 type: 'pie',
-                radius: [0, '25%'],
-                center: ['80%', '65%'],
+                radius: [0, '30%'],
+                center: ['80%', '75%'],
                 data: priorityData
             }
         ],
@@ -1144,79 +1123,6 @@ function 요구사항비용분석차트(data) {
 
     window.addEventListener('resize', myChart.resize);
 }
-
-/////////////////////////////////////////////////////////
-// 투입 비용 현황 차트
-/////////////////////////////////////////////////////////
-function compareCostsChart(){
-
-    console.log(" [ analysisCost :: compareCostsChart :: data -> ");
-    console.log(versionListData);
-
-    let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
-
-    let selectVersionData = [];
-    for (let i = 0; i < selectedVersions.length; i++) {
-        let item = versionListData[selectedVersions[i]];
-        selectVersionData.push(item);
-    }
-
-    let chartDom = document.getElementById("compare_costs");
-    let myChart = echarts.init(chartDom);
-    let option;
-
-    let titles = selectVersionData.map(item => item.c_title);
-    let consumptionCosts = selectVersionData.map(item => item.버전비용);
-
-    option = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            }
-        },
-        legend: {
-            textStyle: {
-                color: '#FFFFFF'
-            }
-        },
-        grid: {
-            left: '3%',
-            right: '10%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'value',
-            boundaryGap: [0, 0.01],
-            axisLabel: {
-                color: '#FFFFFF',
-                rotate: 45
-            }
-        },
-        yAxis: {
-            type: 'category',
-            data: titles,
-            axisLabel: {
-                color: '#FFFFFF'
-            }
-        },
-        series: [
-            {
-                name: '소모 비용',
-                type: 'bar',
-                data: consumptionCosts
-            }
-        ]
-    };
-
-    if (option && typeof option === "object") {
-        myChart.setOption(option, true);
-    }
-
-    window.addEventListener("resize", myChart.resize);
-}
-
 
 function 버전소모비용스택차트(){
 
@@ -1306,7 +1212,7 @@ function 버전소모비용스택차트(){
                 color: '#fff'
             },
             pageButtonPosition: 'end',
-            left: 'left',
+            left: 'center',
             data: stackTypeList,
             textStyle: {
                 color: 'white',
@@ -1856,7 +1762,7 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
         dataZoom: [
             {
                 type: 'inside',
-                xAxisIndex: [0], // y축에만 dataZoom 기능 적용
+                xAxisIndex: [0],
                 start: 0,
                 end: zoomPersent
             },
@@ -1864,8 +1770,8 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
                 show: true,
                 type: 'slider',
                 bottom: '3%',
-                backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
-                dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
+                backgroundColor: 'rgba(0,0,0,0)',
+                dataBackgroundColor: 'rgba(255,255,255,1)',
                 xAxisIndex: [0],
                 start: 0,
                 end: zoomPersent
@@ -1890,4 +1796,76 @@ function 전역인력맵확인() {
             }
         }, 500);  // 100ms마다 globalDeadline 값 확인
     });
+}
+
+/////////////////////////////////////////////////////////
+// 투입 비용 현황 차트
+/////////////////////////////////////////////////////////
+function compareCostsChart(){
+
+    console.log(" [ analysisCost :: compareCostsChart :: data -> ");
+    console.log(versionListData);
+
+    let selectedVersions = selectedVersionId.split(','); // 문자열을 배열로 변환
+
+    let selectVersionData = [];
+    for (let i = 0; i < selectedVersions.length; i++) {
+        let item = versionListData[selectedVersions[i]];
+        selectVersionData.push(item);
+    }
+
+    let chartDom = document.getElementById("compare_costs");
+    let myChart = echarts.init(chartDom);
+    let option;
+
+    let titles = selectVersionData.map(item => item.c_title);
+    let consumptionCosts = selectVersionData.map(item => item.버전비용);
+
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: '#FFFFFF'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '10%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+            axisLabel: {
+                color: '#FFFFFF',
+                rotate: 45
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: titles,
+            axisLabel: {
+                color: '#FFFFFF'
+            }
+        },
+        series: [
+            {
+                name: '소모 비용',
+                type: 'bar',
+                data: consumptionCosts
+            }
+        ]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    window.addEventListener("resize", myChart.resize);
 }
