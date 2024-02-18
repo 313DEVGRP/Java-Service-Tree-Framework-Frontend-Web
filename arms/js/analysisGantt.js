@@ -107,7 +107,7 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if (window.CKEDITOR.status == "loaded") {
-							CKEDITOR.replace("detailview_req_contents", { skin: "office2013" });
+							// CKEDITOR.replace("detailview_req_contents", { skin: "office2013" });
 							CKEDITOR.replace("edit_tabmodal_editor", { skin: "office2013" });
 							CKEDITOR.replace("add_tabmodal_editor", { skin: "office2013" });
 							clearInterval(waitCKEDITOR);
@@ -752,7 +752,7 @@ function setDetailAndEditViewTab() {
 			// ------------------ 편집하기 ------------------ //
 			bindDataEditlTab(data);
 			// ------------------ 상세보기 ------------------ //
-			bindDataDetailTab(data);
+			// bindDataDetailTab(data);
 		})
 		.fail(function (e) {})
 		.always(function () {});
@@ -899,76 +899,76 @@ function bindDataEditlTab(ajaxData) {
 }
 
 // ------------------ 상세보기 ------------------ //
-function bindDataDetailTab(ajaxData) {
-	//제품(서비스) 데이터 바인딩
-	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
-	if (isEmpty(selectedPdServiceText)) {
-		$("#detailview_req_pdservice_name").val("");
-	} else {
-		$("#detailview_req_pdservice_name").val(selectedPdServiceText);
-	}
-
-	//Version 데이터 바인딩
-	var selectedVersionText = $("#edit_multi_version").multipleSelect("getSelects", "text");
-	if (isEmpty(selectedVersionText)) {
-		$("#detailview_req_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
-	} else {
-		$("#detailview_req_pdservice_version").val(selectedVersionText);
-	}
-	$("#detailview_req_id").val(ajaxData.c_id);
-	$("#detailview_req_name").val(ajaxData.c_title);
-
-	//우선순위 셋팅
-	$("#detailview_req_priority").children(".btn.active").removeClass("active");
-	var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
-	$("#" + select_Req_Priority_ID)
-		.parent()
-		.addClass("active");
-
-	$("#detailview_req_status").val(ajaxData.c_req_status);
-	$("#detailview_req_writer").val(ajaxData.c_req_writer);
-	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
-
-	if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
-		$("#detailview_req_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
-	} else {
-		$("#detailview_req_reviewer01").val(ajaxData.c_req_reviewer01);
-	}
-	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
-		$("#detailview_req_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
-	} else {
-		$("#detailview_req_reviewer02").val(ajaxData.c_req_reviewer02);
-	}
-	if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
-		$("#detailview_req_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
-	} else {
-		$("#detailview_req_reviewer03").val(ajaxData.c_req_reviewer03);
-	}
-	if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
-		$("#detailview_req_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
-	} else {
-		$("#detailview_req_reviewer04").val(ajaxData.c_req_reviewer04);
-	}
-	if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
-		$("#detailview_req_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
-	} else {
-		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
-	}
-	//$("#detailview_req_contents").html(ajaxData.c_req_contents);
-
-	$("#detailview_req_start_date").val(getDate(new Date(ajaxData.c_req_start_date)));
-	$("#detailview_req_end_date").val(getDate(new Date(ajaxData.c_req_end_date)));
-
-	$("#detailview_req_total_resource").val(ajaxData.c_req_total_resource);
-	$("#detailview_req_plan_resource").val(ajaxData.c_req_plan_resource);
-
-	$("#detailview_req_total_time").val(ajaxData.c_req_total_time);
-	$("#detailview_req_plan_time").val(ajaxData.c_req_plan_time);
-
-	$("#detailview_req_manager").val(ajaxData.c_req_manager);
-
-	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
-}
+// function bindDataDetailTab(ajaxData) {
+// 	//제품(서비스) 데이터 바인딩
+// 	var selectedPdServiceText = $("#selected_pdService").select2("data")[0].text;
+// 	if (isEmpty(selectedPdServiceText)) {
+// 		$("#detailview_req_pdservice_name").val("");
+// 	} else {
+// 		$("#detailview_req_pdservice_name").val(selectedPdServiceText);
+// 	}
+//
+// 	//Version 데이터 바인딩
+// 	var selectedVersionText = $("#edit_multi_version").multipleSelect("getSelects", "text");
+// 	if (isEmpty(selectedVersionText)) {
+// 		$("#detailview_req_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
+// 	} else {
+// 		$("#detailview_req_pdservice_version").val(selectedVersionText);
+// 	}
+// 	$("#detailview_req_id").val(ajaxData.c_id);
+// 	$("#detailview_req_name").val(ajaxData.c_title);
+//
+// 	//우선순위 셋팅
+// 	$("#detailview_req_priority").children(".btn.active").removeClass("active");
+// 	var select_Req_Priority_ID = "detailView-req-priority-option" + ajaxData.c_priority;
+// 	$("#" + select_Req_Priority_ID)
+// 		.parent()
+// 		.addClass("active");
+//
+// 	$("#detailview_req_status").val(ajaxData.c_req_status);
+// 	$("#detailview_req_writer").val(ajaxData.c_req_writer);
+// 	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
+//
+// 	if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
+// 		$("#detailview_req_reviewer01").val("리뷰어(연대책임자)가 존재하지 않습니다.");
+// 	} else {
+// 		$("#detailview_req_reviewer01").val(ajaxData.c_req_reviewer01);
+// 	}
+// 	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
+// 		$("#detailview_req_reviewer02").val("2번째 리뷰어(연대책임자) 없음");
+// 	} else {
+// 		$("#detailview_req_reviewer02").val(ajaxData.c_req_reviewer02);
+// 	}
+// 	if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
+// 		$("#detailview_req_reviewer03").val("3번째 리뷰어(연대책임자) 없음");
+// 	} else {
+// 		$("#detailview_req_reviewer03").val(ajaxData.c_req_reviewer03);
+// 	}
+// 	if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
+// 		$("#detailview_req_reviewer04").val("4번째 리뷰어(연대책임자) 없음");
+// 	} else {
+// 		$("#detailview_req_reviewer04").val(ajaxData.c_req_reviewer04);
+// 	}
+// 	if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
+// 		$("#detailview_req_reviewer05").val("5번째 리뷰어(연대책임자) 없음");
+// 	} else {
+// 		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
+// 	}
+// 	//$("#detailview_req_contents").html(ajaxData.c_req_contents);
+//
+// 	$("#detailview_req_start_date").val(getDate(new Date(ajaxData.c_req_start_date)));
+// 	$("#detailview_req_end_date").val(getDate(new Date(ajaxData.c_req_end_date)));
+//
+// 	$("#detailview_req_total_resource").val(ajaxData.c_req_total_resource);
+// 	$("#detailview_req_plan_resource").val(ajaxData.c_req_plan_resource);
+//
+// 	$("#detailview_req_total_time").val(ajaxData.c_req_total_time);
+// 	$("#detailview_req_plan_time").val(ajaxData.c_req_plan_time);
+//
+// 	$("#detailview_req_manager").val(ajaxData.c_req_manager);
+//
+// 	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 //문서로 보기 탭
@@ -1192,7 +1192,7 @@ function click_btn_for_req_add() {
 // 요구사항 편집 탭 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
 function click_btn_for_req_update() {
-	$("#edit_tab_req_update").click(function () {
+	$("#edit_tab_req_update, #footer_edit_tab_req_update").click(function () {
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 		var reqName = $("#editview_req_name").val();
 
@@ -1454,18 +1454,14 @@ function change_tab_action() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 
-		if (target == "#stats") {
-			$(".edit_btn_group").addClass("hidden");
-			$(".jira_btn_group").addClass("hidden");
-			$(".newReqDiv").hide();
-		} else if (target == "#edit") {
-			$(".edit_btn_group").removeClass("hidden");
-			$(".jira_btn_group").addClass("hidden");
-			$(".newReqDiv").hide();
+		$(".edit_btn_group, #footer_edit_tab_req_update").addClass("hidden");
+		$(".jira_btn_group").addClass("hidden");
+		$(".newReqDiv").hide();
+
+		if (target == "#edit") {
+			$(".edit_btn_group, #footer_edit_tab_req_update").removeClass("hidden");
 		} else if (target == "#jira") {
-			$(".edit_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
-			$(".newReqDiv").hide();
 
 			console.log("jira tab click event");
 			//1-1. 제품(서비스) 아이디를 기준으로, -- $('#selected_pdService').val()
@@ -1484,15 +1480,6 @@ function change_tab_action() {
 			console.log("jira datatables_jira_project 완료 ");
 		} else if (target == "#report") {
 			$(".newReqDiv").show();
-			$(".edit_btn_group").addClass("hidden");
-		} else if (target == "#doc") {
-			$(".edit_btn_group").addClass("hidden");
-			$(".jira_btn_group").addClass("hidden");
-			$(".newReqDiv").hide();
-		} else if (target == "#history") {
-			$(".edit_btn_group").addClass("hidden");
-			$(".jira_btn_group").addClass("hidden");
-			$(".newReqDiv").hide();
 		}
 	});
 }
@@ -1765,7 +1752,7 @@ function initGantt(data) {
 						})
 						.attr({ "data-placement": "left", "data-original-title": "상세정보 조회 및 수정" })
 						.tooltip()
-						.on("click", () => updateNodeModalOpen(row));
+						.on("click", (e) => updateNodeModalOpen(row));
 					const addBtn = $("<button />")
 						.addClass("btn btn-primary btn-sm mr-xs")
 						.append($("<i />").addClass("fa fa-plus-circle"))
@@ -1841,26 +1828,29 @@ function updateNodeModalOpen(item) {
 
 	$("#my_modal").modal("show");
 
+	// $(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
+	$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //편집하기
+	$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").hide(); //리스트보기
+	$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //문서로보기
+	$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //JIRA연결설정
+
 	if (selectedType == "folder" || selectedType == "drive") {
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").hide(); //편집하기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
+
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //리스트보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //문서로보기
 
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
 		dataTableLoad();
 	} else {
-		$("#default_tab").get(0).click();
+		// $("#default_tab").get(0).click();
+		$("#edit_tab").get(0).click();
 		$(".newReqDiv").hide();
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
+		// $(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //편집하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //JIRA연결설정
 
 		//상세보기 탭 셋팅
 		setDetailAndEditViewTab();
@@ -1909,8 +1899,7 @@ function popup_size_setting() {
 	var height = $(document).height() - 600;
 
 	$("#my_modal").on("hidden.bs.modal", function (e) {
-		console.log("modal close");
-		$(this).find("form")[0].reset();
+		$(this).find("form")[0]?.reset();
 	});
 
 	$(".modal-body")
