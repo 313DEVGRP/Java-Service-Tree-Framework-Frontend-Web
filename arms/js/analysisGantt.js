@@ -1680,6 +1680,14 @@ function updateNode(data, task) {
 	});
 }
 
+function closeTooltip(e) {
+	if (e.target.tagName === "BUTTON") {
+		e.target.blur();
+	} else {
+		e.target.parentElement.blur();
+	}
+}
+
 function initGantt(data) {
 	$("#gantt-target").empty();
 
@@ -1752,7 +1760,10 @@ function initGantt(data) {
 						})
 						.attr({ "data-placement": "left", "data-original-title": "상세정보 조회 및 수정" })
 						.tooltip()
-						.on("click", (e) => updateNodeModalOpen(row));
+						.on("click", (e) => {
+							closeTooltip(e);
+							updateNodeModalOpen(row);
+						});
 					const addBtn = $("<button />")
 						.addClass("btn btn-primary btn-sm mr-xs")
 						.append($("<i />").addClass("fa fa-plus-circle"))
@@ -1766,7 +1777,10 @@ function initGantt(data) {
 						})
 						.attr({ "data-placement": "left", "data-original-title": "동일 레벨에 요구사항 추가" })
 						.tooltip()
-						.on("click", () => addNodeModalOpen(row.parentId));
+						.on("click", (e) => {
+							closeTooltip(e);
+							addNodeModalOpen(row.parentId);
+						});
 
 					btnWrapper.append(updateBtn);
 					btnWrapper.append(addBtn);
@@ -1785,7 +1799,10 @@ function initGantt(data) {
 							})
 							.attr({ "data-placement": "left", "data-original-title": "하위에 요구사항 추가" })
 							.tooltip()
-							.on("click", () => addNodeModalOpen(row.parentId));
+							.on("click", (e) => {
+								closeTooltip(e);
+								addNodeModalOpen(row.parentId);
+							});
 
 						btnWrapper.append(addLevelDownBtn);
 					}
