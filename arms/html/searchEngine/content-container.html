@@ -1,597 +1,906 @@
 <div class="col-lg-12">
-    <div class="row">
-        <div class="col-lg-10 col-md-offset-1">
-            <section class="widget" style="margin-bottom: 25px;">
-                <div class="body" style="margin-top: 0px;">
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="margin-bottom: 0px; padding-top: 5px; padding-bottom: 5px;">
-                            <div class="controls input-group">
-                                <input type="search" class="form-control searchDarkBack"
-                                       id="search-input"
-                                       placeholder="Search All About A-RMS">
-															<span class="input-group-btn" id="search-button">
-																	<button type="button" class="btn btn-success">Search</button>
-															</span>
-                            </div>
-                            <span class="help-block pull-left" style="margin-bottom: 0px; margin-top: 10px; margin-left: 5px;">
-                                <a href="" style="font-size: 12px;"><i class="fa fa-home"></i> 검색</a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="" style="font-size: 12px;"><i class="fa fa-home"></i> 모든 날짜</a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="" style="font-size: 12px;"><i class="fa fa-home"></i> 모든 결과</a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="" style="font-size: 12px;"><i class="fa fa-home"></i> 추천 검색 : </a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="row">
-                <div id="search_main_wrapper" class="col-lg-12 col-layer">
-									  <section class="widget padding-increased" id="jiraissue_section">
-									  	  <header style="margin: 10px 0;">
-									  		  	<h4 style="font-size: 13px; font-weight: 600">
-									  			  		<i class="fa fa-bars"></i>
-									  						이슈 인덱스
-									  				</h4>
-														<div class="widget-controls">
-																<a
-																	data-widgster="toleft"
-																	title="change width to left"
-																	href="#">
-																	<i class="glyphicon glyphicon-chevron-left"></i>
-																</a>
-																<a
-																	data-widgster="expand"
-																	title="Expand"
-																	href="#">
-																	<i class="glyphicon glyphicon-chevron-up"></i>
-																</a>
-																<a
-																	data-widgster="collapse"
-																	title="Collapse"
-																	href="#">
-																	<i class="glyphicon glyphicon-chevron-down"></i>
-																</a>
-																<a
-																	data-widgster="toright"
-																	title="change width to right"
-																	href="#">
-																	<i class="glyphicon glyphicon-chevron-right"></i>
-																</a>
-																<a
-																	data-widgster="restore"
-																	title="Restore"
-																	href="#">
-																	<span class="glyphicon glyphicon-repeat"></span>
-																</a>
-																<a
-																	data-widgster="fullscreen"
-																	title="Fullscreen"
-																	href="#">
-																		<i
-																			class="glyphicon glyphicon-fullscreen"
-																			style="font-size: 11px"></i>
-																</a>
-														</div>
-									  		</header>
-												<div
-														class="gradient_middle_border"
-														style="width: 100%; height: 2px"></div>
-												<blockquote class="font13">
-														검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
-														<div style="float: right">
-																<button
-																	class="btn btn-transparent btn-xs"
-																	style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-																	onclick="return true;">
-																	Help
-																		<i
-																			class="fa fa-question"
-																			style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-																</button>
-														</div>
-												</blockquote>
-												<div class="body search_result_group">
-														<section class="search-result">
-															<!-- 검색 결과 생성 시, append 하는 방식 -->
-																<div class="search_head" data-toggle="modal" data-target="#search_detail_modal" data-backdrop="false">
-																		<div class="search_title">
-																				<span style="font-size: 13px; color:#a4c6ff;">
-																						<span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-																								<img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
-																						</span>
-																						&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-																				</span>
-																		</div>
-																		<div class="search_category">
-																				<p class="text-muted" style="margin: 5px 0;">
-																					<small>카테고리 fluentd-20240204</small>
-																				</p>
-																				<p class="text-success" style="margin: 5px 0;">
-																					<small>2024-02-15 15:18 KST</small>
-																				</p>
-																		</div>
-																</div>
-																<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
-																		<span>
-																			10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
-																		</span>
-																</div>
-														</section>
-														<section class="search-result">
-																<div class="search_head">
-																		<div class="search_title">
-																				<span style="font-size: 13px; color:#a4c6ff;">
-																						<span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-																								<img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
-																						</span>
-																						&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-																				</span>
-																		</div>
-																		<div class="search_category">
-																				<p class="text-muted" style="margin: 5px 0;font-size: 95%">
-																					<small>카테고리 fluentd-20240123</small>
-																				</p>
-																		</div>
-																</div>
-																<div class="search_content" style="font-size:12px; height: 4rem; line-height: 1.58;  overflow: hidden;">
-																		<span>
-																			2024-01-23 17:14:00.493 DEBUG 1 --- [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder  : [2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded [지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018, fields=n (truncated)...]
-																		</span>
-																</div>
-														</section>
-														<section class="search-result">
-																<h4>Can I use CSS3 Radial-Gradient?</h4>
-																<p class="text-success"><small>okendoken.com</small></p>
-																<p>
-																	Yes you can! Further more, you should! It let's you create really beautiful images either for
-																	elements or for the entire background.
-																</p>
-														</section>
-														<div class="text-align-center">
-																<ul class="pagination">
-																		<li class="disabled"><a href="#">Prev</a></li>
-																		<li class="active"><a href="#">1</a></li>
-																		<li><a href="#">2</a></li>
-																		<li><a href="#">3</a></li>
-																		<li><a href="#">4</a></li>
-																		<li><a href="#">5</a></li>
-																		<li><a href="#">Next</a></li>
-																</ul>
-														</div>
-										</div>
-									</section>
-									<!-- Logging 결과 -->
-									<section class="widget padding-increased" id="log_section">
-										<header style="margin: 10px 0;">
-											<h4 style="font-size: 13px; font-weight: 600">
-												<i class="fa fa-bars"></i>
-												로그(log) 검색 결과
-											</h4>
-											<div class="widget-controls">
-												<a
-													data-widgster="toleft"
-													title="change width to left"
-													href="#">
-													<i class="glyphicon glyphicon-chevron-left"></i>
-												</a>
-												<a
-													data-widgster="expand"
-													title="Expand"
-													href="#">
-													<i class="glyphicon glyphicon-chevron-up"></i>
-												</a>
-												<a
-													data-widgster="collapse"
-													title="Collapse"
-													href="#">
-													<i class="glyphicon glyphicon-chevron-down"></i>
-												</a>
-												<a
-													data-widgster="toright"
-													title="change width to right"
-													href="#">
-													<i class="glyphicon glyphicon-chevron-right"></i>
-												</a>
-												<a
-													data-widgster="restore"
-													title="Restore"
-													href="#">
-													<span class="glyphicon glyphicon-repeat"></span>
-												</a>
-												<a
-													data-widgster="fullscreen"
-													title="Fullscreen"
-													href="#">
-													<i
-														class="glyphicon glyphicon-fullscreen"
-														style="font-size: 11px"></i>
-												</a>
-											</div>
-										</header>
+	<div class="row">
+		<div class="col-lg-10 col-md-offset-1">
+			<section
+				class="widget"
+				style="margin-bottom: 25px">
+				<div
+					class="body"
+					style="margin-top: 0px">
+					<div class="row">
+						<div
+							class="col-md-12 form-group"
+							style="margin-bottom: 0px; padding-top: 5px; padding-bottom: 5px">
+							<div class="controls input-group">
+								<input
+									type="search"
+									class="form-control searchDarkBack"
+									id="search-input"
+									placeholder="Search All About A-RMS" />
+								<span
+									class="input-group-btn"
+									id="search-button">
+									<button
+										type="button"
+										class="btn btn-success">
+										Search
+									</button>
+								</span>
+							</div>
+							<span
+								class="help-block pull-left"
+								style="margin-bottom: 0px; margin-top: 10px; margin-left: 5px">
+								<a
+									href=""
+									style="font-size: 12px">
+									<i class="fa fa-home"></i>
+									검색
+								</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+								<a
+									href=""
+									style="font-size: 12px">
+									<i class="fa fa-home"></i>
+									모든 날짜
+								</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+								<a
+									href=""
+									style="font-size: 12px">
+									<i class="fa fa-home"></i>
+									모든 결과
+								</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+								<a
+									href=""
+									style="font-size: 12px">
+									<i class="fa fa-home"></i>
+									추천 검색 :
+								</a>
+							</span>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12 col-md-12">
+			<div class="row">
+				<div
+					id="search_main_wrapper"
+					class="col-lg-12 col-layer">
+					<section
+						class="widget padding-increased"
+						id="jiraissue_section">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								이슈 인덱스
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body search_result_group">
+							<section class="search-result">
+								<!-- 검색 결과 생성 시, append 하는 방식 -->
+								<div
+									class="search_head"
+									data-toggle="modal"
+									data-target="#search_detail_modal"
+									data-backdrop="false">
+									<div class="search_title">
+										<span style="font-size: 13px; color: #a4c6ff">
+											<span
+												role="img"
+												aria-label=":sparkles:"
+												title=":sparkles:"
+												style="background-color: transparent; display: inline-block; vertical-align: middle">
+												<img
+													src="http://www.313.co.kr/arms/img/bestqulity.png"
+													alt=":sparkles:"
+													width="15"
+													height="15"
+													class="CToWUd"
+													data-bit="iit"
+													style="
+														margin: 0px;
+														padding: 0px;
+														border: 0px;
+														display: block;
+														max-width: 100%;
+														height: auto;
+													" />
+											</span>
+											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
+										</span>
+									</div>
+									<div class="search_category">
+										<p
+											class="text-muted"
+											style="margin: 5px 0">
+											<small>카테고리 fluentd-20240204</small>
+										</p>
+										<p
+											class="text-success"
+											style="margin: 5px 0">
+											<small>2024-02-15 15:18 KST</small>
+										</p>
+									</div>
+								</div>
+								<div
+									class="search_content"
+									style="height: 4rem; line-height: 1.58; overflow: hidden">
+									<span>
+										10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+										/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+										HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0)
+										Gecko/20100101 Firefox/122.0" "211.201.140.91"
+									</span>
+								</div>
+							</section>
+							<section class="search-result">
+								<div class="search_head">
+									<div class="search_title">
+										<span style="font-size: 13px; color: #a4c6ff">
+											<span
+												role="img"
+												aria-label=":sparkles:"
+												title=":sparkles:"
+												style="background-color: transparent; display: inline-block; vertical-align: middle">
+												<img
+													src="http://www.313.co.kr/arms/img/bestqulity.png"
+													alt=":sparkles:"
+													width="15"
+													height="15"
+													class="CToWUd"
+													data-bit="iit"
+													style="
+														margin: 0px;
+														padding: 0px;
+														border: 0px;
+														display: block;
+														max-width: 100%;
+														height: auto;
+													" />
+											</span>
+											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
+										</span>
+									</div>
+									<div class="search_category">
+										<p
+											class="text-muted"
+											style="margin: 5px 0; font-size: 95%">
+											<small>카테고리 fluentd-20240123</small>
+										</p>
+									</div>
+								</div>
+								<div
+									class="search_content"
+									style="font-size: 12px; height: 4rem; line-height: 1.58; overflow: hidden">
+									<span>
+										2024-01-23 17:14:00.493 DEBUG 1 --- [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder :
+										[2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded
+										[지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018,
+										fields=n (truncated)...]
+									</span>
+								</div>
+							</section>
+							<section class="search-result">
+								<h4>Can I use CSS3 Radial-Gradient?</h4>
+								<p class="text-success"><small>okendoken.com</small></p>
+								<p>
+									Yes you can! Further more, you should! It let's you create really beautiful images either for elements
+									or for the entire background.
+								</p>
+							</section>
+							<div class="text-align-center">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">2</a></li>
+									<li><a href="#">3</a></li>
+									<li><a href="#">4</a></li>
+									<li><a href="#">5</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+					<!-- Logging 결과 -->
+					<section
+						class="widget padding-increased"
+						id="log_section">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								로그(log) 검색 결과
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body search_result_group">
+							<section class="search-result">
+								<!-- 검색 결과 생성 시, append 하는 방식으로? -->
+								<div
+									class="search_head"
+									data-toggle="modal"
+									data-target="#search_detail_modal"
+									data-backdrop="false">
+									<div class="search_title">
+										<span style="font-size: 13px; color: #a4c6ff">
+											<span
+												role="img"
+												aria-label=":sparkles:"
+												title=":sparkles:"
+												style="background-color: transparent; display: inline-block; vertical-align: middle">
+												<img
+													src="http://www.313.co.kr/arms/img/bestqulity.png"
+													alt=":sparkles:"
+													width="15"
+													height="15"
+													class="CToWUd"
+													data-bit="iit"
+													style="
+														margin: 0px;
+														padding: 0px;
+														border: 0px;
+														display: block;
+														max-width: 100%;
+														height: auto;
+													" />
+											</span>
+											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
+										</span>
+									</div>
+									<div class="search_category">
+										<p
+											class="text-muted"
+											style="margin: 5px 0">
+											<small>카테고리 fluentd-20240204</small>
+										</p>
+										<p
+											class="text-success"
+											style="margin: 5px 0">
+											<small>2024-02-15 15:18 KST</small>
+										</p>
+									</div>
+								</div>
+								<div
+									class="search_content"
+									style="height: 4rem; line-height: 1.58; overflow: hidden">
+									<span>
+										10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+										/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+										HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0)
+										Gecko/20100101 Firefox/122.0" "211.201.140.91"
+									</span>
+								</div>
+							</section>
+							<section class="search-result">
+								<div class="search_head">
+									<div class="search_title">
+										<span style="font-size: 13px; color: #a4c6ff">
+											<span
+												role="img"
+												aria-label=":sparkles:"
+												title=":sparkles:"
+												style="background-color: transparent; display: inline-block; vertical-align: middle">
+												<img
+													src="http://www.313.co.kr/arms/img/bestqulity.png"
+													alt=":sparkles:"
+													width="15"
+													height="15"
+													class="CToWUd"
+													data-bit="iit"
+													style="
+														margin: 0px;
+														padding: 0px;
+														border: 0px;
+														display: block;
+														max-width: 100%;
+														height: auto;
+													" />
+											</span>
+											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
+										</span>
+									</div>
+									<div class="search_category">
+										<p
+											class="text-muted"
+											style="margin: 5px 0; font-size: 95%">
+											<small>카테고리 fluentd-20240123</small>
+										</p>
+									</div>
+								</div>
+								<div
+									class="search_content"
+									style="font-size: 12px; height: 4rem; line-height: 1.58; overflow: hidden">
+									<span>
+										2024-01-23 17:14:00.493 DEBUG 1 --- [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder :
+										[2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded
+										[지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018,
+										fields=n (truncated)...]
+									</span>
+								</div>
+							</section>
+							<section class="search-result">
+								<h4>Can I use CSS3 Radial-Gradient?</h4>
+								<p class="text-success"><small>okendoken.com</small></p>
+								<p>
+									Yes you can! Further more, you should! It let's you create really beautiful images either for elements
+									or for the entire background.
+								</p>
+							</section>
+							<div class="text-align-center">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">2</a></li>
+									<li><a href="#">3</a></li>
+									<li><a href="#">4</a></li>
+									<li><a href="#">5</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+					<!-- APM result section -->
+					<section
+						class="widget padding-increased"
+						id="apm_section">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								APM(Application Performance Monitoring) - 성능 모니터링 결과
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body search_result_group">
+							<section class="search-result">
+								<!-- 검색 결과 생성 시, append 하는 방식으로? -->
+								<div
+									class="search_head"
+									data-toggle="modal"
+									data-target="#search_detail_modal"
+									data-backdrop="false">
+									<div class="search_title">
+										<span style="font-size: 13px; color: #a4c6ff">
+											<span
+												role="img"
+												aria-label=":sparkles:"
+												title=":sparkles:"
+												style="background-color: transparent; display: inline-block; vertical-align: middle">
+												<img
+													src="http://www.313.co.kr/arms/img/bestqulity.png"
+													alt=":sparkles:"
+													width="15"
+													height="15"
+													class="CToWUd"
+													data-bit="iit"
+													style="
+														margin: 0px;
+														padding: 0px;
+														border: 0px;
+														display: block;
+														max-width: 100%;
+														height: auto;
+													" />
+											</span>
+											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
+										</span>
+									</div>
+									<div class="search_category">
+										<p
+											class="text-muted"
+											style="margin: 5px 0">
+											<small>카테고리 fluentd-20240204</small>
+										</p>
+										<p
+											class="text-success"
+											style="margin: 5px 0">
+											<small>2024-02-15 15:18 KST</small>
+										</p>
+									</div>
+								</div>
+								<div
+									class="search_content"
+									style="height: 4rem; line-height: 1.58; overflow: hidden">
+									<span>
+										10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+										/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+										HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0)
+										Gecko/20100101 Firefox/122.0" "211.201.140.91"
+									</span>
+								</div>
+							</section>
+							<section class="search-result">
+								<div class="search_head">
+									<div class="search_title">
+										<span style="font-size: 13px; color: #a4c6ff">
+											<span
+												role="img"
+												aria-label=":sparkles:"
+												title=":sparkles:"
+												style="background-color: transparent; display: inline-block; vertical-align: middle">
+												<img
+													src="http://www.313.co.kr/arms/img/bestqulity.png"
+													alt=":sparkles:"
+													width="15"
+													height="15"
+													class="CToWUd"
+													data-bit="iit"
+													style="
+														margin: 0px;
+														padding: 0px;
+														border: 0px;
+														display: block;
+														max-width: 100%;
+														height: auto;
+													" />
+											</span>
+											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
+										</span>
+									</div>
+									<div class="search_category">
+										<p
+											class="text-muted"
+											style="margin: 5px 0; font-size: 95%">
+											<small>카테고리 fluentd-20240123</small>
+										</p>
+									</div>
+								</div>
+								<div
+									class="search_content"
+									style="font-size: 12px; height: 4rem; line-height: 1.58; overflow: hidden">
+									<span>
+										2024-01-23 17:14:00.493 DEBUG 1 --- [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder :
+										[2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded
+										[지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018,
+										fields=n (truncated)...]
+									</span>
+								</div>
+							</section>
+							<section class="search-result">
+								<h4>Can I use CSS3 Radial-Gradient?</h4>
+								<p class="text-success"><small>okendoken.com</small></p>
+								<p>
+									Yes you can! Further more, you should! It let's you create really beautiful images either for elements
+									or for the entire background.
+								</p>
+							</section>
+							<div class="text-align-center">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">2</a></li>
+									<li><a href="#">3</a></li>
+									<li><a href="#">4</a></li>
+									<li><a href="#">5</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div
+					id="search_detail_wrapper"
+					class="col-lg-8 col-layer"
+					style="display: none">
+					<section class="widget padding-increased">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px">
+								<i class="fa fa-file-text-o"></i>
+								검색 결과 상세
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							검색 결과 상세 입니다.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body">
+							<!-- 디테일 컨텐츠 -->
+							<form
+								class="form-horizontal detail_contents"
+								method="post">
+								<fieldset>
+									<label class="section">검색용 일부</label>
+									<div class="box">
 										<div
-											class="gradient_middle_border"
-											style="width: 100%; height: 2px"></div>
-										<blockquote class="font13">
-											검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
-											<div style="float: right">
-												<button
-													class="btn btn-transparent btn-xs"
-													style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-													onclick="return true;">
-													Help
-													<i
-														class="fa fa-question"
-														style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-												</button>
-											</div>
-										</blockquote>
-										<div class="body search_result_group">
-											<section class="search-result">
-												<!-- 검색 결과 생성 시, append 하는 방식으로? -->
-												<div class="search_head" data-toggle="modal" data-target="#search_detail_modal" data-backdrop="false">
-													<div class="search_title">
-										<span style="font-size: 13px; color:#a4c6ff;">
-                                            <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                                <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
-                                            </span>
-                                            &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-                                        </span>
-													</div>
-													<div class="search_category">
-														<p class="text-muted" style="margin: 5px 0;">
-															<small>카테고리 fluentd-20240204</small>
-														</p>
-														<p class="text-success" style="margin: 5px 0;">
-															<small>2024-02-15 15:18 KST</small>
-														</p>
-													</div>
-												</div>
-												<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
-									<span>
-										10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
-									</span>
-												</div>
-											</section>
-											<section class="search-result">
-												<div class="search_head">
-													<div class="search_title">
-                                        <span style="font-size: 13px; color:#a4c6ff;">
-                                            <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                                <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
-                                            </span>
-                                            &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-                                        </span>
-													</div>
-													<div class="search_category">
-														<p class="text-muted" style="margin: 5px 0;font-size: 95%">
-															<small>카테고리 fluentd-20240123</small>
-														</p>
-													</div>
-												</div>
-												<div class="search_content" style="font-size:12px; height: 4rem; line-height: 1.58;  overflow: hidden;">
-									<span>
-										2024-01-23 17:14:00.493 DEBUG 1 --- [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder  : [2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded [지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018, fields=n (truncated)...]
-									</span>
-												</div>
-											</section>
-											<section class="search-result">
-												<h4>Can I use CSS3 Radial-Gradient?</h4>
-												<p class="text-success"><small>okendoken.com</small></p>
-												<p>
-													Yes you can! Further more, you should! It let's you create really beautiful images either for
-													elements or for the entire background.
-												</p>
-											</section>
-											<div class="text-align-center">
-												<ul class="pagination">
-													<li class="disabled"><a href="#">Prev</a></li>
-													<li class="active"><a href="#">1</a></li>
-													<li><a href="#">2</a></li>
-													<li><a href="#">3</a></li>
-													<li><a href="#">4</a></li>
-													<li><a href="#">5</a></li>
-													<li><a href="#">Next</a></li>
-												</ul>
-											</div>
-										</div>
-									</section>
-									<!-- APM result section -->
-									<section class="widget padding-increased" id="apm_section">
-											<header style="margin: 10px 0;">
-												<h4 style="font-size: 13px; font-weight: 600">
-													<i class="fa fa-bars"></i>
-													APM(Application Performance Monitoring) - 성능 모니터링 결과
-												</h4>
-												<div class="widget-controls">
-													<a
-														data-widgster="toleft"
-														title="change width to left"
-														href="#">
-														<i class="glyphicon glyphicon-chevron-left"></i>
-													</a>
-													<a
-														data-widgster="expand"
-														title="Expand"
-														href="#">
-														<i class="glyphicon glyphicon-chevron-up"></i>
-													</a>
-													<a
-														data-widgster="collapse"
-														title="Collapse"
-														href="#">
-														<i class="glyphicon glyphicon-chevron-down"></i>
-													</a>
-													<a
-														data-widgster="toright"
-														title="change width to right"
-														href="#">
-														<i class="glyphicon glyphicon-chevron-right"></i>
-													</a>
-													<a
-														data-widgster="restore"
-														title="Restore"
-														href="#">
-														<span class="glyphicon glyphicon-repeat"></span>
-													</a>
-													<a
-														data-widgster="fullscreen"
-														title="Fullscreen"
-														href="#">
-														<i
-															class="glyphicon glyphicon-fullscreen"
-															style="font-size: 11px"></i>
-													</a>
-												</div>
-											</header>
-										<div
-											class="gradient_middle_border"
-											style="width: 100%; height: 2px"></div>
-										<blockquote class="font13">
-											검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
-											<div style="float: right">
-												<button
-													class="btn btn-transparent btn-xs"
-													style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-													onclick="return true;">
-													Help
-													<i
-														class="fa fa-question"
-														style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-												</button>
-											</div>
-										</blockquote>
-										<div class="body search_result_group">
-											<section class="search-result">
-												<!-- 검색 결과 생성 시, append 하는 방식으로? -->
-												<div class="search_head" data-toggle="modal" data-target="#search_detail_modal" data-backdrop="false">
-													<div class="search_title">
-										<span style="font-size: 13px; color:#a4c6ff;">
-                                            <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                                <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
-                                            </span>
-                                            &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-                                        </span>
-													</div>
-													<div class="search_category">
-														<p class="text-muted" style="margin: 5px 0;">
-															<small>카테고리 fluentd-20240204</small>
-														</p>
-														<p class="text-success" style="margin: 5px 0;">
-															<small>2024-02-15 15:18 KST</small>
-														</p>
-													</div>
-												</div>
-												<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
-									<span>
-										10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
-									</span>
-												</div>
-											</section>
-											<section class="search-result">
-												<div class="search_head">
-													<div class="search_title">
-                                        <span style="font-size: 13px; color:#a4c6ff;">
-                                            <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                                <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
-                                            </span>
-                                            &nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-                                        </span>
-													</div>
-													<div class="search_category">
-														<p class="text-muted" style="margin: 5px 0;font-size: 95%">
-															<small>카테고리 fluentd-20240123</small>
-														</p>
-													</div>
-												</div>
-												<div class="search_content" style="font-size:12px; height: 4rem; line-height: 1.58;  overflow: hidden;">
-									<span>
-										2024-01-23 17:14:00.493 DEBUG 1 --- [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder  : [2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded [지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018, fields=n (truncated)...]
-									</span>
-												</div>
-											</section>
-											<section class="search-result">
-												<h4>Can I use CSS3 Radial-Gradient?</h4>
-												<p class="text-success"><small>okendoken.com</small></p>
-												<p>
-													Yes you can! Further more, you should! It let's you create really beautiful images either for
-													elements or for the entire background.
-												</p>
-											</section>
-											<div class="text-align-center">
-												<ul class="pagination">
-													<li class="disabled"><a href="#">Prev</a></li>
-													<li class="active"><a href="#">1</a></li>
-													<li><a href="#">2</a></li>
-													<li><a href="#">3</a></li>
-													<li><a href="#">4</a></li>
-													<li><a href="#">5</a></li>
-													<li><a href="#">Next</a></li>
-												</ul>
-											</div>
-										</div>
-									</section>
-                </div>
-                <div id="search_detail_wrapper" class="col-lg-8 col-layer" style="display: none;" >
-                    <section class="widget padding-increased">
-                        <header style="margin: 10px 0;">
-                            <h4 style="font-size: 13px;">
-                                <i class="fa fa-file-text-o"></i>
-                                검색 결과 상세
-                            </h4>
-                            <div class="widget-controls">
-                                <a
-                                        data-widgster="toleft"
-                                        title="change width to left"
-                                        href="#">
-                                    <i class="glyphicon glyphicon-chevron-left"></i>
-                                </a>
-                                <a
-                                        data-widgster="expand"
-                                        title="Expand"
-                                        href="#">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </a>
-                                <a
-                                        data-widgster="collapse"
-                                        title="Collapse"
-                                        href="#">
-                                    <i class="glyphicon glyphicon-chevron-down"></i>
-                                </a>
-                                <a
-                                        data-widgster="toright"
-                                        title="change width to right"
-                                        href="#">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>
-                                </a>
-                                <a
-                                        data-widgster="restore"
-                                        title="Restore"
-                                        href="#">
-                                    <span class="glyphicon glyphicon-repeat"></span>
-                                </a>
-                                <a
-                                        data-widgster="fullscreen"
-                                        title="Fullscreen"
-                                        href="#">
-                                    <i
-                                            class="glyphicon glyphicon-fullscreen"
-                                            style="font-size: 11px"></i>
-                                </a>
-                            </div>
-                        </header>
-                        <div
-                                class="gradient_middle_border"
-                                style="width: 100%; height: 2px"></div>
-                        <blockquote class="font13">
-                            검색 결과 상세 입니다.
-                            <div style="float: right">
-                                <button
-                                        class="btn btn-transparent btn-xs"
-                                        style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-                                        onclick="return true;">
-                                    Help
-                                    <i
-                                            class="fa fa-question"
-                                            style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                                </button>
-                            </div>
-                        </blockquote>
-                        <div class="body">
-                            <!-- 디테일 컨텐츠 -->
-                            <form class="form-horizontal detail_contents" method="post">
-                                <fieldset>
-                                    <label class="section">검색용 일부</label>
-                                    <div class="box">
-                                        <div class="controls form-group"
-                                             style="margin-bottom: 5px !important; padding-top: 5px !important; display: flex;justify-content: space-evenly;">
+											class="controls form-group"
+											style="
+												margin-bottom: 5px !important;
+												padding-top: 5px !important;
+												display: flex;
+												justify-content: space-evenly;
+											">
 											<span>
 												✔ _id :
-												<a id="detail_id" style="font-weight: bold">5XdiNY0BSsMFyzAULQFY</a>
-											</span> <br/>
-                                            <span>
-												✔ _index :
-												<a id="detail_index" style="font-weight: bold">fluentd-20240123</a>
-											</span> <br/>
-                                            <span>
-												✔ _score :
-												<a id="detail_score" style="font-weight: bold"> - </a>
-											</span> <br/>
-                                            <span>
-												✔ _type :
-												<a id="detail_type" style="font-weight: bold">_doc</a>
+												<a
+													id="detail_id"
+													style="font-weight: bold">
+													5XdiNY0BSsMFyzAULQFY
+												</a>
 											</span>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="detail_log_name">@log_name</label>
-                                        <div class="controls form-group">
-                                            <div class="col-sm-9"><input type="text" id="detail_log_name" name="detail_log_name" class="form-control darkBack"></div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="detail_timestamp">@timestamp</label>
-                                        <div class="controls form-group">
-                                            <div class="col-sm-9"><input type="text" id="detail_timestamp" name="detail_timestamp" class="form-control darkBack"></div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="detail_container_id">container_id</label>
-                                        <div class="controls form-group">
-                                            <div class="col-sm-9"><input type="text" id="detail_container_id" name="detail_container_id" class="form-control darkBack"></div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="detail_container_name">container_name</label>
-                                        <div class="controls form-group">
-                                            <div class="col-sm-9"><input type="text" id="detail_container_name" name="detail_container_name" class="form-control darkBack"></div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="detail_log">log</label>
-                                        <div class="controls form-group">
-                                            <div class="col-sm-9"><input type="text" id="detail_log" name="detail_log" class="form-control darkBack"></div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="detail_source">source</label>
-                                        <div class="controls form-group">
-                                            <div class="col-sm-9"><input type="text" id="detail_source" name="detail_source" class="form-control darkBack"></div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </div>
+											<br />
+											<span>
+												✔ _index :
+												<a
+													id="detail_index"
+													style="font-weight: bold">
+													fluentd-20240123
+												</a>
+											</span>
+											<br />
+											<span>
+												✔ _score :
+												<a
+													id="detail_score"
+													style="font-weight: bold">
+													-
+												</a>
+											</span>
+											<br />
+											<span>
+												✔ _type :
+												<a
+													id="detail_type"
+													style="font-weight: bold">
+													_doc
+												</a>
+											</span>
+										</div>
+									</div>
+									<div class="control-group">
+										<label
+											class="control-label"
+											for="detail_log_name">
+											@log_name
+										</label>
+										<div class="controls form-group">
+											<div class="col-sm-9">
+												<input
+													type="text"
+													id="detail_log_name"
+													name="detail_log_name"
+													class="form-control darkBack" />
+											</div>
+										</div>
+									</div>
+									<div class="control-group">
+										<label
+											class="control-label"
+											for="detail_timestamp">
+											@timestamp
+										</label>
+										<div class="controls form-group">
+											<div class="col-sm-9">
+												<input
+													type="text"
+													id="detail_timestamp"
+													name="detail_timestamp"
+													class="form-control darkBack" />
+											</div>
+										</div>
+									</div>
+									<div class="control-group">
+										<label
+											class="control-label"
+											for="detail_container_id">
+											container_id
+										</label>
+										<div class="controls form-group">
+											<div class="col-sm-9">
+												<input
+													type="text"
+													id="detail_container_id"
+													name="detail_container_id"
+													class="form-control darkBack" />
+											</div>
+										</div>
+									</div>
+									<div class="control-group">
+										<label
+											class="control-label"
+											for="detail_container_name">
+											container_name
+										</label>
+										<div class="controls form-group">
+											<div class="col-sm-9">
+												<input
+													type="text"
+													id="detail_container_name"
+													name="detail_container_name"
+													class="form-control darkBack" />
+											</div>
+										</div>
+									</div>
+									<div class="control-group">
+										<label
+											class="control-label"
+											for="detail_log">
+											log
+										</label>
+										<div class="controls form-group">
+											<div class="col-sm-9">
+												<input
+													type="text"
+													id="detail_log"
+													name="detail_log"
+													class="form-control darkBack" />
+											</div>
+										</div>
+									</div>
+									<div class="control-group">
+										<label
+											class="control-label"
+											for="detail_source">
+											source
+										</label>
+										<div class="controls form-group">
+											<div class="col-sm-9">
+												<input
+													type="text"
+													id="detail_source"
+													name="detail_source"
+													class="form-control darkBack" />
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-
 <!-- 검색결과_상세_모달_기본 -->
-<div id="search_detail_modal"
-		 class="modal fade"
-		 role="dialog"
-		 aria-labelledby="search_detail_modal_label"
-		 aria-hidden="false"
-		 style="display: none; border-radius: 10px" >
-	<div class="modal-dialog" style="width:80%; height:50%">
+<div
+	id="search_detail_modal"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="search_detail_modal_label"
+	aria-hidden="false"
+	style="display: none; border-radius: 10px">
+	<div
+		class="modal-dialog"
+		style="height: 50%">
 		<div class="modal-content modalDarkBack">
-			<div class="modal-header"
-					 style="margin: 10px 5px;">
-				<h4 	class="modal-title font13" id="search_detail_modal_label"
-						 style="font-size: 13px; font-weight: 600; color: #f8f8f8;">
+			<div
+				class="modal-header"
+				style="margin: 10px 5px">
+				<h4
+					class="modal-title font13"
+					id="search_detail_modal_label"
+					style="font-size: 13px; font-weight: 600; color: #f8f8f8">
 					<i class="fa fa-file-text-o"></i>
 					검색 결과 상세 (임시 타이틀)
 				</h4>
-				<div class="widget-controls" style="top: 5px; right: 5px">
+				<div
+					class="widget-controls"
+					style="top: 5px; right: 5px">
 					<!--<a
 							data-widgster="toleft"
 							title="change width to left"
@@ -655,7 +964,9 @@
 				</div>
 			</blockquote>
 			<div class="modal-body">
-				<form class="form-horizontal detail_contents" method="post">
+				<form
+					class="form-horizontal detail_contents"
+					method="post">
 					<fieldset>
 						<div class="panel-group col-md-12">
 							<div class="panel">
@@ -665,231 +976,9 @@
 											<section class="widget">
 												<header style="margin-bottom: 15px">
 													<h4>
-									<span class="font13" style="font-weight: bold">
-										<i class="fa fa-asterisk"></i>
-										고정항목
-									</span>
-													</h4>
-												</header>
-												<div class="body">
-													<ul class="color-labels app-progress-label">
-														<div>
-															<li>
-																✔ _id :
-																<a id="detail_id" style="font-weight: bold">mock_id</a>
-															</li>
-															<li>
-																✔ _index :
-																<a id="detail_index" style="font-weight: bold">fluentD-2024-02-14</a>
-															</li>
-															<li>
-																✔ _score :
-																<a id="detail_score" style="font-weight: bold"> - </a>
-															</li>
-															<li>
-																✔ _type :
-																<a id="detail_type" style="font-weight: bold">fluentD_type</a>
-															</li>
-														</div>
-														<div></div>
-													</ul>
-												</div>
-											</section>
-										</div>
-										<div class="col-md-6 color-legend-widget">
-											<section class="widget">
-												<header style="margin-bottom: 15px">
-													<h4>
-									<span class="font13" style="font-weight: bold">
-										<i class="fa fa-asterisk"></i>
-										로그이름. 타임스탬프. 컨테이너 정보
-									</span>
-													</h4>
-												</header>
-												<div class="body">
-													<ul class="color-labels progress-wave-label">
-														<div>
-															<li>
-																✔ @log_name :
-																<a id="modal_log_name" style="font-weight: bold">4</a>
-															</li>
-															<li>
-																✔ @timestamp :
-																<a id="modal_timestamp" style="font-weight: bold">February 14th 2024, 17:00</a>
-															</li>
-															<li>
-																✔ container_id :
-																<a id="modal_container_id" style="font-weight: bold">4</a>
-															</li>
-															<li>
-																✔ container_name :
-																<a id="modal_container_name" style="font-weight: bold">4</a>
-															</li>
-														</div>
-													</ul>
-												</div>
-											</section>
-										</div>
-										<div class="col-md-12 color-legend-widget">
-											<section class="widget" style="overflow: hidden;">
-												<header style="margin-bottom: 15px">
-													<h4>
-														<span class="font13" style="font-weight: bold">
-															<i class="fa fa-asterisk"></i>
-															로그 기록
-														</span>
-													</h4>
-												</header>
-												<div class="body">
-													<div class="col-lg-12" style="padding: 0px">
-														<div
-															id="modal_detail_log"
-															name="modal_detail_log"
-															class="col-sm-12"
-															style="padding: 10px"
-															readonly>10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
-														</div>
-													</div>
-												</div>
-											</section>
-										</div>
-										<div class="col-md-12 color-legend-widget">
-											<section class="widget" style="overflow: hidden;">
-												<header style="margin-bottom: 15px">
-													<h4>
-														<span class="font13" style="font-weight: bold">
-															<i class="fa fa-asterisk"></i>
-															source
-														</span>
-													</h4>
-												</header>
-												<div class="body">
-													<div class="col-lg-12" style="padding: 0px">
-														<div
-															id="modal_detail_source"
-															name="modal_detail_source"
-															class="col-sm-12"
-															style="padding: 10px"
-															readonly>10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
-														</div>
-													</div>
-												</div>
-											</section>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</fieldset>
-				</form>
-			</div>
-			<div class="modal-footer" style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
-				<button type="button" id="modal_close_btn" class="btn btn-default" data-dismiss="modal">
-					Close
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!-- 검색결과_상세_모달_지라이슈 -->
-<div id="search_detail_modal_jiraissue"
-		 class="modal fade"
-		 role="dialog"
-		 aria-labelledby="search_detail_modal_label_jiraissue"
-		 aria-hidden="false"
-		 style="display: none; border-radius: 10px" >
-	<div class="modal-dialog" style="width:80%; height:50%">
-		<div class="modal-content modalDarkBack">
-			<div class="modal-header"
-					 style="margin: 10px 5px;">
-				<h4 	class="modal-title font13" id="search_detail_modal_label_jiraissue"
-						 style="font-size: 13px; font-weight: 600; color: #f8f8f8;">
-					<i class="fa fa-file-text-o"></i>
-					검색 결과 상세
-				</h4>
-				<div class="widget-controls" style="top: 5px; right: 5px">
-					<!--<a
-							data-widgster="toleft"
-							title="change width to left"
-							href="#">
-						<i class="glyphicon glyphicon-chevron-left"></i>
-					</a>-->
-					<!--<a
-							data-widgster="expand"
-							title="Expand"
-							href="#">
-						<i class="glyphicon glyphicon-chevron-up"></i>
-					</a>-->
-					<a
-						data-widgster="collapse"
-						title="Collapse"
-						href="#">
-						<i class="glyphicon glyphicon-chevron-down"></i>
-					</a>
-					<!--<a
-							data-widgster="toright"
-							title="change width to right"
-							href="#">
-						<i class="glyphicon glyphicon-chevron-right"></i>
-					</a>-->
-					<!--<a
-							data-widgster="restore"
-							title="Restore"
-							href="#">
-						<span class="glyphicon glyphicon-repeat"></span>
-					</a>-->
-					<a
-						data-widgster="fullscreen"
-						title="Fullscreen"
-						href="#">
-						<i
-							class="glyphicon glyphicon-fullscreen"
-							style="font-size: 11px"></i>
-					</a>
-					<a
-						data-widgster="close"
-						title="Close"
-						href="#"
-						data-dismiss="modal"
-						aria-hidden="true">
-						<i class="glyphicon glyphicon-remove"></i>
-					</a>
-				</div>
-			</div>
-			<blockquote class="font13">
-				검색 결과 상세 입니다.
-				<div style="float: right">
-					<button
-						class="btn btn-transparent btn-xs"
-						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-						onclick="return true;">
-						Help
-						<i
-							class="fa fa-question"
-							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-					</button>
-				</div>
-			</blockquote>
-			<div class="modal-body">
-				<form class="form-horizontal detail_contents" method="post">
-					<fieldset>
-						<div class="panel-group col-md-12">
-							<div class="panel">
-								<!--<div class="panel-heading">
-									<a class="accordion-toggle collapsed font13" style="font-weight: bold;" data-toggle="collapse" href="#colorLegend">
-										<i class="fa fa-bars"></i>
-										Chart Colors
-									</a>
-								</div>-->
-								<div id="colorLegend" class="panel-collapse in collapse">
-									<div class="panel-body">
-										<div class="col-md-6 color-legend-widget">
-											<section class="widget">
-												<header style="margin-bottom: 15px">
-													<h4>
-														<span class="font13" style="font-weight: bold">
+														<span
+															class="font13"
+															style="font-weight: bold">
 															<i class="fa fa-asterisk"></i>
 															고정항목
 														</span>
@@ -900,19 +989,35 @@
 														<div>
 															<li>
 																✔ _id :
-																<a id="detail_id_jiraissue" style="font-weight: bold">mock_id</a>
+																<a
+																	id="detail_id"
+																	style="font-weight: bold">
+																	mock_id
+																</a>
 															</li>
 															<li>
 																✔ _index :
-																<a id="detail_index_jiraissue" style="font-weight: bold">fluentD-2024-02-14</a>
+																<a
+																	id="detail_index"
+																	style="font-weight: bold">
+																	fluentD-2024-02-14
+																</a>
 															</li>
 															<li>
 																✔ _score :
-																<a id="detail_score_jiraissue" style="font-weight: bold"> - </a>
+																<a
+																	id="detail_score"
+																	style="font-weight: bold">
+																	-
+																</a>
 															</li>
 															<li>
 																✔ _type :
-																<a id="detail_type_jiraissue" style="font-weight: bold">fluentD_type</a>
+																<a
+																	id="detail_type"
+																	style="font-weight: bold">
+																	fluentD_type
+																</a>
 															</li>
 														</div>
 														<div></div>
@@ -924,7 +1029,9 @@
 											<section class="widget">
 												<header style="margin-bottom: 15px">
 													<h4>
-														<span class="font13" style="font-weight: bold">
+														<span
+															class="font13"
+															style="font-weight: bold">
 															<i class="fa fa-asterisk"></i>
 															로그이름. 타임스탬프. 컨테이너 정보
 														</span>
@@ -935,19 +1042,35 @@
 														<div>
 															<li>
 																✔ @log_name :
-																<a id="modal_log_name" style="font-weight: bold">4</a>
+																<a
+																	id="modal_log_name"
+																	style="font-weight: bold">
+																	4
+																</a>
 															</li>
 															<li>
 																✔ @timestamp :
-																<a id="modal_timestamp" style="font-weight: bold">February 14th 2024, 17:00</a>
+																<a
+																	id="modal_timestamp"
+																	style="font-weight: bold">
+																	February 14th 2024, 17:00
+																</a>
 															</li>
 															<li>
 																✔ container_id :
-																<a id="modal_container_id" style="font-weight: bold">4</a>
+																<a
+																	id="modal_container_id"
+																	style="font-weight: bold">
+																	4
+																</a>
 															</li>
 															<li>
 																✔ container_name :
-																<a id="modal_container_name" style="font-weight: bold">4</a>
+																<a
+																	id="modal_container_name"
+																	style="font-weight: bold">
+																	4
+																</a>
 															</li>
 														</div>
 													</ul>
@@ -955,46 +1078,66 @@
 											</section>
 										</div>
 										<div class="col-md-12 color-legend-widget">
-											<section class="widget" style="overflow: hidden;">
+											<section
+												class="widget"
+												style="overflow: hidden">
 												<header style="margin-bottom: 15px">
 													<h4>
-														<span class="font13" style="font-weight: bold">
+														<span
+															class="font13"
+															style="font-weight: bold">
 															<i class="fa fa-asterisk"></i>
 															로그 기록
 														</span>
 													</h4>
 												</header>
 												<div class="body">
-													<div class="col-lg-12" style="padding: 0px">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
 														<div
-															id="modal_detail_log_jiraissue"
-															name="modal_detail_log_jiraissue"
+															id="modal_detail_log"
+															name="modal_detail_log"
 															class="col-sm-12"
 															style="padding: 10px"
-															readonly>10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
+															readonly>
+															10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+															/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+															HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15;
+															rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
 														</div>
 													</div>
 												</div>
 											</section>
 										</div>
 										<div class="col-md-12 color-legend-widget">
-											<section class="widget" style="overflow: hidden;">
+											<section
+												class="widget"
+												style="overflow: hidden">
 												<header style="margin-bottom: 15px">
 													<h4>
-														<span class="font13" style="font-weight: bold">
+														<span
+															class="font13"
+															style="font-weight: bold">
 															<i class="fa fa-asterisk"></i>
 															source
 														</span>
 													</h4>
 												</header>
 												<div class="body">
-													<div class="col-lg-12" style="padding: 0px">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
 														<div
 															id="modal_detail_source"
 															name="modal_detail_source"
 															class="col-sm-12"
 															style="padding: 10px"
-															readonly>10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST /php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
+															readonly>
+															10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+															/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+															HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15;
+															rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
 														</div>
 													</div>
 												</div>
@@ -1007,8 +1150,311 @@
 					</fieldset>
 				</form>
 			</div>
-			<div class="modal-footer" style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
-				<button type="button" id="modal_close_btn" class="btn btn-default" data-dismiss="modal">
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="modal_close_btn"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 검색결과_상세_모달_지라이슈 -->
+<div
+	id="search_detail_modal_jiraissue"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="search_detail_modal_label_jiraissue"
+	aria-hidden="false"
+	style="display: none; border-radius: 10px">
+	<div
+		class="modal-dialog"
+		style="width: 80%; height: 50%">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+				style="margin: 10px 5px">
+				<h4
+					class="modal-title font13"
+					id="search_detail_modal_label_jiraissue"
+					style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+					<i class="fa fa-file-text-o"></i>
+					검색 결과 상세
+				</h4>
+				<div
+					class="widget-controls"
+					style="top: 5px; right: 5px">
+					<!--<a
+							data-widgster="toleft"
+							title="change width to left"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>-->
+					<!--<a
+							data-widgster="expand"
+							title="Expand"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>-->
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<!--<a
+							data-widgster="toright"
+							title="change width to right"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>-->
+					<!--<a
+							data-widgster="restore"
+							title="Restore"
+							href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>-->
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<blockquote class="font13">
+				검색 결과 상세 입니다.
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="return true;">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div class="modal-body">
+				<form
+					class="form-horizontal detail_contents"
+					method="post">
+					<fieldset>
+						<div class="panel-group col-md-12">
+							<div class="panel">
+								<!--<div class="panel-heading">
+									<a class="accordion-toggle collapsed font13" style="font-weight: bold;" data-toggle="collapse" href="#colorLegend">
+										<i class="fa fa-bars"></i>
+										Chart Colors
+									</a>
+								</div>-->
+								<div
+									id="colorLegend"
+									class="panel-collapse in collapse">
+									<div class="panel-body">
+										<div class="col-md-6 color-legend-widget">
+											<section class="widget">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															고정항목
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<ul class="color-labels app-progress-label">
+														<div>
+															<li>
+																✔ _id :
+																<a
+																	id="detail_id_jiraissue"
+																	style="font-weight: bold">
+																	mock_id
+																</a>
+															</li>
+															<li>
+																✔ _index :
+																<a
+																	id="detail_index_jiraissue"
+																	style="font-weight: bold">
+																	fluentD-2024-02-14
+																</a>
+															</li>
+															<li>
+																✔ _score :
+																<a
+																	id="detail_score_jiraissue"
+																	style="font-weight: bold">
+																	-
+																</a>
+															</li>
+															<li>
+																✔ _type :
+																<a
+																	id="detail_type_jiraissue"
+																	style="font-weight: bold">
+																	fluentD_type
+																</a>
+															</li>
+														</div>
+														<div></div>
+													</ul>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-6 color-legend-widget">
+											<section class="widget">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그이름. 타임스탬프. 컨테이너 정보
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<ul class="color-labels progress-wave-label">
+														<div>
+															<li>
+																✔ @log_name :
+																<a
+																	id="modal_log_name"
+																	style="font-weight: bold">
+																	4
+																</a>
+															</li>
+															<li>
+																✔ @timestamp :
+																<a
+																	id="modal_timestamp"
+																	style="font-weight: bold">
+																	February 14th 2024, 17:00
+																</a>
+															</li>
+															<li>
+																✔ container_id :
+																<a
+																	id="modal_container_id"
+																	style="font-weight: bold">
+																	4
+																</a>
+															</li>
+															<li>
+																✔ container_name :
+																<a
+																	id="modal_container_name"
+																	style="font-weight: bold">
+																	4
+																</a>
+															</li>
+														</div>
+													</ul>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-12 color-legend-widget">
+											<section
+												class="widget"
+												style="overflow: hidden">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그 기록
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
+														<div
+															id="modal_detail_log_jiraissue"
+															name="modal_detail_log_jiraissue"
+															class="col-sm-12"
+															style="padding: 10px"
+															readonly>
+															10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+															/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+															HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15;
+															rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
+														</div>
+													</div>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-12 color-legend-widget">
+											<section
+												class="widget"
+												style="overflow: hidden">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															source
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
+														<div
+															id="modal_detail_source"
+															name="modal_detail_source"
+															class="col-sm-12"
+															style="padding: 10px"
+															readonly>
+															10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+															/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+															HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15;
+															rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
+														</div>
+													</div>
+												</div>
+											</section>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="modal_close_btn"
+					class="btn btn-default"
+					data-dismiss="modal">
 					Close
 				</button>
 			</div>

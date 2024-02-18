@@ -1847,3 +1847,18 @@ svg .ghostCircle.show {
 	-webkit-animation: 2s animateLeft linear -1s infinite;
 	animation: 2s animateLeft linear -1s infinite;
 }
+
+.modal-dialog .modal-content {
+	padding: 20px;
+}
+
+.modal-dialog .widget-controls {
+	top: 20px !important;
+	right: 20px;
+}
+
+@media (min-width: 768px) {
+	.modal-dialog {
+		width: 80%;
+	}
+}
