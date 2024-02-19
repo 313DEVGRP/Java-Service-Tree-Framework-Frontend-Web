@@ -193,7 +193,7 @@ function makeVersionMultiSelectBox() {
 			//getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
 			getReqPerMappedVersions(selectedPdServiceId, selectedVersionId, versionTag);
 
-			//treeBar();
+			treeBar();
 
 			//요구사항 현황 데이터 테이블 로드
 			// console.log(" ============ makeVersionMultiSelectBox ============= ");
@@ -246,7 +246,7 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				//treeBar();
+				treeBar();
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
