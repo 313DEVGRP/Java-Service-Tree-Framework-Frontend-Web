@@ -4,7 +4,7 @@
 $(function () {
 	var str = window.location.href;
 	if (str.indexOf("php") > 0) {
-		console.table("313DEVGRP 커뮤니티에 오신것을 환영합니다.");
+		console.table("PROJECT313 커뮤니티에 오신것을 환영합니다.");
 		runScript();
 	} else {
 		authUserCheck();

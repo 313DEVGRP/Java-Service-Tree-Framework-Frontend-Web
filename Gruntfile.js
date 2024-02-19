@@ -7,9 +7,9 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					//외부에서 개발
-					//port: 80,
+					port: 80,
 					//내부에서 개발
-					port: 9999,
+					//port: 9999,
 					hostname: "0.0.0.0",
 					middleware: function (connect, options, defaultMiddleware) {
 						defaultMiddleware.unshift(function (req, res, next) {
@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 				// proxies: [
 				// 	{
 				// 		context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
-				// 			'/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2'],
+				// 			'/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2', '/php'],
 				// 		host: '127.0.0.1',
 				// 		port: 13131,
 				// 		https: false,
@@ -372,7 +372,7 @@ module.exports = function (grunt) {
 	// The default task (running 'grunt' in console) is 'watch'
 	grunt.registerTask("default", ["watch"]);
 
-	//313devgrp
+	//PROJECT313
 	grunt.loadNpmTasks("grunt-contrib-connect");
 	grunt.loadNpmTasks("grunt-connect-proxy");
 	grunt.loadNpmTasks("configureProxies:server");
