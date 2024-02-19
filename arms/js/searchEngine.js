@@ -260,21 +260,41 @@ function eventListenersActivator() {
 
 	$("#search-button").on("click", function (event) {
 		console.log("[searchEngine :: search_start] :: search-button 동작 -> 검색을 실행");
-		// 향후 getMockJsonData() -> API 호출 및 결과 함수로 대체 예정
-		getMockJsonData();
+
+		search_start($("#search-input").val());
+		//getMockJsonData();
 	});
 
 	//검색 결과 리스트 클릭 이벤트
 	$("#search_main_wrapper").on("click", function (event) {
 		console.log($(event.target).closest(".search-result")[0]);
 		var clicked_content_id =  $(event.target).closest(".search-result").find(".search_head").attr("id");
-		if (clicked_content_id) {
-			var order_of_data = getDataOrder(clicked_content_id);
+		var order_of_data = 0;
+		if (clicked_content_id && clicked_content_id.includes("jiraissue")) {
+			order_of_data = getDataOrder(clicked_content_id);
 			mapDataToModal(order_of_data);
+		} else {
+			console.log("[searchEngine :: eventListenersActivator] :: 클릭한 clicked_content_id 가 유효하지 않거나, id에 jiraissue가 있지 않습니다.");
 		}
 	});
 }
 
+function search_start(search_string) {
+	$.ajax({
+		url:  "/engine-search-api/engine/jira/dashboard/search",
+		type: "GET",
+		data: {"search_string" : search_string},
+		dataType: "json",
+		success: function(result) {
+			console.log("[searchEngine :: search_start] :: search_string => " + search_string);
+			console.log("[searchEngine :: search_start] :: search_results => ");
+			console.log(result);
+
+			SearchApi.setSearchResult(result);
+			SearchApi.appendSearchResultSections(result);
+		}
+	});
+}
 
 //데이터 목록을 wide 상태로 보기
 function display_set_wide_hostTable() {
@@ -306,12 +326,23 @@ function mapDataToModal(order) {
 	const targetData = SearchApi.getSearchResult(order);
 	console.log("[searchEngine :: mapDataToModal] :: targetData =>");
 	console.log(targetData);
-	$("#search_detail_modal_jiraissue #detail_id_jiraissue").text(targetData["_id"]);
-	$("#search_detail_modal_jiraissue #detail_index_jiraissue").text(targetData["_index"]);
-	$("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["_score"] === null ? "-" : targetData["_score"]);
-	$("#search_detail_modal_jiraissue #detail_type_jiraissue").text(targetData["_type"]);
+	$("#search_detail_modal_jiraissue #detail_id_jiraissue").text(targetData["id"]);
+	$("#search_detail_modal_jiraissue #detail_index_jiraissue").text(targetData["index"]);
+	$("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? "-" : targetData["score"]);
+	$("#search_detail_modal_jiraissue #detail_type_jiraissue").text(targetData["type"] === undefined ? " - " : targetData["type"]);
+	$("#search_detail_modal_jiraissue #detail_modal_summary_jiraissue").text(targetData["content"]["summary"]);
+	$("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["key"]);
+	$("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["created"]);
+	if(targetData["content"]["assignee"]) {
+		$("#search_detail_modal_jiraissue #detail_modal_assignee_name_jiraissue")
+			.text(targetData["content"]["assignee"]["assignee_displayName"]);	
+	} else {
+		$("#search_detail_modal_jiraissue #detail_modal_assignee_name_jiraissue").text("담당자 정보 없음");
+	}
+	
+		
 
-
+	CKEDITOR.instances.modal_detail_log_jiraissue.setData(JSON.stringify(targetData));
 }
 
 
@@ -327,6 +358,8 @@ function getDataOrder(id) {
 	}
 	return order_of_data;
 }
+
+
 
 function getMockJsonData() {
 	$.ajax({
@@ -352,14 +385,14 @@ var SearchApi = (function() {
 	};
 
 	var getSearchResult = function (order) {
-		return searchResult["rawResponse"]["hits"]["hits"][order]; // 자료구조 검토
+		return searchResult[order]; // 자료구조 검토
 	}
 
 	//////////////////////////////////////////
 	// 1. 검색 결과를 바탕으로 content 보여주기
 	//////////////////////////////////////////
 	var appendSearchResultSections = function (results) {
-		const search_result_arr = results["rawResponse"]["hits"]["hits"];
+		const search_result_arr = results;
 
 		if(search_result_arr) {
 			//해당 search_result_group 내용 초기화
@@ -371,31 +404,31 @@ var SearchApi = (function() {
 				<!-- 검색 결과 생성 시, append 하는 방식 -->
 				<!-- search_detail_modal + _jiraissue -> 이것도 분기 넣어서 따로 동작하도록 해야함. -->
 				<!-- jiraissue, fluentd 등의 분기 조건은 _index 으로 하면 될듯? 인덱스의 명칭에 contains 등을 통해서 분기처리? -->
-				<div class="search_head" id="hits_order_${index}" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+				<div class="search_head" id="hits_order_jiraissue_${index}" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
 					<div class="search_title">
 						<span style="font-size: 13px; color:#a4c6ff;">
 							<span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
 								<img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
 							</span>
 							<!-- 지라이슈 summary 나오도록 -->
-							&nbsp;${content["_source"]["summary"]}							
+							&nbsp;${content["content"]["summary"]}							
 						</span>
 					</div>
 					<div class="search_category">
 						<p class="text-muted" style="margin: 5px 0;">
 							<!--<small>카테고리 fluentd-20240204</small>-->
-							<small>${content["_index"]}</small>
+							<small>${content["index"]}</small>
 						</p>
 						<p class="text-success" style="margin: 5px 0;">
-							<small>${content["_source"]["@timestamp"]}</small>
+							<small>${content["content"]["created"]}</small>
 						</p>
 					</div>
 				</div>
 				<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
 					<span>
-					[임의로 데이터 표시] 지라프로젝트: ${content["_source"]["project"]["project_name"]} </br>
-					생성일: ${content["fields"]["created"]} &nbsp;&nbsp;										
-					타임스탬프: ${content["fields"]["@timestamp"]}
+					이슈키: ${content["content"]["key"]} &nbsp;&nbsp; 지라프로젝트: ${content["content"]["project"]["project_name"]} </br>
+					생성일: ${content["content"]["created"]} &nbsp;&nbsp;															
+					타임스탬프: ${content["content"]["timestamp"]}
 					</span>
 				</div>
 			</section>`
@@ -418,7 +451,7 @@ var SearchApi = (function() {
 					<div class="search_category">
 						<p class="text-muted" style="margin: 5px 0;">
 							<!--<small>카테고리 fluentd-20240204</small>-->
-							<small>${content["_index"]}</small>
+							<small>${content["index"]}</small>
 						</p>
 						<p class="text-success" style="margin: 5px 0;">
 							<small>${date.now()}</small>
