@@ -372,7 +372,7 @@ module.exports = function (grunt) {
 	// The default task (running 'grunt' in console) is 'watch'
 	grunt.registerTask("default", ["watch"]);
 
-	//PROJECT313
+	//313DEVGRP
 	grunt.loadNpmTasks("grunt-contrib-connect");
 	grunt.loadNpmTasks("grunt-connect-proxy");
 	grunt.loadNpmTasks("configureProxies:server");
