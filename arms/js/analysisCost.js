@@ -730,7 +730,7 @@ function 비용분석계산() {
 
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
-        incomeStatusChart();
+        reqCostStatusChart();
     });
 }
 
@@ -1224,123 +1224,201 @@ function 버전소모비용스택차트(){
 /////////////////////////////////////////////////////////
 // 요구사항 상세 차트
 /////////////////////////////////////////////////////////
-function incomeStatusChart(){
-    var chartDom = document.getElementById('income_status_chart');
-    var myChart = echarts.init(chartDom, null, {
-        renderer: "canvas",
-        useDirtyRect: false
-    });
-    var option;
+function 요구사항_계획일_목록(startDate, endDate) {
+    let dateList = [];
+    let currentDate = new Date(startDate);
 
-    option = {
-        xAxis: {
-            type: 'category',
-            data: [
-                '2024-01-01',
-                '2024-01-11',
-                '2024-01-12',
-                '2024-01-17',
-                '2024-01-23',
-                '2024-02-12',
-                '2024-02-11'
-            ],
-            axisLabel: {
-                color: '#FFFFFF'
+    while (currentDate <= endDate) {
+        dateList.push(currentDate.toISOString().substring(0, 10));
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dateList;
+}
+function reqCostStatusChart(data){
+    var chartDom = document.getElementById('income_status_chart');
+    let dateList;
+    let 요구사항_정보;
+    if(data != null){
+        요구사항_정보 = 요구사항전체목록[data.reqId];
+        // 요구사항 일자 ( 시작일 계획일 없을 때 처리 전 )
+        let 요구사항_시작일 = new Date(요구사항_정보.c_req_create_date); // c_req_start_date
+        let 요구사항_계획일 = 요구사항_정보.c_req_plan_time;
+        let 임시데이터 = new Date(요구사항_시작일.getTime());
+        임시데이터.setDate(임시데이터.getDate() + 요구사항_계획일);
+        let 요구사항_목표_종료일 = 임시데이터;
+
+        dateList = 요구사항_계획일_목록(요구사항_시작일, 요구사항_목표_종료일);
+
+//        const url = new UrlBuilder()
+//            .setBaseUrl('/auth-user/api/arms/analysis/cost/req-updated-status')
+//            .addQueryParam('reqIssueId', data.reqId)
+//            .addQueryParam('reqIssueKeys', data.issueKey)
+//            .build();
+//
+//        $.ajax({
+//            url: url,
+//            type: "GET",
+//            contentType: "application/json;charset=UTF-8",
+//            dataType: "json",
+//            progress: true,
+//            statusCode: {
+//                200: function (apiResponse) {
+//                    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: data -> ");
+//                    console.log(apiResponse);
+//                }
+//            }
+//        });
+
+        var myChart = echarts.init(chartDom, null, {
+            renderer: "canvas",
+            useDirtyRect: false
+        });
+        var option;
+
+        option = {
+            title: {
+                text: 요구사항_정보.c_title,
+                left: 'center',
+                 textStyle: {
+                    fontSize: 12,
+                    color: '#FFFFFF'  // 타이틀의 색상을 파란색으로 설정
+                 }
             },
-            scale: true
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {
-                color: '#FFFFFF'
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
             },
-            scale: true,
-        },
-        legend: {
-            data: ['예상', '소모 비용', '투자비용'] ,
-            textStyle: {
-                color: '#FFFFFF' // 범례 텍스트 색상 변경
-            }
-        },
-        series: [
-            {
-                data: [0, 50, 100, 150, 200, 250, 300],
-                type: 'line',
-                name: '예상', // 첫 번째 선에 대한 라벨
-                lineStyle: {
-                    type: 'dashed' // 선의 스타일을 점선으로 변경
+            xAxis: {
+                type: 'category',
+                data: dateList,
+                axisLabel: {
+                    color: '#FFFFFF'
                 },
-                markLine: {
-                    lineStyle: {
-                        color: 'red', // line color
-                        type: 'dashed', // line style
-                        width: 3 // line width
-                    },
+                scale: true
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    color: '#FFFFFF'
+                },
+                scale: true,
+            },
+            series: [
+                {
+                    type: 'line',
                     label: {
-                        position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-                        formatter: '투자 비용', // label의 텍스트 설정
-                        fontSize: 15, // label의 폰트 크기 설정
-                        color: '#FFFFFF'
+                            show: true,
+                            position: 'top'
+                          },
+                    markLine: {
+                        lineStyle: {
+                            color: '#5470c6', // line color
+                            type: 'dashed', // line style
+                            width: 2 // line width
+                        },
+                        label: {
+                            position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+                            formatter: '투자 비용', // label의 텍스트 설정
+                            fontSize: 15, // label의 폰트 크기 설정
+                            color: '#FFFFFF',
+                            formatter: function(){
+                                return '투자 비용: '+data.reqCost.toLocaleString();
+                            }
+                        },
+                        data: [
+                            {
+                                yAxis: data.reqCost,
+                                name: '투자비용' // line label
+                            }
+                        ]
+                    }
+                },
+                {
+                    type: 'line',
+                    label: {
+                            show: true,
+                            position: 'top'
+                          },
+                    markLine: {
+                        lineStyle: {
+                            color: '#5470c6', // line color
+                            type: 'dashed', // line style
+                            width: 2 // line width
+                        },
+                        label: {
+                            position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+                            formatter: '요구사항 기한', // label의 텍스트 설정
+                            fontSize: 15, // label의 폰트 크기 설정
+                            color: '#FFFFFF',
+                            formatter: function(){
+                                return '요구사항 기한: '+ dateList[dateList.length -1];
+                            }
+                        },
+                        data: [
+                            {
+                                xAxis: dateList.length -1
+                            }
+                        ]
+                    }
+                },
+                {
+                    name: '누적 소모 비용',
+                    type: 'bar',
+                    stack: 'Total',
+                    silent: true,
+                    itemStyle: {
+                        borderColor: 'transparent',
+                        color: 'transparent'
                     },
-                    data: [
-                        {
-                            yAxis: 300,
-                            name: '투자비용' // line label
+                    emphasis: {
+                        itemStyle: {
+                            borderColor: 'transparent',
+                            color: 'transparent'
                         }
-                    ]
+                    },
+                    data: [0, 2000000, 5000000, 9000000, 14000000, 20000000, 21000000, 22000000]
+                },
+                    {
+                      name: '소모 비용',
+                      type: 'bar',
+                      stack: 'Total',
+                      label: {
+                        show: true,
+                        color: '#FFFFFF',
+                        position: 'top'
+                      },
+                      itemStyle: {
+                        color: '#eb5454'  // 바의 색상을 빨간색으로 변경
+                      },
+                      data: [2000000, 3000000, 4000000, 5000000, 6000000, 1000000, 1000000]
+                    }
+            ],
+            tooltip: {
+                trigger: "axis",
+                position: "top",
+                borderWidth: 1,
+                axisPointer: {
+                    type: "shadow"
                 }
             },
-            {
-                data: [0, 100, 120, 120, 280, 320, 320],
-                type: 'line',
-                name: '소모 비용',
-                markLine: {
-                    lineStyle: {
-                        color: 'red', // line color
-                        type: 'dashed', // line style
-                        width: 3 // line width
-                    },
-                    label: {
-                        position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-                        formatter: '요구사항 기한', // label의 텍스트 설정
-                        fontSize: 15, // label의 폰트 크기 설정
-                        color: '#FFFFFF'
-                    },
-                    data: [
-                        {
-                            xAxis: 6,
-                            name: '투자비용' // line label
-                        }
-                    ]
-                }
-            },
-            {
-                type: "candlestick",
-                data: [
-                    [120, 134, 110, 138],
-                    [138, 144, 150, 178],
-                    [120, 134, 110, 138],
-                    [120, 134, 110, 138],
-                    [120, 134, 110, 138],
-                    [120, 134, 110, 138]
-                ],
-            }
-        ],
-        tooltip: {
-            trigger: "axis",
-            position: "top",
-            borderWidth: 1,
-            axisPointer: {
-                type: "shadow"
-            }
-        },
-    };
+        };
 
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
 
-    window.addEventListener("resize", myChart.resize);
+        window.addEventListener("resize", myChart.resize);
+    }else{
+        chartDom.style.display = 'flex';
+        chartDom.style.justifyContent = 'center';
+        chartDom.style.alignItems = 'center';
+        chartDom.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
+    }
+
+
 }
 
 /////////////////////////////////////////////////////////

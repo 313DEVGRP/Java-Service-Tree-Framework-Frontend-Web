@@ -152,7 +152,7 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
             d3
                 .pack()
                 .size([api.getWidth() - 2, api.getHeight() - 2])
-                .padding(3)(displayRoot);
+                .padding(6)(displayRoot);
             context.nodes = {};
             displayRoot.descendants().forEach(function (node, index) {
                 context.nodes[node.id] = node;
@@ -272,11 +272,11 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                         let id = params.data.id;
                         let parts = id.split('.');
                         if(params.data.depth === 0){
-                            return "제품(서비스) 정보 </br>● 제품(서비스) :"+ parts[0] +" </br>● 비용 :"+params.data.value ;
+                            return "제품(서비스) 정보 </br>● 제품(서비스) :"+ parts[0] +" </br>● 비용 :"+params.data.value.toLocaleString() ;
                         }else if(params.data.depth === 1){
-                            return "버전 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 비용 :"+params.data.value ;
+                            return "버전 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 비용 :"+params.data.value.toLocaleString() ;
                         }else if(params.data.depth === 2){
-                            return "요구사항 정보 </br>● 버전 :"+ params.data.version_name  +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 비용 :"+params.data.value ;
+                            return "요구사항 정보 </br>● 버전 :"+ params.data.version_name  +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 비용 :"+params.data.value.toLocaleString() ;
                         }else if(params.data.depth === 3){
                             return "요구사항 키 정보 </br>● 버전 :"+ params.data.version_name +" </br>● 요구사항 :"+ params.data.req_name +" </br>● 요구사항 키 :"+ parts[3] ;
                         }
@@ -320,14 +320,51 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
 
         option && myChart.setOption(option, true);
         myChart.on('click', { seriesIndex: 0 }, function (params) {
-            if(params.data.depth != 3){
+            if(params.data.depth == 1){
                 drillDown(params.data.id);
             }
-            if(params.data.depth === 2){
-                incomeStatusChart(params.data);
+            else if(params.data.depth == 2){
+                drillDown(params.data.id);
+                var  childData = findChildItems(seriesData,params.data.id);
+                reqCostStatusChart(childData);
+            }else{
+                var index =params.data.id.lastIndexOf(".")
+                var parentId = params.data.id.substring(0, index);
+                var  childData = findChildItems(seriesData,parentId);
+                reqCostStatusChart(childData);
+                drillDown(parentId);
             }
-
         });
+
+        function findChildItems(data, parentId) {
+            const parentItem = data.find(item => item.id === parentId);
+            if (!parentItem) {
+                return [];
+            }
+            let reqCost = parentItem.value;
+            // 요구사항 하위 키 데이터 목록
+            let childItems = data.filter(item => item.id.startsWith(parentId) && item.depth > parentItem.depth);
+
+            let issueDatas = childItems.reduce((acc, item) => {
+                let parts = item.id.split('.');
+                let issueKey = parts[parts.length - 1];
+                let reqId = parts[parts.length - 2];
+
+                let existingItem = acc.find(a => a.reqId === reqId);
+                if (existingItem) {
+                    existingItem.issueKey.push(issueKey);
+                } else {
+                    acc.push({
+                        reqId: reqId,
+                        issueKey:[issueKey],
+                        reqCost:reqCost
+                    });
+                }
+                return acc;
+            }, []);
+
+            return issueDatas.length > 0 ? issueDatas[0] : null;
+        }
 
         function drillDown(targetNodeId) {
             displayRoot = stratify();
