@@ -13,6 +13,7 @@ var 버전_요구사항_담당자 = {};   // 버전 - 요구사항 - 담당자 �
 var 전체담당자목록 = {};        // 선택된 버전의 전체 담당자 목록
 var 요구사항전체목록 = {};      // 선택된 버전의 요구사항 전체목록
 var 요구사항별_키목록 = {};     // 버전 - 요구사항 cid - 요구사항 키 데이터
+var 인력별_연봉정보 = {};       // 인력별 연봉정보 데이터
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -394,116 +395,8 @@ function costInput(전체담당자목록, pdServiceVersionLinks) {
     console.log(" [ analysisCost :: costInput ] :: 인력데이터 => " + JSON.stringify(전체담당자목록));
 
     file_upload_setting();
-    //versionInput(pdServiceVersionLinks);
     manpowerInput(전체담당자목록);
 }
-
-/*function versionInput(pdServiceVersionLinks) {
-
-    if ($.fn.dataTable.isDataTable('#version-cost')) {
-        $('#version-cost').DataTable().clear().destroy();
-    }
-
-    let selectedVersions = pdServiceVersionLinks.split(',');
-
-    let versionTableData = selectedVersions.map(versionId => {
-        let item = versionListData[versionId];
-        let startDate = item.c_pds_version_start_date === "start" ? formatDate(new Date()) : formatDate(item.c_pds_version_start_date);
-        let endDate = item.c_pds_version_end_date === "end" ? formatDate(new Date()) : formatDate(item.c_pds_version_end_date);
-        return { // 객체를 바로 반환
-            version: item.c_title,
-            period: startDate + " ~ " + endDate,
-            cost: 0,
-            c_id: item.c_id
-        };
-    });
-
-    var columnList = [
-        {
-            name: "versionId",
-            title: "버전아이디",
-            data: "c_id",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-center",
-            visible: false
-        },
-        {
-            name: "version",
-            title: "버전",
-            data: "version",
-            render: function (data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-center",
-            visible: true
-        },
-        {
-            name: "period",
-            title: "기간",
-            data: "period",
-            render: function (data, type, row, meta) {
-                var dates = data.split(' ~ ');
-                if(type === 'sort' || type === 'type'){
-                    return dates[0]; // startDate로 정렬
-                }
-                return data; // 원래 형태로 표시
-            },
-            className: "dt-center",
-            visible: true
-        },
-        {
-            name: "cost",
-            title: "비용 (입력)",
-            data: "cost",
-            render: function(data, type, row) {
-                return '<input type="text" name="version-cost" class="cost-input" value="0" data-owner="' + row.c_id + '"> 만원';
-            },
-            className: "dt-center",
-            visible: true
-        }
-    ];
-
-    var rowsGroupList = [];
-    var columnDefList = [];
-    var orderList = [[2, "desc"]];
-    var jquerySelector = "#version-cost";
-    var ajaxUrl = "";
-    var jsonRoot = "";
-    var buttonList = [];
-    var selectList = {};
-    var isServerSide = false;
-    var scrollY = false;
-    var data = versionTableData;
-    var isAjax = false;
-
-    dataTableRef = dataTable_build(
-        jquerySelector,
-        ajaxUrl,
-        jsonRoot,
-        columnList,
-        rowsGroupList,
-        columnDefList,
-        selectList,
-        orderList,
-        buttonList,
-        isServerSide,
-        scrollY,
-        data,
-        isAjax
-    );
-}*/
 
 function manpowerInput(전체담당자목록) {
 
@@ -512,6 +405,13 @@ function manpowerInput(전체담당자목록) {
     }
 
     let manpowerData = Object.keys(전체담당자목록).map((key) => {
+        let data = {};
+        data.이름 = 전체담당자목록[key].이름;
+        data.키 = key;
+        data.연봉 = 전체담당자목록[key].연봉;
+        return data;
+    });
+    인력별_연봉정보 = Object.keys(전체담당자목록).map((key) => {
         let data = {};
         data.이름 = 전체담당자목록[key].이름;
         data.키 = key;
@@ -593,7 +493,8 @@ function manpowerInput(전체담당자목록) {
         isAjax
     );
 
-    excel_download();
+    // 템플릿 다운로드
+    excel_download(인력별_연봉정보);
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
@@ -635,30 +536,42 @@ function dataTableDrawCallback(tableInfo) {
         let owner = $(this).data('owner');
         전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
         전체담당자목록[owner].성과 = 0;
+
+        var manpower = 인력별_연봉정보.find(item => item.키 === owner);
+        if (manpower) {
+            manpower.연봉 = 전체담당자목록[owner].연봉;
+        }
     });
 }
 
-function excel_download() {
+function excel_download(인력별_연봉정보) {
+    console.log(" [ analysisCost :: excel_download ] :: 인력별_연봉정보 => " + JSON.stringify(인력별_연봉정보));
 
-    /* var tempDataTable = $("#manpower-annual-income").DataTable();
-     var data = tempDataTable.rows().data().toArray();
-     var json = JSON.stringify(data);
-     console.log(" [ analysisCost :: 비용 분석 계산 ] :: 인력 테이블 -> " + json);
+    let fileName = "인력별_연봉정보_템플릿.xlsx";
 
-
-     $("#excel-annual-income-template-download").click(function () {
-         $.ajax({
-             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + "test",
-             type: "POST",
-             data: json,
-             contentType: "application/json",
-             statusCode: {
-                 200: function (data) {
-                     console.log("success");
-                 }
-             }
-         })
-     });*/
+    $("#excel-annual-income-template-download").click(function () {
+        $.ajax({
+            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + fileName,
+            type: "POST",
+            data: JSON.stringify(인력별_연봉정보),
+            contentType: "application/json",
+            xhrFields: {
+                responseType: 'blob'  // 응답 데이터 타입을 blob으로 설정
+            },
+            statusCode: {
+                200: function (data) {
+                    var url = window.URL.createObjectURL(data);  // blob 데이터로 URL 생성
+                    var a = document.createElement('a');  // 다운로드 링크를 위한 <a> 태그 생성
+                    a.href = url; // url 설정
+                    a.download = fileName; // 파일명 설정
+                    a.style.display = 'none';  // <a> 태그를 브라우저에 보이지 않게 설정
+                    document.body.appendChild(a);  // <a> 태그를 body에 추가
+                    a.click();  // 다운로드 링크 클릭
+                    document.body.removeChild(a);  // <a> 태그 제거
+                }
+            }
+        })
+    });
 }
 
 function 비용분석계산() {
