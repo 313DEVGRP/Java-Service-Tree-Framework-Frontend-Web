@@ -13,6 +13,7 @@ var 버전_요구사항_담당자 = {};   // 버전 - 요구사항 - 담당자 �
 var 전체담당자목록 = {};        // 선택된 버전의 전체 담당자 목록
 var 요구사항전체목록 = {};      // 선택된 버전의 요구사항 전체목록
 var 요구사항별_키목록 = {};     // 버전 - 요구사항 cid - 요구사항 키 데이터
+var 인력별_연봉정보 = {};       // 인력별 연봉정보 데이터
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -410,6 +411,13 @@ function manpowerInput(전체담당자목록) {
         data.연봉 = 전체담당자목록[key].연봉;
         return data;
     });
+    인력별_연봉정보 = Object.keys(전체담당자목록).map((key) => {
+        let data = {};
+        data.이름 = 전체담당자목록[key].이름;
+        data.키 = key;
+        data.연봉 = 전체담당자목록[key].연봉;
+        return data;
+    });
     console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
 
     var columnList = [
@@ -486,7 +494,7 @@ function manpowerInput(전체담당자목록) {
     );
 
     // 템플릿 다운로드
-    excel_download(manpowerData);
+    excel_download(인력별_연봉정보);
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
@@ -528,11 +536,16 @@ function dataTableDrawCallback(tableInfo) {
         let owner = $(this).data('owner');
         전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
         전체담당자목록[owner].성과 = 0;
+
+        var manpower = 인력별_연봉정보.find(item => item.키 === owner);
+        if (manpower) {
+            manpower.연봉 = 전체담당자목록[owner].연봉;
+        }
     });
 }
 
-function excel_download(manpowerData) {
-    console.log(" [ analysisCost :: excel_download ] :: manpowerData => " + JSON.stringify(manpowerData));
+function excel_download(인력별_연봉정보) {
+    console.log(" [ analysisCost :: excel_download ] :: 인력별_연봉정보 => " + JSON.stringify(인력별_연봉정보));
 
     let fileName = "인력별_연봉정보_템플릿.xlsx";
 
@@ -540,7 +553,7 @@ function excel_download(manpowerData) {
         $.ajax({
             url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + fileName,
             type: "POST",
-            data: JSON.stringify(manpowerData),
+            data: JSON.stringify(인력별_연봉정보),
             contentType: "application/json",
             xhrFields: {
                 responseType: 'blob'  // 응답 데이터 타입을 blob으로 설정
