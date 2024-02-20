@@ -183,7 +183,8 @@ function makeVersionMultiSelectBox() {
 			// 요구사항 및 연결이슈 통계
 			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 			// Circular Packing with D3 차트
-			getReqStatusAndAssignees(selectedPdServiceId, versionTag);
+			//getReqStatusAndAssignees(selectedPdServiceId, versionTag);
+			getReqStatusAndInvolvedAssignees(selectedPdServiceId, selectedVersionId);
 
 			// 네트워크 차트
 			statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
@@ -235,7 +236,8 @@ function bind_VersionData_By_PdService() {
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 				// Circular Packing with D3 차트
-				getReqStatusAndAssignees(selectedPdServiceId, pdServiceVersionIds);
+				//getReqStatusAndAssignees(selectedPdServiceId, pdServiceVersionIds);
+				getReqStatusAndInvolvedAssignees(selectedPdServiceId, selectedVersionId);
 				// 네트워크 차트
 				statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
@@ -620,7 +622,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			var 버전수 = item.pdServiceVersions.length;
 			if (버전수 && 버전수 > 0) {
 				for (let i =0; i<버전수; i++) {
-					console.log("pdServiceVersioins["+i+"]= " + pdServiceVersions[i]);
 					if(선택한버전.includes(item.pdServiceVersions[i])) {
 						var reqToVersionLink = {
 							source: item.id,
@@ -637,14 +638,13 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 				source: item.id,
 				target: parentItem.id
 			}
-			console.log(parentItem.id);
 			NETWORK_DATA.links.push(subtaskToReqLink);
 		}
 	});
 
-	console.log(" networkChart :: NETWORK_DATA ");
+	console.log("[ networkChart :: NETWORK_DATA ]");
 	console.log(NETWORK_DATA);
-	console.log(" --- --- --- --- ---");
+
 	if (NETWORK_DATA.nodes.length === 0) {
 		// 데이터가 없는 경우를 체크
 		d3.select("#NETWORK_GRAPH").remove();
@@ -1190,7 +1190,7 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 					}
 				});
 				let dataObject = {};
-				let issueStatusSet = new Set();
+				let issueStatusSet = new Set(); // 여기까지 사용
 				let issueStatusList = [];
 				if (result.length > 0) {
 					for (let i = 0; i < result.length; i++) {
@@ -1220,6 +1220,53 @@ function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
 		}
 	});
 }
+
+
+function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
+
+	$.ajax({
+		url: "/auth-user/api/arms/analysis/scope/"+pdServiceId+"/req-status-and-reqInvolved-unique-assignees-per-version",
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		data: {"pdServiceVersionLinks" : pdServiceVersionLinks},
+		progress: true,
+		statusCode: {
+			200: function (result) {
+				console.log("[ analysisScope :: getReqStatusAndInvolvedAssignees ========= ] :: result");
+				console.log(result);
+				let pdServiceName;
+				pdServiceListData.forEach(elements => {
+					if (elements["pdServiceId"] === +pdServiceId) {
+						pdServiceName = elements["pdServiceName"];
+					}
+				});
+				let dataObject = {};
+				let issueStatusSet = new Set(); // 여기까지 사용
+				let issueStatusList = [];
+				if (result.length > 0) {
+					for (let i = 0; i < result.length; i++) {
+						// 버전이름 가져오기
+						let versionName =result[i]["버전_문자열"].replaceAll(".","_");
+
+						let verSubObject = {};
+						result[i]["요구사항_이슈_키_상태_작업자수_목록"].forEach((element) => {
+							// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
+							verSubObject[element["issueKey"]] =
+								{"$count" : element["numOfWorkers"], "$status" : element["statusName"]};
+							issueStatusSet.add(element["statusName"]);
+						});
+						dataObject[versionName] = verSubObject;
+					}
+				}
+				issueStatusSet.forEach(e=>issueStatusList.push(e));
+				drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
+			}
+		}
+	});
+
+}
+
 
 function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks, versionTag) {
 	let reqAddUrl = "/T_ARMS_REQADD_"+ pdService_id +"/getReqAddListByFilter.do?";
