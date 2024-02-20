@@ -1262,9 +1262,20 @@ function hideDetail_Datagrid() {
 		});
 }
 
+//////////////////////////////////////////
 // 페이지 이동 처리
+//////////////////////////////////////////
 function goToTemplatePage(pageName) {
+	console.log("[common :: goToTemplatePage] :: pageName => " + pageName);
 	window.location.href = "template.html?page=" + pageName;
+}
+
+//////////////////////////////////////////
+// 검색어 포함 페이지 이동 처리
+//////////////////////////////////////////
+function goToTemplatePageWithSearchString(pageName, searchString) {
+	console.log("[common :: goToTemplatePageWithSearchString] :: pageName => " + pageName+", 검색어 => " + searchString);
+	window.location.href = "template.html?page=" + pageName+"&searchString="+searchString;
 }
 
 function laddaBtnSetting(라따적용_클래스이름_배열) {
