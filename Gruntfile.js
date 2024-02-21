@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 				// proxies: [
 				// 	{
 				// 		context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
-				// 			'/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2', '/php'],
+				// 			'/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2', '/engine-search-api'],
 				// 		host: '127.0.0.1',
 				// 		port: 13131,
 				// 		https: false,
@@ -46,6 +46,7 @@ module.exports = function (grunt) {
 							"/auth-user",
 							"/auth-admin",
 							"/auth-check",
+						  "/engine-search-api",
 							"/sso",
 							"/dwr",
 							"/logout",

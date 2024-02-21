@@ -1,14 +1,25 @@
 <div class="navbar">
 
-	<ul class="nav navbar-nav navbar-right pull-right">
+	<ul class="nav navbar-nav navbar-right pull-right" style="display: flex; align-items: center;">
 		<li class="hidden-xs">
-			<a
-				href="#"
-				id="search_toggle">
-				<i class="fa fa-search"></i>
-			</a>
+			<div class="controls input-group pull-right">
+				<input
+					type="search"
+					class="form-control searchDarkBack"
+					id="nav-search-input"
+					placeholder="Quick Search" />
+				<span
+					class="input-group-btn"
+					id="nav-search-button">
+				<button
+					type="button"
+					class="btn btn-default">
+					<i class="fa fa-search"></i>
+				</button>
+			</span>
+			</div>
 		</li>
-        <li class="divider"></li>
+
 		<li class="dropdown">
 			<a  href="#"
 				title="Messages"
@@ -186,24 +197,35 @@
 		</li>
 		<li class="hidden-xs logout">
 			<a href="#"
-               class="link logout">
-                <i class="glyphicon glyphicon-off"></i>
-            </a>
+					class="link logout"><i class="glyphicon glyphicon-off"></i></a>
 		</li>
 	</ul>
-	<form   id="search_form"
-            class="hidden-xs navbar-form pull-right"
-            role="search">
-		<input  type="search"
-                class="form-control search-query"
-                placeholder="Search..." />
-	</form>
     <div class="notifications pull-right" style="line-height: 21px !important;"></div>
 </div>
 
 <script>
 
 	(function ($) {
+		$("#nav-search-input").on("keyup", function(event) {
+			if(event.keyCode ===13) {
+				console.log("[page-header :: nav-search-input] :: 검색어 입력 값 => " +$("#nav-search-input").val());
+				$("#nav-search-button").click(); //검색 트리거
+			};
+		});
+
+		$("#nav-search-button").on("click", function (event) {
+			let 검색어 = "";
+			console.log("[page-header :: nav-search-start] :: nav-search-button 실행");
+			if ($("#nav-search-input").val()) {
+				console.log("[page-header :: nav-search-start] :: 검색어 입력 값 => " +$("#nav-search-input").val());
+				검색어 = $("#nav-search-input").val().trim();
+				goToTemplatePageWithSearchString("searchEngine", 검색어);
+			} else {
+				console.log("[page-header :: nav-search-start] :: 검색어가 없습니다. 검색페이지로 이동합니다");
+				goToTemplatePage("searchEngine");
+			}
+		});
+
 		$(".logout").click(function (event) {
 
 			event.preventDefault();
