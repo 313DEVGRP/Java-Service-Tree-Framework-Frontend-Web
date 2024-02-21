@@ -9,6 +9,16 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
+	//해당 이벤트리스너 메인에서 지워져있음.
+	// window.addEventListener(
+	// 	"error",
+	// 	function (event) {
+	// 		console.error("페이지 로드 중 에러 발생 :: " + event.message);
+	//
+	// 		//window.location.reload();
+	// 	},
+	// 	{ once: true }
+	// );
 });
 
 function runScript() {
