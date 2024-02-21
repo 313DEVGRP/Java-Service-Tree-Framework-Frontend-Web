@@ -267,7 +267,8 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
 
                 Object.keys(전체담당자목록).forEach((key) => {
                     전체담당자목록[key].연봉 = 연봉;
-                    전체담당자목록[key].성과 = 0;
+                    전체담당자목록[key].인력별소모비용 = 0;
+                    전체담당자목록[key].완료성과 = 0;
                 });
 
                 costInput(전체담당자목록, pdServiceVersionLinks);
@@ -535,7 +536,7 @@ function dataTableDrawCallback(tableInfo) {
 
         let owner = $(this).data('owner');
         전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
-        전체담당자목록[owner].성과 = 0;
+        전체담당자목록[owner].인력별소모비용 = 0;
 
         var manpower = 인력별_연봉정보.find(item => item.키 === owner);
         if (manpower) {
@@ -585,7 +586,9 @@ function 비용분석계산() {
         let isEmpty = true;
         // 연봉 정보 유효성 체크 및 세팅, 담당자목록 성과 초기화
         for (let owner in 전체담당자목록) {
-            전체담당자목록[owner].성과 = 0;
+            전체담당자목록[owner].인력별소모비용 = 0;
+            전체담당자목록[owner].완료성과 = 0;
+
             if (isNaN(전체담당자목록[owner].연봉)) {
                 alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
                 return;
@@ -681,12 +684,9 @@ function 비용분석계산() {
                                         Object.entries(담당자목록).forEach(([key, value]) => {
 
                                             // 요구사항의 비용 계산을 위한 날짜 카운팅 ****** 수정필요(정책) ******
-                                            let {startDate, endDate} = 날짜계산(요구사항);
 
                                             // 요구사항 단가 계산 및 인력 성과 계산 등
-                                            if (startDate && endDate) {
-                                                최종비용분석계산(key, startDate, endDate, 요구사항, 버전, 요구사항키);
-                                            }
+                                            최종비용분석계산(key, 요구사항, 버전, 요구사항키);
                                         });
                                     }
                                 }
@@ -745,7 +745,7 @@ function 비용계산데이터_초기화() {
     for (let 버전 in 버전_요구사항_담당자) {
         for (let 요구사항키 in 버전_요구사항_담당자[버전]) {
             for (let key in 버전_요구사항_담당자[버전][요구사항키]) {
-                버전_요구사항_담당자[버전][요구사항키][key].버전별담당자성과 = 0;
+                버전_요구사항_담당자[버전][요구사항키][key].버전별담당자소모비용 = 0;
             }
         }
     }
@@ -773,36 +773,54 @@ function 날짜계산(요구사항) {
     return {startDate, endDate};
 }
 
-function 최종비용분석계산(key, startDate, endDate, 요구사항, 버전, 요구사항키) {
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+function 최종비용분석계산(key, 요구사항, 버전, 요구사항키) {
 
-    // startDate와 endDate를 통한 요구사항 진행일자를 가지고 업무일수 카운팅
+    let startDate, endDate;
+
+    if (요구사항.reqStateEntity != null) {
+        if (요구사항.reqStateEntity.c_id === 12) {
+            startDate = new Date(formatDate(요구사항.c_req_start_date));
+            endDate = new Date(formatDate(요구사항.c_req_end_date));
+
+            // 완료된 요구사항만 계산하여 완료성과 측정
+            if (startDate && endDate) {
+                let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
+                전체담당자목록[key].완료성과 += cost;
+            }
+        } else {
+            startDate = new Date(formatDate(요구사항.c_req_start_date));
+            endDate = new Date(formatDate(new Date()));
+        }
+
+        if (startDate && endDate) {
+            let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
+
+            // 요구사항별 금액 측정 차트 데이터
+            요구사항.요구사항금액 += cost;
+
+            // 인력별 성과 차트 데이터
+            전체담당자목록[key].인력별소모비용 += cost;
+
+            // 버전별 소모비용 차트 데이터
+            versionListData[버전].버전비용 += cost;
+
+            // 요구사항 금액별 버블 차트 데이터
+            요구사항키.cost += cost;
+
+            // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
+            if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 == null) {
+                버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 = cost;
+            } else {
+                버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 += cost;
+            }
+        }
+    }
+}
+
+function 담당자별_비용계산(startDate, endDate, salary) {
     let 업무일수 = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-    // 담당자 데이터의 연봉을 가져와 365로 나누어 일급 계산 * 10000은 단위(만원)
-    let 일급 = Math.round((전체담당자목록[key].연봉 / 365)) * 10000;
-
-    // 요구사항별 금액 측정 차트 데이터
-    요구사항.요구사항금액 += 업무일수 * 일급;
-
-    // 인력별 성과 차트 데이터
-    전체담당자목록[key].성과 += 업무일수 * 일급;
-
-    // 버전별 소모비용 차트 데이터
-    versionListData[버전].버전비용 += 업무일수 * 일급;
-
-    // 요구사항 금액별 버블 차트 데이터
-    요구사항키.cost += 업무일수 * 일급;
-
-    // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
-    if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 == null) {
-        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 = 0;
-        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 += 업무일수 * 일급;
-    }
-    else {
-        버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자성과 += 업무일수 * 일급;
-    }
-    // console.log(버전_요구사항_담당자[버전][요구사항키.c_issue_key][key]);
+    let 일급 = Math.round((salary / 365)) * 10000;
+    return 업무일수 * 일급;
 }
 
 function 차트초기화() {
@@ -1061,7 +1079,7 @@ function 버전소모비용스택차트(){
                     버전별_담당자데이터[newKey] = 0;
                 }
 
-                버전별_담당자데이터[newKey] += 담당자.버전별담당자성과;
+                버전별_담당자데이터[newKey] += 담당자.버전별담당자소모비용;
             }
         }
 
@@ -1446,7 +1464,7 @@ function 인력_연봉성과분포차트() {
     };
 
     let dataAll = Object.entries(전체담당자목록).map(([key, value]) => {
-        return [Number(value.연봉) *10000, Number(value.성과), value.이름+"["+key+"]"];
+        return [Number(value.연봉) *10000, Number(value.완료성과), value.이름+"["+key+"]"];
     });
 
     var dom = document.getElementById('manpower-analysis-chart2');
@@ -1585,7 +1603,7 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
     Object.keys(전체담당자목록).forEach((key) => {
         userData.push(전체담당자목록[key].이름 + "[" + key + "]");
         salaryData.push(전체담당자목록[key].연봉 * 10000);
-        performanceData.push(전체담당자목록[key].성과);
+        performanceData.push(전체담당자목록[key].완료성과);
     });
 
     console.log(userData, salaryData, performanceData);
@@ -1596,6 +1614,8 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
     if (size > 0) {
         zoomPersent = (5 / size) * 100;
     }
+
+    const fullScreenIconPath = "M18.25 10V5.75H14M18.25 14v4.25H14m-4 0H5.75V14m0-4V5.75H10";
 
     var dom = document.getElementById('manpower-analysis-chart');
     var myChart = echarts.init(dom, null, {
@@ -1743,8 +1763,24 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
             left: "right",
             bottom: "50px",
             feature: {
-                // mark: { show: true },
-                dataZoom: {show: true}
+                dataZoom: {show: true},
+                myTool1: {
+                    show: false,
+                    title: 'Full screen',
+                    icon: `path://${fullScreenIconPath}`,
+                    onclick: function() {
+                        $("#my_modal2").modal('show');
+                        $("#my_modal2_title").text('인력별 성과 분석');
+                        $("#my_modal2_description").text('인력별 연봉 대비 성과를 한눈에 확인할 수 있습니다.');
+                        let heights = screen.height;// window.innerHeight;
+                        console.log(heights);
+                        $("#my_modal2_body").height(heights-450 + "px");
+                        $("#my_modal2_body").append(`<div id="manpower-analysis-chart"></div>`);
+                        setTimeout(function() {
+                            myChart.resize();
+                        }, 500);
+                    }
+                }
             },
             iconStyle: {
                 borderColor: "white"
