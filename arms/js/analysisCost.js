@@ -1268,66 +1268,87 @@ function reqCostStatusChart(data){
 
         dateList = 요구사항_계획일_목록(요구사항_시작일, 요구사항_목표_종료일);
 
-//        const url = new UrlBuilder()
-//            .setBaseUrl('/auth-user/api/arms/analysis/cost/req-updated-status')
-//            .addQueryParam('reqIssueId', data.reqId)
-//            .addQueryParam('reqIssueKeys', data.issueKey)
-//            .build();
-//
-//        $.ajax({
-//            url: url,
-//            type: "GET",
-//            contentType: "application/json;charset=UTF-8",
-//            dataType: "json",
-//            progress: true,
-//            statusCode: {
-//                200: function (apiResponse) {
-//                    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: data -> ");
-//                    console.log(apiResponse);
-//                }
-//            }
-//        });
+        const url = new UrlBuilder()
+            .setBaseUrl('/auth-user/api/arms/analysis/cost/req-updated-list')
+            .addQueryParam('issueList', data.issueKey)
+            .build();
 
-        var myChart = echarts.init(chartDom, null, {
-            renderer: "canvas",
-            useDirtyRect: false
+        $.ajax({
+            url: url,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (apiResponse) {
+                    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: data -> ");
+                    console.log(apiResponse.body);
+                    var 요구사항_이슈키별_업데이트_데이터 = apiResponse.body;
+                    drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요구사항_이슈키별_업데이트_데이터);
+                }
+            }
         });
-        var option;
+    }else{
+        chartDom.style.display = 'flex';
+        chartDom.style.justifyContent = 'center';
+        chartDom.style.alignItems = 'center';
+        chartDom.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
+    }
+}
+function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요구사항_이슈키별_업데이트_데이터){
+    console.log("###############################################");
+    console.log(인력별_연봉정보);
+    var 투자비용 = data.reqCost;
+    var 기준비용 = Array.from({length: dateList.length}, (_, index) => index * (투자비용 / (dateListLength - 1)));
 
-        option = {
-            title: {
-                text: 요구사항_정보.c_title,
-                left: 'center',
-                 textStyle: {
-                    fontSize: 12,
-                    color: '#FFFFFF'  // 타이틀의 색상을 파란색으로 설정
-                 }
+    var myChart = echarts.init(chartDom, null, {
+        renderer: "canvas",
+        useDirtyRect: false
+    });
+    var option;
+    option = {
+        title: {
+            text: 요구사항_정보.c_title,
+            left: 'center',
+            textStyle: {
+                fontSize: 12,
+                color: '#FFFFFF'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: dateList,
+            axisLabel: {
+                color: '#FFFFFF'
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
+            scale: true
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                color: '#FFFFFF'
             },
-            xAxis: {
-                type: 'category',
-                data: dateList,
-                axisLabel: {
-                    color: '#FFFFFF'
-                },
-                scale: true
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    color: '#FFFFFF'
-                },
-                scale: true,
-            },
-            series: [
-                {
-                    type: 'line',
-                    label: {
+            scale: true,
+        },
+        series: [
+//            {
+//                  type: 'line',
+//                  itemStyle: {
+//                      color: 'red',
+//                      type: 'dashed',
+//                      width: 3
+//                  },
+//                  data: 기준비용
+//            },
+            {
+                type: 'line',
+                label: {
                             show: true,
                             position: 'top'
                           },
@@ -1343,7 +1364,7 @@ function reqCostStatusChart(data){
                             fontSize: 15, // label의 폰트 크기 설정
                             color: '#FFFFFF',
                             formatter: function(){
-                                return '투자 비용: '+data.reqCost.toLocaleString();
+                                return '투자 비용: '+투자비용.toLocaleString();
                             }
                         },
                         data: [
@@ -1354,7 +1375,7 @@ function reqCostStatusChart(data){
                         ]
                     }
                 },
-                {
+            {
                     type: 'line',
                     label: {
                             show: true,
@@ -1382,7 +1403,7 @@ function reqCostStatusChart(data){
                         ]
                     }
                 },
-                {
+            {
                     name: '누적 소모 비용',
                     type: 'bar',
                     stack: 'Total',
@@ -1399,7 +1420,7 @@ function reqCostStatusChart(data){
                     },
                     data: [0, 2000000, 5000000, 9000000, 14000000, 20000000, 21000000, 22000000]
                 },
-                    {
+            {
                       name: '소모 비용',
                       type: 'bar',
                       stack: 'Total',
@@ -1413,30 +1434,21 @@ function reqCostStatusChart(data){
                       },
                       data: [2000000, 3000000, 4000000, 5000000, 6000000, 1000000, 1000000]
                     }
-            ],
-            tooltip: {
+        ],
+        tooltip: {
                 trigger: "axis",
                 position: "top",
                 borderWidth: 1,
                 axisPointer: {
                     type: "shadow"
                 }
-            },
-        };
+        },
+    };
 
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
-
-        window.addEventListener("resize", myChart.resize);
-    }else{
-        chartDom.style.display = 'flex';
-        chartDom.style.justifyContent = 'center';
-        chartDom.style.alignItems = 'center';
-        chartDom.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
-    }
-
-
+    window.addEventListener("resize", myChart.resize);
 }
 
 /////////////////////////////////////////////////////////
