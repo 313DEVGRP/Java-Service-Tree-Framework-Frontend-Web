@@ -561,7 +561,9 @@
 										</button>
 									</div>
 								</blockquote>
-								<div class="network-graph" style="display: none;">
+								<div
+									class="network-graph"
+									style="display: none">
 									<svg id="NETWORK_GRAPH"></svg>
 								</div>
 							</div>
@@ -644,7 +646,7 @@
 					</div>
 				</blockquote>
 
-                <div class="row">
+				<div class="row">
 					<div class="col-md-4">
 						<section class="widget">
 							<header>
@@ -703,11 +705,10 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12" style="margin: 0 0 5px !important">
-									<strong>제품<sup>서비스</sup>의 버전 별 요구사항 수<br></strong>
-                                    <i class="fa fa-info-circle"></i>
-                                    요구사항이 여러 버전에 설정되어 있는 경우,<br>
-                                    각 버전별 1개씩 집계됩니다.
+								<blockquote class="font12">
+									제품
+									<sup>서비스</sup>
+									의 선택한 버전 별 요구사항 수
 								</blockquote>
 								<div
 									class="body"
@@ -717,205 +718,211 @@
 						</section>
 					</div>
 
-                    <!-- 요구사항 현황 시작 -->
-                    <div class="col-md-8">
-                        <section
-                                class="widget"
-                                style="margin-bottom: 0px !important">
-                            <header>
-                                <h4>
-				<span
-                        class="font13"
-                        style="font-weight: bold">
-					<i class="fa fa-edit"></i>
-					Issue List
-				</span>
-                                </h4>
-                                <div class="widget-controls">
-                                    <a
-                                            data-widgster="toleft"
-                                            title="change width to left"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-left"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="expand"
-                                            title="Expand"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="collapse"
-                                            title="Collapse"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="toright"
-                                            title="change width to right"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-right"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="restore"
-                                            title="Restore"
-                                            href="#">
-                                        <span class="glyphicon glyphicon-repeat"></span>
-                                    </a>
-                                    <a
-                                            data-widgster="fullscreen"
-                                            title="Fullscreen"
-                                            href="#">
-                                        <i
-                                                class="glyphicon glyphicon-fullscreen"
-                                                style="font-size: 11px"></i>
-                                    </a>
-                                </div>
-                            </header>
-                            <div
-                                    class="ribbon"
-                                    style="--d: 12px; --w: 155px; --c: #e5603b; font-size: 12px">
-                                ES 수집 일 기준
-                            </div>
-                            <div
-                                    class="body"
-                                    style="overflow: hidden">
-                                <div
-                                        class="gradient_middle_border"
-                                        style="width: 100%; height: 2px"></div>
-                                <blockquote
-                                        class="font13"
-                                        style="margin-top: 5px">
-                                    제품<sup>서비스</sup>의 요구사항 정보를 확인합니다.
-                                    <div style="float: right">
-                                        <button
-                                                class="btn btn-transparent btn-xs"
-                                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
-                                                onclick="window.open('docs/guide.html#reqstatus_issue_list')">
-                                            Help
-                                            <i
-                                                    class="fa fa-question"
-                                                    style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                                        </button>
-                                    </div>
-                                </blockquote>
+					<!-- 요구사항 현황 시작 -->
+					<div class="col-md-8">
+						<section
+							class="widget"
+							style="margin-bottom: 0px !important">
+							<header>
+								<h4>
+									<span
+										class="font13"
+										style="font-weight: bold">
+										<i class="fa fa-edit"></i>
+										Issue List
+									</span>
+								</h4>
+								<div class="widget-controls">
+									<a
+										data-widgster="toleft"
+										title="change width to left"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-left"></i>
+									</a>
+									<a
+										data-widgster="expand"
+										title="Expand"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-up"></i>
+									</a>
+									<a
+										data-widgster="collapse"
+										title="Collapse"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-down"></i>
+									</a>
+									<a
+										data-widgster="toright"
+										title="change width to right"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-right"></i>
+									</a>
+									<a
+										data-widgster="restore"
+										title="Restore"
+										href="#">
+										<span class="glyphicon glyphicon-repeat"></span>
+									</a>
+									<a
+										data-widgster="fullscreen"
+										title="Fullscreen"
+										href="#">
+										<i
+											class="glyphicon glyphicon-fullscreen"
+											style="font-size: 11px"></i>
+									</a>
+								</div>
+							</header>
+							<div
+								class="ribbon"
+								style="--d: 12px; --w: 155px; --c: #e5603b; font-size: 12px">
+								ES 수집 일 기준
+							</div>
+							<div
+								class="body"
+								style="overflow: hidden">
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; height: 2px"></div>
+								<blockquote
+									class="font13"
+									style="margin-top: 5px">
+									제품
+									<sup>서비스</sup>
+									의 요구사항 정보를 확인합니다.
+									<div style="float: right">
+										<button
+											class="btn btn-transparent btn-xs"
+											style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+											onclick="window.open('docs/guide.html#reqstatus_issue_list')">
+											Help
+											<i
+												class="fa fa-question"
+												style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+										</button>
+									</div>
+								</blockquote>
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <section
-                                                class="widget"
-                                                style="margin-bottom: 0px !important">
-                                            <header>
-                                                <label><i class="fa fa-bars"></i> <strong>Service - Issue List</strong></label>
-                                            </header>
-                                            <div class="body">
-                                                <blockquote
-                                                        class="font12"
-                                                        style="margin: 0 0 5px !important">
-                                                    <strong>제품(서비스) - Version - 요구사항 - Issue 를 확인하세요.</strong>
-                                                    <br />
-                                                    <p style="margin-top: 5px !important; text-align: left !important;">
-                                                        <i class="fa fa-info-circle"></i>
-                                                        링크드 이슈 및 서브테스크는
-                                                        <strong>요구사항 이슈 키</strong>
-                                                        컬럼의
-                                                        <i class="fa fa-list-alt"></i>
-                                                        아이콘을 클릭하세요.
-                                                    </p>
-                                                </blockquote>
-                                                <div class="gradient_bottom_border"></div>
-                                                <div style="width: 100%; height: 10px"></div>
-                                                <div style="float: left">
-                                                    <div
-                                                            style="float: left"
-                                                            class="btn-group">
-                                                        <button
-                                                                class="btn btn-default btn-sm dropdown-toggle"
-                                                                data-toggle="dropdown">
-                                                            &nbsp; Export &nbsp;
-                                                            <i class="fa fa-caret-down"></i>
-                                                        </button>
-                                                        <ul
-                                                                class="dropdown-menu"
-                                                                style="background: rgb(51, 51, 51) !important">
-                                                            <li>
-                                                                <a
-                                                                        id="copychecker"
-                                                                        style="color: white">
-                                                                    Copy
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a
-                                                                        id="csvchecker"
-                                                                        style="color: white">
-                                                                    CSV
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a
-                                                                        id="excelchecker"
-                                                                        style="color: white">
-                                                                    Excel
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a
-                                                                        id="printchecker"
-                                                                        style="color: white">
-                                                                    Print
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a
-                                                                        id="pdfchecker"
-                                                                        style="color: white">
-                                                                    PDF
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                        class="hidden"
-                                                        style="float: right">
-                                                    <button
-                                                            class="btn btn-primary btn-sm"
-                                                            type="button">
-                                                        추가
-                                                    </button>
-                                                    <button
-                                                            class="btn btn-success btn-sm"
-                                                            type="button">
-                                                        수정
-                                                    </button>
-                                                    <button
-                                                            class="btn btn-danger btn-sm"
-                                                            type="button">
-                                                        삭제
-                                                    </button>
-                                                    <button
-                                                            class="btn btn-warning btn-sm"
-                                                            type="button">
-                                                        기타
-                                                    </button>
-                                                </div>
-                                                <table
-                                                        id="reqstatustable"
-                                                        class="display"
-                                                        style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <!-- 요구사항 현황 종료 -->
-
+								<div class="row">
+									<div class="col-md-12">
+										<section
+											class="widget"
+											style="margin-bottom: 0px !important">
+											<header>
+												<label>
+													<i class="fa fa-bars"></i>
+													<strong>Service - Issue List</strong>
+												</label>
+											</header>
+											<div class="body">
+												<blockquote
+													class="font12"
+													style="margin: 0 0 5px !important">
+													<strong>제품(서비스) - Version - 요구사항 - Issue 를 확인하세요.</strong>
+													<br />
+													<p style="margin-top: 5px !important; text-align: left !important">
+														<i class="fa fa-info-circle"></i>
+														링크드 이슈 및 서브테스크는
+														<strong>요구사항 이슈 키</strong>
+														컬럼의
+														<i class="fa fa-list-alt"></i>
+														아이콘을 클릭하세요.
+													</p>
+												</blockquote>
+												<div class="gradient_bottom_border"></div>
+												<div style="width: 100%; height: 10px"></div>
+												<div style="float: left">
+													<div
+														style="float: left"
+														class="btn-group">
+														<button
+															class="btn btn-default btn-sm dropdown-toggle"
+															data-toggle="dropdown">
+															&nbsp; Export &nbsp;
+															<i class="fa fa-caret-down"></i>
+														</button>
+														<ul
+															class="dropdown-menu"
+															style="background: rgb(51, 51, 51) !important">
+															<li>
+																<a
+																	id="copychecker"
+																	style="color: white">
+																	Copy
+																</a>
+															</li>
+															<li>
+																<a
+																	id="csvchecker"
+																	style="color: white">
+																	CSV
+																</a>
+															</li>
+															<li>
+																<a
+																	id="excelchecker"
+																	style="color: white">
+																	Excel
+																</a>
+															</li>
+															<li>
+																<a
+																	id="printchecker"
+																	style="color: white">
+																	Print
+																</a>
+															</li>
+															<li>
+																<a
+																	id="pdfchecker"
+																	style="color: white">
+																	PDF
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+												<div
+													class="hidden"
+													style="float: right">
+													<button
+														class="btn btn-primary btn-sm"
+														type="button">
+														추가
+													</button>
+													<button
+														class="btn btn-success btn-sm"
+														type="button">
+														수정
+													</button>
+													<button
+														class="btn btn-danger btn-sm"
+														type="button">
+														삭제
+													</button>
+													<button
+														class="btn btn-warning btn-sm"
+														type="button">
+														기타
+													</button>
+												</div>
+												<table
+													id="reqstatustable"
+													class="display"
+													style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
+											</div>
+										</section>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+					<!-- 요구사항 현황 종료 -->
 				</div>
 
-				<div class="row" style="margin-top: 20px;">
+				<div
+					class="row"
+					style="margin-top: 20px">
 					<div class="col-md-6">
 						<section class="tree-container widget large">
 							<header>
@@ -1046,111 +1053,110 @@
 								<blockquote class="font12">
 									선택한 버전에 진행중인(담당자 존재) 요구사항과 해당 요구사항의 진행 상태
 									<br />
-                                    요구사항에 관련된 작업자 수에 비례하여 원의 지름이 커집니다.
+									요구사항에 관련된 작업자 수에 비례하여 원의 지름이 커집니다.
 								</blockquote>
 								<div
 									class="body"
 									id="circularPacking"
-									style="min-height: 550px;"></div>
+									style="min-height: 550px"></div>
 							</div>
 						</section>
 					</div>
 				</div>
-
 			</div>
 		</section>
 	</div>
 </div>
 
 <div
-        id="my_modal2"
-        class="modal fade"
-        role="dialog"
-        aria-labelledby="myModalLabel"
-        aria-hidden="true"
-        style="display: none; border-radius: 10px">
-    <div
-            class="modal-dialog"
-            style="width: 80%; height: 80%">
-        <div class="modal-content modalDarkBack">
-            <div
-                    class="modal-header"
-                    style="padding: 0px; border-bottom: 1px">
-                <h4
-                        class="modal-title font14"
-                        id="my_modal_label2"
-                        style="color: #f8f8f8; text-align: left; padding: 5px">
+	id="my_modal2"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="myModalLabel"
+	aria-hidden="true"
+	style="display: none; border-radius: 10px">
+	<div
+		class="modal-dialog"
+		style="width: 80%; height: 80%">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+				style="padding: 0px; border-bottom: 1px">
+				<h4
+					class="modal-title font14"
+					id="my_modal_label2"
+					style="color: #f8f8f8; text-align: left; padding: 5px">
 					<span
-                            class="font13"
-                            id="my_modal2_title"
-                            style="font-weight: bold">
+						class="font13"
+						id="my_modal2_title"
+						style="font-weight: bold">
 						<i class="fa fa-edit"></i>
 						링크드 이슈 및 서브테스크
 					</span>
-                    <blockquote
-                            class="search-result"
-                            style="border-left: 5px solid #e5603b">
-                        <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-                            선택한 이슈와 연결된 이슈와 하위 이슈 정보입니다.
-                        </p>
-                    </blockquote>
-                </h4>
-                <div
-                        class="widget-controls"
-                        style="padding-top: 10px">
-                    <a
-                            title="Options"
-                            class="hidden"
-                            href="#">
-                        <i class="glyphicon glyphicon-cog"></i>
-                    </a>
-                    <a
-                            data-widgster="expand"
-                            title="Expand"
-                            class="hidden"
-                            href="#">
-                        <i class="glyphicon glyphicon-chevron-up"></i>
-                    </a>
-                    <a
-                            data-widgster="collapse"
-                            title="Collapse"
-                            class="hidden"
-                            href="#">
-                        <i class="glyphicon glyphicon-chevron-down"></i>
-                    </a>
-                    <a
-                            data-widgster="close"
-                            title="Close"
-                            href="#"
-                            data-dismiss="modal"
-                            aria-hidden="true">
-                        <i class="glyphicon glyphicon-remove"></i>
-                    </a>
-                </div>
-            </div>
-            <div
-                    class="modal-body"
-                    style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
-                <table
-                        id="linkedIssueAndSubtaskTable"
-                        class="display"
-                        style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3); color: #f8f8f8"></table>
-            </div>
-            <div
-                    class="modal-footer"
-                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
-                <button
-                        type="button"
-                        id="extendclose_jira_server"
-                        class="btn btn-default"
-                        data-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+					<blockquote
+						class="search-result"
+						style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+							선택한 이슈와 연결된 이슈와 하위 이슈 정보입니다.
+						</p>
+					</blockquote>
+				</h4>
+				<div
+					class="widget-controls"
+					style="padding-top: 10px">
+					<a
+						title="Options"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-cog"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<div
+				class="modal-body"
+				style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<table
+					id="linkedIssueAndSubtaskTable"
+					class="display"
+					style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3); color: #f8f8f8"></table>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="extendclose_jira_server"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
 </div>
 
 <style>

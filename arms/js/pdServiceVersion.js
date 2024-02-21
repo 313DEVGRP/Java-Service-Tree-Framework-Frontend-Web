@@ -68,6 +68,7 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded") {
+							CKEDITOR.replace("version_contents", {skin: "office2013"});
 							CKEDITOR.replace("input_pdservice_editor", {skin: "office2013"});
 							CKEDITOR.replace("extend_modal_editor", {skin: "office2013"});
 							clearInterval(waitCKEDITOR);
@@ -512,7 +513,7 @@ function dataLoad(getSelectedText, selectedText) {
 			$("#version_start_date").val(json.pdServiceVersionEntities[0].c_start_date);
 			$("#version_end_date").val(json.pdServiceVersionEntities[0].c_end_date);
 
-			$("#version_contents").html(json.pdServiceVersionEntities[0].c_contents);
+			CKEDITOR.instances.version_contents.setData(json.pdServiceVersionEntities[0].c_contents);
 
 			// 상세보기 편집하기
 			$("#input_pdservice_name").val(selectedText);
@@ -638,7 +639,7 @@ function versionClick(element, c_id) {
 			$("#pdservice_version").val(json.c_title);
 			$("#version_start_date").val(json.c_pds_version_start_date);
 			$("#version_end_date").val(json.c_pds_version_end_date);
-			$("#version_contents").html(json.c_pds_version_contents);
+			CKEDITOR.instances.version_contents.setData(json.c_pds_version_contents);
 
 			$("#input_pdservice_name").val($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
 			$("#input_pdservice_version").val(json.c_title);
