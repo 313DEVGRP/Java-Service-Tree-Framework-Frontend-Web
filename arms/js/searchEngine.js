@@ -94,8 +94,7 @@ function execDocReady() {
 
 
 			eventListenersActivator();
-			
-			//상단 검색 확인
+			//페이지 로드 시  - 상단 검색 확인
 			checkQueryStringOnUrl();
 		})
 		.catch(function (e) {
@@ -226,9 +225,9 @@ function eventListenersActivator() {
 
 	$("#search-button").on("click", function (event) {
 		console.log("[searchEngine :: search_start] :: search-button 동작 -> 검색을 실행");
-
+		$("#nav-search-input").val("");
+		setParameter("searchString",$("#search-input").val());
 		search_start($("#search-input").val());
-		//getMockJsonData();
 	});
 
 	//검색 결과 리스트 클릭 이벤트
@@ -246,6 +245,7 @@ function eventListenersActivator() {
 }
 
 function search_start(search_string) {
+
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search",
 		type: "GET",
@@ -423,9 +423,10 @@ function checkQueryStringOnUrl() {
 	var searchTerm = urlParams.get("searchString");
 	if (searchTerm) {
 		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어 => " + searchTerm);
-		document.getElementById("search-input").value = searchTerm;
-		search_start($("#search-input").val());
+		$("#search-input").val(searchTerm);
+		search_start(searchTerm);
 	} else {
 		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없습니다.");
+		// 검색페이지 중앙으로 커서 이동 이벤트 넣기?
 	}
 }
