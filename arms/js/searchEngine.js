@@ -94,6 +94,8 @@ function execDocReady() {
 
 
 			eventListenersActivator();
+			//페이지 로드 시  - 상단 검색 확인
+			checkQueryStringOnUrl();
 		})
 		.catch(function (e) {
 			console.error("플러그인 로드 중 오류 발생");
@@ -207,44 +209,7 @@ function dataTableUtilBtn() {
 	});
 }
 
-///////////////////////////////////////////
-// 검색 결과 section 눌렀을 때, 사이즈 재조정 //
-///////////////////////////////////////////
-function click_search_result() {
-	console.log("[searchEngine :: click_search_result] :: click_search_result");
-	//풀사이즈 그리드이면 줄이고, 호스트 정보를 보여준다
-	if ($("#search_main_wrapper")[0].classList.contains("col-lg-12")) {
-		//호스트 테이블 줄이기
-		$("#search_main_wrapper").removeClass("col-lg-12").addClass("col-lg-4");
-		// $("#search_detail_wrapper").css("display")
-		$("#search_detail_wrapper").show();
-	} else {
-		$("#search_main_wrapper").removeClass("col-lg-4").addClass("col-lg-12");
-		$("#search_detail_wrapper").hide();
-	}
-	/*if ($("#hostTable_Wrapper")[0].classList.contains("col-lg-9")) {
-		//호스트 테이블 줄이기
-		$("#hostTable_Wrapper").removeClass("col-lg-9").addClass("col-lg-3");
 
-		//호스트 테이블 유틸 버튼 그룹 hide
-		$("#hostTable_Left_Util").hide();
-		$("#hostTable_Right_Support_Util").hide();
-
-		$("#returnList_Layer").show();
-
-		$("#hostInfo_Wrapper").removeClass("fade-out-box");
-		$("#hostInfo_Wrapper").addClass("fade-in-box");
-
-		$("table.dataTable > tbody > tr.child").css("display", "none");
-		$("#hostTable").removeClass("dtr-inline collapsed");
-
-		var box = document.querySelector("#hostTable_Wrapper");
-		box.ontransitionend = () => {
-			$("#hostInfo_Wrapper").show();
-			$("#hostTable").DataTable().columns.adjust().responsive.recalc();
-		};
-	}*/
-}
 
 /////////////////////////
 //이벤트 리스너 활성화
@@ -253,22 +218,22 @@ function eventListenersActivator() {
 
 	$("#search-input").on("keyup", function (event) {
 		if (event.keyCode === 13) { // 엔터의 keyCode 13
-			console.log("[searchEngine :: search-input] :: 검색어 입력 값 => " +$("#search-input").val());
+			console.log("[searchEngine :: search-input] :: 검색어 입력 값 => " + $("#search-input").val());
 			$("#search-button").click(); //검색시작 트리거 역할
 		}
 	});
 
 	$("#search-button").on("click", function (event) {
 		console.log("[searchEngine :: search_start] :: search-button 동작 -> 검색을 실행");
-
+		$("#nav-search-input").val("");
+		setParameter("searchString",$("#search-input").val());
 		search_start($("#search-input").val());
-		//getMockJsonData();
 	});
 
 	//검색 결과 리스트 클릭 이벤트
 	$("#search_main_wrapper").on("click", function (event) {
 		console.log($(event.target).closest(".search-result")[0]);
-		var clicked_content_id =  $(event.target).closest(".search-result").find(".search_head").attr("id");
+		var clicked_content_id = $(event.target).closest(".search-result").find(".search_head").attr("id");
 		var order_of_data = 0;
 		if (clicked_content_id && clicked_content_id.includes("jiraissue")) {
 			order_of_data = getDataOrder(clicked_content_id);
@@ -280,10 +245,11 @@ function eventListenersActivator() {
 }
 
 function search_start(search_string) {
+
 	$.ajax({
-		url:  "/engine-search-api/engine/jira/dashboard/search",
+		url: "/engine-search-api/engine/jira/dashboard/search",
 		type: "GET",
-		data: {"search_string" : search_string},
+		data: { "search_string": search_string },
 		dataType: "json",
 		success: function(result) {
 			console.log("[searchEngine :: search_start] :: search_string => " + search_string);
@@ -294,31 +260,6 @@ function search_start(search_string) {
 			SearchApi.appendSearchResultSections(result);
 		}
 	});
-}
-
-//데이터 목록을 wide 상태로 보기
-function display_set_wide_hostTable() {
-	var box = document.querySelector("#hostTable_Wrapper");
-	box.ontransitionend = () => {
-		$("#hostTable").DataTable().columns.adjust().responsive.recalc();
-	};
-
-	// 테이블 원복
-	$("table.dataTable > tbody > tr.child ul.dtr-details").css("display", "inline-block;");
-	$("#hostTable").addClass("dtr-inline collapsed");
-
-	// 감추기
-	$("#returnList_Layer").hide();
-	$("#hostInfo_Wrapper").removeClass("fade-in-box");
-	//$("#hostInfo_Wrapper").addClass("fade-out-box");
-	$("#hostInfo_Wrapper").hide();
-
-	//호스트 테이블 늘이기
-	$("#hostTable_Wrapper").removeClass("col-lg-3").addClass("col-lg-9");
-
-	//호스트 테이블 유틸 버튼 그룹 show
-	$("#hostTable_Left_Util").show();
-	$("#hostTable_Right_Support_Util").show();
 }
 
 
@@ -393,11 +334,12 @@ var SearchApi = (function() {
 	//////////////////////////////////////////
 	var appendSearchResultSections = function (results) {
 		const search_result_arr = results;
+		var today = new Date();
 
-		if(search_result_arr) {
+		$("#jiraissue_section .search_result_group").html("");
+		console.log("[searchEngine :: appendSearchResultSections] :: search_result_arr길이 =>" +search_result_arr.length);
+		if(search_result_arr && search_result_arr.length !== 0) {
 			//해당 search_result_group 내용 초기화
-			$("#jiraissue_section .search_result_group").html("");
-
 			search_result_arr.forEach(function (content, index) {
 				$("#jiraissue_section .search_result_group").append(
 					`<section class="search-result">
@@ -445,22 +387,22 @@ var SearchApi = (function() {
 								<img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
 							</span>
 							<!-- 지라이슈 summary 나오도록 -->
-							<p class="search_title_name"> &nbsp; 검색 결과가 없습니다.</p>
+							&nbsp; 검색 결과가 없습니다. &nbsp;
 						</span>
 					</div>
 					<div class="search_category">
 						<p class="text-muted" style="margin: 5px 0;">
 							<!--<small>카테고리 fluentd-20240204</small>-->
-							<small>${content["index"]}</small>
+							<small> - </small>
 						</p>
 						<p class="text-success" style="margin: 5px 0;">
-							<small>${date.now()}</small>
+							<small>${today}</small>
 						</p>
 					</div>
 				</div>
 				<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
 					<span>
-					검색 결과가 없습니다. 현재시각 :: ${date.now()}
+					검색 결과가 없습니다. 현재시각 :: ${today}
 					</span>
 				</div>
 			</section>`
@@ -474,3 +416,17 @@ var SearchApi = (function() {
 		appendSearchResultSections
 	}
 })(); //즉시실행 함수
+
+function checkQueryStringOnUrl() {
+	var queryString = window.location.search;
+	var urlParams = new URLSearchParams(queryString);
+	var searchTerm = urlParams.get("searchString");
+	if (searchTerm) {
+		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어 => " + searchTerm);
+		$("#search-input").val(searchTerm);
+		search_start(searchTerm);
+	} else {
+		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없습니다.");
+		// 검색페이지 중앙으로 커서 이동 이벤트 넣기?
+	}
+}

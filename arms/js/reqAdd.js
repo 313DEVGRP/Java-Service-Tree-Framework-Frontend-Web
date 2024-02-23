@@ -856,7 +856,7 @@ function bindDataEditlTab(ajaxData) {
 	//radio 버튼 - 상태 초기화
 	$("input[name='editview_req_priority_options']:checked").prop("checked", false);
 	$("input[name='editview_req_difficulty_options']:checked").prop("checked", false);
-	$("input[name='popup_req_state_options']:checked").prop("checked", false);
+	$("input[name='editview_req_state_options']:checked").prop("checked", false);
 
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");

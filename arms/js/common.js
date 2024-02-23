@@ -9,6 +9,16 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
+	//해당 이벤트리스너 메인에서 지워져있음.
+	// window.addEventListener(
+	// 	"error",
+	// 	function (event) {
+	// 		console.error("페이지 로드 중 에러 발생 :: " + event.message);
+	//
+	// 		//window.location.reload();
+	// 	},
+	// 	{ once: true }
+	// );
 });
 
 function runScript() {
@@ -160,6 +170,7 @@ function 로드_완료_이후_실행_함수() {
 	톱니바퀴_초기설정();
 	setLocale();
 	widgsterWrapper();
+	검색_이벤트_트리거();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1262,9 +1273,36 @@ function hideDetail_Datagrid() {
 		});
 }
 
+//////////////////////////////////////////
 // 페이지 이동 처리
+//////////////////////////////////////////
 function goToTemplatePage(pageName) {
-	window.location.href = "template.html?page=" + pageName;
+	let current_page = getPageName(this.location.search);
+	console.log("[common :: goToTemplatePage] :: current_page => " + current_page);
+	if(current_page === "searchEngine") {
+		console.log("[common :: goToTemplatePage] :: 검색페이지");
+	} else {
+		console.log("[common :: goToTemplatePage] :: pageName => " + pageName);
+		window.location.href = "template.html?page=" + pageName;
+	}
+}
+
+//////////////////////////////////////////
+// 검색어 포함 페이지 이동 처리
+//////////////////////////////////////////
+function goToTemplatePageWithSearchString(pageName, searchString) {
+	console.log("[common :: goToTemplatePageWithSearchString] :: pageName => " + pageName+", 검색어 => " + searchString);
+	let current_page = getPageName(this.location.search);
+
+	if(current_page === "searchEngine") {
+		console.log("[common :: goToTemplatePageWithSearchString] :: current_page => " + current_page);
+		console.log("[common :: goToTemplatePageWithSearchString] :: 검색페이지");
+		$("#search-input").val(searchString);
+		$("#search-button").click();
+	} else {
+		console.log("[common :: goToTemplatePageWithSearchString] :: 검색어와 함께 페이지 이동");
+		window.location.href = "template.html?page=" + pageName+"&searchString="+searchString;
+	}
 }
 
 function laddaBtnSetting(라따적용_클래스이름_배열) {
@@ -1398,10 +1436,13 @@ function tourGuideEventListener() {
 	});
 }
 
-function getPageName(str) {
-	if (str !== "") {
-		let idxOfPageParam = str.indexOf("page"); // page param의 위치
-		return str.substring(idxOfPageParam + 5);
+function getPageName() {
+	const queryString = location.search;
+	const params = new URLSearchParams(queryString);
+	const page = params.get("page");
+
+	if (!isEmpty(page)) { // page param의 위치
+		return page;
 	}
 	return "페이지 이름 없음"; //페이지 이름이 없을 경우.
 }
@@ -1788,4 +1829,56 @@ function chnageLoocale() {
 	const localeSelect = document.getElementById("localeSelect");
 
 	setLocale(localeSelect.options[localeSelect.selectedIndex].value);
+}
+
+
+/////////////////////////////////////
+// 검색_이벤트_트리거
+/////////////////////////////////////
+function 검색_이벤트_트리거() {
+	$("#nav-search-input").on("focus", function(event) {
+		$("#nav-search-button").addClass("highlight");
+	});
+
+	$("#nav-search-input").on("blur", function(event) {
+		$("#nav-search-button").removeClass("highlight");
+	});
+	// nav 검색창
+	$("#search_form").on("submit", function (event) {
+		event.preventDefault();
+
+		let 검색어 = $("#nav-search-input").val().trim();
+		if (검색어) {
+			console.log("[page-header :: nav-search-start] :: 검색어 입력 값 => " + 검색어);
+			setParameter("searchString", 검색어);
+			goToTemplatePageWithSearchString("searchEngine", 검색어);
+		} else {
+			console.log("[page-header :: nav-search-start] :: 검색어가 없습니다. 검색페이지로 이동합니다");
+			goToTemplatePage("searchEngine");
+		}
+	});
+
+	$("#nav-search-button").on("click", function (event) {
+		$("#search_form").trigger("submit");
+	});
+}
+
+/////////////////////////////////////////////
+// URL 파라미터값 찾기
+/////////////////////////////////////////////
+function getParameter(param) {
+	param = param.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	let regex = new RegExp("[\\?&]" + param + "=([^&#]*)"),
+		results = regex.exec(location.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+/////////////////////////////////////////////
+// URL 파라미터값 수정
+/////////////////////////////////////////////
+function setParameter(param, value) {
+	var url = new URL(window.location.href);
+	url.searchParams.set(param, value);
+	// Replace the currnt URL without reloading the page
+	window.history.pushState({path:url.href}, '', url.href);
 }

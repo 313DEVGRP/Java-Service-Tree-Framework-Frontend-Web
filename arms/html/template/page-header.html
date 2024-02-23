@@ -1,13 +1,15 @@
 <div class="navbar">
 
-	<ul class="nav navbar-nav navbar-right pull-right">
+	<ul class="nav navbar-nav navbar-right pull-right" style="display: flex; align-items: center; flex-wrap: wrap;">
 		<li class="hidden-xs">
-			<a
-				href="#"
-				id="search_toggle">
-				<i class="fa fa-search"></i>
-			</a>
+			<form id="search_form" class="navbar-form pull-right" role="search" style="margin: 0px; display: flex; align-items: center;">
+				<input id="nav-search-input" type="search" class="form-control search-query" placeholder="Search...">
+				<a href="#" id="nav-search-button">
+					<i class="fa fa-search"></i>
+				</a>
+			</form>
 		</li>
+    <li class="divider"></li>
 		<li class="dropdown">
 			<a  href="#"
 				title="Messages"
@@ -188,13 +190,6 @@
 					class="link logout"><i class="glyphicon glyphicon-off"></i></a>
 		</li>
 	</ul>
-	<form   id="search_form"
-            class="hidden-xs navbar-form pull-right"
-            role="search">
-		<input  type="search"
-                class="form-control search-query"
-                placeholder="Search..." />
-	</form>
     <div class="notifications pull-right" style="line-height: 21px !important;"></div>
 </div>
 
