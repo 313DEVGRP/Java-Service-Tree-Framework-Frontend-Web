@@ -176,7 +176,7 @@
             <div class="body">
                 <div class="row">
                     <div class="col-md-5">
-                        <h1 class="text-align-center">404</h1>
+                        <h1 class="text-align-center">404 error</h1>
                     </div>
                     <div class="col-md-7">
                         <div class="description">
@@ -189,15 +189,19 @@
         </section>
         <section class="widget widget-404-search">
             <div class="body no-margin">
-                <form class="form-inline form-search no-margin text-align-center" method="get" action="special_search.html" role="form">
+                <form class="form-inline form-search no-margin text-align-center" role="form">
                     <div class="input-group">
                         <input type="search" class="form-control" placeholder="Pages: Posts, Tags">
                         <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit">
-                            &nbsp; Search &nbsp;
-                        </button>
-                    </span>
+                            <button class="btn btn-primary" id="search">
+                                &nbsp; Search &nbsp;
+                            </button>
+                        </span>
                     </div>
+                    &nbsp;
+                    <button class="btn btn-danger" id="goback">
+                        &nbsp; Go Back &nbsp;
+                    </button>
                 </form>
             </div>
         </section>
@@ -496,12 +500,6 @@
         src="/reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"
         charset="utf-8"></script>
 
-<!-- ckeditor4 -->
-<script
-        type="text/javascript"
-        src="/reference/jquery-plugins/ckeditor4-4.16.1/ckeditor.js"
-        charset="utf-8"></script>
-
 <!-- multiselect -->
 <link
         rel="stylesheet"
@@ -550,5 +548,28 @@
 <script src="/reference/jquery-plugins/diff2html-2.12.2/dist/diff2html.js"></script>
 
 
+<script>
+
+    (function ($) {
+        $("#goback").click(function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            history.back();
+
+        });
+
+        $("#search").click(function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            $(location).attr('href', '/arms/template.html?page=searchEngine');
+
+        });
+    })(jQuery);
+
+</script>
 </body>
 </html>
