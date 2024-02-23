@@ -73,7 +73,7 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
         };
     }
     function initChart(seriesData, maxDepth) {
-        console.log("seriesData ===> ")
+        console.log("[circularPackingChart :: initChart] :: seriesData ===> ");
         console.log(seriesData);
         var displayRoot = stratify();
         function stratify() {
