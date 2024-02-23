@@ -1,25 +1,15 @@
 <div class="navbar">
 
-	<ul class="nav navbar-nav navbar-right pull-right" style="display: flex; align-items: center;">
+	<ul class="nav navbar-nav navbar-right pull-right" style="display: flex; align-items: center; flex-wrap: wrap;">
 		<li class="hidden-xs">
-			<div class="controls input-group pull-right">
-				<input
-					type="search"
-					class="form-control searchDarkBack"
-					id="nav-search-input"
-					placeholder="Quick Search" />
-				<span
-					class="input-group-btn"
-					id="nav-search-button">
-				<button
-					type="button"
-					class="btn btn-default">
+			<form id="search_form" class="navbar-form pull-right" role="search" style="margin: 0px; display: flex; align-items: center;">
+				<input id="nav-search-input" type="search" class="form-control search-query" placeholder="Search...">
+				<a href="#" id="nav-search-button">
 					<i class="fa fa-search"></i>
-				</button>
-			</span>
-			</div>
+				</a>
+			</form>
 		</li>
-
+    <li class="divider"></li>
 		<li class="dropdown">
 			<a  href="#"
 				title="Messages"
@@ -206,26 +196,6 @@
 <script>
 
 	(function ($) {
-		$("#nav-search-input").on("keyup", function(event) {
-			if(event.keyCode ===13) {
-				console.log("[page-header :: nav-search-input] :: 검색어 입력 값 => " +$("#nav-search-input").val());
-				$("#nav-search-button").click(); //검색 트리거
-			};
-		});
-
-		$("#nav-search-button").on("click", function (event) {
-			let 검색어 = "";
-			console.log("[page-header :: nav-search-start] :: nav-search-button 실행");
-			if ($("#nav-search-input").val()) {
-				console.log("[page-header :: nav-search-start] :: 검색어 입력 값 => " +$("#nav-search-input").val());
-				검색어 = $("#nav-search-input").val().trim();
-				goToTemplatePageWithSearchString("searchEngine", 검색어);
-			} else {
-				console.log("[page-header :: nav-search-start] :: 검색어가 없습니다. 검색페이지로 이동합니다");
-				goToTemplatePage("searchEngine");
-			}
-		});
-
 		$(".logout").click(function (event) {
 
 			event.preventDefault();
