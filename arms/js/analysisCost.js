@@ -1253,6 +1253,44 @@ function 요구사항_계획일_목록(startDate, endDate) {
 
     return dateList;
 }
+
+function 일자별_소모비용(요구사항_이슈키별_업데이트_데이터){
+     let 일자별_소모비용 = [];
+     for (let key in 요구사항_이슈키별_업데이트_데이터) {
+        요구사항_이슈키별_업데이트_데이터[key].forEach(data => {
+            if (data.assignee !== null) {
+                let matchingAssignee = 인력별_연봉정보.find(assignee => assignee.키 === data.assignee.assignee_accountId);
+                if (matchingAssignee) {
+                    let 일급 = Math.round((matchingAssignee.연봉 / 365)) * 10000;
+                    let updated = new Date(data.updated).toISOString().split('T')[0];
+                     일자별_소모비용.push({
+                        updated: updated,
+                        일급: 일급
+                     });
+                }
+            }
+        });
+     }
+     // 'updated' 필드를 기준으로 오름차순 정렬
+     일자별_소모비용.sort((a, b) => new Date(a.updated) - new Date(b.updated));
+
+     let resultData = [];
+     일자별_소모비용.forEach(data => {
+         // 이미 같은 날짜의 데이터가 resultData에 있는지 확인
+         let existingData = resultData.find(d => d.updated === data.updated);
+
+         if (existingData) {
+             // 같은 날짜의 데이터가 있다면 일급 합산
+             existingData.일급 += data.일급;
+         } else {
+             // 같은 날짜의 데이터가 없다면 새로 추가
+             let newData = Object.assign({}, data);
+             resultData.push(newData);
+         }
+     });
+     return resultData;
+}
+
 function reqCostStatusChart(data){
     var chartDom = document.getElementById('income_status_chart');
     let dateList;
@@ -1284,7 +1322,8 @@ function reqCostStatusChart(data){
                     console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: data -> ");
                     console.log(apiResponse.body);
                     var 요구사항_이슈키별_업데이트_데이터 = apiResponse.body;
-                    drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요구사항_이슈키별_업데이트_데이터);
+                    var 일자별_소모비용_데이터 = 일자별_소모비용(요구사항_이슈키별_업데이트_데이터);
+                    drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_목표_종료일,일자별_소모비용_데이터);
                 }
             }
         });
@@ -1295,11 +1334,22 @@ function reqCostStatusChart(data){
         chartDom.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
     }
 }
-function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요구사항_이슈키별_업데이트_데이터){
-    console.log("###############################################");
-    console.log(인력별_연봉정보);
+
+function drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_목표_종료일,일자별_소모비용_데이터){
+
     var 투자비용 = data.reqCost;
-    var 기준비용 = Array.from({length: dateList.length}, (_, index) => index * (투자비용 / (dateListLength - 1)));
+
+    let dates = 일자별_소모비용_데이터.map(item => item.updated);
+    dates.push(요구사항_목표_종료일.toISOString().substring(0, 10));
+
+    let costData = 일자별_소모비용_데이터.map(item => item.일급);
+
+    let accumulatedData = 일자별_소모비용_데이터.reduce((acc, item) => {
+        let accumulatedCost = (acc.length > 0 ? acc[acc.length - 1] : 0) + item.일급;
+        return [...acc, accumulatedCost];
+    }, []);
+
+    var 기준비용 = Array.from({length: dates.length}, (_, index) => index * (투자비용 / (dates.length - 1)));
 
     var myChart = echarts.init(chartDom, null, {
         renderer: "canvas",
@@ -1323,7 +1373,7 @@ function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요�
         },
         xAxis: {
             type: 'category',
-            data: dateList,
+            data: dates,
             axisLabel: {
                 color: '#FFFFFF'
             },
@@ -1337,72 +1387,76 @@ function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요�
             scale: true,
         },
         series: [
-//            {
-//                  type: 'line',
-//                  itemStyle: {
-//                      color: 'red',
-//                      type: 'dashed',
-//                      width: 3
-//                  },
-//                  data: 기준비용
-//            },
+            {
+                type: 'line',
+                lineStyle: {
+                    color: 'green',
+                    type: 'dashed',
+                    width: 3
+                },
+                tooltip: {
+                    show: false
+                },
+                showSymbol: false,
+                data: 기준비용
+            },
             {
                 type: 'line',
                 label: {
-                            show: true,
-                            position: 'top'
-                          },
-                    markLine: {
-                        lineStyle: {
-                            color: '#5470c6', // line color
-                            type: 'dashed', // line style
-                            width: 2 // line width
-                        },
-                        label: {
-                            position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-                            formatter: '투자 비용', // label의 텍스트 설정
-                            fontSize: 15, // label의 폰트 크기 설정
-                            color: '#FFFFFF',
-                            formatter: function(){
-                                return '투자 비용: '+투자비용.toLocaleString();
-                            }
-                        },
-                        data: [
-                            {
-                                yAxis: data.reqCost,
-                                name: '투자비용' // line label
-                            }
-                        ]
-                    }
+                    show: true,
+                    position: 'top'
                 },
-            {
-                    type: 'line',
+                markLine: {
+                    lineStyle: {
+                        color: '#5470c6', // line color
+                        type: 'dashed', // line style
+                        width: 2 // line width
+                    },
                     label: {
-                            show: true,
-                            position: 'top'
-                          },
-                    markLine: {
-                        lineStyle: {
-                            color: '#5470c6', // line color
-                            type: 'dashed', // line style
-                            width: 2 // line width
-                        },
-                        label: {
-                            position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-                            formatter: '요구사항 기한', // label의 텍스트 설정
-                            fontSize: 15, // label의 폰트 크기 설정
-                            color: '#FFFFFF',
-                            formatter: function(){
-                                return '요구사항 기한: '+ dateList[dateList.length -1];
-                            }
-                        },
-                        data: [
-                            {
-                                xAxis: dateList.length -1
-                            }
-                        ]
-                    }
+                        position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+                        formatter: '투자 비용', // label의 텍스트 설정
+                        fontSize: 15, // label의 폰트 크기 설정
+                        color: '#FFFFFF',
+                        formatter: function(){
+                            return '투자 비용: '+투자비용.toLocaleString();
+                        }
+                    },
+                    data: [
+                        {
+                            yAxis: data.reqCost,
+                             name: '투자비용' // line label
+                        }
+                    ]
+                }
+            },
+            {
+                type: 'line',
+                label: {
+                    show: true,
+                    position: 'top'
                 },
+                markLine: {
+                    lineStyle: {
+                        color: '#5470c6', // line color
+                        type: 'dashed', // line style
+                        width: 2 // line width
+                    },
+                    label: {
+                        position: 'middle', // label이 markLine의 중간에 위치하도록 설정
+                        formatter: '요구사항 기한', // label의 텍스트 설정
+                        fontSize: 15, // label의 폰트 크기 설정
+                        color: '#FFFFFF',
+                        formatter: function(){
+                            return '요구사항 기한: '+ 요구사항_목표_종료일.toISOString().substring(0, 10);
+                        }
+                    },
+                    data: [
+                        {
+                            xAxis: 요구사항_목표_종료일.toISOString().substring(0, 10)
+                        }
+                    ]
+                }
+            },
             {
                     name: '누적 소모 비용',
                     type: 'bar',
@@ -1418,7 +1472,7 @@ function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요�
                             color: 'transparent'
                         }
                     },
-                    data: [0, 2000000, 5000000, 9000000, 14000000, 20000000, 21000000, 22000000]
+                    data: accumulatedData //[0, 2000000, 5000000, 9000000, 14000000, 20000000, 21000000] // 누적값
                 },
             {
                       name: '소모 비용',
@@ -1432,7 +1486,7 @@ function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요�
                       itemStyle: {
                         color: '#eb5454'  // 바의 색상을 빨간색으로 변경
                       },
-                      data: [2000000, 3000000, 4000000, 5000000, 6000000, 1000000, 1000000]
+                      data:costData// [2000000, 3000000, 4000000, 5000000, 6000000, 1000000, 1000000] // 증폭
                     }
         ],
         tooltip: {
@@ -1441,7 +1495,18 @@ function drawReqCostStatusChart(chartDom,요구사항_정보,data,dateList,요�
                 borderWidth: 1,
                 axisPointer: {
                     type: "shadow"
-                }
+                },
+                     formatter: function(params) {
+                         var tooltipText = params[0].name + '<br/>';  // X축 데이터 추가
+                         for (var i = 0; i < params.length; i++) {
+                             if (params[i].seriesName !== '누적 소모 비용') {
+                                 tooltipText += params[i].marker + params[i].seriesName + ': ' + params[i].value + '<br/>';
+                             } else {
+                                 tooltipText += params[i].seriesName + ': ' + params[i].value + '<br/>';
+                             }
+                         }
+                         return tooltipText;
+                     }
         },
     };
 
