@@ -1229,6 +1229,200 @@
 													</div>
 													<div class="control-group">
 														<label
+															for="editview_req_priority"
+															class="control-label font13">
+															요구사항 우선순위 :
+														</label>
+														<div
+															class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+															<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																<div
+																	id="editview_req_priority"
+																	class="btn-group"
+																	data-toggle="buttons">
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_priority_options7"
+																			name="editview_req_priority_options"
+																			value="7" />
+																		매우 높음
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_priority_options6"
+																			name="editview_req_priority_options"
+																			value="6" />
+																		높음
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_priority_options5"
+																			name="editview_req_priority_options"
+																			value="5" />
+																		중간
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_priority_options4"
+																			name="editview_req_priority_options"
+																			value="4" />
+																		낮음
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_priority_options3"
+																			name="editview_req_priority_options"
+																			value="3" />
+																		매우 낮음
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+															for="editview_req_difficulty"
+															class="control-label font13">
+															요구사항 난이도 :
+														</label>
+														<div
+															class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+															<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																<div
+																	id="editview_req_difficulty"
+																	class="btn-group"
+																	data-toggle="buttons">
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_difficulty_options3"
+																			name="editview_req_difficulty_options"
+																			value="3" />
+																		매우 어려움
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_difficulty_options4"
+																			name="editview_req_difficulty_options"
+																			value="4" />
+																		어려움
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_difficulty_options5"
+																			name="editview_req_difficulty_options"
+																			value="5" />
+																		보통
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_difficulty_options6"
+																			name="editview_req_difficulty_options"
+																			value="6" />
+																		쉬움
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_difficulty_options7"
+																			name="editview_req_difficulty_options"
+																			value="7" />
+																		매우 쉬움
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+															for="editview_req_state"
+															class="control-label font13">
+															요구사항 상태 :
+														</label>
+														<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+														<div
+															class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+															<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																<div
+																	id="editview_req_state"
+																	class="btn-group"
+																	data-toggle="buttons">
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_state_options10"
+																			name="editview_req_state_options"
+																			value="10" />
+																		열림
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_state_options11"
+																			name="editview_req_state_options"
+																			value="11" />
+																		진행중
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_state_options12"
+																			name="editview_req_state_options"
+																			value="12" />
+																		해결됨
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																			type="radio"
+																			id="editview_req_state_options13"
+																			name="editview_req_state_options"
+																			value="13" />
+																		닫힘
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div
+														class="control-group"
+														for="editview_req_plan_time">
+														<label class="control-label font13">예상 일정(일) :</label>
+														<div
+															class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+															<input
+																type="text"
+																id="editview_req_plan_time"
+																name="editview_req_plan_time"
+																class="form-control parsley-validated font13 darkBack"
+																data-placement="top"
+																required="required"
+																style="color: #a4c6ff"
+																placeholder="Requirement Plan Day"
+															/>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
 															class="control-label"
 															for="editview_req_writer">
 															요구사항 요청자 :
@@ -1980,9 +2174,23 @@
 												data-toggle="buttons">
 												<label
 													class="btn btn-transparent btn-sm active"
-													style="color: #f8f8f8 !important">
-													<input type="radio" />
-													요구사항 등록 모드
+													data-toggle-class="btn-primary"
+													data-toggle-passive-class="btn-default">
+													<input
+														type="radio"
+														name="reqType"
+														value="default" />
+													일반 요구사항 등록 모드
+												</label>
+												<label
+													class="btn btn-transparent btn-sm"
+													data-toggle-class="btn-primary"
+													data-toggle-passive-class="btn-default">
+													<input
+														type="radio"
+														name="reqType"
+														value="folder" />
+													폴더 형식으로 등록
 												</label>
 											</div>
 										</div>
@@ -2057,6 +2265,186 @@
 												type="text"
 												placeholder="요구사항 제목을 입력해 주세요" />
 										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										for="addview_req_priority"
+										class="control-label font13">
+										요구사항 우선순위 :
+									</label>
+									<div
+										class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+										<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+											<div
+												id="addview_req_priority"
+												class="btn-group"
+												data-toggle="buttons">
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_priority_options"
+														value="7" />
+													매우 높음
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_priority_options"
+														value="6" />
+													높음
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_priority_options"
+														value="5" />
+													중간
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_priority_options"
+														value="4" />
+													낮음
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_priority_options"
+														value="3" />
+													매우 낮음
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										for="addview_req_difficulty"
+										class="control-label font13">
+										요구사항 난이도 :
+									</label>
+									<div
+										class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+										<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+											<div
+												id="addview_req_difficulty"
+												class="btn-group"
+												data-toggle="buttons">
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_difficulty_options"
+														value="3" />
+													매우 어려움
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_difficulty_options"
+														value="4" />
+													어려움
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_difficulty_options"
+														value="5" />
+													보통
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_difficulty_options"
+														value="6" />
+													쉬움
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_difficulty_options"
+														value="7" />
+													매우 쉬움
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+										for="addview_req_state"
+										class="control-label font13">
+										요구사항 상태 :
+									</label>
+									<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+									<div
+										class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+										<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+											<div
+												id="addview_req_state"
+												class="btn-group"
+												data-toggle="buttons">
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_state_options"
+														value="10" />
+													열림
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_state_options"
+														value="11" />
+													진행중
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_state_options"
+														value="12" />
+													해결됨
+												</label>
+												<label class="btn btn-warning btn-disabled">
+													<input
+														type="radio"
+														name="addview_req_state_options"
+														value="13" />
+													닫힘
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div
+									class="control-group"
+									for="addview_req_plan_time">
+									<label class="control-label font13">예상 일정(일) :</label>
+									<div
+										class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+										<input
+											type="text"
+											id="addview_req_plan_time"
+											name="addview_req_plan_time"
+											class="form-control parsley-validated font13 darkBack"
+											data-placement="top"
+											required="required"
+											style="color: #a4c6ff"
+											placeholder="Requirement Plan Day"
+										/>
 									</div>
 								</div>
 								<div class="control-group">
