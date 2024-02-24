@@ -2,15 +2,6 @@
 //Page 전역 변수
 ////////////////////////////////////////////////////////////////////////////////////////
 var dataTableRef;
-var pieChart;
-var windowCount = 0;
-var linuxCount = 0;
-var unixCount = 0;
-var etcCount = 0;
-var footerCheck = 0;
-var activeTab;
-var selectedStorData;
-var datatableCallback_DuplicateDefence = 0;
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -245,19 +236,33 @@ function eventListenersActivator() {
 }
 
 function search_start(search_string) {
+	console.log("[searchEngine :: search_start] :: search_string => " + search_string);
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search",
+		url: "/engine-search-api/engine/jira/dashboard/search", //지라이슈로 바꾸자
 		type: "GET",
 		data: { "search_string": search_string },
 		dataType: "json",
 		success: function(result) {
-			console.log("[searchEngine :: search_start] :: search_string => " + search_string);
-			console.log("[searchEngine :: search_start] :: search_results => ");
+			console.log("[searchEngine :: search_start] :: jiraissue_search_results => ");
 			console.log(result);
 
 			SearchApi.setSearchResult(result);
 			SearchApi.appendSearchResultSections(result);
+		}
+	});
+
+	$.ajax({
+		url: "/engine-search-api/engine/jira/dashboard/search/fluentd",
+		type: "GET",
+		data: { "search_string": search_string, "page" : 0, "size": 100 },
+		dataType: "json",
+		success: function(result) {
+			console.log("[searchEngine :: search_start] :: fluentd_search_results => ");
+			console.log(result);
+
+			SearchApi.setSearchResult_fluentd(result);
+			SearchApi.appendSearchResultSections_fluentd(result);
 		}
 	});
 }
@@ -319,16 +324,25 @@ function getMockJsonData() {
 
 var SearchApi = (function() {
 	var searchResult;
+
+	var searchResultObject ={"jiraissue" : null, "fluentd" : null};
 	var setSearchResult = function (result) {
 		console.log("[SearchApi :: setSearchResult] :: result =>");
 		console.log(result);
 		searchResult = result;
+		//searchResultObject["jiraissue"] = result; // 변경 대상.
 	};
 
+	var setSearchResult_fluentd = function(result) {
+		searchResultObject["fluentd"] = result;
+	}
 	var getSearchResult = function (order) {
 		return searchResult[order]; // 자료구조 검토
 	}
 
+	var getSearchResult_fluentd = function(order) {
+		return searchResultObject["fluentd"][order];
+	}
 	//////////////////////////////////////////
 	// 1. 검색 결과를 바탕으로 content 보여주기
 	//////////////////////////////////////////
@@ -410,10 +424,85 @@ var SearchApi = (function() {
 		}
 	}
 
+	var appendSearchResultSections_fluentd = function (results) {
+		const search_result_arr = results;
+		var today = new Date();
+
+		$("#log_section .search_result_group").html("");
+		console.log("[searchEngine :: appendSearchResultSections_fluentd] :: search_result_arr길이 =>" +search_result_arr.length);
+		if(search_result_arr && search_result_arr.length !== 0) {
+			//해당 search_result_group 내용 초기화
+			search_result_arr.forEach(function (content, index) {
+				$("#log_section .search_result_group").append(
+					`<section class="search-result">
+				<!-- 검색 결과 생성 시, append 하는 방식 -->
+				<!-- search_detail_modal + _jiraissue -> 이것도 분기 넣어서 따로 동작하도록 해야함. -->
+				<!-- jiraissue, fluentd 등의 분기 조건은 _index 으로 하면 될듯? 인덱스의 명칭에 contains 등을 통해서 분기처리? -->
+				<div class="search_head" id="hits_order_fluentd_${index}" data-toggle="modal" data-target="#search_detail_modal_fluentd" data-backdrop="false">
+					<div class="search_title">
+						<span style="font-size: 13px; color:#a4c6ff;">
+							<span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
+								<img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+							</span>
+							<!-- 로그네임 표시 -->
+							&nbsp;${content["content"]["logName"]}							
+						</span>
+					</div>
+					<div class="search_category">
+						<p class="text-muted" style="margin: 5px 0;">
+							<!--<small>카테고리 fluentd-20240204</small>-->
+							<small>${content["index"]}</small>
+						</p>
+						<p class="text-success" style="margin: 5px 0;">
+							<small>${content["content"]["timestamp"]}</small>
+						</p>
+					</div>
+				</div>
+				<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
+					<span>
+					${content["content"]["log"]}
+					</span>
+				</div>
+			</section>`
+				);
+			});
+		} else {
+			$("#log_section .search_result_group").append(
+				`<section class="search-result">
+				<!-- 검색 결과 생성 시, append 하는 방식으로? -->
+				<div class="search_head search_none">
+					<div class="search_title">
+						<span style="font-size: 13px; color:#a4c6ff;">
+							<span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
+								<img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+							</span>
+							<!-- 지라이슈 summary 나오도록 -->
+							&nbsp; 검색 결과가 없습니다. &nbsp;
+						</span>
+					</div>
+					<div class="search_category">
+						<p class="text-muted" style="margin: 5px 0;">
+							<!--<small>카테고리 fluentd-20240204</small>-->
+							<small> - </small>
+						</p>
+						<p class="text-success" style="margin: 5px 0;">
+							<small>${today}</small>
+						</p>
+					</div>
+				</div>
+				<div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
+					<span>
+					검색 결과가 없습니다. 현재시각 :: ${today}
+					</span>
+				</div>
+			</section>`
+			);
+		}
+	}
 	return {
-		setSearchResult,
-		getSearchResult,
-		appendSearchResultSections
+		setSearchResult, setSearchResult_fluentd,
+		getSearchResult, getSearchResult_fluentd,
+		appendSearchResultSections, appendSearchResultSections_fluentd
 	}
 })(); //즉시실행 함수
 
@@ -427,6 +516,29 @@ function checkQueryStringOnUrl() {
 		search_start(searchTerm);
 	} else {
 		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없습니다.");
-		// 검색페이지 중앙으로 커서 이동 이벤트 넣기?
+		// 검색페이지 중앙으로 커서 이동 이벤트 넣기 검토
 	}
+}
+
+function renderPagination(totalItems, itemsPerPage) {
+	var totalPages = Math.ceil(totalItems / itemsPerPage);
+	var paginationElement = document.getElementById('pagination');
+
+	for (var i = 1; i <= totalPages; i++) {
+		var li = document.createElement('li');
+		var a = document.createElement('a');
+		a.href = '#';
+		a.textContent = i;
+		a.addEventListener('click', function(event) {
+			event.preventDefault();
+			// 해당 페이지의 데이터를 가져오는 함수 호출
+			fetchData(i);
+		});
+		li.appendChild(a);
+		paginationElement.appendChild(li);
+	}
+}
+
+function fetchData(pageNumber) {
+	// 해당 페이지의 데이터를 가져오는 로직을 여기에 구현
 }
