@@ -1662,7 +1662,7 @@ function updateNode(data, task) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
 		type: "POST",
-		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateDate.do",
+		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateNode.do",
 		data: data,
 		progress: true,
 		statusCode: {}
