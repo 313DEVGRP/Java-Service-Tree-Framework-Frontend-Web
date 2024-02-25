@@ -1148,80 +1148,6 @@ function formatDate(date) {
 /////////////////////////////////////////////////////////
 // Circular Packing Chart
 /////////////////////////////////////////////////////////
-function getReqStatusAndAssignees(pdServiceLink, pdServiceVersionLinks) {
-
-	let paramData = {
-		"요구_사항" : {
-			'isReqType': 'REQUIREMENT',
-			'pdServiceLink' : selectedPdServiceId,
-			'pdServiceVersionLinks' : pdServiceVersionLinks,//[16,17,18]
-			'메인그룹필드' : 'pdServiceVersions',
-			'컨텐츠보기여부' : false,
-			'크기' : 10000,
-			'하위그룹필드들' : ['key','assignee.assignee_emailAddress.keyword'],
-			'하위크기' : 10000
-		},
-		"하위_이슈_사항" : {
-			'isReqType': 'ISSUE',
-			'pdServiceLink': selectedPdServiceId,
-			'pdServiceVersionLinks': pdServiceVersionLinks,
-			'메인그룹필드': 'parentReqKey',
-			'컨텐츠보기여부': false,
-			'크기': 10000,
-			'하위그룹필드들': ['assignee.assignee_emailAddress.keyword'],//'[assignee.assignee_emailAddress.keyword]',
-			'하위크기': 10000
-		}
-	}
-	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/req-status-and-reqInvolved-unique-assignees",
-		type: "POST",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		data: JSON.stringify(paramData),
-		progress: true,
-		statusCode: {
-			200: function (result) {
-				console.log("[ analysisScope :: getReqStatusAndAssignees ] :: result");
-				console.log(result);
-				let pdServiceName;
-				pdServiceListData.forEach(elements => {
-					if (elements["pdServiceId"] === +pdServiceLink) {
-						pdServiceName = elements["pdServiceName"];
-					}
-				});
-				let dataObject = {};
-				let issueStatusSet = new Set(); // 여기까지 사용
-				let issueStatusList = [];
-				if (result.length > 0) {
-					for (let i = 0; i < result.length; i++) {
-						// 버전이름 가져오기
-						let versionName ="";
-						for (let j = 0; j < versionListData.length; j++) {
-							if(result[i]["제품_서비스_버전"] === versionListData[j]["c_id"]){
-								versionName = versionListData[j]["c_title"].replaceAll(".","_");
-								break;
-							}
-						}
-						let verSubObject = {};
-						result[i]["요구사항들"].forEach((element) => {
-							// 작업자수가 0이 아닌 요구 사항만 (담당자 배정된 요구사항만)
-							if (element["작업자수"] !== 0) {
-								verSubObject[element["요구_사항_번호"]] =
-									{"$count" : element["작업자수"], "$status" : element["요구_사항_상태"]};
-								issueStatusSet.add(element["요구_사항_상태"]);
-							}
-						});
-						dataObject[versionName] = verSubObject;
-					}
-				}
-				issueStatusSet.forEach(e=>issueStatusList.push(e));
-				drawCircularPacking("circularPacking",pdServiceName,dataObject, issueStatusList);
-			}
-		}
-	});
-}
-
-
 function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
 
 	$.ajax({
@@ -1268,6 +1194,9 @@ function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
 }
 
 
+/////////////////////////////////////////////////////////
+// Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
+/////////////////////////////////////////////////////////
 function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks, versionTag) {
 	let reqAddUrl = "/T_ARMS_REQADD_"+ pdService_id +"/getReqAddListByFilter.do?";
 
@@ -1282,7 +1211,6 @@ function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks, versionTag
 			200: function (result) {
 				console.log("[ analysisScope :: getReqPerMappedVersions ] :: result");
 				console.log(result);
-				console.log("해당 결과는 ReqAdd에서 가져온 결과 입니다.");
 				const versionNameCountMap = result;
 				const outputArray = [];
 				for(const key in versionNameCountMap) {
@@ -1296,9 +1224,6 @@ function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks, versionTag
 	});
 }
 
-/////////////////////////////////////////////////////////
-// Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
-/////////////////////////////////////////////////////////
 function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
 	$.ajax({
 		url: "/auth-user/api/arms/analysis/scope/pdservice-id/"+pdService_id+"/req-per-version",
