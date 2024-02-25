@@ -137,7 +137,9 @@
 							</div>
 						</blockquote>
 						<div class="body search_result_group">
-							<div class="text-align-center">
+                            <div class="search_result_items">
+                            </div>
+							<div class="text-align-center pagination-div">
 								<ul class="pagination">
 									<li class="disabled"><a href="#">Prev</a></li>
 									<li class="active"><a href="#">1</a></li>
@@ -218,7 +220,9 @@
 							</div>
 						</blockquote>
 						<div class="body search_result_group">
-							<div class="text-align-center">
+                            <div class="search_result_items">
+                            </div>
+							<div class="text-align-center pagination-div">
 								<ul class="pagination">
 									<li class="disabled"><a href="#">Prev</a></li>
 									<li class="active"><a href="#">1</a></li>
@@ -1014,4 +1018,267 @@
 			</div>
 		</div>
 	</div>
+</div>
+<!-- 검색결과_상세_모달_로그(플루언트디) -->
+<div
+        id="search_detail_modal_log"
+        class="modal fade"
+        role="dialog"
+        aria-labelledby="search_detail_modal_label_log"
+        aria-hidden="false"
+        style="display: none; border-radius: 10px">
+    <div
+            class="modal-dialog"
+            style="width: 80%; height: 50%">
+        <div class="modal-content modalDarkBack">
+            <div
+                    class="modal-header"
+                    style="margin: 10px 5px">
+                <h4
+                        class="modal-title font13"
+                        id="search_detail_modal_label_log"
+                        style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+                    <i class="fa fa-file-text-o"></i>
+                    검색 결과 상세
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="top: 5px; right: 5px">
+<!--                    <a
+                          data-widgster="toleft"
+                          title="change width to left"
+                          href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                      </a>
+                    <a
+                      data-widgster="expand"
+                      title="Expand"
+                      href="#">
+                    <i class="glyphicon glyphicon-chevron-up"></i>
+                  </a>-->
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <!--<a
+                      data-widgster="toright"
+                      title="change width to right"
+                      href="#">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                  </a>-->
+                    <!--<a
+                      data-widgster="restore"
+                      title="Restore"
+                      href="#">
+                    <span class="glyphicon glyphicon-repeat"></span>
+                  </a>-->
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <blockquote class="font13">
+                검색 결과 상세 입니다.
+                <div style="float: right">
+                    <button
+                            class="btn btn-transparent btn-xs"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+                            onclick="return true;">
+                        Help
+                        <i
+                                class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                    </button>
+                </div>
+            </blockquote>
+            <div class="modal-body">
+                <form
+                        class="form-horizontal detail_contents"
+                        method="post">
+                    <fieldset>
+                        <div class="panel-group col-md-12">
+                            <div class="panel">
+                                <div
+                                        id="colorLegend"
+                                        class="panel-collapse in collapse">
+                                    <div class="panel-body">
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															고정항목
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels app-progress-label">
+                                                        <div>
+                                                            <li>
+                                                                ✔ _id :
+                                                                <a
+                                                                        id="detail_id_log"
+                                                                        style="font-weight: bold">
+                                                                    mock_id
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ _index :
+                                                                <a
+                                                                        id="detail_index_log"
+                                                                        style="font-weight: bold">
+                                                                    fluentD-2024-02-14
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ _score :
+                                                                <a
+                                                                        id="detail_score_log"
+                                                                        style="font-weight: bold">
+                                                                    -
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ _type :
+                                                                <a
+                                                                        id="detail_type_log"
+                                                                        style="font-weight: bold">
+                                                                    fluentD_type
+                                                                </a>
+                                                            </li>
+                                                        </div>
+                                                        <div></div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그 주요 정보
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels progress-wave-label">
+                                                        <div>
+                                                            <li>
+                                                                ✔ 로그명 :
+                                                                <a
+                                                                        id="detail_modal_logname_log"
+                                                                        style="font-weight: bold">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ timestamp :
+                                                                <a
+                                                                        id="detail_modal_timestamp_log"
+                                                                        style="font-weight: bold">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ source :
+                                                                <a
+                                                                        id="detail_modal_source_log"
+                                                                        style="font-weight: bold">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ container_id (12자리)
+                                                                :
+                                                                <a
+                                                                        id="detail_modal_container_id_log"
+                                                                        style="font-weight: bold">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ container_name
+                                                                :
+                                                                <a
+                                                                        id="detail_modal_container_name_log"
+                                                                        style="font-weight: bold">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-12 color-legend-widget">
+                                            <section
+                                                    class="widget"
+                                                    style="overflow: hidden">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그 정보
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <div
+                                                            class="col-lg-12"
+                                                            style="padding: 0px">
+                                                        <div
+                                                                id="modal_detail_log_log"
+                                                                name="modal_detail_log_log"
+                                                                class="col-sm-12"
+                                                                style="padding: 10px"
+                                                                readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div
+                    class="modal-footer"
+                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button
+                        type="button"
+                        id="modal_close_btn"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
