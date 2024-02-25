@@ -792,16 +792,22 @@ function 최종비용분석계산(key, 요구사항, 버전, 요구사항키, �
             endDate = new Date(formatDate(요구사항.c_req_end_date));
 
             // 완료된 요구사항만 계산하여 완료성과 측정
-            if (startDate && endDate) {
+            if (startDate && endDate && (startDate <= endDate)) {
                 let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
                 전체담당자목록[key].완료성과 += cost;
             }
         } else {
-            startDate = new Date(formatDate(요구사항.c_req_start_date));
-            endDate = new Date(formatDate(new Date()));
+            if (요구사항.c_req_start_date && 요구사항.c_req_end_date) {
+                startDate = new Date(formatDate(요구사항.c_req_start_date));
+                endDate = new Date(formatDate(요구사항.c_req_end_date));
+            }
+            else {
+                startDate = new Date(formatDate(요구사항.c_req_start_date));
+                endDate = new Date(formatDate(new Date()));
+            }
         }
 
-        if (startDate && endDate) {
+        if (startDate && endDate && (startDate <= endDate)) {
             let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
 
             // 요구사항별 금액 측정 차트 데이터
