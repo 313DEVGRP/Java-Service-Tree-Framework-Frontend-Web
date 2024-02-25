@@ -44,7 +44,11 @@ function dwr_login(userId,username){
     dwr.engine.setActiveReverseAjax(true);
     dwr.engine.setNotifyServerOnPageUnload(true);
     dwr.engine.setErrorHandler(function () {
-        console.log("DWR Error");
+        Messenger().post({
+            message: "서버와의 실시간 네트워크 통신에 문제를 감지했습니다. ( 재시도 합니다 )",
+            type: 'error',
+            showCloseButton: true
+        });
     });
     Chat.login(userId,username);
 
