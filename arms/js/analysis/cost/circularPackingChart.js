@@ -349,12 +349,14 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                 let parts = item.id.split('.');
                 let issueKey = parts[parts.length - 1];
                 let reqId = parts[parts.length - 2];
+                let versionId = parts[parts.length - 3];
 
                 let existingItem = acc.find(a => a.reqId === reqId);
                 if (existingItem) {
                     existingItem.issueKey.push(issueKey);
                 } else {
                     acc.push({
+                        versionId: versionId,
                         reqId: reqId,
                         issueKey:[issueKey],
                         reqCost:reqCost
