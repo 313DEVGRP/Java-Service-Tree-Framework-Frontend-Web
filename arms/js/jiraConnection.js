@@ -79,7 +79,10 @@ function execDocReady() {
             $.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
                 initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
             });
+            
             //스크립트 실행 로직을 이곳에 추가합니다.
+            var 라따적용_클래스이름_배열 = ['.pdservice_version_alm_connect'];
+            laddaBtnSetting(라따적용_클래스이름_배열);
 
         })
         .catch(function() {
