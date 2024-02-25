@@ -295,8 +295,6 @@ function makeVersionMultiSelectBox() {
 		onClose: function () {
 			console.log("onOpen event fire!\n");
 
-			var checked = $("#checkbox1").is(":checked");
-			var endPointUrl = "";
 			var versionTag = $(".multiple-select").val();
 
 			if (versionTag === null || versionTag == "") {
@@ -308,22 +306,6 @@ function makeVersionMultiSelectBox() {
 			selectedVersionId = versionTag.join(",");
 			// 요구사항 및 연결이슈 통계
 			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
-
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" +
-					$("#selected_pdService").val() +
-					"/getStatusMonitor.do?disable=true&versionTag=" +
-					versionTag;
-				getMonitorData($("#selected_pdService").val(), endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" +
-					$("#selected_pdService").val() +
-					"/getStatusMonitor.do?disable=false&versionTag=" +
-					versionTag;
-				getMonitorData($("#selected_pdService").val(), endPointUrl);
-			}
 		}
 	});
 }
@@ -788,8 +770,20 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_name").val(ajaxData.c_title);
 
 	$("#editview_req_priority").children(".btn.active").removeClass("active");
-	var slectReqPriorityID = "editview_req_priority-option" + ajaxData.c_priority;
-	$("#" + slectReqPriorityID)
+	var selectReqPriorityID = "editview_req_priority_options" + ajaxData.reqPriorityEntity.c_id;
+	$("#" + selectReqPriorityID)
+		.parent()
+		.addClass("active");
+
+	$("#editview_req_difficulty").children(".btn.active").removeClass("active");
+	var selectReqDifficultyID = "editview_req_difficulty_options" + ajaxData.reqDifficultyEntity.c_id;
+	$("#" + selectReqDifficultyID)
+		.parent()
+		.addClass("active");
+
+	$("#editview_req_state").children(".btn.active").removeClass("active");
+	var selectReqStateID = "editview_req_state_options" + ajaxData.reqStateEntity.c_id;
+	$("#" + selectReqStateID)
 		.parent()
 		.addClass("active");
 
@@ -1154,20 +1148,38 @@ function click_btn_for_req_add() {
 			reviewers05 = $("#addview_req_reviewers").select2("data")[4].text;
 		}
 
+		var c_type_value;
+		if (isEmpty($("input[name=reqType]:checked").val())) {
+			c_type_value = "default";
+		} else {
+			c_type_value = $("input[name=reqType]:checked").val();
+		}
+
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 			type: "POST",
 			data: {
-				c_parentid: parentIdOfSelected,
+				ref: parentIdOfSelected,
+				c_title: $("#addview_req_name").val(),
+				c_type: c_type_value,
+				c_req_pdservice_link: $("#selected_pdService").val(),
 				c_req_pdservice_versionset_link: JSON.stringify($("#add_multi_version").val()),
 				c_req_writer: "[" + userName + "]" + " - " + userID,
 				c_req_create_date: new Date(),
 				c_req_update_date: new Date(),
+				c_req_priority_link: $('#addview_req_priority .btn.active input').val(),
+				c_req_difficulty_link: $('#addview_req_difficulty .btn.active input').val(),
+				c_req_state_link: $('#addview_req_state .btn.active input').val(),
 				c_req_reviewer01: reviewers01,
 				c_req_reviewer02: reviewers02,
 				c_req_reviewer03: reviewers03,
 				c_req_reviewer04: reviewers04,
 				c_req_reviewer05: reviewers05,
+				c_req_reviewer01_status: "Draft",
+				c_req_reviewer02_status: "Draft",
+				c_req_reviewer03_status: "Draft",
+				c_req_reviewer04_status: "Draft",
+				c_req_reviewer05_status: "Draft",
 				c_req_start_date: new Date($("#addview_req_start_date").val()),
 				c_req_end_date: new Date($("#addview_req_end_date").val()),
 				c_req_total_resource: $("#addview_req_total_resource").val(),
@@ -1176,7 +1188,9 @@ function click_btn_for_req_add() {
 				c_req_plan_time: $("#addview_req_plan_time").val(),
 				c_req_manager: $("#addview_req_manager").select2("data")[0]?.text,
 				c_req_status: "AppendReq",
-				c_req_contents: CKEDITOR.instances["add_tabmodal_editor"].getData()
+				c_req_contents: CKEDITOR.instances["add_tabmodal_editor"].getData(),
+				c_req_desc: "설명",
+				c_req_etc: "비고"
 			},
 			statusCode: {
 				200: function () {
@@ -1226,7 +1240,9 @@ function click_btn_for_req_update() {
 				c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
 				// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
 				c_req_update_date: new Date(),
-				c_priority: $("#editview_req_priority").children(".btn.active").children("input").val(),
+				c_req_priority_link: $('#editview_req_priority .btn.active input').val(),
+				c_req_difficulty_link: $('#editview_req_difficulty .btn.active input').val(),
+				c_req_state_link: $('#editview_req_state .btn.active input').val(),
 				c_req_reviewer01: reviewers01,
 				c_req_reviewer02: reviewers02,
 				c_req_reviewer03: reviewers03,
@@ -1662,7 +1678,7 @@ function updateNode(data, task) {
 	const endPoint = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 	$.ajax({
 		type: "POST",
-		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateNode.do",
+		url: "/auth-user/api/arms/reqAdd/" + endPoint + "/updateDate.do",
 		data: data,
 		progress: true,
 		statusCode: {}
@@ -1801,7 +1817,7 @@ function initGantt(data) {
 							.tooltip()
 							.on("click", (e) => {
 								closeTooltip(e);
-								addNodeModalOpen(row.parentId);
+								addNodeModalOpen(row.id);
 							});
 
 						btnWrapper.append(addLevelDownBtn);
@@ -1906,6 +1922,10 @@ function addNodeModalOpen(parentId) {
 	$("#addview_req_plan_time").val(null);
 
 	$("#addview_req_manager").val(null).trigger("change");
+
+	$("#addview_req_priority").children(".btn.active").removeClass("active");
+	$("#addview_req_difficulty").children(".btn.active").removeClass("active");
+	$("#addview_req_state").children(".btn.active").removeClass("active");
 
 	CKEDITOR.instances.add_tabmodal_editor.setData($("<p />").text("요구사항 내용을 기록합니다."));
 

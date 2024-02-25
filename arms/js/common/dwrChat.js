@@ -26,7 +26,9 @@ function dwr_callback(userId, username, message, time) {
             type: 'success',
             showCloseButton: true
         });
-    }else{
+    }
+
+    if (message.indexOf("Server]") >= 0){
         $(".notifications.pull-right").addClass("alert-created");
         const alertDiv = $('<div/>').addClass('alert pull-right');
         const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
@@ -42,7 +44,11 @@ function dwr_login(userId,username){
     dwr.engine.setActiveReverseAjax(true);
     dwr.engine.setNotifyServerOnPageUnload(true);
     dwr.engine.setErrorHandler(function () {
-        console.log("DWR Error");
+        Messenger().post({
+            message: "서버와의 실시간 네트워크 통신에 문제를 감지했습니다. ( 재시도 합니다 )",
+            type: 'error',
+            showCloseButton: true
+        });
     });
     Chat.login(userId,username);
 

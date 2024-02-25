@@ -617,14 +617,21 @@ function 비용분석계산() {
             .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
             .build();
 
+        const completeKeywordUrl = new UrlBuilder()
+            .setBaseUrl("/auth-user/api/arms/reqState/complete-keyword")
+            .build();
+
         Promise.all([
             $.ajax({ url: url, type: "GET", dataType: "json" }),
-            $.ajax({ url: url2, type: "GET", dataType: "json" })
-        ]).then(function([data1, data2]) {
+            $.ajax({ url: url2, type: "GET", dataType: "json" }),
+            $.ajax({ url: completeKeywordUrl, type: "GET", dataType: "json" })
+        ]).then(function([data1, data2, data3]) {
             console.log("[ analysisCost :: 비용분석계산 API 1 ] :: data1 => ");
             console.log(data1);
             console.log("[ analysisCost :: 비용분석계산 API 2 ] :: data2 => ");
             console.log(data2);
+            console.log("[ analysisCost :: 비용분석계산 완료 요구사항 키워드 ] :: data3 => ");
+            console.log(data3);
 
             요구사항별_키목록 = data1.버전별_요구사항별_연결된지_지라이슈;
             요구사항전체목록 = data2.requirement;
@@ -686,7 +693,7 @@ function 비용분석계산() {
                                             // 요구사항의 비용 계산을 위한 날짜 카운팅 ****** 수정필요(정책) ******
 
                                             // 요구사항 단가 계산 및 인력 성과 계산 등
-                                            최종비용분석계산(key, 요구사항, 버전, 요구사항키);
+                                            최종비용분석계산(key, 요구사항, 버전, 요구사항키, data3);
                                         });
                                     }
                                 }
@@ -773,12 +780,14 @@ function 날짜계산(요구사항) {
     return {startDate, endDate};
 }
 
-function 최종비용분석계산(key, 요구사항, 버전, 요구사항키) {
+function 최종비용분석계산(key, 요구사항, 버전, 요구사항키, 완료_요구사항_키워드) {
+
+    const 완료_요구사항_키워드SET = new Set(완료_요구사항_키워드);
 
     let startDate, endDate;
 
     if (요구사항.reqStateEntity != null) {
-        if (요구사항.reqStateEntity.c_id === 12) {
+        if (완료_요구사항_키워드SET.has(요구사항.reqStateEntity.c_title)) {
             startDate = new Date(formatDate(요구사항.c_req_start_date));
             endDate = new Date(formatDate(요구사항.c_req_end_date));
 

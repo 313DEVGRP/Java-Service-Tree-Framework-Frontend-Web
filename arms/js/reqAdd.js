@@ -852,13 +852,13 @@ function bindDataEditlTab(ajaxData) {
 	//radio 버튼 - 선택 초기화
 	$("#editview_req_priority label").removeClass("active");
 	$("#editview_req_difficulty label").removeClass("active");
-	$("#editview_req_state_options label").removeClass("active");
+	$("#editview_req_state label").removeClass("active");
 	//radio 버튼 - 상태 초기화
 	$("input[name='editview_req_priority_options']:checked").prop("checked", false);
 	$("input[name='editview_req_difficulty_options']:checked").prop("checked", false);
 	$("input[name='editview_req_state_options']:checked").prop("checked", false);
 
-	//상세보기 - 우선순위 버튼
+	//편집하기 - 우선순위 버튼
 	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");
 	priorityRadioButtons.each(function () {
 		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
@@ -868,7 +868,7 @@ function bindDataEditlTab(ajaxData) {
 			$(this).prop("checked", false);
 		}
 	});
-	//상세보기 - 난이도 버튼
+	//편집하기 - 난이도 버튼
 	let difficultRadioButtons = $("#editview_req_difficulty input[type='radio']");
 	difficultRadioButtons.each(function () {
 		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
@@ -878,7 +878,7 @@ function bindDataEditlTab(ajaxData) {
 			$(this).prop("checked", false);
 		}
 	});
-	//상세보기 - 상태 버튼
+	//편집하기 - 상태 버튼
 	let stateRadioButtons = $("#editview_req_state input[type='radio']");
 	stateRadioButtons.each(function () {
 		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
