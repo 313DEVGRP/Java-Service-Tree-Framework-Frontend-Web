@@ -26,7 +26,9 @@ function dwr_callback(userId, username, message, time) {
             type: 'success',
             showCloseButton: true
         });
-    }else{
+    }
+
+    if (message.indexOf("Server]") >= 0){
         $(".notifications.pull-right").addClass("alert-created");
         const alertDiv = $('<div/>').addClass('alert pull-right');
         const closeButton = $('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×');
