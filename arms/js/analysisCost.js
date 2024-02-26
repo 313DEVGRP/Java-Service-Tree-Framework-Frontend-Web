@@ -96,7 +96,7 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            비용분석계산();
+            비용분석계산버튼();
 
             dashboardColor = dashboardPalette.dashboardPalette01;
 
@@ -579,7 +579,7 @@ function excel_download(인력별_연봉정보) {
     });
 }
 
-function 비용분석계산() {
+function 비용분석계산버튼() {
     $("#cost-analysis-calculation").click(function() {
 
         if(!selectedPdServiceId || !selectedVersionId) {
@@ -788,50 +788,44 @@ function 최종비용분석계산(key, 요구사항, 버전, 요구사항키, �
 
     const 완료_요구사항_키워드SET = new Set(완료_요구사항_키워드);
 
-    let startDate, endDate;
+    let startDate = 요구사항.c_req_start_date
+        ? new Date(formatDate(요구사항.c_req_start_date))
+        : null;
+
+    let endDate = 요구사항.c_req_end_date
+        ? new Date(formatDate(요구사항.c_req_end_date))
+        : new Date(formatDate(new Date()));
 
     if (요구사항.reqStateEntity != null) {
         if (완료_요구사항_키워드SET.has(요구사항.reqStateEntity.c_title)) {
-            startDate = new Date(formatDate(요구사항.c_req_start_date));
-            endDate = new Date(formatDate(요구사항.c_req_end_date));
-
             // 완료된 요구사항만 계산하여 완료성과 측정
             if (startDate && endDate && (startDate <= endDate)) {
                 let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
                 전체담당자목록[key].완료성과 += cost;
             }
-        } else {
-            if (요구사항.c_req_start_date && 요구사항.c_req_end_date) {
-                startDate = new Date(formatDate(요구사항.c_req_start_date));
-                endDate = new Date(formatDate(요구사항.c_req_end_date));
-            }
-            else {
-                startDate = new Date(formatDate(요구사항.c_req_start_date));
-                endDate = new Date(formatDate(new Date()));
-            }
         }
+    }
 
-        if (startDate && endDate && (startDate <= endDate)) {
-            let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
+    if (startDate && endDate && (startDate <= endDate)) {
+        let cost = 담당자별_비용계산(startDate, endDate, 전체담당자목록[key].연봉);
 
-            // 요구사항별 금액 측정 차트 데이터
-            요구사항.요구사항금액 += cost;
+        // 요구사항별 금액 측정 차트 데이터
+        요구사항.요구사항금액 += cost;
 
-            // 인력별 성과 차트 데이터
-            전체담당자목록[key].인력별소모비용 += cost;
+        // 인력별 성과 차트 데이터
+        전체담당자목록[key].인력별소모비용 += cost;
 
-            // 버전별 소모비용 차트 데이터
-            versionListData[버전].버전비용 += cost;
+        // 버전별 소모비용 차트 데이터
+        versionListData[버전].버전비용 += cost;
 
-            // 요구사항 금액별 버블 차트 데이터
-            요구사항키.cost += cost;
+        // 요구사항 금액별 버블 차트 데이터
+        요구사항키.cost += cost;
 
-            // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
-            if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 == null) {
-                버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 = cost;
-            } else {
-                버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 += cost;
-            }
+        // 버전별 소모비용 -> 버전별 인력비용 스택차트로 변경 데이터
+        if (버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 == null) {
+            버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 = cost;
+        } else {
+            버전_요구사항_담당자[버전][요구사항키.c_issue_key][key].버전별담당자소모비용 += cost;
         }
     }
 }
