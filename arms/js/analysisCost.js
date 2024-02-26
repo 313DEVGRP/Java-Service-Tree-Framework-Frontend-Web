@@ -551,27 +551,31 @@ function excel_download(인력별_연봉정보) {
     let fileName = "인력별_연봉정보_템플릿.xlsx";
 
     $("#excel-annual-income-template-download").click(function () {
-        $.ajax({
-            url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + fileName,
-            type: "POST",
-            data: JSON.stringify(인력별_연봉정보),
-            contentType: "application/json",
-            xhrFields: {
-                responseType: 'blob'  // 응답 데이터 타입을 blob으로 설정
-            },
-            statusCode: {
-                200: function (data) {
-                    var url = window.URL.createObjectURL(data);  // blob 데이터로 URL 생성
-                    var a = document.createElement('a');  // 다운로드 링크를 위한 <a> 태그 생성
-                    a.href = url; // url 설정
-                    a.download = fileName; // 파일명 설정
-                    a.style.display = 'none';  // <a> 태그를 브라우저에 보이지 않게 설정
-                    document.body.appendChild(a);  // <a> 태그를 body에 추가
-                    a.click();  // 다운로드 링크 클릭
-                    document.body.removeChild(a);  // <a> 태그 제거
+        if (Object.keys(인력별_연봉정보).length === 0) {
+            alert("다운로드할 인력 정보가 없습니다.");
+        } else {
+            $.ajax({
+                url: "/auth-user/api/arms/analysis/cost/excel-download.do?excelFileName=" + fileName,
+                type: "POST",
+                data: JSON.stringify(인력별_연봉정보),
+                contentType: "application/json",
+                xhrFields: {
+                    responseType: 'blob'  // 응답 데이터 타입을 blob으로 설정
+                },
+                statusCode: {
+                    200: function (data) {
+                        var url = window.URL.createObjectURL(data);  // blob 데이터로 URL 생성
+                        var a = document.createElement('a');  // 다운로드 링크를 위한 <a> 태그 생성
+                        a.href = url; // url 설정
+                        a.download = fileName; // 파일명 설정
+                        a.style.display = 'none';  // <a> 태그를 브라우저에 보이지 않게 설정
+                        document.body.appendChild(a);  // <a> 태그를 body에 추가
+                        a.click();  // 다운로드 링크 클릭
+                        document.body.removeChild(a);  // <a> 태그 제거
+                    }
                 }
-            }
-        })
+            })
+        }
     });
 }
 
