@@ -231,13 +231,37 @@ function eventListenersActivator() {
 	});
 }
 
+//////////////////////
+// 페이지 누를때 동작
+//////////////////////
+function search(search_section, page) {
+	var search_string = $("#search-input").val();
+	var pageSize = 10;
+
+	$.ajax({
+		url: "/engine-search-api/engine/jira/dashboard/search/"+search_section,
+		type: "GET",
+		data: { "search_string": search_string, "page" : page, "size": pageSize },
+		dataType: "json",
+		success: function(result) {
+			console.log("[searchEngine :: search_start] :: jiraissue_search_results => ");
+			console.log(result);
+			let showPage = page+1; // 보여주는 페이지
+			SearchApiModule.setSearchResult(search_section,result, showPage, pageSize);
+			let pageStart = Math.floor(page / 10) * 10 + 1;
+			SearchApiModule.updateButtons(search_section, pageStart);
+		}
+	});
+}
+
+
 function search_start(search_string) {
 	console.log("[searchEngine :: search_start] :: search_string => " + search_string);
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search",
+		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue",
 		type: "GET",
-		data: { "search_string": search_string, "page" : 0, "size": 1000 },
+		data: { "search_string": search_string, "page" : 0, "size": 10 },
 		dataType: "json",
 		success: function(result) {
 			console.log("[searchEngine :: search_start] :: jiraissue_search_results => ");
@@ -251,9 +275,9 @@ function search_start(search_string) {
 	});
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/fluentd",
+		url: "/engine-search-api/engine/jira/dashboard/search/log",
 		type: "GET",
-		data: { "search_string": search_string, "page" : 0, "size": 1000 },
+		data: { "search_string": search_string, "page" : 0, "size": 10 },
 		dataType: "json",
 		success: function(result) {
 			console.log("[searchEngine :: search_start] :: fluentd_search_results => ");
@@ -304,5 +328,9 @@ function checkQueryStringOnUrl() {
 
 function changePage(search_section,page) {
 	console.log("[searchEngine :: chagne] :: search_section -> " +search_section + ", page -> " +page);
-	SearchApiModule.changePage(search_section,page);
+	let requestPage = page-1 ;
+	if(requestPage < 0) {
+		requestPage = 0;
+	}
+	search(search_section, requestPage);
 }

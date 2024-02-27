@@ -5,18 +5,20 @@ var SearchApiModule = (function () {
         "fluentd" : null
     };
 
-    let items_per_page=10; //페이지별 아이템 갯수. 기본값 10으로 설정
-
-    // 검색한 자료 세팅
-    var setItemsPerPage = function (items_per_page) {
-        items_per_page = +items_per_page;
-        return items_per_page;
+    // 검색결과 총수
+    var hitsTotal = {
+        "jiraissue" : null,
+        "fluentd" : null
     };
 
     var setSearchResult = function(search_section, search_results, current_page, items_per_Page) {
         if(search_section) {
-            searchResult[search_section] = search_results;
-            paginateAndDisplayData(search_section, current_page,items_per_Page);
+            searchResult[search_section] = search_results["검색결과_목록"];
+            hitsTotal[search_section] = search_results["결과_총수"];
+
+            displayResults(search_section, getSearchResult(search_section));
+            displayPagination(search_section, current_page);
+
         } else {
             console.log("[searchApiModule :: setSearchResult] ::: search_section 없습니다.");
         }
@@ -31,30 +33,16 @@ var SearchApiModule = (function () {
         console.log("[searchApiModule :: getSearchResultDetail] :: search_section -> " + search_section + ", order ->" + order);
         return searchResult[search_section][order];
     };
-    var paginateAndDisplayData = function (search_section, currentPage, itemsPerPage) {
-        const data = getSearchResult(search_section);
-        let items_per_page = setItemsPerPage(itemsPerPage);
-        // 현재 페이지에서 보여줄 데이터 추출
-        const startIndex = (currentPage - 1) * items_per_page;
-        const endIndex = startIndex + items_per_page;
-        const currentPageData = data.slice(startIndex, endIndex);
-        console.log("startIndex : " + startIndex);  console.log("endIndex : " + endIndex);
-        console.log(currentPageData);
-        // 페이징된 데이터를 화면에 표시
-        displayData(search_section, currentPageData, currentPage, items_per_page);
 
-        const totalPage = Math.ceil(data.length / items_per_page);
+    var displayPagination = function (search_section, currentPage) {
+
+        const totalPage = hitsTotal[search_section] / 10;
         const countPageBlock = 10; // 페이지블록 수 (한번에 보여줄 페이지 수)
-
         let startPage = ((currentPage-1) / 10) * 10 + 1;
         let endPage = startPage + countPageBlock -1;
 
-        if (totalPage < currentPage) {
-            currentPage = totalPage;
-        }
-        if (endPage > totalPage) {
-            endPage = totalPage;
-        }
+        if (totalPage < currentPage) { currentPage = totalPage; }
+        if (endPage > totalPage) {     endPage = totalPage;     }
 
         let pagination = '';
         pagination += '<ul class="pagination">';
@@ -67,12 +55,12 @@ var SearchApiModule = (function () {
 
         let pagination_spot = '#'+search_section+'_section'+' .pagination-div';
         $(pagination_spot).html(pagination);
-    };
+    }
 
-    var displayData = function (search_section, currentPageData, startIndex, endIndex) {
-        console.log("[searchApiModule :: displayData] :: search_section -> " + search_section +", startIndex-> " + startIndex);
+    var displayResults = function (search_section, results) {
+        console.log("[searchApiModule :: displayData] :: search_section -> " + search_section);
         // 데이터를 화면에 표시하는 코드 작성
-        let search_result_arr = currentPageData;
+        let search_result_arr = results;
         let today = new Date();
         let no_search_result =
             `<section class="search-result">
@@ -108,10 +96,9 @@ var SearchApiModule = (function () {
             console.log("[searchApiModule :: appendSearchResultSections] :: search_result_arr길이 =>" +search_result_arr.length);
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
-                    let 순서 = startIndex+index;
                     $("#jiraissue_section .search_result_group .search_result_items").append(
                         `<section class="search-result">
-                            <div class="search_head" id="hits_order_jiraissue_${순서}" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+                            <div class="search_head" id="hits_order_jiraissue_${index}" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
                                         <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
@@ -151,10 +138,9 @@ var SearchApiModule = (function () {
             console.log(search_result_arr);
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
-                    let 순서 = startIndex+index;
                     $("#log_section .search_result_group .search_result_items").append(
                         `<section class="search-result">
-                            <div class="search_head" id="hits_order_log_${순서}" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
+                            <div class="search_head" id="hits_order_log_${index}" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
                                         <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
@@ -185,90 +171,51 @@ var SearchApiModule = (function () {
                 $("#log_section .search_result_group .search_result_items").append(no_search_result);
             }
         }
+    }
 
-    };
 
-    var changePage = function (search_section, page) { // 11페이지가 나오면.
-        const current_page = page;
-
-        const startIndex = (current_page - 1) * items_per_page;
-        const endIndex = startIndex + items_per_page;
-
-        console.log("[searchApiModule :: changePage] :: startIndex -> " + startIndex+ ", endIndex -> " +endIndex);
-        const currentPageData = getSearchResult(search_section).slice(startIndex, endIndex);
-        console.log("[searchApiModule :: changePage] :: currentPageData => ");
-        console.log(currentPageData);
-        displayData(search_section, currentPageData, startIndex, endIndex);
-        updateButtons(search_section, current_page);
-    };
-
-    var updateButtons = function(search_section, current_page) {
-        console.log("updateButtons :: current_page => " + current_page);
-        const total_page = Math.ceil(getSearchResult(search_section).length / items_per_page);
+    var updateButtons = function (search_section, current_page) {
+        console.log("[searchApiModule :: updateButtons] :: current_page => " + current_page);
+        let total_page = Math.floor(hitsTotal[search_section] / 10); //총 페이지
         const $pagination = $('#'+search_section+'_section .pagination-div .pagination');
         const $prevButton = $('#'+search_section+'_section .pagination-div .pagination .prev');
         const $nextButton = $('#'+search_section+'_section .pagination-div .pagination .next');
-        const countPageBlock = 10;
-
+        let countPageBlock = 10;
         let startPage = ((current_page-1) / 10) * 10 + 1;
-        let endPage = startPage + countPageBlock -1;
+        let endPage = Math.min(startPage + 9, total_page);
+        // let endPage = startPage + countPageBlock -1;
 
         if (total_page < current_page) {
             current_page = total_page;
         }
-        if (endPage > total_page) {
+
+        if (endPage >= total_page) {
             endPage = total_page;
         }
 
-        // 만약 current_page가 11, 21, 31, 41, 51 이면 해당 페이지를 누를 당시, prev ~ next가 갱신(next를 누른 것) - 첫번째 블록이 아니면서 첫째페이지
-        if( ((current_page % 10) === 1 && (current_page / 10) !== 0)) {
-            let pagination = '';
-            pagination += '<ul class="pagination">';
-            pagination += `<li class="prev ${current_page === 1 ? 'disabled' : ''}"><a href="#" onclick="changePage(\'${search_section}\',${startPage - 1})">Prev</a></li>`;
-            for (let i = current_page; i <= endPage; i++) {
-                pagination += `<li class="${current_page === i ? 'active' : ''} page-num-${i}"><a href="#" onclick="changePage(\'${search_section}\',${i})">${i}</a></li>`;
-            }
-            pagination += `<li class="next ${current_page === endPage ? 'disabled' : ''}"><a href="#" onclick="changePage(\'${search_section}\',${endPage + 1})">Next</a></li>`;
-            pagination += '</ul>';
-            let pagination_spot = '#'+search_section+'_section'+' .pagination-div';
-            console.log(pagination);
-            $(pagination_spot).html("");
-            $(pagination_spot).html(pagination);
+        let pagination = '<ul class="pagination">';
+        pagination += `<li class="prev ${current_page === 1 ? 'disabled' : ''}"><a href="#" onclick="changePage('${search_section}', ${Math.max(startPage - 10, 1)})">Prev</a></li>`;
+        for (let i = startPage; i <= endPage; i++) {
+            pagination += `<li class="${current_page === i ? 'active' : ''} page-num-${i}"><a href="#" onclick="changePage('${search_section}', ${i})">${i}</a></li>`;
         }
+        pagination += `<li class="next ${current_page === total_page ? 'disabled' : ''}"><a href="#" onclick="changePage('${search_section}', ${Math.min(endPage + 1, total_page)})">Next</a></li>`;
+        pagination += '</ul>';
 
-        // 만약 current_page가 10, 20, 30, 40, 50 이면 해당 페이지를 누를 당시, prev ~ next가 갱신(prev를 누르거나 해당 블록의 endpage를 누른것) - 첫번재 블록이 아니면서 마지막페이지 or next 버튼
-        if ((current_page % 10) === 0) {
-            let 시작지점 = (current_page < 10 ? 1 : current_page - 9);
-            let pagination = '';
-            pagination += '<ul class="pagination">';
-            pagination += `<li class="prev ${current_page === 1 ? 'disabled' : ''}"><a href="#" onclick="changePage(\'${search_section}\',${startPage - 1})">Prev</a></li>`;
-            for (let i = 시작지점; i <= current_page; i++) {
-                pagination += `<li class="${current_page === i ? 'active' : ''} page-num-${i}"><a href="#" onclick="changePage(\'${search_section}\',${i})">${i}</a></li>`;
-            }
-            pagination += `<li class="next ${current_page === endPage ? 'disabled' : ''}"><a href="#" onclick="changePage(\'${search_section}\',${endPage + 1})">Next</a></li>`;
-            pagination += '</ul>';
-            let pagination_spot = '#'+search_section+'_section'+' .pagination-div';
-            $(pagination_spot).html("");
-            $(pagination_spot).html(pagination);
-        }
+        let pagination_spot = '#' + search_section + '_section' + ' .pagination-div';
+        $(pagination_spot).html(pagination);
 
-        if (startPage === 0) {
-            $prevButton.addClass('disabled');
-        } else {
-            $prevButton.removeClass('disabled');
-        }
+        $prevButton.toggleClass('disabled', startPage === 1);
+        $nextButton.toggleClass('disabled', endPage === total_page);
 
-        if (current_page === total_page) {
-            $nextButton.addClass('disabled');
-        } else {
-            $nextButton.removeClass('disabled');
-        }
+        $prevButton.toggleClass('disabled', startPage === 1);
+        $nextButton.toggleClass('disabled', endPage === total_page);
 
         // 이전에 선택된 페이지 요소에서 'active' 클래스 제거
         $pagination.find('.active').removeClass('active');
         // 선택된 페이지 번호에 해당하는 요소에 'active' 클래스 추가
         $pagination.find('.page-num-' + current_page).addClass('active');
     }
+
     var mapDataToModal = function (search_section, order) {
         const targetData = SearchApiModule.getSearchResultDetail(search_section,order);
         console.log("[searchApiModule :: mapDataToModal] :: targetData => "); console.log(targetData);
@@ -306,11 +253,9 @@ var SearchApiModule = (function () {
     };
 
     return {
-        setSearchResult,
-        getSearchResult,
+        setSearchResult, getSearchResult,
+        updateButtons,
         getSearchResultDetail,
-        paginateAndDisplayData,
-        displayData,
         changePage,
         mapDataToModal
     }
