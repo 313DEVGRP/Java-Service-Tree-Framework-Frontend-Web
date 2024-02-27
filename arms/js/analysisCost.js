@@ -740,6 +740,18 @@ function 비용분석계산버튼() {
         });
 
         // 요구사항별 수익현황 차트
+        var income_status_chart = document.getElementById('income_status_chart');
+        if (!income_status_chart.hasChildNodes()) {
+            income_status_chart.style.display = 'flex';
+            income_status_chart.style.justifyContent = 'center';
+            income_status_chart.style.alignItems = 'center';
+            income_status_chart.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
+        }else{
+            var chartInstance = echarts.getInstanceByDom(income_status_chart);
+            chartInstance.dispose();
+            reqCostStatusChart();
+
+        }
         $("#income_status_chart").height("620px");
 
     });
