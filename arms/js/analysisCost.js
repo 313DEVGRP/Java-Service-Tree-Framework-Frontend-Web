@@ -338,7 +338,7 @@ function file_upload_setting() {
                                                     name="files[]"
                                                     multiple="" />
                                         </span>
-                <button
+                <!-- <button
                         type="submit"
                         class="btn btn-inverse btn-sm start">
                     <i class="fa fa-upload"></i>
@@ -349,13 +349,13 @@ function file_upload_setting() {
                         class="btn btn-inverse btn-sm cancel">
                     <i class="fa fa-ban"></i>
                     <span>Cancel upload</span>
-                </button>
+                </button> -->
             </div>
             <div class="fileupload-loading">
                 <i class="fa fa-spin fa-spinner"></i>
             </div>
             <!-- The table listing the files available for upload/download -->
-            <table
+            <!--<table
                     role="presentation"
                     class="table table-striped"
                     style="margin-bottom: 5px">
@@ -363,7 +363,7 @@ function file_upload_setting() {
                         class="files"
                         data-toggle="modal-gallery"
                         data-target="#modal-gallery"></tbody>
-            </table>
+            </table>-->
         </form>
     `);
 
@@ -374,11 +374,34 @@ function file_upload_setting() {
         //xhrFields: {withCredentials: true},
         autoUpload: true,
         url: "/auth-user/api/arms/analysis/cost/excel-upload.do",
-        dropZone: $("#dropzone")
+        dropZone: $("#dropzone"),
+        limitMultiFileUploads: 1,
+        paramName: 'excelFile',
+        // Callback for successful uploads:
+        fail: function (e, data) {
+            console.log("--------------------------");
+            console.log(data);
+
+            jError(data.jqXHR.responseJSON.error.message);
+        },
+        done: function (e, data) {
+            console.log("--------------------------");
+            console.log(data);
+            if (data.textStatus == "success") {
+                jNotify("업로드한 연봉 정보가 반영되었습니다.");
+            } else {
+                jError("데이터 반영 중 에러가 발생했습니다. 엑셀 파일을 확인해주세요");
+            }
+
+            //manpowerInput(data.result); //데이터 테이블 재 로드
+            manpowerInput(전체담당자목록);
+            $("#cost-analysis-calculation").click(); // 비용 계산 버튼 클릭
+
+        }
     });
 
 
-    $("#fileupload").bind("fileuploadsubmit", function (e, data) {
+    /*$("#fileupload").bind("fileuploadsubmit", function (e, data) {
         // The example input, doesn't have to be part of the upload form:
         var input = $("#fileIdlink");
         data.formData = { pdservice_link: input.val() };
@@ -387,7 +410,7 @@ function file_upload_setting() {
             input.focus();
             return false;
         }
-    });
+    });*/
 }
 
 // 버전 비용 및 인력 비용 입력
@@ -503,7 +526,7 @@ function dataTableClick(tempDataTable, selectedData) {}
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수
 function dataTableCallBack(settings, json) {
-    $("#fileIdlink").val(selectedPdServiceId);
+    /*$("#fileIdlink").val(selectedPdServiceId);
 
     //파일 리스트 초기화
     $("table tbody.files").empty();
@@ -520,7 +543,7 @@ function dataTableCallBack(settings, json) {
     }).done(function (result) {
         $(this).fileupload("option", "done").call(this, null, { result: result });
         $(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리
-    });
+    });*/
 }
 
 function dataTableDrawCallback(tableInfo) {
