@@ -728,6 +728,7 @@ function 비용분석계산버튼() {
                 }
             });
 
+            clearChart('circularPacking');
             $("#circularPacking").height("620px");
             drawCircularPacking("circularPacking",pdServiceName, 요구사항별_키목록);
 
@@ -739,8 +740,20 @@ function 비용분석계산버튼() {
         });
 
         // 요구사항별 수익현황 차트
+        var income_status_chart = document.getElementById('income_status_chart');
+        if (!income_status_chart.hasChildNodes()) {
+            income_status_chart.style.display = 'flex';
+            income_status_chart.style.justifyContent = 'center';
+            income_status_chart.style.alignItems = 'center';
+            income_status_chart.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
+        }else{
+            var chartInstance = echarts.getInstanceByDom(income_status_chart);
+            chartInstance.dispose();
+            reqCostStatusChart();
+
+        }
         $("#income_status_chart").height("620px");
-        reqCostStatusChart();
+
     });
 }
 
@@ -1377,8 +1390,9 @@ function 요구사항_일자별_소모비용(요구사항_시작일,요구사항
 function reqCostStatusChart(data){
     var chartDom = document.getElementById('income_status_chart');
 
-    let 요구사항_정보;
     if(data != null && data.versionId !== undefined){
+
+        let 요구사항_정보;
         요구사항_정보 = 요구사항전체목록[data.reqId];
         console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: 선택한 요구사항 정보 -> ");
         console.log(요구사항_정보);
@@ -1606,7 +1620,7 @@ function drawReqCostStatusChart(chartDom,요구사항_정보, 일급,data,요구
     };
 
     if (option && typeof option === "object") {
-        myChart.setOption(option, true);
+        myChart.setOption(option);
     }
     window.addEventListener("resize", myChart.resize);
 }

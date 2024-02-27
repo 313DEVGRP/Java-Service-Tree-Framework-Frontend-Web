@@ -318,7 +318,8 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
             ]
         };
 
-        option && myChart.setOption(option, true);
+        option && myChart.setOption(option);
+        myChart.off('click');
         myChart.on('click', { seriesIndex: 0 }, function (params) {
             if(params.data.depth == 1){
                 drillDown(params.data.id);
@@ -374,6 +375,9 @@ function drawCircularPacking(target, psServiceName,rawData, colorArr) {
                 displayRoot = displayRoot.descendants().find(function (node) {
                     return node.data.id === targetNodeId;
                 });
+            }
+            if (!displayRoot) {
+                    return;
             }
             // A trick to prevent d3-hierarchy from visiting parents in this algorithm.
             displayRoot.parent = null;
