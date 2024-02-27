@@ -1318,11 +1318,12 @@ function 요구사항_하위이슈_일자별_소모비용(요구사항_시작일
     let resultData = [일자별_소모비용[0]];
 
     for (let i = 1; i < 일자별_소모비용.length; i++) {
-        let 시작일 = new Date(resultData[0].updated);
+        //let 시작일 = new Date(resultData[0].updated);
+        let 이전_데이터 = new Date(일자별_소모비용[i - 1].updated);
         let 현재_데이터 = new Date(일자별_소모비용[i].updated);
 
         // 이전 업데이트 일자와의 차이를 일수로 계산
-        let 일자_차이 = (현재_데이터.getTime() - 시작일.getTime()) / (1000 * 60 * 60 * 24);
+        let 일자_차이 = (현재_데이터.getTime() - 이전_데이터.getTime()) / (1000 * 60 * 60 * 24);
 
         // 일자 차이와 일급을 곱하여 일급을 다시 계산
         // 즉 업데이트 일까지의 소모비용을 계산 한 것
@@ -1377,12 +1378,12 @@ function reqCostStatusChart(data){
     var chartDom = document.getElementById('income_status_chart');
 
     let 요구사항_정보;
-    if(data != null){
+    if(data != null && data.versionId !== undefined){
         요구사항_정보 = 요구사항전체목록[data.reqId];
         console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: 선택한 요구사항 정보 -> ");
         console.log(요구사항_정보);
         // 요구사항이 생성된 일자를 시작일로 설정
-        let 요구사항_시작일 = new Date(요구사항_정보.c_req_create_date); // c_req_start_date
+        let 요구사항_시작일 = new Date(요구사항_정보.c_req_start_date); // c_req_start_date
         let 요구사항_계획일 = 요구사항_정보.c_req_plan_time;
         let 요구사항_목표_종료일 ;
         let 요구사항_종료일 = new Date(요구사항_정보.c_req_end_date);
