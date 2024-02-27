@@ -1422,7 +1422,7 @@ function reqCostStatusChart(data){
                     } else {// 참여 하는 사람 중 하나라도 하위 이슈 생성하여 작업하는 경우
                         일자별_소모비용_데이터 = 요구사항_하위이슈_일자별_소모비용(요구사항_시작일, 일급, 요구사항_이슈키별_업데이트_데이터);
                     }
-                    drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_목표_종료일,일자별_소모비용_데이터);
+                    drawReqCostStatusChart(chartDom,요구사항_정보,일급,data,요구사항_목표_종료일,일자별_소모비용_데이터);
                 }
             }
         });
@@ -1434,10 +1434,10 @@ function reqCostStatusChart(data){
     }
 }
 
-function drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_목표_종료일,일자별_소모비용_데이터){
+function drawReqCostStatusChart(chartDom,요구사항_정보, 일급,data,요구사항_목표_종료일,일자별_소모비용_데이터){
 
-    var 투자비용 = data.reqCost;
-    요구사항_목표_종료일 = 요구사항_목표_종료일.toISOString().substring(0, 10)
+    var 예상비용 = 일급 * 요구사항_정보.c_req_plan_time;
+    요구사항_목표_종료일 = 요구사항_목표_종료일.toISOString().substring(0, 10);
 
     let dates = 일자별_소모비용_데이터.map(item => item.updated);
     dates.push(요구사항_목표_종료일);
@@ -1520,12 +1520,12 @@ function drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_�
                         fontSize: 15, // label의 폰트 크기 설정
                         color: '#FFFFFF',
                         formatter: function(){
-                            return '예상 비용: '+투자비용.toLocaleString();
+                            return '예상 비용: '+예상비용.toLocaleString();
                         }
                     },
                     data: [
                         {
-                            yAxis: data.reqCost,
+                            yAxis: 예상비용,
                              name: '예상 비용' // line label
                         }
                     ]
