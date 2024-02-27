@@ -729,7 +729,6 @@ function 비용분석계산버튼() {
             });
 
             $("#circularPacking").height("620px");
-
             drawCircularPacking("circularPacking",pdServiceName, 요구사항별_키목록);
 
             $("#version-stack-container").height("500px");
@@ -741,7 +740,7 @@ function 비용분석계산버튼() {
 
         // 요구사항별 수익현황 차트
         $("#income_status_chart").height("620px");
-        incomeStatusChart();
+        reqCostStatusChart();
     });
 }
 
@@ -1255,26 +1254,228 @@ function 버전소모비용스택차트(){
 /////////////////////////////////////////////////////////
 // 요구사항 상세 차트
 /////////////////////////////////////////////////////////
-function incomeStatusChart(){
+function 요구사항_담당자_조회(요구사항_정보) {
+    let 버전 = 요구사항_정보.versionId;
+    let 요구사항키_목록 = 요구사항_정보.issueKey;
+    let result = {};
+
+    if (버전_요구사항_담당자.hasOwnProperty(버전)) {
+        요구사항키_목록.forEach(key => {
+            if (버전_요구사항_담당자[버전].hasOwnProperty(key)) {
+                result[key] = 버전_요구사항_담당자[버전][key];
+            }
+        });
+    }
+
+    let 요구사항_담당자_목록 = Object.keys(result).flatMap(key => Object.keys(result[key]));
+
+    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: 선택한 요구사항 참여 인원 정보 -> ");
+    console.log(요구사항_담당자_목록);
+
+    let 일급_합산 = 0;
+
+    요구사항_담당자_목록.forEach(key => {
+        if (전체담당자목록.hasOwnProperty(key)) {
+            let 연봉 = 전체담당자목록[key].연봉;
+            let 일급데이터 = Math.round((연봉 / 365)) * 10000;
+            일급_합산 += 일급데이터;
+        }
+    });
+
+    return 일급_합산;
+}
+
+function 요구사항_하위이슈_일자별_소모비용(요구사항_시작일, 일급, 요구사항_이슈키별_업데이트_데이터){
+    let 일자별_소모비용 = [];
+    let assigneeList = new Set();
+
+    for (let key in 요구사항_이슈키별_업데이트_데이터) {
+        요구사항_이슈키별_업데이트_데이터[key].forEach(data => {
+            if (data.assignee !== null) {
+                assigneeList.add(data.assignee);
+                let updated = new Date(data.updated).toISOString().split('T')[0];
+                일자별_소모비용.push({
+                    updated: updated,
+                    일급: 일급
+                });
+            }
+        });
+    }
+
+    요구사항_시작일 = new Date(요구사항_시작일).toISOString().split('T')[0];
+
+    // Set을 사용하여 중복된 assignee를 제거하고 요구사항 시작일에 대한 데이터가 없으면 추가.
+    if (!일자별_소모비용.some(data => data.updated === 요구사항_시작일)) {
+        일자별_소모비용.push({
+            updated: 요구사항_시작일,
+            일급: 0
+        });
+    }
+
+    // 'updated' 필드를 기준으로 오름차순 정렬
+    일자별_소모비용.sort((a, b) => new Date(a.updated) - new Date(b.updated));
+
+    let resultData = [일자별_소모비용[0]];
+
+    for (let i = 1; i < 일자별_소모비용.length; i++) {
+        let 시작일 = new Date(resultData[0].updated);
+        let 현재_데이터 = new Date(일자별_소모비용[i].updated);
+
+        // 이전 업데이트 일자와의 차이를 일수로 계산
+        let 일자_차이 = (현재_데이터.getTime() - 시작일.getTime()) / (1000 * 60 * 60 * 24);
+
+        // 일자 차이와 일급을 곱하여 일급을 다시 계산
+        // 즉 업데이트 일까지의 소모비용을 계산 한 것
+        일자별_소모비용[i].일급 = 일자_차이 * 일자별_소모비용[i].일급;
+
+        // 중복된 날짜가 아닐 경우에만 결과 데이터에 추가
+        if (resultData[resultData.length - 1].updated !== 일자별_소모비용[i].updated) {
+            resultData.push(일자별_소모비용[i]);
+        }
+    }
+//    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: 선택한 요구사항항 일자벌 소모 비용 -> ");
+//    console.log(resultData);
+
+    return resultData;
+}
+
+function 요구사항_일자별_소모비용(요구사항_시작일,요구사항_목표_종료일, 일급,요구사항_이슈키별_업데이트_데이터){
+    // 요구사항_종료일(DB에 저장된 요구사항 종료 시점) 이 없거나
+    // 요구사항_이슈키별_업데이트_데이터에서 레졸루션 데이트(es에서 수집한 데이터)가 없으면 오늘 날짜까지 만듬 있으면 해당중 가장 큰날까지 만듬
+
+    let 일자별_소모비용 = [];
+    let 오늘 = new Date();
+    console.log(요구사항_시작일);
+    console.log(요구사항_목표_종료일);
+    console.log(오늘);
+
+    if(요구사항_목표_종료일 >= 오늘){
+        for (let d = 요구사항_시작일; d <= 오늘; d.setDate(d.getDate() + 1)) {
+            let dateString = d.toISOString().split('T')[0];
+                일자별_소모비용.push({
+                    updated: dateString,
+                    일급: 일급
+                });
+        }
+    }else{
+        for (let d = 요구사항_시작일; d <= 요구사항_목표_종료일; d.setDate(d.getDate() + 1)) {
+                let dateString = d.toISOString().split('T')[0];
+                    일자별_소모비용.push({
+                        updated: dateString,
+                        일급: 일급
+                    });
+            }
+    }
+
+//    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: 일자별 소모 비용 -> ");
+//    console.log(일자별_소모비용);
+
+    return 일자별_소모비용;
+}
+
+function reqCostStatusChart(data){
     var chartDom = document.getElementById('income_status_chart');
+
+    let 요구사항_정보;
+    if(data != null){
+        요구사항_정보 = 요구사항전체목록[data.reqId];
+        console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: 선택한 요구사항 정보 -> ");
+        console.log(요구사항_정보);
+        // 요구사항이 생성된 일자를 시작일로 설정
+        let 요구사항_시작일 = new Date(요구사항_정보.c_req_create_date); // c_req_start_date
+        let 요구사항_계획일 = 요구사항_정보.c_req_plan_time;
+        let 요구사항_목표_종료일 ;
+        let 요구사항_종료일 = new Date(요구사항_정보.c_req_end_date);
+
+        if(요구사항_계획일 == null){ // 요구사항 계획일이 없으면 버전 종료일로 처리
+            요구사항_목표_종료일 = new Date(versionListData[data.versionId].c_pds_version_end_date);
+        }else{
+            let 임시데이터 = new Date(요구사항_시작일.getTime());
+            임시데이터.setDate(임시데이터.getDate() + 요구사항_계획일);
+            요구사항_목표_종료일 = 임시데이터;
+        }
+
+        const url = new UrlBuilder()
+            .setBaseUrl('/auth-user/api/arms/analysis/cost/req-updated-list')
+            .addQueryParam('issueList', data.issueKey)
+            .build();
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (apiResponse) {
+                    console.log(" [ analysisCost :: 요구사항별_소모비용_차트 :: data -> ");
+                    console.log(apiResponse.body);
+                    let 요구사항_이슈키별_업데이트_데이터 = apiResponse.body;
+
+                    let allIsReqTrue = Object.values(요구사항_이슈키별_업데이트_데이터).flat().every(item => item.isReq === true);
+                    let 일급 =  요구사항_담당자_조회(data);
+                    let 일자별_소모비용_데이터;
+
+                    if (allIsReqTrue) {// 모든 사람이 요구사항을 직접 처리 하는 경우
+                        일자별_소모비용_데이터 = 요구사항_일자별_소모비용(요구사항_시작일, 요구사항_목표_종료일, 일급,요구사항_이슈키별_업데이트_데이터);
+
+                    } else {// 참여 하는 사람 중 하나라도 하위 이슈 생성하여 작업하는 경우
+                        일자별_소모비용_데이터 = 요구사항_하위이슈_일자별_소모비용(요구사항_시작일, 일급, 요구사항_이슈키별_업데이트_데이터);
+                    }
+                    drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_목표_종료일,일자별_소모비용_데이터);
+                }
+            }
+        });
+    }else{
+        chartDom.style.display = 'flex';
+        chartDom.style.justifyContent = 'center';
+        chartDom.style.alignItems = 'center';
+        chartDom.innerHTML = '<p>좌측 요구사항을 선택해주세요.</p>';
+    }
+}
+
+function drawReqCostStatusChart(chartDom,요구사항_정보,data,요구사항_목표_종료일,일자별_소모비용_데이터){
+
+    var 투자비용 = data.reqCost;
+    요구사항_목표_종료일 = 요구사항_목표_종료일.toISOString().substring(0, 10)
+
+    let dates = 일자별_소모비용_데이터.map(item => item.updated);
+    dates.push(요구사항_목표_종료일);
+
+    let costData = 일자별_소모비용_데이터.map(item => item.일급);
+
+    let accumulatedData = 일자별_소모비용_데이터.reduce((acc, item) => {
+        let accumulatedCost = (acc.length > 0 ? acc[acc.length - 1] : 0) + item.일급;
+        return [...acc, accumulatedCost];
+    }, []);
+
+    accumulatedData.unshift(0);
+
+    let 누적합 = costData.map((num, idx) => num + (accumulatedData[idx] || 0));
+
     var myChart = echarts.init(chartDom, null, {
         renderer: "canvas",
         useDirtyRect: false
     });
     var option;
-
     option = {
+        title: {
+            text: 요구사항_정보.c_title,
+            left: 'center',
+            textStyle: {
+                fontSize: 12,
+                color: '#FFFFFF'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
         xAxis: {
             type: 'category',
-            data: [
-                '2024-01-01',
-                '2024-01-11',
-                '2024-01-12',
-                '2024-01-17',
-                '2024-01-23',
-                '2024-02-12',
-                '2024-02-11'
-            ],
+            data: dates,
             axisLabel: {
                 color: '#FFFFFF'
             },
@@ -1287,74 +1488,110 @@ function incomeStatusChart(){
             },
             scale: true,
         },
-        legend: {
-            data: ['예상', '소모 비용', '투자비용'] ,
-            textStyle: {
-                color: '#FFFFFF' // 범례 텍스트 색상 변경
-            }
-        },
         series: [
             {
-                data: [0, 50, 100, 150, 200, 250, 300],
+                name: '누적 소모 비용',
                 type: 'line',
-                name: '예상', // 첫 번째 선에 대한 라벨
                 lineStyle: {
-                    type: 'dashed' // 선의 스타일을 점선으로 변경
+                    color: 'green',
+                    type: 'dashed',
+                    width: 3
+                },
+                itemStyle: {
+                    color: 'green'
+                },
+                data: 누적합
+            },
+            {
+                type: 'line',
+                label: {
+                    show: true,
+                    position: 'top'
                 },
                 markLine: {
                     lineStyle: {
-                        color: 'red', // line color
+                        color: '#5470c6', // line color
                         type: 'dashed', // line style
-                        width: 3 // line width
+                        width: 2 // line width
                     },
                     label: {
                         position: 'middle', // label이 markLine의 중간에 위치하도록 설정
-                        formatter: '투자 비용', // label의 텍스트 설정
+                        formatter: '예상 비용', // label의 텍스트 설정
                         fontSize: 15, // label의 폰트 크기 설정
-                        color: '#FFFFFF'
+                        color: '#FFFFFF',
+                        formatter: function(){
+                            return '예상 비용: '+투자비용.toLocaleString();
+                        }
                     },
                     data: [
                         {
-                            yAxis: 300,
-                            name: '투자비용' // line label
+                            yAxis: data.reqCost,
+                             name: '예상 비용' // line label
                         }
                     ]
                 }
             },
             {
-                data: [0, 100, 120, 120, 280, 320, 320],
                 type: 'line',
-                name: '소모 비용',
+                label: {
+                    show: true,
+                    position: 'top'
+                },
                 markLine: {
                     lineStyle: {
-                        color: 'red', // line color
+                        color: '#5470c6', // line color
                         type: 'dashed', // line style
-                        width: 3 // line width
+                        width: 2 // line width
                     },
                     label: {
                         position: 'middle', // label이 markLine의 중간에 위치하도록 설정
                         formatter: '요구사항 기한', // label의 텍스트 설정
                         fontSize: 15, // label의 폰트 크기 설정
-                        color: '#FFFFFF'
+                        color: '#FFFFFF',
+                        formatter: function(){
+                            return '요구사항 기한: '+ 요구사항_목표_종료일;
+                        }
                     },
                     data: [
                         {
-                            xAxis: 6,
-                            name: '투자비용' // line label
+                            xAxis: 요구사항_목표_종료일
                         }
                     ]
                 }
             },
             {
-                type: "candlestick",
-                data: [
-                    [120, 134, 110, 138],
-                    [138, 144, 150, 178],
-                    [120, 134, 110, 138],
-                    [120, 134, 110, 138],
-                    [120, 134, 110, 138],
-                    [120, 134, 110, 138]
-                ],
+                name: '누적 소모 비용',
+                type: 'bar',
+                stack: 'Total',
+                silent: true,
+                    itemStyle: {
+                        borderColor: 'transparent',
+                        color: 'transparent'
+                    },
+                    tooltip :{
+                        show:false
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            borderColor: 'transparent',
+                            color: 'transparent'
+                        }
+                    },
+                    data: accumulatedData  // 누적값
+                },
+            {
+                name: '소모 비용',
+                type: 'bar',
+                stack: 'Total',
+                label: {
+                    show: true,
+                    color: '#FFFFFF',
+                    position: 'top'
+                },
+                itemStyle: {
+                    color: '#eb5454'  // 바의 색상을 빨간색으로 변경
+                },
+                data:costData// 증폭
             }
         ],
         tooltip: {
@@ -1362,7 +1599,7 @@ function incomeStatusChart(){
             position: "top",
             borderWidth: 1,
             axisPointer: {
-                type: "shadow"
+                 type: "shadow"
             }
         },
     };
@@ -1370,7 +1607,6 @@ function incomeStatusChart(){
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
-
     window.addEventListener("resize", myChart.resize);
 }
 
