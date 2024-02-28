@@ -36,7 +36,7 @@ var SearchApiModule = (function () {
 
     var displayPagination = function (search_section, currentPage) {
 
-        const totalPage = hitsTotal[search_section] / 10;
+        const totalPage = Math.ceil(hitsTotal[search_section] / 10);
         const countPageBlock = 10; // 페이지블록 수 (한번에 보여줄 페이지 수)
         let startPage = ((currentPage-1) / 10) * 10 + 1;
         let endPage = startPage + countPageBlock -1;
@@ -65,7 +65,7 @@ var SearchApiModule = (function () {
         let no_search_result =
             `<section class="search-result">
                     <!-- 검색 결과 생성 시, append 하는 방식 -->
-                    <div class="search_head search_none">
+                    <div class="search_head search_none" id="no_search_result_${search_section}">
                         <div class="search_title">
                             <span style="font-size: 13px; color:#a4c6ff;">
                                 <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
@@ -176,7 +176,7 @@ var SearchApiModule = (function () {
 
     var updateButtons = function (search_section, current_page, pageStart) {
         console.log("[searchApiModule :: updateButtons] :: current_page => " + current_page);
-        let total_page = Math.floor(hitsTotal[search_section] / 10); //총 페이지
+        let total_page = Math.ceil(hitsTotal[search_section] / 10); //총 페이지
         const $pagination = $('#'+search_section+'_section .pagination-div .pagination');
         const $prevButton = $('#'+search_section+'_section .pagination-div .pagination .prev');
         const $nextButton = $('#'+search_section+'_section .pagination-div .pagination .next');
@@ -223,7 +223,7 @@ var SearchApiModule = (function () {
         if(search_section === "jiraissue") {
             $("#search_detail_modal_jiraissue #detail_id_jiraissue").text(targetData["id"]);
             $("#search_detail_modal_jiraissue #detail_index_jiraissue").text(targetData["index"]);
-            $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? "-" : targetData["score"]);
+            $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? " - " : targetData["score"]));
             $("#search_detail_modal_jiraissue #detail_type_jiraissue").text(targetData["type"] === undefined ? " - " : targetData["type"]);
             $("#search_detail_modal_jiraissue #detail_modal_summary_jiraissue").text(targetData["content"]["summary"]);
             $("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["key"]);
@@ -239,7 +239,7 @@ var SearchApiModule = (function () {
         else if (search_section === "log") {
             $("#search_detail_modal_log #detail_id_log").text(targetData["id"]);
             $("#search_detail_modal_log #detail_index_log").text(targetData["index"]);
-            $("#search_detail_modal_log #detail_score_log").text(targetData["score"] === null ? "-" : targetData["score"]);
+            $("#search_detail_modal_log #detail_score_log").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? " - " : targetData["score"]));
             $("#search_detail_modal_log #detail_type_log").text(targetData["type"] === undefined ? " - " : targetData["type"]);
 
             $("#search_detail_modal_log #detail_modal_logname_log").text(targetData["content"]["logName"]);

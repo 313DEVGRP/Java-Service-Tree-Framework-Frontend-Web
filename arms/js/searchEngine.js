@@ -225,9 +225,10 @@ function eventListenersActivator() {
 	$("#search_main_wrapper .search_result_group .search_result_items").on("click", function (event) {
 		console.log($(event.target).closest(".search-result")[0]);
 		var clicked_content_id = $(event.target).closest(".search-result").find(".search_head").attr("id");
-		let section_and_order = getDataSectionAndOrder(clicked_content_id);
-
-		SearchApiModule.mapDataToModal(section_and_order["search_section"], section_and_order["order"]);
+		if (!clicked_content_id.includes("no_search_result")) {
+			let section_and_order = getDataSectionAndOrder(clicked_content_id);
+			SearchApiModule.mapDataToModal(section_and_order["search_section"], section_and_order["order"]);
+		}
 	});
 }
 
