@@ -249,7 +249,7 @@ function search(search_section, page) {
 			let showPage = page+1; // 보여주는 페이지
 			SearchApiModule.setSearchResult(search_section,result, showPage, pageSize);
 			let pageStart = Math.floor(page / 10) * 10 + 1;
-			SearchApiModule.updateButtons(search_section, pageStart);
+			SearchApiModule.updateButtons(search_section, showPage, pageStart);
 		}
 	});
 }

@@ -174,14 +174,14 @@ var SearchApiModule = (function () {
     }
 
 
-    var updateButtons = function (search_section, current_page) {
+    var updateButtons = function (search_section, current_page, pageStart) {
         console.log("[searchApiModule :: updateButtons] :: current_page => " + current_page);
         let total_page = Math.floor(hitsTotal[search_section] / 10); //총 페이지
         const $pagination = $('#'+search_section+'_section .pagination-div .pagination');
         const $prevButton = $('#'+search_section+'_section .pagination-div .pagination .prev');
         const $nextButton = $('#'+search_section+'_section .pagination-div .pagination .next');
         let countPageBlock = 10;
-        let startPage = ((current_page-1) / 10) * 10 + 1;
+        let startPage = ((pageStart-1) / 10) * 10 + 1;
         let endPage = Math.min(startPage + 9, total_page);
         // let endPage = startPage + countPageBlock -1;
 
