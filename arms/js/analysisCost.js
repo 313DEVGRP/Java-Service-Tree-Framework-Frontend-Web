@@ -266,7 +266,7 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 let 연봉 = 5000;
 
                 Object.keys(전체담당자목록).forEach((key) => {
-                    전체담당자목록[key].연봉 = 연봉;
+                    //전체담당자목록[key].연봉 = 연봉;
                     전체담당자목록[key].인력별소모비용 = 0;
                     전체담당자목록[key].완료성과 = 0;
                 });
@@ -393,8 +393,8 @@ function file_upload_setting() {
                 jError("데이터 반영 중 에러가 발생했습니다. 엑셀 파일을 확인해주세요");
             }
 
-            //manpowerInput(data.result); //데이터 테이블 재 로드
-            manpowerInput(전체담당자목록);
+            버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
+            manpowerInput(전체담당자목록); //데이터 테이블 재 로드
             $("#cost-analysis-calculation").click(); // 비용 계산 버튼 클릭
 
         }
@@ -428,13 +428,13 @@ function manpowerInput(전체담당자목록) {
         $('#manpower-annual-income').DataTable().clear().destroy();
     }
 
-    let manpowerData = Object.keys(전체담당자목록).map((key) => {
+    /*let manpowerData = Object.keys(전체담당자목록).map((key) => {
         let data = {};
         data.이름 = 전체담당자목록[key].이름;
         data.키 = key;
         data.연봉 = 전체담당자목록[key].연봉;
         return data;
-    });
+    });*/
     인력별_연봉정보 = Object.keys(전체담당자목록).map((key) => {
         let data = {};
         data.이름 = 전체담당자목록[key].이름;
@@ -442,7 +442,7 @@ function manpowerInput(전체담당자목록) {
         data.연봉 = 전체담당자목록[key].연봉;
         return data;
     });
-    console.log(" [ analysisCost :: manpowerInput ] :: manpowerData => " + JSON.stringify(manpowerData));
+    console.log(" [ analysisCost :: manpowerInput ] :: 인력별_연봉정보 => " + JSON.stringify(인력별_연봉정보));
 
     var columnList = [
         {
@@ -498,7 +498,7 @@ function manpowerInput(전체담당자목록) {
     var selectList = {};
     var isServerSide = false;
     var scrollY = false;
-    var data = manpowerData;
+    var data = 인력별_연봉정보;
     var isAjax = false;
 
     dataTableRef = dataTable_build(
