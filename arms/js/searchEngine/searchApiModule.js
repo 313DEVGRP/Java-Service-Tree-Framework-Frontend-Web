@@ -16,7 +16,7 @@ var SearchApiModule = (function () {
             searchResult[search_section] = search_results["검색결과_목록"];
             hitsTotal[search_section] = search_results["결과_총수"];
 
-            displayResults(search_section, getSearchResult(search_section));
+            displayResults(search_section, getSearchResult(search_section), getHitsTotal(search_section));
             displayPagination(search_section, current_page);
 
         } else {
@@ -26,6 +26,10 @@ var SearchApiModule = (function () {
 
     var getSearchResult = function(search_section) {
         return searchResult[search_section];
+    };
+
+    var getHitsTotal = function(search_section) {
+        return hitsTotal[search_section];
     };
 
     // 클릭 했을 때, 모달 띄우기 위한 자료.
@@ -57,14 +61,22 @@ var SearchApiModule = (function () {
         $(pagination_spot).html(pagination);
     }
 
-    var displayResults = function (search_section, results) {
+    var displayResults = function (search_section, searchResult, hitsTotal) {
         console.log("[searchApiModule :: displayData] :: search_section -> " + search_section);
         // 데이터를 화면에 표시하는 코드 작성
-        let search_result_arr = results;
+        let search_result_arr = searchResult;
+        let hits_total = 0;
+        if(hitsTotal) {
+            hits_total = hitsTotal;
+            $("#"+search_section+"_section .search_results_total").text("'총 "+hitsTotal+"건'");
+            $("#"+search_section+"_section .search_results_total").css("color","#a4c6ff");
+        } else {
+            $("#"+search_section+"_section .search_results_total").text("0건");
+            $("#"+search_section+"_section .search_results_total").css("color",null);
+        }
         let today = new Date();
         let no_search_result =
-            `<section class="search-result">
-                    <!-- 검색 결과 생성 시, append 하는 방식 -->
+            `<section class="search-result">                    
                     <div class="search_head search_none" id="no_search_result_${search_section}">
                         <div class="search_title">
                             <span style="font-size: 13px; color:#a4c6ff;">
@@ -97,8 +109,8 @@ var SearchApiModule = (function () {
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
                     $("#jiraissue_section .search_result_group .search_result_items").append(
-                        `<section class="search-result">
-                            <div class="search_head" id="hits_order_jiraissue_${index}" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+                            <div class="search_head" id="hits_order_jiraissue_${index}">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
                                         <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
@@ -139,8 +151,8 @@ var SearchApiModule = (function () {
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
                     $("#log_section .search_result_group .search_result_items").append(
-                        `<section class="search-result">
-                            <div class="search_head" id="hits_order_log_${index}" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
+                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+                            <div class="search_head" id="hits_order_log_${index}">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
                                         <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
@@ -171,6 +183,8 @@ var SearchApiModule = (function () {
                 $("#log_section .search_result_group .search_result_items").append(no_search_result);
             }
         }
+
+
     }
 
 
@@ -253,7 +267,7 @@ var SearchApiModule = (function () {
     };
 
     return {
-        setSearchResult, getSearchResult,
+        setSearchResult, getSearchResult, getHitsTotal,
         updateButtons,
         getSearchResultDetail,
         changePage,
