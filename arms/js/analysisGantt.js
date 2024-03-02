@@ -770,22 +770,28 @@ function bindDataEditlTab(ajaxData) {
 	$("#editview_req_name").val(ajaxData.c_title);
 
 	$("#editview_req_priority").children(".btn.active").removeClass("active");
-	var selectReqPriorityID = "editview_req_priority_options" + ajaxData.reqPriorityEntity.c_id;
-	$("#" + selectReqPriorityID)
-		.parent()
-		.addClass("active");
+	if (!isEmpty(ajaxData.reqPriorityEntity)) {
+		var selectReqPriorityID = "editview_req_priority_options" + ajaxData.reqPriorityEntity.c_id;
+		$("#" + selectReqPriorityID)
+			.parent()
+			.addClass("active");
+	}
 
 	$("#editview_req_difficulty").children(".btn.active").removeClass("active");
-	var selectReqDifficultyID = "editview_req_difficulty_options" + ajaxData.reqDifficultyEntity.c_id;
-	$("#" + selectReqDifficultyID)
-		.parent()
-		.addClass("active");
+	if (!isEmpty(ajaxData.reqDifficultyEntity)) {
+		var selectReqDifficultyID = "editview_req_difficulty_options" + ajaxData.reqDifficultyEntity.c_id;
+		$("#" + selectReqDifficultyID)
+			.parent()
+			.addClass("active");
+	}
 
 	$("#editview_req_state").children(".btn.active").removeClass("active");
-	var selectReqStateID = "editview_req_state_options" + ajaxData.reqStateEntity.c_id;
-	$("#" + selectReqStateID)
-		.parent()
-		.addClass("active");
+	if (!isEmpty(ajaxData.reqStateEntity)) {
+		var selectReqStateID = "editview_req_state_options" + ajaxData.reqStateEntity.c_id;
+		$("#" + selectReqStateID)
+			.parent()
+			.addClass("active");
+	}
 
 	// -------------------- reviewer setting -------------------- //
 	//reviewer clear
@@ -1167,9 +1173,9 @@ function click_btn_for_req_add() {
 				c_req_writer: "[" + userName + "]" + " - " + userID,
 				c_req_create_date: new Date(),
 				c_req_update_date: new Date(),
-				c_req_priority_link: $('#addview_req_priority .btn.active input').val(),
-				c_req_difficulty_link: $('#addview_req_difficulty .btn.active input').val(),
-				c_req_state_link: $('#addview_req_state .btn.active input').val(),
+				c_req_priority_link: $("#addview_req_priority .btn.active input").val(),
+				c_req_difficulty_link: $("#addview_req_difficulty .btn.active input").val(),
+				c_req_state_link: $("#addview_req_state .btn.active input").val(),
 				c_req_reviewer01: reviewers01,
 				c_req_reviewer02: reviewers02,
 				c_req_reviewer03: reviewers03,
@@ -1240,9 +1246,9 @@ function click_btn_for_req_update() {
 				c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
 				// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
 				c_req_update_date: new Date(),
-				c_req_priority_link: $('#editview_req_priority .btn.active input').val(),
-				c_req_difficulty_link: $('#editview_req_difficulty .btn.active input').val(),
-				c_req_state_link: $('#editview_req_state .btn.active input').val(),
+				c_req_priority_link: $("#editview_req_priority .btn.active input").val(),
+				c_req_difficulty_link: $("#editview_req_difficulty .btn.active input").val(),
+				c_req_state_link: $("#editview_req_state .btn.active input").val(),
 				c_req_reviewer01: reviewers01,
 				c_req_reviewer02: reviewers02,
 				c_req_reviewer03: reviewers03,
