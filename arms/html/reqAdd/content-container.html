@@ -1756,9 +1756,44 @@
 			<div
 				id="reqTable"
 				class="tab-pane">
-				<section
-					id="reqDataTable"
-					class="widget"></section>
+				<article class="widget">
+					<blockquote
+						class="font13"
+						style="margin-top: 0 !important; display: flex; justify-content: space-between">
+						<span id="tableTitle"></span>
+						<div class="control-group">
+							<div
+								id="pivotRadio"
+								style="margin: 0 !important"
+								onchange="checkAnswer()">
+								<label class="radio-inline">
+									<input
+										type="radio"
+										name="pivot"
+										value="normal"
+										checked />
+									Pivot 없음
+								</label>
+								<label class="radio-inline">
+									<input
+										type="radio"
+										name="pivot"
+										value="version" />
+									Version
+								</label>
+								<label class="radio-inline">
+									<input
+										type="radio"
+										name="pivot"
+										value="owner" />
+									Task Owner
+								</label>
+							</div>
+						</div>
+					</blockquote>
+
+					<section id="reqDataTable"></section>
+				</article>
 			</div>
 		</div>
 	</section>

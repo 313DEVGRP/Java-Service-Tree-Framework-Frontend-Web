@@ -1,3 +1,46 @@
+let versionList, tableData, pivotTableData, tableOptions, TableInstance;
+const ContentType = {
+	normal: {
+		version: "Version",
+		category: "구분",
+		id: "TASK NO",
+		manager: "TASK OWNER",
+		status: "Status",
+		depth1: "Depth 1",
+		depth2: "Depth 2",
+		depth3: "Depth 3",
+		content: "기능",
+		priority: "우선순위",
+		difficulty: "난이도",
+		createDate: "생성일",
+		startDate: "시작일",
+		endDate: "종료일",
+		progress: "진행률"
+	},
+	version: {
+		version: "Version",
+		manager: "TASK OWNER",
+		depth1: "Depth 1",
+		content: "기능",
+		open: "Open",
+		investigation: "Investigation",
+		resolved: "Resoleved",
+		closeStatus: "Close",
+		statusTotal: "총계"
+	},
+	owner: {
+		manager: "TASK OWNER",
+		version: "Version",
+		depth1: "Depth 1",
+		content: "기능",
+		open: "Open",
+		investigation: "Investigation",
+		resolved: "Resoleved",
+		close: "Close",
+		statusTotal: "총계"
+	}
+};
+
 const ReqPriority = {
 	매우_높음: 7,
 	높음: 6,
@@ -20,11 +63,226 @@ const ReqStatus = {
 	해결됨: 12
 };
 
+const calcStatus = (arr) =>
+	arr.reduce((acc, cur) => {
+		const open = Number(acc?.open ?? 0) + Number(cur.open),
+			investigation = Number(acc?.investigation ?? 0) + Number(cur.investigation),
+			resolved = Number(acc?.resolved ?? 0) + Number(cur.resolved),
+			closeStatus = Number(acc?.closeStatus ?? 0) + Number(cur.closeStatus),
+			statusTotal = open + investigation + resolved + closeStatus;
+
+		return {
+			open,
+			investigation,
+			resolved,
+			closeStatus,
+			statusTotal
+		};
+	}, {});
+
+const getDate = (stamp) => {
+	if (!stamp || stamp < 0) return "";
+	const time = new Date(stamp);
+	return `${time.getFullYear()}-${addZero(time.getMonth() + 1)}-${addZero(time.getDate())}`;
+};
+
+const addZero = (n) => {
+	return n < 10 ? `0${n}` : n;
+};
+
+const setDepth = (data, parentId, titles) => {
+	if (parentId === 2) return { depth1: titles[0] };
+
+	const node = data.find((task) => task.c_id === parentId);
+
+	if (node.c_parentid <= 2) {
+		const reulst = {};
+
+		titles
+			.concat(node.c_title)
+			.reverse()
+			.forEach((title, index) => (reulst[`depth${index + 1}`] = title));
+
+		return reulst;
+	}
+
+	return setDepth(data, node.c_parentid, titles.concat(node.c_title));
+};
+
+const mapperTableData = (data) => {
+	return data
+		?.sort((a, b) => a.c_parentid - b.c_parentid)
+		.reduce((acc, cur) => {
+			const {
+				c_id,
+				c_parentid,
+				c_title,
+				c_req_owner,
+				c_req_contents,
+				reqStateEntity,
+				reqPriorityEntity,
+				reqDifficultyEntity,
+				c_req_create_date,
+				c_req_start_date,
+				c_req_end_date,
+				c_req_plan_progress
+			} = cur;
+			if (cur.c_parentid < 2) return acc;
+
+			return [
+				...acc,
+				{
+					version: "",
+					id: c_id,
+					category: "",
+					manager: c_req_owner,
+					status: reqStateEntity?.data ?? "",
+					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+					content: c_title,
+					priority: reqPriorityEntity?.data ?? "",
+					difficulty: reqDifficultyEntity?.data ?? "",
+					createDate: getDate(c_req_create_date),
+					startDate: getDate(c_req_start_date),
+					endDate: getDate(c_req_end_date),
+					progress: c_req_plan_progress || 0,
+					origin: cur,
+					_status: reqStateEntity?.c_id,
+					_priority: reqPriorityEntity?.c_id,
+					_difficulty: reqDifficultyEntity?.c_id
+				}
+			];
+		}, []);
+};
+
+const mapperPivotTableData = (data) => {
+	return data.reduce((acc, cur) => {
+		const {
+			c_id,
+			c_parentid,
+			c_title,
+			c_req_owner,
+			c_req_contents,
+			reqStateEntity,
+			reqPriorityEntity,
+			reqDifficultyEntity,
+			c_req_create_date,
+			c_req_start_date,
+			c_req_end_date,
+			c_req_plan_progress,
+			c_req_pdservice_versionset_link
+		} = cur;
+		if (cur.c_parentid < 2) return acc;
+
+		return [
+			...acc,
+			{
+				id: c_id,
+				version: c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : "",
+				manager: c_req_owner,
+				open: reqStateEntity?.c_id === 10 ? 1 : "",
+				investigation: "",
+				resolved: reqStateEntity?.c_id === 11 ? 1 : "",
+				closeStatus: reqStateEntity?.c_id === 12 ? 1 : "",
+				statusTotal: "",
+				...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+				content: c_title,
+				origin: cur
+			}
+		];
+	}, []);
+};
+
 class Table {
-	constructor(options, data) {
-		this.options = options;
+	type = "normal";
+	constructor() {
 		this.$table = this.makeElement("table");
-		this.$data = data;
+		this.$data = this.setTableData();
+	}
+
+	setTableData(data) {
+		if (this.type === "normal") {
+			return tableData;
+		}
+
+		if (this.type === "version") {
+			return versionList.flatMap((version) => {
+				const filterItems = pivotTableData.filter((item) => item.version?.includes(`${version.c_id}`));
+
+				return [
+					{
+						version: `${version.c_title} 총계`,
+						id: version.c_id,
+						col: 0,
+						colSpan: 4,
+						...calcStatus(filterItems)
+					},
+					...filterItems
+						.reduce((acc, cur) => {
+							const result = { ...cur, versionOrigin: version, version: version.c_title };
+							const index = acc?.findIndex((item) => item.some((task) => task.manager === cur.manager));
+
+							if (index >= 0) {
+								acc[index].push(result);
+							} else {
+								acc?.push([result]);
+							}
+
+							return acc;
+						}, [])
+						.flatMap((group) => [
+							...group,
+							{ manager: `${group[0].manager} 총계`, id: group[0].id, col: 1, colSpan: 3, ...calcStatus(group) }
+						])
+				];
+			});
+		}
+
+		if (this.type === "owner") {
+			return pivotTableData
+				.flatMap((task) =>
+					task.version.reduce((acc, cur) => {
+						const versionItem = versionList.find((item) => item.c_id === Number(cur));
+						return [...acc, { ...task, v_id: versionItem.c_id, version: versionItem.c_title }];
+					}, [])
+				)
+				.sort((a, b) => a.manager.localeCompare(b.manager) || a.v_id - b.v_id)
+				.reduce((acc, cur) => {
+					const index = acc?.findIndex((item) => item.some((task) => task.manager === cur.manager));
+
+					if (index >= 0) {
+						acc[index].push(cur);
+					} else {
+						acc?.push([cur]);
+					}
+
+					return acc;
+				}, [])
+				.flatMap((group) => [
+					{ manager: `${group[0].manager} 총계`, id: group[0].id, col: 0, colSpan: 4, ...calcStatus(group) },
+					...group
+						.reduce((acc, cur) => {
+							const index = acc?.findIndex((item) => item.some((task) => task.version === cur.version));
+
+							if (index >= 0) {
+								acc[index].push(cur);
+							} else {
+								acc?.push([cur]);
+							}
+
+							return acc;
+						}, [])
+						.flatMap((tasks) => [
+							...tasks,
+							{
+								version: `${tasks[0].version} 총계`,
+								v_id: tasks[0].v_id,
+								col: 1,
+								colSpan: 3,
+								...calcStatus(tasks)
+							}
+						])
+				]);
+		}
 	}
 
 	makeElement(name) {
@@ -71,12 +329,38 @@ class Table {
 		}
 	}
 
+	makePivotRow(rows, tag) {
+		return rows.reduce((acc, cur) => {
+			const $tr = this.makeElement("tr");
+			$tr.setAttribute("data-id", cur.id);
+
+			Object.keys(ContentType[this.type]).forEach((key, index) => {
+				const $col = this.makeElement(tag);
+				$col.className = key;
+
+				$col.innerHTML = !cur[key] ? "" : cur[key];
+
+				if (index >= cur.col && index < cur.colSpan) {
+					$col.classList.add("col-span");
+				}
+
+				if (cur.colSpan) {
+					$tr.classList.add("highlight");
+				}
+
+				$tr.appendChild($col);
+			});
+
+			return [...acc, $tr];
+		}, []);
+	}
+
 	makeRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
 			$tr.setAttribute("data-id", cur.id);
 
-			Object.keys(this.options.content).forEach((key) => {
+			Object.keys(ContentType[this.type]).forEach((key) => {
 				if ([`_${key}`].includes(key)) return;
 
 				const $col = this.makeElement(tag);
@@ -107,7 +391,7 @@ class Table {
 
 		task[key] = value;
 
-		this.options.onUpdate(this.options.id, {
+		tableOptions.onUpdate(tableOptions.id, {
 			c_id: task.id,
 			c_title: task.content,
 			c_req_pdservice_versionset_link: task.origin.c_req_pdservice_versionset_link,
@@ -214,7 +498,9 @@ class Table {
 		const $el = this.makeElement(name);
 		$el.id = `req_${name}`;
 		$el.className = name;
-		this.makeRow(rowData, col).forEach((r) => $el.append(r));
+
+		if (this.type === "normal") this.makeRow(rowData, col).forEach((r) => $el.append(r));
+		else this.makePivotRow(rowData, col).forEach((r) => $el.append(r));
 
 		if ("thead" === name) this.bindHeadEvent($el);
 		else this.bindBodyEvent($el);
@@ -224,95 +510,41 @@ class Table {
 
 	makeTable() {
 		this.$table.className = "reqTable";
-		this.$table.appendChild(this.makeSection([this.options.content], "thead", "th"));
+		this.$table.appendChild(this.makeSection([ContentType[this.type]], "thead", "th"));
 		this.$table.appendChild(this.makeSection(this.$data, "tbody", "td"));
 		return this.$table;
 	}
 
 	rendering() {
-		const $wrapper = document.getElementById(this.options.wrapper);
-		$wrapper.innerHTML = "";
+		const $wrapper = document.getElementById(tableOptions.wrapper);
+		$wrapper.innerHTML = null;
+
 		$wrapper.appendChild(this.makeTable());
+	}
+
+	rerenderTable(type) {
+		this.type = type;
+		this.$data = this.setTableData();
+
+		this.$table.innerHTML = "";
+
+		this.makeTable();
 	}
 }
 
-const getDate = (stamp) => {
-	if (!stamp || stamp < 0) return "";
-	const time = new Date(stamp);
-	return `${time.getFullYear()}-${addZero(time.getMonth() + 1)}-${addZero(time.getDate())}`;
-};
-
-const addZero = (n) => {
-	return n < 10 ? `0${n}` : n;
-};
-
-const setDepth = (data, parentId, titles) => {
-	if (parentId === 2) return { depth1: titles[0] };
-
-	const node = data.find((task) => task.c_id === parentId);
-
-	if (node.c_parentid <= 2) {
-		const reulst = {};
-
-		titles
-			.concat(node.c_title)
-			.reverse()
-			.forEach((title, index) => (reulst[`depth${index + 1}`] = title));
-
-		return reulst;
-	}
-
-	return setDepth(data, node.c_parentid, titles.concat(node.c_title));
-};
-
-const setTableData = (data) => {
-	return data
-		.sort((a, b) => a.c_parentid - b.c_parentid)
-		.reduce((acc, cur) => {
-			const {
-				c_id,
-				c_parentid,
-				c_title,
-				c_req_owner,
-				c_req_contents,
-				reqStateEntity,
-				reqPriorityEntity,
-				reqDifficultyEntity,
-				c_req_create_date,
-				c_req_start_date,
-				c_req_end_date,
-				c_req_plan_progress
-			} = cur;
-			if (cur.c_parentid < 2) return acc;
-
-			return [
-				...acc,
-				{
-					version: "",
-					id: c_id,
-					category: "",
-					manager: c_req_owner,
-					status: reqStateEntity?.data ?? "",
-					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
-					content: c_title,
-					priority: reqPriorityEntity?.data ?? "",
-					difficulty: reqDifficultyEntity?.data ?? "",
-					createDate: getDate(c_req_create_date),
-					startDate: getDate(c_req_start_date),
-					endDate: getDate(c_req_end_date),
-					progress: c_req_plan_progress || 0,
-					origin: cur,
-					_status: reqStateEntity?.c_id,
-					_priority: reqPriorityEntity?.c_id,
-					_difficulty: reqDifficultyEntity?.c_id
-				}
-			];
-		}, []);
-};
-
 const makeReqTable = async (options) => {
-	const res = await options.onGetData(options.id);
-	const table = new Table(options, setTableData(res));
+	tableOptions = options;
+	const data = await tableOptions.onGetVersion(tableOptions.id);
+	const res = await tableOptions.onGetData(tableOptions.id);
+	versionList = data.response.sort((a, b) => a.c_id - b.c_id);
 
-	table.rendering();
+	tableData = mapperTableData([...res]);
+	pivotTableData = mapperPivotTableData([...res]);
+	TableInstance = new Table();
+
+	TableInstance.rendering();
+};
+
+const changeTableType = (type) => {
+	TableInstance.rerenderTable(type, ContentType[type]);
 };

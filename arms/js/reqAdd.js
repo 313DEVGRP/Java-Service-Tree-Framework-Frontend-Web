@@ -58,7 +58,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-		["js/reqAddTable.js", "css/jiraServerCustom.css"]
+		["js/reqAddTable.js", "js/reqAddPivot.js", "css/jiraServerCustom.css"]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -1895,20 +1895,46 @@ $("#text").on("input", function () {
 
 function tableSelectOption(obj) {
 	const $li = document.createElement("li");
+	const $title = document.getElementById("tableTitle");
 
 	$li.innerHTML = `<a href="#reqTable" data-toggle="tab">${obj.c_title}</a>`;
 
 	$li.addEventListener("click", (e) => {
 		tableSelect(obj.c_id);
+		$title.innerText = obj.c_title;
 	});
 
 	return $li;
+}
+
+function checkAnswer(e) {
+	const radioEl = document.querySelector('[name="pivot"]:checked');
+
+	changeTableType(radioEl.value);
 }
 
 function tableSelect(id) {
 	makeReqTable({
 		wrapper: "reqDataTable",
 		id,
+		onGetVersion: async function (id) {
+			return await $.ajax({
+				url: `/auth-user/api/arms/pdService/getVersionList.do?c_id=${id}`,
+				type: "GET",
+				dataType: "json",
+				progress: true,
+				statusCode: {
+					200: function (data) {
+						if (!isEmpty(data)) {
+							return data;
+						}
+					}
+				},
+				error: function (e) {
+					jError("버전 조회 중 에러가 발생했습니다.");
+				}
+			});
+		},
 		onGetData: async function (id) {
 			return await $.ajax({
 				url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/getMonitor.do`,
@@ -1935,23 +1961,6 @@ function tableSelect(id) {
 					}
 				}
 			});
-		},
-		content: {
-			version: "Version",
-			category: "구분",
-			id: "TASK NO",
-			manager: "TASK OWNER",
-			status: "Status",
-			depth1: "Depth 1",
-			depth2: "Depth 2",
-			depth3: "Depth 3",
-			content: "기능",
-			priority: "우선순위",
-			difficulty: "난이도",
-			createDate: "생성일",
-			startDate: "시작일",
-			endDate: "종료일",
-			progress: "진행률"
 		}
 	});
 }
