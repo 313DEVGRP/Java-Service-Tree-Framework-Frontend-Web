@@ -2,13 +2,13 @@ var SearchApiModule = (function () {
     "use strict";
     var searchResult = {
         "jiraissue" : null,
-        "fluentd" : null
+        "log" : null
     };
 
     // 검색결과 총수
     var hitsTotal = {
         "jiraissue" : null,
-        "fluentd" : null
+        "log" : null
     };
 
     var setSearchResult = function(search_section, search_results, current_page, items_per_Page) {
@@ -151,7 +151,7 @@ var SearchApiModule = (function () {
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
                     $("#log_section .search_result_group .search_result_items").append(
-                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
                             <div class="search_head" id="hits_order_log_${index}">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
@@ -232,6 +232,8 @@ var SearchApiModule = (function () {
 
     var mapDataToModal = function (search_section, order) {
         const targetData = SearchApiModule.getSearchResultDetail(search_section,order);
+        console.log("[searchApiModule :: mapDataToModal] :: search_section => " + search_section);
+        console.log("[searchApiModule :: mapDataToModal] :: order => " + order);
         console.log("[searchApiModule :: mapDataToModal] :: targetData => "); console.log(targetData);
 
         if(search_section === "jiraissue") {
