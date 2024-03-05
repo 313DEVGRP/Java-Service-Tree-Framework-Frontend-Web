@@ -29,6 +29,7 @@ function execDocReady() {
 		[
 			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
+			"../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js",
 			"../reference/lightblue4/docs/lib/widgster/widgster.js"
 		],
 
@@ -47,8 +48,16 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
 		],
 		[
+			"../reference/jquery-plugins/highlight.js-11.9.0/highlight.js/highlight.min.js",
+			"../reference/jquery-plugins/highlight.js-11.9.0/src/styles/arta.css",
+
 			"css/searchEngine.css",
-			"js/searchEngine/searchApiModule.js"
+			"js/searchEngine/searchApiModule.js",
+			//날짜 검색
+			"../reference/light-blue/lib/bootstrap-datepicker.js",
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
+			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
+
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -67,25 +76,8 @@ function execDocReady() {
 				document.head.appendChild(script);
 			}, 2000); // 2초 후에 실행됩니다.
 
-			// --- 에디터 설정 --- //
-			var waitCKEDITOR = setInterval(function () {
-				try {
-					if (window.CKEDITOR) {
-						if(window.CKEDITOR.status == "loaded"){
-							// 모달의 에디터를 각 모달 종류마다 해야하는지 검토.
-							CKEDITOR.replace("modal_detail_log",{ skin: "office2013" });
-							CKEDITOR.replace("modal_detail_log_jiraissue",{ skin: "office2013" });
-							CKEDITOR.replace("modal_detail_log_log",{ skin: "office2013" });
-							// 추가로 에디터 설정이 필요한 경우 여기에 추가
-							clearInterval(waitCKEDITOR);
-						}
-					}
-				} catch (err) {
-					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
-				}
-			}, 313 /*milli*/);
-
-
+			//highlight.js 설정.
+			hljs.highlightAll();
 			eventListenersActivator();
 			//페이지 로드 시  - 상단 검색 확인
 			checkQueryStringOnUrl();

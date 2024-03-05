@@ -68,7 +68,8 @@ var SearchApiModule = (function () {
         let hits_total = 0;
         if(hitsTotal) {
             hits_total = hitsTotal;
-            $("#"+search_section+"_section .search_results_total").text("'총 "+hitsTotal+"건'");
+            let total_text = (hitsTotal >= 10000 ? " 10000건 이상" : "'총"+hits_total+"건'");
+            $("#"+search_section+"_section .search_results_total").text(total_text);
             $("#"+search_section+"_section .search_results_total").css("color","#a4c6ff");
         } else {
             $("#"+search_section+"_section .search_results_total").text("0건");
@@ -250,7 +251,12 @@ var SearchApiModule = (function () {
             } else {
                 $("#search_detail_modal_jiraissue #detail_modal_assignee_name_jiraissue").text("담당자 정보 없음");
             }
-            CKEDITOR.instances.modal_detail_log_jiraissue.setData(JSON.stringify(targetData));
+
+            $("#search_detail_modal_jiraissue #modal_detail_log_jiraissue").html("");
+            var stringify = JSON.stringify(targetData, undefined, 4);
+            var prettify = hljs.highlight(stringify,{language : "JSON" }).value;
+
+            $("#search_detail_modal_jiraissue #modal_detail_log_jiraissue").html(prettify);
         }
         else if (search_section === "log") {
             $("#search_detail_modal_log #detail_id_log").text(targetData["id"]);
@@ -264,7 +270,11 @@ var SearchApiModule = (function () {
             $("#search_detail_modal_log #detail_modal_container_id_log").text(targetData["content"]["container_id"] === null? "-" : targetData["content"]["container_id"].substring(0,12));
             $("#search_detail_modal_log #detail_modal_container_name_log").text(targetData["content"]["container_name"]);
 
-            CKEDITOR.instances.modal_detail_log_log.setData(JSON.stringify(targetData["content"]["log"]));
+            $("#search_detail_modal_log #modal_detail_log_log").html("");
+            var stringify = JSON.stringify(targetData["content"], undefined, 4);
+            var prettify = hljs.highlight(stringify,{language : "JSON" }).value;
+            $("#search_detail_modal_log #modal_detail_log_log").html(prettify);
+
         }
     };
 
