@@ -63,6 +63,14 @@ const ReqStatus = {
 	해결됨: 12
 };
 
+const createUUID = () => {
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+		const r = (Math.random() * 16) | 0;
+		const v = c === "x" ? r : (r & 0x3) | 0x8;
+		return v.toString(16);
+	});
+};
+
 const calcStatus = (arr) =>
 	arr.reduce((acc, cur) => {
 		const open = Number(acc?.open ?? 0) + Number(cur.open),
@@ -109,6 +117,16 @@ const setDepth = (data, parentId, titles) => {
 	return setDepth(data, node.c_parentid, titles.concat(node.c_title));
 };
 
+const getVersionTitle = (id) => {
+	if (!id) return "";
+	return versionList.find((v) => v.c_id === Number(id))?.c_title ?? "";
+};
+
+const CategoryName = {
+	folder: "Group",
+	default: "요구사항"
+};
+
 const mapperTableData = (data) => {
 	return data
 		?.sort((a, b) => a.c_parentid - b.c_parentid)
@@ -125,16 +143,20 @@ const mapperTableData = (data) => {
 				c_req_create_date,
 				c_req_start_date,
 				c_req_end_date,
-				c_req_plan_progress
+				c_req_plan_progress,
+				c_req_pdservice_versionset_link,
+				c_type
 			} = cur;
 			if (cur.c_parentid < 2) return acc;
+
+			const vid = JSON.parse(c_req_pdservice_versionset_link)[0] ?? "";
 
 			return [
 				...acc,
 				{
-					version: "",
+					version: getVersionTitle(vid),
 					id: c_id,
-					category: "",
+					category: CategoryName[c_type],
 					manager: c_req_owner,
 					status: reqStateEntity?.data ?? "",
 					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
@@ -148,7 +170,8 @@ const mapperTableData = (data) => {
 					origin: cur,
 					_status: reqStateEntity?.c_id,
 					_priority: reqPriorityEntity?.c_id,
-					_difficulty: reqDifficultyEntity?.c_id
+					_difficulty: reqDifficultyEntity?.c_id,
+					_version: Number(vid)
 				}
 			];
 		}, []);
@@ -290,7 +313,10 @@ class Table {
 	}
 
 	sortData(key, type) {
-		if (["id", "progress"].includes(key)) {
+		if (key === "category") {
+			type === "asc" && this.$data.sort((a, b) => a[key].localeCompare([key]));
+			type === "desc" && this.$data.sort((a, b) => b[key].localeCompare(a[key]));
+		} else if (["id", "progress"].includes(key)) {
 			type === "asc" && this.$data.sort((a, b) => a[key] - b[key]);
 			type === "desc" && this.$data.sort((a, b) => b[key] - a[key]);
 		} else if (["createDate", "startDate", "endDate"].includes(key)) {
@@ -462,7 +488,7 @@ class Table {
 	}
 
 	addSelect(node) {
-		const uuid = crypto.randomUUID();
+		const uuid = createUUID();
 		const $ul = this.makeElement("ul");
 		$ul.id = uuid;
 		$ul.className = "dropdown-menu req-select";
@@ -482,7 +508,7 @@ class Table {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
 			// input
-			if (tagName === "TD" && classList.contains("content")) {
+			if (tagName === "TD" && (classList.contains("content") || classList.contains("manager"))) {
 				this.addInput(e.target);
 			}
 
