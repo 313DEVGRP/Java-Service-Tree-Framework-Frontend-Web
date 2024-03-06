@@ -29,7 +29,6 @@ function execDocReady() {
 		[
 			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
-			"../reference/lightblue4/docs/lib/nvd3/build/nv.d3.min.js",
 			"../reference/lightblue4/docs/lib/widgster/widgster.js"
 		],
 
