@@ -49,3 +49,34 @@
 .search-result > p {
     margin-bottom: 0px;
 }
+
+.row {
+    overflow: visible !important;
+}
+
+.search-nav {
+    display: flex;;
+    align-items: center;
+}
+.search-nav>li {
+    position: relative;
+    display: block;
+    background: none;
+    float: left;
+}
+.search-nav>li.divider {
+    display: block;
+    height: 38px;
+    width: 1px;
+    margin: 0 10px;
+    background: linear-gradient(0.5turn, rgb(0 0 0 / 0%), #666666, rgb(0 0 0 / 0%));
+}
+
+.search_content em{
+    font-weight: bold;
+    color: #E49400;
+}
+
+.modal-content .modal-body .hlhs{
+    background: rgba(51,51,51,0.425) !important;
+}
