@@ -110,8 +110,6 @@ var SearchApiModule = (function () {
                 search_result_arr.forEach(function (content, index) {
                     var highlight_stringify = "";
                     if(content["highlightFields"]) {
-                        console.log("[ searchApiModule :: displayResults ] :: highlightFields => ");
-                        console.log(content["highlightFields"]);
                         highlight_stringify = JSON.stringify(content["highlightFields"], undefined, 4);
                     }
                     // highlightFields ES 자체 도출 필드
@@ -163,8 +161,6 @@ var SearchApiModule = (function () {
                 search_result_arr.forEach(function (content, index) {
                     var highlight_stringify = "";
                     if(content["highlightFields"]) {
-                        console.log("[ searchApiModule :: displayResults ] :: highlightFields => ");
-                        console.log(content["highlightFields"]);
                         highlight_stringify = JSON.stringify(content["highlightFields"], undefined, 4);
                     }
                     let highlightFields_string = (highlight_stringify === "" ? content["content"]["log"] : highlight_stringify);
