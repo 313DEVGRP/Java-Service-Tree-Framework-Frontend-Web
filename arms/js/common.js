@@ -1301,7 +1301,7 @@ function goToTemplatePageWithSearchString(pageName, searchString) {
 		$("#search-button").click();
 	} else {
 		console.log("[common :: goToTemplatePageWithSearchString] :: 검색어와 함께 페이지 이동");
-		window.location.href = "template.html?page=" + pageName+"&searchString="+searchString;
+		window.location.href = "/arms/template.html?page=" + pageName+"&searchString="+searchString;
 	}
 }
 
