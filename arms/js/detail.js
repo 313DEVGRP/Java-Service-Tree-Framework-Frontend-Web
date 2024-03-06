@@ -53,7 +53,7 @@ function getDetailViewTab() {
 	}
 
 	console.log("Detail Tab ::::");
-	var tableName = "T_ARMS_REQADD_" + selectedPdService;
+	var tableName = "T_ARMS_REQADD_";
 
 	$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
 	$.ajax({
