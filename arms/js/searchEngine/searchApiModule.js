@@ -59,7 +59,7 @@ var SearchApiModule = (function () {
 
         let pagination_spot = '#'+search_section+'_section'+' .pagination-div';
         $(pagination_spot).html(pagination);
-    }
+    };
 
     var displayResults = function (search_section, searchResult, hitsTotal) {
         console.log("[searchApiModule :: displayData] :: search_section -> " + search_section);
@@ -87,12 +87,11 @@ var SearchApiModule = (function () {
                                 &nbsp; 검색 결과가 없습니다. &nbsp;
                             </span>
                         </div>
-                        <div class="search_category">
-                            <p class="text-muted" style="margin: 5px 0;">
-                                <!--<small>카테고리 fluentd-20240204</small>-->
+                        <div class="search_category" style="display: flex">
+                            <p class="text-muted" style="margin: 5px 0;">                                
                                 <small> - </small>
                             </p>
-                            <p class="text-success" style="margin: 5px 0;">
+                            <p class="text-success" style="margin: 5px 0 5px 5px;">
                                 <small>${today}</small>
                             </p>
                         </div>
@@ -109,6 +108,12 @@ var SearchApiModule = (function () {
             console.log("[searchApiModule :: appendSearchResultSections] :: search_result_arr길이 =>" +search_result_arr.length);
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
+                    var highlight_stringify = "";
+                    if(content["highlightFields"]) {
+                        highlight_stringify = JSON.stringify(content["highlightFields"], undefined, 4);
+                    }
+                    // highlightFields ES 자체 도출 필드
+                    let highlightFields_string = (highlight_stringify === "" ? " - " : highlight_stringify);
                     $("#jiraissue_section .search_result_group .search_result_items").append(
                         `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
                             <div class="search_head" id="hits_order_jiraissue_${index}">
@@ -121,18 +126,20 @@ var SearchApiModule = (function () {
                                         &nbsp;${content["content"]["summary"]}							
                                     </span>
                                 </div>
-                                <div class="search_category">
-                                    <p class="text-muted" style="margin: 5px 0;">
-                                        <!--<small>카테고리 fluentd-20240204</small>-->
+                                <div class="search_category" style="display: flex">
+                                    <p class="text-muted" style="margin: 5px 0;">                                        
                                         <small>${content["index"]}</small>
                                     </p>
-                                    <p class="text-success" style="margin: 5px 0;">
+                                    <p class="text-success" style="margin: 5px 0 5px 5px;">
                                         <small>${content["content"]["created"]}</small>
                                     </p>
                                 </div>
                             </div>
                             <div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
-                                <span>
+                                <span> 
+                                    ${highlightFields_string}                        
+                                </span>
+                                <span>                                
                                 이슈키: ${content["content"]["key"]} &nbsp;&nbsp; 지라프로젝트: ${content["content"]["project"]["project_name"]} </br>
                                 생성일: ${content["content"]["created"]} &nbsp;&nbsp;															
                                 타임스탬프: ${content["content"]["timestamp"]}
@@ -149,8 +156,14 @@ var SearchApiModule = (function () {
             $("#log_section .search_result_group .search_result_items").html("");
             console.log("[searchApiModule :: appendSearchResultSections_fluentd] :: search_result_arr길이 =>" +search_result_arr.length);
             console.log(search_result_arr);
+
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
+                    var highlight_stringify = "";
+                    if(content["highlightFields"]) {
+                        highlight_stringify = JSON.stringify(content["highlightFields"], undefined, 4);
+                    }
+                    let highlightFields_string = (highlight_stringify === "" ? content["content"]["log"] : highlight_stringify);
                     $("#log_section .search_result_group .search_result_items").append(
                         `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
                             <div class="search_head" id="hits_order_log_${index}">
@@ -163,18 +176,18 @@ var SearchApiModule = (function () {
                                         &nbsp;${content["content"]["logName"]}							
                                     </span>
                                 </div>
-                                <div class="search_category">
+                                <div class="search_category" style="display: flex">
                                     <p class="text-muted" style="margin: 5px 0;">                                        
                                         <small>${content["index"]}</small>
                                     </p>
-                                    <p class="text-success" style="margin: 5px 0;">
+                                    <p class="text-success" style="margin: 5px 0 5px 5px;">
                                         <small>${content["content"]["timestamp"]}</small>
                                     </p>
                                 </div>
                             </div>
                             <div class="search_content" style="height: 4rem; line-height: 1.58;  overflow: hidden;">
-                                <span>
-                                ${content["content"]["log"]}
+                                <span> 
+                                    ${highlightFields_string}                        
                                 </span>
                             </div>
                         </section>`
@@ -185,8 +198,7 @@ var SearchApiModule = (function () {
             }
         }
 
-
-    }
+    };
 
 
     var updateButtons = function (search_section, current_page, pageStart) {
@@ -229,7 +241,7 @@ var SearchApiModule = (function () {
         $pagination.find('.active').removeClass('active');
         // 선택된 페이지 번호에 해당하는 요소에 'active' 클래스 추가
         $pagination.find('.page-num-' + current_page).addClass('active');
-    }
+    };
 
     var mapDataToModal = function (search_section, order) {
         const targetData = SearchApiModule.getSearchResultDetail(search_section,order);

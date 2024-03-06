@@ -31,25 +31,10 @@ function execDocReady() {
 			"../reference/jquery-plugins/unityping-0.1.0/dist/jquery.unityping.min.js",
 			"../reference/lightblue4/docs/lib/widgster/widgster.js"
 		],
-
-		[
-			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
-			"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/js/dataTables.responsive.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/js/dataTables.select.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/RowGroup/js/dataTables.rowsGroup.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
-		],
-		[
+		[	// 하이라이트
 			"../reference/jquery-plugins/highlight.js-11.9.0/highlight.js/highlight.min.js",
 			"../reference/jquery-plugins/highlight.js-11.9.0/src/styles/arta.css",
-
+			// 검색엔진
 			"css/searchEngine.css",
 			"js/searchEngine/searchApiModule.js",
 			//날짜 검색
@@ -84,91 +69,6 @@ function execDocReady() {
 		.catch(function (e) {
 			console.error("플러그인 로드 중 오류 발생");
 		});
-}
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-// --- 데이터 테이블 설정 --- //
-////////////////////////////////////////////////////////////////////////////////////////
-function dataTableLoad() {
-	// 데이터 테이블 컬럼 및 열그룹 구성
-	var columnList = [
-		{ name: "c_id", title: "제품(서비스) 아이디", data: "c_id", visible: false },
-		{
-			name: "c_title",
-			title: "제품(서비스) 이름",
-			data: "c_title",
-			render: function (data, type, row, meta) {
-				if (type === "display") { //// 렌더링 시 이름을 라벨로 감싸서 표시
-					return '<label style="color: #a4c6ff">' + data + "</label>";
-				}
-
-				return data;
-			},
-			className: "dt-body-left",  // 좌측 정렬
-			visible: true
-		}
-	];
-	var rowsGroupList = [];
-	var columnDefList = [];
-	var selectList = {};
-	var orderList = [[0, "asc"]];
-	var buttonList = [
-		"copy",
-		"excel",
-		"print",
-		{
-			extend: "csv",
-			text: "Export csv",
-			charset: "utf-8",
-			extension: ".csv",
-			fieldSeparator: ",",
-			fieldBoundary: "",
-			bom: true
-		},
-		{
-			extend: "pdfHtml5",
-			orientation: "landscape",
-			pageSize: "LEGAL"
-		}
-	];
-
-	var jquerySelector = "#pdservice_table";
-	var ajaxUrl = "/auth-user/api/arms/pdService/getPdServiceMonitor.do";
-	var jsonRoot = "response";
-	var isServerSide = false;
-	console.log("jsonRoot:", jsonRoot);
-
-	dataTableRef = dataTable_build(
-		jquerySelector,
-		ajaxUrl,
-		jsonRoot,
-		columnList,
-		rowsGroupList,
-		columnDefList,
-		selectList,
-		orderList,
-		buttonList,
-		isServerSide
-	);
-
-}
-
-// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(tempDataTable, selectedData) {
-	console.log(selectedData);
-}
-
-function dataTableDrawCallback(tableInfo) {
-}
-
-// 데이터 테이블 데이터 렌더링 이후 콜백 함수.
-function dataTableCallBack(settings, json) {
-}
-
-function dataTableDrawCallback(tableInfo) {
-	console.log(tableInfo);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -206,10 +106,16 @@ function eventListenersActivator() {
 	});
 
 	$("#search-button").on("click", function (event) {
-		console.log("[searchEngine :: search_start] :: search-button 동작 -> 검색을 실행");
 		$("#nav-search-input").val("");
-		setParameter("searchString",$("#search-input").val());
-		search_start($("#search-input").val());
+		let searchTerm = $("#search-input").val();
+		if(searchTerm && searchTerm.trim()) {
+			let 검색어 = searchTerm.trim();
+			console.log("[searchEngine :: search-button] :: 검색어 -> "+ 검색어.trim());
+			setParameter("searchString",검색어);
+			search_start(검색어);
+		} else {
+			console.log("[searchEngine :: search-button] :: 검색어가 없거나 빈값 입니다.");
+		}
 	});
 
 	//검색 결과 리스트 클릭 이벤트
@@ -223,9 +129,9 @@ function eventListenersActivator() {
 	});
 }
 
-//////////////////////
-// 페이지 누를때 동작
-//////////////////////
+/////////////////////////
+// 페이지 누를때 동작 - 검색
+/////////////////////////
 function search(search_section, page) {
 	var search_string = $("#search-input").val();
 	var pageSize = 10;
@@ -246,9 +152,11 @@ function search(search_section, page) {
 	});
 }
 
-
+/////////////////////////
+// 검색어 검색 시작
+/////////////////////////
 function search_start(search_string) {
-	console.log("[searchEngine :: search_start] :: search_string => " + search_string);
+	console.log("[searchEngine :: search_start] :: 검색어 => " + search_string);
 
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue",
