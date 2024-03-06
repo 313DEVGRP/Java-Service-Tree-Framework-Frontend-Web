@@ -140,9 +140,8 @@ var SearchApiModule = (function () {
                                     ${highlightFields_string}                        
                                 </span>
                                 <span>                                
-                                이슈키: ${content["content"]["key"]} &nbsp;&nbsp; 지라프로젝트: ${content["content"]["project"]["project_name"]} </br>
-                                생성일: ${content["content"]["created"]} &nbsp;&nbsp;															
-                                타임스탬프: ${content["content"]["timestamp"]}
+                                </br>&nbsp; 이슈: ${content["content"]["key"]} &nbsp;&nbsp; 지라프로젝트: ${content["content"]["project"]["project_name"]} </br>                                															
+                                &nbsp; 타임스탬프: ${content["content"]["timestamp"]}
                                 </span>
                             </div>
                         </section>`
