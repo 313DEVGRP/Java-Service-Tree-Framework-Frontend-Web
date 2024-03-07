@@ -109,11 +109,14 @@ var SearchApiModule = (function () {
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
                     var highlight_stringify = "";
+                    var issue_key = (content["content"]["key"] !== null ? content["content"]["key"] : " - " );
+                    var jiraproject_name = (content["content"]["project"] !== null ? content["content"]["project"]["project_name"] : " - ");
                     if(content["highlightFields"]) {
                         highlight_stringify = JSON.stringify(content["highlightFields"], undefined, 4);
                     }
                     // highlightFields ES 자체 도출 필드
                     let highlightFields_string = (highlight_stringify === "" ? " - " : highlight_stringify);
+
                     $("#jiraissue_section .search_result_group .search_result_items").append(
                         `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
                             <div class="search_head" id="hits_order_jiraissue_${index}">
@@ -140,7 +143,7 @@ var SearchApiModule = (function () {
                                     ${highlightFields_string}                        
                                 </span>
                                 <span>                                
-                                </br>&nbsp; 이슈: ${content["content"]["key"]} &nbsp;&nbsp; 지라프로젝트: ${content["content"]["project"]["project_name"]} </br>                                															
+                                </br>&nbsp; 이슈 : ${issue_key} &nbsp;&nbsp; 지라프로젝트: ${jiraproject_name} </br>                                															
                                 &nbsp; 타임스탬프: ${content["content"]["timestamp"]}
                                 </span>
                             </div>
@@ -154,7 +157,6 @@ var SearchApiModule = (function () {
         else if (search_section === 'log') {
             $("#log_section .search_result_group .search_result_items").html("");
             console.log("[searchApiModule :: appendSearchResultSections_fluentd] :: search_result_arr길이 =>" +search_result_arr.length);
-            console.log(search_result_arr);
 
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
@@ -251,7 +253,7 @@ var SearchApiModule = (function () {
         if(search_section === "jiraissue") {
             $("#search_detail_modal_jiraissue #detail_id_jiraissue").text(targetData["id"]);
             $("#search_detail_modal_jiraissue #detail_index_jiraissue").text(targetData["index"]);
-            $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? " - " : targetData["score"]));
+            $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? targetData["score"]: " - " ));
             $("#search_detail_modal_jiraissue #detail_type_jiraissue").text(targetData["type"] === undefined ? " - " : targetData["type"]);
             $("#search_detail_modal_jiraissue #detail_modal_summary_jiraissue").text(targetData["content"]["summary"]);
             $("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["key"]);
@@ -264,15 +266,25 @@ var SearchApiModule = (function () {
             }
 
             $("#search_detail_modal_jiraissue #modal_detail_log_jiraissue").html("");
+
+            let highlightFieldsObject = targetData["highlightFields"];
+            let unique_key_array = result_of_highlightFileds(highlightFieldsObject);
+
             var stringify = JSON.stringify(targetData, undefined, 4);
             var prettify = hljs.highlight(stringify,{language : "JSON" }).value;
 
-            $("#search_detail_modal_jiraissue #modal_detail_log_jiraissue").html(prettify);
+            if(unique_key_array.length > 0) {
+                let replacedResult = replacedText(prettify, unique_key_array);
+                $("#search_detail_modal_jiraissue #modal_detail_log_jiraissue").html(replacedResult);
+            } else {
+                $("#search_detail_modal_jiraissue #modal_detail_log_jiraissue").html(prettify);
+            }
+
         }
         else if (search_section === "log") {
             $("#search_detail_modal_log #detail_id_log").text(targetData["id"]);
             $("#search_detail_modal_log #detail_index_log").text(targetData["index"]);
-            $("#search_detail_modal_log #detail_score_log").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? " - " : targetData["score"]));
+            $("#search_detail_modal_log #detail_score_log").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? targetData["score"]: " - " ));
             $("#search_detail_modal_log #detail_type_log").text(targetData["type"] === undefined ? " - " : targetData["type"]);
 
             $("#search_detail_modal_log #detail_modal_logname_log").text(targetData["content"]["logName"]);
@@ -282,12 +294,57 @@ var SearchApiModule = (function () {
             $("#search_detail_modal_log #detail_modal_container_name_log").text(targetData["content"]["container_name"]);
 
             $("#search_detail_modal_log #modal_detail_log_log").html("");
+
+            let highlightFieldsObject = targetData["highlightFields"];
+            let unique_key_array = result_of_highlightFileds(highlightFieldsObject);
+
             var stringify = JSON.stringify(targetData["content"], undefined, 4);
             var prettify = hljs.highlight(stringify,{language : "JSON" }).value;
-            $("#search_detail_modal_log #modal_detail_log_log").html(prettify);
+
+            if(unique_key_array.length > 0) {
+                let replacedResult = replacedText(prettify, unique_key_array);
+                $("#search_detail_modal_log #modal_detail_log_log").html(replacedResult);
+            } else {
+                $("#search_detail_modal_log #modal_detail_log_log").html(prettify);
+            }
 
         }
     };
+
+
+    var result_of_highlightFileds = function (highlightFieldsObject) {
+        let uniqueValues = new Set();
+        if(highlightFieldsObject) {
+            for (let key in highlightFieldsObject) {
+                highlightFieldsObject[key].forEach(value => uniqueValues.add(extractValue_in_em(value)));
+            }
+        }
+        return uniqueValues.size > 0 ? Array.from(uniqueValues) : [];
+    }
+
+    // 정규표현식으로 <em></em> 사이 값 추출
+    function extractValue_in_em(str) {
+        var regex = /<em>(.*?)<\/em>/;
+        var match = regex.exec(str);
+
+        if(match) {
+            return match[1];
+        }
+    }
+
+    // 원본 코드에서 target_text를 만나면 <em>target_text</em>의 형태로 교체
+    var replacedText = function (original_text, target_text_arr) {
+        console.log("[searchApiModule :: replacedText] :: target_text_arr");
+        console.log(target_text_arr);
+        for (let i = 0; i <target_text_arr.length; i++) {
+            let target_text = target_text_arr[i];
+            console.log("[searchApiModule :: replacedText] :: target_text => " + target_text);
+            let regex = new RegExp(target_text, 'g');
+            original_text = original_text.replace(regex,`<em>${target_text}</em>`);
+        }
+        return original_text;
+    }
+
 
     return {
         setSearchResult, getSearchResult, getHitsTotal,

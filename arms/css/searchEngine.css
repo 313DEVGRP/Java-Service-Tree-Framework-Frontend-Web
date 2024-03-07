@@ -80,3 +80,11 @@
 .modal-content .modal-body .hljs{
     background: rgba(51,51,51,0.425) !important;
 }
+
+.modal-content .modal-body .hljs em{
+    font-weight: bold;
+    color: #E49400;
+    text-decoration: underline;
+    font-style: normal;
+    background-color: #00008b;
+}
