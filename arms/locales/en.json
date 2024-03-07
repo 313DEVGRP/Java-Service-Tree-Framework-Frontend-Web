@@ -1,32 +1,32 @@
 {
 	"nav": {
 		"product": {
-			"p": "Product Management",
-			"v": "Version Management"
+			"p": "<span style='font-size:12px;'>Product</span> <span style='font-size:10px;vertical-align: bottom;'>Manage</span>",
+			"v": "<span style='font-size:12px;'>Version</span> <span style='font-size:10px;vertical-align: bottom;'>Manage</span>"
 		},
 		"alm": {
-			"s": "Server Management",
-			"c": "Manage Connection"
+			"s": "<span style='font-size:12px;'>Server</span> <span style='font-size:10px;vertical-align: bottom;'>Manage</span>",
+			"c": "<span style='font-size:12px;'>Connect</span> <span style='font-size:10px;vertical-align: bottom;'>Manage</span>"
 		},
 		"requirement": {
-			"q": "Demand Management",
-			"s": "Status Management"
+			"q": "<span style='font-size:12px;'>Demand</span> <span style='font-size:10px;vertical-align: bottom;'>Manage</span>",
+			"s": "<span style='font-size:12px;'>Status</span> <span style='font-size:10px;vertical-align: bottom;'>Manage</span>"
 		},
 		"analysis": {
-			"g": "Gantt Chart",
-			"t": "Time Analysis",
-			"s": "Scope Analysis",
-			"r": "Resource Analysis",
-			"c": "Cost Analysis"
+			"g": "<span style='font-size:12px;'>Gantt Chart</span>",
+			"t": "<span style='font-size:12px;'>Time Analysis</span>",
+			"s": "<span style='font-size:12px;'>Scope Analysis</span>",
+			"r": "<span style='font-size:12px;'>Resource Analysis</span>",
+			"c": "<span style='font-size:12px;'>Cost Analysis</span>"
 		},
 		"community": {
-			"n": "Notice",
-			"q": "Inquiry Answers",
-			"p": "Patch Note",
-			"m": "Manual",
-			"t": "Administrative Tools",
-			"c": "Contributors",
-			"l": "Licenses"
+			"n": "<span style='font-size:12px;'>Notice Board</span>",
+			"q": "<span style='font-size:12px;'>Inquiry Answers</span>",
+			"p": "<span style='font-size:12px;'>Update Note</span>",
+			"m": "<span style='font-size:12px;'>User Manual</span>",
+			"t": "<span style='font-size:12px;'>Dev Tools</span>",
+			"c": "<span style='font-size:12px;'>Contributors</span>",
+			"l": "<span style='font-size:12px;'>Licenses</span>"
 		}
 	}
 }
