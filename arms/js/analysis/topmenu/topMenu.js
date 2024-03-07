@@ -3,12 +3,15 @@ function getReqAndLinkedIssueData(pdservice_id, pdServiceVersionLinks) {
     $.ajax({
         url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
         type: "GET",
-        data: { "서비스아이디" : pdservice_id,
+        data: {
+            "pdServiceLink" : pdservice_id,
             "pdServiceVersionLinks" : pdServiceVersionLinks,
             "메인그룹필드" : "isReq",
             "하위그룹필드들": "assignee.assignee_emailAddress.keyword",
             "컨텐츠보기여부" : true,
-            "크기" : 1000},
+            "크기" : 1000,
+            "하위크기": 1000
+        },
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
@@ -78,11 +81,14 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
     $.ajax({
         url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
         type: "GET",
-        data: { "서비스아이디" : pdservice_id,
-            "pdServiceVersionLinks" : pdServiceVersionLinks,
-            "메인그룹필드" : "assignee.assignee_emailAddress.keyword",
-            "컨텐츠보기여부" : true,
-            "크기" : 1000},
+        data: {
+            "pdServiceLink": pdservice_id,
+            "pdServiceVersionLinks": pdServiceVersionLinks,
+            "메인그룹필드": "assignee.assignee_emailAddress.keyword",
+            "컨텐츠보기여부": true,
+            "크기": 1000,
+            "하위크기": 1000
+        },
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
