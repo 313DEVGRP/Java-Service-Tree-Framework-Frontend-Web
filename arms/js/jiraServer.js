@@ -174,6 +174,9 @@ function draw_card_deck(cardInfo) {
 			if (cardList[i].c_jira_server_type === '온프레미스') {
 				insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
 			}
+			if (cardList[i].c_jira_server_type === '레드마인') {
+                insertImage = `<img src="./img/redmine_fluid_icon.png" width="30px" style=""></img>`;
+            }
 
 			data +=
 				`
@@ -291,9 +294,12 @@ function jiraServerCardClick(c_id) {
 			if(selectServerType === "클라우드") {
 				$("#detailview_jira_server_type_option1").parent().click();
 				$("#editview_jira_server_type_option1").parent().click();
-			} else {
+			} else if(selectServerType === "온프레미스")  {
 				$("#detailview_jira_server_type_option2").parent().click();
 				$("#editview_jira_server_type_option2").parent().click();
+			} else{
+			    $("#detailview_jira_server_type_option3").parent().click();
+            	$("#editview_jira_server_type_option3").parent().click();
 			}
 
 			// BASE_URL
