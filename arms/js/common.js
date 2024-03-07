@@ -1796,7 +1796,27 @@ function bindLocaleText(locales) {
 	const targets = document.querySelectorAll("[data-locale]");
 
 	targets.forEach((tag) => {
-		tag.textContent = locales[tag.dataset.locale];
+		const content = locales[tag.dataset.locale];
+		if (isIncludeHTMLTag(content)) {
+			tag.innerHTML = sanitizeHTML(content);
+		} else {
+			tag.textContent = content;
+		}
+	});
+}
+
+function isIncludeHTMLTag(content) {
+	return /<\/?[a-z][\s\S]*>/i.test(content);
+}
+
+function sanitizeHTML(content) {
+	const allowedTags = ['span', 'small', 'strong', 'p', 'b', 'ul', 'li'];
+	return content.replace(/<(\w+)[^>]*>|<\/(\w+)>/g, (match, openTag, closeTag) => {
+		const tagName = (openTag || closeTag).toLowerCase();
+		if (allowedTags.includes(tagName)) {
+			return match.replace(/ on\w+="[^"]*"| on\w+='[^']*'/g, ''); // 이벤트 핸들러 속성 제거
+		}
+		return ''; // 허용되지 않은 태그 제거
 	});
 }
 
