@@ -9,16 +9,6 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
-	//해당 이벤트리스너 메인에서 지워져있음.
-	// window.addEventListener(
-	// 	"error",
-	// 	function (event) {
-	// 		console.error("페이지 로드 중 에러 발생 :: " + event.message);
-	//
-	// 		//window.location.reload();
-	// 	},
-	// 	{ once: true }
-	// );
 });
 
 function runScript() {
@@ -179,8 +169,15 @@ function 로드_완료_이후_실행_함수() {
 // 우측_상단_사용자_정보_설정
 ////////////////////////////////////////////////////////////////////////////////////////
 function 우측_상단_사용자_정보_설정() {
-	var account_html = "<span style='color:#a4c6ff;'>\"" + userName + "\"</span>";
-	$("#login_id").append(account_html);
+
+	var str = window.location.href;
+	if (str.indexOf("php") > 0) {
+		var account_html = "<span style='color:#a4c6ff;'>not supported</span>";
+		$("#login_id").append(account_html);
+	}else {
+		var account_html = "<span style='color:#a4c6ff;'>\"" + userName + "\"</span>";
+		$("#login_id").append(account_html);
+	}
 }
 
 
