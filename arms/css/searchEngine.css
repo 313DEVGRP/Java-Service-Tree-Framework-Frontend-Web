@@ -82,9 +82,9 @@
 }
 
 .modal-content .modal-body .hljs em{
-    font-weight: bold;
-    color: #E49400;
-    text-decoration: underline;
+    padding: 2px 4px;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 3px;
     font-style: normal;
-    background-color: #00008b;
 }
