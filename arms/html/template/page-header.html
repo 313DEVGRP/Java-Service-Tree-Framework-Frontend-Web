@@ -69,63 +69,29 @@
 				class="dropdown-toggle"
 				data-toggle="dropdown">
 				<i class="glyphicon glyphicon-globe"></i>
-				<span class="count">8</span>
+				<span class="count">3</span>
 			</a>
 			<ul id="support_menu"
-				class="dropdown-menu support"
+				class="dropdown-menu support locale-menu"
 				role="menu">
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-important"><i class="fa fa-bell-o"></i></span>
-						</div>
-						<div class="details">Check out this awesome ticket</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-warning"><i class="fa fa-question-circle"></i></span>
-						</div>
-						<div class="details">"What is the best way to get ...</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-success"><i class="fa fa-tag"></i></span>
-						</div>
-						<div class="details">This is just a simple notification</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-info"><i class="fa fa-info-circle"></i></span>
-						</div>
-						<div class="details">12 new orders has arrived today</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-important"><i class="fa fa-plus"></i></span>
-						</div>
-						<div class="details">One more thing that just happened</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="text-align-center see-all">
-						See all tickets
-						<i class="fa fa-arrow-right"></i>
-					</a>
-				</li>
+                <li role="presentation" class="locale-item">
+                    <a href="#" class="locale-selector" data-key="ko">
+                        <div class="picture"><span class="fi fi-kr"></span></div>
+                        <div class="details" data-locale="nav.language.ko">한국어</div>
+                    </a>
+                </li>
+                <li role="presentation" class="locale-item">
+                    <a href="#" class="locale-selector" data-key="jp">
+                        <div class="picture"><span class="fi fi-jp"></span></div>
+                        <div class="details" data-locale="nav.language.jp">일본어</div>
+                    </a>
+                </li>
+                <li role="presentation" class="locale-item">
+                    <a href="#" class="locale-selector" data-key="en">
+                        <div class="picture"><span class="fi fi-us"></span></div>
+                        <div class="details" data-locale="nav.language.en">영어</div>
+                    </a>
+                </li>
 			</ul>
 		</li>
 		<li class="divider"></li>
@@ -197,6 +163,45 @@
     <div class="notifications pull-right" style="line-height: 21px !important;"></div>
 </div>
 
+
+<style>
+    /* Locale 선택 메뉴 스타일링 */
+    .locale-selector {
+        .picture {
+            float: left;
+            text-align: center;
+        }
+        .details {
+            margin-left: 30px;
+        }
+    }
+    .locale-menu {
+        min-width: 120px;
+        /* 국기 아이콘 적용 (ref: https://github.com/lipis/flag-icons) */
+        .fi {
+            background-size: contain;
+            background-position: 50%;
+            background-repeat: no-repeat;
+            position: relative;
+            display: inline-block;
+            width: 1.333333em;
+            line-height: 1em;
+        }
+        .fi:before {
+            content: " ";
+        }
+        .fi-kr {
+            background-image: url('./img/flags/kr.svg');
+        }
+        .fi-jp {
+            background-image: url('./img/flags/jp.svg');
+        }
+        .fi-us {
+            background-image: url('./img/flags/us.svg');
+        }
+    }
+</style>
+
 <script>
 
 	(function ($) {
@@ -220,9 +225,16 @@
 				complete: function () {
 				}
 			});
-
-
 		});
+
+        $(".locale-selector").click(function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const $this = $(this);
+            const selectedLocale = $this.attr("data-key");
+            changeLocale(selectedLocale);
+            $this.closest(".dropdown-menu").dropdown("toggle");
+        });
 	})(jQuery);
 
 </script>
