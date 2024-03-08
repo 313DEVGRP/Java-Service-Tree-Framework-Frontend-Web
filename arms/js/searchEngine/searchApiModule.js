@@ -82,7 +82,7 @@ var SearchApiModule = (function () {
                         <div class="search_title">
                             <span style="font-size: 13px; color:#a4c6ff;">
                                 <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                    <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                    <img src="/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
                                 </span>                                
                                 &nbsp; 검색 결과가 없습니다. &nbsp;
                             </span>
@@ -123,7 +123,7 @@ var SearchApiModule = (function () {
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
                                         <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                            <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                            <img src="/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
                                         </span>
                                         <!-- 지라이슈 summary 나오도록 -->
                                         &nbsp;${content["content"]["summary"]}							
@@ -171,7 +171,7 @@ var SearchApiModule = (function () {
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
                                         <span role="img" aria-label=":sparkles:" title=":sparkles:" style="background-color: transparent; display: inline-block; vertical-align: middle;">
-                                            <img src="http://www.313.co.kr/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
+                                            <img src="/arms/img/bestqulity.png" alt=":sparkles:" width="15" height="15" class="CToWUd" data-bit="iit" style="margin: 0px; padding: 0px; border: 0px; display: block; max-width: 100%; height: auto;">
                                         </span>
                                         <!-- 로그네임 표시 -->
                                         &nbsp;${content["content"]["logName"]}							

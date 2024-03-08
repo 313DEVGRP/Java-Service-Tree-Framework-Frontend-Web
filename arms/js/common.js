@@ -171,7 +171,18 @@ function 로드_완료_이후_실행_함수() {
 	setLocale();
 	widgsterWrapper();
 	검색_이벤트_트리거();
+
+	우측_상단_사용자_정보_설정();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 우측_상단_사용자_정보_설정
+////////////////////////////////////////////////////////////////////////////////////////
+function 우측_상단_사용자_정보_설정() {
+	var account_html = "<span style='color:#a4c6ff;'>\"" + userName + "\"</span>";
+	$("#login_id").append(account_html);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 플러그인 로드 모듈 ( 병렬 시퀀스 )
@@ -364,7 +375,6 @@ function authUserCheck() {
 			statusCode: {
 				200: function (json) {
 					console.log("[ common :: authUserCheck ] userName = " + json.preferred_username);
-					console.log("[ common :: authUserCheck ] permissions = ");
 					console.log("[ common :: authUserCheck ] sub = " + json.sub);
 					console.log(json.realm_access.roles);
 					userName = json.preferred_username;
@@ -372,10 +382,6 @@ function authUserCheck() {
 					userID = json.sub;
 					userEmail = json.email;
 					fullName = json.name;
-
-					var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
-					account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
-					$(".account-picture").append(account_html);
 
 					runScript();
 				},
