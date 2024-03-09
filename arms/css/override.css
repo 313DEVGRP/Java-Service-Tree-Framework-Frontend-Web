@@ -1644,13 +1644,37 @@ svg .ghostCircle.show {
 #reqDataTable .reqTable th.desc:after {
 	background-image: url(../img/datatable/sort_desc.png);
 }
+#reqDataTable .root {
+	padding-left: 25px !important;
+	text-align: left !important;
+}
 
-#reqDataTable .highlight {
+#reqDataTable .pivotTable {
+	min-width: 120%;
+}
+
+#reqDataTable .pivotTable .highlight {
 	color: #a4c6ff;
 }
 
-#reqDataTable .col-span {
-	border-right: none !important;
+#reqDataTable .pivot-toggle {
+	margin-right: 3px;
+	padding: 0 3px;
+	background-color: transparent;
+}
+#reqDataTable .pivot-toggle .fa {
+	vertical-align: text-bottom;
+	font-size: 14px;
+	color: #a4c6ff;
+}
+#reqDataTable .pivot-toggle .fa-minus-square {
+	display: none;
+}
+#reqDataTable .pivot-toggle.active .fa-plus-square {
+	display: none;
+}
+#reqDataTable .pivot-toggle.active .fa-minus-square {
+	display: block;
 }
 
 /* cost 분석 */
