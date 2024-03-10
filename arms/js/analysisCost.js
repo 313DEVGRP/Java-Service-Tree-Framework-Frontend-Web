@@ -280,7 +280,7 @@ function fetchUpdatedData() {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 연봉 정보 업데이트(PUT), 조회(GET) 완료 후 데이터 가공하여 데이터테이블 reload
-////////////////////////////////////////////////////////////////////////////////////////function handleData(apiResponse) {
+////////////////////////////////////////////////////////////////////////////////////////
 function handleData(apiResponse) {
     버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
     전체담당자목록 = apiResponse.response.전체담당자목록;
@@ -305,8 +305,32 @@ function handleData(apiResponse) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+// 연봉 정보 업데이트(PUT), 조회(GET) 완료 후 데이터 가공하여 데이터테이블 reload 포커스 이동
+////////////////////////////////////////////////////////////////////////////////////////
+function focusOnRow() {
+    let key = $('#editview_assignee_key').val();
+    let table = $('#manpower-annual-income').DataTable();
+    let rowIndex = -1;
+    table.rows().every(function(index) {
+        let row = $(this.node());
+        if (row.find('.assignee-key').text() === key) {
+            rowIndex = index;
+            return false;
+        }
+    });
+
+    if (rowIndex !== -1) {
+        let page = Math.floor(rowIndex / table.page.info().length);
+        table.page(page).draw('page');
+
+        let row = $(table.row(rowIndex).node());
+        row.focus();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 // 연봉 정보 업데이트 버튼 클릭 이벤트 처리
-////////////////////////////////////////////////////////////////////////////////////////function handleData(apiResponse) {
+////////////////////////////////////////////////////////////////////////////////////////
 function click_btn_for_assignee_update() {
     $("#edit_assignee_update, #footer_edit_assignee_update").click(function () {
         updateSalary()
@@ -314,6 +338,7 @@ function click_btn_for_assignee_update() {
               console.log(data);
               fetchUpdatedData()
                 .done(handleData)
+                .then(focusOnRow)
                 .fail(() => jError("연봉 정보 변경에 실패했습니다."));
           });
     });
@@ -575,7 +600,7 @@ function manpowerInput(전체담당자목록) {
                 if (isEmpty(data) || data === "unknown") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+                    return "<div style='white-space: nowrap; color: #a4c6ff' class='assignee-key'>" + data + "</div>";
                 }
                 return data;
             },
