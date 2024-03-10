@@ -1,6 +1,6 @@
 <div class="col-lg-12">
 	<div class="row">
-		<div class="col-lg-10 col-md-offset-1">
+		<div class="col-lg-10 col-md-offset-0">
 			<section
 				class="widget"
 				style="margin-bottom: 25px">
@@ -28,20 +28,24 @@
 								</span>
 							</div>
                             <div class="search-nav" style="margin-top: 10px">
-                                <li class="btn-group">
+                                <li class="btn-group" id="date-range-group">
                                     <span class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer; color:#a4c6ff; font-size: 12px;">
-                                        &nbsp; <i class="fa fa-home"></i> 모든 날짜 &nbsp;
+                                        &nbsp; <i class="fa fa-home"></i> <span id="date-range">모든 날짜</span> &nbsp;
                                         <i class="fa fa-caret-down"></i>
                                     </span>
                                     <ul class="dropdown-menu"
                                         style="background: rgba(51, 51, 51, 0.9) !important;">
-                                        <li><a href="#" style="color: white;">모든 날짜</a></li>
-                                        <li><a href="#" style="color: white;">지난 1시간</a></li>
-                                        <li><a href="#" style="color: white;">지난 1일</a></li>
-                                        <li><a href="#" style="color: white;">지난 1주</a></li>
-                                        <li><a href="#" style="color: white;">지난 1개월</a></li>
-                                        <li><a href="#" style="color: white;">지난 1년</a></li>
-                                        <li><a href="#" style="color: white;">기간 설정</a></li>
+                                        <li><a href="#" id="all-time" style="color: white;">모든 날짜</a></li>
+                                        <li><a href="#" id="previous-hour" style="color: white;">지난 1시간</a></li>
+                                        <li><a href="#" id="previous-day" style="color: white;">지난 1일</a></li>
+                                        <li><a href="#" id="previous-week" style="color: white;">지난 1주</a></li>
+                                        <li><a href="#" id="previous-month" style="color: white;">지난 1개월</a></li>
+                                        <li><a href="#" id="previous-year" style="color: white;">지난 1년</a></li>
+                                        <li><a id="custom-range"
+                                               data-toggle="modal"
+                                               data-target="#search_range_modal" data-backdrop="false"
+                                               style="color: white;">기간 설정</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="divider"></li>
@@ -61,6 +65,17 @@
                                         <i class="fa fa-home"></i>
                                         추천 검색 :
                                     </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li style="display: flex; align-items: center;">
+                                    <a
+                                            href=""
+                                            style="font-size: 12px; margin-right: 3px">
+                                        <i class="fa fa-home"></i>
+                                        검색 조건 :
+                                    </a>
+                                    <ul id="filter_list">
+                                    </ul>
                                 </li>
                             </div>
 						</div>
@@ -429,6 +444,163 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<!--   -->
+<div
+        id="search_range_modal"
+        class="modal fade"
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="myModalLabel"
+        aria-hidden="false"
+        style="display: none; border-radius: 10px"
+        data-backdrop="true">
+    <div
+            class="modal-dialog"
+            style="height: 50%">
+        <div class="modal-content modalDarkBack col-lg-4">
+            <div
+                    class="modal-header"
+                    style="margin: 10px 5px; border-bottom: 1px;">
+                <h4
+                        class="modal-title font13"
+                        id="search_range_modal_label"
+                        style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+                    <i class="fa fa-file-text-o"></i>
+                    검색 기간 설정
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="top: 5px; right: 5px">
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <blockquote class="font13">
+                검색하고자 하는 시작일과 종료일을 선택해주세요.
+                <div style="float: right">
+                    <button
+                            class="btn btn-transparent btn-xs"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+                            onclick="return true;">
+                        Help
+                        <i
+                                class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                    </button>
+                </div>
+            </blockquote>
+            <div class="modal-body">
+                <form
+                        class="form-horizontal detail_contents"
+                        method="post">
+                    <fieldset>
+                        <div class="panel-group col-md-12">
+                            <div class="panel">
+                                <div class="panel-collapse in collapse">
+                                    <div class="panel-body">
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget" style="margin-bottom: 5px">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															시작일
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels app-progress-label">
+                                                        <div>
+                                                            <li style="display: flex">
+                                                                <a href="#" id="btn_select_calendar" class="btn btn-danger" style="background-color: #e5603b !important; border: 1px solid transparent !important" data-date-format="yyyy/mm/dd">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </a>
+                                                                <input id="date_timepicker_start"
+                                                                       class="form-control darkBack" type="text" value=""
+                                                                       required
+                                                                       pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/">
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget" style="margin-bottom: 5px">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															종료일
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels progress-wave-label">
+                                                        <div>
+                                                            <li style="display: flex">
+                                                                <a href="#" id="btn_select_calendar" class="btn btn-danger" style="background-color: #e5603b !important; border: 1px solid transparent !important" data-date-format="yyyy/mm/dd">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </a>
+                                                                <input id="date_timepicker_end"
+                                                                       class="form-control darkBack" type="text" value=""
+                                                                       required
+                                                                       pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/">
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div
+                 class="modal-footer"
+                 style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                <button
+                        type="button"
+                        id="modal_close_btn"
+                        class="btn btn-success"
+                        data-dismiss="modal"
+                        onClick="customRangeSetting()">
+                    검색 실행
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 검색결과_상세_모달_기본 -->
@@ -902,11 +1074,16 @@
 																	February 14th 2024, 17:00
 																</a>
 															</li>
+                                                            <li>
+                                                                ✔ 최종수정 :
+                                                                <a
+                                                                        id="detail_modal_timestamp_jiraissue">
+                                                                </a>
+                                                            </li>
 															<li>
-																✔ 생성일 :
+																✔ 최초생성 :
 																<a
 																	id="detail_modal_created_jiraissue">
-																	4
 																</a>
 															</li>
 															<li>

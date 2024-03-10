@@ -135,7 +135,7 @@ function makePdServiceSelectBox() {
 				}
 				//////////////////////////////////////////////////////////
 				console.log("[analysisScope :: makePdServiceSelectBox] :: pdServiceListData => " );
-				console.log(pdServiceListData);
+				console.table(pdServiceListData);
 			}
 		}
 	});
@@ -183,7 +183,6 @@ function makeVersionMultiSelectBox() {
 			// 요구사항 및 연결이슈 통계
 			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 			// Circular Packing with D3 차트
-			//getReqStatusAndAssignees(selectedPdServiceId, versionTag);
 			getReqStatusAndInvolvedAssignees(selectedPdServiceId, selectedVersionId);
 
 			// 네트워크 차트
@@ -191,16 +190,9 @@ function makeVersionMultiSelectBox() {
 			getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
 			// 나이팅게일로즈 차트(pie) - 버전별 요구사항
-			//getReqPerVersion(selectedPdServiceId, selectedVersionId, versionTag);
 			getReqPerMappedVersions(selectedPdServiceId, selectedVersionId, versionTag);
 
 			treeBar();
-
-			//요구사항 현황 데이터 테이블 로드
-			// console.log(" ============ makeVersionMultiSelectBox ============= ");
-			// endPointUrl =
-			// 	"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-			// 요구사항_현황_데이터_테이블($("#selected_pdService").val(), endPointUrl);
 
 		}
 	});
@@ -216,14 +208,12 @@ function bind_VersionData_By_PdService() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
-				//console.log(data.response);
 				var pdServiceVersionIds = [];
 				versionListData = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
 					pdServiceVersionIds.push(obj.c_id);
 					versionListData.push(obj);
-					// versionListData.push({ c_id: obj.c_id, versionTitle: obj.c_title });
 					var newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
@@ -236,7 +226,6 @@ function bind_VersionData_By_PdService() {
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 				// Circular Packing with D3 차트
-				//getReqStatusAndAssignees(selectedPdServiceId, pdServiceVersionIds);
 				getReqStatusAndInvolvedAssignees(selectedPdServiceId, selectedVersionId);
 				// 네트워크 차트
 				statisticsMonitor($("#selected_pdService").val(), selectedVersionId);
@@ -249,16 +238,11 @@ function bind_VersionData_By_PdService() {
 					console.log("display 재설정.");
 				}
 				treeBar();
-				//$('#multiversion').multipleSelect('refresh');
-				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
 
-
 				//요구사항 현황 데이터 테이블 로드
-				console.log("=========================");
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false&versionTag=" + versionTag;
-				요구사항_현황_데이터_테이블($("#selected_pdService").val(), endPointUrl);
+				var 요구사항_호출_주소 = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getNodesWithoutRoot.do";
+				요구사항_현황_데이터_테이블($("#selected_pdService").val(), 요구사항_호출_주소);
 				//////////////////////////////////////////////////////////
 			}
 		}
@@ -1568,11 +1552,11 @@ function responsiveTreeBar(svg) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 	var columnList = [
-		{ name: "c_pdservice_link", title: "제품(서비스) 아이디", data: "c_pdservice_link", visible: false },
+		{ name: "pdServiceEntity.c_id", title: "제품(서비스) 아이디", data: "pdServiceEntity.c_id", visible: false },
 		{
-			name: "c_pdservice_name",
-			title: "제품(서비스)",
-			data: "c_pdservice_name",
+			name: "c_req_pdservice_versionset_link",
+			title: "버전",
+			data: "c_req_pdservice_versionset_link",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1584,67 +1568,15 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			className: "dt-body-left",
 			visible: true
 		},
-		{ name: "c_pds_version_link", title: "제품(서비스) 버전 아이디", data: "c_pds_version_link", visible: false },
 		{
-			name: "c_pds_version_name",
-			title: "제품(서비스) 버전",
-			data: "c_pds_version_name",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_req_link", title: "요구사항 아이디", data: "c_req_link", visible: false },
-		{ name: "c_issue_url", title: "요구사항 이슈 주소", data: "c_issue_url", visible: false },
-		{
-			name: "c_req_name",
+			name: "c_title",
 			title: "요구사항",
-			data: "c_req_name",
+			data: "c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_jira_server_link", title: "지라 서버 아이디", data: "c_jira_server_link", visible: false },
-		{ name: "c_jira_server_url", title: "지라 서버 주소", data: "c_jira_server_url", visible: false },
-		{
-			name: "c_jira_server_name",
-			title: "JIRA 서버명",
-			data: "c_jira_project_name",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_jira_project_link", title: "지라 프로젝트 아이디", data: "c_jira_project_link", visible: false },
-		{ name: "c_jira_project_url", title: "지라 프로젝트 주소", data: "c_jira_project_url", visible: false },
-		{
-			name: "c_jira_project_name",
-			title: "JIRA 프로젝트명",
-			data: "c_jira_project_name",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 45) + "</div>";
 				}
 				return data;
 			},
@@ -1652,14 +1584,14 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "c_jira_project_key",
-			title: "JIRA 프로젝트키",
-			data: "c_jira_project_key",
+			name: "reqPriorityEntity.c_title",
+			title: "우선순위",
+			data: "reqPriorityEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 10) + "</div>";
 				}
 				return data;
 			},
@@ -1667,52 +1599,14 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "c_issue_key",
-			title: "요구사항 이슈 키",
-			data: "c_issue_key",
+			name: "reqDifficultyEntity.c_title",
+			title: "난이도",
+			data: "reqDifficultyEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					var _render =
-						'<div style=\'white-space: nowrap; color: #a4c6ff\'>' + data +
-						'<button data-target="#my_modal2" data-toggle="modal" style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_issue_key('
-						+ '\'' + row.c_jira_server_link + '\','
-						+ '\'' + row.c_issue_key + '\')"><i class="fa fa-list-alt"></i></button>'+
-						"</div>";
-					return _render;
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_issue_priority_link", title: "요구사항 이슈 우선순위 아이디", data: "c_issue_priority_link", visible: false },
-		{
-			name: "c_issue_priority_name",
-			title: "요구사항 이슈 우선순위",
-			data: "c_issue_priority_name",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ name: "c_issue_status_link", title: "요구사항 이슈 상태 아이디", data: "c_issue_status_link", visible: false },
-		{
-			name: "c_issue_status_name",
-			title: "요구사항 이슈 상태",
-			data: "c_issue_status_name",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 10) + "</div>";
 				}
 				return data;
 			},
@@ -1720,59 +1614,14 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "c_issue_reporter",
-			title: "요구사항 이슈 보고자",
-			data: "c_issue_reporter",
+			name: "reqStateEntity.c_title",
+			title: "상태",
+			data: "reqStateEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{
-			name: "c_issue_assignee",
-			title: "요구사항 이슈 할당자",
-			data: "c_issue_assignee",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{
-			name: "c_issue_create_date",
-			title: "요구사항 이슈 생성일자",
-			data: "c_issue_create_date",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{
-			name: "c_issue_update_date",
-			title: "요구사항 이슈 최근 업데이트 일자",
-			data: "c_issue_update_date",
-			render: function (data, type, row, meta) {
-				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
-				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 10) + "</div>";
 				}
 				return data;
 			},
@@ -1780,7 +1629,7 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		}
 	];
-	var rowsGroupList = [1,3,6];
+	var rowsGroupList = [1,2];
 	var columnDefList = [
 		{
 			orderable: false,
@@ -1790,7 +1639,7 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 	];
 	var orderList = [[1, "asc"]];
 	var jquerySelector = "#reqstatustable";
-	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+	var ajaxUrl = "/auth-user/api/arms/reqAdd" + endPointUrl;
 	var jsonRoot = "";
 	var buttonList = [
 		"copy",
