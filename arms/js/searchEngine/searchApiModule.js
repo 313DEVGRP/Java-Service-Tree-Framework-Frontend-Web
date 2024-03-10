@@ -1,5 +1,63 @@
 var SearchApiModule = (function () {
     "use strict";
+
+    var searchRagneDate = {
+        "start-date": null,
+        "end-daet" : null
+    };
+
+    var getRangeDate = function () {
+        return searchRagneDate;
+    };
+
+    var setRangeDate = function (rangeTypeId) {
+        let today = new Date();
+        let today_ISOString = today.toISOString();
+        searchRagneDate["end-date"] = today_ISOString.slice(0,10);
+        console.log("[searchApiModule :: setRangeDate] :: today => " + today);
+        console.log("[searchApiModule :: setRangeDate] :: today.ISOString => " + today.toISOString());
+
+        switch (rangeTypeId) {
+            case "custom-range" : //일단 올타임으로 설정.
+                //custom-range 일 경우만 end-date설정
+                searchRagneDate["start-date"] = null; // 변경필요.
+                searchRagneDate["end-date"] = today_ISOString; // 변경필요.
+                break;
+            case "all-time":
+                searchRagneDate["start-date"] = null;
+                break;
+            case "previous-hour":
+                let oneHourAgo = new Date(today.getTime() - (1 * 60 * 60 * 1000));
+                searchRagneDate["start-date"] = oneHourAgo.toISOString();
+                searchRagneDate["end-date"] = today.toISOString();
+                break;
+            case "previous-day":
+                let oneDayAgo = new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000);
+                searchRagneDate["start-date"] = oneDayAgo.toISOString().slice(0,10);
+                break;
+            case "previous-week":
+                let oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                searchRagneDate["start-date"] = oneWeekAgo.toISOString().slice(0,10);
+                break;
+            case "previous-month":
+                let oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+                searchRagneDate["start-date"] = oneMonthAgo.toISOString().slice(0,10);
+                break;
+            case "previous-year":
+                let oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+                searchRagneDate["start-date"] = oneYearAgo.toISOString().slice(0,10);
+                break;
+        }
+
+    };
+
+    var setRangeDateAsync = function(rangeTypeId) {
+        return new Promise( (resolve, reject) => {
+            setRangeDate(rangeTypeId);
+            resolve();
+        });
+    };
+
     var searchResult = {
         "jiraissue" : null,
         "log" : null
@@ -50,11 +108,11 @@ var SearchApiModule = (function () {
 
         let pagination = '';
         pagination += '<ul class="pagination">';
-        pagination += `<li class="prev ${currentPage === 1 ? 'disabled' : ''}"><a href="#" onclick="changePage(\'${search_section}\',${startPage - 1})">Prev</a></li>`;
+        pagination += `<li class="prev ${currentPage === 1 ? 'disabled' : ''}"><a onclick="changePage(\'${search_section}\',${startPage - 1})">Prev</a></li>`;
         for (let i = 1; i <= endPage; i++) {
-            pagination += `<li class="${currentPage === i ? 'active' : ''} page-num-${i}"><a href="#" onclick="changePage(\'${search_section}\',${i})">${i}</a></li>`;
+            pagination += `<li class="${currentPage === i ? 'active' : ''} page-num-${i}"><a onclick="changePage(\'${search_section}\',${i})">${i}</a></li>`;
         }
-        pagination += `<li class="next ${totalPage === endPage ? 'disabled' : ''}"><a href="#" onclick="changePage(\'${search_section}\',${endPage + 1})">Next</a></li>`;
+        pagination += `<li class="next ${totalPage === endPage ? 'disabled' : ''}"><a onclick="changePage(\'${search_section}\',${endPage + 1})">Next</a></li>`;
         pagination += '</ul>';
 
         let pagination_spot = '#'+search_section+'_section'+' .pagination-div';
@@ -75,7 +133,7 @@ var SearchApiModule = (function () {
             $("#"+search_section+"_section .search_results_total").text("0건");
             $("#"+search_section+"_section .search_results_total").css("color",null);
         }
-        let today = new Date();
+        let today = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
         let no_search_result =
             `<section class="search-result">                    
                     <div class="search_head search_none" id="no_search_result_${search_section}">
@@ -116,7 +174,7 @@ var SearchApiModule = (function () {
                     }
                     // highlightFields ES 자체 도출 필드
                     let highlightFields_string = (highlight_stringify === "" ? " - " : highlight_stringify);
-
+                    let timestamp_kst = new Date(content["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
                     $("#jiraissue_section .search_result_group .search_result_items").append(
                         `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
                             <div class="search_head" id="hits_order_jiraissue_${index}">
@@ -134,7 +192,7 @@ var SearchApiModule = (function () {
                                         <small>${content["index"]}</small>
                                     </p>
                                     <p class="text-success" style="margin: 5px 0 5px 5px;">
-                                        <small>${content["content"]["created"]}</small>
+                                        <small>${timestamp_kst}</small>
                                     </p>
                                 </div>
                             </div>
@@ -144,7 +202,7 @@ var SearchApiModule = (function () {
                                 </span>
                                 <span>                                
                                 </br>&nbsp; 이슈 : ${issue_key} &nbsp;&nbsp; 지라프로젝트: ${jiraproject_name} </br>                                															
-                                &nbsp; 타임스탬프: ${content["content"]["timestamp"]}
+                                &nbsp; 최초생성일: ${content["content"]["created"]}
                                 </span>
                             </div>
                         </section>`
@@ -165,6 +223,7 @@ var SearchApiModule = (function () {
                         highlight_stringify = JSON.stringify(content["highlightFields"], undefined, 4);
                     }
                     let highlightFields_string = (highlight_stringify === "" ? content["content"]["log"] : highlight_stringify);
+                    let timestamp_kst = new Date(content["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
                     $("#log_section .search_result_group .search_result_items").append(
                         `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
                             <div class="search_head" id="hits_order_log_${index}">
@@ -182,7 +241,7 @@ var SearchApiModule = (function () {
                                         <small>${content["index"]}</small>
                                     </p>
                                     <p class="text-success" style="margin: 5px 0 5px 5px;">
-                                        <small>${content["content"]["timestamp"]}</small>
+                                        <small>${timestamp_kst}</small>
                                     </p>
                                 </div>
                             </div>
@@ -200,7 +259,6 @@ var SearchApiModule = (function () {
         }
 
     };
-
 
     var updateButtons = function (search_section, current_page, pageStart) {
         console.log("[searchApiModule :: updateButtons] :: current_page => " + current_page);
@@ -222,11 +280,11 @@ var SearchApiModule = (function () {
         }
 
         let pagination = '<ul class="pagination">';
-        pagination += `<li class="prev ${current_page === 1 ? 'disabled' : ''}"><a href="#" onclick="changePage('${search_section}', ${Math.max(startPage - 10, 1)})">Prev</a></li>`;
+        pagination += `<li class="prev ${current_page === 1 ? 'disabled' : ''}"><a onclick="changePage('${search_section}', ${Math.max(startPage - 10, 1)})">Prev</a></li>`;
         for (let i = startPage; i <= endPage; i++) {
-            pagination += `<li class="${current_page === i ? 'active' : ''} page-num-${i}"><a href="#" onclick="changePage('${search_section}', ${i})">${i}</a></li>`;
+            pagination += `<li class="${current_page === i ? 'active' : ''} page-num-${i}"><a onclick="changePage('${search_section}', ${i})">${i}</a></li>`;
         }
-        pagination += `<li class="next ${current_page === total_page ? 'disabled' : ''}"><a href="#" onclick="changePage('${search_section}', ${Math.min(endPage + 1, total_page)})">Next</a></li>`;
+        pagination += `<li class="next ${current_page === total_page ? 'disabled' : ''}"><a onclick="changePage('${search_section}', ${Math.min(endPage + 1, total_page)})">Next</a></li>`;
         pagination += '</ul>';
 
         let pagination_spot = '#' + search_section + '_section' + ' .pagination-div';
@@ -251,13 +309,17 @@ var SearchApiModule = (function () {
         console.log("[searchApiModule :: mapDataToModal] :: targetData => "); console.log(targetData);
 
         if(search_section === "jiraissue") {
+            let timestamp_kst = new Date(targetData["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
+            let created_kst = new Date(targetData["content"]["created"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
             $("#search_detail_modal_jiraissue #detail_id_jiraissue").text(targetData["id"]);
             $("#search_detail_modal_jiraissue #detail_index_jiraissue").text(targetData["index"]);
             $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? targetData["score"]: " - " ));
             $("#search_detail_modal_jiraissue #detail_type_jiraissue").text(targetData["type"] === undefined ? " - " : targetData["type"]);
             $("#search_detail_modal_jiraissue #detail_modal_summary_jiraissue").text(targetData["content"]["summary"]);
             $("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["key"]);
-            $("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["created"]);
+            $("#search_detail_modal_jiraissue #detail_modal_timestamp_jiraissue").text(timestamp_kst);
+            $("#search_detail_modal_jiraissue #detail_modal_created_jiraissue").text(created_kst);
+
             if(targetData["content"]["assignee"]) {
                 $("#search_detail_modal_jiraissue #detail_modal_assignee_name_jiraissue")
                     .text(targetData["content"]["assignee"]["assignee_displayName"]);
@@ -282,13 +344,14 @@ var SearchApiModule = (function () {
 
         }
         else if (search_section === "log") {
+            let timestamp_kst = new Date(targetData["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
             $("#search_detail_modal_log #detail_id_log").text(targetData["id"]);
             $("#search_detail_modal_log #detail_index_log").text(targetData["index"]);
             $("#search_detail_modal_log #detail_score_log").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? targetData["score"]: " - " ));
             $("#search_detail_modal_log #detail_type_log").text(targetData["type"] === undefined ? " - " : targetData["type"]);
 
             $("#search_detail_modal_log #detail_modal_logname_log").text(targetData["content"]["logName"]);
-            $("#search_detail_modal_log #detail_modal_timestamp_log").text(targetData["content"]["timestamp"]);
+            $("#search_detail_modal_log #detail_modal_timestamp_log").text(timestamp_kst);
             $("#search_detail_modal_log #detail_modal_source_log").text(targetData["content"]["source"]);
             $("#search_detail_modal_log #detail_modal_container_id_log").text(targetData["content"]["container_id"] === null? "-" : targetData["content"]["container_id"].substring(0,12));
             $("#search_detail_modal_log #detail_modal_container_name_log").text(targetData["content"]["container_name"]);
@@ -345,12 +408,16 @@ var SearchApiModule = (function () {
         return original_text;
     }
 
-
     return {
+        // 날짜 구간 설정
+        setRangeDate, getRangeDate, setRangeDateAsync,
+        // 검색 결과
         setSearchResult, getSearchResult, getHitsTotal,
-        updateButtons,
-        getSearchResultDetail,
+        // 페이지 변경
         changePage,
-        mapDataToModal
+        // 페이지 선택시, 페이지네이션 업데이트
+        updateButtons,
+        // 검색결과 상세, Modal 데이터 매핑
+        getSearchResultDetail, mapDataToModal
     }
 })(); //즉시실행 함수
