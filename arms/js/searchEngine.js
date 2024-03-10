@@ -65,7 +65,10 @@ function execDocReady() {
 
 			//highlight.js 설정.
 			hljs.highlightAll();
+			//이벤트리스너 활성화
 			eventListenersActivator();
+			//datetime-picker 활성화
+			datetTimePicker();
 			//페이지 로드 시  - 상단 검색 확인
 			checkQueryStringOnUrl();
 		})
@@ -112,7 +115,7 @@ function eventListenersActivator() {
 	});
 
 	//검색 날짜필터 이벤트 리스너
-	$("#date-range-group .dropdown-menu li").on("click", function (event) {
+	$("#date-range-group .dropdown-menu li:not(:last)").on("click", function (event) {
 		// console.log($(event.target));
 		var rangeTypeId = $(event.target).closest("a").attr("id");
 		var rangeText = $("#"+rangeTypeId).text();
@@ -127,26 +130,38 @@ function eventListenersActivator() {
 			}
 		}
 
-		if(searchString) {
-			searchRangeType = rangeTypeId; // 검색 레인지 타입아이디
-			SearchApiModule.setRangeDateAsync(rangeTypeId).then(() => {
-				let rangeDate = SearchApiModule.getRangeDate();
-				search_with_date(searchString, rangeDate);
-				let start = (rangeDate["start-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
-				let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
-				let rangeText = start+ " ~ " + end;
+		searchRangeType = rangeTypeId; // 검색 레인지 타입아이디
+		SearchApiModule.setRangeDateAsync(rangeTypeId).then(() => {
+			let rangeDate = SearchApiModule.getRangeDate();
+			console.log(rangeDate["start-date"]);
+			console.log(rangeDate["end-date"]);
+			
+			let start = (rangeDate["start-date"] ? new Date(rangeDate["start-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
+			let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
+			let rangeText = start+ " ~ " + end;
 
-				$("#filter_list").html("");
-				$("#filter_list").append(
-					`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
-				);
-			}).catch((error) => {
-				console.error("[searchEngine :: 날짜검색 이벤트리스너] :: 검색 오류 발생 =>", error);
-			});
-			console.log(rangeTypeId);
-		}
+			$("#filter_list").html("");
+			$("#filter_list").append(
+				`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
+			);
+			if(searchString) {
+				search_with_date(searchString, rangeDate);
+			}
+		}).catch((error) => {
+			console.error("[searchEngine :: 날짜검색 이벤트리스너] :: 검색 오류 발생 =>", error);
+		});
+		console.log(rangeTypeId);
+
 	});
 
+	$("#date-range-group .dropdown-menu li:last").on("click", function (event) {
+		var rangeTypeId = $(event.target).closest("a").attr("id");
+		var rangeText = $("#"+rangeTypeId).text();
+		$("#date-range").text(rangeText); // 드롭다운 타이틀 변경
+
+		$("#date_timepicker_start").val("");
+		$("#date_timepicker_end").val("");
+	});
 }
 
 /////////////////////////
@@ -319,4 +334,70 @@ function changePage(search_section,page) {
 		requestPage = 0;
 	}
 	search(search_section, requestPage, SearchApiModule.getRangeDate());
+}
+////////////////////////////
+// 검색날짜 기간 설정 세팅
+////////////////////////////
+function datetTimePicker() {
+	$('#date_timepicker_start').datetimepicker({
+		format: 'Y-m-d', // 날짜 및 시간 형식 지정
+		formatDate:'Y/m/d',
+		timepicker: false,
+		theme:'dark',
+		lang: "kr",
+		onSelectTime: function (current_time, $input) {
+			$('#date_timepicker_end').datetimepicker('setOptions', { minDate: current_time });
+		},
+		onShow: function(ct){
+			this.setOptions({
+				maxDate: $('#date_timepicker_end').val() ? $('#date_timepicker_end').val() : false
+			});
+		}
+	});
+	$('#date_timepicker_end').datetimepicker({
+		format: 'Y-m-d', // 날짜 및 시간 형식 지정
+		formatDate:'Y/m/d',
+		timepicker: false,
+		theme:'dark',
+		lang: "kr",
+		onSelectTime: function (current_time, $input) {
+			$('#date_timepicker_start').datetimepicker('setOptions', { maxDate: current_time });
+		},
+		onShow: function(ct){
+			this.setOptions({
+				minDate: $('#date_timepicker_start').val() ? $('#date_timepicker_start').val() : false
+			});
+		}
+	});
+}
+
+////////////////////////////
+// 검색날짜 기간 설정 모달 -
+////////////////////////////
+function customRangeSetting() {
+	console.log("[searchEngine :: customRangeSetting] :: 실행");
+	searchRangeType = "custom-range";
+	SearchApiModule.setRangeDateAsync("custom-range").then(() => {
+		let rangeDate = SearchApiModule.getRangeDate();
+		let start = (rangeDate["start-date"] ? new Date(rangeDate["start-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
+		let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
+		let rangeText = start+ " ~ " + end;
+		$("#filter_list").html("");
+		$("#filter_list").append(
+			`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
+		);
+		if(!searchString) {
+			let searchTerm = $("#search-input").val();
+			if(searchTerm && searchTerm.trim()) {
+				let 검색어 = searchTerm.trim();
+				searchString = 검색어;
+			}
+		}
+		if(searchString) {
+			console.log("[searchEngine :: customRangeSetting] :: searchString => " + searchString);
+			search_with_date(searchString, rangeDate);
+		}
+	}).catch((error) => {
+		console.error("[searchEngine :: 날짜검색 이벤트리스너] :: 검색 오류 발생 =>", error);
+	});
 }

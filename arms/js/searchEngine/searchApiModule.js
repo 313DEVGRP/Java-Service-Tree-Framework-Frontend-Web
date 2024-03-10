@@ -18,10 +18,9 @@ var SearchApiModule = (function () {
         console.log("[searchApiModule :: setRangeDate] :: today.ISOString => " + today.toISOString());
 
         switch (rangeTypeId) {
-            case "custom-range" : //일단 올타임으로 설정.
-                //custom-range 일 경우만 end-date설정
-                searchRagneDate["start-date"] = null; // 변경필요.
-                searchRagneDate["end-date"] = today_ISOString; // 변경필요.
+            case "custom-range" :
+                searchRagneDate["start-date"] = $("#date_timepicker_start").val();
+                searchRagneDate["end-date"] = ($("#date_timepicker_end").val() === null ? today.toISOString() : $("#date_timepicker_end").val());
                 break;
             case "all-time":
                 searchRagneDate["start-date"] = null;
@@ -176,7 +175,7 @@ var SearchApiModule = (function () {
                     let highlightFields_string = (highlight_stringify === "" ? " - " : highlight_stringify);
                     let timestamp_kst = new Date(content["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
                     $("#jiraissue_section .search_result_group .search_result_items").append(
-                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue" data-backdrop="false">
+                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_jiraissue">
                             <div class="search_head" id="hits_order_jiraissue_${index}">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
@@ -225,7 +224,7 @@ var SearchApiModule = (function () {
                     let highlightFields_string = (highlight_stringify === "" ? content["content"]["log"] : highlight_stringify);
                     let timestamp_kst = new Date(content["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
                     $("#log_section .search_result_group .search_result_items").append(
-                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_log" data-backdrop="false">
+                        `<section class="search-result" data-toggle="modal" data-target="#search_detail_modal_log">
                             <div class="search_head" id="hits_order_log_${index}">
                                 <div class="search_title">
                                     <span style="font-size: 13px; color:#a4c6ff;">
