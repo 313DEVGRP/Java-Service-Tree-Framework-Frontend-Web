@@ -1029,6 +1029,7 @@ function dataTable_build(
 		buttons: buttonList,
 		scrollX: true,
 		scrollY: scrollY,
+		// lengthMenu: [[3, 5, 7, 10], [3, 5, 7, 10]],
 		language: {
 			processing: "",
 			loadingRecords:
