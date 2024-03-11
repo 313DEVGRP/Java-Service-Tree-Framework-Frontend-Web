@@ -1,50 +1,50 @@
 var SearchApiModule = (function () {
     "use strict";
 
-    var searchRagneDate = {
+    var searchRangeDate = {
         "start-date": null,
-        "end-daet" : null
+        "end-date" : null
     };
 
     var getRangeDate = function () {
-        return searchRagneDate;
+        return searchRangeDate;
     };
 
     var setRangeDate = function (rangeTypeId) {
         let today = new Date();
         let today_ISOString = today.toISOString();
-        searchRagneDate["end-date"] = today_ISOString.slice(0,10);
+        searchRangeDate["end-date"] = today_ISOString.slice(0,10);
         console.log("[searchApiModule :: setRangeDate] :: today => " + today);
         console.log("[searchApiModule :: setRangeDate] :: today.ISOString => " + today.toISOString());
 
         switch (rangeTypeId) {
             case "custom-range" :
-                searchRagneDate["start-date"] = $("#date_timepicker_start").val();
-                searchRagneDate["end-date"] = ($("#date_timepicker_end").val() === null ? today.toISOString() : $("#date_timepicker_end").val());
+                searchRangeDate["start-date"] = $("#date_timepicker_start").val();
+                searchRangeDate["end-date"] = ($("#date_timepicker_end").val() === null ? today.toISOString() : $("#date_timepicker_end").val());
                 break;
             case "all-time":
-                searchRagneDate["start-date"] = null;
+                searchRangeDate["start-date"] = null;
                 break;
             case "previous-hour":
                 let oneHourAgo = new Date(today.getTime() - (1 * 60 * 60 * 1000));
-                searchRagneDate["start-date"] = oneHourAgo.toISOString();
-                searchRagneDate["end-date"] = today.toISOString();
+                searchRangeDate["start-date"] = oneHourAgo.toISOString();
+                searchRangeDate["end-date"] = today.toISOString();
                 break;
             case "previous-day":
                 let oneDayAgo = new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000);
-                searchRagneDate["start-date"] = oneDayAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = oneDayAgo.toISOString().slice(0,10);
                 break;
             case "previous-week":
                 let oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                searchRagneDate["start-date"] = oneWeekAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = oneWeekAgo.toISOString().slice(0,10);
                 break;
             case "previous-month":
                 let oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-                searchRagneDate["start-date"] = oneMonthAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = oneMonthAgo.toISOString().slice(0,10);
                 break;
             case "previous-year":
                 let oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
-                searchRagneDate["start-date"] = oneYearAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = oneYearAgo.toISOString().slice(0,10);
                 break;
         }
 
