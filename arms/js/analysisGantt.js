@@ -148,6 +148,9 @@ function execDocReady() {
 				allowPageScroll: false,
 				disableFadeOut: false
 			});
+
+			var 라따적용_클래스이름_배열 = ['.ladda_shcedule_update'];
+			laddaBtnSetting(라따적용_클래스이름_배열);
 		})
 		.catch(function (e) {
 			console.error("플러그인 로드 중 오류 발생");

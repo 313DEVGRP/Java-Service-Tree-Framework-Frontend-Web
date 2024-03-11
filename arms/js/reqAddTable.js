@@ -1,4 +1,9 @@
-let versionList, tableData, pivotTableData, tableOptions, TableInstance;
+let versionList,
+	tableData,
+	pivotTableData,
+	tableOptions,
+	TableInstance,
+	pivotType = "normal";
 const ContentType = {
 	normal: {
 		version: "Version",
@@ -22,10 +27,10 @@ const ContentType = {
 		manager: "TASK OWNER",
 		depth1: "Depth 1",
 		content: "기능",
-		open: "Open",
-		investigation: "Investigation",
-		resolved: "Resoleved",
-		closeStatus: "Close",
+		open: "열림",
+		investigation: "진행중",
+		resolved: "해결됨",
+		closeStatus: "닫힘",
 		statusTotal: "총계"
 	},
 	owner: {
@@ -33,10 +38,10 @@ const ContentType = {
 		version: "Version",
 		depth1: "Depth 1",
 		content: "기능",
-		open: "Open",
-		investigation: "Investigation",
-		resolved: "Resoleved",
-		close: "Close",
+		open: "열림",
+		investigation: "진행중",
+		resolved: "해결됨",
+		closeStatus: "닫힘",
 		statusTotal: "총계"
 	}
 };
@@ -200,8 +205,9 @@ const mapperPivotTableData = (data) => {
 			...acc,
 			{
 				id: c_id,
-				version: c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : "",
+				version: JSON.parse(c_req_pdservice_versionset_link) ?? "",
 				manager: c_req_owner,
+				_manager: c_req_owner,
 				open: reqStateEntity?.c_id === 10 ? 1 : "",
 				investigation: "",
 				resolved: reqStateEntity?.c_id === 11 ? 1 : "",
@@ -215,96 +221,103 @@ const mapperPivotTableData = (data) => {
 	}, []);
 };
 
+const rearrangement = (arr, key, root, data) =>
+	arr.reduce((acc, cur) => {
+		const result = { ...cur, ...data };
+		const index = acc?.findIndex((item) => item.some((task) => task[key] === result[key]));
+
+		if (index >= 0) {
+			acc[index].push(result);
+		} else {
+			acc?.push([{ ...result, root }]);
+		}
+
+		return acc;
+	}, []);
+
 class Table {
-	type = "normal";
 	constructor() {
 		this.$table = this.makeElement("table");
 		this.$data = this.setTableData();
 	}
 
 	setTableData(data) {
-		if (this.type === "normal") {
+		if (pivotType === "normal") {
 			return tableData;
 		}
 
-		if (this.type === "version") {
-			return versionList.flatMap((version) => {
+		if (pivotType === "version") {
+			return versionList.map((version) => {
 				const filterItems = pivotTableData.filter((item) => item.version?.includes(`${version.c_id}`));
-
-				return [
-					{
-						version: `${version.c_title} 총계`,
-						id: version.c_id,
-						col: 0,
-						colSpan: 4,
-						...calcStatus(filterItems)
-					},
-					...filterItems
-						.reduce((acc, cur) => {
-							const result = { ...cur, versionOrigin: version, version: version.c_title };
-							const index = acc?.findIndex((item) => item.some((task) => task.manager === cur.manager));
-
-							if (index >= 0) {
-								acc[index].push(result);
-							} else {
-								acc?.push([result]);
+				const childrenItem = rearrangement(filterItems, "manager", "manager", {
+					version: version.c_title,
+					_version: version.c_id
+				}).reduce((acc, cur) => {
+					return [
+						...acc,
+						{
+							...cur[0],
+							children: cur.slice(1, cur.length - 1),
+							lastChild: {
+								_version: version.c_id,
+								manager: `${cur[0].manager} 총계`,
+								_manager: cur[0].manager,
+								col: 1,
+								colSpan: 3,
+								origin: version,
+								...calcStatus(cur)
 							}
+						}
+					];
+				}, []);
 
-							return acc;
-						}, [])
-						.flatMap((group) => [
-							...group,
-							{ manager: `${group[0].manager} 총계`, id: group[0].id, col: 1, colSpan: 3, ...calcStatus(group) }
-						])
-				];
+				return {
+					version: `${version.c_title} 총계`,
+					_version: version.c_id,
+					col: 0,
+					colSpan: 4,
+					root: "version",
+					origin: version,
+					children: childrenItem,
+					...calcStatus(filterItems)
+				};
 			});
 		}
 
-		if (this.type === "owner") {
-			return pivotTableData
-				.flatMap((task) =>
-					task.version.reduce((acc, cur) => {
-						const versionItem = versionList.find((item) => item.c_id === Number(cur));
-						return [...acc, { ...task, v_id: versionItem.c_id, version: versionItem.c_title }];
-					}, [])
-				)
-				.sort((a, b) => a.manager.localeCompare(b.manager) || a.v_id - b.v_id)
-				.reduce((acc, cur) => {
-					const index = acc?.findIndex((item) => item.some((task) => task.manager === cur.manager));
-
-					if (index >= 0) {
-						acc[index].push(cur);
-					} else {
-						acc?.push([cur]);
-					}
-
-					return acc;
-				}, [])
-				.flatMap((group) => [
-					{ manager: `${group[0].manager} 총계`, id: group[0].id, col: 0, colSpan: 4, ...calcStatus(group) },
-					...group
-						.reduce((acc, cur) => {
-							const index = acc?.findIndex((item) => item.some((task) => task.version === cur.version));
-
-							if (index >= 0) {
-								acc[index].push(cur);
-							} else {
-								acc?.push([cur]);
-							}
-
-							return acc;
+		if (pivotType === "owner") {
+			return rearrangement(
+				pivotTableData
+					.flatMap((task) =>
+						task.version.reduce((acc, cur) => {
+							const versionItem = versionList.find((item) => item.c_id === Number(cur));
+							return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
 						}, [])
-						.flatMap((tasks) => [
-							...tasks,
-							{
-								version: `${tasks[0].version} 총계`,
-								v_id: tasks[0].v_id,
+					)
+					.sort((a, b) => a.manager?.localeCompare(b.manager) || a._version - b._version)
+			).map((group) => ({
+				manager: `${group[0].manager} 총계`,
+				_manager: group[0].manager,
+				col: 0,
+				colSpan: 4,
+				root: "manager",
+				children: rearrangement(group, "version", "version").reduce((acc, cur) => {
+					return [
+						...acc,
+						{
+							...cur[0],
+							children: cur.slice(1, cur.length - 1),
+							lastChild: {
+								version: `${cur[0].version} 총계`,
+								_manager: group[0].manager,
 								col: 1,
 								colSpan: 3,
-								...calcStatus(tasks)
+								...calcStatus(cur)
 							}
-						])
-				]);
+						}
+					];
+				}, []),
+				...calcStatus(group)
+			}));
 		}
 	}
 
@@ -355,26 +368,99 @@ class Table {
 		}
 	}
 
+	insertElement(root, list) {
+		list.forEach((row, index, arr) => {
+			if (index) arr[index - 1].after(row);
+			else root.after(row);
+		});
+	}
+
+	removeElment(selector) {
+		const elements = document.querySelectorAll(selector);
+
+		Array.from(elements)
+			.filter((el, index) => index)
+			.forEach((row) => row.remove());
+	}
+
+	getElement(target, tag, id) {
+		return target.tagName !== tag ? this.getElement(target.parentElement, tag) : target;
+	}
+
+	makePivotButton($tr, data) {
+		const rows = this.makePivotRow(
+			data.children.flatMap((item) => {
+				if (item.lastChild) return [item, item.lastChild];
+				return item;
+			}),
+			"td"
+		);
+		const btn = this.makeElement("button");
+		const plusIcon = this.makeElement("i");
+		const minusIcon = this.makeElement("i");
+
+		btn.className = "btn pivot-toggle";
+		plusIcon.className = "fa fa-plus-square";
+		minusIcon.className = "fa fa-minus-square";
+
+		btn.appendChild(plusIcon);
+		btn.appendChild(minusIcon);
+
+		btn.addEventListener("click", (e) => {
+			btn.classList.toggle("active");
+
+			if (btn.classList.contains("active")) {
+				this.insertElement(this.getElement(e.target, "TR"), rows);
+			} else {
+				this.removeElment(`[data-${data.root}="${data[`_${[data.root]}`]}"]`);
+				console.log("##### delete", data);
+			}
+		});
+
+		return btn;
+	}
+
 	makePivotRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
-			$tr.setAttribute("data-id", cur.id);
+			$tr.setAttribute("data-id", cur.id ?? "");
+			$tr.setAttribute("data-version", cur._version ?? "");
+			$tr.setAttribute("data-manager", cur._manager ?? "");
 
-			Object.keys(ContentType[this.type]).forEach((key, index) => {
+			Object.keys(ContentType[pivotType]).forEach((key, index) => {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
-				$col.innerHTML = !cur[key] ? "" : cur[key];
+				if (cur[key]) {
+					$col.innerHTML = cur[key];
+					cur.id &&
+						["manager", "content"].includes(key) &&
+						($col.innerHTML = `<span class="col-input">${cur[key]}</span>`);
+				}
 
-				if (index >= cur.col && index < cur.colSpan) {
-					$col.classList.add("col-span");
+				if (tag === "th") {
+					$tr.appendChild($col);
+					return;
+				}
+
+				if (cur.col !== undefined && cur.col === index) {
+					$col.setAttribute("colspan", cur.colSpan);
+				}
+
+				if (index > cur.col && index < cur.col + cur.colSpan) {
+					$col.classList.add("remove");
 				}
 
 				if (cur.colSpan) {
 					$tr.classList.add("highlight");
 				}
 
-				$tr.appendChild($col);
+				if (cur.root === key) {
+					$col.prepend(this.makePivotButton($tr, cur));
+					$col.classList.add("root");
+				}
+
+				!$col.classList.contains("remove") && $tr.appendChild($col);
 			});
 
 			return [...acc, $tr];
@@ -386,19 +472,24 @@ class Table {
 			const $tr = this.makeElement("tr");
 			$tr.setAttribute("data-id", cur.id);
 
-			Object.keys(ContentType[this.type]).forEach((key) => {
+			Object.keys(ContentType[pivotType]).forEach((key) => {
 				if ([`_${key}`].includes(key)) return;
 
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
-				if (tag === "td" && ["status", "priority", "difficulty"].includes(key)) {
-					!!cur[key] &&
-						($col.innerHTML = `
+				if (tag === "td") {
+					if (cur[key]) {
+						$col.innerHTML = cur[key];
+						["status", "priority", "difficulty"].includes(key) &&
+							($col.innerHTML = `
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						${cur[key]}
 						<i class="fa fa-caret-down"></i>
 					</a>`);
+
+						["manager", "content"].includes(key) && ($col.innerHTML = `<span class="col-input">${cur[key]}</span>`);
+					}
 				} else {
 					$col.innerHTML = cur[key];
 				}
@@ -442,7 +533,8 @@ class Table {
 
 		$input.id = uuid;
 		$input.addEventListener("blur", () => {
-			this.updateData(node.parentElement.dataset.id, "content", $input.value);
+			console.log("###", this.getElement(node, "TR"));
+			this.updateData(this.getElement(node, "TR").dataset.id, "content", $input.value);
 			node.textContent = $input.value;
 		});
 
@@ -508,7 +600,7 @@ class Table {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
 			// input
-			if (tagName === "TD" && (classList.contains("content") || classList.contains("manager"))) {
+			if (tagName === "SPAN" && classList.contains("col-input")) {
 				this.addInput(e.target);
 			}
 
@@ -525,7 +617,7 @@ class Table {
 		$el.id = `req_${name}`;
 		$el.className = name;
 
-		if (this.type === "normal") this.makeRow(rowData, col).forEach((r) => $el.append(r));
+		if (pivotType === "normal") this.makeRow(rowData, col).forEach((r) => $el.append(r));
 		else this.makePivotRow(rowData, col).forEach((r) => $el.append(r));
 
 		if ("thead" === name) this.bindHeadEvent($el);
@@ -535,8 +627,8 @@ class Table {
 	}
 
 	makeTable() {
-		this.$table.className = "reqTable";
-		this.$table.appendChild(this.makeSection([ContentType[this.type]], "thead", "th"));
+		this.$table.className = `reqTable ${pivotType !== "normal" ? "pivotTable" : ""}`;
+		this.$table.appendChild(this.makeSection([ContentType[pivotType]], "thead", "th"));
 		this.$table.appendChild(this.makeSection(this.$data, "tbody", "td"));
 		return this.$table;
 	}
@@ -548,8 +640,7 @@ class Table {
 		$wrapper.appendChild(this.makeTable());
 	}
 
-	rerenderTable(type) {
-		this.type = type;
+	rerenderTable() {
 		this.$data = this.setTableData();
 
 		this.$table.innerHTML = "";
@@ -572,5 +663,6 @@ const makeReqTable = async (options) => {
 };
 
 const changeTableType = (type) => {
-	TableInstance.rerenderTable(type, ContentType[type]);
+	pivotType = type;
+	TableInstance.rerenderTable();
 };

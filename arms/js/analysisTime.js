@@ -1689,8 +1689,11 @@ function verticalTimeLineChart(data) {
 					date: formatDateTime(item.updated)
 				};
 			} else {
-				contentSet[item.summary].issuekey.push(item.key);
-				contentSet[item.summary].issuekey.sort();
+				// issuekey에 item.key가 없는 경우에만 추가
+				if (!contentSet[item.summary].issuekey.includes(item.key)) {
+					contentSet[item.summary].issuekey.push(item.key);
+					contentSet[item.summary].issuekey.sort();
+				}
 			}
 		});
 
@@ -1703,7 +1706,7 @@ function verticalTimeLineChart(data) {
 	}));
 
 	// 날짜를 기준으로 오름차순 정렬
-	items.sort((a, b) => new Date(a.date) - new Date(b.date));
+	items.sort((a, b) => new Date(b.date) - new Date(a.date));
 
 	makeVerticalTimeline(items);
 

@@ -9,16 +9,6 @@ $(function () {
 	} else {
 		authUserCheck();
 	}
-	//해당 이벤트리스너 메인에서 지워져있음.
-	// window.addEventListener(
-	// 	"error",
-	// 	function (event) {
-	// 		console.error("페이지 로드 중 에러 발생 :: " + event.message);
-	//
-	// 		//window.location.reload();
-	// 	},
-	// 	{ once: true }
-	// );
 });
 
 function runScript() {
@@ -168,10 +158,28 @@ function widgsterWrapper() {
 
 function 로드_완료_이후_실행_함수() {
 	톱니바퀴_초기설정();
-	setLocale();
+	loadLocale();
 	widgsterWrapper();
 	검색_이벤트_트리거();
+
+	우측_상단_사용자_정보_설정();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 우측_상단_사용자_정보_설정
+////////////////////////////////////////////////////////////////////////////////////////
+function 우측_상단_사용자_정보_설정() {
+
+	var str = window.location.href;
+	if (str.indexOf("php") > 0) {
+		var account_html = "<span style='color:#a4c6ff;'>not supported</span>";
+		$("#login_id").append(account_html);
+	}else {
+		var account_html = "<span style='color:#a4c6ff;'>\"" + userName + "\"</span>";
+		$("#login_id").append(account_html);
+	}
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 플러그인 로드 모듈 ( 병렬 시퀀스 )
@@ -364,7 +372,6 @@ function authUserCheck() {
 			statusCode: {
 				200: function (json) {
 					console.log("[ common :: authUserCheck ] userName = " + json.preferred_username);
-					console.log("[ common :: authUserCheck ] permissions = ");
 					console.log("[ common :: authUserCheck ] sub = " + json.sub);
 					console.log(json.realm_access.roles);
 					userName = json.preferred_username;
@@ -372,10 +379,6 @@ function authUserCheck() {
 					userID = json.sub;
 					userEmail = json.email;
 					fullName = json.name;
-
-					var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
-					account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
-					$(".account-picture").append(account_html);
 
 					runScript();
 				},
@@ -1026,6 +1029,7 @@ function dataTable_build(
 		buttons: buttonList,
 		scrollX: true,
 		scrollY: scrollY,
+		// lengthMenu: [[3, 5, 7, 10], [3, 5, 7, 10]],
 		language: {
 			processing: "",
 			loadingRecords:
@@ -1788,15 +1792,43 @@ function gnuboardIndex() {
 
 	location.href = `/php/gnuboard5/index.php?${new URLSearchParams(params).toString()}`;
 }
+////////////////////////////////////////////////////////////////////////////////////////
+// 국제화 설정
+////////////////////////////////////////////////////////////////////////////////////////
+function loadLocale() {
+	const locale = getCookie("locale");
+	changeLocale(locale || "ko");
+}
 
-/**
- * Locales
- * */
+function changeLocale(locale) {
+	const allowedLocale = ["ko", "jp", "en"];
+	const selectedLocale = allowedLocale.includes(locale) ? locale : "ko";
+	const $localeMenu = $(".locale-menu");
+	$localeMenu.find(".locale-item").removeClass("active");
+	$localeMenu.find(".locale-selector[data-key=" + selectedLocale + "]").closest(".locale-item").addClass("active");
+	setCookie("locale", selectedLocale, 365);
+	setLocale(selectedLocale);
+}
+
+function setLocale(locale = "ko") {
+	$.ajax({
+		url: `/arms/locales/${locale}.json`,
+		async: false,
+		dataType: "json"
+	}).done(function (data) {
+		bindLocaleText(flattenObject(data));
+	});
+}
+
 function bindLocaleText(locales) {
 	const targets = document.querySelectorAll("[data-locale]");
 
 	targets.forEach((tag) => {
 		const content = locales[tag.dataset.locale];
+		if (content === undefined) {
+			console.warn("해당 키에 대한 국제화 문자열이 없습니다.", tag.dataset.locale);
+			return;
+		}
 		if (isIncludeHTMLTag(content)) {
 			tag.innerHTML = sanitizeHTML(content);
 		} else {
@@ -1810,7 +1842,7 @@ function isIncludeHTMLTag(content) {
 }
 
 function sanitizeHTML(content) {
-	const allowedTags = ['span', 'small', 'strong', 'p', 'b', 'ul', 'li'];
+	const allowedTags = ['span', 'small', 'strong', 'p', 'b', 'ul', 'li', 'br'];
 	return content.replace(/<(\w+)[^>]*>|<\/(\w+)>/g, (match, openTag, closeTag) => {
 		const tagName = (openTag || closeTag).toLowerCase();
 		if (allowedTags.includes(tagName)) {
@@ -1835,22 +1867,15 @@ function flattenObject(obj, parentKey) {
 	return result;
 }
 
-function setLocale(locale = "ko") {
-	$.ajax({
-		url: `/arms/locales/${locale}.json`,
-		async: false,
-		dataType: "json"
-	}).done(function (data) {
-		bindLocaleText(flattenObject(data));
-	});
+/////////////////////////////////////
+// 쿠키 설정
+/////////////////////////////////////
+function setCookie(name, value, exp = 1) {
+	const path = "/arms";
+	const date = new Date();
+	date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+	document.cookie = `${name}=${value};expires=${date.toUTCString()};path=${path}`;
 }
-
-function chnageLoocale() {
-	const localeSelect = document.getElementById("localeSelect");
-
-	setLocale(localeSelect.options[localeSelect.selectedIndex].value);
-}
-
 
 /////////////////////////////////////
 // 검색_이벤트_트리거
