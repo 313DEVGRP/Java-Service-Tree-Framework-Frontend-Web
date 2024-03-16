@@ -1,55 +1,88 @@
 var SearchApiModule = (function () {
     "use strict";
 
-    var searchRagneDate = {
+    var searchRangeDate = {
         "start-date": null,
-        "end-daet" : null
+        "end-date" : null
     };
 
     var getRangeDate = function () {
-        return searchRagneDate;
+        return searchRangeDate;
     };
 
     var setRangeDate = function (rangeTypeId) {
         let today = new Date();
-        let today_ISOString = today.toISOString();
-        searchRagneDate["end-date"] = today_ISOString.slice(0,10);
+        let today_ISOString = today.toISOString(); // UTC+00:00 기준으로 "2024-03-12T12:25:27.525Z"
+        searchRangeDate["end-date"] = setEndTimeOfTheDay(today_ISOString);
         console.log("[searchApiModule :: setRangeDate] :: today => " + today);
         console.log("[searchApiModule :: setRangeDate] :: today.ISOString => " + today.toISOString());
 
         switch (rangeTypeId) {
             case "custom-range" :
-                searchRagneDate["start-date"] = $("#date_timepicker_start").val();
-                searchRagneDate["end-date"] = ($("#date_timepicker_end").val() === null ? today.toISOString() : $("#date_timepicker_end").val());
+                searchRangeDate["start-date"] = ($("#date_timepicker_start").val() === null ? null : setStartTimeOfTheDay($("#date_timepicker_start").val()));
+                searchRangeDate["end-date"] = ($("#date_timepicker_end").val() === null ? setEndTimeOfTheDay(today.toISOString()) : setEndTimeOfTheDay($("#date_timepicker_end").val()));
                 break;
             case "all-time":
-                searchRagneDate["start-date"] = null;
+                searchRangeDate["start-date"] = null;
                 break;
             case "previous-hour":
                 let oneHourAgo = new Date(today.getTime() - (1 * 60 * 60 * 1000));
-                searchRagneDate["start-date"] = oneHourAgo.toISOString();
-                searchRagneDate["end-date"] = today.toISOString();
+                searchRangeDate["start-date"] = oneHourAgo.toISOString();
+                searchRangeDate["end-date"] = today.toISOString();
                 break;
             case "previous-day":
                 let oneDayAgo = new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000);
-                searchRagneDate["start-date"] = oneDayAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = setStartTimeOfTheDay(oneDayAgo);
                 break;
             case "previous-week":
                 let oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                searchRagneDate["start-date"] = oneWeekAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = setStartTimeOfTheDay(oneWeekAgo);
                 break;
             case "previous-month":
                 let oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-                searchRagneDate["start-date"] = oneMonthAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = setStartTimeOfTheDay(oneMonthAgo);
                 break;
             case "previous-year":
                 let oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
-                searchRagneDate["start-date"] = oneYearAgo.toISOString().slice(0,10);
+                searchRangeDate["start-date"] = setStartTimeOfTheDay(oneYearAgo);
                 break;
         }
-
     };
 
+    // 끝_날짜 시간 23:59:59 설정
+    var setEndTimeOfTheDay = function (dateString) {
+        let date = new Date(dateString);
+        date.setHours(23);
+        date.setMinutes(59);
+        date.setSeconds(59);
+        date.setMilliseconds(0);
+        return date.toISOString();
+    };
+    // 시작_날짜 끝 시간 23:59:59 설정
+    var setStartTimeOfTheDay = function (dateString) {
+        let date = new Date(dateString);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        //date.toISOString().slice(0,10);
+        return date.toISOString();
+    };
+
+    // 자정  24:00:00 -> 00:00:00 으로 변경
+    var setMidnightToZero = function(dateString) {
+        let date = new Date(dateString);
+        let formattedDate;
+        // 시간을 자정인 경우 "오전 00:00:00"으로 수정
+        if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0) {
+            const parts = ['오전', '00:00:00'];
+            formattedDate = `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}. ${parts.join(' ')}`;
+            return formattedDate;
+        } else {
+            formattedDate = date.toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
+            return formattedDate;
+        }
+    };
     var setRangeDateAsync = function(rangeTypeId) {
         return new Promise( (resolve, reject) => {
             setRangeDate(rangeTypeId);
@@ -162,7 +195,6 @@ var SearchApiModule = (function () {
 
         if(search_section === 'jiraissue') {
             $("#jiraissue_section .search_result_group .search_result_items").html("");
-            console.log("[searchApiModule :: appendSearchResultSections] :: search_result_arr길이 =>" +search_result_arr.length);
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
                     var highlight_stringify = "";
@@ -213,8 +245,6 @@ var SearchApiModule = (function () {
         }
         else if (search_section === 'log') {
             $("#log_section .search_result_group .search_result_items").html("");
-            console.log("[searchApiModule :: appendSearchResultSections_fluentd] :: search_result_arr길이 =>" +search_result_arr.length);
-
             if(search_result_arr && search_result_arr.length !== 0) {
                 search_result_arr.forEach(function (content, index) {
                     var highlight_stringify = "";
@@ -409,7 +439,7 @@ var SearchApiModule = (function () {
 
     return {
         // 날짜 구간 설정
-        setRangeDate, getRangeDate, setRangeDateAsync,
+        setRangeDate, getRangeDate, setRangeDateAsync, setMidnightToZero,
         // 검색 결과
         setSearchResult, getSearchResult, getHitsTotal,
         // 페이지 변경

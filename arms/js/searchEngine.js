@@ -132,19 +132,19 @@ function eventListenersActivator() {
 
 		searchRangeType = rangeTypeId; // 검색 레인지 타입아이디
 		SearchApiModule.setRangeDateAsync(rangeTypeId).then(() => {
+			//날짜 구간 세팅
 			let rangeDate = SearchApiModule.getRangeDate();
 			console.log(rangeDate["start-date"]);
 			console.log(rangeDate["end-date"]);
-			
-			let start = (rangeDate["start-date"] ? new Date(rangeDate["start-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
+			let start = (rangeDate["start-date"] ? SearchApiModule.setMidnightToZero(rangeDate["start-date"]) : "" );
 			let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
 			let rangeText = start+ " ~ " + end;
-
 			$("#filter_list").html("");
 			$("#filter_list").append(
 				`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
 			);
-			if(searchString) {
+			
+			if(searchString) { //검색 실행
 				search_with_date(searchString, rangeDate);
 			}
 		}).catch((error) => {
@@ -386,6 +386,7 @@ function customRangeSetting() {
 		$("#filter_list").append(
 			`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
 		);
+
 		if(!searchString) {
 			let searchTerm = $("#search-input").val();
 			if(searchTerm && searchTerm.trim()) {
