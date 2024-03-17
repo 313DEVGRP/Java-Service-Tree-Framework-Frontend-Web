@@ -134,8 +134,6 @@ function eventListenersActivator() {
 		SearchApiModule.setRangeDateAsync(rangeTypeId).then(() => {
 			//날짜 구간 세팅
 			let rangeDate = SearchApiModule.getRangeDate();
-			console.log(rangeDate["start-date"]);
-			console.log(rangeDate["end-date"]);
 			let start = (rangeDate["start-date"] ? SearchApiModule.setMidnightToZero(rangeDate["start-date"]) : "" );
 			let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
 			let rangeText = start+ " ~ " + end;
@@ -179,6 +177,11 @@ function search_with_date(search_string, range_date) {
 		}
 	}
 
+	$(".spinner").html(
+		'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+		"검색 결과 로딩 중입니다..."
+	);
+
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue/with-date",
 		type: "GET",
@@ -206,6 +209,19 @@ function search_with_date(search_string, range_date) {
 			const current_page = 1; //현재 페이지 초기화
 			const items_per_Page = 10; //페이지당 아이템 수
 			SearchApiModule.setSearchResult("log", result, current_page, items_per_Page);
+		}
+	});
+}
+
+function getTop5LogName(search_string, range_date){
+	$.ajax({
+		url: "/engine-search-api/engine/jira/dashboard/search/log-aggs-top5/with-date",
+		type: "GET",
+		data: { "search_string": search_string, "from": start_date, "to" : end_date },
+		dataType: "json",
+		success: function(result) {
+			console.log("[searchEngine :: search_with_date] :: log-aggs-top5 => 집계결과");
+			console.log(result);
 		}
 	});
 }
