@@ -1617,3 +1617,181 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<div
+        id="not_ready_modal"
+        class="modal fade"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+        style="display: none; border-radius: 10px">
+    <div
+            class="modal-dialog"
+            style="width: 80%">
+        <div class="modal-content modalDarkBack">
+            <div
+                    class="modal-header"
+                    style="padding: 0px; border-bottom: 1px">
+                <h4
+                        class="modal-title font14"
+                        id="my_modal_label2"
+                        style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+                            class="font13"
+                            id="my_modal2_title"
+                            style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						프로젝트별 이슈유형 미등록 현황
+					</span>
+                    <blockquote
+                            class="search-result"
+                            style="border-left: 5px solid #e5603b">
+                        <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">이슈유형이 등록되지 않은 프로젝트 목록 확인</p>
+                    </blockquote>
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="padding-top: 10px">
+                    <a
+                            title="Options"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-cog"></i>
+                    </a>
+                    <a
+                            data-widgster="expand"
+                            title="Expand"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <div
+                    class="modal-body"
+                    style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+                <div class="body">
+                    <div class="clearfix widget-content">
+                        <!-- 컴포넌트 대상 -->
+                        <div
+                                id="selected_info"
+                                style="float: left">
+                            <div
+                                    class="panel-group json-menu"
+                                    id="versionAccordion"
+                                    style="margin-bottom: 0px !important">
+                                <li
+                                        class="list-group-item json-menu-header"
+                                        style="padding: 0px">
+                                    <div class="chat-message">
+                                        <div
+                                                class="chat-message-body"
+                                                style="
+												margin-left: 0px !important;
+												padding: 0px 10px 0px 10px !important;
+												border-left: 2px solid #a4c6ff;
+											">
+											<span
+                                                    class="arrow"
+                                                    style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
+                                            <div
+                                                    class="sender"
+                                                    style="padding-bottom: 5px; padding-top: 5px">
+                                                선택된 서버 :
+                                                <span
+                                                        id="select_server_name"
+                                                        style="color: #a4c6ff">
+													선택되지 않음
+												</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+
+<!--                        <div
+                                style="float: right; border: 1px solid #0b67ff !important"
+                                class="newReqDiv darkBack">
+                            <label
+                                    id="new_req_regist02"
+                                    class="btn btn-primary btn-transparent btn-sm active"
+                                    data-target="#my_modal1"
+                                    data-toggle="modal"
+                                    style="width: 100%; background-color: #2477ff !important">
+                                A-RMS의 신규 요구사항 등록하기
+                            </label>
+                        </div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section
+                                    class="widget widget-tabs"
+                                    style="margin-bottom: 0">
+                                <header style="display: none;">
+                                    <ul class="nav nav-tabs">
+                                        <li>
+                                            <a
+                                                    href="#report"
+                                                    data-toggle="tab"
+                                                    id="folder_tab">
+                                                <strong>리스트로 보기</strong>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </header>
+                                <div class="body tab-content">
+                                    <div    id="report"
+                                            class="tab-pane active"
+                                            style="padding-top: 30px !important">
+                                        <table class="display"
+                                               id="modal_project_table"
+                                               style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
+                                            <thead>
+                                            <tr>
+                                                <th>c_jira_name</th>
+                                                <th>c_jira_key</th>
+                                                <th>c_desc</th>
+                                                <th>jiraIssueTypeEntities</th>
+                                                <th>c_id</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                    class="modal-footer"
+                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button type="button"
+                        id="not_ready_close_modal"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
