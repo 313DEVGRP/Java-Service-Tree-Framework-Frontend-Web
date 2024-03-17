@@ -58,14 +58,13 @@ var SearchApiModule = (function () {
         date.setMilliseconds(0);
         return date.toISOString();
     };
-    // 시작_날짜 끝 시간 23:59:59 설정
+    // 시작_날짜 끝 시간 0:0:0 설정 (24:00:00, 12:00:00으로 보임 -> 아래 setMidnightToZero 활용)
     var setStartTimeOfTheDay = function (dateString) {
         let date = new Date(dateString);
         date.setHours(0);
         date.setMinutes(0);
         date.setSeconds(0);
         date.setMilliseconds(0);
-        //date.toISOString().slice(0,10);
         return date.toISOString();
     };
 
@@ -342,7 +341,7 @@ var SearchApiModule = (function () {
             let created_kst = new Date(targetData["content"]["created"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
             $("#search_detail_modal_jiraissue #detail_id_jiraissue").text(targetData["id"]);
             $("#search_detail_modal_jiraissue #detail_index_jiraissue").text(targetData["index"]);
-            $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? targetData["score"]: " - " ));
+            $("#search_detail_modal_jiraissue #detail_score_jiraissue").text(score_data(targetData["score"]));
             $("#search_detail_modal_jiraissue #detail_type_jiraissue").text(targetData["type"] === undefined ? " - " : targetData["type"]);
             $("#search_detail_modal_jiraissue #detail_modal_summary_jiraissue").text(targetData["content"]["summary"]);
             $("#search_detail_modal_jiraissue #detail_modal_key_jiraissue").text(targetData["content"]["key"]);
@@ -376,7 +375,7 @@ var SearchApiModule = (function () {
             let timestamp_kst = new Date(targetData["content"]["timestamp"]).toLocaleString('ko-KR',{timeZone: 'Asia/Seoul'});
             $("#search_detail_modal_log #detail_id_log").text(targetData["id"]);
             $("#search_detail_modal_log #detail_index_log").text(targetData["index"]);
-            $("#search_detail_modal_log #detail_score_log").text(targetData["score"] === null ? " - " : (targetData["score"] !== NaN ? targetData["score"]: " - " ));
+            $("#search_detail_modal_log #detail_score_log").text(score_data(targetData["score"]));
             $("#search_detail_modal_log #detail_type_log").text(targetData["type"] === undefined ? " - " : targetData["type"]);
 
             $("#search_detail_modal_log #detail_modal_logname_log").text(targetData["content"]["logName"]);
@@ -403,6 +402,13 @@ var SearchApiModule = (function () {
         }
     };
 
+    var score_data = function (param) { // null, 'NaN', NaN 인 경우
+        if (param === null || param === "NaN" || isNaN(param)) {
+            return " - ";
+        } else {
+            return param;
+        }
+    };
 
     var result_of_highlightFileds = function (highlightFieldsObject) {
         let uniqueValues = new Set();
