@@ -160,6 +160,19 @@ function eventListenersActivator() {
 		$("#date_timepicker_start").val("");
 		$("#date_timepicker_end").val("");
 	});
+
+	$("#log-agg-group").on("click", function (event) {
+		let rangeDate = SearchApiModule.getRangeDate();
+		//검색어 체크 (없다면, 검색창 확인하여 세팅)
+		if(!searchString) {
+			let searchTerm = $("#search-input").val();
+			if(searchTerm && searchTerm.trim()) {
+				let 검색어 = searchTerm.trim();
+				searchString = 검색어;
+			}
+		}
+		getTop5LogName(searchString, rangeDate);
+	});
 }
 
 /////////////////////////
@@ -188,8 +201,7 @@ function search_with_date(search_string, range_date) {
 		data: { "search_string": search_string, "page" : 0, "size": 10, "from": start_date, "to" : end_date },
 		dataType: "json",
 		success: function(result) {
-			console.log("[searchEngine :: search_with_date] :: jiraissue_search_results => ");
-			console.log(result);
+			console.log("[searchEngine :: search_with_date] :: jiraissue_search_results 실행");
 
 			const current_page = 1; //현재 페이지 초기화
 			const items_per_Page = 10; //페이지당 아이템 수
@@ -204,8 +216,7 @@ function search_with_date(search_string, range_date) {
 		data: { "search_string": search_string, "page" : 0, "size": 10,"from": start_date, "to" : end_date },
 		dataType: "json",
 		success: function(result) {
-			console.log("[searchEngine :: search_with_date] :: fluentd_search_results => ");
-			console.log(result);
+			console.log("[searchEngine :: search_with_date] :: fluentd_search_results 실행");
 			const current_page = 1; //현재 페이지 초기화
 			const items_per_Page = 10; //페이지당 아이템 수
 			SearchApiModule.setSearchResult("log", result, current_page, items_per_Page);
@@ -214,14 +225,56 @@ function search_with_date(search_string, range_date) {
 }
 
 function getTop5LogName(search_string, range_date){
+	console.log("[searchEngine :: getTop5LogName] 실행");
+	$(".spinner").html(
+		'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+		"검색 결과 로딩 중입니다..."
+	);
+
+	let start_date = null;
+	let end_date = null;
+	if(range_date) {
+		if(range_date["start-date"]) {
+			start_date = range_date["start-date"];
+		}
+		if(range_date["end-date"]) {
+			end_date = range_date["end-date"];
+		}
+	}
+
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/log-aggs-top5/with-date",
 		type: "GET",
 		data: { "search_string": search_string, "from": start_date, "to" : end_date },
 		dataType: "json",
 		success: function(result) {
-			console.log("[searchEngine :: search_with_date] :: log-aggs-top5 => 집계결과");
-			console.log(result);
+			console.log("[searchEngine :: search_with_date] :: log-aggs-top5 => 집계 실행");
+
+			if(result) {
+				var resultArr=result["검색결과"]["group_by_@log_name"];
+				var appendHtml = ``;
+
+				var total = 0;
+				resultArr.forEach((element) => {
+					total += parseInt(element["개수"]);
+				});
+				var setting = `<li style="margin: 5px 10px; font-weight: bold;">Top5 Values</li><li class="gradient_middle_border"></li>`;
+				$("#log-agg-group .dropdown-menu").html("");
+				resultArr.forEach((element) => {
+					var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
+					setting += `<li>
+												<div style="margin: 5px 10px; display: flex; justify-content: space-between" >
+													<p style="color: #a4c6ff; margin-bottom: 0px">${element["필드명"]}</p>
+													<p style="color: #2D8515; margin-bottom: 0px">${element["개수"]}(${ratio}%)</p>
+												</div>
+												<div class="progress progress-small" style="margin: 0 10px 5px 10px">
+                        	<div class="progress-bar progress-bar-inverse" style="width: ${ratio}%;"></div>
+                    		</div>												
+				  </li>`;
+				});
+				$("#log-agg-group .dropdown-menu").html(setting);
+			}
+
 		}
 	});
 }
