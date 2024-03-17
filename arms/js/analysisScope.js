@@ -512,24 +512,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 				console.log("[ analysisScope :: statisticsMonitor ] pdServiceData");
 				console.log(json);
 				let versionData = json.pdServiceVersionEntities;
-				let versionCustomTimeline = [];
-
-				let today = new Date();
-				versionData.sort((a, b) => a.c_id - b.c_id);
-
-				versionData.forEach(function (versionElement, idx) {
-					var versionTimelineCustomData = {
-						"c_id": versionElement.c_id,
-						"title" : versionElement.c_title,
-						"startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-						"endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-					};
-					versionCustomTimeline.push(versionTimelineCustomData);
-				});
-
-				let version_count = versionData.length;
-
-				console.log("등록된 버전 개수 = " + version_count);
 			}
 		}
 	});
@@ -568,7 +550,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 		links: []
 	};
 
-	pdServiceData.id = pdServiceData.c_id;
+	pdServiceData.id = "pdService-"+ pdServiceData.c_id;
 	pdServiceData.type = "pdService";
 	NETWORK_DATA.nodes.push(pdServiceData);
 
@@ -579,14 +561,14 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
 	versionList.forEach((item) => {
 		if (선택한버전.includes(item.c_id)) {
-			item.id = item.c_id;
+			item.id = "version-"+item.c_id;
 			item.type = "version";
 			NETWORK_DATA.nodes.push(item); // 버전 노드 삽입
 
 			console.log(typeof item.id);
 			var link = {
 				source: item.id,
-				target: pdServiceData.c_id
+				target: pdServiceData.id
 			};
 			NETWORK_DATA.links.push(link);
 		}
@@ -609,7 +591,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 					if(선택한버전.includes(item.pdServiceVersions[i])) {
 						var reqToVersionLink = {
 							source: item.id,
-							target: item.pdServiceVersions[i]
+							target: "version-" + item.pdServiceVersions[i]
 						}
 						NETWORK_DATA.links.push(reqToVersionLink);
 					}
@@ -857,9 +839,17 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 					let scaleY = height / chartHeight;
 					let initScale = Math.min(scaleX, scaleY);
 					console.log("initScale : " + initScale);
+					let widthPoint = width /3;
+					let heightPoint = height / 3;
+
+					if(initScale > 1) {
+						initScale = 1;
+						widthPoint = width/5;
+						heightPoint = height/5;
+					}
 
 					let initialTransform = d3.zoomIdentity
-						.translate(width / 3, height / 3) // 초기 위치 설정
+						.translate(widthPoint, heightPoint) // 초기 위치 설정
 						.scale(initScale); // 초기 줌 레벨 설정
 
 					let zoom = d3
@@ -886,7 +876,7 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 			}
 
 			//invalidation.then(() => simulation.stop());
-
+			// $('.network-graph').addClass('show');
 			return svg.node();
 		},
 		drag: function (simulation) {
