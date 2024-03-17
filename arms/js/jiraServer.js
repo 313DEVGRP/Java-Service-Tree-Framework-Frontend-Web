@@ -174,7 +174,7 @@ function draw_card_deck(cardInfo) {
 			if (cardList[i].c_jira_server_type === '온프레미스') {
 				insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
 			}
-			if (cardList[i].c_jira_server_type === '레드마인') {
+			if (cardList[i].c_jira_server_type === '레드마인_온프레미스') {
                 insertImage = `<img src="./img/redmine_fluid_icon.png" width="30px" style=""></img>`;
             }
 
@@ -257,18 +257,27 @@ function jiraServerCardClick(c_id) {
 			selectServerType ="";
 			selectServerId = json.c_id;
 			selectServerType = json.c_jira_server_type;
-			if (selectServerType === "클라우드") {
-				$("#type_tab").hide();
-				$("#status_tab").hide();
-				$("#resolution_tab").hide();
+			// 디폴트
+			// 상세보기 , 편집하기, 지라프로젝트, 이슈 운선순위, 이슈 유형, 삭제하기
+			if (selectServerType === "클라우드") {  // 상세보기 , 편집하기, 지라 프로젝트, 이슈 우선수위, 삭제하기
+				$("#type_tab").hide(); // 이슈 유형 숨김
+				$("#status_tab").hide(); // 이슈 상태 숨김
+				$("#resolution_tab").hide(); // 이슈 해결책 숨김
 
 				$("#cloudIssueTypeInfo").removeClass("hidden");
-			} else {
-				$("#type_tab").show();
-				$("#status_tab").hide();
-				$("#resolution_tab").hide();
+			}else if(selectServerType === "온프레미스") {// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 유형, 삭제하기
+				$("#type_tab").show();// 이슈 유형 보여주기
+				$("#status_tab").hide(); // 이슈 상태 숨김
+				$("#resolution_tab").hide(); //해결책 숨김
 
 				$("#cloudIssueTypeInfo").addClass("hidden");
+			} else{ // 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 상태, 삭제하기
+
+			    $("#type_tab").hide(); // 이슈 유형 슴김
+
+			    $("#resolution_tab").hide(); // 해결책 숨기기
+
+                $("#cloudIssueTypeInfo").removeClass("hidden");
 			}
 
 			// Sender 설정
@@ -383,7 +392,7 @@ function project_dataTableLoad(c_id) {
 	var jquerySelector = "#jira_project_table"; // 장소
 	var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProjectPure.do?c_id=" + c_id;
 	var jsonRoot = "response";
-	if (selectServerType === "클라우드") {
+	if (selectServerType === "클라우드" || selectServerType === "레드마인_온프레미스") {
 		columnDefList = columnDefList_cloud;
 	} else {
 		columnDefList = columnDefList_onpremise;
@@ -491,8 +500,10 @@ function popup_size_setting() {
 
 		if ( $("#editview_jira_server_type").find(".active input").val() === "클라우드") {
 			$("#extend_editview_jira_server_type_option1").parent().click();
-		} else {
+		}else if(( $("#editview_jira_server_type").find(".active input").val() === "온프레미스") ) {
 			$("#extend_editview_jira_server_type_option2").parent().click();
+		}else{
+		    $("#extend_editview_jira_server_type_option3").parent().click();
 		}
 	});
 
@@ -516,8 +527,10 @@ function popup_size_setting() {
 
 		if ( $("#editview_jira_server_type").find(".active input").val() === "클라우드") {
 			$("#extend_editview_jira_server_type_option1").parent().click();
-		} else {
+		} else if($("#editview_jira_server_type").find(".active input").val() === "온프레미스"){
 			$("#extend_editview_jira_server_type_option2").parent().click();
+		} else{
+		    $("#extend_editview_jira_server_type_option3").parent().click();
 		}
 
 	});
@@ -1526,7 +1539,7 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
 			}
 		});
 	}
-	if (jiraServerType ==="클라우드") {
+	if (jiraServerType ==="클라우드" || jiraServerType ==="레드마인_온프레미스") {
 		$.ajax({
 			url: "/auth-user/api/arms/jiraServer/getJiraProject.do",
 			type:"GET",
