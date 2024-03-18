@@ -66,6 +66,21 @@ function execDocReady() {
 			//좌측 메뉴
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_pdservice");
+
+			// --- 에디터 설정 --- //
+			var waitCKEDITOR = setInterval(function () {
+				try {
+					if (window.CKEDITOR) {
+						if(window.CKEDITOR.status == "loaded"){
+							CKEDITOR.replace("detail_pdservice_contents",{ skin: "office2013" });//상세보기
+							clearInterval(waitCKEDITOR);
+						}
+					}
+				} catch (err) {
+					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+				}
+			}, 313 /*milli*/);
+
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			getNodeInfo();
 			fileLoadByPdService();
@@ -124,7 +139,15 @@ function getNodeInfo() {
 		async: false,
 		dataType: "json"
 	}).done(function (result) {
-		document.getElementById("file_description").innerHTML = result.c_pdservice_contents;
+		//document.getElementById("file_description").innerHTML = result.c_pdservice_contents;
+
+		// CKEditor 로드된 후, 기획 정보 세팅
+		CKEDITOR.on('instanceReady', function(event) {
+			var editor = event.editor;
+			if(editor.name === 'detail_pdservice_contents'){
+				editor.setData(result.c_pdservice_contents);
+			}
+		});
 	});
 }
 
