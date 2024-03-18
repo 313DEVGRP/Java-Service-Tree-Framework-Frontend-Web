@@ -174,6 +174,9 @@ function draw_card_deck(cardInfo) {
 			if (cardList[i].c_jira_server_type === '온프레미스') {
 				insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
 			}
+			if (cardList[i].c_jira_server_type === '레드마인_온프레미스') {
+                insertImage = `<img src="./img/redmine_fluid_icon.png" width="30px" style=""></img>`;
+            }
 
 			data +=
 				`
@@ -254,18 +257,39 @@ function jiraServerCardClick(c_id) {
 			selectServerType ="";
 			selectServerId = json.c_id;
 			selectServerType = json.c_jira_server_type;
-			if (selectServerType === "클라우드") {
-				$("#type_tab").hide();
-				$("#status_tab").hide();
-				$("#resolution_tab").hide();
+			// 디폴트
+			// 상세보기 , 편집하기, 지라프로젝트, 이슈 운선순위, 이슈 유형, 삭제하기
+			if (selectServerType === "클라우드") {  // 상세보기 , 편집하기, 지라 프로젝트, 이슈 우선수위, 삭제하기
+				$("#type_tab").hide(); // 이슈 유형 숨김
+				$("#status_tab").hide(); // 이슈 상태 숨김
+				$("#resolution_tab").hide(); // 이슈 해결책 숨김
 
 				$("#cloudIssueTypeInfo").removeClass("hidden");
-			} else {
-				$("#type_tab").show();
-				$("#status_tab").hide();
-				$("#resolution_tab").hide();
+
+				$("li a[href='#related_project'] strong").text("지라 프로젝트");
+
+			}else if(selectServerType === "온프레미스") {// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 유형, 삭제하기
+				$("#type_tab").show();// 이슈 유형 보여주기
+				$("#status_tab").hide(); // 이슈 상태 숨김
+				$("#resolution_tab").hide(); //해결책 숨김
 
 				$("#cloudIssueTypeInfo").addClass("hidden");
+
+				$("li a[href='#related_project'] strong").text("지라 프로젝트");
+
+			} else{ // 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 상태, 삭제하기
+
+			    $("#type_tab").hide(); // 이슈 유형 슴김
+
+			    $("#resolution_tab").hide(); // 해결책 숨기기
+
+			    $("li a[href='#related_project'] strong").text("레드마인 프로젝트");
+
+
+
+                $("#status_tab").removeClass("hidden").show();
+
+                $("#cloudIssueTypeInfo").removeClass("hidden");
 			}
 
 			// Sender 설정
@@ -291,9 +315,12 @@ function jiraServerCardClick(c_id) {
 			if(selectServerType === "클라우드") {
 				$("#detailview_jira_server_type_option1").parent().click();
 				$("#editview_jira_server_type_option1").parent().click();
-			} else {
+			} else if(selectServerType === "온프레미스")  {
 				$("#detailview_jira_server_type_option2").parent().click();
 				$("#editview_jira_server_type_option2").parent().click();
+			} else{
+			    $("#detailview_jira_server_type_option3").parent().click();
+            	$("#editview_jira_server_type_option3").parent().click();
 			}
 
 			// BASE_URL
@@ -364,8 +391,8 @@ function project_dataTableLoad(c_id) {
 				} else {
 					var _render =
 						'<div style=\'white-space: nowrap; color: #f8f8f8\'>' + data +
-						'<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_projectList_table(\''+data+'\')"><i class="fa fa-th-list"></i>' + "</button>"+
-						"</div>";
+						'<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_projectList_table(\'' + data + '\',\'' + selectServerType + '\')"><i class="fa fa-th-list"></i>' + "</button>"+
+                        "</div>";
 					return _render;
 				}
 				return data;
@@ -377,7 +404,7 @@ function project_dataTableLoad(c_id) {
 	var jquerySelector = "#jira_project_table"; // 장소
 	var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProjectPure.do?c_id=" + c_id;
 	var jsonRoot = "response";
-	if (selectServerType === "클라우드") {
+	if (selectServerType === "클라우드" || selectServerType === "레드마인_온프레미스") {
 		columnDefList = columnDefList_cloud;
 	} else {
 		columnDefList = columnDefList_onpremise;
@@ -418,7 +445,7 @@ function dataTableDrawCallback(tableInfo) {
 			else { className = "issueStatus"; }
 		}
 		if (selectedTab === "issueType") {
-			if (selectServerType === "클라우드") { className = "project-issueType"; }
+			if (selectServerType === "클라우드"||selectServerType === "레드마인_온프레미스") { className = "project-issueType"; }
 			else { className = "issueType"; }
 		}
 
@@ -439,7 +466,6 @@ function dataTableDrawCallback(tableInfo) {
 		});
 
 	}
-
 }
 
 //데이터 테이블 ajax load 이후 콜백.
@@ -485,8 +511,10 @@ function popup_size_setting() {
 
 		if ( $("#editview_jira_server_type").find(".active input").val() === "클라우드") {
 			$("#extend_editview_jira_server_type_option1").parent().click();
-		} else {
+		}else if(( $("#editview_jira_server_type").find(".active input").val() === "온프레미스") ) {
 			$("#extend_editview_jira_server_type_option2").parent().click();
+		}else{
+		    $("#extend_editview_jira_server_type_option3").parent().click();
 		}
 	});
 
@@ -510,8 +538,10 @@ function popup_size_setting() {
 
 		if ( $("#editview_jira_server_type").find(".active input").val() === "클라우드") {
 			$("#extend_editview_jira_server_type_option1").parent().click();
-		} else {
+		} else if($("#editview_jira_server_type").find(".active input").val() === "온프레미스"){
 			$("#extend_editview_jira_server_type_option2").parent().click();
+		} else{
+		    $("#extend_editview_jira_server_type_option3").parent().click();
 		}
 
 	});
@@ -665,7 +695,7 @@ function delete_btn_click() { // TreeAbstractController 에 이미 있음.
 	$("#delete_jira_server").click(function () {
 		console.log("selectId = " + selectId);
 		console.log("selectServerName = " + selectServerName);
-		if(!confirm("정말 삭제하시겠습니까? \n 삭제할 서버명 : " + selectServerName +")")) {
+		if(!confirm("정말 삭제하시겠습니까? \n 삭제할 서버명 : " + selectServerName )) {
 			console.log("삭제하지 않음");
 		} else {
 			$.ajax({
@@ -749,8 +779,23 @@ function set_renew_btn_3rd_grid(selectdTab, selectProjectId) {
 	var 라따적용_클래스이름_배열 = ['.jira_project_type_renew_btn', '.jira_project_status_renew_btn'];
 	laddaBtnSetting(라따적용_클래스이름_배열);
 }
-
-function tab_click_event() {
+function set_redmine_renew_btn_3rd_grid(selectdTab, selectProjectId) {
+	$("#redmine_renew_button_div_3rd_grid").html("");
+	var renewHtml = ``;
+	if(selectedTab == "issueType") {
+		renewHtml += `<button type="button"
+                             onClick="jira_renew_issueType_issueStatus_under_cloud('issueType', ${selectProjectId})"
+                             data-style="contract"
+                             class="jira_project_type_renew_btn btn btn-success btn-sm mr-1"
+                             style="width:77%">
+                            이슈유형 갱신
+                     </button>`;
+	}
+	$("#redmine_renew_button_div_3rd_grid").html(renewHtml);
+	var 라따적용_클래스이름_배열 = ['.jira_project_type_renew_btn', '.jira_project_status_renew_btn'];
+	laddaBtnSetting(라따적용_클래스이름_배열);
+}
+function tab_click_event() { // 탭 클릭시 이벤트
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 		console.log("[ jiraServer :: tab_click_event ] :: target => " + target);
@@ -766,12 +811,14 @@ function tab_click_event() {
 			if (isEmpty(selectServerId)) {
 				jError("선택된 지라 서버가 없습니다. 오류는 무시됩니다.");
 			}
-		} else if (target === "#report") { // 편집하기
+		}
+		else if (target === "#report") { // 편집하기
 			$("#jira_default_update_div").addClass("hidden");
 			$("#jira_server_update_div").removeClass("hidden");
 			$("#jira_server_delete_div").addClass("hidden");
 			$("#jira_renew_button_div").addClass("hidden");
-		} else if (target === "#related_project") {
+		}
+		else if (target === "#related_project") {
 			selectedTab = "jiraProject";
 			set_renew_btn(selectedTab, selectServerId);
 			$("#jira_renew_button_div").removeClass("hidden");
@@ -784,7 +831,8 @@ function tab_click_event() {
 			}
 			project_dataTableLoad(selectServerId);
 
-		} else if(target ==="#stats") { // 상세보기, 처음화면
+		}
+		else if(target ==="#stats") { // 상세보기, 처음화면
 			$("#jira_default_update_div").addClass("hidden");
 			$("#jira_server_update_div").addClass("hidden");
 			$("#jira_server_delete_div").addClass("hidden");
@@ -830,7 +878,6 @@ function tab_click_event() {
 				$("#issue_type_table").removeClass("hidden");
 				$("#issue_status_table").addClass("hidden");
 
-
 				if (isEmpty(selectServerId)) {
 					jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
 				}
@@ -847,6 +894,13 @@ function tab_click_event() {
 					set_renew_btn(selectedTab, selectServerId);
 					jiraServerDataTable(selectedTab);
 				}
+                if (selectServerType === "레드마인_온프레미스") {
+					$("#jira_default_update_div").addClass("hidden");
+                    $("#jira_renew_button_div_3rd_grid").removeClass("hidden");
+                    set_redmine_renew_btn_3rd_grid(selectedTab, selectServerId);
+                    projectIssueTypeDataTable();
+				}
+
 			}
 			if (target === "#issue_status" || target ==="#server_issue_status") {
 				selectedTab = "issueStatus";
@@ -869,6 +923,16 @@ function tab_click_event() {
 					set_renew_btn(selectedTab, selectServerId);
 					jiraServerDataTable(selectedTab);
 				}
+
+				if (selectServerType === "레드마인_온프레미스")  {
+                    $("#jira_renew_button_div_3rd_grid").removeClass("hidden");
+                    $("#server_issue_status").removeClass("hidden");
+                    $("#jira_renew_button_div").removeClass("hidden");
+                	set_renew_btn(selectedTab, selectServerId);
+                	display_set_wide_projectTable();
+                	jiraServerDataTable(selectedTab);
+
+                }
 			}
 		}
 	});
@@ -881,7 +945,6 @@ function tab_click_event() {
 
 // 갱신 버튼 (project, issueType, issuePriority, issueResolution, issueStatus)
 function jira_renew(renewJiraType, serverId) { // 서버 c_id
-
 	if (serverId === undefined) { serverId = "서버 아이디 정보 없음"; return false; }
 	if (renewJiraType === undefined) { renewJiraType = "갱신할 지라 타입 없음"; return false; }
 	console.log("[ jiraServer :: jira_renew] :: renewJiraType =>" + renewJiraType +" serverId => " + serverId);
@@ -1042,11 +1105,16 @@ function projectIssueTypeDataTable() {
 	var orderList = [[1, "asc"]];
 	var buttonList = [];
 	console.log("[ jiraServer :: projectIssueTypeDataTable ] selectProjectId => " + selectProjectId);
-	var jquerySelector = "#issue_type_table";
+	var jquerySelector;
+	if(selectServerType==="레드마인_온프레미스"){
+	    jquerySelector = "#redmine_issue_type_table";
+	}else{
+	    jquerySelector = "#issue_type_table";
+	}
+	//var jquerySelector = "#issue_type_table";
 	var ajaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueType.do?c_id=" + selectProjectId; // 사용 예정
 	var jsonRoot = "response";
 	var isServerSide = false;
-
 
 	dataTableRef = dataTable_build(
 		jquerySelector,
@@ -1305,7 +1373,7 @@ function default_setting_event() {
 			return;
 		}
 
-		if (selectedTab === "issueType" && selectServerType === "클라우드") {
+		if (selectedTab === "issueType" && selectServerType === "클라우드" || selectServerType === "레드마인_온프레미스") {
 			sourceCid = selectProjectId;
 			ajax_url = "jiraProject/"+ selectedTab+"/makeDefault.do";
 		}
@@ -1336,7 +1404,7 @@ function default_setting_event() {
 }
 
 //지라 프로젝트 - 데이터테이블 프로젝트 명 클릭시
-function click_projectList_table(projectName) {
+function click_projectList_table(projectName, selectServerType) {
 	console.log("[ jiraServer :: click_projectList_table ] :: projectName => " + projectName);
 	$(".grid3rd").html("");
 	// Sender 설정
@@ -1355,11 +1423,18 @@ function click_projectList_table(projectName) {
 	//풀사이즈 그리드이면 줄이고, 호스트 정보를 보여준다
 	console.log($("#serverInfo_Wrapper")[0].className);
 	console.log("[ jiraServer :: click_projectList_table ] :: selectProjectId => " + selectProjectId);
+
 	if ($("#serverInfo_Wrapper").hasClass("col-lg-7")) {
 		//서버 정보 줄이기
 		$("#serverInfo_Wrapper").removeClass("col-lg-7").addClass("col-lg-4");
 
-		$("#serverConfig_Wrapper").show();
+        if(selectServerType === '레드마인_온프레미스'){
+            $("#redmineServerConfig_Wrapper").show();
+             //$('a[href="#issue_type"]').parent().show();
+        }else{
+            $("#serverConfig_Wrapper").show();
+            //$('a[href="#issue_type"]').parent().show();
+        }
 
 		$("#returnList_Layer").show();
 
@@ -1382,6 +1457,9 @@ function click_projectList_table(projectName) {
 			selectedTab = "issueType";
 			$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
 			set_renew_btn_3rd_grid(selectedTab, selectProjectId);
+
+			$("#redmine_renew_button_div_3rd_grid").removeClass("hidden");
+            set_redmine_renew_btn_3rd_grid(selectedTab, selectProjectId);
 			projectIssueTypeDataTable();
 		}
 	}, 313);
@@ -1403,7 +1481,7 @@ function display_set_wide_projectTable() {
 	$("#serverInfo_Wrapper").removeClass("fade-in-box");
 	//$("#hostInfo_Wrapper").addClass("fade-out-box");
 	$("#serverConfig_Wrapper").hide();
-
+    $("#redmineServerConfig_Wrapper").hide();
 	//호스트 테이블 늘이기
 	$("#serverInfo_Wrapper").removeClass("col-lg-4").addClass("col-lg-7");
 
@@ -1520,7 +1598,7 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
 			}
 		});
 	}
-	if (jiraServerType ==="클라우드") {
+	if (jiraServerType ==="클라우드" || jiraServerType ==="레드마인_온프레미스") {
 		$.ajax({
 			url: "/auth-user/api/arms/jiraServer/getJiraProject.do",
 			type:"GET",

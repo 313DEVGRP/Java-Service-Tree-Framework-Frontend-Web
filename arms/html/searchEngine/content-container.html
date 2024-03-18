@@ -222,7 +222,17 @@
 							class="gradient_middle_border"
 							style="width: 100%; height: 2px"></div>
 						<blockquote class="font13">
-							로그 검색 결과가 <span class="search_results_total"></span>입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							로그 검색 결과가
+							<li class="btn-group" id="log-agg-group"><span class="search_results_total dropdown-toggle" data-toggle="dropdown"></span>
+								<ul class="dropdown-menu"
+										style="background: rgba(51, 51, 51, 0.9) !important; min-width:200px;">
+									<li style="margin: 5px 10px;">Top5 Values</li>
+									<li class="divider"></li>
+								</ul>
+							</li>
+							입니다.
+							자세한 정보를 보시려면 해당 항목을 선택해주세요.
+
 							<div style="float: right">
 								<button
 									class="btn btn-transparent btn-xs"
