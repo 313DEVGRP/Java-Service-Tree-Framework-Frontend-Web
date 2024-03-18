@@ -191,7 +191,7 @@ function search_with_date(search_string, range_date) {
 	}
 
 	$(".spinner").html(
-		'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 		"검색 결과 로딩 중입니다..."
 	);
 
@@ -227,7 +227,7 @@ function search_with_date(search_string, range_date) {
 function getTop5LogName(search_string, range_date){
 	console.log("[searchEngine :: getTop5LogName] 실행");
 	$(".spinner").html(
-		'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 		"검색 결과 로딩 중입니다..."
 	);
 
