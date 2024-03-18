@@ -188,7 +188,7 @@ function loadPlugin(url) {
 	return new Promise(function (resolve, reject) {
 		if (isJavaScriptFile(url)) {
 			$(".spinner").html(
-				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 					getFileNameFromURL(url) +
 					" 자바스크립트를 다운로드 중입니다..."
 			);
@@ -210,7 +210,7 @@ function loadPlugin(url) {
 			});
 		} else {
 			$(".spinner").html(
-				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 					getFileNameFromURL(url) +
 					" 스타일시트를 다운로드 중입니다..."
 			);
