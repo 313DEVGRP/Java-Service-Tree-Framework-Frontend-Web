@@ -283,6 +283,9 @@ function getTop5LogName(search_string, range_date){
 		}
 	}
 
+	var agg_title = `<li style="margin: 5px 10px; font-weight: bold;">Top5 Values</li><li class="gradient_middle_border"></li>`;
+	$("#log-agg-group .dropdown-custom-right").html(agg_title);
+
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/log-aggs-top5/with-date",
 		type: "GET",
