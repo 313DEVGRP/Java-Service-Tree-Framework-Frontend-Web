@@ -1696,7 +1696,7 @@ function notReaadyModalPopup(jiraServerId) {
 			targets: 3,
 			searchable: true,
 			orderable: true,
-			render: function (data, type, row,meta) {
+			render: function (data, type, row, meta) {
 				let isCheck = null;
 
 				for (const rowInfo of data) {
@@ -1721,7 +1721,7 @@ function notReaadyModalPopup(jiraServerId) {
 	columnDefList = columnDefList_issuetype;
 	var rowsGroupList = null; //그룹을 안쓰려면 null 처리
 	var jquerySelector = "#modal_project_table"; // 장소
-	var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProjectPure.do?c_id=" + jiraServerId;
+	var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProject.do?c_id=" + jiraServerId;
 	var jsonRoot = "response";
 
 	var selectList = {};
