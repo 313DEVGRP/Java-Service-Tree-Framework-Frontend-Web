@@ -88,3 +88,13 @@
     border-radius: 3px;
     font-style: normal;
 }
+
+.dropdown-menu{
+    min-width: 120px;
+}
+
+.dropdown-custom-right {
+    top: -5px;
+    left: 120px;
+    right: 0;
+}

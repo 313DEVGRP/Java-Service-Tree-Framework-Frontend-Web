@@ -67,8 +67,14 @@ function execDocReady() {
 			hljs.highlightAll();
 			//이벤트리스너 활성화
 			eventListenersActivator();
-			//datetime-picker 활성화
+
+			//날짜검색 이벤트리스너
+			date_range_filter_event();
 			datetTimePicker();
+			//검색결과_집계
+			result_aggs_event();
+
+
 			//페이지 로드 시  - 상단 검색 확인
 			checkQueryStringOnUrl();
 		})
@@ -114,7 +120,50 @@ function eventListenersActivator() {
 		}
 	});
 
-	//검색 날짜필터 이벤트 리스너
+}
+
+///////////////////////////////////////
+// 검색_모든결과 집계 이벤트리스너
+///////////////////////////////////////
+function result_aggs_event() {
+	// 필터-드롭다운
+	$("#data-result-group .dropdown-menu li").on("click", function (event) {
+		var targetId = $(event.target).closest("a").attr("id");
+		var targetText = $("#"+targetId).text();
+		console.log("[searchEngine :: 모든 결과] :: 드롭다운 :: targetText=>" + targetText);
+		$("#data-result").text(targetText);
+
+		event.stopPropagation(); //이벤트 버블링 중지(클릭 후 드롭다운 사라지지 않음)
+	});
+
+	$("#overall-result").on("click", function (event) {
+		$("#data-result-group").removeClass("open");
+	});
+
+	로그집계_드롭다운_이벤트();
+	//다른 이벤트 추가..
+}
+function 로그집계_드롭다운_이벤트() {
+	//로그 버튼 눌렀을 때
+	$("#log-agg-group").on("click", function (event) {
+		let rangeDate = SearchApiModule.getRangeDate();
+		//검색어 체크 (없다면, 검색창 확인하여 세팅)
+		if(!searchString) {
+			let searchTerm = $("#search-input").val();
+			if(searchTerm && searchTerm.trim()) {
+				let 검색어 = searchTerm.trim();
+				searchString = 검색어;
+			}
+		}
+		getTop5LogName(searchString, rangeDate);
+		$("#log-agg-group").addClass("open");
+	});
+}
+
+//////////////////////////////
+// 검색_날짜필터 이벤트리스너
+//////////////////////////////
+function date_range_filter_event() {
 	$("#date-range-group .dropdown-menu li:not(:last)").on("click", function (event) {
 		// console.log($(event.target));
 		var rangeTypeId = $(event.target).closest("a").attr("id");
@@ -141,7 +190,7 @@ function eventListenersActivator() {
 			$("#filter_list").append(
 				`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
 			);
-			
+
 			if(searchString) { //검색 실행
 				search_with_date(searchString, rangeDate);
 			}
@@ -152,28 +201,20 @@ function eventListenersActivator() {
 
 	});
 
+	// 기간 설정 선택
 	$("#date-range-group .dropdown-menu li:last").on("click", function (event) {
 		var rangeTypeId = $(event.target).closest("a").attr("id");
 		var rangeText = $("#"+rangeTypeId).text();
-		$("#date-range").text(rangeText); // 드롭다운 타이틀 변경
+		$("#date-range").text(rangeText);
 
 		$("#date_timepicker_start").val("");
 		$("#date_timepicker_end").val("");
 	});
-
-	$("#log-agg-group").on("click", function (event) {
-		let rangeDate = SearchApiModule.getRangeDate();
-		//검색어 체크 (없다면, 검색창 확인하여 세팅)
-		if(!searchString) {
-			let searchTerm = $("#search-input").val();
-			if(searchTerm && searchTerm.trim()) {
-				let 검색어 = searchTerm.trim();
-				searchString = 검색어;
-			}
-		}
-		getTop5LogName(searchString, rangeDate);
-	});
 }
+
+
+
+
 
 /////////////////////////
 // 페이지 날짜 포함 검색
@@ -228,7 +269,7 @@ function getTop5LogName(search_string, range_date){
 	console.log("[searchEngine :: getTop5LogName] 실행");
 	$(".spinner").html(
 		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
-		"검색 결과 로딩 중입니다..."
+		"집계 결과 로딩 중입니다..."
 	);
 
 	let start_date = null;
@@ -249,7 +290,6 @@ function getTop5LogName(search_string, range_date){
 		dataType: "json",
 		success: function(result) {
 			console.log("[searchEngine :: search_with_date] :: log-aggs-top5 => 집계 실행");
-
 			if(result) {
 				var resultArr=result["검색결과"]["group_by_@log_name"];
 				var appendHtml = ``;
@@ -258,8 +298,9 @@ function getTop5LogName(search_string, range_date){
 				resultArr.forEach((element) => {
 					total += parseInt(element["개수"]);
 				});
+				console.log("[searchEngine :: search_with_date] :: log-aggs-top5 :: total => ", total);
 				var setting = `<li style="margin: 5px 10px; font-weight: bold;">Top5 Values</li><li class="gradient_middle_border"></li>`;
-				$("#log-agg-group .dropdown-menu").html("");
+				$("#log-agg-group .dropdown-custom-right").html("");
 				resultArr.forEach((element) => {
 					var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
 					setting += `<li>
