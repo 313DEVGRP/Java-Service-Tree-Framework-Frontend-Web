@@ -1641,9 +1641,9 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
 						// ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`;
 						$(ribbonSelector).append(ribbonHtmlData);
 					} else {
-						/*ribbonHtmlData += `<div class="ribbon ribbon-info" >Ready</div>`;*/
-						ribbonHtmlData += `<div class="ribbon ribbon-info" style="cursor: pointer;"
-												onclick="event.stopPropagation(); notReaadyModalPopup('${jiraServerId}')">Ready</div>`;
+						ribbonHtmlData += `<div class="ribbon ribbon-info" >Ready</div>`;
+						/*ribbonHtmlData += `<div class="ribbon ribbon-info" style="cursor: pointer;"
+												onclick="event.stopPropagation(); notReaadyModalPopup('${jiraServerId}')">Ready</div>`;*/
 						$(ribbonSelector).append(ribbonHtmlData);
 					}
 				}
@@ -1657,62 +1657,6 @@ function drawRibbon(jiraServerId, jiraServerType, index) {
 			}
 		});
 	}
-	/*if (jiraServerType ==="레드마인_온프레미스") {
-		$.ajax({
-			url: "/auth-user/api/arms/jiraServer/getJiraProject.do",
-			type:"GET",
-			data: { c_id: jiraServerId },
-			contentType: "application/json;charset=UTF-8",
-			dataType: "json", // 서버에서 보내줄 데이터의 타입
-			progress: true,
-			statusCode: {
-				200: function (data) {
-					$(".loader").addClass("hide");
-
-					cardIndex = index;
-					resultList = data.response; // 프로젝트 엔티티 목록(+이슈유형, 이슈상태 있음)
-					var arr = [];
-					arr = resultList;
-					var issueTypeList = [];
-
-					var ribbonSelector = ".ribbon-"+cardIndex;
-					var ribbonHtmlData = ``;
-
-					var projectIdList = [];
-					var dic = {serverId : "" , projectId : ""};
-					dic.serverId = jiraServerId;
-					for(var i = 0; i < arr.length ; i++) {
-						issueTypeList = arr[i].jiraIssueTypeEntities; // 이슈타입들의 목록
-						chk_result = chk_issue_type_whether_issue_can_be_created(issueTypeList);
-						if (chk_result !== "true") { projectIdList.push(arr[i].c_id); }
-					}
-					dic.projectId = projectIdList;
-					if (dic.projectId.length !== 0) { //이슈 타입의 기본값 설정이 없음 or arms-requirement 가 아님
-						ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34; cursor: pointer;"
-												onclick="event.stopPropagation(); notReaadyModalPopup('${jiraServerId}')" >
-												<button style="background: #DB2A34; border:none; font-weight: bold;">
-													Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i>
-												</button>
-											</div>`;
-						// ribbonHtmlData += `<div class="ribbon ribbon-info" style="background: #DB2A34;"><button onclick="window.open('docs/guide.html#jira_regist_manage')" style="background: #DB2A34; border:none; font-weight: bold;">Help<i class="fa fa-exclamation ml-1" style="font-size: 13px;"></i></button></div>`;
-						$(ribbonSelector).append(ribbonHtmlData);
-					} else {
-						ribbonHtmlData += `<div class="ribbon ribbon-info" >Ready</div>`;
-						/!*ribbonHtmlData += `<div class="ribbon ribbon-info" style="cursor: pointer;"
-												onclick="event.stopPropagation(); notReaadyModalPopup('${jiraServerId}')">Ready</div>`;*!/
-						$(ribbonSelector).append(ribbonHtmlData);
-					}
-				}
-			},
-			error: function (e) {
-				if(jiraServerId === undefined || jiraServerId === "") {
-					jError("클라우드 지라 프로젝트 조회 중 에러가 발생했습니다. (지라(서버) 아이디 없음)");
-				} else {
-					jError("클라우드 지라 프로젝트 조회 중 에러가 발생했습니다.");
-				}
-			}
-		});
-	}*/
 	return resultList;
 }
 
@@ -1747,7 +1691,7 @@ function notReaadyModalPopup(jiraServerId) {
 		{ name: "c_id", title: "c_id", data: "c_id", visible: false },
 	];
 	var columnDefList =[];
-	var columnDefList_cloud = [
+	var columnDefList_issuetype = [
 		{
 			targets: 3,
 			searchable: true,
@@ -1774,7 +1718,7 @@ function notReaadyModalPopup(jiraServerId) {
 			}
 		}
 	];
-	columnDefList = columnDefList_cloud;
+	columnDefList = columnDefList_issuetype;
 	var rowsGroupList = null; //그룹을 안쓰려면 null 처리
 	var jquerySelector = "#modal_project_table"; // 장소
 	var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProjectPure.do?c_id=" + jiraServerId;
