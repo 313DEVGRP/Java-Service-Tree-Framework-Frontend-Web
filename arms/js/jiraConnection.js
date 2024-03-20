@@ -514,11 +514,27 @@ function setdata_for_multiSelect() {
                 var obj = data[k];
                 var server_name = obj.c_jira_server_name;
                 var server_type = obj.c_jira_server_type;
-                for(var p in data[k].jiraProjectPureEntities) {
-                    var obj2 = data[k].jiraProjectPureEntities[p];
+                for(var p in data[k].jiraProjectIssueTypePureEntities) {
+                    var obj2 = data[k].jiraProjectIssueTypePureEntities[p];
                     var jira_name = obj2.c_jira_name;
                     var jira_idx = obj2.c_id;
-                    optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
+                    if ((server_type ==="클라우드" || server_type ==="레드마인_온프레미스") && obj2.jiraIssueTypeEntities.length > 0) {
+                        let isCheck = null;
+                        for(let j in obj2.jiraIssueTypeEntities) {
+                            let issuetype = obj2.jiraIssueTypeEntities[j];
+                            if (issuetype.c_check === "true") {
+                                isCheck = issuetype.c_issue_type_name+"["+issuetype.c_issue_type_id+"]";
+                                break;
+                            }
+                        }
+                        if(!isEmpty(isCheck)) {
+                            optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
+                        }
+                    }
+                    else {
+                        optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
+                    }
+
                     //optionData.push("<option value='" + jira_idx + "'>"+"["+server_name+"] "+jira_name + "</option>");
                 }
             }

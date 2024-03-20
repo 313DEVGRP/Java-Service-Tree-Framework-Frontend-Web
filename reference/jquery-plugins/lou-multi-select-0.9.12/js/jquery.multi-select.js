@@ -116,12 +116,15 @@
           value,
           elementId;
 
-      if(serverType === "온프레미스" || serverType ==="클라우드") {
+      if(serverType === "온프레미스" || serverType ==="클라우드" || serverType === "레드마인_온프레미스") {
         if (serverType === "온프레미스") {
            selectableLi = $('<li '+attributes+'><span><img src="./img/jira/mark-gradient-blue-jira.svg" width="15px" style=""></img> '+that.escapeHTML($option.text())+'</span></li>');
         }
         if (serverType === "클라우드") {
            selectableLi = $('<li '+attributes+'><span><img src="./img/jira/mark-gradient-white-jira.svg" width="15px" style=""></img> '+that.escapeHTML($option.text())+'</span></li>');
+        }
+        if (serverType === "레드마인_온프레미스") {
+          selectableLi = $('<li '+attributes+'><span><img src="./img/community_devtool/redmine.png" width="15px" style=""></img> '+that.escapeHTML($option.text())+'</span></li>');
         }
       } else {
          selectableLi = $('<li '+attributes+'><span><span class=\"glyphicon glyphicon-check\" style=\"color: #e49400; vertical-align: middle;\"></span> '+that.escapeHTML($option.text())+'</span></li>');
