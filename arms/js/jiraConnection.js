@@ -79,7 +79,7 @@ function execDocReady() {
             $.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
                 initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
             });
-            
+
             //스크립트 실행 로직을 이곳에 추가합니다.
             var 라따적용_클래스이름_배열 = ['.pdservice_version_alm_connect'];
             laddaBtnSetting(라따적용_클래스이름_배열);
@@ -518,17 +518,13 @@ function setdata_for_multiSelect() {
                     var obj2 = data[k].jiraProjectIssueTypePureEntities[p];
                     var jira_name = obj2.c_jira_name;
                     var jira_idx = obj2.c_id;
-                    if ((server_type ==="클라우드" || server_type ==="레드마인_온프레미스") && obj2.jiraIssueTypeEntities.length > 0) {
-                        let isCheck = null;
-                        for(let j in obj2.jiraIssueTypeEntities) {
-                            let issuetype = obj2.jiraIssueTypeEntities[j];
-                            if (issuetype.c_check === "true") {
-                                isCheck = issuetype.c_issue_type_name+"["+issuetype.c_issue_type_id+"]";
-                                break;
+                    if (server_type === "클라우드" || server_type === "레드마인_온프레미스") {
+                        if (obj2.jiraIssueTypeEntities && obj2.jiraIssueTypeEntities.length > 0) {
+                            const issueType = obj2.jiraIssueTypeEntities.find(issuetype => issuetype.c_check === "true");
+
+                            if (issueType) {
+                                optionData.push("<option data-server-type='" + server_type + "' value='" + jira_idx + "'>" + "[" + server_name + "] " + jira_name + "</option>");
                             }
-                        }
-                        if(!isEmpty(isCheck)) {
-                            optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
                         }
                     }
                     else {
