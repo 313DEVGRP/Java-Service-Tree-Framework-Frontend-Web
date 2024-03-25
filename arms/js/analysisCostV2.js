@@ -220,6 +220,7 @@ function productCostChart() {
                 var option;
                 var mapValues = Object.values(monthlyCost);
                 var mapKeys = Object.keys(monthlyCost);
+                var mapKeysSize = mapKeys.length;
                 var maxValue = response.totalAnnualIncome;
                 var intervalValue = maxValue / 10;
 
@@ -271,8 +272,8 @@ function productCostChart() {
                             name: '성과 기준선',
                             type: 'line',
                             data: [
-                              [0, maxValue/12],
-                              [11, maxValue]
+                              [0, maxValue/mapKeysSize],
+                              [mapKeysSize-1, maxValue]
                             ],
                             smooth: true,
                         },
