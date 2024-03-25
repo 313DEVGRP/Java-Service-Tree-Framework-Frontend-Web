@@ -200,7 +200,6 @@ function productCostChart() {
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
       .addQueryParam("isReqType", "ISSUE")
       .addQueryParam('메인그룹필드', "parentReqKey")
-      // .addQueryParam('메인그룹필드', "cReqLink")
       .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword")
       .build();
 
@@ -243,14 +242,13 @@ function productCostChart() {
                         }
                     },
                     legend: {
-                        data: ['성과 기준선', '월 별 누별 성과']
+                        data: ['성과 기준선', '월 별 누적 성과']
                     },
                     xAxis: [
                         {
                             type: 'category',
                             data: mapKeys,
                             // name: '2024',
-                            // data: ['2024/1', '2024/2', '2024/3', '2024/4', '2024/5', '2024/6', '2024/7', '2024/8', '2024/9', '2024/10', '2024/11', '2024/12'],
                             axisPointer: {
                                 type: 'shadow'
                             }
@@ -276,48 +274,12 @@ function productCostChart() {
                               [0, maxValue/12],
                               [11, maxValue]
                             ],
-                            // data: [
-                            //     6666666,
-                            //     13333333,
-                            //     20000000,
-                            //     26666666,
-                            //     33333333,
-                            //     40000000,
-                            //     46666666,
-                            //     53333333,
-                            //     60000000,
-                            //     66666666,
-                            //     73333333,
-                            //     80000000
-                            // ],
-                            // data: [
-                            //     [0, 6666666],
-                            //     [11, 80000000]
-                            // ],
                             smooth: true,
-                            // markLine: {
-                            //     data: [{type: 'average', name: '평균'}]
-                            //     data: [{ yAxis: 5000000, name: '특정 값' }]
-                            // }
                         },
                         {
-                            name: '월 별 누별 성과',
+                            name: '월 별 누적 성과',
                             type: 'bar',
                             data: mapValues,
-                            // data: [
-                            //     5000000, // 1월
-                            //     11000000, // 2월
-                            //     18000000, // 3월
-                            //     23366666, // 4월
-                            //     29333333, // 5월
-                            //     38000000, // 6월
-                            //     42666666, // 7월
-                            //     51333333, // 8월
-                            //     57000000, // 9월
-                            //     63666666, // 10월
-                            //     71333333, // 11월
-                            //     79000000 // 12월
-                            // ],
                             barWidth: '60%' // 막대너비
                         }
                     ]
