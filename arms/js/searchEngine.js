@@ -340,6 +340,12 @@ function search(search_section, page, range_date) {
 			end_date = range_date["end-date"];
 		}
 	}
+
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"검색 결과 로딩 중입니다..."
+	);
+
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/"+search_section+"/with-date", // 날짜포함이 있어야 하므로.
 		type: "GET",
@@ -371,6 +377,12 @@ function search_start(search_string, range_date) {
 			end_date = range_date["end-date"];
 		}
 	}
+
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"검색 결과 로딩 중입니다..."
+	);
+
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue/with-date",
 		type: "GET",
