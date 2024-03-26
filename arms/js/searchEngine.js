@@ -98,15 +98,16 @@ function eventListenersActivator() {
 	$("#search-button").on("click", function (event) {
 		$("#nav-search-input").val("");
 		let searchTerm = $("#search-input").val();
-		if(searchTerm && searchTerm.trim()) {
-			let 검색어 = searchTerm.trim();
-			searchString = 검색어;
-			console.log("[searchEngine :: search-button] :: 검색어 -> "+ 검색어.trim());
-			setParameter("searchString",검색어);
+
+		검색어_유효성_체크(searchTerm); // 여기서 전역변수인 검색어 세팅
+
+		if(searchString) {
+			console.log("[searchEngine :: search-button] :: 검색어 -> "+ searchString);
+			setParameter("searchString",searchString);
 			let rangeDate = SearchApiModule.getRangeDate();
-			search_with_date(검색어, rangeDate);
+			search_with_date(searchString, rangeDate);
 		} else {
-			setParameter("searchString",""); // 검색어 초기화
+			setParameter("searchString",""); // 검색어 url 초기화
 			console.log("[searchEngine :: search-button] :: 검색어가 없거나 빈값 입니다.");
 		}
 	});
@@ -133,13 +134,12 @@ function result_aggs_event() {
 
 		let rangeDate = SearchApiModule.getRangeDate();
 		//검색어 체크 (없다면, 검색창 확인하여 세팅)
-		if(!searchString) {
-			let searchTerm = $("#search-input").val();
-			if(searchTerm && searchTerm.trim()) {
-				let 검색어 = searchTerm.trim();
-				searchString = 검색어;
-				getTop5LogName(searchString, rangeDate);
-			}
+		if(searchString) {
+			getTop5LogName(searchString, rangeDate);
+		} else {
+			$("#log-agg-top5").html("");
+			var setting = `<a style="text-align: center;">집계 데이터 없음</a>`;
+			$("#log-agg-top5").html(setting);
 		}
 	});
 }
@@ -154,15 +154,6 @@ function date_range_filter_event() {
 		var rangeText = $("#"+rangeTypeId).text();
 		$("#date-range").text(rangeText); // 드롭다운 타이틀 변경
 
-		//검색어 체크 (없다면, 검색창 확인하여 세팅)
-		if(!searchString) {
-			let searchTerm = $("#search-input").val();
-			if(searchTerm && searchTerm.trim()) {
-				let 검색어 = searchTerm.trim();
-				searchString = 검색어;
-			}
-		}
-
 		searchRangeType = rangeTypeId; // 검색 레인지 타입아이디
 		SearchApiModule.setRangeDateAsync(rangeTypeId).then(() => {
 			//날짜 구간 세팅
@@ -175,7 +166,7 @@ function date_range_filter_event() {
 				`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
 			);
 
-			if(searchString) { //검색 실행
+			if(searchString) {
 				search_with_date(searchString, rangeDate);
 			}
 		}).catch((error) => {
@@ -195,9 +186,6 @@ function date_range_filter_event() {
 		$("#date_timepicker_end").val("");
 	});
 }
-
-
-
 
 
 /////////////////////////
@@ -267,9 +255,6 @@ function getTop5LogName(search_string, range_date){
 		}
 	}
 
-	var agg_title = `<li style="margin: 5px 10px; font-weight: bold;">Top5 Values</li><li class="gradient_middle_border"></li>`;
-	$("#log-agg-group .dropdown-custom-right").html(agg_title);
-
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/log-aggs-top5/with-date",
 		type: "GET",
@@ -286,7 +271,7 @@ function getTop5LogName(search_string, range_date){
 					total += parseInt(element["개수"]);
 				});
 				console.log("[searchEngine :: search_with_date] :: log-aggs-top5 :: total => ", total);
-				var setting = `<a href="#"  style="color: white; font-weight: bold;">로그 - Top 5 Values</a><li class="gradient_middle_border"></li><ul>`;
+				var setting = `<ul>`;
 				$("#log-agg-top5").html("");
 				resultArr.forEach((element) => {
 					var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
@@ -302,16 +287,17 @@ function getTop5LogName(search_string, range_date){
 				});
 				setting +=`</ul>`;
 				$("#log-agg-top5").html(setting);
+			} else {
+				$("#log-agg-top5").html(`<a style="text-align: center;">집계 데이터 없음</a>`);
 			}
-
 		}
 	});
 }
 
-/////////////////////////
-// 페이지 누를때 동작 - 검색
-/////////////////////////
-function search(search_section, page, range_date) {
+/////////////////////////////////////////////////////////////
+// 페이지 누를때 동작 - 검색 (search_section 별 페이지 검색)
+////////////////////////////////////////////////////////////
+function section_search(search_section, page, range_date) {
 	var search_string = $("#search-input").val();
 	var pageSize = 10;
 
@@ -337,7 +323,7 @@ function search(search_section, page, range_date) {
 		data: { "search_string": search_string, "page" : page, "size": pageSize, "from": start_date, "to" : end_date },
 		dataType: "json",
 		success: function(result) {
-			console.log("[searchEngine :: search_start] :: jiraissue_search_results => ");
+			console.log("[searchEngine :: search] :: jiraissue_search_results => ");
 			console.log(result);
 			let showPage = page+1; // 보여주는 페이지
 			SearchApiModule.setSearchResult(search_section,result, showPage, pageSize);
@@ -346,60 +332,6 @@ function search(search_section, page, range_date) {
 		}
 	});
 }
-
-/////////////////////////
-// 검색어 검색 시작
-/////////////////////////
-function search_start(search_string, range_date) {
-	console.log("[searchEngine :: search_start] :: 검색어 => " + search_string);
-	let start_date = null;
-	let end_date = null;
-	if(range_date) {
-		if(range_date["start-date"]) {
-			start_date = range_date["start-date"];
-		}
-		if(range_date["end-date"]) {
-			end_date = range_date["end-date"];
-		}
-	}
-
-	$(".spinner").html(
-		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
-		"검색 결과 로딩 중입니다..."
-	);
-
-	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue/with-date",
-		type: "GET",
-		data: { "search_string": search_string, "page" : 0, "size": 10, "from": start_date, "to" : end_date },
-		dataType: "json",
-		success: function(result) {
-			console.log("[searchEngine :: search_start] :: jiraissue_search_results => ");
-			console.log(result);
-
-			const current_page = 1; //현재 페이지 초기화
-			const items_per_Page = 10; //페이지당 아이템 수
-			SearchApiModule.setSearchResult("jiraissue",result, current_page, items_per_Page);
-
-		}
-	});
-
-	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/log/with-date",
-		type: "GET",
-		data: { "search_string": search_string, "page" : 0, "size": 10 },
-		dataType: "json",
-		success: function(result) {
-			console.log("[searchEngine :: search_start] :: fluentd_search_results => ");
-			console.log(result);
-			const current_page = 1; //현재 페이지 초기화
-			const items_per_Page = 10; //페이지당 아이템 수
-			SearchApiModule.setSearchResult("log", result, current_page, items_per_Page);
-		}
-	});
-}
-
-
 
 /////////////////////////////////////
 // 클릭한 아이디에서 section과 결과순서 가져오기
@@ -427,12 +359,13 @@ function checkQueryStringOnUrl() {
 	var queryString = window.location.search;
 	var urlParams = new URLSearchParams(queryString);
 	var searchTerm = urlParams.get("searchString");
-	if (searchTerm) {
-		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어 => " + searchTerm);
-		$("#search-input").val(searchTerm);
-		search_start(searchTerm);
+	console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어 => " + searchTerm);
+	검색어_유효성_체크(searchTerm);
+	if (searchString) {
+		$("#search-input").val(searchString);
+		search_with_date(searchString, null);
 	} else {
-		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없습니다.");
+		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없거나 유효하지 않습니다.");
 	}
 }
 
@@ -443,7 +376,7 @@ function changePage(search_section,page) {
 	if(requestPage < 0) {
 		requestPage = 0;
 	}
-	search(search_section, requestPage, SearchApiModule.getRangeDate());
+	section_search(search_section, requestPage, SearchApiModule.getRangeDate());
 }
 ////////////////////////////
 // 검색날짜 기간 설정 세팅
@@ -497,18 +430,23 @@ function customRangeSetting() {
 			`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
 		);
 
-		if(!searchString) {
-			let searchTerm = $("#search-input").val();
-			if(searchTerm && searchTerm.trim()) {
-				let 검색어 = searchTerm.trim();
-				searchString = 검색어;
-			}
-		}
 		if(searchString) {
 			console.log("[searchEngine :: customRangeSetting] :: searchString => " + searchString);
 			search_with_date(searchString, rangeDate);
 		}
+
 	}).catch((error) => {
 		console.error("[searchEngine :: 날짜검색 이벤트리스너] :: 검색 오류 발생 =>", error);
 	});
+}
+
+function 검색어_유효성_체크(search_string) {
+	if ($("#search-input").val() && $.trim($("#search-input").val()) !== "" && !/^[^\w\s]+$/.test($.trim($("#search-input").val()))) {
+		searchString = $.trim($("#search-input").val());
+	} else {
+		// url 검색어 param 초기화
+		setParameter("searchString","");
+		searchString=null;
+		console.log("[searchEngine :: 검색어_유효성_체크 ] :: 검색어가 유효하지 않습니다.");
+	}
 }
