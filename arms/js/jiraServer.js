@@ -182,7 +182,7 @@ function draw_card_deck(cardInfo) {
 				insertImage = `<img src="./img/jira/mark-gradient-blue-jira.svg" width="30px" style=""></img>`;
 			}
 			if (cardList[i].c_jira_server_type === '레드마인_온프레미스') {
-                insertImage = `<img src="./img/community_devtool/redmine.png" width="30px" style=""></img>`;
+                insertImage = `<img src="./img/redmine/logo.png" width="30px" style=""></img>`;
             }
 
 			data +=
