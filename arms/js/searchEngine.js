@@ -106,6 +106,7 @@ function eventListenersActivator() {
 			let rangeDate = SearchApiModule.getRangeDate();
 			search_with_date(검색어, rangeDate);
 		} else {
+			setParameter("searchString",""); // 검색어 초기화
 			console.log("[searchEngine :: search-button] :: 검색어가 없거나 빈값 입니다.");
 		}
 	});
@@ -123,29 +124,13 @@ function eventListenersActivator() {
 }
 
 ///////////////////////////////////////
-// 검색_모든결과 집계 이벤트리스너
+// 검색_데이터 집계 이벤트리스너
 ///////////////////////////////////////
 function result_aggs_event() {
 	// 필터-드롭다운
-	$("#data-result-group .dropdown-menu li").on("click", function (event) {
-		var targetId = $(event.target).closest("a").attr("id");
-		var targetText = $("#"+targetId).text();
-		console.log("[searchEngine :: 모든 결과] :: 드롭다운 :: targetText=>" + targetText);
-		$("#data-result").text(targetText);
+	$("#data-result-group").on("click", function (event) {
+		console.log("[searchEngine :: 모든 결과] :: 드롭다운 :: 로그집계 top5 보여주기");
 
-		event.stopPropagation(); //이벤트 버블링 중지(클릭 후 드롭다운 사라지지 않음)
-	});
-
-	$("#overall-result").on("click", function (event) {
-		$("#data-result-group").removeClass("open");
-	});
-
-	로그집계_드롭다운_이벤트();
-	//다른 이벤트 추가..
-}
-function 로그집계_드롭다운_이벤트() {
-	//로그 버튼 눌렀을 때
-	$("#log-agg-group").on("click", function (event) {
 		let rangeDate = SearchApiModule.getRangeDate();
 		//검색어 체크 (없다면, 검색창 확인하여 세팅)
 		if(!searchString) {
@@ -153,10 +138,9 @@ function 로그집계_드롭다운_이벤트() {
 			if(searchTerm && searchTerm.trim()) {
 				let 검색어 = searchTerm.trim();
 				searchString = 검색어;
+				getTop5LogName(searchString, rangeDate);
 			}
 		}
-		getTop5LogName(searchString, rangeDate);
-		$("#log-agg-group").addClass("open");
 	});
 }
 
@@ -302,8 +286,8 @@ function getTop5LogName(search_string, range_date){
 					total += parseInt(element["개수"]);
 				});
 				console.log("[searchEngine :: search_with_date] :: log-aggs-top5 :: total => ", total);
-				var setting = `<li style="margin: 5px 10px; font-weight: bold;">Top5 Values</li><li class="gradient_middle_border"></li>`;
-				$("#log-agg-group .dropdown-custom-right").html("");
+				var setting = `<a href="#"  style="color: white; font-weight: bold;">로그 - Top 5 Values</a><li class="gradient_middle_border"></li><ul>`;
+				$("#log-agg-top5").html("");
 				resultArr.forEach((element) => {
 					var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
 					setting += `<li>
@@ -316,7 +300,8 @@ function getTop5LogName(search_string, range_date){
                     		</div>												
 				  </li>`;
 				});
-				$("#log-agg-group .dropdown-menu").html(setting);
+				setting +=`</ul>`;
+				$("#log-agg-top5").html(setting);
 			}
 
 		}
