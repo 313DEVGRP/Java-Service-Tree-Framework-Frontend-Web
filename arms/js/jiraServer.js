@@ -1378,7 +1378,7 @@ function default_setting_event() {
 			return;
 		}
 
-		if (selectedTab === "issueType" && selectServerType === "클라우드" || selectServerType === "레드마인_온프레미스") {
+		if (selectedTab === "issueType" && (selectServerType === "클라우드" || selectServerType === "레드마인_온프레미스")) {
 			sourceCid = selectProjectId;
 			ajax_url = "jiraProject/"+ selectedTab+"/makeDefault.do";
 		}
