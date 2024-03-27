@@ -442,11 +442,23 @@ function customRangeSetting() {
 
 function 검색어_유효성_체크(search_string) {
 	if ($("#search-input").val() && $.trim($("#search-input").val()) !== "" && !/^[^\w\s]+$/.test($.trim($("#search-input").val()))) {
-		searchString = $.trim($("#search-input").val());
+
+		let searchTerm = $.trim($("#search-input").val());
+		searchString = checkAndAppendWildcard(searchTerm);
 	} else {
 		// url 검색어 param 초기화
 		setParameter("searchString","");
 		searchString=null;
 		console.log("[searchEngine :: 검색어_유효성_체크 ] :: 검색어가 유효하지 않습니다.");
 	}
+}
+
+function checkAndAppendWildcard(searchTerm) {
+	// 검색어의 마지막 문자가 *인지 확인
+	if (searchTerm.slice(-1) !== '*') {
+		// *이 없다면 *을 추가하여 반환
+		return searchTerm + '*';
+	}
+	// *이 이미 있으면 검색어를 그대로 반환
+	return searchTerm;
 }
