@@ -441,7 +441,7 @@ function customRangeSetting() {
 }
 
 function 검색어_유효성_체크(search_string) {
-	if (search_string && $.trim(search_string) !== "" && !/^[^\w\s]+$/.test($.trim(search_string))) {
+	if (search_string && $.trim(search_string) !== "" && !/^\*+$/.test($.trim(search_string))) {
 		let searchTerm = $.trim(search_string);
 		searchString = checkAndAppendWildcard(searchTerm);
 	} else {
