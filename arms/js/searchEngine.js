@@ -99,7 +99,7 @@ function eventListenersActivator() {
 		$("#nav-search-input").val("");
 		let searchTerm = $("#search-input").val();
 
-		검색어_유효성_체크(searchTerm); // 여기서 전역변수인 검색어 세팅
+		검색어_유효성_체크(searchTerm);
 
 		if(searchString) {
 			console.log("[searchEngine :: search-button] :: 검색어 -> "+ searchString);
@@ -441,9 +441,8 @@ function customRangeSetting() {
 }
 
 function 검색어_유효성_체크(search_string) {
-	if ($("#search-input").val() && $.trim($("#search-input").val()) !== "" && !/^[^\w\s]+$/.test($.trim($("#search-input").val()))) {
-
-		let searchTerm = $.trim($("#search-input").val());
+	if (search_string && $.trim(search_string) !== "" && !/^[^\w\s]+$/.test($.trim(search_string))) {
+		let searchTerm = $.trim(search_string);
 		searchString = checkAndAppendWildcard(searchTerm);
 	} else {
 		// url 검색어 param 초기화
