@@ -98,8 +98,6 @@ function execDocReady() {
 
             비용분석계산버튼();
 
-            click_btn_for_assignee_update();
-
             dashboardColor = dashboardPalette.dashboardPalette01;
 
         })
@@ -238,109 +236,6 @@ function bind_VersionData_By_PdService() {
                 //////////////////////////////////////////////////////////
             }
         }
-    });
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 수정 PUT API 호출
-////////////////////////////////////////////////////////////////////////////////////////
-function updateSalary() {
-    return $.ajax({
-        url: "/auth-user/api/arms/salaries/update.do",
-        type: "PUT",
-        data: {
-            c_annual_income: $("#editview_assignee_salary").val(),
-            c_key: $("#editview_assignee_key").val()
-            // plan_resource: $("#editview_assignee_plan_resource").val(),
-            // assignee_start_date: new Date($("#editview_assignee_start_date").val()),
-            // assignee_end_date: new Date($("#editview_assignee_end_date").val()),
-        }
-    });
-}
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트 완료 후 연봉 데이터 GET API 호출
-////////////////////////////////////////////////////////////////////////////////////////
-function fetchUpdatedData() {
-    const url = new UrlBuilder()
-      .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
-      .addQueryParam('pdServiceLink', selectedPdServiceId)
-      .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-      .addQueryParam('크기', 1000)
-      .addQueryParam('하위크기', 1000)
-      .addQueryParam('컨텐츠보기여부', true)
-      .build();
-
-    return $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-    });
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트(PUT), 조회(GET) 완료 후 데이터 가공하여 데이터테이블 reload
-////////////////////////////////////////////////////////////////////////////////////////
-function handleData(apiResponse) {
-    버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
-    전체담당자목록 = apiResponse.response.전체담당자목록;
-    Object.keys(전체담당자목록).forEach((key) => {
-        전체담당자목록[key].인력별소모비용 = 0;
-        전체담당자목록[key].완료성과 = 0;
-    });
-
-    const newData = Object.keys(전체담당자목록).map((key) => {
-        let data = {};
-        data.이름 = 전체담당자목록[key].이름;
-        data.키 = key;
-        data.연봉 = 전체담당자목록[key].연봉;
-        return data;
-    });
-
-    const dataTable = $('#manpower-annual-income').DataTable();
-    dataTable.clear();
-    dataTable.rows.add(newData);
-    dataTable.draw();
-    jSuccess($("#editview_assignee_name").val() + "의 연봉 정보가 변경되었습니다.");
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트(PUT), 조회(GET) 완료 후 데이터 가공하여 데이터테이블 reload 포커스 이동
-////////////////////////////////////////////////////////////////////////////////////////
-function focusOnRow() {
-    let key = $('#editview_assignee_key').val();
-    let table = $('#manpower-annual-income').DataTable();
-    let rowIndex = -1;
-    table.rows().every(function(index) {
-        let row = $(this.node());
-        if (row.find('.assignee-key').text() === key) {
-            rowIndex = index;
-            return false;
-        }
-    });
-
-    if (rowIndex !== -1) {
-        let page = Math.floor(rowIndex / table.page.info().length);
-        table.page(page).draw('page');
-
-        let row = $(table.row(rowIndex).node());
-        row.focus();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트 버튼 클릭 이벤트 처리
-////////////////////////////////////////////////////////////////////////////////////////
-function click_btn_for_assignee_update() {
-    $("#edit_assignee_update, #footer_edit_assignee_update").click(function () {
-        updateSalary()
-          .done(data => {
-              console.log(data);
-              fetchUpdatedData()
-                .done(handleData)
-                .then(focusOnRow)
-                .fail(() => jError("연봉 정보 변경에 실패했습니다."));
-          });
     });
 }
 
@@ -526,31 +421,7 @@ function costInput(전체담당자목록, pdServiceVersionLinks) {
     file_upload_setting();
     manpowerInput(전체담당자목록);
 }
-$(document).on('click', '.btn.btn-success.btn-sm.mr-xs', function(e) {
-    let 이름 = $(this).data('이름');
-    let 키 = $(this).data('키');
-    let 연봉 = $(this).data('연봉');
-    // let 투입일 = $(this).data('투입일');
-    // let 투입종료일 = $(this).data('투입종료일');
-    // let assignmentPercent = $(this).data('assignment-percent');
-    $("#my_modal").modal("show");
-    // var datepickerOption = {
-    //     timepicker: false,
-    //     format: "Y/m/d",
-    //     formatDate: "Y/m/d",
-    //     scrollInput: false
-    // };
-    $("#editview_assignee_key").val(키);
-    $("#editview_assignee_name").val(이름);
-    $("#editview_assignee_salary").val(연봉);
-    // $("#editview_assignee_start_date").datetimepicker(
-    //   $.extend({}, datepickerOption, { value: new Date(투입일) })
-    // );
-    // $("#editview_assignee_end_date").datetimepicker(
-    //   $.extend({}, datepickerOption, { value: new Date(투입종료일) })
-    // );
-    // $("#editview_assignee_plan_resource").val(assignmentPercent);
-});
+
 function manpowerInput(전체담당자목록) {
 
     if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
@@ -569,9 +440,6 @@ function manpowerInput(전체담당자목록) {
         data.이름 = 전체담당자목록[key].이름;
         data.키 = key;
         data.연봉 = 전체담당자목록[key].연봉;
-        // data.투입일 = new Date();
-        // data.투입종료일 = new Date();
-        // data.assignmentPercent = (Math.random() * 0.9 + 0.1).toFixed(1);
         return data;
     });
     console.log(" [ analysisCost :: manpowerInput ] :: 인력별_연봉정보 => " + JSON.stringify(인력별_연봉정보));
@@ -612,43 +480,12 @@ function manpowerInput(전체담당자목록) {
             title: "연봉 (입력)",
             data: "연봉",
             render: function(data, type, row) {
-                var updateBtn = "<button style='margin-top: 0; padding-top: 0; padding-bottom: 0; border: none; outline:  none; background: none' " +
-                  "class='btn btn-success btn-sm mr-xs'" +
-                  "data-이름='" + row.이름 + "' " +
-                  "data-키='" + row.키 + "' " +
-                  "data-연봉='" + row.연봉 + "' >" +
-                  // "data-투입일='" + row.투입일 + "' " +
-                  // "data-투입종료일='" + row.투입종료일 + "' " +
-                  // "data-assignment-percent='" + row.assignmentPercent + "'>" +
-                  "<i class='fa fa-pencil'></i>" +
-                  "</button>";
                 var formattedData = parseInt(data).toLocaleString();
-                return '<input type="text" disabled name="annual-income" class="annual-income-input" value="' + formattedData  + '" data-owner="' + row.키 + '"> 만원' + updateBtn;
+                return '<input type="text" name="annual-income" class="annual-income-input" value="' + formattedData  + '" data-owner="' + row.키 + '"> 만원';
             },
             className: "dt-center",
             visible: true
         }
-        // {
-        //     name: "assignmentPercent",
-        //     title: "제품(서비스) 업무 투입 비율 ( m/m )",
-        //     data: "assignmentPercent",
-        //     className: "dt-center",
-        //     visible: true
-        // },
-        // {
-        //     name: "assignmentStartDate",
-        //     title: "투입일",
-        //     data: "투입일",
-        //     className: "dt-center",
-        //     visible: true
-        // },
-        // {
-        //     name: "assignmentEndDate",
-        //     title: "투입종료일",
-        //     data: "투입종료일",
-        //     className: "dt-center",
-        //     visible: true
-        // }
     ];
 
     var rowsGroupList = [];

@@ -81,29 +81,27 @@ function execDocReady() {
     ];
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
-        .then(function () {
-            // 사이드 메뉴 색상 설정
+      .then(function() {
+          // 사이드 메뉴 색상 설정
 
-            $(".widget").widgster();
-            setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_cost");
+          $(".widget").widgster();
+          setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_cost");
 
-            //제품(서비스) 셀렉트 박스 이니시에이터
-            makePdServiceSelectBox();
+          //제품(서비스) 셀렉트 박스 이니시에이터
+          makePdServiceSelectBox();
 
-            //버전 멀티 셀렉트 박스 이니시에이터
-            makeVersionMultiSelectBox();
+          //버전 멀티 셀렉트 박스 이니시에이터
+          makeVersionMultiSelectBox();
 
-            비용분석계산버튼();
+          비용분석계산버튼();
 
-            click_btn_for_assignee_update();
+          dashboardColor = dashboardPalette.dashboardPalette01;
 
-            dashboardColor = dashboardPalette.dashboardPalette01;
-
-        })
-        .catch(function (e) {
-            console.error("플러그인 로드 중 오류 발생");
-            console.error(e);
-        });
+      })
+      .catch(function(e) {
+          console.error("플러그인 로드 중 오류 발생");
+          console.error(e);
+      });
 }
 
 ///////////////////////
@@ -111,7 +109,7 @@ function execDocReady() {
 //////////////////////
 function makePdServiceSelectBox() {
     //제품 서비스 셀렉트 박스 이니시에이터
-    $(".chzn-select").each(function () {
+    $(".chzn-select").each(function() {
         $(this).select2($(this).data());
     });
 
@@ -123,7 +121,7 @@ function makePdServiceSelectBox() {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (data) {
+            200: function(data) {
                 //////////////////////////////////////////////////////////
                 pdServiceListData = [];
                 for (var k in data.response) {
@@ -133,19 +131,19 @@ function makePdServiceSelectBox() {
                     $("#selected_pdService").append(newOption).trigger("change");
                 }
                 //////////////////////////////////////////////////////////
-                console.log("[analysisCost :: makePdServiceSelectBox] :: pdServiceListData => " );
+                console.log("[analysisCost :: makePdServiceSelectBox] :: pdServiceListData => ");
                 console.log(pdServiceListData);
             }
         }
     });
 
-    $("#selected_pdService").on("select2:open", function () {
+    $("#selected_pdService").on("select2:open", function() {
         //슬림스크롤
         makeSlimScroll(".select2-results__options");
     });
 
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
-    $("#selected_pdService").on("select2:select", function (e) {
+    $("#selected_pdService").on("select2:select", function(e) {
         selectedPdServiceId = $("#selected_pdService").val();
         차트초기화();
         //refreshDetailChart(); 변수값_초기화();
@@ -163,7 +161,7 @@ function makeVersionMultiSelectBox() {
     //버전 선택시 셀렉트 박스 이니시에이터
     $(".multiple-select").multipleSelect({
         filter: true,
-        onClose: function () {
+        onClose: function() {
             console.log("onOpen event fire!\n");
 
             var checked = $("#checkbox1").is(":checked");
@@ -210,7 +208,7 @@ function productCostChart() {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (apiResponse) {
+            200: function(apiResponse) {
                 var response = apiResponse.response;
                 var monthlyCost = response.monthlyCost;
                 console.log(" [ analysisCost :: chart1 ] :: response data -> " + JSON.stringify(monthlyCost));
@@ -236,10 +234,10 @@ function productCostChart() {
                     },
                     toolbox: {
                         feature: {
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
+                            dataView: { show: true, readOnly: false },
+                            magicType: { show: true, type: ['line', 'bar'] },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
                         }
                     },
                     legend: {
@@ -272,8 +270,8 @@ function productCostChart() {
                             name: '성과 기준선',
                             type: 'line',
                             data: [
-                              [0, maxValue/mapKeysSize],
-                              [mapKeysSize-1, maxValue]
+                                [0, maxValue / mapKeysSize],
+                                [mapKeysSize - 1, maxValue]
                             ],
                             smooth: true,
                         },
@@ -303,7 +301,7 @@ function bind_VersionData_By_PdService() {
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (data) {
+            200: function(data) {
                 //////////////////////////////////////////////////////////
                 //console.log(data.response);
                 var pdServiceVersionIds = [];
@@ -379,82 +377,16 @@ function fetchUpdatedData() {
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트(PUT), 조회(GET) 완료 후 데이터 가공하여 데이터테이블 reload
-////////////////////////////////////////////////////////////////////////////////////////
-function handleData(apiResponse) {
-    버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
-    전체담당자목록 = apiResponse.response.전체담당자목록;
-    Object.keys(전체담당자목록).forEach((key) => {
-        전체담당자목록[key].인력별소모비용 = 0;
-        전체담당자목록[key].완료성과 = 0;
-    });
-
-    const newData = Object.keys(전체담당자목록).map((key) => {
-        let data = {};
-        data.이름 = 전체담당자목록[key].이름;
-        data.키 = key;
-        data.연봉 = 전체담당자목록[key].연봉;
-        return data;
-    });
-
-    const dataTable = $('#manpower-annual-income').DataTable();
-    dataTable.clear();
-    dataTable.rows.add(newData);
-    dataTable.draw();
-    jSuccess($("#editview_assignee_name").val() + "의 연봉 정보가 변경되었습니다.");
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트(PUT), 조회(GET) 완료 후 데이터 가공하여 데이터테이블 reload 포커스 이동
-////////////////////////////////////////////////////////////////////////////////////////
-function focusOnRow() {
-    let key = $('#editview_assignee_key').val();
-    let table = $('#manpower-annual-income').DataTable();
-    let rowIndex = -1;
-    table.rows().every(function(index) {
-        let row = $(this.node());
-        if (row.find('.assignee-key').text() === key) {
-            rowIndex = index;
-            return false;
-        }
-    });
-
-    if (rowIndex !== -1) {
-        let page = Math.floor(rowIndex / table.page.info().length);
-        table.page(page).draw('page');
-
-        let row = $(table.row(rowIndex).node());
-        row.focus();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트 버튼 클릭 이벤트 처리
-////////////////////////////////////////////////////////////////////////////////////////
-function click_btn_for_assignee_update() {
-    $("#edit_assignee_update, #footer_edit_assignee_update").click(function () {
-        updateSalary()
-          .done(data => {
-              console.log(data);
-              fetchUpdatedData()
-                .done(handleData)
-                .then(focusOnRow)
-                .fail(() => jError("연봉 정보 변경에 실패했습니다."));
-          });
-    });
-}
-
 function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
     const url = new UrlBuilder()
-        .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
-        // .setBaseUrl('/auth-user/api/arms/analysis/cost/all-assignees')
-        .addQueryParam('pdServiceLink', pdServiceLink)
-        .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-        .addQueryParam('크기', 1000)
-        .addQueryParam('하위크기', 1000)
-        .addQueryParam('컨텐츠보기여부', true)
-        .build();
+      .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
+      // .setBaseUrl('/auth-user/api/arms/analysis/cost/all-assignees')
+      .addQueryParam('pdServiceLink', pdServiceLink)
+      .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
+      .addQueryParam('크기', 1000)
+      .addQueryParam('하위크기', 1000)
+      .addQueryParam('컨텐츠보기여부', true)
+      .build();
 
     $.ajax({
         url: url,
@@ -463,7 +395,7 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
         dataType: "json",
         progress: true,
         statusCode: {
-            200: function (apiResponse) {
+            200: function(apiResponse) {
                 console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
                 console.log(apiResponse.response);
                 버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
@@ -584,13 +516,13 @@ function file_upload_setting() {
         limitMultiFileUploads: 1,
         paramName: 'excelFile',
         // Callback for successful uploads:
-        fail: function (e, data) {
+        fail: function(e, data) {
             console.log("--------------------------");
             console.log(data);
 
             jError(data.jqXHR.responseJSON.error.message);
         },
-        done: function (e, data) {
+        done: function(e, data) {
             console.log("--------------------------");
             console.log(data);
             if (data.textStatus == "success") {
@@ -627,31 +559,7 @@ function costInput(전체담당자목록, pdServiceVersionLinks) {
     file_upload_setting();
     manpowerInput(전체담당자목록);
 }
-$(document).on('click', '.btn.btn-success.btn-sm.mr-xs', function(e) {
-    let 이름 = $(this).data('이름');
-    let 키 = $(this).data('키');
-    let 연봉 = $(this).data('연봉');
-    // let 투입일 = $(this).data('투입일');
-    // let 투입종료일 = $(this).data('투입종료일');
-    // let assignmentPercent = $(this).data('assignment-percent');
-    $("#my_modal").modal("show");
-    // var datepickerOption = {
-    //     timepicker: false,
-    //     format: "Y/m/d",
-    //     formatDate: "Y/m/d",
-    //     scrollInput: false
-    // };
-    $("#editview_assignee_key").val(키);
-    $("#editview_assignee_name").val(이름);
-    $("#editview_assignee_salary").val(연봉);
-    // $("#editview_assignee_start_date").datetimepicker(
-    //   $.extend({}, datepickerOption, { value: new Date(투입일) })
-    // );
-    // $("#editview_assignee_end_date").datetimepicker(
-    //   $.extend({}, datepickerOption, { value: new Date(투입종료일) })
-    // );
-    // $("#editview_assignee_plan_resource").val(assignmentPercent);
-});
+
 function manpowerInput(전체담당자목록) {
 
     if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
@@ -670,9 +578,6 @@ function manpowerInput(전체담당자목록) {
         data.이름 = 전체담당자목록[key].이름;
         data.키 = key;
         data.연봉 = 전체담당자목록[key].연봉;
-        // data.투입일 = new Date();
-        // data.투입종료일 = new Date();
-        // data.assignmentPercent = (Math.random() * 0.9 + 0.1).toFixed(1);
         return data;
     });
     console.log(" [ analysisCost :: manpowerInput ] :: 인력별_연봉정보 => " + JSON.stringify(인력별_연봉정보));
@@ -682,7 +587,7 @@ function manpowerInput(전체담당자목록) {
             name: "name",
             title: "이름",
             data: "이름",
-            render: function (data, type, row, meta) {
+            render: function(data, type, row, meta) {
                 if (isEmpty(data) || data === "unknown") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
@@ -697,7 +602,7 @@ function manpowerInput(전체담당자목록) {
             name: "key",
             title: "고유 키",
             data: "키",
-            render: function (data, type, row, meta) {
+            render: function(data, type, row, meta) {
                 if (isEmpty(data) || data === "unknown") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
@@ -718,38 +623,13 @@ function manpowerInput(전체담당자목록) {
                   "data-이름='" + row.이름 + "' " +
                   "data-키='" + row.키 + "' " +
                   "data-연봉='" + row.연봉 + "' >" +
-                  // "data-투입일='" + row.투입일 + "' " +
-                  // "data-투입종료일='" + row.투입종료일 + "' " +
-                  // "data-assignment-percent='" + row.assignmentPercent + "'>" +
-                  "<i class='fa fa-pencil'></i>" +
                   "</button>";
                 var formattedData = parseInt(data).toLocaleString();
-                return '<input type="text" disabled name="annual-income" class="annual-income-input" value="' + formattedData  + '" data-owner="' + row.키 + '"> 만원' + updateBtn;
+                return '<input type="text" disabled name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.키 + '"> 만원' + updateBtn;
             },
             className: "dt-center",
             visible: true
         }
-        // {
-        //     name: "assignmentPercent",
-        //     title: "제품(서비스) 업무 투입 비율 ( m/m )",
-        //     data: "assignmentPercent",
-        //     className: "dt-center",
-        //     visible: true
-        // },
-        // {
-        //     name: "assignmentStartDate",
-        //     title: "투입일",
-        //     data: "투입일",
-        //     className: "dt-center",
-        //     visible: true
-        // },
-        // {
-        //     name: "assignmentEndDate",
-        //     title: "투입종료일",
-        //     data: "투입종료일",
-        //     className: "dt-center",
-        //     visible: true
-        // }
     ];
 
     var rowsGroupList = [];
@@ -766,19 +646,19 @@ function manpowerInput(전체담당자목록) {
     var isAjax = false;
 
     dataTableRef = dataTable_build(
-        jquerySelector,
-        ajaxUrl,
-        jsonRoot,
-        columnList,
-        rowsGroupList,
-        columnDefList,
-        selectList,
-        orderList,
-        buttonList,
-        isServerSide,
-        scrollY,
-        data,
-        isAjax
+      jquerySelector,
+      ajaxUrl,
+      jsonRoot,
+      columnList,
+      rowsGroupList,
+      columnDefList,
+      selectList,
+      orderList,
+      buttonList,
+      isServerSide,
+      scrollY,
+      data,
+      isAjax
     );
 
     // 템플릿 다운로드
@@ -812,9 +692,9 @@ function dataTableCallBack(settings, json) {
 
 function dataTableDrawCallback(tableInfo) {
     $("#" + tableInfo.sInstance)
-        .DataTable()
-        .columns.adjust()
-        .responsive.recalc();
+      .DataTable()
+      .columns.adjust()
+      .responsive.recalc();
 
     // 연봉 포맷 설정 및 연봉 정보 저장
     $('.annual-income-input').off('input').on('input', function() {
@@ -837,7 +717,7 @@ function excel_download(인력별_연봉정보) {
 
     let fileName = "인력별_연봉정보_템플릿.xlsx";
 
-    $("#excel-annual-income-template-download").click(function () {
+    $("#excel-annual-income-template-download").click(function() {
         if (Object.keys(인력별_연봉정보).length === 0) {
             alert("다운로드할 인력 정보가 없습니다.");
         } else {
@@ -850,7 +730,7 @@ function excel_download(인력별_연봉정보) {
                     responseType: 'blob'  // 응답 데이터 타입을 blob으로 설정
                 },
                 statusCode: {
-                    200: function (data) {
+                    200: function(data) {
                         var url = window.URL.createObjectURL(data);  // blob 데이터로 URL 생성
                         var a = document.createElement('a');  // 다운로드 링크를 위한 <a> 태그 생성
                         a.href = url; // url 설정
@@ -869,7 +749,7 @@ function excel_download(인력별_연봉정보) {
 function 비용분석계산버튼() {
     $("#cost-analysis-calculation").click(function() {
 
-        if(!selectedPdServiceId || !selectedVersionId) {
+        if (!selectedPdServiceId || !selectedVersionId) {
             alert("제품(서비스), 버전을 선택해주세요.");
             return;
         }
@@ -900,19 +780,19 @@ function 비용분석계산버튼() {
         console.log(전체담당자목록);
 
         const url = new UrlBuilder()
-            .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
-            .addQueryParam("pdServiceLink", selectedPdServiceId)
-            .addQueryParam("pdServiceVersionLinks", selectedVersionId)
-            .build();
+          .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
+          .addQueryParam("pdServiceLink", selectedPdServiceId)
+          .addQueryParam("pdServiceVersionLinks", selectedVersionId)
+          .build();
 
         const url2 = new UrlBuilder()
-            .setBaseUrl("/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_"+ selectedPdServiceId + "/req-difficulty-priority-list")
-            .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
-            .build();
+          .setBaseUrl("/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId + "/req-difficulty-priority-list")
+          .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
+          .build();
 
         const completeKeywordUrl = new UrlBuilder()
-            .setBaseUrl("/auth-user/api/arms/reqState/complete-keyword")
-            .build();
+          .setBaseUrl("/auth-user/api/arms/reqState/complete-keyword")
+          .build();
 
         Promise.all([
             $.ajax({ url: url, type: "GET", dataType: "json" }),
@@ -945,7 +825,7 @@ function 비용분석계산버튼() {
 
                 // 해당 요구사항이 멀티 버전일 수 있으니 버전목록을 가져옴
                 let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
-                
+
                 // 요구사항의 버전목록을 반복문 돌기 
                 요구사항이포함된버전목록.forEach((버전) => {
                     // 해당 버전에 요구사항 키 목록을 가져옴
@@ -953,16 +833,14 @@ function 비용분석계산버튼() {
 
                     // 버전의 요구사항 목록 유무 확인
                     if (버전_요구사항_키목록 == null) {
-                    }
-                    else {
+                    } else {
                         // 있을 시 계산, 버전과 요구사항 c_id로 해당 요구사항이 가진 키목록 데이터 가져오기
                         let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
 
                         // 요구사항 키 목록 유무 확인
                         if (요구사항_키목록 == null) {
                             // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
-                        }
-                        else {
+                        } else {
                             // 있을 시 키목록을 반목문 돌기
                             요구사항_키목록.forEach((요구사항키) => {
 
@@ -970,14 +848,12 @@ function 비용분석계산버튼() {
                                 let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
                                 if (요구사항_담당자목록 == null) {
 
-                                }
-                                else {
+                                } else {
                                     // 있으면 버전_요구사항_담당자 중 담당자목록 유무 확인
                                     let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
                                     if (담당자목록 == null) {
                                         // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "n\요구사항_담당자목록 -> " +요구사항.c_id);
-                                    }
-                                    else {
+                                    } else {
                                         // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
 
                                         // 있으면 담당자목록을 반목문 돌기
@@ -1046,12 +922,12 @@ function 최종비용분석계산(key, 요구사항, 버전, 요구사항키, �
     const 완료_요구사항_키워드SET = new Set(완료_요구사항_키워드);
 
     let startDate = 요구사항.c_req_start_date
-        ? new Date(formatDate(요구사항.c_req_start_date))
-        : null;
+      ? new Date(formatDate(요구사항.c_req_start_date))
+      : null;
 
     let endDate = 요구사항.c_req_end_date
-        ? new Date(formatDate(요구사항.c_req_end_date))
-        : new Date(formatDate(new Date()));
+      ? new Date(formatDate(요구사항.c_req_end_date))
+      : new Date(formatDate(new Date()));
 
     if (요구사항.reqStateEntity != null) {
         if (완료_요구사항_키워드SET.has(요구사항.reqStateEntity.c_title)) {
@@ -1129,7 +1005,7 @@ function 요구사항비용분석차트(data) {
     console.log(data);
     let requirementJson = data.requirement;
     let difficultyJson = data.difficulty;
-    let priorityJson = data. priority;
+    let priorityJson = data.priority;
 
     let requirementList = Object.values(requirementJson).reduce((result, item) => {
         result[item.c_title] = item.요구사항금액;
@@ -1178,7 +1054,7 @@ function 요구사항비용분석차트(data) {
         title: [
             {
                 // text: '요구사항',
-                subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원',
+                subtext: '전체 ' + reqTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원',
                 left: '25%',
                 textAlign: 'center',
                 textStyle: {
@@ -1206,7 +1082,7 @@ function 요구사항비용분석차트(data) {
             {
                 top: 50,
                 left: '5%',
-                right: '0%', 
+                right: '0%',
                 width: '55%',
                 bottom: '5%',
                 containLabel: true
@@ -1308,7 +1184,7 @@ function 요구사항비용분석차트(data) {
     window.addEventListener('resize', myChart.resize);
 }
 
-function 버전소모비용스택차트(){
+function 버전소모비용스택차트() {
 
     const defaultValue = 0;
 
@@ -1341,7 +1217,7 @@ function 버전소모비용스택차트(){
 
     let stackTypeList = Object.keys(전체담당자목록).map(key => {
         let data;
-        data = 전체담당자목록[key].이름 + "["+key+"]";
+        data = 전체담당자목록[key].이름 + "[" + key + "]";
         return data;
     });
 
@@ -1369,17 +1245,17 @@ function 버전소모비용스택차트(){
             axisPointer: {
                 type: 'shadow' // 'line' or 'shadow'. 기본값은 'shadow'
             },
-            formatter: function (params) {
+            formatter: function(params) {
                 const tooltip = params.reduce((acc, param) => {
                     const { marker, seriesName, value } = param;
                     if (param.value > 0) {
-                        let data = param.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+                        let data = param.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
                         acc += `${marker}${seriesName}: ${data}<br/>`;
                     }
                     return acc;
                 }, '');
 
-                const totalCount = params.reduce((acc, param) => acc + param.value, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'원';
+                const totalCount = params.reduce((acc, param) => acc + param.value, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
                 const versionName = params[0].name;
                 const totalTooltip = `[${versionName}] - Total: ${totalCount}<br/>`;
 
@@ -1469,7 +1345,7 @@ function 버전소모비용스택차트(){
             {
                 type: 'inside',
                 yAxisIndex: [0], // y축에만 dataZoom 기능 적용
-                start: (100-zoomPersent),
+                start: (100 - zoomPersent),
                 end: 100
             },
             {
@@ -1479,7 +1355,7 @@ function 버전소모비용스택차트(){
                 backgroundColor: 'rgba(0,0,0,0)', // 슬라이더의 배경색
                 dataBackgroundColor: 'rgba(255,255,255,1)', // 데이터 배경색
                 yAxisIndex: [0],
-                start: (100-zoomPersent),
+                start: (100 - zoomPersent),
                 end: 100
             }
         ],
@@ -1487,7 +1363,7 @@ function 버전소모비용스택차트(){
 
     option && myChart.setOption(option);
 
-    window.addEventListener('resize', function () {
+    window.addEventListener('resize', function() {
         myChart.resize();
     });
 }
@@ -1626,8 +1502,7 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
                     show: true,
                     position: 'outside',
                     color: "white",
-                    formatter: function(params)
-                    {
+                    formatter: function(params) {
                         return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
                 },
@@ -1647,8 +1522,7 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
                     show: true,
                     position: 'outside',
                     color: "white",
-                    formatter: function(params)
-                    {
+                    formatter: function(params) {
                         return params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
                 },
@@ -1663,7 +1537,7 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
             left: "right",
             bottom: "50px",
             feature: {
-                dataZoom: {show: true},
+                dataZoom: { show: true },
                 myTool1: {
                     show: false,
                     title: 'Full screen',
@@ -1674,7 +1548,7 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
                         $("#my_modal2_description").text('인력별 연봉 대비 성과를 한눈에 확인할 수 있습니다.');
                         let heights = screen.height;// window.innerHeight;
                         console.log(heights);
-                        $("#my_modal2_body").height(heights-450 + "px");
+                        $("#my_modal2_body").height(heights - 450 + "px");
                         $("#my_modal2_body").append(`<div id="manpower-analysis-chart"></div>`);
                         setTimeout(function() {
                             myChart.resize();
