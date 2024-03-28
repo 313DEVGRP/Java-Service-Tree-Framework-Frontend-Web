@@ -112,7 +112,7 @@ function execDocReady() {
 			popup_update_btn_click();
 
 			autoSlide();
-
+            레드마인_안내문구();
 			var 라따적용_클래스이름_배열 = ['.default_update', '.jira_renew_btn'];
 			laddaBtnSetting(라따적용_클래스이름_배열);
 
@@ -270,7 +270,7 @@ function jiraServerCardClick(c_id) {
 				$("#type_tab").hide(); // 이슈 유형 숨김
 				$("#status_tab").hide(); // 이슈 상태 숨김
 				$("#resolution_tab").hide(); // 이슈 해결책 숨김
-
+                $("#redmine_info_edit").hide();
 				$("#cloudIssueTypeInfo").removeClass("hidden");
 
 				$("li a[href='#related_project'] strong").text("지라 프로젝트");
@@ -279,7 +279,7 @@ function jiraServerCardClick(c_id) {
 				$("#type_tab").show();// 이슈 유형 보여주기
 				$("#status_tab").hide(); // 이슈 상태 숨김
 				$("#resolution_tab").hide(); //해결책 숨김
-
+                $("#redmine_info_edit").hide();
 				$("#cloudIssueTypeInfo").addClass("hidden");
 
 				$("li a[href='#related_project'] strong").text("지라 프로젝트");
@@ -289,7 +289,7 @@ function jiraServerCardClick(c_id) {
 			    $("#type_tab").hide(); // 이슈 유형 슴김
 			    $("#resolution_tab").hide(); // 해결책 숨기기
 			    $("li a[href='#related_project'] strong").text("레드마인 프로젝트");
-
+                $("#redmine_info_edit").show();
                 $("#status_tab").removeClass("hidden").show();
 
                 $("#cloudIssueTypeInfo").removeClass("hidden");
@@ -570,6 +570,18 @@ function modalPopup(popupName) {
 		$("#extend_change_to_update_jira_server").addClass("hidden");
 		$("#extendupdate_jira_server").removeClass("hidden");
 	}
+}
+function 레드마인_안내문구(){
+    $('input[type="radio"][name="options"]').change(function() {
+
+        if ($('#popup_editview_jira_server_type_option3').is(':checked')) {
+            //console.log('레드마인이 선택되었습니다.');
+            $('#redmine_info').show();
+        }else{
+            $('#redmine_info').hide();
+        }
+
+    });
 }
 
 ////////////////////////////////
