@@ -46,7 +46,7 @@ function initD3Chart(href) {
 
         // size of the diagram
         var viewerWidth = $("#tree_container")[0].clientWidth;
-        var viewerHeight = 295;
+        var viewerHeight = 545;
 
         var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
         console.log("tree layout :: " + tree);
