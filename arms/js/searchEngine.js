@@ -105,7 +105,7 @@ function eventListenersActivator() {
 			console.log("[searchEngine :: search-button] :: 검색어 -> "+ searchString);
 			setParameter("searchString",searchString);
 			let rangeDate = SearchApiModule.getRangeDate();
-			search_with_date(searchString, rangeDate);
+			search_with_date(checkAndAppendWildcard(searchString), rangeDate);
 		} else {
 			setParameter("searchString",""); // 검색어 url 초기화
 			console.log("[searchEngine :: search-button] :: 검색어가 없거나 빈값 입니다.");
@@ -167,7 +167,7 @@ function date_range_filter_event() {
 			);
 
 			if(searchString) {
-				search_with_date(searchString, rangeDate);
+				search_with_date(checkAndAppendWildcard(searchString), rangeDate);
 			}
 		}).catch((error) => {
 			console.error("[searchEngine :: 날짜검색 이벤트리스너] :: 검색 오류 발생 =>", error);
@@ -360,12 +360,12 @@ function checkQueryStringOnUrl() {
 	var urlParams = new URLSearchParams(queryString);
 	var searchTerm = urlParams.get("searchString");
 	console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어 => " + searchTerm);
-	검색어_유효성_체크(searchTerm);
-	if (searchString) {
-		$("#search-input").val(searchString);
-		search_with_date(searchString, null);
+
+	if(searchTerm) {
+		$("#search-input").val(searchTerm);
+		$("#search-button").click();
 	} else {
-		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없거나 유효하지 않습니다.");
+		console.log("[searchEngine :: checkQueryStringOnUrl] :: 상단_검색 검색어가 없습니다.");
 	}
 }
 
@@ -432,7 +432,7 @@ function customRangeSetting() {
 
 		if(searchString) {
 			console.log("[searchEngine :: customRangeSetting] :: searchString => " + searchString);
-			search_with_date(searchString, rangeDate);
+			search_with_date(checkAndAppendWildcard(searchString), rangeDate);
 		}
 
 	}).catch((error) => {
@@ -443,7 +443,7 @@ function customRangeSetting() {
 function 검색어_유효성_체크(search_string) {
 	if (search_string && $.trim(search_string) !== "" && !/^\*+$/.test($.trim(search_string))) {
 		let searchTerm = $.trim(search_string);
-		searchString = checkAndAppendWildcard(searchTerm);
+		searchString = searchTerm;
 	} else {
 		// url 검색어 param 초기화
 		setParameter("searchString","");
