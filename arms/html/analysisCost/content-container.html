@@ -621,9 +621,19 @@
 									style="margin-top: 5px">
 									각 버전에 투입된 인력의 연봉 정보를 입력합니다.
 								</blockquote>
-								<table
-									id="manpower-annual-income"
-									style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
+
+								<div class="clearfix widget-content">
+									<div style="float: right">
+										<button type="button"
+														class="btn btn-primary btn-block btn-sm"
+														id="cost-excel-batch-update"
+														style="margin-right: 5px;"
+										>
+											일괄저장
+										</button>
+									</div>
+								</div>
+								<div id="spreadsheet" style="height: 500px;"></div>
 							</div>
 						</section>
 					</div>
@@ -641,9 +651,267 @@
 
 							<strong>비용 분석 계산</strong>
 						</a>
-						<!--                        <button id="cost-analysis-calculation" class="cost-input-complete">
-                            입력 완료
-                        </button>-->
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<div class="col-lg-12 col-layer">
+		<section class="widget">
+			<header>
+				<h4>
+					<span
+						class="font13"
+						style="font-weight: bold">
+						<i class="fa fa-money"></i>
+						제품에 대한 투자 비용 대비 성과
+					</span>
+				</h4>
+				<div class="widget-controls">
+					<a
+						data-widgster="toleft"
+						title="change width to left"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="toright"
+						title="change width to right"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>
+					<a
+						data-widgster="restore"
+						title="Restore"
+						href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+				</div>
+			</header>
+			<div class="body">
+				<div
+					class="gradient_middle_border"
+					style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+				<blockquote
+					class="font13"
+					style="margin-top: 5px">
+					제품의 비용을 확인할 수 있습니다.
+				</blockquote>
+				<div class="row">
+					<div class="col-md-12">
+						<section
+							class="widget"
+							style="margin-bottom: 0px !important">
+							<header>
+								<h4>
+									<span
+										class="font13"
+										style="font-weight: bold">
+										<i class="fa fa-users"></i>
+										투자 비용 대비 성과
+									</span>
+								</h4>
+								<div class="widget-controls">
+									<a
+										data-widgster="expand"
+										title="Expand"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-up"></i>
+									</a>
+									<a
+										data-widgster="collapse"
+										title="Collapse"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-down"></i>
+									</a>
+									<a
+										data-widgster="restore"
+										title="Restore"
+										href="#">
+										<span class="glyphicon glyphicon-repeat"></span>
+									</a>
+									<a
+										data-widgster="fullscreen"
+										title="Fullscreen"
+										href="#">
+										<i
+											class="glyphicon glyphicon-fullscreen"
+											style="font-size: 11px"></i>
+									</a>
+								</div>
+							</header>
+							<div
+								class="body"
+								style="overflow: hidden">
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; height: 2px"></div>
+								<blockquote
+									class="font13"
+									style="margin-top: 5px">
+									완료 된 요구사항을 기준으로 하여, 제품에 대한 투자 비용 대비 성과를 확인할 수 있습니다.
+									<div style="float: right"></div>
+								</blockquote>
+<!--								<select id="yearSelect">-->
+<!--									<option value="2025">2025년</option>-->
+<!--									<option value="2024">2024년</option>-->
+<!--									<option value="2023">2023년</option>-->
+<!--								</select>-->
+								<div id="product-accumulate-cost-by-month"></div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<div class="col-lg-12 col-layer">
+		<section class="widget">
+			<header>
+				<h4>
+					<span
+						class="font13"
+						style="font-weight: bold">
+						<i class="fa fa-money"></i>
+						제품 버전 비용 산정
+					</span>
+				</h4>
+				<div class="widget-controls">
+					<a
+						data-widgster="toleft"
+						title="change width to left"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="toright"
+						title="change width to right"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>
+					<a
+						data-widgster="restore"
+						title="Restore"
+						href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+				</div>
+			</header>
+			<div class="body">
+				<div
+					class="gradient_middle_border"
+					style="width: 100%; margin-top: 8px; margin-bottom: 15px"></div>
+				<blockquote
+					class="font13"
+					style="margin-top: 5px">
+					제품의 버전 별 비용을 확인할 수 있습니다.
+				</blockquote>
+				<div class="row">
+					<div class="col-md-12">
+						<section class="widget">
+							<header>
+								<h4>
+									<span
+										class="font13"
+										style="font-weight: bold">
+										<i class="fa fa-stack-overflow"></i>
+										버전 별 총 인력 비용
+									</span>
+								</h4>
+								<div class="widget-controls">
+									<a
+										data-widgster="toleft"
+										title="change width to left"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-left"></i>
+									</a>
+									<a
+										data-widgster="expand"
+										title="Expand"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-up"></i>
+									</a>
+									<a
+										data-widgster="collapse"
+										title="Collapse"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-down"></i>
+									</a>
+									<a
+
+										data-widgster="toright"
+										title="change width to right"
+										href="#">
+										<i class="glyphicon glyphicon-chevron-right"></i>
+									</a>
+									<a
+										data-widgster="restore"
+										title="Restore"
+										href="#">
+										<span class="glyphicon glyphicon-repeat"></span>
+									</a>
+									<a
+										data-widgster="fullscreen"
+										title="Fullscreen"
+										href="#">
+										<i
+											class="glyphicon glyphicon-fullscreen"
+											style="font-size: 11px"></i>
+									</a>
+								</div>
+							</header>
+							<div class="body">
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; margin-top: 8px"></div>
+								<blockquote class="font12">버전별 소모된 총 인력 비용을 확인할 수 있습니다.</blockquote>
+								<div class="body">
+									<div id="version-stack-container"></div>
+								</div>
+							</div>
+						</section>
 					</div>
 				</div>
 			</div>
@@ -710,21 +978,8 @@
 					class="font13"
 					style="margin-top: 5px">
 					요구사항의 연결된 담당자와 입력된 인력별 연봉 정보를 바탕으로 분석된 데이터입니다.
-					<!--<div style="float: right">
-                        <button
-                                class="btn btn-transparent btn-xs"
-                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
-                            Help
-                            <i
-                                    class="fa fa-question"
-                                    style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                        </button>
-                    </div>-->
 				</blockquote>
-
-				<div
-					class="row"
-					style="margin-top: 20px">
+				<div class="row">
 					<div class="col-md-12">
 						<section class="widget">
 							<header>
@@ -795,138 +1050,6 @@
 							</div>
 						</section>
 					</div>
-
-					<div class="col-md-6">
-						<section class="tree-container widget large">
-							<header>
-								<h4>
-									<span
-										class="font13"
-										style="font-weight: bold">
-										<i class="fa fa-tags"></i>
-										버전별 요구사항 단가 분포 현황
-									</span>
-								</h4>
-								<div class="widget-controls">
-									<a
-
-										data-widgster="toleft"
-										title="change width to left"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-left"></i>
-									</a>
-									<a
-										data-widgster="expand"
-										title="Expand"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-up"></i>
-									</a>
-									<a
-										data-widgster="collapse"
-										title="Collapse"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-down"></i>
-									</a>
-									<a
-
-										data-widgster="toright"
-										title="change width to right"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-right"></i>
-									</a>
-									<a
-										data-widgster="restore"
-										title="Restore"
-										href="#">
-										<span class="glyphicon glyphicon-repeat"></span>
-									</a>
-									<a
-										data-widgster="fullscreen"
-										title="Fullscreen"
-										href="#">
-										<i
-											class="glyphicon glyphicon-fullscreen"
-											style="font-size: 11px"></i>
-									</a>
-								</div>
-							</header>
-							<div class="body">
-								<div
-									class="gradient_middle_border"
-									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12">버전별 요구사항 단가를 버블의 크기별로 확인할 수 있습니다.</blockquote>
-								<div
-									class="body"
-									id="circularPacking"></div>
-							</div>
-						</section>
-					</div>
-
-					<div class="col-md-6">
-						<section class="widget">
-							<header>
-								<h4>
-									<span
-										class="font13"
-										style="font-weight: bold">
-										<i class="fa fa-line-chart"></i>
-										요구사항별 투입비용 현황
-									</span>
-								</h4>
-								<div class="widget-controls">
-									<a
-
-										data-widgster="toleft"
-										title="change width to left"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-left"></i>
-									</a>
-									<a
-										data-widgster="expand"
-										title="Expand"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-up"></i>
-									</a>
-									<a
-										data-widgster="collapse"
-										title="Collapse"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-down"></i>
-									</a>
-									<a
-
-										data-widgster="toright"
-										title="change width to right"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-right"></i>
-									</a>
-									<a
-										data-widgster="restore"
-										title="Restore"
-										href="#">
-										<span class="glyphicon glyphicon-repeat"></span>
-									</a>
-									<a
-										data-widgster="fullscreen"
-										title="Fullscreen"
-										href="#">
-										<i
-											class="glyphicon glyphicon-fullscreen"
-											style="font-size: 11px"></i>
-									</a>
-								</div>
-							</header>
-							<div class="body">
-								<div
-									class="gradient_middle_border"
-									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12">요구사항별 투입 비용 현황을 확인할 수 있습니다.</blockquote>
-								<div class="body">
-									<div id="income_status_chart"></div>
-								</div>
-							</div>
-						</section>
-					</div>
 				</div>
 			</div>
 		</section>
@@ -992,18 +1115,7 @@
 					class="font13"
 					style="margin-top: 5px">
 					계산된 요구사항을 기반으로 분석된 데이터입니다.
-					<!--<div style="float: right">
-                        <button
-                                class="btn btn-transparent btn-xs"
-                                style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
-                            Help
-                            <i
-                                    class="fa fa-question"
-                                    style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-                        </button>
-                    </div>-->
 				</blockquote>
-
 				<div class="row">
 					<div class="col-md-12">
 						<section class="widget">
@@ -1012,8 +1124,8 @@
 									<span
 										class="font13"
 										style="font-weight: bold">
-										<i class="fa fa-stack-overflow"></i>
-										버전 별 총 인력 비용
+										<i class="fa fa-users"></i>
+										인력별 성과 분석
 									</span>
 								</h4>
 								<div class="widget-controls">
@@ -1059,61 +1171,6 @@
 									</a>
 								</div>
 							</header>
-							<div class="body">
-								<div
-									class="gradient_middle_border"
-									style="width: 100%; margin-top: 8px"></div>
-								<blockquote class="font12">버전별 소모된 총 인력 비용을 확인할 수 있습니다.</blockquote>
-								<div class="body">
-									<div id="version-stack-container"></div>
-								</div>
-							</div>
-						</section>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<section
-							class="widget"
-							style="margin-bottom: 0px !important">
-							<header>
-								<h4>
-									<span
-										class="font13"
-										style="font-weight: bold">
-										<i class="fa fa-users"></i>
-										연봉기준 성과 분포
-									</span>
-								</h4>
-								<div class="widget-controls">
-									<a
-										data-widgster="expand"
-										title="Expand"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-up"></i>
-									</a>
-									<a
-										data-widgster="collapse"
-										title="Collapse"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-down"></i>
-									</a>
-									<a
-										data-widgster="restore"
-										title="Restore"
-										href="#">
-										<span class="glyphicon glyphicon-repeat"></span>
-									</a>
-									<a
-										data-widgster="fullscreen"
-										title="Fullscreen"
-										href="#">
-										<i
-											class="glyphicon glyphicon-fullscreen"
-											style="font-size: 11px"></i>
-									</a>
-								</div>
-							</header>
 							<div
 								class="body"
 								style="overflow: hidden">
@@ -1123,437 +1180,19 @@
 								<blockquote
 									class="font13"
 									style="margin-top: 5px">
-									전체 인력 연봉 대비 성과 분포를 확인할 수 있습니다. - [완료 요구사항 기준]
-									<div style="float: right"></div>
-								</blockquote>
-								<div id="manpower-analysis-chart2"></div>
-								<!--                                <div id="manpower-analysis-chart2"></div>-->
-							</div>
-						</section>
-					</div>
-					<div class="col-md-6">
-						<section
-							class="widget"
-							style="margin-bottom: 0px !important">
-							<header>
-								<h4>
-									<span
-										class="font13"
-										style="font-weight: bold">
-										<i class="fa fa-users"></i>
-										인력별 성과 분석
-									</span>
-								</h4>
-								<div class="widget-controls">
-									<a
-										data-widgster="expand"
-										title="Expand"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-up"></i>
-									</a>
-									<a
-										data-widgster="collapse"
-										title="Collapse"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-down"></i>
-									</a>
-									<a
-										data-widgster="restore"
-										title="Restore"
-										href="#">
-										<span class="glyphicon glyphicon-repeat"></span>
-									</a>
-									<a
-										data-widgster="fullscreen"
-										title="Fullscreen"
-										href="#">
-										<i
-											class="glyphicon glyphicon-fullscreen"
-											style="font-size: 11px"></i>
-									</a>
-								</div>
-							</header>
-							<div
-								class="body"
-								style="overflow: hidden">
-								<div
-									class="gradient_middle_border"
-									style="width: 100%; height: 2px"></div>
-								<blockquote
-									class="font13"
-									style="margin-top: 5px">
-  									인력별 연봉 대비 성과를 한눈에 확인할 수 있습니다. - [완료 요구사항 기준]
+									인력별 연봉 대비 성과를 한눈에 확인할 수 있습니다. - [완료 요구사항 기준]
 									<div style="float: right"></div>
 								</blockquote>
 								<div id="manpower-analysis-chart"></div>
-								<!--                                <div id="manpower-analysis-chart2"></div>-->
 							</div>
 						</section>
 					</div>
 				</div>
-				<!--                <div class="row">
-                    <div class="col-lg-12">
-                        <section
-                                class="widget"
-                                style="margin-bottom: 0px !important">
-                            <header>
-                                <h4>
-                                <span
-                                                class="font13"
-                                                style="font-weight: bold">
-                                  <i class="fa fa-edit"></i>
-                                  인력별 비용 분석
-                                </span>
-                                </h4>
-                                <div class="widget-controls">
-                                    <a
-                                            data-widgster="expand"
-                                            title="Expand"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="collapse"
-                                            title="Collapse"
-                                            href="#">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                    </a>
-                                    <a
-                                            data-widgster="restore"
-                                            title="Restore"
-                                            href="#">
-                                        <span class="glyphicon glyphicon-repeat"></span>
-                                    </a>
-                                    <a
-                                            data-widgster="fullscreen"
-                                            title="Fullscreen"
-                                            href="#">
-                                        <i
-                                                class="glyphicon glyphicon-fullscreen"
-                                                style="font-size: 11px"></i>
-                                    </a>
-                                </div>
-                            </header>
-                            <div
-                                    class="body"
-                                    style="overflow: hidden">
-                                <div
-                                        class="gradient_middle_border"
-                                        style="width: 100%; height: 2px"></div>
-                                <blockquote
-                                        class="font13"
-                                        style="margin-top: 5px">
-                                    인력별 요구사항 투입된 정보로 분석된 데이터입니다.
-                                    <div style="float: right">
-                                    </div>
-                                </blockquote>
-                                <div class="input-group" id="person-select-box" style="display:none;">
-                                    <span class="input-group-btn">
-                                                <select class="selectpicker person-data" data-style="btn-default" style="display: none;">
-                                                    <option>박현기</option>
-                                                </select>
-                                        <div class="btn-group bootstrap-select" style="float: right;">
-                                            <button class="btn dropdown-toggle clearfix btn-default" data-toggle="dropdown" >
-                                                <span class="filter-option" id="first-person-select">박현기</span>&nbsp;<i class="fa fa-caret-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu" style="max-height: 128.75px; overflow-y: auto; min-height: 60px;">
-                                            </ul>
-                                        </div>
-                                    </span>
-                                </div>
-                                <div id="manpower-analysis-chart"></div>
-                            </div>
-                        </section>
-                    </div>
-                </div>-->
 			</div>
 		</section>
 	</div>
 </div>
 
-<div
-	id="my_modal"
-	class="modal fade"
-	role="dialog"
-	aria-labelledby="myModalLabel"
-	aria-hidden="true"
-	style="display: none; border-radius: 10px">
-	<div
-		class="modal-dialog"
-		style="width: 80%">
-		<div class="modal-content modalDarkBack">
-			<div
-				class="modal-header"
-				style="padding: 0px; border-bottom: 1px">
-				<h4
-					class="modal-title font14"
-					id="my_modal_label2"
-					style="color: #f8f8f8; text-align: left; padding: 5px">
-					<span
-						class="font13"
-						id="my_modal2_title"
-						style="font-weight: bold">
-						<i class="fa fa-edit"></i>
-						연봉정보 내용
-					</span>
-					<blockquote
-						class="search-result"
-						style="border-left: 5px solid #e5603b">
-						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">연봉정보 세부 내용 조회</p>
-					</blockquote>
-				</h4>
-				<div
-					class="widget-controls"
-					style="padding-top: 10px">
-					<a
-						title="Options"
-						class="hidden"
-						href="#">
-						<i class="glyphicon glyphicon-cog"></i>
-					</a>
-					<a
-						data-widgster="expand"
-						title="Expand"
-						class="hidden"
-						href="#">
-						<i class="glyphicon glyphicon-chevron-up"></i>
-					</a>
-					<a
-						data-widgster="collapse"
-						title="Collapse"
-						class="hidden"
-						href="#">
-						<i class="glyphicon glyphicon-chevron-down"></i>
-					</a>
-					<a
-						data-widgster="close"
-						title="Close"
-						href="#"
-						data-dismiss="modal"
-						aria-hidden="true">
-						<i class="glyphicon glyphicon-remove"></i>
-					</a>
-				</div>
-			</div>
-			<div
-				class="modal-body"
-				style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
-				<div class="body">
-					<div class="clearfix widget-content">
-						<div
-							style="float: right"
-							class="edit_btn_group">
-							<button
-								type="button"
-								id="edit_assignee_update"
-								class="btn btn-success btn-sm"
-								data-dismiss="modal">
-								연봉 정보 변경 저장
-							</button>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<section
-								class="widget widget-tabs"
-								style="margin-bottom: 0">
-								<header>
-									<ul class="nav nav-tabs">
-										<li class="active">
-											<a
-												href="#edit"
-												data-toggle="tab"
-												id="edit_tab">
-												<strong>편집 하기</strong>
-											</a>
-										</li>
-									</ul>
-								</header>
-								<div class="body tab-content">
-									<div
-										id="edit"
-										class="tab-pane active clearfix"
-										style="padding-top: 10px !important">
-										<form>
-											<fieldset>
-												<div
-													class="form-group"
-													style="padding-top: 10px">
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_assignee_name">
-															이름 :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-user"></i>
-																</span>
-																<input
-																	id="editview_assignee_name"
-																	disabled="disabled"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	size="16"
-																	type="text"
-																	placeholder="이름" />
-															</div>
-														</div>
-													</div>
-
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_assignee_key">
-															고유키 :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-user"></i>
-																</span>
-																<input
-																	id="editview_assignee_key"
-																	disabled="disabled"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	size="16"
-																	type="text"
-																	placeholder="고유키" />
-															</div>
-														</div>
-													</div>
-
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_assignee_salary">
-															연봉 :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-usd"></i>
-																</span>
-																<input
-																	id="editview_assignee_salary"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	size="16"
-																	type="text"
-																	placeholder="연봉" />
-															</div>
-														</div>
-													</div>
-
-<!--													<div class="control-group">-->
-<!--														<label-->
-<!--															class="control-label"-->
-<!--															for="editview_assignee_plan_resource">-->
-<!--															투입 비율(m/m) :-->
-<!--														</label>-->
-<!--														<div-->
-<!--															class="controls form-group"-->
-<!--															style="margin-bottom: 10px">-->
-<!--															<div class="input-group">-->
-<!--																<span class="input-group-addon">-->
-<!--																	<i class="glyphicon glyphicon-user"></i>-->
-<!--																</span>-->
-<!--																<input-->
-<!--																	id="editview_assignee_plan_resource"-->
-<!--																	disabled="disabled"-->
-<!--																	class="form-control font13 darkBack"-->
-<!--																	style="color: #a4c6ff"-->
-<!--																	size="16"-->
-<!--																	type="text"-->
-<!--																	placeholder="제품(서비스) 업무 투입 비율(m/m)" />-->
-<!--															</div>-->
-<!--														</div>-->
-<!--													</div>-->
-
-<!--													<div class="control-group">-->
-<!--														<label-->
-<!--															class="control-label"-->
-<!--															for="editview_assignee_start_date">-->
-<!--															투입일 :-->
-<!--														</label>-->
-<!--														<div-->
-<!--															class="controls form-group"-->
-<!--															style="margin-bottom: 10px">-->
-<!--															<div class="input-group">-->
-<!--																<span class="input-group-addon">-->
-<!--																	<i class="glyphicon glyphicon-envelope"></i>-->
-<!--																</span>-->
-<!--																<input-->
-<!--																	id="editview_assignee_start_date"-->
-<!--																	class="form-control font13 darkBack"-->
-<!--																	style="color: #a4c6ff"-->
-<!--																	placeholder="투입일을 입력해 주세요" />-->
-<!--															</div>-->
-<!--														</div>-->
-<!--													</div>-->
-
-<!--													<div class="control-group">-->
-<!--														<label-->
-<!--															class="control-label"-->
-<!--															for="editview_assignee_end_date">-->
-<!--															투입종료일 :-->
-<!--														</label>-->
-<!--														<div-->
-<!--															class="controls form-group"-->
-<!--															style="margin-bottom: 10px">-->
-<!--															<div class="input-group">-->
-<!--																<span class="input-group-addon">-->
-<!--																	<i class="glyphicon glyphicon-envelope"></i>-->
-<!--																</span>-->
-<!--																<input-->
-<!--																	id="editview_assignee_end_date"-->
-<!--																	class="form-control font13 darkBack"-->
-<!--																	style="color: #a4c6ff"-->
-<!--																	placeholder="투입 종료일을 입력해 주세요" />-->
-<!--															</div>-->
-<!--														</div>-->
-<!--													</div>-->
-												</div>
-											</fieldset>
-										</form>
-									</div>
-								</div>
-							</section>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div
-				class="modal-footer"
-				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
-				<button
-					type="button"
-					id="extendclose_jira_server"
-					class="btn btn-default"
-					data-dismiss="modal">
-					Close
-				</button>
-				<button
-					type="button"
-					id="footer_edit_assignee_update"
-					class="btn btn-success btn-sm"
-					data-dismiss="modal">
-					연봉 정보 변경 저장
-				</button>
-			</div>
-		</div>
-		<!-- /.modal-content -->
-	</div>
-	<!-- /.modal-dialog -->
-</div>
 
 <div
 	id="my_modal2"
@@ -1642,3 +1281,60 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
+
+<style>
+		#spreadsheet .jexcel_content {
+				width: 100%;
+		}
+    #spreadsheet .jexcel_content table {
+        width: 100%;
+    }
+
+    /* Desktops */
+    @media screen and (min-width: 1024px) {
+        #spreadsheet colgroup col:nth-child(1) {
+            width: 5%;
+        }
+        #spreadsheet colgroup col:nth-child(2) {
+            width: 30%;
+        }
+        #spreadsheet colgroup col:nth-child(3) {
+            width: 40%;
+        }
+        #spreadsheet colgroup col:nth-child(4) {
+            width: 25%;
+        }
+    }
+
+    /* Tablets */
+    @media screen and (min-width: 0px) and (max-width: 1023px) {
+        #spreadsheet colgroup col:nth-child(1) {
+            width: 10%;
+        }
+        #spreadsheet colgroup col:nth-child(2) {
+            width: 25%;
+        }
+        #spreadsheet colgroup col:nth-child(3) {
+            width: 40%;
+        }
+        #spreadsheet colgroup col:nth-child(4) {
+            width: 25%;
+        }
+    }
+
+    /* Phone */
+    @media screen and (max-width: 767px) {
+        #spreadsheet colgroup col:nth-child(1) {
+            width: 10%;
+        }
+        #spreadsheet colgroup col:nth-child(2) {
+            width: 25%;
+        }
+        #spreadsheet colgroup col:nth-child(3) {
+            width: 40%;
+        }
+        #spreadsheet colgroup col:nth-child(4) {
+            width: 25%;
+        }
+    }
+</style>
