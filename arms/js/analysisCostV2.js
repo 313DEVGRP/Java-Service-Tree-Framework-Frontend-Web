@@ -3,9 +3,9 @@ var selectedVersionId; // 선택된 버전 아이디
 var dataTableRef;
 var mailAddressList; // 투입 작업자 메일
 var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
-
+var modifiedRows = {};
 var dashboardColor;
-
+let fileName = "인력별_연봉정보_템플릿.xlsx";
 var pdServiceListData;
 var versionListData;
 
@@ -76,6 +76,15 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
             "../arms/js/analysis/resource/sankey.js"
+        ],
+        [
+            "https://fonts.googleapis.com/css?family=Material+Icons",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.js",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.css",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/index.js",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css",
+            // "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.datatables.css",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -172,7 +181,7 @@ function makeVersionMultiSelectBox() {
             selectedVersionId = versionTag.join(",");
 
             if (versionTag === null || versionTag == "") {
-                alert("버전이 선택되지 않았습니다.");
+                jError("버전이 선택되지 않았습니다.");
                 return;
             }
 
@@ -537,18 +546,6 @@ function file_upload_setting() {
 
         }
     });
-
-
-    /*$("#fileupload").bind("fileuploadsubmit", function (e, data) {
-        // The example input, doesn't have to be part of the upload form:
-        var input = $("#fileIdlink");
-        data.formData = { pdservice_link: input.val() };
-        if (!data.formData.pdservice_link) {
-            data.context.find("button").prop("disabled", false);
-            input.focus();
-            return false;
-        }
-    });*/
 }
 
 // 버전 비용 및 인력 비용 입력
@@ -561,18 +558,6 @@ function costInput(전체담당자목록, pdServiceVersionLinks) {
 }
 
 function manpowerInput(전체담당자목록) {
-
-    if ($.fn.dataTable.isDataTable('#manpower-annual-income')) {
-        $('#manpower-annual-income').DataTable().clear().destroy();
-    }
-
-    /*let manpowerData = Object.keys(전체담당자목록).map((key) => {
-        let data = {};
-        data.이름 = 전체담당자목록[key].이름;
-        data.키 = key;
-        data.연봉 = 전체담당자목록[key].연봉;
-        return data;
-    });*/
     인력별_연봉정보 = Object.keys(전체담당자목록).map((key) => {
         let data = {};
         data.이름 = 전체담당자목록[key].이름;
@@ -582,134 +567,10 @@ function manpowerInput(전체담당자목록) {
     });
     console.log(" [ analysisCost :: manpowerInput ] :: 인력별_연봉정보 => " + JSON.stringify(인력별_연봉정보));
 
-    var columnList = [
-        {
-            name: "name",
-            title: "이름",
-            data: "이름",
-            render: function(data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-center",
-            visible: true
-        },
-        {
-            name: "key",
-            title: "고유 키",
-            data: "키",
-            render: function(data, type, row, meta) {
-                if (isEmpty(data) || data === "unknown") {
-                    return "<div style='color: #808080'>N/A</div>";
-                } else {
-                    return "<div style='white-space: nowrap; color: #a4c6ff' class='assignee-key'>" + data + "</div>";
-                }
-                return data;
-            },
-            className: "dt-center",
-            visible: true
-        },
-        {
-            name: "annualIncome",
-            title: "연봉 (입력)",
-            data: "연봉",
-            render: function(data, type, row) {
-                var updateBtn = "<button style='margin-top: 0; padding-top: 0; padding-bottom: 0; border: none; outline:  none; background: none' " +
-                  "class='btn btn-success btn-sm mr-xs'" +
-                  "data-이름='" + row.이름 + "' " +
-                  "data-키='" + row.키 + "' " +
-                  "data-연봉='" + row.연봉 + "' >" +
-                  "</button>";
-                var formattedData = parseInt(data).toLocaleString();
-                return '<input type="text" disabled name="annual-income" class="annual-income-input" value="' + formattedData + '" data-owner="' + row.키 + '"> 만원' + updateBtn;
-            },
-            className: "dt-center",
-            visible: true
-        }
-    ];
-
-    var rowsGroupList = [];
-    var columnDefList = [];
-    var orderList = [];
-    var jquerySelector = "#manpower-annual-income";
-    var ajaxUrl = null;
-    var jsonRoot = null;
-    var buttonList = [];
-    var selectList = {};
-    var isServerSide = false;
-    var scrollY = false;
-    var data = 인력별_연봉정보;
-    var isAjax = false;
-
-    dataTableRef = dataTable_build(
-      jquerySelector,
-      ajaxUrl,
-      jsonRoot,
-      columnList,
-      rowsGroupList,
-      columnDefList,
-      selectList,
-      orderList,
-      buttonList,
-      isServerSide,
-      scrollY,
-      data,
-      isAjax
-    );
+    jspreadsheetRender(인력별_연봉정보);
 
     // 템플릿 다운로드
     excel_download(인력별_연봉정보);
-}
-
-// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(tempDataTable, selectedData) {}
-
-// 데이터 테이블 데이터 렌더링 이후 콜백 함수
-function dataTableCallBack(settings, json) {
-    /*$("#fileIdlink").val(selectedPdServiceId);
-
-    //파일 리스트 초기화
-    $("table tbody.files").empty();
-    // Load existing files:
-    var $fileupload = $("#fileupload");
-
-    $.ajax({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
-        url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-        data: { fileIdLink: selectedPdServiceId },
-        dataType: "json",
-        context: $fileupload[0]
-    }).done(function (result) {
-        $(this).fileupload("option", "done").call(this, null, { result: result });
-        $(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리
-    });*/
-}
-
-function dataTableDrawCallback(tableInfo) {
-    $("#" + tableInfo.sInstance)
-      .DataTable()
-      .columns.adjust()
-      .responsive.recalc();
-
-    // 연봉 포맷 설정 및 연봉 정보 저장
-    $('.annual-income-input').off('input').on('input', function() {
-        var value = this.value.replace(/,/g, '');
-        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-        let owner = $(this).data('owner');
-        전체담당자목록[owner].연봉 = this.value.replace(/,/g, '');
-        전체담당자목록[owner].인력별소모비용 = 0;
-
-        var manpower = 인력별_연봉정보.find(item => item.키 === owner);
-        if (manpower) {
-            manpower.연봉 = 전체담당자목록[owner].연봉;
-        }
-    });
 }
 
 function excel_download(인력별_연봉정보) {
@@ -719,7 +580,7 @@ function excel_download(인력별_연봉정보) {
 
     $("#excel-annual-income-template-download").click(function() {
         if (Object.keys(인력별_연봉정보).length === 0) {
-            alert("다운로드할 인력 정보가 없습니다.");
+            jError("다운로드할 인력 정보가 없습니다.");
         } else {
             $.ajax({
                 url: "/auth-user/api/arms/salaries/excel-download.do?excelFileName=" + fileName,
@@ -747,10 +608,10 @@ function excel_download(인력별_연봉정보) {
 }
 
 function 비용분석계산버튼() {
-    $("#cost-analysis-calculation").click(function() {
+    $("#cost-analysis-calculation").on('click', function() {
 
         if (!selectedPdServiceId || !selectedVersionId) {
-            alert("제품(서비스), 버전을 선택해주세요.");
+            jError("제품(서비스), 버전을 선택해주세요.");
             return;
         }
 
@@ -761,14 +622,14 @@ function 비용분석계산버튼() {
             전체담당자목록[owner].완료성과 = 0;
 
             if (isNaN(전체담당자목록[owner].연봉)) {
-                alert(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
+                jError(owner + "의 연봉 정보가 잘못되었습니다. 숫자만 입력해주세요.");
                 return;
             }
             isEmpty = false;
         }
 
         if (isEmpty) {
-            alert("요구사항에 할당된 담당자가 없습니다.");
+            jError("요구사항에 할당된 담당자가 없습니다.");
             return;
         }
 
@@ -826,7 +687,7 @@ function 비용분석계산버튼() {
                 // 해당 요구사항이 멀티 버전일 수 있으니 버전목록을 가져옴
                 let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
 
-                // 요구사항의 버전목록을 반복문 돌기 
+                // 요구사항의 버전목록을 반복문 돌기
                 요구사항이포함된버전목록.forEach((버전) => {
                     // 해당 버전에 요구사항 키 목록을 가져옴
                     let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
@@ -1586,3 +1447,133 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
 
     window.addEventListener('resize', myChart.resize);
 }
+
+function jspreadsheetRender(data) {
+    var sheet = jspreadsheet(document.getElementById("spreadsheet"), {
+        // allowComments: true,
+        contextMenu: function(o, x, y, e, items) {
+            var items = [];
+
+            // Save
+            items.push({
+                title: jSuites.translate('Save as'),
+                shortcut: 'Ctrl + S',
+                icon: 'save',
+                onclick: function () {
+                    o.download();
+                }
+            });
+
+            return items;
+        },
+        search:true,
+        pagination:10,
+        data: data,
+        columns: [
+            { type: "text", title: "이름", readOnly: true },
+            { type: "text", title: "키",  readOnly: true  },
+            { type: "text", title: "연봉"  }
+        ],
+        onbeforechange: function(instance, cell, x, y, value) {
+            var cellName = jspreadsheet.getColumnNameFromId([x,y]);
+            console.log('The cell ' + cellName + ' will be changed' + '\n');
+        },
+        oninsertcolumn: function(instance) {
+            console.log('Column added' + '\n');
+        },
+        onchange: function(instance, cell, x, y, value) {
+            var cellName = jspreadsheet.getColumnNameFromId([x,y]);
+            console.log('onchange :: ' + cell + " :;  x :: " + x + " :: y :: " + y +" :: cellName ::" + cellName + ' to: ' + value + '\n');
+            if (x == 2) {
+                var key = instance.jexcel.getValueFromCoords(1, y);
+                modifiedRows[key] = value;
+            }
+        },
+        oninsertrow: function(instance, rowNumber) {
+            console.log('Row added' + rowNumber);
+        },
+        ondeleterow: function(instance, rowNumber) {
+            console.log('Row deleted' + rowNumber);
+        },
+        ondeletecolumn: function(instance) {
+            console.log('Column deleted' +'\n');
+        },
+        onselection: function(instance, x1, y1, x2, y2, origin) {
+            var cellName1 = jspreadsheet.getColumnNameFromId([x1, y1]);
+            var cellName2 = jspreadsheet.getColumnNameFromId([x2, y2]);
+            console.log('The selection from ' + cellName1 + ' to ' + cellName2 + '' + '\n');
+        },
+        onsort: function(instance, cellNum, order) {
+            var order = (order) ? 'desc' : 'asc';
+            console.log('The column  ' + cellNum + ' sorted by ' + order + '\n');
+        },
+        onresizerow: function(instance, cell, height) {
+            console.log('The row  ' + cell + ' resized to height ' + height + ' px' + '\n');
+        },
+        onresizecolumn: function(instance, cell, width) {
+            console.log('The column  ' + cell + ' resized to width ' + width + ' px' + '\n');
+        },
+        onmoverow: function(instance, from, to) {
+            console.log('The row ' + from + ' was move to the position of ' + to + ' ' + '\n');
+        },
+        onmovecolumn: function(instance, from, to) {
+            console.log('The col ' + from + ' was move to the position of ' + to + ' ' + '\n');
+        },
+        onload: function(instance) {
+            console.log('New data is loaded' + '\n');
+        },
+        onblur: function(instance) {
+            console.log('The table ' + $(instance).prop('id') + ' is blur' + '\n');
+        },
+        onfocus: function(instance) {
+            console.log('The table ' + $(instance).prop('id') + ' is focus' + '\n');
+        },
+        onpaste: function(data) {
+            console.log('Paste on the table ' + $(instance).prop('id') + '' + '\n');
+        },
+    });
+
+    var rowCount = data.length;
+
+    for(var rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+        sheet.setStyle(`C${rowIndex + 1}`, 'color', 'white');
+        // sheet.setStyle(`C${rowIndex + 1}`, 'background-color', 'orange');
+    }
+}
+
+$("#cost-excel-batch-update").on('click', function() {
+    if (Object.keys(modifiedRows).length === 0) {
+        jError("수정된 연봉 데이터가 없습니다.");
+        return;
+    }
+    var data = $("#spreadsheet").jexcel("getData");
+
+    var isValid = data.every(function(row) {
+        return !isNaN(row[2]) && row[2] !== "";
+    });
+
+    if (!isValid) {
+        jError("연봉 데이터는 숫자만 입력해야하며, 값이 존재해야 합니다.");
+    } else {
+        $.ajax({
+            url: "/auth-user/api/arms/salaries",
+            type: "PUT",
+            data: JSON.stringify(modifiedRows),
+            contentType: "application/json",
+            statusCode: {
+                200: function(apiResponse) {
+                    var response = apiResponse.response;
+                    인력별_연봉정보 = response;
+                    var spreadsheetElement = document.getElementById("spreadsheet");
+                    if (spreadsheetElement.jexcel) {
+                        spreadsheetElement.jexcel.destroy();
+                    }
+                    modifiedRows = {};
+                    jspreadsheetRender(response);
+                    jSuccess("연봉 정보가 수정되었습니다.");
+                }
+            }
+        });
+    }
+});
+
