@@ -621,9 +621,19 @@
 									style="margin-top: 5px">
 									각 버전에 투입된 인력의 연봉 정보를 입력합니다.
 								</blockquote>
-								<table
-									id="manpower-annual-income"
-									style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
+
+								<div class="clearfix widget-content">
+									<div style="float: right">
+										<button type="button"
+														class="btn btn-primary btn-block btn-sm"
+														id="cost-excel-batch-update"
+														style="margin-right: 5px;"
+										>
+											일괄저장
+										</button>
+									</div>
+								</div>
+								<div id="spreadsheet" style="height: 500px;"></div>
 							</div>
 						</section>
 					</div>
@@ -1271,3 +1281,60 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
+
+<style>
+		#spreadsheet .jexcel_content {
+				width: 100%;
+		}
+    #spreadsheet .jexcel_content table {
+        width: 100%;
+    }
+
+    /* Desktops */
+    @media screen and (min-width: 1024px) {
+        #spreadsheet colgroup col:nth-child(1) {
+            width: 5%;
+        }
+        #spreadsheet colgroup col:nth-child(2) {
+            width: 30%;
+        }
+        #spreadsheet colgroup col:nth-child(3) {
+            width: 40%;
+        }
+        #spreadsheet colgroup col:nth-child(4) {
+            width: 25%;
+        }
+    }
+
+    /* Tablets */
+    @media screen and (min-width: 0px) and (max-width: 1023px) {
+        #spreadsheet colgroup col:nth-child(1) {
+            width: 10%;
+        }
+        #spreadsheet colgroup col:nth-child(2) {
+            width: 25%;
+        }
+        #spreadsheet colgroup col:nth-child(3) {
+            width: 40%;
+        }
+        #spreadsheet colgroup col:nth-child(4) {
+            width: 25%;
+        }
+    }
+
+    /* Phone */
+    @media screen and (max-width: 767px) {
+        #spreadsheet colgroup col:nth-child(1) {
+            width: 10%;
+        }
+        #spreadsheet colgroup col:nth-child(2) {
+            width: 25%;
+        }
+        #spreadsheet colgroup col:nth-child(3) {
+            width: 40%;
+        }
+        #spreadsheet colgroup col:nth-child(4) {
+            width: 25%;
+        }
+    }
+</style>
