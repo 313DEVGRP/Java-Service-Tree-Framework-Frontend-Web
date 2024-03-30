@@ -113,7 +113,7 @@ function eventListenersActivator() {
 	});
 
 	//검색 결과 리스트 클릭 이벤트
-	$("#search_main_wrapper .search_result_group .search_result_items").on("click", function (event) {
+	$(".search_main_wrapper .search_result_group .search_result_items").on("click", function (event) {
 		console.log($(event.target).closest(".search-result")[0]);
 		var clicked_content_id = $(event.target).closest(".search-result").find(".search_head").attr("id");
 		if (!clicked_content_id.includes("no_search_result")) {
@@ -161,9 +161,14 @@ function date_range_filter_event() {
 			let start = (rangeDate["start-date"] ? SearchApiModule.setMidnightToZero(rangeDate["start-date"]) : "" );
 			let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
 			let rangeText = start+ " ~ " + end;
+			let blannk = `&nbsp;&nbsp;`
+			if(searchRangeType ==="all-time") {
+				rangeText = "";
+				blannk = ``;
+			}
 			$("#filter_list").html("");
 			$("#filter_list").append(
-				`<li style="margin: 0 3px"><a>${rangeText}</a></li>`
+				`<li style="margin: 0 3px"><a>${blannk}${rangeText}</a></li>`
 			);
 
 			if(searchString) {
@@ -194,31 +199,31 @@ function date_range_filter_event() {
 function search_with_date(search_string, range_date) {
 	let start_date = null;
 	let end_date = null;
-	if(range_date) {
-		if(range_date["start-date"]) {
+	if (range_date) {
+		if (range_date["start-date"]) {
 			start_date = range_date["start-date"];
 		}
-		if(range_date["end-date"]) {
+		if (range_date["end-date"]) {
 			end_date = range_date["end-date"];
 		}
 	}
 
 	$(".spinner").html(
-		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"<img src=\"./img/loading.gif\" alt=\"로딩\" style=\"width: 16px;\"> " +
 		"검색 결과 로딩 중입니다..."
 	);
 
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue/with-date",
 		type: "GET",
-		data: { "search_string": search_string, "page" : 0, "size": 10, "from": start_date, "to" : end_date },
+		data: { "search_string": search_string, "page": 0, "size": 10, "from": start_date, "to": end_date },
 		dataType: "json",
 		success: function(result) {
 			console.log("[searchEngine :: search_with_date] :: jiraissue_search_results 실행");
 
 			const current_page = 1; //현재 페이지 초기화
 			const items_per_Page = 10; //페이지당 아이템 수
-			SearchApiModule.setSearchResult("jiraissue",result, current_page, items_per_Page);
+			SearchApiModule.setSearchResult("jiraissue", result, current_page, items_per_Page);
 
 		}
 	});
@@ -226,7 +231,7 @@ function search_with_date(search_string, range_date) {
 	$.ajax({
 		url: "/engine-search-api/engine/jira/dashboard/search/log/with-date",
 		type: "GET",
-		data: { "search_string": search_string, "page" : 0, "size": 10,"from": start_date, "to" : end_date },
+		data: { "search_string": search_string, "page": 0, "size": 10, "from": start_date, "to": end_date },
 		dataType: "json",
 		success: function(result) {
 			console.log("[searchEngine :: search_with_date] :: fluentd_search_results 실행");
@@ -235,14 +240,16 @@ function search_with_date(search_string, range_date) {
 			SearchApiModule.setSearchResult("log", result, current_page, items_per_Page);
 		}
 	});
+
+	getTop5LogName(search_string,range_date);
 }
 
 function getTop5LogName(search_string, range_date){
 	console.log("[searchEngine :: getTop5LogName] 실행");
-	$(".spinner").html(
+/*	$(".spinner").html(
 		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 		"집계 결과 로딩 중입니다..."
-	);
+	);*/
 
 	let start_date = null;
 	let end_date = null;

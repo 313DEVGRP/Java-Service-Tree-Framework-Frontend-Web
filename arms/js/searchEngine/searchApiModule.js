@@ -24,6 +24,7 @@ var SearchApiModule = (function () {
                 break;
             case "all-time":
                 searchRangeDate["start-date"] = null;
+                searchRangeDate["end-date"] =  null;
                 break;
             case "previous-hour":
                 let oneHourAgo = new Date(today.getTime() - (1 * 60 * 60 * 1000));

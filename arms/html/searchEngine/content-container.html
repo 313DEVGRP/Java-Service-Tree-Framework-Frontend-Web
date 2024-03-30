@@ -48,8 +48,12 @@
                                 </li>
                             </ul>
                         </li>
+												<li style="display: flex; align-items: center;">
+													<ul id="filter_list">
+													</ul>
+												</li>
                         <li class="divider"></li>
-                        <li class="btn-group" id="data-result-group">
+<!--                        <li class="btn-group" id="data-result-group">
 														<span class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer; color:#a4c6ff; font-size: 12px;">
                                 &nbsp; <i class="fa fa-home"></i> <span id="data-result">검색결과 집계</span> &nbsp;
                                 <i class="fa fa-caret-down"></i>
@@ -58,8 +62,7 @@
 																style="background: rgba(51, 51, 51, 0.9) !important; min-width: 220px;">
 															<li id="log-agg-top5"> &nbsp;&nbsp; </li>
 														</ul>
-                        </li>
-                        <li class="divider"></li>
+                        </li>-->
                         <li>
                             <a
                               href=""
@@ -76,8 +79,8 @@
                                 <i class="fa fa-home"></i>
                                 검색 조건 :
                             </a>
-                            <ul id="filter_list">
-                            </ul>
+<!--                            <ul id="filter_list">
+                            </ul>-->
                         </li>
                     </div>
 						</div>
@@ -90,8 +93,7 @@
 		<div class="col-lg-12 col-md-12">
 			<div class="row">
 				<div
-					id="search_main_wrapper"
-					class="col-lg-12 col-layer">
+					class="search_main_wrapper col-lg-12 col-layer">
 					<section
 						class="widget padding-increased"
 						id="jiraissue_section">
@@ -170,6 +172,85 @@
 							</div>
 						</div>
 					</section>
+				</div>
+<!--				<div class="col-lg-3">
+					<section
+						class="widget padding-increased"
+						id="jiraissue_aggs">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								이슈 집계
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							집계 결과 상위 5 항목 입니다.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body">
+							<div class="box" style="margin-bottom: 0px">
+								<span id="issue-agg-top5"> &nbsp;&nbsp; </span>
+							</div>
+						</div>
+					</section>
+				</div>-->
+			</div>
+			<div class="row">
+				<div
+					class="search_main_wrapper col-lg-9 col-layer">
 					<!-- Logging 결과 -->
 					<section
 						class="widget padding-increased"
@@ -238,25 +319,26 @@
 							</div>
 						</blockquote>
 						<div class="body search_result_group">
-                <div class="search_result_items">
-                </div>
-							  <div class="text-align-center pagination-div">
-							  	<ul class="pagination">
-							  		<li class="disabled"><a href="#">Prev</a></li>
-							  		<li class="active"><a href="#">1</a></li>
-							  		<li><a href="#">Next</a></li>
-							  	</ul>
-							  </div>
+							<div class="search_result_items">
+							</div>
+							<div class="text-align-center pagination-div">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
 						</div>
 					</section>
-					<!-- APM result section -->
-<!--					<section
+				</div>
+				<div class="col-lg-3">
+					<section
 						class="widget padding-increased"
-						id="apm_section">
+						id="log_aggs">
 						<header style="margin: 10px 0">
 							<h4 style="font-size: 13px; font-weight: 600">
 								<i class="fa fa-bars"></i>
-								APM(Application Performance Monitoring) - 성능 모니터링 결과
+								로그 집계
 							</h4>
 							<div class="widget-controls">
 								<a
@@ -303,7 +385,7 @@
 							class="gradient_middle_border"
 							style="width: 100%; height: 2px"></div>
 						<blockquote class="font13">
-							검색 결과입니다. 자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							집계 결과 상위 5 항목 입니다.
 							<div style="float: right">
 								<button
 									class="btn btn-transparent btn-xs"
@@ -316,132 +398,12 @@
 								</button>
 							</div>
 						</blockquote>
-						<div class="body search_result_group">
-							<section class="search-result">
-								&lt;!&ndash; 검색 결과 생성 시, append 하는 방식으로? &ndash;&gt;
-								<div
-									class="search_head"
-									data-toggle="modal"
-									data-target="#search_detail_modal"
-									data-backdrop="false">
-									<div class="search_title">
-										<span style="font-size: 13px; color: #a4c6ff">
-											<span
-												role="img"
-												aria-label=":sparkles:"
-												title=":sparkles:"
-												style="background-color: transparent; display: inline-block; vertical-align: middle">
-												<img
-													src="http://www.313.co.kr/arms/img/bestqulity.png"
-													alt=":sparkles:"
-													width="15"
-													height="15"
-													class="CToWUd"
-													data-bit="iit"
-													style="
-														margin: 0px;
-														padding: 0px;
-														border: 0px;
-														display: block;
-														max-width: 100%;
-														height: auto;
-													" />
-											</span>
-											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-										</span>
-									</div>
-									<div class="search_category">
-										<p
-											class="text-muted"
-											style="margin: 5px 0">
-											<small>카테고리 fluentd-20240204</small>
-										</p>
-										<p
-											class="text-success"
-											style="margin: 5px 0">
-											<small>2024-02-15 15:18 KST</small>
-										</p>
-									</div>
-								</div>
-								<div
-									class="search_content"
-									style="height: 4rem; line-height: 1.58; overflow: hidden">
-									<span>
-										10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
-										/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
-										HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0)
-										Gecko/20100101 Firefox/122.0" "211.201.140.91"
-									</span>
-								</div>
-							</section>
-							<section class="search-result">
-								<div class="search_head">
-									<div class="search_title">
-										<span style="font-size: 13px; color: #a4c6ff">
-											<span
-												role="img"
-												aria-label=":sparkles:"
-												title=":sparkles:"
-												style="background-color: transparent; display: inline-block; vertical-align: middle">
-												<img
-													src="http://www.313.co.kr/arms/img/bestqulity.png"
-													alt=":sparkles:"
-													width="15"
-													height="15"
-													class="CToWUd"
-													data-bit="iit"
-													style="
-														margin: 0px;
-														padding: 0px;
-														border: 0px;
-														display: block;
-														max-width: 100%;
-														height: auto;
-													" />
-											</span>
-											&nbsp;A-RMS 는 IT 위기를 해결 할 수 있어요
-										</span>
-									</div>
-									<div class="search_category">
-										<p
-											class="text-muted"
-											style="margin: 5px 0; font-size: 95%">
-											<small>카테고리 fluentd-20240123</small>
-										</p>
-									</div>
-								</div>
-								<div
-									class="search_content"
-									style="font-size: 12px; height: 4rem; line-height: 1.58; overflow: hidden">
-									<span>
-										2024-01-23 17:14:00.493 DEBUG 1 -&#45;&#45; [r-http-epoll-11] o.s.http.codec.json.Jackson2JsonDecoder :
-										[2d8d7f6] [636415dd-3, L:/172.18.0.23:41310 - R:hsyang206.atlassian.net/43.202.69.1:443] Decoded
-										[지라이슈_데이터(id=10018, key=YHS-19, self=https://hsyang206.atlassian.net/rest/api/3/issue/10018,
-										fields=n (truncated)...]
-									</span>
-								</div>
-							</section>
-							<section class="search-result">
-								<h4>Can I use CSS3 Radial-Gradient?</h4>
-								<p class="text-success"><small>okendoken.com</small></p>
-								<p>
-									Yes you can! Further more, you should! It let's you create really beautiful images either for elements
-									or for the entire background.
-								</p>
-							</section>
-							<div class="text-align-center">
-								<ul class="pagination">
-									<li class="disabled"><a href="#">Prev</a></li>
-									<li class="active"><a href="#">1</a></li>
-									<li><a href="#">2</a></li>
-									<li><a href="#">3</a></li>
-									<li><a href="#">4</a></li>
-									<li><a href="#">5</a></li>
-									<li><a href="#">Next</a></li>
-								</ul>
+						<div class="body">
+							<div class="box" style="margin-bottom: 0px">
+								<span id="log-agg-top5"> &nbsp;&nbsp; </span>
 							</div>
 						</div>
-					</section>-->
+					</section>
 				</div>
 			</div>
 		</div>
