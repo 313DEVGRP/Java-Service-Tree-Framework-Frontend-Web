@@ -826,7 +826,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 			$(".body-middle").hide();
 
 			if (isEmpty(selectServerId)) {
-				jError("선택된 지라 서버가 없습니다. 오류는 무시됩니다.");
+				jError("선택된 ALM 서버가 없습니다. 오류는 무시됩니다.");
 			}
 		}
 		else if (target === "#report") { // 편집하기
@@ -844,7 +844,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 			$("#jira_server_delete_div").addClass("hidden");
 
 			if (isEmpty(selectServerId)) {
-				jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+				jError("선택된 ALM 서버가 없습니다. ALM 서버를 선택해주세요. 오류는 무시됩니다.");
 			}
 			project_dataTableLoad(selectServerId);
 
@@ -871,7 +871,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 				set_renew_btn(selectedTab, selectServerId);
 
 				if (isEmpty(selectServerId)) {
-					jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+					jError("선택된 ALM 서버가 없습니다. ALM 서버를 선택해주세요. 오류는 무시됩니다.");
 				}
 				display_set_wide_projectTable();
 				jiraServerDataTable(selectedTab);
@@ -883,7 +883,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 				$("#jira_renew_button_div").removeClass("hidden");
 
 				if (isEmpty(selectServerId)) {
-					jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+					jError("선택된 ALM 서버가 없습니다. ALM 서버를 선택해주세요. 오류는 무시됩니다.");
 				}
 
 				display_set_wide_projectTable();
@@ -896,7 +896,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 				$("#issue_status_table").addClass("hidden");
 
 				if (isEmpty(selectServerId)) {
-					jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+					jError("선택된 ALM 서버가 없습니다. ALM 서버를 선택해주세요. 오류는 무시됩니다.");
 				}
 
 				if (selectServerType === "클라우드")  {
@@ -925,7 +925,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 				$("#issue_status_table").removeClass("hidden");
 
 				if (isEmpty(selectServerId)) {
-					jError("선택된 지라 서버가 없습니다. 지라 서버를 선택해주세요. 오류는 무시됩니다.");
+					jError("선택된 ALM 서버가 없습니다. ALM 서버를 선택해주세요. 오류는 무시됩니다.");
 				}
 
 				if (selectServerType === "클라우드")  {
