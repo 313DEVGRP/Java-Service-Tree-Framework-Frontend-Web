@@ -100,7 +100,7 @@ function execDocReady() {
 
 			//사이드 메뉴 처리
 			$(".widget").widgster();
-			setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_gantt");
+			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_gantt");
 
 			// --- 에디터 설정 --- //
 			var waitCKEDITOR = setInterval(function () {
