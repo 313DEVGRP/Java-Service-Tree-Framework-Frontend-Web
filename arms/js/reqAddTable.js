@@ -162,8 +162,8 @@ const mapperTableData = (data) => {
 					version: getVersionTitle(vid),
 					id: c_id,
 					category: CategoryName[c_type],
-					manager: c_req_owner,
-					status: reqStateEntity?.data ?? "",
+					manager: c_type !== "folder" ? c_req_owner : "",
+					status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
 					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
 					content: c_title,
 					priority: reqPriorityEntity?.data ?? "",
@@ -527,7 +527,7 @@ class Table {
 	}
 
 	addInput(node) {
-		const uuid = crypto.randomUUID();
+		const uuid = createUUID();
 		const text = node.textContent;
 		const $input = this.makeElement("input");
 
