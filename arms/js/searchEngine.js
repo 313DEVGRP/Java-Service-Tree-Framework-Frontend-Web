@@ -242,6 +242,7 @@ function search_with_date(search_string, range_date) {
 	});
 
 	getTop5LogName(search_string,range_date);
+	getTop5projectName(search_string,range_date);
 }
 
 function getTop5LogName(search_string, range_date){
@@ -277,22 +278,27 @@ function getTop5LogName(search_string, range_date){
 				resultArr.forEach((element) => {
 					total += parseInt(element["개수"]);
 				});
-				console.log("[searchEngine :: search_with_date] :: log-aggs-top5 :: total => ", total);
-				var setting = `<ul>`;
+				console.log("[searchEngine :: getTop5LogName] :: log-aggs-top5 :: total => ", total);
 				$("#log-agg-top5").html("");
-				resultArr.forEach((element) => {
-					var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
-					setting += `<li>
-												<div style="margin: 5px 10px; display: flex; justify-content: space-between" >
-													<p style="color: #a4c6ff; margin-bottom: 0px">${element["필드명"]}</p>
-													<p style="color: #2D8515; margin-bottom: 0px">${element["개수"]}(${ratio}%)</p>
-												</div>
-												<div class="progress progress-small" style="margin: 0 10px 5px 10px">
-                        	<div class="progress-bar progress-bar-inverse" style="width: ${ratio}%;"></div>
-                    		</div>												
-				  </li>`;
-				});
-				setting +=`</ul>`;
+				var setting = `<ul>`;
+				if(total === 0) {
+					setting += `<li><a style="text-align: center;">집계 데이터 없음</a></li>`;
+				} else {
+
+					resultArr.forEach((element) => {
+						var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
+						setting += `<li>
+													<div style="margin: 5px 10px; display: flex; justify-content: space-between" >
+														<p style="color: #a4c6ff; margin-bottom: 0px">${element["필드명"]}</p>
+														<p style="color: #2D8515; margin-bottom: 0px">${element["개수"]}(${ratio}%)</p>
+													</div>
+													<div class="progress progress-small" style="margin: 0 10px 5px 10px">
+														<div class="progress-bar progress-bar-inverse" style="width: ${ratio}%;"></div>
+													</div>												
+						</li>`;
+					});
+					setting +=`</ul>`;
+				}
 				$("#log-agg-top5").html(setting);
 			} else {
 				$("#log-agg-top5").html(`<a style="text-align: center;">집계 데이터 없음</a>`);
@@ -301,6 +307,70 @@ function getTop5LogName(search_string, range_date){
 	});
 }
 
+function getTop5projectName(search_string, range_date) {
+	console.log("[searchEngine :: getTop5projectName] 실행");
+	/*	$(".spinner").html(
+			'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+			"집계 결과 로딩 중입니다..."
+		);*/
+
+	let start_date = null;
+	let end_date = null;
+	if(range_date) {
+		if(range_date["start-date"]) {
+			start_date = range_date["start-date"];
+		}
+		if(range_date["end-date"]) {
+			end_date = range_date["end-date"];
+		}
+	}
+
+	$.ajax({
+		url: "/engine-search-api/engine/search/project-aggs-top5/with-date",
+		type: "GET",
+		data: { "search_string": search_string, "from": start_date, "to" : end_date },
+		dataType: "json",
+		success: function(result) {
+			console.log("[searchEngine :: search_with_date] :: proeject-aggs-top5 => 집계 실행");
+			console.log(result);
+			if(result) {
+				var resultArr=result["검색결과"]["group_by_project.project_name.keyword"];
+				console.log(resultArr);
+				var appendHtml = ``;
+
+				var total = 0;
+				resultArr.forEach((element) => {
+					total += parseInt(element["개수"]);
+				});
+				console.log("[searchEngine :: getTop5projectName] :: project-agg-top5 :: total => ", total);
+				$("#project-agg-top5").html("");
+				var setting = `<ul>`;
+				if(total === 0) {
+					setting += `<li><a style="text-align: center;">집계 데이터 없음</a></li>`;
+				} else {
+					resultArr.forEach((element) => {
+						var ratio = +((parseInt(element["개수"]) / total) *100 ).toFixed(1);
+						setting += `<li>
+												<div style="margin: 5px 10px; display: flex; justify-content: space-between" >
+													<p style="color: #a4c6ff; margin-bottom: 0px">${element["필드명"]}</p>
+													<p style="color: #2D8515; margin-bottom: 0px">${element["개수"]}(${ratio}%)</p>
+												</div>
+												<div class="progress progress-small" style="margin: 0 10px 5px 10px">
+                        	<div class="progress-bar progress-bar-inverse" style="width: ${ratio}%;"></div>
+                    		</div>												
+				  </li>`;
+					});
+				}
+				setting +=`</ul>`;
+				$("#project-agg-top5").html(setting);
+			} else {
+				$("#project-agg-top5").html(`<a style="text-align: center;">집계 데이터 없음</a>`);
+			}
+
+		}
+	});
+
+}
 /////////////////////////////////////////////////////////////
 // 페이지 누를때 동작 - 검색 (search_section 별 페이지 검색)
 ////////////////////////////////////////////////////////////
