@@ -1486,7 +1486,12 @@ function jspreadsheetRender(data) {
             console.log('onchange :: ' + cell + " :;  x :: " + x + " :: y :: " + y +" :: cellName ::" + cellName + ' to: ' + value + '\n');
             if (x == 2) {
                 var key = instance.jexcel.getValueFromCoords(1, y);
-                modifiedRows[key] = value;
+                if (!modifiedRows[key]) {
+                    modifiedRows[key] = {};
+                }
+                modifiedRows[key].이름 = instance.jexcel.getValueFromCoords(0, y);
+                modifiedRows[key].키 = instance.jexcel.getValueFromCoords(1, y);
+                modifiedRows[key].연봉 = value;
             }
         },
         oninsertrow: function(instance, rowNumber) {
@@ -1541,39 +1546,45 @@ function jspreadsheetRender(data) {
     }
 }
 
-$("#cost-excel-batch-update").on('click', function() {
-    if (Object.keys(modifiedRows).length === 0) {
-        jError("수정된 연봉 데이터가 없습니다.");
-        return;
-    }
-    var data = $("#spreadsheet").jexcel("getData");
+$(document).ready(function() {
+    $("#cost-excel-batch-update").on('click', function() {
+        if (Object.keys(modifiedRows).length === 0) {
+            jError("수정된 연봉 데이터가 없습니다.");
+            return;
+        }
+        var data = $("#spreadsheet").jexcel("getData");
 
-    var isValid = data.every(function(row) {
-        return !isNaN(row[2]) && row[2] !== "";
+        var isValid = data.every(function(row) {
+            if (!row[0] || !row[1] || !row[2]) {
+                return true;
+            }
+            return !isNaN(row[2]) && row[2] !== "";
+        });
+
+        if (!isValid) {
+            jError("연봉 데이터는 숫자만 입력해야하며, 값이 존재해야 합니다.");
+        } else {
+            $.ajax({
+                url: "/auth-user/api/arms/salaries",
+                type: "PUT",
+                data: JSON.stringify(modifiedRows),
+                contentType: "application/json",
+                statusCode: {
+                    200: function(apiResponse) {
+                        var response = apiResponse.response;
+                        인력별_연봉정보 = response;
+                        var spreadsheetElement = document.getElementById("spreadsheet");
+                        if (spreadsheetElement.jexcel) {
+                            spreadsheetElement.jexcel.destroy();
+                        }
+                        modifiedRows = {};
+                        jspreadsheetRender(response);
+                        jSuccess("연봉 정보가 수정되었습니다.");
+                    }
+                }
+            });
+        }
     });
 
-    if (!isValid) {
-        jError("연봉 데이터는 숫자만 입력해야하며, 값이 존재해야 합니다.");
-    } else {
-        $.ajax({
-            url: "/auth-user/api/arms/salaries",
-            type: "PUT",
-            data: JSON.stringify(modifiedRows),
-            contentType: "application/json",
-            statusCode: {
-                200: function(apiResponse) {
-                    var response = apiResponse.response;
-                    인력별_연봉정보 = response;
-                    var spreadsheetElement = document.getElementById("spreadsheet");
-                    if (spreadsheetElement.jexcel) {
-                        spreadsheetElement.jexcel.destroy();
-                    }
-                    modifiedRows = {};
-                    jspreadsheetRender(response);
-                    jSuccess("연봉 정보가 수정되었습니다.");
-                }
-            }
-        });
-    }
-});
 
+});
