@@ -223,6 +223,8 @@ function bind_VersionData_By_PdService() {
 				수치_초기화();
 				console.log(pdServiceVersionIds);
 				selectedVersionId = pdServiceVersionIds.join(",");
+				console.log("bind_VersionData_By_PdService :: selectedVersionId");
+				console.log(selectedVersionId);
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 				// Circular Packing with D3 차트
@@ -531,8 +533,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 				// 버전 선택 시 데이터 파싱
 
 				setTimeout(function () {
-					console.log("[ analysisScope :: getRelationJiraIssueByPdServiceAndVersions ] 네트워크차트 - 가져온  데이터")
-					console.log(data);
+					console.log("[ analysisScope :: getRelationJiraIssueByPdServiceAndVersions ] 네트워크차트 그리기")
 					networkChart(pdServiceVersions, data);
 				}, 1500);
 			}
@@ -556,7 +557,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
 	var 선택한버전 = pdServiceVersions.split(",").map(Number);
 	console.log(" networkChart :: 선택한버전 => " + 선택한버전);
-	console.log(선택한버전);
 	var versionList = pdServiceData.pdServiceVersionEntities;
 
 	versionList.forEach((item) => {

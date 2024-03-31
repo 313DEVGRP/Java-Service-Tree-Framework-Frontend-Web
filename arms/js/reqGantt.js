@@ -20,6 +20,7 @@ var selectedIssueKey; //선택한 이슈 키
 var gantt;
 var ganttTasks;
 
+var versionListData;
 function execDocReady() {
 	var pluginGroups = [
 		[
@@ -217,9 +218,9 @@ function makePdServiceSelectBox() {
 		//
 		getMonitorData($("#selected_pdService").val(), endPointUrl);
 		//통계로드
-		statisticsLoad($("#selected_pdService").val(), null);
+		statisticsLoad($("#selected_pdService").val(), "");
 		//진행상태 가져오기
-		progressLoad($("#selected_pdService").val(), null);
+		progressLoad($("#selected_pdService").val(), "");
 	});
 } // end makePdServiceSelectBox()
 
@@ -309,6 +310,11 @@ function makeVersionMultiSelectBox() {
 			selectedVersionId = versionTag.join(",");
 			// 요구사항 및 연결이슈 통계
 			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+
+			//통계로드
+			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+			//진행상태 가져오기
+			progressLoad($("#selected_pdService").val(), selectedVersionId);
 		}
 	});
 }
@@ -324,9 +330,11 @@ function bind_VersionData_By_PdService() {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
 				var pdServiceVersionIds = [];
+				versionListData = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
 					pdServiceVersionIds.push(obj.c_id);
+					versionListData.push(obj);
 					var newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
@@ -339,6 +347,13 @@ function bind_VersionData_By_PdService() {
 				selectedVersionId = pdServiceVersionIds.join(",");
 				// 요구사항 및 연결이슈 통계
 				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+				console.log("bind_VersionData_By_PdService :: selectedVersionId");
+				console.log(selectedVersionId);
+
+				//통계로드
+				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+				//진행상태 가져오기
+				progressLoad($("#selected_pdService").val(), selectedVersionId);
 
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
