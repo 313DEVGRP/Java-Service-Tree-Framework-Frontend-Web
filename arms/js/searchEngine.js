@@ -214,7 +214,7 @@ function search_with_date(search_string, range_date) {
 	);
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/jiraissue/with-date",
+		url: "/engine-search-api/engine/search/jiraissue/with-date",
 		type: "GET",
 		data: { "search_string": search_string, "page": 0, "size": 10, "from": start_date, "to": end_date },
 		dataType: "json",
@@ -229,7 +229,7 @@ function search_with_date(search_string, range_date) {
 	});
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/log/with-date",
+		url: "/engine-search-api/engine/search/log/with-date",
 		type: "GET",
 		data: { "search_string": search_string, "page": 0, "size": 10, "from": start_date, "to": end_date },
 		dataType: "json",
@@ -263,7 +263,7 @@ function getTop5LogName(search_string, range_date){
 	}
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/log-aggs-top5/with-date",
+		url: "/engine-search-api/engine/search/log-aggs-top5/with-date",
 		type: "GET",
 		data: { "search_string": search_string, "from": start_date, "to" : end_date },
 		dataType: "json",
@@ -325,7 +325,7 @@ function section_search(search_section, page, range_date) {
 	);
 
 	$.ajax({
-		url: "/engine-search-api/engine/jira/dashboard/search/"+search_section+"/with-date", // 날짜포함이 있어야 하므로.
+		url: "/engine-search-api/engine/search/"+search_section+"/with-date", // 날짜포함이 있어야 하므로.
 		type: "GET",
 		data: { "search_string": search_string, "page" : page, "size": pageSize, "from": start_date, "to" : end_date },
 		dataType: "json",
