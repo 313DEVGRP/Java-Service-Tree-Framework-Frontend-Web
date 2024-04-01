@@ -211,6 +211,13 @@ function stackedHorizontalBar(){
                         color: 'white',
                         fontWeight: "",
                         fontSize: "11"
+                    },
+                    formatter: function (value) {
+                        if (value.length > 15) { // 길이가 15보다 크면 생략
+                            return value.substr(0, 15) + '...'; // 일부만 표시하고 "..." 추가
+                        } else {
+                            return value;
+                        }
                     }
                 }
             },

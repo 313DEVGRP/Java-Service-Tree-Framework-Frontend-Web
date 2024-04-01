@@ -115,6 +115,13 @@ function drawHorizontalBarChart(target,yAxisDataArr,seriesArr) {
                     color: 'white',
                     fontWeight: "",
                     fontSize: "11"
+                },
+                formatter: function (value) {
+                    if (value.length > 10) { // 길이가 10보다 크면 생략
+                        return value.substr(0, 10) + '...'; // 일부만 표시하고 "..." 추가
+                    } else {
+                        return value;
+                    }
                 }
             }
         },

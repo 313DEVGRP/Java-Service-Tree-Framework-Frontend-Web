@@ -161,14 +161,14 @@ function date_range_filter_event() {
 			let start = (rangeDate["start-date"] ? SearchApiModule.setMidnightToZero(rangeDate["start-date"]) : "" );
 			let end = (rangeDate["end-date"] ? new Date(rangeDate["end-date"]).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) : "");
 			let rangeText = start+ " ~ " + end;
-			let blannk = `&nbsp;&nbsp;`
+			let blank = `&nbsp;&nbsp;`;
 			if(searchRangeType ==="all-time") {
 				rangeText = "";
-				blannk = ``;
+				blank = ``;
 			}
 			$("#filter_list").html("");
 			$("#filter_list").append(
-				`<li style="margin: 0 3px"><a>${blannk}${rangeText}</a></li>`
+				`<li style="margin: 0 3px"><a>${blank}${rangeText}</a></li>`
 			);
 
 			if(searchString) {
