@@ -219,78 +219,45 @@ function productCostChart() {
         statusCode: {
             200: function(apiResponse) {
                 var response = apiResponse.response;
-                var monthlyCost = response.monthlyCost;
-                console.log(" [ analysisCost :: chart1 ] :: response data -> " + JSON.stringify(monthlyCost));
+                console.log(" [ analysisCost :: chart1 ] :: response data -> " + JSON.stringify(response));
+                var maxCost = Math.max(...Object.values(response));
                 var productChartDom = document.getElementById('product-accumulate-cost-by-month');
                 $(productChartDom).height("500px");
                 var mymChart = echarts.init(productChartDom);
                 var option;
-                var mapValues = Object.values(monthlyCost);
-                var mapKeys = Object.keys(monthlyCost);
-                var mapKeysSize = mapKeys.length;
-                var maxValue = response.totalAnnualIncome;
-                var intervalValue = maxValue / 10;
-
+                var dates = Object.keys(response);
+                var costs = Object.values(response);
                 option = {
+                    dataZoom: [{
+                        type: 'slider',
+                        start: 0,
+                        end: 100
+                    }],
                     tooltip: {
                         trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            crossStyle: {
-                                color: '#999'
-                            }
+                        formatter: function(params) {
+                            var formattedCost = new Intl.NumberFormat().format(params[0].value);
+                            return '날짜: ' + params[0].name + '<br>비용: ' + formattedCost;
                         }
                     },
-                    toolbox: {
-                        feature: {
-                            dataView: { show: true, readOnly: false },
-                            magicType: { show: true, type: ['line', 'bar'] },
-                            restore: { show: true },
-                            saveAsImage: { show: true }
-                        }
+                    xAxis: {
+                        type: 'category',
+                        data: dates
+                    },
+                    yAxis: {
+                        type: 'value',
+                        min: 0,
+                        max: maxCost,
+                        interval: Math.floor(maxCost / 10)
                     },
                     legend: {
-                        data: ['성과 기준선', '월 별 누적 성과']
+                        data: ['성과 기준선']
                     },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            data: mapKeys,
-                            // name: '2024',
-                            axisPointer: {
-                                type: 'shadow'
-                            }
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value',
-                            // name: '비용',
-                            min: 0,
-                            max: maxValue,
-                            interval: intervalValue,
-                            axisLabel: {
-                                formatter: '₩{value}'
-                            }
-                        }
-                    ],
-                    series: [
-                        {
-                            name: '성과 기준선',
-                            type: 'line',
-                            data: [
-                                [0, maxValue / mapKeysSize],
-                                [mapKeysSize - 1, maxValue]
-                            ],
-                            smooth: true,
-                        },
-                        {
-                            name: '월 별 누적 성과',
-                            type: 'bar',
-                            data: mapValues,
-                            barWidth: '60%' // 막대너비
-                        }
-                    ]
+                    series: [{
+                        name: '성과 기준선',
+                        data: costs,
+                        type: 'line'
+                    }]
                 };
 
                 if (option && typeof option === 'object') {
