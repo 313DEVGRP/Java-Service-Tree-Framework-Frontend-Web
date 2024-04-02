@@ -332,26 +332,7 @@ function updateSalary() {
         }
     });
 }
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트 완료 후 연봉 데이터 GET API 호출
-////////////////////////////////////////////////////////////////////////////////////////
-function fetchUpdatedData() {
-    const url = new UrlBuilder()
-      .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
-      .addQueryParam('pdServiceLink', selectedPdServiceId)
-      .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-      .addQueryParam('크기', 1000)
-      .addQueryParam('하위크기', 1000)
-      .addQueryParam('컨텐츠보기여부', true)
-      .build();
 
-    return $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-    });
-}
 
 function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
     const url = new UrlBuilder()
@@ -376,8 +357,6 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 console.log(apiResponse.response);
                 버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
                 전체담당자목록 = apiResponse.response.전체담당자목록;
-
-                let 연봉 = 5000;
 
                 Object.keys(전체담당자목록).forEach((key) => {
                     //전체담당자목록[key].연봉 = 연봉;
@@ -1416,7 +1395,13 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
 }
 
 function jspreadsheetRender(data) {
-    var sheet = jspreadsheet(document.getElementById("spreadsheet"), {
+    var spreadsheetElement = document.getElementById("spreadsheet");
+
+    if (spreadsheetElement.jexcel) {
+        spreadsheetElement.jexcel.destroy();
+    }
+
+    var sheet = jspreadsheet(spreadsheetElement, {
         // allowComments: true,
         contextMenu: function(o, x, y, e, items) {
             var items = [];
@@ -1539,13 +1524,8 @@ $(document).ready(function() {
                 statusCode: {
                     200: function(apiResponse) {
                         var response = apiResponse.response;
-                        인력별_연봉정보 = response;
-                        var spreadsheetElement = document.getElementById("spreadsheet");
-                        if (spreadsheetElement.jexcel) {
-                            spreadsheetElement.jexcel.destroy();
-                        }
+                        버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
                         modifiedRows = {};
-                        jspreadsheetRender(response);
                         jSuccess("연봉 정보가 수정되었습니다.");
                     }
                 }
