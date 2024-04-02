@@ -17,6 +17,8 @@ var dataTableRef; // 데이터테이블 참조 변수
 
 var serverDataList; // 서버 전체 맵
 
+var isAccountVerified = false; // 계정 검증 완료 플래그
+
 ////////////////
 //Document Ready
 ////////////////
@@ -102,7 +104,7 @@ function execDocReady() {
          tab_click_event();
 
          default_setting_event();
-
+         서버등록_계정검증_버튼_클릭();
          save_btn_click();
          delete_btn_click();
          update_btn_click();
@@ -476,11 +478,13 @@ function dataTableCallBack(settings, json) {}
 // --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function popup_size_setting() {
-   // 팝업 사이즈 조절 및 팝업 내용 데이터 바인딩
-   //지라 서버(등록)
-   $("#modal_popup_id").click(function () {
-      console.log("modal_popup_id clicked");
-      var height = $(document).height() - 600;
+	// 팝업 사이즈 조절 및 팝업 내용 데이터 바인딩
+	//지라 서버(등록)
+	$("#modal_popup_id").click(function () {
+		console.log("modal_popup_id clicked");
+		isAccountVerified = false;
+		$('#verify_account').text("계정 검증 하기");
+		var height = $(document).height() - 600;
 
       $("#my_modal1").on("hidden.bs.modal", function (e) {
          console.log("modal close");
@@ -587,58 +591,116 @@ function 레드마인_안내문구(){
 ////////////////////////////////
 // 지라 서버 등록
 ////////////////////////////////
-function save_btn_click() {
-   $("#regist_jira_server").click(function () {
-      if($("#popup_editview_jira_server_name").val() !== "") { // 서버 이름
-         if($("#popup_editview_jira_server_type input[name='options']:checked").val() !== undefined) { // 지라환경 선택여부
-            console.log("Base URL==> " + $("#popup_editview_jira_server_base_url").val());
-            console.log("c_jira_server_type==> " + $("#popup_editview_jira_server_type input[name='options']:checked").val());
-            console.log("c_jira_server_connect_id==> " + $("#popup_editview_jira_server_connect_id").val());
-            console.log("c_jira_server_connect_pw==> " + $("#popup_editview_jira_pass_token").val());
-            $.ajax({
-               url: "/auth-user/api/arms/jiraServer/addJiraServerNode.do",
-               type: "POST",
-               data: {
-                  ref: 2,
-                  c_title: $("#popup_editview_jira_server_name").val(),
-                  c_type: "default",
-                  c_jira_server_name: $("#popup_editview_jira_server_name").val(),
-                  c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
-                  c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //클라우드, on-premise
-                  c_jira_server_connect_id: $("#popup_editview_jira_server_connect_id").val(),
-                  c_jira_server_connect_pw: $("#popup_editview_jira_pass_token").val(),
-                  c_jira_server_contents: CKEDITOR.instances.modal_editor.getData()
-               },
-               statusCode: {
-                  200: function () {
-                     //모달 팝업 끝내고
-                     $("#close_regist_jira_server").trigger("click");
-                     //지라 서버 목록 재 로드
-                     makeJiraServerCardDeck();
-                     //dataTableRef.ajax.reload();
-                     jSuccess("신규 제품 등록이 완료 되었습니다.");
-                  }
-               },
-               beforeSend: function () {
-                  $("#regist_jira_server").hide();
-               },
-               complete: function () {
-                  $("#regist_jira_server").show();
-               },
-               error: function (e) {
-                  jError("지라 서버 등록 중 에러가 발생했습니다.");
-               }
-            });
+function 서버등록_계정검증_버튼_클릭(){
+    $('#verify_account').off().click(function(){
+        var uri = $("#popup_editview_jira_server_base_url").val();
+        var type = $("#popup_editview_jira_server_type input[name='options']:checked").val();
+        var userId = $("#popup_editview_jira_server_connect_id").val();
+        var passwordOrToken = $("#popup_editview_jira_pass_token").val();
 
-         } else {
-            alert("지라 서버 환경을 선택해주세요.");
-            return false;
-         }
-      } else {
-         alert("지라 서버의 이름이 없습니다.");
-         return false;
-      }
-   });
+        if(!type){
+            alert("ALM 환경을 선택해주세요.");
+            return;
+        }
+
+        if(!uri){
+            alert("ALM URL을 입력해주세요.");
+            return;
+        }
+
+        if(!userId){
+            alert("ALM ID를 입력해주세요.");
+            return;
+        }
+        if(!passwordOrToken){
+            alert("ALM 암호 또는 토큰을 입력해주세요.");
+            return;
+        }
+        console.log("Base URL==> " + uri);
+        console.log("c_jira_server_type==> " + type);
+        console.log("c_jira_server_connect_id==> " +userId);
+        console.log("c_jira_server_connect_pw==> " + passwordOrToken);
+
+        $.ajax({
+                url: "/auth-user/api/arms/jiraServer/verifyAccount.do",
+                type: "GET",
+                data: {
+                    uri: uri,
+                    type: type,
+                    userId: userId,
+                    passwordOrToken: passwordOrToken
+                },
+                statusCode: {
+                    200: function (계정_정보) {
+                        if(type ==="레드마인_온프레미스"){
+                            var isAdmin = 계정_정보.response.admin;
+                            if(isAdmin === true ){
+                                jSuccess("계정 검증이 완료 되었습니다.");
+                                isAccountVerified = true;
+                                $('#verify_account').text("계정 검증 성공");
+                            }else{
+                                jError("관리자 계정이 아닙니다. 등록한 정보를 확인해 주세요.");
+                            }
+                        }else{
+                            var isActivate = 계정_정보.response.active;
+                            if(isActivate === true ){
+                                jSuccess("계정 검증이 완료 되었습니다.");
+                                isAccountVerified = true;
+                                $('#verify_account').text("계정 검증 성공");
+                            }else{
+                                jError("활성화된 계정이 아닙니다. 등록한 정보를 확인해 주세요.");
+                            }
+                        }
+                    }
+                },
+                error: function(){
+                    jError("등록이 불가한 계정 정보입니다. 등록한 정보를 확인해 주세요.");
+                }
+        });
+
+    });
+}
+function save_btn_click() {
+    $("#regist_jira_server").off().click(function() {
+        if (!isAccountVerified) { // 계정 검증이 완료되지 않았다면
+            jError("계정 검증을 먼저 해주세요.");
+        } else {
+            $.ajax({
+                url: "/auth-user/api/arms/jiraServer/addJiraServerNode.do",
+                type: "POST",
+                data: {
+                    ref: 2,
+                    c_title: $("#popup_editview_jira_server_name").val(),
+                    c_type: "default",
+                    c_jira_server_name: $("#popup_editview_jira_server_name").val(),
+                    c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
+                    c_jira_server_type: $("#popup_editview_jira_server_type input[name='options']:checked").val(), //클라우드, on-premise
+                    c_jira_server_connect_id: $("#popup_editview_jira_server_connect_id").val(),
+                    c_jira_server_connect_pw: $("#popup_editview_jira_pass_token").val(),
+                    c_jira_server_contents: CKEDITOR.instances.modal_editor.getData()
+                },
+                statusCode: {
+                    200: function() {
+                        //모달 팝업 끝내고
+                        $("#close_regist_jira_server").trigger("click");
+                        //지라 서버 목록 재 로드
+                        makeJiraServerCardDeck();
+                        //dataTableRef.ajax.reload();
+                        jSuccess("신규 제품 등록이 완료 되었습니다.");
+                    }
+                },
+                beforeSend: function() {
+                    $("#regist_jira_server").hide();
+                },
+                complete: function() {
+                    $("#regist_jira_server").show();
+                },
+                error: function(e) {
+                    jError("지라 서버 등록 중 에러가 발생했습니다.");
+                }
+            });
+        }
+     });
 }
 
 function update_btn_click(){
