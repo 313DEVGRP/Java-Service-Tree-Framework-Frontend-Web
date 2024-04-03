@@ -217,10 +217,6 @@ function makePdServiceSelectBox() {
 		}
 		//
 		getMonitorData($("#selected_pdService").val(), endPointUrl);
-		//통계로드
-		statisticsLoad($("#selected_pdService").val(), "");
-		//진행상태 가져오기
-		progressLoad($("#selected_pdService").val(), "");
 	});
 } // end makePdServiceSelectBox()
 
