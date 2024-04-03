@@ -205,9 +205,9 @@ function productCostChart() {
       .setBaseUrl('/auth-user/api/arms/analysis/cost/product-accumulate-cost-by-month')
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-      .addQueryParam("isReqType", "ISSUE")
-      .addQueryParam('메인그룹필드', "parentReqKey")
-      .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword")
+      // .addQueryParam("isReqType", "ISSUE")
+      .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
+      .addQueryParam('하위그룹필드들', "key")
       .build();
 
     $.ajax({
@@ -218,15 +218,19 @@ function productCostChart() {
         progress: true,
         statusCode: {
             200: function(apiResponse) {
-                var response = apiResponse.response;
-                console.log(" [ analysisCost :: chart1 ] :: response data -> " + JSON.stringify(response));
-                var maxCost = Math.max(...Object.values(response));
+                var responseMap = apiResponse.response;
+                var line = responseMap.line;
+                var bar = responseMap.bar;
+                console.log(" [ analysisCost :: line ] :: response data -> " + JSON.stringify(line));
+                console.log(" [ analysisCost :: bar ] :: response data -> " + JSON.stringify(bar));
+                var maxCost = Math.max(...Object.values(line));
                 var productChartDom = document.getElementById('product-accumulate-cost-by-month');
                 $(productChartDom).height("500px");
                 var mymChart = echarts.init(productChartDom);
                 var option;
-                var dates = Object.keys(response);
-                var costs = Object.values(response);
+                var dates = Object.keys(line);
+                var lineCosts = Object.values(line);
+                var barCosts = Object.values(bar);
                 option = {
                     dataZoom: [{
                         type: 'slider',
@@ -236,8 +240,9 @@ function productCostChart() {
                     tooltip: {
                         trigger: 'axis',
                         formatter: function(params) {
-                            var formattedCost = new Intl.NumberFormat().format(params[0].value);
-                            return '날짜: ' + params[0].name + '<br>비용: ' + formattedCost;
+                            var lineTooltip = new Intl.NumberFormat().format(params[0].value);
+                            var barTooltip = new Intl.NumberFormat().format(params[1].value);
+                            return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip;
                         }
                     },
                     xAxis: {
@@ -251,12 +256,16 @@ function productCostChart() {
                         interval: Math.floor(maxCost / 10)
                     },
                     legend: {
-                        data: ['성과 기준선']
+                        data: ['성과 기준선', '비용']
                     },
                     series: [{
                         name: '성과 기준선',
-                        data: costs,
-                        type: 'line'
+                        data: lineCosts,
+                        type: 'line',
+                    }, {
+                        name: '비용',
+                        data: barCosts,
+                        type: 'bar',
                     }]
                 };
 
