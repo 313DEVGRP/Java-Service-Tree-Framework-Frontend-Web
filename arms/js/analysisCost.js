@@ -205,9 +205,9 @@ function productCostChart() {
       .setBaseUrl('/auth-user/api/arms/analysis/cost/product-accumulate-cost-by-month')
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-      // .addQueryParam("isReqType", "ISSUE")
-      .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
-      .addQueryParam('하위그룹필드들', "key")
+      .addQueryParam("isReqType", "ISSUE")
+      .addQueryParam('메인그룹필드', "cReqLink")
+      .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword")
       .build();
 
     $.ajax({
