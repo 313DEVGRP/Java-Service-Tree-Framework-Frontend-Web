@@ -1459,6 +1459,10 @@ function default_setting_event() {
 					jSuccess("기본 설정("+selectedTab+")이 변경되었습니다.");
 					//데이터 테이블 데이터 재 로드
 					display_set_wide_projectTable(); // 다시 wide 설정으로.
+
+					if (selectedTab === "issueType" || selectedTab === "issuePriority") {
+						makeJiraServerCardDeck();
+					}
 				}
 			}
 		});
