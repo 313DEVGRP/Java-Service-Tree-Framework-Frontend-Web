@@ -1385,10 +1385,22 @@ function switch_action_for_mode() {
 			$("#popup_version_div").show();
 			$("#popup_reviewer_div").show();
 			$("#popup_priority_div").show();
+
+			$("#popup_req_priority_div").show();
+			$("#popup_req_difficulty_div").show();
+			$("#popup_req_state_div").show();
+
+			$("#popup_req_plan_time_div").show();
 		} else {
 			$("#popup_version_div").hide();
 			$("#popup_reviewer_div").hide();
 			$("#popup_priority_div").hide();
+
+			$("#popup_req_priority_div").hide();
+			$("#popup_req_difficulty_div").hide();
+			$("#popup_req_state_div").hide();
+
+			$("#popup_req_plan_time_div").hide();
 		}
 	});
 }
@@ -1445,9 +1457,14 @@ function save_req() {
 		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
 		let selectedplanTime = $("#popup_req_plan_time").val();
 
+		let reqTitle = $("#req_title").val();
+		if(reqTitle) {
+			reqTitle = reqTitle.trim();
+		}
+
 		let dataObjectParam = {
 			ref: selectedJsTreeId,
-			c_title: $("#req_title").val(),
+			c_title: reqTitle,
 			c_type: c_type_value,
 			c_req_pdservice_link: $("#selected_pdService").val(),
 			c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
@@ -1472,10 +1489,11 @@ function save_req() {
 		};
 		console.log(dataObjectParam);
 
-		if ($("#popup_version").val().length >= 1) {
-			if ($("#req_title").val().trim() !== "") {
+		// 폴더일때
+		if(c_type_value === "folder") {
+			if(reqTitle) {
 				$.ajax({
-					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
+					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addFolderNode.do",
 					type: "POST",
 					data: dataObjectParam,
 					statusCode: {
@@ -1490,9 +1508,30 @@ function save_req() {
 				alert("요구사항 제목이 없습니다.");
 				return false;
 			}
-		} else {
-			alert("선택된 버전이 없습니다.");
-			return false;
+		}
+		else {
+			if ($("#popup_version").val().length >= 1) {
+				if (reqTitle !== "") {
+					$.ajax({
+						url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
+						type: "POST",
+						data: dataObjectParam,
+						statusCode: {
+							200: function () {
+								$("#req_tree").jstree("refresh");
+								$("#close_req").trigger("click");
+								jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
+							}
+						}
+					});
+				} else {
+					alert("요구사항 제목이 없습니다.");
+					return false;
+				}
+			} else {
+				alert("선택된 버전이 없습니다.");
+				return false;
+			}
 		}
 	});
 }
