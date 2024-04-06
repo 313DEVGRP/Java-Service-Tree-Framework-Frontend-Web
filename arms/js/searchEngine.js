@@ -375,7 +375,7 @@ function getTop5projectName(search_string, range_date) {
 // 페이지 누를때 동작 - 검색 (search_section 별 페이지 검색)
 ////////////////////////////////////////////////////////////
 function section_search(search_section, page, range_date) {
-	var search_string = $("#search-input").val();
+	var search_string = checkAndAppendWildcard(searchString);
 	var pageSize = 10;
 
 	let start_date = null;

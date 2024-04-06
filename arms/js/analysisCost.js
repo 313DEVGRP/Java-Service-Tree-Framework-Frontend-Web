@@ -206,7 +206,7 @@ function productCostChart() {
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
       .addQueryParam("isReqType", "ISSUE")
-      .addQueryParam('메인그룹필드', "parentReqKey")
+      .addQueryParam('메인그룹필드', "cReqLink")
       .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword")
       .build();
 
@@ -218,15 +218,19 @@ function productCostChart() {
         progress: true,
         statusCode: {
             200: function(apiResponse) {
-                var response = apiResponse.response;
-                console.log(" [ analysisCost :: chart1 ] :: response data -> " + JSON.stringify(response));
-                var maxCost = Math.max(...Object.values(response));
+                var responseMap = apiResponse.response;
+                var line = responseMap.line;
+                var bar = responseMap.bar;
+                console.log(" [ analysisCost :: line ] :: response data -> " + JSON.stringify(line));
+                console.log(" [ analysisCost :: bar ] :: response data -> " + JSON.stringify(bar));
+                var maxCost = Math.max(...Object.values(line));
                 var productChartDom = document.getElementById('product-accumulate-cost-by-month');
                 $(productChartDom).height("500px");
                 var mymChart = echarts.init(productChartDom);
                 var option;
-                var dates = Object.keys(response);
-                var costs = Object.values(response);
+                var dates = Object.keys(line);
+                var lineCosts = Object.values(line);
+                var barCosts = Object.values(bar);
                 option = {
                     dataZoom: [{
                         type: 'slider',
@@ -236,8 +240,9 @@ function productCostChart() {
                     tooltip: {
                         trigger: 'axis',
                         formatter: function(params) {
-                            var formattedCost = new Intl.NumberFormat().format(params[0].value);
-                            return '날짜: ' + params[0].name + '<br>비용: ' + formattedCost;
+                            var lineTooltip = new Intl.NumberFormat().format(params[0].value);
+                            var barTooltip = new Intl.NumberFormat().format(params[1].value);
+                            return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip;
                         }
                     },
                     xAxis: {
@@ -251,12 +256,16 @@ function productCostChart() {
                         interval: Math.floor(maxCost / 10)
                     },
                     legend: {
-                        data: ['성과 기준선']
+                        data: ['성과 기준선', '비용']
                     },
                     series: [{
                         name: '성과 기준선',
-                        data: costs,
-                        type: 'line'
+                        data: lineCosts,
+                        type: 'line',
+                    }, {
+                        name: '비용',
+                        data: barCosts,
+                        type: 'bar',
                     }]
                 };
 
@@ -332,26 +341,7 @@ function updateSalary() {
         }
     });
 }
-////////////////////////////////////////////////////////////////////////////////////////
-// 연봉 정보 업데이트 완료 후 연봉 데이터 GET API 호출
-////////////////////////////////////////////////////////////////////////////////////////
-function fetchUpdatedData() {
-    const url = new UrlBuilder()
-      .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
-      .addQueryParam('pdServiceLink', selectedPdServiceId)
-      .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-      .addQueryParam('크기', 1000)
-      .addQueryParam('하위크기', 1000)
-      .addQueryParam('컨텐츠보기여부', true)
-      .build();
 
-    return $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-    });
-}
 
 function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
     const url = new UrlBuilder()
@@ -376,8 +366,6 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
                 console.log(apiResponse.response);
                 버전_요구사항_담당자 = apiResponse.response.버전_요구사항_담당자;
                 전체담당자목록 = apiResponse.response.전체담당자목록;
-
-                let 연봉 = 5000;
 
                 Object.keys(전체담당자목록).forEach((key) => {
                     //전체담당자목록[key].연봉 = 연봉;
@@ -1416,7 +1404,13 @@ function 인력별_연봉대비_성과차트(전체담당자목록) {
 }
 
 function jspreadsheetRender(data) {
-    var sheet = jspreadsheet(document.getElementById("spreadsheet"), {
+    var spreadsheetElement = document.getElementById("spreadsheet");
+
+    if (spreadsheetElement.jexcel) {
+        spreadsheetElement.jexcel.destroy();
+    }
+
+    var sheet = jspreadsheet(spreadsheetElement, {
         // allowComments: true,
         contextMenu: function(o, x, y, e, items) {
             var items = [];
@@ -1539,13 +1533,8 @@ $(document).ready(function() {
                 statusCode: {
                     200: function(apiResponse) {
                         var response = apiResponse.response;
-                        인력별_연봉정보 = response;
-                        var spreadsheetElement = document.getElementById("spreadsheet");
-                        if (spreadsheetElement.jexcel) {
-                            spreadsheetElement.jexcel.destroy();
-                        }
+                        버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
                         modifiedRows = {};
-                        jspreadsheetRender(response);
                         jSuccess("연봉 정보가 수정되었습니다.");
                     }
                 }
