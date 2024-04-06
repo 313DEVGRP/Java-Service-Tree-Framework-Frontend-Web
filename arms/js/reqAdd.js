@@ -209,14 +209,14 @@ function makePdServiceSelectBox() {
 				<div class="chat-message-body" style="margin-left: 0px !important;">
 					<span class="arrow" style="top: 35% !important;"></span>
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
-				<span class="text" style="color: #a4c6ff;">
-				` +
-			selectedService +
-			`
-				</span>
+					<span class="text" style="color: #a4c6ff;">
+					` +
+					selectedService +
+					`
+					</span>
 				</div>
-				</div>
-				`;
+			</div>
+			`;
 		$("#reqSender").html(selectedHtml); // 선택된 제품(서비스)
 
 		//~> 이벤트 연계 함수 :: 요구사항 표시 jsTree 빌드
@@ -298,11 +298,10 @@ function changeMultipleSelected() {
 	console.log("select pdservice:: " + $("#selected_pdService").val());
 
 	$.ajax({
-		url:
-			"/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
-			$("#selected_pdService").val() +
-			"/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
-			result_cids,
+		url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
+			 $("#selected_pdService").val() +
+			 "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
+			 result_cids,
 		type: "GET",
 		dataType: "json",
 		progress: true,
@@ -379,7 +378,7 @@ function jsTreeClick(selectedNode) {
 	}
 
 	//요구사항 타입에 따라서 탭의 설정을 변경
-	if (selectRel == "folder" || selectRel == "drive") {
+	if (selectRel == "drive") {
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
@@ -391,6 +390,20 @@ function jsTreeClick(selectedNode) {
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
 		dataTableLoad(selectedJsTreeId, selectRel);
+	} else if (selectRel == "folder") {
+
+		$("#folder_tab").get(0).click();
+		$(".newReqDiv").show();
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
+
+		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
+		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
+		dataTableLoad(selectedJsTreeId, selectRel);
+
 	} else {
 		$("#default_tab").get(0).click();
 		$(".newReqDiv").hide();
@@ -401,13 +414,8 @@ function jsTreeClick(selectedNode) {
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
 
 		//이전에 화면에 렌더링된 데이터 초기화
-		// ------------------ 편집하기 ------------------ //
-		// bindDataEditlTab(data);
-		// // ------------------ 상세보기 ------------------ //
-		// bindDataDetailTab(data);
 		//상세보기 탭 셋팅
 		setDetailAndEditViewTab();
-		// defaultType_dataTableLoad(selectedJsTreeId);
 	}
 }
 
@@ -534,269 +542,15 @@ function dataTableLoad(selectId, selectRel) {
 	}
 }
 
-// --- 데이터 테이블 설정 --- // getConnectionInfo.do
-function datatables_jira_project() {
-	// jiraProjectConnectionInfo();
-	// 데이터 테이블 컬럼 및 열그룹 구성
-	var columnList = [
-		{
-			data: "c_id",
-
-			render: function (data, type, row) {
-				if (type === "display") {
-					// 만약 데이터가 특정 조건을 만족한다면 체크박스를 체크한 상태로 렌더링합니다.
-					// console.log("jira display" + jiraCheckId);
-					// console.log("jira id" + data);
-					// var test = [27, 10];
-					var checkboxHtml = '<input type="checkbox" class="editor-active" name="jiraVerList" value="' + data + '"';
-					// 배열에 현재 data가 포함되어 있는지 확인
-					if (jiraCheckId.includes(data)) {
-						checkboxHtml += " checked"; // 체크된 상태로 설정
-						console.log("jira jiraCheckId" + jiraCheckId);
-					}
-					checkboxHtml += ">";
-					return checkboxHtml;
-				}
-				console.log("jira type" + type);
-				return data;
-			},
-			className: "dt-body-center",
-			title: '<input type="checkbox" name="checkall" id="checkall">'
-		},
-		{
-			name: "c_jira_key",
-			title: "c_jira_key",
-			data: "c_jira_key",
-			className: "dt-body-left",
-			visible: true,
-			defaultContent: "-"
-		},
-		{
-			name: "c_pdservice_version_name",
-			title: "버전 이름",
-			data: "c_pdservice_version_name",
-			className: "dt-body-center",
-			visible: true,
-			defaultContent: "-"
-		},
-		{
-			name: "c_jira_name",
-			title: "JIRA Project",
-			data: "c_jira_name",
-			className: "dt-body-left",
-			visible: true,
-			defaultContent: "-"
-		}
-	];
-	var rowsGroupList = null;
-	var columnDefList = [
-		{
-			orderable: false,
-			className: "select-checkbox",
-			targets: 0
-		}
-	];
-	var selectList = {
-		style: "os",
-		selector: "td:first-child"
-	};
-	var orderList = [[1, "asc"]];
-	var buttonList = [];
-
-	var jquerySelector = "#jira_project_table";
-	var ajaxUrl = "/auth-user/api/arms/jiraProject/getNodesWithoutRoot.do";
-	var jsonRoot = "result";
-	var isServerSide = false;
-
-	dataTable_build(
-		jquerySelector,
-		ajaxUrl,
-		jsonRoot,
-		columnList,
-		rowsGroupList,
-		columnDefList,
-		selectList,
-		orderList,
-		buttonList,
-		isServerSide
-	);
-}
-// -------------------- checkbox 가 들어가야 하는 데이터테이블 이므로 row code를 사용함 ------------------ //
-// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function defaultType_dataTableLoad() {
-	console.log("defaultType_dataTableLoad:::");
-	// 데이터 테이블 컬럼 및 열그룹 구성
-
-	//여기는 데이터 가져와서 체크박스 처리 해야 하는 로직
-
-	var columnList = [
-		{
-			data: "c_id",
-			render: function (data, type, row) {
-				if (type === "display") {
-					return '<input type="checkbox" class="editor-active" name="jiraVerList" value="' + data + '">';
-				}
-				return data;
-			},
-			className: "dt-body-center",
-			title: '<input type="checkbox" name="checkall" id="checkall">'
-		},
-		{
-			name: "c_jira_key",
-			title: "c_jira_key",
-			data: "c_jira_key",
-			className: "dt-body-left",
-			visible: true,
-			defaultContent: "-"
-		},
-		{
-			name: "c_jira_name",
-			title: "버전 이름",
-			data: "c_jira_name",
-			className: "dt-body-center",
-			visible: true,
-			defaultContent: "-"
-		},
-		{
-			name: "c_pdservice_jira_name",
-			title: "JIRA Project",
-			data: "c_pdservice_jira_name",
-			className: "dt-body-left",
-			visible: true,
-			defaultContent: "-"
-		}
-	];
-	var rowsGroupList = null;
-	var columnDefList = [
-		{
-			orderable: false,
-			className: "select-checkbox",
-			targets: 0
-		}
-	];
-	var selectList = {
-		style: "os",
-		selector: "td:first-child"
-	};
-	var orderList = [[1, "asc"]];
-	var buttonList = [];
-
-	var jquerySelector = "#jira_ver_table";
-	var ajaxUrl = "/auth-user/api/arms/jiraProject/getNodesWithoutRoot.do";
-	var jsonRoot = "result";
-	var isServerSide = false;
-
-	dataTableRef = dataTable_build(
-		jquerySelector,
-		ajaxUrl,
-		jsonRoot,
-		columnList,
-		rowsGroupList,
-		columnDefList,
-		selectList,
-		orderList,
-		buttonList,
-		isServerSide
-	);
-
-	return dataTableRef;
-}
-// -------- jira project connection info
-function jiraProjectConnectionInfo() {
-	console.log("selected_pdService" + $("#selected_pdService").val());
-	$.ajax({
-		url: "/auth-user/api/arms/jiraProject/getConnectionInfo.do",
-		type: "GET",
-		data: {
-			pdservice_link: $("#selected_pdService").val()
-		},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				/////////////////// insert Card ///////////////////////
-
-				// 데이터 배열을 순회하면서 모든 c_id를 배열에 추가
-				var obj = data.response;
-				console.log("testData::" + obj);
-
-				for (var i = 0; i < obj.length; i++) {
-					console.log("data[i]::" + obj[i].c_id);
-					jiraCheckId.push(obj[i].c_id);
-				}
-
-				console.table(obj);
-				console.log(obj.c_id);
-				console.log(jiraCheckId);
-			}
-		}
-	});
-}
-
-// -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
-	// 기존 클릭 이벤트 리스너 제거
-	$('input[name="jiraVerList"]').off("click");
-
-	// 새로운 클릭 이벤트 리스너 추가
-	$('input[name="jiraVerList"]').on("click", function () {
-		var isChecked = $(this).prop("checked");
-		// var checkboxValue = $(this).val();
-		var checkboxValue = parseInt($(this).val()); // 문자열을 정수로 변환
-
-		if (isChecked) {
-			// 체크 박스가 체크되면 배열에 정보를 추가
-			jiraCheckId.push(checkboxValue);
-			console.log("isChecked:::" + isChecked);
-		} else {
-			// 체크 박스가 해제되면 배열에서 정보를 제거
-			var index = jiraCheckId.indexOf(checkboxValue);
-			if (index !== -1) {
-				jiraCheckId.splice(index, 1);
-			}
-			console.log("isChecked::delete:" + isChecked);
-		}
-
-		// 배열에 담긴 정보 확인
-		console.log("jiraCheckId:", jiraCheckId);
-	});
+	console.log("dataTableClick")
 }
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(settings, json) {
-	console.log("데이터테이블콜백");
 	setDocViewTab();
-	//상세보기 탭 셋팅
-	//setDetailAndEditViewTab();
-
-	// $('input[name="jiraVerList"]').click(function () {
-	// 	var allPages = tempDataTable.cells().nodes();
-	// 	if ($("#checkall").val() == "on") {
-	// 		$("#checkall").prop("checked", false);
-	// 	}
-	// });
-
-	$('input[name="jiraVerList"]').on("click", function () {
-		var isChecked = $(this).prop("checked");
-		var checkboxValue = parseInt($(this).val()); // 문자열을 정수로 변환
-
-		if (isChecked) {
-			// 체크 박스가 체크되면 배열에 정보를 추가
-			jiraCheckId.push(checkboxValue);
-		} else {
-			// 체크 박스가 해제되면 배열에서 정보를 제거
-			var index = jiraCheckId.indexOf(checkboxValue);
-			if (index !== -1) {
-				jiraCheckId.splice(index, 1);
-			}
-		}
-
-		// 배열에 담긴 정보 확인
-		console.log("jiraCheckId:", jiraCheckId);
-	});
 }
 
 function dataTableDrawCallback(tableInfo) {

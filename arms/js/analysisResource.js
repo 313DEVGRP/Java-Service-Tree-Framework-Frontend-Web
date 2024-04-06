@@ -443,15 +443,12 @@ function dataTableClick(tempDataTable, selectedData) {
 
 //데이터 테이블 그리고 난 후 시퀀스 이벤트
 function dataTableCallBack(settings, json) {
-    console.log("check");
+    console.log("dataTableCallBack");
 }
 
 //데이터 테이블 그리고 난 후 시퀀스 이벤트
 function dataTableDrawCallback(tableInfo) {
-    /*$("#" + tableInfo.sInstance)
-        .DataTable()
-        .columns.adjust()
-        .responsive.recalc();*/
+    console.log("dataTableDrawCallback");
 }
 
 
