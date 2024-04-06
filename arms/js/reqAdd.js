@@ -122,9 +122,6 @@ function execDocReady() {
 			makeDatePicker($("#btn_start_calendar_popup"));
 			makeDatePicker($("#btn_end_calendar_popup"));
 
-			// jira 서버 정보 데이터 테이블 셋팅
-			//datatables_jira_project();
-
 			autoCompleteForUser();
 
 			selected_after_action_for_select2();
@@ -137,7 +134,6 @@ function execDocReady() {
 			click_btn_for_connect_req_jira();
 
 			save_req();
-			//jiraProjectConnectionInfo();
 
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			//save_req
@@ -395,10 +391,24 @@ function jsTreeClick(selectedNode) {
 		$("#folder_tab").get(0).click();
 		$(".newReqDiv").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
+
+		$("#req_edit_layer_version").hide();
+		$("#req_edit_layer_id").hide();
+		$("#req_edit_layer_priority").hide();
+		$("#req_edit_layer_difficulty").hide();
+		$("#req_edit_layer_state").hide();
+		$("#req_edit_layer_plantime").hide();
+		$("#req_edit_layer_writer").hide();
+		$("#req_edit_layer_write_date").hide();
+		$("#req_edit_layer_reviewers").hide();
+		$("#req_edit_layer_req_contents").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
+
+		//상세보기 탭 셋팅
+		setDetailAndEditViewTab();
 
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
@@ -408,6 +418,17 @@ function jsTreeClick(selectedNode) {
 		$("#default_tab").get(0).click();
 		$(".newReqDiv").hide();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").show(); //상세보기
+
+		$("#req_edit_layer_version").show();
+		$("#req_edit_layer_id").show();
+		$("#req_edit_layer_priority").show();
+		$("#req_edit_layer_difficulty").show();
+		$("#req_edit_layer_state").show();
+		$("#req_edit_layer_plantime").show();
+		$("#req_edit_layer_writer").show();
+		$("#req_edit_layer_write_date").show();
+		$("#req_edit_layer_reviewers").show();
+		$("#req_edit_layer_req_contents").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
