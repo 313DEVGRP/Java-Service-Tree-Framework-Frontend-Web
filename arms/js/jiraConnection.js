@@ -259,8 +259,6 @@ function dataLoad(getSelectedText, selectedText) {
 
 
         //updateD3ByVersionList();
-        console.log("===========================================");
-
         setTimeout(function () {
             $("#pdService_Version_First_Child").trigger("click");
         }, 500);
