@@ -1925,3 +1925,21 @@ svg .ghostCircle.show {
 	width: 30px;
 	line-height: 30px;
 }
+
+/* 칸반 보드 */
+.kanban-top {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.kanban-top:last-child {
+    margin-bottom: 0;
+}
+
+.kanban-container {
+   color: black;
+}
+
+.kanban-drag {
+    min-height: 550px !important;
+}

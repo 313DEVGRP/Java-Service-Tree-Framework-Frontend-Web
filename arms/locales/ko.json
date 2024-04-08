@@ -10,10 +10,11 @@
 		},
 		"requirement": {
 			"q": "요구 관리",
-			"s": "현황 관리"
+			"s": "현황 관리",
+			"g": "간트 차트. Gantt",
+			"k": "칸반 보드. Kanban"
 		},
 		"analysis": {
-			"g": "간트 차트. Gantt",
 			"t": "일정 분석. Time",
 			"s": "범위 분석. Scope",
 			"r": "자원 분석. Resource",
