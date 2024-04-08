@@ -6,7 +6,8 @@ var TopMenuApi = (function () {
     * */
     // MySQL - 요구사항(DB)의 상태
     var req_state_data = {
-        "total" : 0,   // 총합
+        "total" : 0,    // 총합
+        "folder" : 0,   // 폴더타입
         "not-open" : 0, // 열림 제외(진행중, 해결됨, 닫힘)
         "resolved-and-closed" : 0, // 해결됨+닫힘
         "open" : 0,        // 열림
@@ -31,9 +32,17 @@ var TopMenuApi = (function () {
 
 
     var resource = {
-        "total" : null,
-        "resourceInfo" : null
+        "resource" : 0,
+        "req_total" : 0,
+        "sub_total" : 0,
+        "req_max" : null,
+        "req_avg" : null,
+        "req_min" : null,
+        "sub_max" : null,
+        "sub_avg" : null,
+        "sub_min" : null
     };
+
 
     var pullTotalApi = function(pdService_id, pdServiceVersionLinks) {
         return Promise.all([
@@ -57,6 +66,7 @@ var TopMenuApi = (function () {
     //////////////////////////////////
     var setReqStateData = function (result) {
         req_state_data["total"] = (result["total"] ? result["total"] : 0);
+        req_state_data["folder"] = (result["folder"] ? result["folder"] : 0);
         req_state_data["open"] = (result["open"] ? result["open"] : 0);
         req_state_data["in-progress"] = (result["in-progress"]  ? result["in-progress"] : 0);
         req_state_data["resolved"] = (result["resolved"] ? result["resolved"] : 0);
@@ -127,9 +137,6 @@ var TopMenuApi = (function () {
                                             가장늦은종료날짜 = 버전목록[i]["c_pds_version_end_date"];
                                         }
                                     }
-                                    console.log(i);
-                                    console.log(가장이른시작날짜);
-                                    console.log(가장늦은종료날짜);
                                 }
                             }
 
@@ -207,15 +214,44 @@ var TopMenuApi = (function () {
     };
 
     var setResourceInfo = function (result) {
-        const keyCount = Object.keys(result).length;
-        resource["total"] = keyCount;
-        resource["resourceInfo"] = result;
+        resource["resource"] = result["resource"];
+        resource["req_total"] = result["req"];
+        resource["sub_total"] = result["subtask"];
+        resource["req_max"] = result["req_max"];
+        resource["req_avg"] = (result["resource"] !== 0 ? (result["req"] / result["resource"]).toFixed(1) : " - ");
+        resource["req_min"] = result["req_min"];
+        resource["sub_max"] = result["sub_max"];
+        resource["sub_avg"] = (result["resource"] !== 0 ? (result["subtask"] / result["resource"]).toFixed(1) : " - ");
+        resource["sub_min"] = result["sub_min"];
     };
 
     var getResourceInfo = function() {
         return resource;
     };
 
+    var 톱메뉴_초기화 = function 톱메뉴_초기화() {
+        $("#remaining_days").text(" - ");
+        $("#progressDateRate").text(" - ");
+        $("#req_in_action_count").text(" - ");// 작업중
+        $("#req_count").text(" - "); 						// 작업대상
+        $("#req_progress").text(" - "); // 진척도
+        $("#total_req_issue_count").text(" - ");  // 생성된 요구사항 이슈
+        $("#no_assigned_req_issue_count").text(" - "); // 생성된 요구사항 이슈(미할당)
+        $("#total_linkedIssue_subtask_count").text(" - "); //생성한 연결이슈
+        $("#no_assigned_linkedIssue_subtask_count").text(" - "); //생성한 연결이슈(미할당)
+        //전체 일정
+        $("#start_date_summary").text(" - ");
+        $("#end_date_summary").text(" - ");
+        $("#expected_end_date").text(" - ");
+        //작업자수
+        $("#resource").text(" - ");
+        $("#req_max").text(" - ");
+        $("#req_avg").text(" - ");
+        $("#req_min").text(" - ");
+        $("#sub_max").text(" - ");
+        $("#sub_avg").text(" - ");
+        $("#sub_min").text(" - ");
+    }
 
     return {
         pullTotalApi,
@@ -223,6 +259,7 @@ var TopMenuApi = (function () {
         versionPeriod,  getVersionPeriod,
         reqAndSubtaskIssue, getReqAndSubtaskIssue,
         resourceInfo,   getResourceInfo,
-        getReqProgress
+        getReqProgress,
+        톱메뉴_초기화
     }
 })(); //즉시실행 함수
