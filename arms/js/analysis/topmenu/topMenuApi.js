@@ -7,8 +7,13 @@ var TopMenuApi = (function () {
     // MySQL - 요구사항(DB)의 상태
     var req_state_data = {
         "total" : 0,   // 총합
-        "open" : 0,    // 열림
-        "not-open" : 0 // 열림 제외(진행중, 해결됨, 닫힘)
+        "not-open" : 0, // 열림 제외(진행중, 해결됨, 닫힘)
+        "resolved-and-closed" : 0, // 해결됨+닫힘
+        "open" : 0,        // 열림
+        "in-progress" : 0, // 진행중
+        "resolved" : 0,    // 해결됨
+        "closed" : 0       // 닫힘
+
     };
     // Version 시작일, 종료일
     var period_date = {
@@ -25,7 +30,6 @@ var TopMenuApi = (function () {
     };
 
 
-    // 작업자수 - 필요할까?
     var resource = {
         "total" : null,
         "resourceInfo" : null
@@ -40,14 +44,25 @@ var TopMenuApi = (function () {
         ]);
     };
 
-
+    var getReqProgress = function () {
+        let state_data = getReqStateData();
+        if (state_data["total"] !== 0 || !isNaN(state_data["total"])) {
+            return (( state_data["resolved-and-closed"] / state_data["total"] ) * 100 ).toFixed(1);
+        } else {
+            return " - (invalid)";
+        }
+    }
     //////////////////////////////////
     // 요구사항(DB)의 상태 - Application
     //////////////////////////////////
     var setReqStateData = function (result) {
         req_state_data["total"] = (result["total"] ? result["total"] : 0);
         req_state_data["open"] = (result["open"] ? result["open"] : 0);
-        req_state_data["not-open"] = (result["not-open"] ? result["not-open"] : 0);
+        req_state_data["in-progress"] = (result["in-progress"]  ? result["in-progress"] : 0);
+        req_state_data["resolved"] = (result["resolved"] ? result["resolved"] : 0);
+        req_state_data["closed"] = (result["closed"] ? result["closed"] : 0);
+        req_state_data["not-open"] = result["total"] - req_state_data["open"];
+        req_state_data["resolved-and-closed"] = req_state_data["resolved"] + req_state_data["closed"];
     };
 
     var getReqStateData = function () {
@@ -207,6 +222,7 @@ var TopMenuApi = (function () {
         reqStateData,   getReqStateData,
         versionPeriod,  getVersionPeriod,
         reqAndSubtaskIssue, getReqAndSubtaskIssue,
-        resourceInfo,   getResourceInfo
+        resourceInfo,   getResourceInfo,
+        getReqProgress
     }
 })(); //즉시실행 함수
