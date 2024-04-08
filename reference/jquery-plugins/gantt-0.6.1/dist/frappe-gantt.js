@@ -604,18 +604,18 @@ var Gantt = (function () {
         update_bar_position({ x = null, width = null }) {
             const bar = this.$bar;
             if (x) {
-                // get all x values of parent task
-                const xs = this.task.dependencies.map((dep) => {
-                    return this.gantt.get_bar(dep).$bar.getX();
-                });
-                // child task must not go before parent
-                const valid_x = xs.reduce((prev, curr) => {
-                    return x >= curr;
-                }, x);
-                if (!valid_x) {
-                    width = null;
-                    return;
-                }
+                // // get all x values of parent task
+                // const xs = this.task.dependencies.map((dep) => {
+                //     return this.gantt.get_bar(dep).$bar.getX();
+                // });
+                // // child task must not go before parent
+                // const valid_x = xs.reduce((prev, curr) => {
+                //     return x >= curr;
+                // }, x);
+                // if (!valid_x) {
+                //     width = null;
+                //     return;
+                // }
                 this.update_attr(bar, 'x', x);
             }
             if (width && width >= this.gantt.options.column_width) {
