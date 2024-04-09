@@ -1636,7 +1636,7 @@ function setGanttTasks(data) {
 				name: cur.c_title,
 				start: getDate(cur.c_req_start_date),
 				end: getDate(cur.c_req_end_date),
-				progress: cur.c_req_plan_progress || 0,
+				progress: cur.c_req_plan_progress || 1,
 				dependencies: dependencies,
 				priority: cur.state,
 				custom_class: cur.status, // optional
@@ -1751,7 +1751,8 @@ function initGantt(data) {
 						c_req_total_resource: dateDiff.diffMonth,
 						c_req_plan_resource: dateDiff.diffMonth,
 						c_req_total_time: dateDiff.dayDiff,
-						c_req_plan_time: dateDiff.dayDiff
+						c_req_plan_time: dateDiff.dayDiff,
+						c_req_plan_progress: 10
 					},
 					{
 						start: getDate(start),
@@ -1759,7 +1760,8 @@ function initGantt(data) {
 						tmm: dateDiff.diffMonth,
 						p_work: dateDiff.diffMonth,
 						t_period: dateDiff.dayDiff,
-						tpp: dateDiff.dayDiff
+						tpp: dateDiff.dayDiff,
+						progress: 20
 					}
 				);
 			},
