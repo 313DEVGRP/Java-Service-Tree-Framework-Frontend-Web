@@ -3,15 +3,28 @@ import { $ } from './svg_utils';
 export default class Table {
     dragStartY = 0;
     constructor(gantt, columns) {
+
+        console.log("[Table :: constructor]");
+        console.table(gantt);
+        console.table(columns);
+
         this.set_defaults(gantt, columns);
     }
 
     set_defaults(gantt, columns) {
+
+        console.log("[Table :: set_defaults]");
+        console.table(gantt);
+        console.table(columns);
+
         this.gantt = gantt;
         this.columns = columns;
     }
 
     draw_table_header() {
+
+        console.log("[Table :: draw_table_header]");
+
         const $thead = document.createElement('thead');
         const $tr = document.createElement('tr');
 
@@ -31,11 +44,20 @@ export default class Table {
     }
 
     get_parentNode(tag, target) {
+
+        console.log("[Table :: get_parentNode]");
+        console.table(tag);
+        console.table(target);
+
         if (target.tagName === tag.toUpperCase()) return target;
         return this.get_parentNode(tag, target.parentNode);
     }
 
     draw_table_body(tasks) {
+
+        console.log("[Table :: draw_table_body]");
+        console.table(tasks);
+
         this.tasks = this.gantt.setGroupPosition(tasks);
 
         const $tbody = document.createElement('tbody');
@@ -54,6 +76,10 @@ export default class Table {
     }
 
     isRowLine(id) {
+
+        console.log("[Table :: isRowLine]");
+        console.table(id);
+
         if (id <= 2) return false;
         const target = this.tasks.find((t) => t.id === `${id}`);
 
@@ -61,6 +87,9 @@ export default class Table {
     }
 
     make_table_row() {
+
+        console.log("[Table :: make_table_row]");
+
         return this.tasks.map((task, index) => {
             const deps = task.level - 1;
             const $tr = document.createElement('tr');
@@ -156,6 +185,11 @@ export default class Table {
     }
 
     get_drag_after_element(container, y) {
+
+        console.log("[Table :: get_drag_after_element]");
+        console.table(container);
+        console.table(y);
+
         const draggableElements = [
             ...container.querySelectorAll('tr:not(.dragging)'),
         ];
@@ -175,10 +209,18 @@ export default class Table {
     }
 
     find_task_item(id) {
+
+        console.log("[Table :: find_task_item]");
+        console.table(id);
+
         return this.tasks.find((t) => t.id === id);
     }
 
     bind_draggable_event($tbody) {
+
+        console.log("[Table :: bind_draggable_event]");
+        console.table($tbody);
+
         $tbody.addEventListener('dragover', (e) => {
             e.preventDefault();
             if (!this.dragStartY) this.dragStartY = e.clientY;

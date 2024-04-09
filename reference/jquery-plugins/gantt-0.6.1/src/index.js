@@ -1025,6 +1025,9 @@ export default class Gantt {
         }
 
         $.on(this.$svg, 'mousedown', '.bar-wrapper, .handle', (e, element) => {
+
+            console.log ( "[gantt-0.6.1 :: mousedown]");
+
             const bar_wrapper = $.closest('.bar-wrapper', element);
 
             if (element.classList.contains('left')) {
@@ -1041,9 +1044,12 @@ export default class Gantt {
             y_on_start = e.offsetY;
 
             parent_bar_id = bar_wrapper.getAttribute('data-id');
+            // const ids = [
+            //     parent_bar_id,
+            //     ...this.get_all_dependent_tasks(parent_bar_id),
+            // ];
             const ids = [
-                parent_bar_id,
-                ...this.get_all_dependent_tasks(parent_bar_id),
+                parent_bar_id
             ];
             bars = ids.map((id) => this.get_bar(id));
 
@@ -1059,6 +1065,9 @@ export default class Gantt {
         });
 
         $.on(this.$svg, 'mousemove', (e) => {
+
+            console.log ( "[gantt-0.6.1 :: mousemove]");
+
             if (!action_in_progress()) return;
             const dx = e.offsetX - x_on_start;
             const dy = e.offsetY - y_on_start;

@@ -1740,6 +1740,9 @@ function initGantt(data) {
 				console.log("Update End Date :: ", end);
 				var dateDiff = handle_change_date(start, end);
 
+				console.log ("[ reqGantt :: initGantt ]");
+				console.table(task);
+
 				updateNode(
 					{
 						c_id: task.id,
