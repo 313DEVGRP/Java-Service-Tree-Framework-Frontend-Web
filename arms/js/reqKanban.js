@@ -1,8 +1,11 @@
+let selectedPdServiceId; // 제품(서비스) 아이디
+let selectedVersionId; // 선택된 버전 아이디
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 function execDocReady() {
-    var pluginGroups = [
+    let pluginGroups = [
         [
             "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
@@ -54,8 +57,8 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            // 칸반 보드 띄우기
-            loadKanban();
+            // 빈 칸반 보드
+            emptyKanban();
 
         })
         .catch(function (e) {
@@ -83,17 +86,17 @@ function makePdServiceSelectBox() {
         statusCode: {
             200: function(data) {
                 //////////////////////////////////////////////////////////
-                pdServiceListData = [];
                 for (var k in data.response) {
                     var obj = data.response[k];
-                    pdServiceListData.push({ "pdServiceId": obj.c_id, "pdServiceName": obj.c_title });
                     var newOption = new Option(obj.c_title, obj.c_id, false, false);
                     $("#selected_pdService").append(newOption).trigger("change");
                 }
                 //////////////////////////////////////////////////////////
-                console.log("[analysisCost :: makePdServiceSelectBox] :: pdServiceListData => ");
-                console.log(pdServiceListData);
+                jSuccess("제품(서비스) 조회가 완료 되었습니다.");
             }
+        },
+        error: function (e) {
+            jError("제품(서비스) 조회 중 에러가 발생했습니다.");
         }
     });
 
@@ -118,24 +121,7 @@ function makePdServiceSelectBox() {
 ////////////////////////////////////////
 function makeVersionMultiSelectBox() {
     //버전 선택시 셀렉트 박스 이니시에이터
-    $(".multiple-select").multipleSelect({
-        filter: true,
-        onClose: function() {
-            console.log("onOpen event fire!\n");
-
-            var checked = $("#checkbox1").is(":checked");
-            var endPointUrl = "";
-            var versionTag = $(".multiple-select").val();
-            console.log("[ analysisCost :: makeVersionMultiSelectBox ] :: versionTag");
-            console.log(versionTag);
-            selectedVersionId = versionTag.join(",");
-
-            if (versionTag === null || versionTag == "") {
-                jError("버전이 선택되지 않았습니다.");
-                return;
-            }
-        }
-    });
+    $(".multiple-select").multipleSelect();
 }
 
 function bind_VersionData_By_PdService() {
@@ -148,18 +134,17 @@ function bind_VersionData_By_PdService() {
         statusCode: {
             200: function (data) {
                 //////////////////////////////////////////////////////////
-                var pdServiceVersionIds = [];
                 for (var k in data.response) {
                     var obj = data.response[k];
-                    pdServiceVersionIds.push(obj.c_id);
-                    var newOption = new Option(obj.c_title, obj.c_id, true, false);
+                    var newOption = new Option(obj.c_title, obj.c_id, false, false);
                     $(".multiple-select").append(newOption);
                 }
 
                 if (data.length > 0) {
-                    console.log("[ reqAdd :: bind_VersionData_By_PdService ] :: result = display 재설정.");
+                    console.log("[ reqKanban :: bind_VersionData_By_PdService ] :: result = display 재설정.");
                 }
                 $(".multiple-select").multipleSelect("refresh");
+                jSuccess("버전 조회가 완료 되었습니다.");
                 //////////////////////////////////////////////////////////
             }
         },
@@ -169,9 +154,50 @@ function bind_VersionData_By_PdService() {
     });
 }
 
-function loadKanban() {
+////////////////////////////////////////////////////////////////////////////////////////
+//제품(서비스) 선택 후, 버전을 선택하면 동작하는 함수
+////////////////////////////////////////////////////////////////////////////////////////
+function changeMultipleSelected() {
+    let result = [];
+    let versionIds = [];
+    $("#multiversion option:selected").map(function (a, item) {
+        //result.push(item.innerText);
+        versionIds.push(item.value);
+    });
+    selectedVersionId = versionIds;
+    //$("#select_Version").text(isEmpty(result) ? "선택되지 않음" : result);
+    console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 제품 = " + selectedPdServiceId);
+    console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 버전 = " + selectedVersionId);
 
-    var kanban = new jKanban({
+    // selectedVersionId로 선택한 제품(서비스)를 구분하고
+    // version 정보를 매핑해서 요구사항 이슈 가져오기
+    $.ajax({
+        url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
+            selectedPdServiceId +
+            "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
+            selectedVersionId,
+        type: "GET",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function (data) {
+                console.log("리스트!!!: " + JSON.stringify(data));
+
+                let reqList = data.map(item => ({ title: item.c_title }));
+                loadKanban(reqList);
+            }
+        },
+        error: function (e) {
+            jError("버전 조회 중 에러가 발생했습니다.");
+        }
+    });
+}
+
+function loadKanban(reqList) {
+
+    $("#myKanban").empty();
+
+    let kanban = new jKanban({
         element : '#myKanban',
         gutter  : '15px',
         click : function(el){
@@ -181,61 +207,51 @@ function loadKanban() {
             {
                 'id' : 'kanban_open',
                 'title'  : '열림',
-                'class' : 'info',
-                'item'  : [
-                    {
-                        'title': 'open'
-                    }
-                ]
+                'item'  : reqList
             },
             {
                 'id' : 'kanban_progress',
-                'title'  : '진행 중',
-                'class' : 'warning',
-                'item'  : [
-                    {
-                        'title':'Do Something!',
-                    },
-                    {
-                        'title':'Run?',
-                    }
-                ]
+                'title'  : '진행 중'
             },
             {
                 'id' : 'kanban_resolved',
-                'title'  : '해결됨',
-                'class' : 'warning',
-                'item'  : [
-                    {
-                        'title':'Resolve Issue!',
-                    },
-                    {
-                        'title':'Good',
-                    }
-                ]
+                'title'  : '해결됨'
             },
             {
                 'id' : 'kanban_closed',
-                'title'  : '닫힘',
-                'class' : 'warning',
-                'item'  : [
-                    {
-                        'title':'All right',
-                    },
-                    {
-                        'title':'Ok!',
-                    }
-                ]
+                'title'  : '닫힘'
             }
         ]
     });
 }
 
-function adjustHeight() {
-	var verticalTimeline = $('#vertical-timeline');
-	var updateRidgeLine = $('#updateRidgeLine');
+function emptyKanban() {
 
-	if (verticalTimeline && updateRidgeLine) {
-		verticalTimeline.height(updateRidgeLine.height() + 20);
-	}
+    $("#myKanban").empty();
+
+    let kanban = new jKanban({
+        element : '#myKanban',
+        gutter  : '15px',
+        click : function(el){
+            alert(el.innerHTML);
+        },
+        boards  :[
+            {
+                'id' : 'kanban_open',
+                'title'  : '열림'
+            },
+            {
+                'id' : 'kanban_progress',
+                'title'  : '진행 중'
+            },
+            {
+                'id' : 'kanban_resolved',
+                'title'  : '해결됨'
+            },
+            {
+                'id' : 'kanban_closed',
+                'title'  : '닫힘'
+            }
+        ]
+    });
 }
