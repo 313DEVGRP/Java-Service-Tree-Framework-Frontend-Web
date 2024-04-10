@@ -406,6 +406,32 @@ var TopMenuApi = (function () {
           });
     }
 
+    const calDateDiff = (d1, d2) => {
+        const date1 = new Date(d1); // ISO 형식으로 변환하여 생성자에 전달합니다.
+        const date2 = new Date(d2);
+
+        if (isNaN(date1.getTime()) || isNaN(date2.getTime())) {
+            console.error("유효하지 않은 날짜 형식입니다.");
+            console.log(date1.getTime());
+            console.log(date2.getTime());
+            return NaN;
+        }
+
+        let startDate, endDate;
+        if (date1 < date2) {
+            startDate = date1;
+            endDate = date2;
+        } else {
+            startDate = date2;
+            endDate = date1;
+        }
+
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        return diffDays;
+    }
+
     return {
         pullTotalApi,
         reqStateData,   getReqStateData,
