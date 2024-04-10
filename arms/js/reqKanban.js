@@ -210,6 +210,8 @@ function loadKanban(reqList) {
     let kanban = new jKanban({
         element : '#myKanban',
         gutter  : '15px',
+        responsivePercentage: true,
+        dragBoards: false,
         /*click : function(el){
             alert(el.innerHTML);
         },*/
@@ -247,8 +249,10 @@ function emptyKanban() {
     $("#myKanban").empty();
 
     let kanban = new jKanban({
-        element : '#myKanban',
-        gutter  : '15px',
+        element : '#myKanban',          // 칸반 보드 선택자
+        gutter  : '15px',               // 보드 간 간격
+        responsivePercentage: true,     // 반응형 여부
+        dragBoards: false,              // 보드 drag 가능 여부
         click : function(el){
             alert(el.innerHTML);
         },
