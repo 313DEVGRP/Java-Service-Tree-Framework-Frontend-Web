@@ -221,16 +221,19 @@ function productCostChart() {
                 var responseMap = apiResponse.response;
                 var line = responseMap.line;
                 var bar = responseMap.bar;
+                var candleStick = responseMap.candleStick;
                 console.log(" [ analysisCost :: line ] :: response data -> " + JSON.stringify(line));
                 console.log(" [ analysisCost :: bar ] :: response data -> " + JSON.stringify(bar));
+                console.log(" [ analysisCost :: candleStick ] :: response data -> " + JSON.stringify(candleStick));
                 var maxCost = Math.max(...Object.values(line));
                 var productChartDom = document.getElementById('product-accumulate-cost-by-month');
                 $(productChartDom).height("500px");
-                var mymChart = echarts.init(productChartDom);
+                var productCostChart = echarts.init(productChartDom);
                 var option;
                 var dates = Object.keys(line);
                 var lineCosts = Object.values(line);
                 var barCosts = Object.values(bar);
+                var candleStickCosts = Object.values(candleStick);
                 option = {
                     dataZoom: [{
                         type: 'slider',
@@ -242,37 +245,73 @@ function productCostChart() {
                         formatter: function(params) {
                             var lineTooltip = new Intl.NumberFormat().format(params[0].value);
                             var barTooltip = new Intl.NumberFormat().format(params[1].value);
-                            return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip;
+                            var candleStickTooltip = params[2] ? params[2].value : null;
+                            var candleText = '';
+                            if (candleStickTooltip) {
+                                var 시가 = new Intl.NumberFormat().format(candleStickTooltip[1]);
+                                var 종가 = new Intl.NumberFormat().format(candleStickTooltip[2]);
+                                var 최저가 = new Intl.NumberFormat().format(candleStickTooltip[3]);
+                                var 최고가 = new Intl.NumberFormat().format(candleStickTooltip[4]);
+                                candleText = `시가: ${시가}<br>종가: ${종가}<br>최저가: ${최저가}<br>최고가: ${최고가}`;
+                                return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip + (candleText ? '<br>' + candleText : '');
+                            } else {
+                                return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip;
+                            }
                         }
                     },
                     xAxis: {
                         type: 'category',
                         data: dates
                     },
-                    yAxis: {
-                        type: 'value',
-                        min: 0,
-                        max: maxCost,
-                        interval: Math.floor(maxCost / 10)
-                    },
+                    yAxis: [
+                        {
+                            type: 'value',
+                            min: 0,
+                            max: maxCost,
+                            interval: Math.floor(maxCost / 10),
+                            name: '누적 성과 비용'
+                        },
+                        {
+                            type: 'value',
+                            scale: true,
+                            name: '총 연봉 비용 변동 추이'
+                        }
+                    ],
+
                     legend: {
-                        data: ['성과 기준선', '비용']
+                        data: ['누적 성과 기준선', '누적 성과 비용', '총 연봉 비용 변동 추이']
                     },
                     series: [{
-                        name: '성과 기준선',
+                        name: '누적 성과 기준선',
                         data: lineCosts,
                         type: 'line',
+                        yAxisIndex: 0
                     }, {
-                        name: '비용',
+                        name: '누적 성과 비용',
                         data: barCosts,
                         type: 'bar',
+                        yAxisIndex: 0
+                    },
+                    {
+                        name: '총 연봉 비용 변동 추이',
+                        type: 'candlestick',
+                        data: candleStickCosts,
+                        yAxisIndex: 1,
+                        itemStyle: {
+                            color: 'red', // 양봉 색상
+                            color0: 'blue', // 음봉 색상
+                            borderColor: 'red', // 테두리 색상
+                            borderColor0: 'blue', // 음봉 테두리 색상
+                            // borderWidth: 3, // 테두리 두께
+                        },
+                        // barWidth: 3, // 캔들 가로 두께
                     }]
                 };
 
                 if (option && typeof option === 'object') {
-                    mymChart.setOption(option);
+                    productCostChart.setOption(option);
                 }
-                window.addEventListener('resize', mymChart.resize);
+                window.addEventListener('resize', productCostChart.resize);
             }
         }
     });
