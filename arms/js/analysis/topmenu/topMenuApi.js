@@ -43,6 +43,11 @@ var TopMenuApi = (function () {
         "sub_min" : null
     };
 
+    var expectedEndDate = {
+        "text" : null,
+        "css_color" : null
+    };
+
 
     var pullTotalApi = function(pdService_id, pdServiceVersionLinks) {
         return Promise.all([
@@ -229,12 +234,13 @@ var TopMenuApi = (function () {
         return resource;
     };
 
-    var 톱메뉴_초기화 = function 톱메뉴_초기화() {
+    function 톱메뉴_초기화() {
         $("#remaining_days").text(" - ");
         $("#progressDateRate").text(" - ");
         $("#req_in_action_count").text(" - ");// 작업중
         $("#req_count").text(" - "); 						// 작업대상
         $("#req_progress").text(" - "); // 진척도
+        $("#req_completed").text(" - "); // 완료된_요구사항(resolved+closed)
         $("#total_req_issue_count").text(" - ");  // 생성된 요구사항 이슈
         $("#no_assigned_req_issue_count").text(" - "); // 생성된 요구사항 이슈(미할당)
         $("#total_linkedIssue_subtask_count").text(" - "); //생성한 연결이슈
@@ -242,7 +248,7 @@ var TopMenuApi = (function () {
         //전체 일정
         $("#start_date_summary").text(" - ");
         $("#end_date_summary").text(" - ");
-        $("#expected_end_date").text(" - ");
+        $("#expected_end_date").text(" - ").css("color", "");
         //작업자수
         $("#resource").text(" - ");
         $("#req_max").text(" - ");
@@ -251,6 +257,153 @@ var TopMenuApi = (function () {
         $("#sub_max").text(" - ");
         $("#sub_avg").text(" - ");
         $("#sub_min").text(" - ");
+
+        let radarChart = echarts.getInstanceByDom(document.getElementById("radarPart"));
+        if(radarChart) { radarChart.dispose(); }
+    }
+
+
+
+    var getExpectedEndDate = function () {
+        return expectedEndDate;
+    }
+
+    var setExpectedEndDate = function (result) {
+        expectedEndDate["text"] = (result["text"] ? result["text"] : null);
+        expectedEndDate["css_color"] = (result["css_color"] ? result["css_color"] : null);
+    }
+
+    var calExpectedEndDate = function (pdServiceLink, pdServiceVersionLinks, all_req_count, total_days_progress) {
+
+        return new Promise((resolve) => {
+            let totalDaysProgress = (total_days_progress ? total_days_progress : undefined);
+
+            const url = new UrlBuilder()
+              .setBaseUrl("/auth-user/api/arms/analysis/top-menu/normal-version/resolution")
+              .addQueryParam("pdServiceLink", pdServiceLink)
+              .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
+              .addQueryParam("isReqType", "REQUIREMENT")
+              .addQueryParam("resolution", "resolutiondate")
+              .addQueryParam("메인그룹필드", "isReq")
+              .addQueryParam("크기", 1000)
+              .addQueryParam("컨텐츠보기여부", true)
+              .build();
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                progress: true,
+                statusCode: {
+                    200: async function (data) {
+                        console.log("[ topMenu :: getExpectedEndDate ] :: Resolution 개수 확인 = " + data.전체합계);
+                        console.log("[ topMenuAPI :: getExpectedEndDate ] :: 전체 할당된 요구사항 개수 = " + all_req_count);
+                        let resultData = {
+                            "text" : null,
+                            "css_color" : null
+                        };
+                        if (data.전체합계 !== 0) {
+                            let workingRatio = (data.전체합계 / all_req_count) * 100;
+                            if (all_req_count === data.전체합계) {
+                                resultData["text"] = "작업_완료";
+                                resultData["css_color"] = "rgb(45, 133, 21)";
+                                //$("#expected_end_date").text("작업 완료");
+                            }
+                            else {
+                                console.log("totalDaysProgress : " + totalDaysProgress);
+                                let result = Math.abs((100 / workingRatio) * totalDaysProgress).toFixed(0);
+                                resultData["text"] = addDaysToDate(result);
+                                resultData["css_color"] = "rgb(164,198,255)";
+                            }
+                        }
+                        else {
+                            resultData["text"] = "예측 불가";
+                            resultData["css_color"] = "rgb(219, 42, 52)";
+                        }
+                        setExpectedEndDate(resultData);
+                        resolve();
+                    }
+                }
+            });
+        });
+
+    };
+
+    function addDaysToDate(daysToAdd) {
+        var currentDate = new Date(); // 현재 날짜 가져오기
+        var targetDate = new Date(currentDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000)); // 대상 날짜 계산
+
+        // 대상 날짜를 년, 월, 일로 분리
+        var year = targetDate.getFullYear();
+        var month = targetDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+        var day = targetDate.getDate();
+
+        return year + "년 " + month + "월 " + day + "일"; // 결과 반환
+    }
+
+    function 톱메뉴_세팅() {
+        TopMenuApi.pullTotalApi(selectedPdServiceId, selectedVersionId)
+          .then(() => {
+              req_state = TopMenuApi.getReqStateData();
+              period_info = TopMenuApi.getVersionPeriod();
+              issue_info = TopMenuApi.getReqAndSubtaskIssue();
+              resource_info = TopMenuApi.getResourceInfo();
+              let objectiveDateDiff = calDateDiff(period_info["start_date"], period_info["end_date"]);
+              let currentDateDiff = calDateDiff(period_info["start_date"], new Date());
+
+              total_days_progress = currentDateDiff;
+
+              $("#progressDateRate").text((currentDateDiff*100/(objectiveDateDiff === 0 ? 1 : objectiveDateDiff)).toFixed(0)+"%");
+              let dateDiff = Math.abs(objectiveDateDiff - currentDateDiff).toFixed(0);
+              if(objectiveDateDiff>= currentDateDiff) {
+                  $("#remaining_days").text("D-"+dateDiff);
+                  $("#remaining_days").css("color","rgb(164,198,255)");
+              } else {
+                  $("#remaining_days").text("D+"+dateDiff);
+                  $("#remaining_days").css("color", "rgb(219,42,52)");
+              }
+
+              let 목표데이터_배열 = [resource_info["resource"], req_state["total"], objectiveDateDiff];
+              let 현재진행데이터_배열 = [resource_info["resource"], req_state["not-open"], currentDateDiff];
+              //레이더차트
+              drawBasicRadar("radarPart",목표데이터_배열, 현재진행데이터_배열);
+          })
+          .then(() => {
+              //범위현황
+              $("#req_in_action_count").text(req_state["not-open"]);// 작업중
+              $("#req_count").text(req_state["total"]); 						// 작업대상
+              $("#req_progress").text(TopMenuApi.getReqProgress()); // 진척도
+              $("#req_completed").text(req_state["resolved-and-closed"]);
+              $("#req_closed").text(req_state["closed"]);
+
+              $("#total_req_issue_count").text(issue_info["req"]);  // 생성된 요구사항 이슈
+              $("#no_assigned_req_issue_count").text(issue_info["req"]-resource_info["req_total"]); // 생성된 요구사항 이슈(미할당)
+              $("#total_linkedIssue_subtask_count").text(issue_info["subtask"]); //생성한 연결이슈
+              $("#no_assigned_linkedIssue_subtask_count").text(issue_info["subtask"]-resource_info["sub_total"]); //생성한 연결이슈(미할당)
+              //전체 일정
+              $("#start_date_summary").text(period_info["start_date"].substr(0,10).replaceAll("\/","-"));
+              $("#end_date_summary").text(period_info["end_date"].substr(0,10).replaceAll("\/","-"));
+              TopMenuApi.calExpectedEndDate(selectedPdServiceId, selectedVersionId,resource_info["req_total"], total_days_progress)
+                .then( () => {
+                    return TopMenuApi.getExpectedEndDate();
+                }).then(expEndDate => {
+                  $("#expected_end_date").text(expEndDate["text"]).css("color",expEndDate["css_color"]);
+              }).catch(error => {
+                  console.error("An error occurred:", error);
+              });
+              //작업자수
+              $("#resource").text(resource_info["resource"]);
+              $("#req_max").text(resource_info["req_max"]);
+              $("#req_avg").text(resource_info["req_avg"]);
+              $("#req_min").text(resource_info["req_min"]);
+              $("#sub_max").text(resource_info["sub_max"]);
+              $("#sub_avg").text(resource_info["sub_avg"]);
+              $("#sub_min").text(resource_info["sub_min"]);
+          })
+          .catch((error) => {
+              console.error('Error occurred:', error);
+          });
     }
 
     return {
@@ -260,6 +413,7 @@ var TopMenuApi = (function () {
         reqAndSubtaskIssue, getReqAndSubtaskIssue,
         resourceInfo,   getResourceInfo,
         getReqProgress,
-        톱메뉴_초기화
+        calExpectedEndDate, getExpectedEndDate,
+        톱메뉴_초기화, 톱메뉴_세팅
     }
 })(); //즉시실행 함수
