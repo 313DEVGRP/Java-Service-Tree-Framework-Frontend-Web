@@ -183,7 +183,17 @@ function changeMultipleSelected() {
             200: function (data) {
                 console.log("리스트!!!: " + JSON.stringify(data));
 
-                let reqList = data.map(item => ({ title: item.c_title }));
+                let reqList = data.map((item, index) => ({
+                    title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-index="${index}"></i>`,
+                    info: {
+                        reqVersions: "",
+                        reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
+                        reqState: (item.reqStateEntity && item.reqStateEntity.c_title) || "상태 정보 없음",
+                        reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
+                        reqPlan: item.c_req_plan_time || "예상 일정 정보 없음"
+                    }
+                }));
+
                 loadKanban(reqList);
             }
         },
@@ -200,9 +210,9 @@ function loadKanban(reqList) {
     let kanban = new jKanban({
         element : '#myKanban',
         gutter  : '15px',
-        click : function(el){
+        /*click : function(el){
             alert(el.innerHTML);
-        },
+        },*/
         boards  :[
             {
                 'id' : 'kanban_open',
@@ -222,6 +232,13 @@ function loadKanban(reqList) {
                 'title'  : '닫힘'
             }
         ]
+    });
+
+    // 상세 정보 클릭 이벤트
+    $('.show-info').click(function() {
+        const index = $(this).data('index');
+        console.log("$$ " + JSON.stringify(reqList[index].info));
+        alert(JSON.stringify(reqList[index].info));
     });
 }
 

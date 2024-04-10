@@ -1937,10 +1937,20 @@ svg .ghostCircle.show {
 }
 
 .kanban-container {
-   color: black;
+   	color: black;
+}
+
+.kanban-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
 }
 
 .kanban-drag {
-    height: 550px !important;
+	height: 550px !important;
 	overflow: auto;
+}
+
+.show-info {
+	cursor: pointer;
 }
