@@ -1,6 +1,11 @@
-let selectedPdServiceId; // 제품(서비스) 아이디
-let selectedVersionId; // 선택된 버전 아이디
-
+let selectedPdServiceId;           // 선택한 제품(서비스) 아이디
+let selectedVersionId;             // 선택한 버전 아이디
+const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
+    '열림': 'kanban-open',
+    '진행중': 'kanban-progress',
+    '해결됨': 'kanban-resolved',
+    '닫힘': 'kanban-closed'
+};
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +132,7 @@ function makeVersionMultiSelectBox() {
 function bind_VersionData_By_PdService() {
     $(".multiple-select option").remove();
     $.ajax({
-        url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
+        url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + selectedPdServiceId,
         type: "GET",
         dataType: "json",
         progress: true,
@@ -181,20 +186,46 @@ function changeMultipleSelected() {
         progress: true,
         statusCode: {
             200: function (data) {
-                console.log("리스트!!!: " + JSON.stringify(data));
 
-                let reqList = data.map((item, index) => ({
-                    title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-index="${index}"></i>`,
-                    info: {
-                        reqVersions: "",
-                        reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
-                        reqState: (item.reqStateEntity && item.reqStateEntity.c_title) || "상태 정보 없음",
-                        reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
-                        reqPlan: item.c_req_plan_time || "예상 일정 정보 없음"
+                // 요구사항 상태 별 리스트
+                const reqListByState = data.reduce((reqList, item, index) => {
+
+                    // 요구사항 상태 가져오기
+                    const state = (item.reqStateEntity && item.reqStateEntity.c_title) || "상태 정보 없음";
+
+                    // 해당 상태의 리스트가 없으면 초기화
+                    if (!reqList[state]) {
+                        reqList[state] = [];
                     }
-                }));
 
-                loadKanban(reqList);
+                    // 현재 상태에 해당하는 리스트에 아이템 추가
+                    reqList[state].push({
+                        id: state + "-" + index,
+                        title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-id="${state}-${index}" data-state="${state}"></i>`,
+                        info: {
+                            reqVersions: "",
+                            reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
+                            reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
+                            reqState: state,
+                            reqPlan: item.c_req_plan_time || "예상 일정 정보 없음"
+                        }
+                    });
+
+                    return reqList;
+                }, {});
+
+                //console.log("reqListByState: ", JSON.stringify(reqListByState));
+
+                // 칸반 보드 구성
+                const reqBoardByState = Object.keys(reqStateToIdMapping).map(state => ({
+                                            id: reqStateToIdMapping[state], // 요구사항 상태 별 id
+                                            title: state,                   // 요구사항 제목
+                                            item: reqListByState[state]     // 요구사항 상태 별 리스트
+                                        }));
+
+                // 칸반 보드 로드
+                loadKanban(reqListByState, reqBoardByState);
+                jSuccess("보드가 로드 되었습니다.");
             }
         },
         error: function (e) {
@@ -203,7 +234,7 @@ function changeMultipleSelected() {
     });
 }
 
-function loadKanban(reqList) {
+function loadKanban(reqListByState, reqBoardByState) {
 
     $("#myKanban").empty();
 
@@ -212,35 +243,21 @@ function loadKanban(reqList) {
         gutter  : '15px',
         responsivePercentage: true,
         dragBoards: false,
-        /*click : function(el){
-            alert(el.innerHTML);
-        },*/
-        boards  :[
-            {
-                'id' : 'kanban_open',
-                'title'  : '열림',
-                'item'  : reqList
-            },
-            {
-                'id' : 'kanban_progress',
-                'title'  : '진행 중'
-            },
-            {
-                'id' : 'kanban_resolved',
-                'title'  : '해결됨'
-            },
-            {
-                'id' : 'kanban_closed',
-                'title'  : '닫힘'
-            }
-        ]
+        boards  : reqBoardByState
     });
 
     // 상세 정보 클릭 이벤트
     $('.show-info').click(function() {
-        const index = $(this).data('index');
-        console.log("$$ " + JSON.stringify(reqList[index].info));
-        alert(JSON.stringify(reqList[index].info));
+        const id = $(this).data('id');
+        const state = $(this).data('state');
+
+        const item = reqListByState[state].find(item => item.id === id);
+
+        if (item && item.info) {
+            alert(JSON.stringify(item.info));
+        } else {
+            console.error('[ reqKanban :: loadKanban ] :: info 정보를 찾을 수 없습니다.', { id, state });
+        }
     });
 }
 
