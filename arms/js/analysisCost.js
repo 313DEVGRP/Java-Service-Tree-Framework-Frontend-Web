@@ -261,7 +261,12 @@ function productCostChart() {
                     },
                     xAxis: {
                         type: 'category',
-                        data: dates
+                        data: dates,
+                        axisLabel: {
+                            textStyle: {
+                                color: 'white',
+                            },
+                        },
                     },
                     yAxis: [
                         {
@@ -269,28 +274,53 @@ function productCostChart() {
                             min: 0,
                             max: maxCost,
                             interval: Math.floor(maxCost / 10),
-                            name: '누적 성과 비용'
+                            name: '누적 성과 비용',
+                            nameTextStyle: {
+                                color: 'white',
+                            },
+                            axisLabel: {
+                                textStyle: {
+                                    color: 'white',
+                                },
+                            },
                         },
                         {
                             type: 'value',
                             scale: true,
-                            name: '총 연봉 비용 변동 추이'
+                            name: '총 연봉 비용 변동 추이',
+                            nameTextStyle: {
+                                color: 'white',
+                            },
+                            axisLabel: {
+                                textStyle: {
+                                    color: 'white',
+                                },
+                            },
                         }
                     ],
 
                     legend: {
-                        data: ['누적 성과 기준선', '누적 성과 비용', '총 연봉 비용 변동 추이']
+                        data: ['누적 성과 기준선', '누적 성과 비용', '총 연봉 비용 변동 추이'],
+                        textStyle: {
+                            color: 'white',
+                        },
                     },
                     series: [{
                         name: '누적 성과 기준선',
                         data: lineCosts,
                         type: 'line',
-                        yAxisIndex: 0
+                        yAxisIndex: 0,
+                        textStyle: {
+                            color: 'white',
+                        },
                     }, {
                         name: '누적 성과 비용',
                         data: barCosts,
                         type: 'bar',
-                        yAxisIndex: 0
+                        yAxisIndex: 0,
+                        textStyle: {
+                            color: 'white',
+                        },
                     },
                     {
                         name: '총 연봉 비용 변동 추이',
@@ -303,6 +333,9 @@ function productCostChart() {
                             borderColor: 'red', // 테두리 색상
                             borderColor0: 'blue', // 음봉 테두리 색상
                             // borderWidth: 3, // 테두리 두께
+                        },
+                        textStyle: {
+                            color: 'white',
                         },
                         // barWidth: 3, // 캔들 가로 두께
                     }]
@@ -1538,12 +1571,6 @@ function jspreadsheetRender(data) {
         },
     });
 
-    var rowCount = data.length;
-
-    for(var rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-        sheet.setStyle(`C${rowIndex + 1}`, 'color', 'white');
-        // sheet.setStyle(`C${rowIndex + 1}`, 'background-color', 'orange');
-    }
 }
 
 $(document).ready(function() {
