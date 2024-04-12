@@ -3,8 +3,8 @@ let selectedVersionId;             // 선택한 버전 아이디
 const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
     '열림': 'kanban-open',
     '진행중': 'kanban-progress',
-    '해결됨': 'kanban-resolved',
-    '닫힘': 'kanban-closed'
+    '해결됨': 'kanban-resolve',
+    '닫힘': 'kanban-close'
 };
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -213,8 +213,10 @@ function changeMultipleSelected() {
 
                     return reqList;
                 }, {});
+                //console.log("[ reqKanban :: changeMultipleSelected ] :: 요구사항 상태 별 리스트 => ", JSON.stringify(reqListByState));
 
-                //console.log("reqListByState: ", JSON.stringify(reqListByState));
+                // 요구사항 개수 표시
+                setReqCount(reqListByState);
 
                 // 칸반 보드 구성
                 const reqBoardByState = Object.keys(reqStateToIdMapping).map(state => ({
@@ -232,6 +234,22 @@ function changeMultipleSelected() {
             jError("버전 조회 중 에러가 발생했습니다.");
         }
     });
+}
+
+function setReqCount(reqListByState) {
+
+    let open = (reqListByState["열림"] && reqListByState["열림"].length) || 0;
+    let progress = (reqListByState["진행중"] && reqListByState["진행중"].length) || 0;
+    let resolve = (reqListByState["해결됨"] && reqListByState["해결됨"].length) || 0;
+    let close = (reqListByState["닫힘"] && reqListByState["닫힘"].length) || 0;
+    let total = open + progress + resolve + close;
+
+    $("#req-count").text(total);
+    $("#req-open-count").text(open);
+    $("#req-progress-count").text(progress);
+    $("#req-resolve-count").text(resolve);
+    $("#req-close-count").text(close);
+
 }
 
 function loadKanban(reqListByState, reqBoardByState) {
