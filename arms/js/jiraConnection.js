@@ -500,7 +500,7 @@ function connect_pdservice_jira(){
 /* --------------------------- multi select & slim scroll ---------------------------------- */
 function setdata_for_multiSelect() {
     $.ajax({
-        url: "/auth-user/api/arms/jiraServerProjectPure/getChildNode.do?c_id=2",
+        url: "/auth-user/api/arms/jiraServerProjectPure/getChildNodeWithoutSoftDelete.do?c_id=2",
         type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
@@ -528,8 +528,6 @@ function setdata_for_multiSelect() {
                     else {
                         optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
                     }
-
-                    //optionData.push("<option value='" + jira_idx + "'>"+"["+server_name+"] "+jira_name + "</option>");
                 }
             }
 
