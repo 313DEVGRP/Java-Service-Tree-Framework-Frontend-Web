@@ -383,7 +383,10 @@ class Table {
 			.forEach((row) => row.remove());
 	}
 
-	getElement(target, tag, id) {
+	getElement(target, tag, className) {
+		if (className) {
+			return target.tagName === tag && target.classList.contains(className) && target;
+		}
 		return target.tagName !== tag ? this.getElement(target.parentElement, tag) : target;
 	}
 
@@ -433,9 +436,6 @@ class Table {
 
 				if (cur[key]) {
 					$col.innerHTML = cur[key];
-					cur.id &&
-						["manager", "content"].includes(key) &&
-						($col.innerHTML = `<span class="col-input">${cur[key]}</span>`);
 				}
 
 				if (tag === "th") {
@@ -479,17 +479,14 @@ class Table {
 				$col.className = key;
 
 				if (tag === "td") {
-					if (cur[key]) {
-						$col.innerHTML = cur[key];
-						["status", "priority", "difficulty"].includes(key) &&
-							($col.innerHTML = `
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					$col.innerHTML = cur[key];
+					["status", "priority", "difficulty"].includes(key) &&
+						cur.category !== "Group" &&
+						($col.innerHTML = `
+					<a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
 						${cur[key]}
 						<i class="fa fa-caret-down"></i>
 					</a>`);
-
-						["manager", "content"].includes(key) && ($col.innerHTML = `<span class="col-input">${cur[key]}</span>`);
-					}
 				} else {
 					$col.innerHTML = cur[key];
 				}
@@ -526,15 +523,14 @@ class Table {
 		});
 	}
 
-	addInput(node) {
+	addInput(node, updateKey) {
 		const uuid = createUUID();
 		const text = node.textContent;
 		const $input = this.makeElement("input");
 
 		$input.id = uuid;
 		$input.addEventListener("blur", () => {
-			console.log("###", this.getElement(node, "TR"));
-			this.updateData(this.getElement(node, "TR").dataset.id, "content", $input.value);
+			this.updateData(this.getElement(node, "TR").dataset.id, updateKey, $input.value);
 			node.textContent = $input.value;
 		});
 
@@ -599,9 +595,18 @@ class Table {
 	bindBodyEvent($el) {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
-			// input
-			if (tagName === "SPAN" && classList.contains("col-input")) {
-				this.addInput(e.target);
+
+			const $manager = this.getElement(e.target, "TD", "manager");
+			const $content = this.getElement(e.target, "TD", "content");
+
+			if ($manager) {
+				this.addInput($manager, "manager");
+				return;
+			}
+
+			if ($content) {
+				this.addInput($content, "content");
+				return;
 			}
 
 			// select
