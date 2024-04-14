@@ -480,13 +480,14 @@ class Table {
 
 				if (tag === "td") {
 					$col.innerHTML = cur[key];
-					["status", "priority", "difficulty"].includes(key) &&
-						cur.category !== "Group" &&
-						($col.innerHTML = `
+
+					if ((["status"].includes(key) && cur.category !== "Group") || ["priority", "difficulty"].includes(key)) {
+						$col.innerHTML = `
 					<a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
 						${cur[key]}
 						<i class="fa fa-caret-down"></i>
-					</a>`);
+					</a>`;
+					}
 				} else {
 					$col.innerHTML = cur[key];
 				}
@@ -519,15 +520,17 @@ class Table {
 			c_req_reviewer04: task.origin.c_req_reviewer04,
 			c_req_reviewer05: task.origin.c_req_reviewer05,
 			c_req_status: "ChangeReq",
-			c_req_contents: task.origin.c_req_contents
+			c_req_contents: task.origin.c_req_contents,
+			c_req_plan_progress: task.progress
 		});
 	}
 
-	addInput(node, updateKey) {
+	addInput(node, updateKey, type = text) {
 		const uuid = createUUID();
 		const text = node.textContent;
 		const $input = this.makeElement("input");
 
+		$input.setAttribute("type", type);
 		$input.id = uuid;
 		$input.addEventListener("blur", () => {
 			this.updateData(this.getElement(node, "TR").dataset.id, updateKey, $input.value);
@@ -598,6 +601,7 @@ class Table {
 
 			const $manager = this.getElement(e.target, "TD", "manager");
 			const $content = this.getElement(e.target, "TD", "content");
+			const $progress = this.getElement(e.target, "TD", "progress");
 
 			if ($manager) {
 				this.addInput($manager, "manager");
@@ -606,6 +610,11 @@ class Table {
 
 			if ($content) {
 				this.addInput($content, "content");
+				return;
+			}
+
+			if ($progress) {
+				this.addInput($progress, "progress", "number");
 				return;
 			}
 
