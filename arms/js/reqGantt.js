@@ -7,8 +7,10 @@ var parentIdOfSelected;
 
 var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId; // 선택된 버전 아이디
-var mailAddressList; // 투입 작업자 메일
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
+// 최상단 메뉴 변수
+var req_state, resource_info, issue_info, period_info, total_days_progress;
+/*var mailAddressList; // 투입 작업자 메일
+var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;*/
 var dashboardColor;
 
 var reqStatusDataTable;
@@ -82,9 +84,9 @@ function execDocReady() {
 			"./js/dashboard/chart/colorPalette.js",
 			// Apache Echarts
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
-			//topMenu
-			"js/analysis/topmenu/basicRadar.js",
-			"js/analysis/topmenu/topMenu.js"
+			// 최상단 메뉴
+			"js/analysis/topmenu/topMenuApi.js",
+			"js/analysis/topmenu/basicRadar.js"
 		] // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
@@ -125,6 +127,10 @@ function execDocReady() {
 			makeVersionMultiSelectBox();
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
+
+			TopMenuApi.setEqualHeight(".top-menu-div");
+			TopMenuApi.resizeHeightEvent();
+
 
 			popup_size_setting();
 
@@ -301,11 +307,12 @@ function makeVersionMultiSelectBox() {
 				alert("버전이 선택되지 않았습니다.");
 				return;
 			}
-
-			수치_초기화();
+			console.log("[ reqGantt :: makeVersionMultiSelectBox ] :: versionTag");
+			console.log(versionTag);
 			selectedVersionId = versionTag.join(",");
-			// 요구사항 및 연결이슈 통계
-			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+			// 최상단 메뉴 세팅
+			TopMenuApi.톱메뉴_초기화();
+			TopMenuApi.톱메뉴_세팅();
 
 			//통계로드
 			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
@@ -338,14 +345,15 @@ function bind_VersionData_By_PdService() {
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-
-				수치_초기화();
+				var versionTag = $(".multiple-select").val();
+				console.log("[ analysisScope :: bind_VersionData_By_PdService ] :: versionTag");
+				console.log(pdServiceVersionIds);
 				selectedVersionId = pdServiceVersionIds.join(",");
-				// 요구사항 및 연결이슈 통계
-				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
 				console.log("bind_VersionData_By_PdService :: selectedVersionId");
 				console.log(selectedVersionId);
-
+				// 최상단 메뉴 세팅
+				TopMenuApi.톱메뉴_초기화();
+				TopMenuApi.톱메뉴_세팅();
 				//통계로드
 				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 				//진행상태 가져오기

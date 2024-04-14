@@ -72,10 +72,10 @@
 						</button>
 					</div>
 				</blockquote>
-				<div class="row">
-					<div class="col-md-3">
+				<div class="row top-menu-div-group">
+					<div class="col-md-3 top-menu-div">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section menu1 top-menu-div"
 							style="border: dashed; border-width: thin; border-color: lightsteelblue">
 							<header style="margin-bottom: 20px">
 								<h4>
@@ -92,7 +92,7 @@
 							</header>
 							<div class="body">
 								<div class="column">
-                                    <blockquote class="font13">
+									<blockquote class="font13">
 										1. Product
 										<sup>service</sup>
 										를 선택해 주세요
@@ -137,10 +137,10 @@
 							</div>
 						</section>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-3" style="margin-bottom: 10px;">
 						<section
-							class="widget large"
-							style="margin-bottom: 15px; height: 290px">
+							class="widget large top-menu-div"
+							style="margin-bottom: 15px; height: 290px; margin-bottom: 10px">
 							<header>
 								<h4>
 									<span
@@ -163,8 +163,8 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section"
-							style="overflow: auto; margin-bottom: 15px">
+							class="widget dashboard-top-section top-menu-div"
+							style="overflow: auto; margin-bottom: 10px">
 							<header style="margin-bottom: 15px">
 								<h4>
 									<span
@@ -197,7 +197,7 @@
 										</div>
 										<div class="description">
 											<i class="fa fa-wrench"></i>
-											작업 중
+											진행 중
 										</div>
 									</div>
 									<div style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px">|</div>
@@ -207,7 +207,7 @@
 											style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700">
 											-
 										</div>
-										<div class="description">└ 작업 대상 ┘</div>
+										<div class="description">【총 요구사항】</div>
 									</div>
 								</div>
 								<div class="column">
@@ -218,42 +218,52 @@
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												요구사항(
-												<i class="fa fa-wrench"></i>
-												) 연결이슈 평균:
+												요구사항 진척도 :
+												<!--													id="linkedIssue_subtask_count_per_req_in_action"-->
 												<a
-													id="linkedIssue_subtask_count_per_req_in_action"
+													id="req_progress"
 													style="font-weight: bold">
 													-
 												</a>
-												개
+												%
 											</span>
 											<br />
+											<span>(완료된 요구사항 : <a id="req_completed" style="font-weight: bold">-</a>)</span>
 										</div>
-										<div
-											class="controls form-group darkBack col-md-6"
-											style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+									</div>
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0;">
+
+									</div>
+								</div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div
+										class="controls form-group col-md-6"
+										style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												총 요구사항
+												생성된 요구사항 이슈
 												<br />
 												<small>(미할당)</small>
 												<br />
 												<a
-													id="total_req_count"
+													id="total_req_issue_count"
 													style="font-weight: bold">
 													-
 												</a>
 												개 (
-												<span id="no_assigned_req_count">-</span>
+												<span id="no_assigned_req_issue_count">-</span>
 												)
 											</span>
-											<br />
-										</div>
-										<div
-											class="controls form-group darkBack col-md-6"
-											style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+										<br />
+									</div>
+									<div
+										class="controls form-group col-md-6"
+										style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												총 연결이슈
+												생성한 연결이슈
 												<br />
 												<small>(미할당)</small>
 												<br />
@@ -266,15 +276,14 @@
 												<span id="no_assigned_linkedIssue_subtask_count">-</span>
 												)
 											</span>
-											<br />
-										</div>
+										<br />
 									</div>
 								</div>
 							</div>
 						</section>
 					</div>
 					<div class="col-md-2">
-						<section class="widget">
+						<section class="widget dashboard-top-section top-menu-div" style="margin-bottom: 10px;">
 							<header style="margin-bottom: 15px">
 								<h4>
 									<span
@@ -289,6 +298,28 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; height: 2px; margin-top: 5px"></div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div>
+										<span>
+											전체 일정
+											<br />
+											<a
+												id="start_date_summary"
+												style="font-weight: bold">
+												-
+											</a>
+											~
+											<a
+												id="end_date_summary"
+												style="font-weight: bold">
+												-
+											</a>
+										</span>
+										<br />
+									</div>
+								</div>
 								<div
 									class="box"
 									style="display: flex; justify-content: space-evenly; margin: 10px 0">
@@ -338,8 +369,8 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section"
-							style="overflow: auto">
+							class="widget dashboard-top-section top-menu-div"
+							style="overflow: auto; margin-bottom: 10px">
 							<header style="margin-bottom: 15px">
 								<h4>
 									<span
@@ -358,7 +389,7 @@
 									class="box"
 									style="margin: 10px 0">
 									<div
-										id="resource_count"
+										id="resource"
 										style="
 											color: #a4c6ff;
 											margin-top: 5px;
@@ -381,31 +412,51 @@
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
-											<span>
-												작업 중 요구사항 평균 :
-												<a
-													id="req_in_action_avg"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
+											<span> 1인당 요구사항 이슈 수 <br/>(최대 / 평균 / 최소) </span>
 											<br />
+											<span>
+												<a id="req_max" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="req_avg" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="req_min" style="font-weight: bold"> - </a>
+											</span>
 										</div>
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
-											<span>
-												생성한 연결이슈 평균 :
-												<a
-													id="avg_linkedIssue_count"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
+											<span> 1인당 생성한 연결이슈 수 <br/>(최대 / 평균 / 최소)</span>
 											<br />
+											<span>
+												<a id="sub_max" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="sub_avg" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="sub_min" style="font-weight: bold"> - </a>
+											</span>
 										</div>
+										<!--										<div
+																					class="controls form-group darkBack col-md-12"
+																					style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
+																					<span>
+																						생성한 연결이슈 평균 :
+																						<a
+																							id="avg_linkedIssue_count"
+																							style="font-weight: bold">
+																							-
+																						</a>
+																						개
+																					</span>
+																					<br />
+																				</div>-->
 									</div>
 								</div>
 							</div>
@@ -567,46 +618,46 @@
 											작업자별 요구사항 관여도
 										</span>
 									</h4>
-                                    <div class="widget-controls">
-                                        <a
-                                                data-widgster="toleft"
-                                                title="change width to left"
-                                                href="#">
-                                            <i class="glyphicon glyphicon-chevron-left"></i>
-                                        </a>
-                                        <a
-                                                data-widgster="expand"
-                                                title="Expand"
-                                                href="#">
-                                            <i class="glyphicon glyphicon-chevron-up"></i>
-                                        </a>
-                                        <a
-                                                data-widgster="collapse"
-                                                title="Collapse"
-                                                href="#">
-                                            <i class="glyphicon glyphicon-chevron-down"></i>
-                                        </a>
-                                        <a
-                                                data-widgster="toright"
-                                                title="change width to right"
-                                                href="#">
-                                            <i class="glyphicon glyphicon-chevron-right"></i>
-                                        </a>
-                                        <a
-                                                data-widgster="restore"
-                                                title="Restore"
-                                                href="#">
-                                            <span class="glyphicon glyphicon-repeat"></span>
-                                        </a>
-                                        <a
-                                                data-widgster="fullscreen"
-                                                title="Fullscreen"
-                                                href="#">
-                                            <i
-                                                    class="glyphicon glyphicon-fullscreen"
-                                                    style="font-size: 11px"></i>
-                                        </a>
-                                    </div>
+                  <div class="widget-controls">
+                    <a
+                            data-widgster="toleft"
+                            title="change width to left"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a
+                            data-widgster="expand"
+                            title="Expand"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a
+                            data-widgster="toright"
+                            title="change width to right"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a
+                            data-widgster="restore"
+                            title="Restore"
+                            href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                  </div>
 								</header>
 								<div class="body">
 									<div
@@ -732,24 +783,9 @@
 						class="font13"
 						style="font-weight: bold">
 						<i class="fa fa-calendar-o"></i>
-						작업자별 요구사항 및 연결이슈 항목별 상세
+						작업자별 요구사항 및 연결이슈 항목별 상세 (Top 5)
 					</span>
-					<button
-						type="button"
-						class="btn btn-default btn-sm ml-1 hidden"
-						style="margin-top: 0; vertical-align: baseline"
-						onclick="refreshDetailChart()">
-						<span class="glyphicon glyphicon-repeat"></span>
-						refresh
-					</button>
-					<button
-						type="button"
-						class="btn btn-default btn-sm ml-1 hidden"
-						style="margin-top: 0; vertical-align: baseline"
-						onclick="drawDetailOverallChart()">
-						<span class="glyphicon glyphicon-repeat"></span>
-						전체보기
-					</button>
+
 				</h4>
 				<div class="widget-controls">
 					<a
@@ -813,6 +849,28 @@
 						</button>
 					</div>
 				</blockquote>
+
+				<div class="clearfix widget-content hidden">
+					<div style="float: left">
+						<button
+							type="button"
+							class="btn btn-default btn-sm ml-1"
+							style="margin-top: 0; vertical-align: baseline"
+							onclick="refreshDetailChart()">
+							<span class="glyphicon glyphicon-repeat"></span>
+							refresh
+						</button>
+						<button
+							type="button"
+							class="btn btn-default btn-sm ml-1"
+							style="margin-top: 0; vertical-align: baseline"
+							onclick="drawDetailOverallChart()">
+							<span class="glyphicon glyphicon-repeat"></span>
+							전체보기
+						</button>
+					</div>
+				</div>
+
 				<div class="row">
 					<div class="col-lg-3 col-md-6 col-sm-12">
 						<section class="widget large">
