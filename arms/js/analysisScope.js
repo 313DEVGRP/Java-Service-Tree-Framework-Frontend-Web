@@ -1375,7 +1375,7 @@ function treeBar() {
 		.setBaseUrl("/auth-user/api/arms/analysis/scope/tree-bar-top10")
 		.addQueryParam("pdServiceLink", selectedPdServiceId)
 		.addQueryParam("pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('메인그룹필드', "parentReqKey")
+		.addQueryParam('메인그룹필드', "cReqLink")
 		.addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
 		.addQueryParam('컨텐츠보기여부', true)
 		.addQueryParam("isReqType", "ISSUE")
