@@ -400,6 +400,7 @@ var TopMenuApi = (function () {
               $("#sub_max").text(resource_info["sub_max"]);
               $("#sub_avg").text(resource_info["sub_avg"]);
               $("#sub_min").text(resource_info["sub_min"]);
+
           })
           .catch((error) => {
               console.error('Error occurred:', error);
@@ -432,6 +433,23 @@ var TopMenuApi = (function () {
         return diffDays;
     }
 
+    function setEqualHeight(selector) {
+        var maxHeight = 0;
+        $(selector).each(function() {
+            var height = $(this).height();
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+        $(selector).height(maxHeight);
+    }
+
+    function resizeHeightEvent() {
+        $(window).resize(function() {
+            TopMenuApi.setEqualHeight('.top-menu-div');
+        });
+    }
+
     return {
         pullTotalApi,
         reqStateData,   getReqStateData,
@@ -440,6 +458,7 @@ var TopMenuApi = (function () {
         resourceInfo,   getResourceInfo,
         getReqProgress,
         calExpectedEndDate, getExpectedEndDate,
-        톱메뉴_초기화, 톱메뉴_세팅
+        톱메뉴_초기화, 톱메뉴_세팅,
+        setEqualHeight, resizeHeightEvent
     }
 })(); //즉시실행 함수
