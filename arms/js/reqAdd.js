@@ -1275,7 +1275,7 @@ function save_req() {
 						200: function () {
 							$("#req_tree").jstree("refresh");
 							$("#close_req").trigger("click");
-							jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
+							jSuccess('"' + reqTitle + '"' + " 요구사항이 등록되었습니다.");
 						}
 					}
 				});
@@ -1295,7 +1295,7 @@ function save_req() {
 							200: function () {
 								$("#req_tree").jstree("refresh");
 								$("#close_req").trigger("click");
-								jSuccess($("#popup-pdService-name").val() + "의 데이터가 변경되었습니다.");
+								jSuccess('"' + reqTitle + '"' + " 요구사항이 등록되었습니다.");
 							}
 						}
 					});
@@ -1390,7 +1390,7 @@ function click_btn_for_req_update() {
 			statusCode: {
 				200: function () {
 					$("#req_tree").jstree("refresh");
-					jSuccess(reqName + "의 데이터가 변경되었습니다.");
+					jSuccess('"' + reqName + '"' + " 요구사항이 변경되었습니다.");
 				}
 			}
 		});
@@ -1774,7 +1774,7 @@ function tableSelect(id) {
 				data: params,
 				statusCode: {
 					200: function () {
-						jSuccess(params.c_title + "의 데이터가 변경되었습니다.");
+						jSuccess('"' + params.c_title + '"' + " 요구사항이 변경되었습니다.");
 					}
 				}
 			});
