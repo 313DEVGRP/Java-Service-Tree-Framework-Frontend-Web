@@ -69,7 +69,6 @@ function execDocReady() {
             "js/analysis/table/workerStatusTable.js",
             "js/analysis/resource/chart/horizontalBarChart.js",
             "js/analysis/resource/chart/simplePie.js",
-            "js/analysis/resource/chart/basicRadar.js"
         ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
