@@ -165,7 +165,7 @@ function bind_VersionData_By_PdService() {
 function changeMultipleSelected() {
     let result = [];
     let versionIds = [];
-    $("#multiversion option:selected").map(function (a, item) {
+    $("#multi-version option:selected").map(function (a, item) {
         //result.push(item.innerText);
         versionIds.push(item.value);
     });
@@ -193,6 +193,13 @@ function changeMultipleSelected() {
                     // 요구사항 상태 가져오기
                     const state = (item.reqStateEntity && item.reqStateEntity.c_title) || "상태 정보 없음";
 
+                    // 요구사항 버전 가져오기
+                    let versions = "버전 정보 없음";
+                    if (!isEmpty(item.c_req_pdservice_versionset_link)) {
+                        $("#req-versions").multipleSelect("setSelects", JSON.parse(item.c_req_pdservice_versionset_link));
+                        versions = $("#req-versions").multipleSelect("getSelects", "text").join(', ');;
+                    }
+
                     // 해당 상태의 리스트가 없으면 초기화
                     if (!reqList[state]) {
                         reqList[state] = [];
@@ -203,7 +210,7 @@ function changeMultipleSelected() {
                         id: state + "-" + index,
                         title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-id="${state}-${index}" data-state="${state}"></i>`,
                         info: {
-                            reqVersions: "",
+                            reqVersions: versions,
                             reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
                             reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
                             reqState: state,

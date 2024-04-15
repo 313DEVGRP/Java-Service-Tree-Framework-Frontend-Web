@@ -1,8 +1,8 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId; // 선택된 버전 아이디
 var dataTableRef;
-var mailAddressList; // 투입 작업자 메일
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
+// 최상단 메뉴 변수
+var req_state, resource_info, issue_info, period_info, total_days_progress;
 var modifiedRows = {};
 var dashboardColor;
 let fileName = "인력별_연봉정보_템플릿.xlsx";
@@ -58,9 +58,9 @@ function execDocReady() {
         [
             // d3-5.16.0 네트워크 차트
             "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
-            // 생성한 차트 import
+            //  최상단 메뉴
+            "js/analysis/topmenu/topMenuApi.js",
             "js/analysis/topmenu/basicRadar.js",
-            "js/analysis/topmenu/topMenu.js",
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -101,6 +101,9 @@ function execDocReady() {
 
           //버전 멀티 셀렉트 박스 이니시에이터
           makeVersionMultiSelectBox();
+
+          TopMenuApi.setEqualHeight(".top-menu-div");
+          TopMenuApi.resizeHeightEvent();
 
           비용분석계산버튼();
 
@@ -187,11 +190,9 @@ function makeVersionMultiSelectBox() {
 
             차트초기화();
 
-            //분석메뉴 상단 수치 초기화
-            수치_초기화();
-
-            // 요구사항 및 연결이슈 통계
-            getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+            // 최상단 메뉴 세팅
+            TopMenuApi.톱메뉴_초기화();
+            TopMenuApi.톱메뉴_세팅();
 
             버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
 
@@ -375,12 +376,11 @@ function bind_VersionData_By_PdService() {
                 }
 
                 console.log("[ analysisCost :: bind_VersionData_By_PdService ] :: versionTag");
-
-                수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(",");
 
-                // 요구사항 및 연결이슈 통계
-                getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+                // 최상단 메뉴 세팅
+                TopMenuApi.톱메뉴_초기화();
+                TopMenuApi.톱메뉴_세팅();
 
                 버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
 

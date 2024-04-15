@@ -7,8 +7,7 @@ var selectedVersionId;
 var versionListData;
 var globalDeadline;
 // 최상단 메뉴 변수
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
-var mailAddressList;
+var req_state, resource_info, issue_info, period_info, total_days_progress;
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -28,9 +27,9 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// chart Colors
 			"./js/common/colorPalette.js",
-			//  최상단 메뉴
+			// 최상단 메뉴
+			"js/analysis/topmenu/topMenuApi.js",
 			"js/analysis/topmenu/basicRadar.js",
-			"js/analysis/topmenu/topMenu.js",
 			// 버전 timeline js, css
 			"./js/analysis/time/D_analysisTime.js",
 			"./js/analysis/time/timeline_analysisTime.js",
@@ -97,6 +96,8 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
+			TopMenuApi.setEqualHeight(".top-menu-div");
+			TopMenuApi.resizeHeightEvent();
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
@@ -198,9 +199,10 @@ function bind_VersionData_By_PdService() {
 				}
 				baseDateReset();
 
-				// 최상단 메뉴 통계
-				수치_초기화();
-				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+				// 최상단 메뉴 세팅
+				TopMenuApi.톱메뉴_초기화();
+				TopMenuApi.톱메뉴_세팅();
+
 
 				// 버전 및 게이지차트, 버전 타임라인 차트 초기화
 				statisticsMonitor(selectedPdServiceId, selectedVersionId);
@@ -211,8 +213,6 @@ function bind_VersionData_By_PdService() {
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
 				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
-
-				// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 				// vertical timeline chart
 				//verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
@@ -260,8 +260,8 @@ function makeVersionMultiSelectBox() {
 			baseDateReset();
 
 			// 최상단 메뉴 통계
-			수치_초기화();
-			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+			TopMenuApi.톱메뉴_초기화();
+			TopMenuApi.톱메뉴_세팅();
 
 			// 버전 및 게이지차트, 버전 타임라인 차트 초기화
 			statisticsMonitor(selectedPdServiceId, selectedVersionId);
@@ -2313,4 +2313,9 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 			}
 		}
 	});
+}
+
+//톱 메뉴 세팅
+function top_menu_setting() {
+
 }
