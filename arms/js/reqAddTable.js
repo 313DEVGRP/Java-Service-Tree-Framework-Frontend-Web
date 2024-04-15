@@ -221,7 +221,12 @@ const mapperPivotTableData = (data) => {
 	}, []);
 };
 
-const rearrangement = (arr, key, root, data) => // arr를 key 기준으로 그룹화 첫번째 한테는 root 속성을 넣어줌
+const rearrangement = (
+	arr,
+	key,
+	root,
+	data // arr를 key 기준으로 그룹화 첫번째 한테는 root 속성을 넣어줌
+) =>
 	arr.reduce((acc, cur) => {
 		const result = { ...cur, ...data };
 		const index = acc?.findIndex((item) => item.some((task) => task[key] === result[key]));
@@ -247,79 +252,80 @@ class Table {
 		}
 
 		if (pivotType === "version") {
-            return versionList.map((version) => {
-                const filterItems = pivotTableData
-                    .filter(item => item.origin && item.origin.attr && item.origin.attr.rel !== 'folder') // 폴더 제거
-                    .filter((item) => item.version?.includes(`${version.c_id}`));
+			return versionList.map((version) => {
+				const filterItems = pivotTableData
+					.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제거
+					.filter((item) => item.version?.includes(`${version.c_id}`));
 
-                const childrenItem = rearrangement(filterItems, "writer", "writer", {
-                        version: version.c_title,
-                        _version: version.c_id
-                    })
-                    .reduce((acc, cur) => {
-                        return [
-                            ...acc,
-                            {
-                                ...cur[0],
-                                children: cur.slice(1, cur.length),
-                                lastChild: {
-                                    _version: version.c_id,
-                                    writer: `${cur[0].writer} 총계`,
-                                    _writer: cur[0].writer,
-                                    col: 1,
-                                    colSpan: 3,
-                                    origin: version,
-                                    ...calcStatus(cur)
-                                }
-                            }
-                        ];
-                    }, []);
-                return {
-                    version: `${version.c_title} 총계`,
-                    _version: version.c_id,
-                    col: 0,
-                    colSpan: 4,
-                    root: "version",
-                    origin: version,
-                    children: childrenItem,
-                    ...calcStatus(filterItems)
-                };
-            });
+				const childrenItem = rearrangement(filterItems, "writer", "writer", {
+					version: version.c_title,
+					_version: version.c_id
+				}).reduce((acc, cur) => {
+					return [
+						...acc,
+						{
+							...cur[0],
+							children: cur.slice(1, cur.length),
+							lastChild: {
+								_version: version.c_id,
+								writer: `${cur[0].writer} 총계`,
+								_writer: cur[0].writer,
+								col: 1,
+								colSpan: 3,
+								origin: version,
+								...calcStatus(cur)
+							}
+						}
+					];
+				}, []);
+				return {
+					version: `${version.c_title} 총계`,
+					_version: version.c_id,
+					col: 0,
+					colSpan: 4,
+					root: "version",
+					origin: version,
+					children: childrenItem,
+					...calcStatus(filterItems)
+				};
+			});
 		}
 
-		if (pivotType === "owner") { // Task Owner
-		    const 모든_요구사항데이터= pivotTableData
-                .filter(item => item.origin && item.origin.attr && item.origin.attr.rel !== 'folder') // 폴더 제외(요구사항만 포함)
-                .flatMap((task) =>
-                    task.version.reduce((acc, cur) => {
-                        const versionItem = versionList.find((item) => item.c_id === Number(cur));
-                        return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
-                    }, [])).sort((a, b) => a.writer?.localeCompare(b.writer) || a._version - b._version); // 데이터 정렬
-            return rearrangement(모든_요구사항데이터,"writer", "writer").map((group) => (
-            {
-                writer: `${group[0].writer} 총계`,
-                _writer: group[0].writer,
-                col: 0,
-                colSpan: 4,
-                root: "writer",
-                children: rearrangement(group, "version", "version").reduce((acc, cur) => {
-                    return [
-                        ...acc,
-                       	{
-                       	    ...cur[0],
-                       	    children: cur.slice(1, cur.length),
-                       	    lastChild: {
-                                writer: `${cur[0].version} 총계`,
-                       		    _writer: group[0].writer,
-                       		    col: 1,
-                       		    colSpan: 3,
-                       		    ...calcStatus(cur)
-                       	    }
-                        }
-                    ];
-                }, []),
-                ...calcStatus(group)
-            }));
+		if (pivotType === "owner") {
+			// Task Owner
+			const 모든_요구사항데이터 = pivotTableData
+				.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제외(요구사항만 포함)
+				.flatMap((task) =>
+					task.version.reduce((acc, cur) => {
+						const versionItem = versionList.find((item) => item.c_id === Number(cur));
+						return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
+					}, [])
+				)
+				.sort((a, b) => a.writer?.localeCompare(b.writer) || a._version - b._version); // 데이터 정렬
+			return rearrangement(모든_요구사항데이터, "writer", "writer").map((group) => ({
+				writer: `${group[0].writer} 총계`,
+				_writer: group[0].writer,
+				col: 0,
+				colSpan: 4,
+				root: "writer",
+				children: rearrangement(group, "version", "version").reduce((acc, cur) => {
+					return [
+						...acc,
+						{
+							...cur[0],
+							children: cur.slice(1, cur.length),
+							lastChild: {
+								writer: `${cur[0].version} 총계`,
+								_writer: group[0].writer,
+								col: 1,
+								colSpan: 3,
+								...calcStatus(cur)
+							}
+						}
+					];
+				}, []),
+				...calcStatus(group)
+			}));
 		}
 	}
 
@@ -522,7 +528,8 @@ class Table {
 			c_req_reviewer05: task.origin.c_req_reviewer05,
 			c_req_status: "ChangeReq",
 			c_req_contents: task.origin.c_req_contents,
-			c_req_plan_progress: task.progress
+			c_req_plan_progress: task.progress,
+			c_req_end_date: new Date(task.endDate)
 		});
 	}
 
@@ -540,6 +547,7 @@ class Table {
 
 		node.textContent = "";
 		node.appendChild($input);
+
 		document.getElementById(uuid).value = text;
 		document.getElementById(uuid).focus();
 	}
@@ -600,12 +608,13 @@ class Table {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
 
-			const $manager = this.getElement(e.target, "TD", "manager");
+			const $writer = this.getElement(e.target, "TD", "writer");
 			const $content = this.getElement(e.target, "TD", "content");
 			const $progress = this.getElement(e.target, "TD", "progress");
+			const $endDate = this.getElement(e.target, "TD", "endDate");
 
-			if ($manager) {
-				this.addInput($manager, "manager");
+			if ($writer) {
+				this.addInput($writer, "writer");
 				return;
 			}
 
@@ -616,6 +625,11 @@ class Table {
 
 			if ($progress) {
 				this.addInput($progress, "progress", "number");
+				return;
+			}
+
+			if ($endDate) {
+				this.addInput($endDate, "endDate", "date");
 				return;
 			}
 
