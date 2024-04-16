@@ -314,8 +314,6 @@ function makeVersionMultiSelectBox() {
 			TopMenuApi.톱메뉴_초기화();
 			TopMenuApi.톱메뉴_세팅();
 
-			//통계로드
-			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 			//진행상태 가져오기
 			progressLoad($("#selected_pdService").val(), selectedVersionId);
 		}
@@ -354,8 +352,7 @@ function bind_VersionData_By_PdService() {
 				// 최상단 메뉴 세팅
 				TopMenuApi.톱메뉴_초기화();
 				TopMenuApi.톱메뉴_세팅();
-				//통계로드
-				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+
 				//진행상태 가져오기
 				progressLoad($("#selected_pdService").val(), selectedVersionId);
 
