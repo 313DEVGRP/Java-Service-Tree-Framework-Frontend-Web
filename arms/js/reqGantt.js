@@ -128,8 +128,8 @@ function execDocReady() {
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
-			TopMenuApi.setEqualHeight(".top-menu-div");
-			TopMenuApi.resizeHeightEvent();
+			/*TopMenuApi.setEqualHeight(".top-menu-div");
+			TopMenuApi.resizeHeightEvent();*/
 
 
 			popup_size_setting();

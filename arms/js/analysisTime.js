@@ -96,8 +96,8 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
-			TopMenuApi.setEqualHeight(".top-menu-div");
-			TopMenuApi.resizeHeightEvent();
+			/*TopMenuApi.setEqualHeight(".top-menu-div");
+			TopMenuApi.resizeHeightEvent();*/
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 

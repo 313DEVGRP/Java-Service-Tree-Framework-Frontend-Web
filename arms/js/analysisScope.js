@@ -96,8 +96,8 @@ function execDocReady() {
 			makeVersionMultiSelectBox();
 
 			//Top메뉴 높이 맞추기
-			TopMenuApi.setEqualHeight(".top-menu-div");
-			TopMenuApi.resizeHeightEvent();
+			/*TopMenuApi.setEqualHeight(".top-menu-div");
+			TopMenuApi.resizeHeightEvent();*/
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
