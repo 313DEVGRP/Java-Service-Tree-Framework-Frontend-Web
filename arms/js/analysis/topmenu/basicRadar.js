@@ -76,6 +76,7 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
         if (currentProgressArr[2] < 0) {
             scheduleMax = objectiveArr[2];
             titleText += "일정 시작: " + Math.abs(currentProgressArr[2]) +"일 남음";
+            currentProgressArr[2]=0;
             titleColor = 'rgb(164,198,255)';
         } else if (objectiveArr[2] >= currentProgressArr[2]) {
             scheduleMax = objectiveArr[2];

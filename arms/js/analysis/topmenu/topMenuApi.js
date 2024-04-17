@@ -130,6 +130,13 @@ var TopMenuApi = (function () {
                             let 가장늦은종료날짜;
                             if(버전목록.length !== 0) {
                                 for (let i=0; i<버전목록.length; i++) {
+                                    let today = new Date();
+                                    if(버전목록[i]["c_pds_version_start_date"]==="start") {
+                                        버전목록[i]["c_pds_version_start_date"] = today;
+                                    }
+                                    if(버전목록[i]["c_pds_version_end_date"] ==="end") {
+                                        버전목록[i]["c_pds_version_end_date"] = today;
+                                    }
 
                                     if (i === 0) {
                                         가장이른시작날짜 = 버전목록[i].c_pds_version_start_date;
@@ -360,6 +367,7 @@ var TopMenuApi = (function () {
               resource_info = TopMenuApi.getResourceInfo();
               let today = new Date();
               console.log(today);
+              console.log(period_info);
               let objectiveDateDiff = calDateDiff(period_info["start_date"], period_info["end_date"]);
               let currentDateDiff = calDateDiff(period_info["start_date"], today);
 
@@ -436,7 +444,8 @@ var TopMenuApi = (function () {
     const calDateDiff = (d1, d2) => {
         const date1 = new Date(d1);
         const date2 = new Date(d2);
-
+        console.log("[topMenuApi :: calDateDiff] :: date1 => " + date1);
+        console.log("[topMenuApi :: calDateDiff] :: date2 => " + date2);
         if (isNaN(date1.getTime()) || isNaN(date2.getTime())) {
             console.error("유효하지 않은 날짜 형식입니다.");
             console.log(date1.getTime());
