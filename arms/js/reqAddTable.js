@@ -460,6 +460,9 @@ class Table {
 
 				if (cur.colSpan) {
 					$tr.classList.add("highlight");
+					if (pivotType === "version"){
+					    $tr.removeAttribute('data-writer');
+					}
 				}
 
 				if (cur.root === key) {
