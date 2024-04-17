@@ -395,14 +395,23 @@ function dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "pdServiceVersion",
+			name: "pdServiceVersions",
 			title: "Version",
-			data: "pdServiceVersion",
+			data: "pdServiceVersions",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					let verNameList = [];
+					let verHtml =``;
+						data.forEach(version_id => {
+						let versionInfo = versionListData.find(version => version["c_id"] === version_id);
+						if(versionInfo) {
+							verNameList.push(versionInfo["c_title"]);
+							verHtml+= versionInfo["c_title"]+`<br/>`;
+						}
+					});
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
 				}
 				return data;
 			},
@@ -471,12 +480,8 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
-					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
-				return data;
 			},
 			className: "dt-body-left",
 			visible: true
