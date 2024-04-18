@@ -1,8 +1,8 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId; // 선택된 버전 아이디
 var dataTableRef;
-var mailAddressList; // 투입 작업자 메일
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
+// 최상단 메뉴 변수
+var req_state, resource_info, issue_info, period_info, total_days_progress;
 
 var dashboardColor;
 var pdServiceData;
@@ -53,9 +53,9 @@ function execDocReady() {
 		[
 			// d3-5.16.0 네트워크 차트
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
-			// 생성한 차트 import
+			// 최상단 메뉴
+			"js/analysis/topmenu/topMenuApi.js",
 			"js/analysis/topmenu/basicRadar.js",
-			"js/analysis/topmenu/topMenu.js",
 
 			// 버전 별 요구사항 현황 (RadialPolarBarChart)
 			"js/analysis/resource/chart/nightingaleRosePieChart.js",
@@ -94,6 +94,10 @@ function execDocReady() {
 
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			//Top메뉴 높이 맞추기
+			/*TopMenuApi.setEqualHeight(".top-menu-div");
+			TopMenuApi.resizeHeightEvent();*/
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
@@ -177,11 +181,11 @@ function makeVersionMultiSelectBox() {
 				alert("버전이 선택되지 않았습니다.");
 				return;
 			}
-			//분석메뉴 상단 수치 초기화
-			수치_초기화();
 
-			// 요구사항 및 연결이슈 통계
-			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+			// 최상단 메뉴 세팅
+			TopMenuApi.톱메뉴_초기화();
+			TopMenuApi.톱메뉴_세팅();
+
 			// Circular Packing with D3 차트
 			getReqStatusAndInvolvedAssignees(selectedPdServiceId, selectedVersionId);
 
@@ -220,13 +224,15 @@ function bind_VersionData_By_PdService() {
 				var versionTag = $(".multiple-select").val();
 				console.log("[ analysisScope :: bind_VersionData_By_PdService ] :: versionTag");
 
-				수치_초기화();
 				console.log(pdServiceVersionIds);
 				selectedVersionId = pdServiceVersionIds.join(",");
 				console.log("bind_VersionData_By_PdService :: selectedVersionId");
 				console.log(selectedVersionId);
-				// 요구사항 및 연결이슈 통계
-				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+
+				// 최상단 메뉴 세팅
+				TopMenuApi.톱메뉴_초기화();
+				TopMenuApi.톱메뉴_세팅();
+
 				// Circular Packing with D3 차트
 				getReqStatusAndInvolvedAssignees(selectedPdServiceId, selectedVersionId);
 				// 네트워크 차트
@@ -1375,7 +1381,7 @@ function treeBar() {
 		.setBaseUrl("/auth-user/api/arms/analysis/scope/tree-bar-top10")
 		.addQueryParam("pdServiceLink", selectedPdServiceId)
 		.addQueryParam("pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('메인그룹필드', "parentReqKey")
+		.addQueryParam('메인그룹필드', "cReqLink")
 		.addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
 		.addQueryParam('컨텐츠보기여부', true)
 		.addQueryParam("isReqType", "ISSUE")

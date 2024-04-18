@@ -9,7 +9,7 @@ const ContentType = {
 		version: "Version",
 		category: "구분",
 		id: "TASK NO",
-		manager: "TASK OWNER",
+		writer: "TASK OWNER",
 		status: "Status",
 		depth1: "Depth 1",
 		depth2: "Depth 2",
@@ -24,7 +24,7 @@ const ContentType = {
 	},
 	version: {
 		version: "Version",
-		manager: "TASK OWNER",
+		writer: "TASK OWNER",
 		depth1: "Depth 1",
 		content: "기능",
 		open: "열림",
@@ -34,7 +34,7 @@ const ContentType = {
 		statusTotal: "총계"
 	},
 	owner: {
-		manager: "TASK OWNER",
+		writer: "TASK OWNER",
 		version: "Version",
 		depth1: "Depth 1",
 		content: "기능",
@@ -140,7 +140,7 @@ const mapperTableData = (data) => {
 				c_id,
 				c_parentid,
 				c_title,
-				c_req_owner,
+				c_req_writer,
 				c_req_contents,
 				reqStateEntity,
 				reqPriorityEntity,
@@ -162,7 +162,7 @@ const mapperTableData = (data) => {
 					version: getVersionTitle(vid),
 					id: c_id,
 					category: CategoryName[c_type],
-					manager: c_type !== "folder" ? c_req_owner : "",
+					writer: c_type !== "folder" ? c_req_writer : "",
 					status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
 					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
 					content: c_title,
@@ -188,7 +188,7 @@ const mapperPivotTableData = (data) => {
 			c_id,
 			c_parentid,
 			c_title,
-			c_req_owner,
+			c_req_writer,
 			c_req_contents,
 			reqStateEntity,
 			reqPriorityEntity,
@@ -206,8 +206,8 @@ const mapperPivotTableData = (data) => {
 			{
 				id: c_id,
 				version: JSON.parse(c_req_pdservice_versionset_link) ?? "",
-				manager: c_req_owner,
-				_manager: c_req_owner,
+				writer: c_req_writer,
+				_writer: c_req_writer,
 				open: reqStateEntity?.c_id === 10 ? 1 : "",
 				investigation: "",
 				resolved: reqStateEntity?.c_id === 11 ? 1 : "",
@@ -221,7 +221,12 @@ const mapperPivotTableData = (data) => {
 	}, []);
 };
 
-const rearrangement = (arr, key, root, data) =>
+const rearrangement = (
+	arr,
+	key,
+	root,
+	data // arr를 key 기준으로 그룹화 첫번째 한테는 root 속성을 넣어줌
+) =>
 	arr.reduce((acc, cur) => {
 		const result = { ...cur, ...data };
 		const index = acc?.findIndex((item) => item.some((task) => task[key] === result[key]));
@@ -248,8 +253,11 @@ class Table {
 
 		if (pivotType === "version") {
 			return versionList.map((version) => {
-				const filterItems = pivotTableData.filter((item) => item.version?.includes(`${version.c_id}`));
-				const childrenItem = rearrangement(filterItems, "manager", "manager", {
+				const filterItems = pivotTableData
+					.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제거
+					.filter((item) => item.version?.includes(`${version.c_id}`));
+
+				const childrenItem = rearrangement(filterItems, "writer", "writer", {
 					version: version.c_title,
 					_version: version.c_id
 				}).reduce((acc, cur) => {
@@ -257,11 +265,11 @@ class Table {
 						...acc,
 						{
 							...cur[0],
-							children: cur.slice(1, cur.length - 1),
+							children: cur.slice(1, cur.length),
 							lastChild: {
 								_version: version.c_id,
-								manager: `${cur[0].manager} 총계`,
-								_manager: cur[0].manager,
+								writer: `${cur[0].writer} 총계`,
+								_writer: cur[0].writer,
 								col: 1,
 								colSpan: 3,
 								origin: version,
@@ -270,7 +278,6 @@ class Table {
 						}
 					];
 				}, []);
-
 				return {
 					version: `${version.c_title} 총계`,
 					_version: version.c_id,
@@ -285,30 +292,31 @@ class Table {
 		}
 
 		if (pivotType === "owner") {
-			return rearrangement(
-				pivotTableData
-					.flatMap((task) =>
-						task.version.reduce((acc, cur) => {
-							const versionItem = versionList.find((item) => item.c_id === Number(cur));
-							return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
-						}, [])
-					)
-					.sort((a, b) => a.manager?.localeCompare(b.manager) || a._version - b._version)
-			).map((group) => ({
-				manager: `${group[0].manager} 총계`,
-				_manager: group[0].manager,
+			// Task Owner
+			const 모든_요구사항데이터 = pivotTableData
+				.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제외(요구사항만 포함)
+				.flatMap((task) =>
+					task.version.reduce((acc, cur) => {
+						const versionItem = versionList.find((item) => item.c_id === Number(cur));
+						return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
+					}, [])
+				)
+				.sort((a, b) => a.writer?.localeCompare(b.writer) || a._version - b._version); // 데이터 정렬
+			return rearrangement(모든_요구사항데이터, "writer", "writer").map((group) => ({
+				writer: `${group[0].writer} 총계`,
+				_writer: group[0].writer,
 				col: 0,
 				colSpan: 4,
-				root: "manager",
+				root: "writer",
 				children: rearrangement(group, "version", "version").reduce((acc, cur) => {
 					return [
 						...acc,
 						{
 							...cur[0],
-							children: cur.slice(1, cur.length - 1),
+							children: cur.slice(1, cur.length),
 							lastChild: {
-								version: `${cur[0].version} 총계`,
-								_manager: group[0].manager,
+								writer: `${cur[0].version} 총계`,
+								_writer: group[0].writer,
 								col: 1,
 								colSpan: 3,
 								...calcStatus(cur)
@@ -383,7 +391,10 @@ class Table {
 			.forEach((row) => row.remove());
 	}
 
-	getElement(target, tag, id) {
+	getElement(target, tag, className) {
+		if (className) {
+			return target.tagName === tag && target.classList.contains(className) && target;
+		}
 		return target.tagName !== tag ? this.getElement(target.parentElement, tag) : target;
 	}
 
@@ -425,17 +436,13 @@ class Table {
 			const $tr = this.makeElement("tr");
 			$tr.setAttribute("data-id", cur.id ?? "");
 			$tr.setAttribute("data-version", cur._version ?? "");
-			$tr.setAttribute("data-manager", cur._manager ?? "");
-
+			$tr.setAttribute("data-writer", cur._writer ?? "");
 			Object.keys(ContentType[pivotType]).forEach((key, index) => {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
 				if (cur[key]) {
 					$col.innerHTML = cur[key];
-					cur.id &&
-						["manager", "content"].includes(key) &&
-						($col.innerHTML = `<span class="col-input">${cur[key]}</span>`);
 				}
 
 				if (tag === "th") {
@@ -453,6 +460,9 @@ class Table {
 
 				if (cur.colSpan) {
 					$tr.classList.add("highlight");
+					if (pivotType === "version"){
+					    $tr.removeAttribute('data-writer');
+					}
 				}
 
 				if (cur.root === key) {
@@ -479,16 +489,14 @@ class Table {
 				$col.className = key;
 
 				if (tag === "td") {
-					if (cur[key]) {
-						$col.innerHTML = cur[key];
-						["status", "priority", "difficulty"].includes(key) &&
-							($col.innerHTML = `
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					$col.innerHTML = cur[key];
+
+					if ((["status"].includes(key) && cur.category !== "Group") || ["priority", "difficulty"].includes(key)) {
+						$col.innerHTML = `
+					<a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
 						${cur[key]}
 						<i class="fa fa-caret-down"></i>
-					</a>`);
-
-						["manager", "content"].includes(key) && ($col.innerHTML = `<span class="col-input">${cur[key]}</span>`);
+					</a>`;
 					}
 				} else {
 					$col.innerHTML = cur[key];
@@ -522,24 +530,27 @@ class Table {
 			c_req_reviewer04: task.origin.c_req_reviewer04,
 			c_req_reviewer05: task.origin.c_req_reviewer05,
 			c_req_status: "ChangeReq",
-			c_req_contents: task.origin.c_req_contents
+			c_req_contents: task.origin.c_req_contents,
+			c_req_plan_progress: task.progress,
+			c_req_end_date: new Date(task.endDate)
 		});
 	}
 
-	addInput(node) {
+	addInput(node, updateKey, type = text) {
 		const uuid = createUUID();
 		const text = node.textContent;
 		const $input = this.makeElement("input");
 
+		$input.setAttribute("type", type);
 		$input.id = uuid;
 		$input.addEventListener("blur", () => {
-			console.log("###", this.getElement(node, "TR"));
-			this.updateData(this.getElement(node, "TR").dataset.id, "content", $input.value);
+			this.updateData(this.getElement(node, "TR").dataset.id, updateKey, $input.value);
 			node.textContent = $input.value;
 		});
 
 		node.textContent = "";
 		node.appendChild($input);
+
 		document.getElementById(uuid).value = text;
 		document.getElementById(uuid).focus();
 	}
@@ -591,7 +602,7 @@ class Table {
 
 	bindHeadEvent($el) {
 		$el.addEventListener("click", (e) => {
-			!["manager", "depth1", "depth2", "depth3", "content"].includes(e.target.className) &&
+			!["writer", "depth1", "depth2", "depth3", "content"].includes(e.target.className) &&
 				this.handleSorting(e, e.target.classList.item(0));
 		});
 	}
@@ -599,9 +610,30 @@ class Table {
 	bindBodyEvent($el) {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
-			// input
-			if (tagName === "SPAN" && classList.contains("col-input")) {
-				this.addInput(e.target);
+
+			const $writer = this.getElement(e.target, "TD", "writer");
+			const $content = this.getElement(e.target, "TD", "content");
+			const $progress = this.getElement(e.target, "TD", "progress");
+			const $endDate = this.getElement(e.target, "TD", "endDate");
+
+			if ($writer) {
+				this.addInput($writer, "writer");
+				return;
+			}
+
+			if ($content) {
+				this.addInput($content, "content");
+				return;
+			}
+
+			if ($progress) {
+				this.addInput($progress, "progress", "number");
+				return;
+			}
+
+			if ($endDate) {
+				this.addInput($endDate, "endDate", "date");
+				return;
 			}
 
 			// select

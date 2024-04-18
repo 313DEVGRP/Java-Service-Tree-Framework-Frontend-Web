@@ -7,8 +7,8 @@
 					<span
 						class="font13"
 						style="font-weight: bold">
-						<i class="fa fa-dollar"></i>
-						비용 분석
+						<i class="fa fa-home"></i>
+						Cost 분석
 					</span>
 				</h4>
 				<div class="widget-controls">
@@ -59,7 +59,7 @@
 				<blockquote
 					class="font13"
 					style="margin-top: 5px">
-					선택한 제품(서비스)와 버전의 요구사항 및 연결된 이슈 관점 요구사항 현황
+					선택한 제품(서비스)와 버전의 Cost 관점 요구사항 현황
 					<div style="float: right">
 						<button
 							class="btn btn-transparent btn-xs"
@@ -75,7 +75,7 @@
 				<div class="row">
 					<div class="col-md-3">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section top-menu-div"
 							style="border: dashed; border-width: thin; border-color: lightsteelblue">
 							<header style="margin-bottom: 20px">
 								<h4>
@@ -92,7 +92,7 @@
 							</header>
 							<div class="body">
 								<div class="column">
-                                    <blockquote class="font13">
+									<blockquote class="font13">
 										1. Product
 										<sup>service</sup>
 										를 선택해 주세요
@@ -139,7 +139,7 @@
 					</div>
 					<div class="col-md-3">
 						<section
-							class="widget large"
+							class="widget large top-menu-div"
 							style="margin-bottom: 15px; height: 290px">
 							<header>
 								<h4>
@@ -163,7 +163,7 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section top-menu-div"
 							style="overflow: auto; margin-bottom: 15px">
 							<header style="margin-bottom: 15px">
 								<h4>
@@ -197,7 +197,7 @@
 										</div>
 										<div class="description">
 											<i class="fa fa-wrench"></i>
-											작업 중
+											진행 중
 										</div>
 									</div>
 									<div style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px">|</div>
@@ -207,7 +207,7 @@
 											style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700">
 											-
 										</div>
-										<div class="description">└ 작업 대상 ┘</div>
+										<div class="description">【총 요구사항】</div>
 									</div>
 								</div>
 								<div class="column">
@@ -218,42 +218,52 @@
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												요구사항(
-												<i class="fa fa-wrench"></i>
-												) 연결이슈 평균:
+												요구사항 진척도 :
+												<!--													id="linkedIssue_subtask_count_per_req_in_action"-->
 												<a
-													id="linkedIssue_subtask_count_per_req_in_action"
+													id="req_progress"
 													style="font-weight: bold">
 													-
 												</a>
-												개
+												%
 											</span>
 											<br />
+											<span>(완료된 요구사항 : <a id="req_completed" style="font-weight: bold">-</a>)</span>
 										</div>
-										<div
-											class="controls form-group darkBack col-md-6"
-											style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+									</div>
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0;">
+
+									</div>
+								</div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div
+										class="controls form-group col-md-6"
+										style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												총 요구사항
+												생성된 요구사항 이슈
 												<br />
 												<small>(미할당)</small>
 												<br />
 												<a
-													id="total_req_count"
+													id="total_req_issue_count"
 													style="font-weight: bold">
 													-
 												</a>
 												개 (
-												<span id="no_assigned_req_count">-</span>
+												<span id="no_assigned_req_issue_count">-</span>
 												)
 											</span>
-											<br />
-										</div>
-										<div
-											class="controls form-group darkBack col-md-6"
-											style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+										<br />
+									</div>
+									<div
+										class="controls form-group col-md-6"
+										style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												총 연결이슈
+												생성한 연결이슈
 												<br />
 												<small>(미할당)</small>
 												<br />
@@ -266,15 +276,14 @@
 												<span id="no_assigned_linkedIssue_subtask_count">-</span>
 												)
 											</span>
-											<br />
-										</div>
+										<br />
 									</div>
 								</div>
 							</div>
 						</section>
 					</div>
 					<div class="col-md-2">
-						<section class="widget">
+						<section class="widget dashboard-top-section top-menu-div">
 							<header style="margin-bottom: 15px">
 								<h4>
 									<span
@@ -289,6 +298,28 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; height: 2px; margin-top: 5px"></div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div>
+										<span>
+											전체 일정
+											<br />
+											<a
+												id="start_date_summary"
+												style="font-weight: bold">
+												-
+											</a>
+											~
+											<a
+												id="end_date_summary"
+												style="font-weight: bold">
+												-
+											</a>
+										</span>
+										<br />
+									</div>
+								</div>
 								<div
 									class="box"
 									style="display: flex; justify-content: space-evenly; margin: 10px 0">
@@ -338,7 +369,7 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section top-menu-div"
 							style="overflow: auto">
 							<header style="margin-bottom: 15px">
 								<h4>
@@ -358,7 +389,7 @@
 									class="box"
 									style="margin: 10px 0">
 									<div
-										id="resource_count"
+										id="resource"
 										style="
 											color: #a4c6ff;
 											margin-top: 5px;
@@ -381,31 +412,51 @@
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
-											<span>
-												작업 중 요구사항 평균 :
-												<a
-													id="req_in_action_avg"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
+											<span> 1인당 요구사항 이슈 수 <br/>(최대 / 평균 / 최소) </span>
 											<br />
+											<span>
+												<a id="req_max" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="req_avg" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="req_min" style="font-weight: bold"> - </a>
+											</span>
 										</div>
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
-											<span>
-												생성한 연결이슈 평균 :
-												<a
-													id="avg_linkedIssue_count"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
+											<span> 1인당 생성한 연결이슈 수 <br/>(최대 / 평균 / 최소)</span>
 											<br />
+											<span>
+												<a id="sub_max" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="sub_avg" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="sub_min" style="font-weight: bold"> - </a>
+											</span>
 										</div>
+										<!--										<div
+																					class="controls form-group darkBack col-md-12"
+																					style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
+																					<span>
+																						생성한 연결이슈 평균 :
+																						<a
+																							id="avg_linkedIssue_count"
+																							style="font-weight: bold">
+																							-
+																						</a>
+																						개
+																					</span>
+																					<br />
+																				</div>-->
 									</div>
 								</div>
 							</div>
@@ -1283,9 +1334,14 @@
 </div>
 
 <style>
-		#spreadsheet .jexcel_content {
-				width: 100%;
-		}
+    #spreadsheet .jexcel_content {
+            width: 100%;
+    }
+
+    #spreadsheet .jexcel_content table tbody tr td{
+        color: white;
+    }
+
     #spreadsheet .jexcel_content table {
         width: 100%;
     }

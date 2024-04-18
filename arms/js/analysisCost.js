@@ -1,8 +1,8 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId; // 선택된 버전 아이디
 var dataTableRef;
-var mailAddressList; // 투입 작업자 메일
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
+// 최상단 메뉴 변수
+var req_state, resource_info, issue_info, period_info, total_days_progress;
 var modifiedRows = {};
 var dashboardColor;
 let fileName = "인력별_연봉정보_템플릿.xlsx";
@@ -58,9 +58,9 @@ function execDocReady() {
         [
             // d3-5.16.0 네트워크 차트
             "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
-            // 생성한 차트 import
+            //  최상단 메뉴
+            "js/analysis/topmenu/topMenuApi.js",
             "js/analysis/topmenu/basicRadar.js",
-            "js/analysis/topmenu/topMenu.js",
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -101,6 +101,9 @@ function execDocReady() {
 
           //버전 멀티 셀렉트 박스 이니시에이터
           makeVersionMultiSelectBox();
+
+          /*TopMenuApi.setEqualHeight(".top-menu-div");
+          TopMenuApi.resizeHeightEvent();*/
 
           비용분석계산버튼();
 
@@ -187,11 +190,9 @@ function makeVersionMultiSelectBox() {
 
             차트초기화();
 
-            //분석메뉴 상단 수치 초기화
-            수치_초기화();
-
-            // 요구사항 및 연결이슈 통계
-            getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+            // 최상단 메뉴 세팅
+            TopMenuApi.톱메뉴_초기화();
+            TopMenuApi.톱메뉴_세팅();
 
             버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
 
@@ -221,16 +222,19 @@ function productCostChart() {
                 var responseMap = apiResponse.response;
                 var line = responseMap.line;
                 var bar = responseMap.bar;
+                var candleStick = responseMap.candleStick;
                 console.log(" [ analysisCost :: line ] :: response data -> " + JSON.stringify(line));
                 console.log(" [ analysisCost :: bar ] :: response data -> " + JSON.stringify(bar));
+                console.log(" [ analysisCost :: candleStick ] :: response data -> " + JSON.stringify(candleStick));
                 var maxCost = Math.max(...Object.values(line));
                 var productChartDom = document.getElementById('product-accumulate-cost-by-month');
                 $(productChartDom).height("500px");
-                var mymChart = echarts.init(productChartDom);
+                var productCostChart = echarts.init(productChartDom);
                 var option;
                 var dates = Object.keys(line);
                 var lineCosts = Object.values(line);
                 var barCosts = Object.values(bar);
+                var candleStickCosts = Object.values(candleStick);
                 option = {
                     dataZoom: [{
                         type: 'slider',
@@ -242,37 +246,106 @@ function productCostChart() {
                         formatter: function(params) {
                             var lineTooltip = new Intl.NumberFormat().format(params[0].value);
                             var barTooltip = new Intl.NumberFormat().format(params[1].value);
-                            return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip;
+                            var candleStickTooltip = params[2] ? params[2].value : null;
+                            var candleText = '';
+                            if (candleStickTooltip) {
+                                var 시가 = new Intl.NumberFormat().format(candleStickTooltip[1]);
+                                var 종가 = new Intl.NumberFormat().format(candleStickTooltip[2]);
+                                var 최저가 = new Intl.NumberFormat().format(candleStickTooltip[3]);
+                                var 최고가 = new Intl.NumberFormat().format(candleStickTooltip[4]);
+                                candleText = `시가: ${시가}<br>종가: ${종가}<br>최저가: ${최저가}<br>최고가: ${최고가}`;
+                                return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip + (candleText ? '<br>' + candleText : '');
+                            } else {
+                                return '날짜: ' + params[0].name + '<br>성과 기준선: ' + lineTooltip + '<br>성과: ' + barTooltip;
+                            }
                         }
                     },
                     xAxis: {
                         type: 'category',
-                        data: dates
+                        data: dates,
+                        axisLabel: {
+                            textStyle: {
+                                color: 'white',
+                            },
+                        },
                     },
-                    yAxis: {
-                        type: 'value',
-                        min: 0,
-                        max: maxCost,
-                        interval: Math.floor(maxCost / 10)
-                    },
+                    yAxis: [
+                        {
+                            type: 'value',
+                            min: 0,
+                            max: maxCost,
+                            interval: Math.floor(maxCost / 10),
+                            name: '누적 성과 비용',
+                            nameTextStyle: {
+                                color: 'white',
+                            },
+                            axisLabel: {
+                                textStyle: {
+                                    color: 'white',
+                                },
+                            },
+                        },
+                        {
+                            type: 'value',
+                            scale: true,
+                            name: '총 연봉 비용 변동 추이',
+                            nameTextStyle: {
+                                color: 'white',
+                            },
+                            axisLabel: {
+                                textStyle: {
+                                    color: 'white',
+                                },
+                            },
+                        }
+                    ],
+
                     legend: {
-                        data: ['성과 기준선', '비용']
+                        data: ['누적 성과 기준선', '누적 성과 비용', '총 연봉 비용 변동 추이'],
+                        textStyle: {
+                            color: 'white',
+                        },
                     },
                     series: [{
-                        name: '성과 기준선',
+                        name: '누적 성과 기준선',
                         data: lineCosts,
                         type: 'line',
+                        yAxisIndex: 0,
+                        textStyle: {
+                            color: 'white',
+                        },
                     }, {
-                        name: '비용',
+                        name: '누적 성과 비용',
                         data: barCosts,
                         type: 'bar',
+                        yAxisIndex: 0,
+                        textStyle: {
+                            color: 'white',
+                        },
+                    },
+                    {
+                        name: '총 연봉 비용 변동 추이',
+                        type: 'candlestick',
+                        data: candleStickCosts,
+                        yAxisIndex: 1,
+                        itemStyle: {
+                            color: 'red', // 양봉 색상
+                            color0: 'blue', // 음봉 색상
+                            borderColor: 'red', // 테두리 색상
+                            borderColor0: 'blue', // 음봉 테두리 색상
+                            // borderWidth: 3, // 테두리 두께
+                        },
+                        textStyle: {
+                            color: 'white',
+                        },
+                        // barWidth: 3, // 캔들 가로 두께
                     }]
                 };
 
                 if (option && typeof option === 'object') {
-                    mymChart.setOption(option);
+                    productCostChart.setOption(option);
                 }
-                window.addEventListener('resize', mymChart.resize);
+                window.addEventListener('resize', productCostChart.resize);
             }
         }
     });
@@ -303,12 +376,11 @@ function bind_VersionData_By_PdService() {
                 }
 
                 console.log("[ analysisCost :: bind_VersionData_By_PdService ] :: versionTag");
-
-                수치_초기화();
                 selectedVersionId = pdServiceVersionIds.join(",");
 
-                // 요구사항 및 연결이슈 통계
-                getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+                // 최상단 메뉴 세팅
+                TopMenuApi.톱메뉴_초기화();
+                TopMenuApi.톱메뉴_세팅();
 
                 버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
 
@@ -1499,12 +1571,6 @@ function jspreadsheetRender(data) {
         },
     });
 
-    var rowCount = data.length;
-
-    for(var rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-        sheet.setStyle(`C${rowIndex + 1}`, 'color', 'white');
-        // sheet.setStyle(`C${rowIndex + 1}`, 'background-color', 'orange');
-    }
 }
 
 $(document).ready(function() {

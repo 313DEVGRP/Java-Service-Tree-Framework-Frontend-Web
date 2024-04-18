@@ -73,7 +73,12 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
         }
         let dateDiff = Math.abs(objectiveArr[2] - currentProgressArr[2]).toFixed(0);
 
-        if (objectiveArr[2] >= currentProgressArr[2]) {
+        if (currentProgressArr[2] < 0) {
+            scheduleMax = objectiveArr[2];
+            titleText += "일정 시작: " + Math.abs(currentProgressArr[2]) +"일 남음";
+            currentProgressArr[2]=0;
+            titleColor = 'rgb(164,198,255)';
+        } else if (objectiveArr[2] >= currentProgressArr[2]) {
             scheduleMax = objectiveArr[2];
             titleText += "일정: " + dateDiff +"일 남음";
             titleColor = 'rgb(164,198,255)';
@@ -172,7 +177,11 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
                                 borderRadius: 3,
                             },
                             formatter: function (params) {
-                                return params.value;
+                                if (params.value < 0) {
+                                    return "("+Math.abs(params.value)+")";
+                                } else {
+                                    return params.value;
+                                }
                             }
                         },
                         areaStyle: {
