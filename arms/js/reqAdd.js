@@ -1232,6 +1232,17 @@ function save_req() {
 		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
 		let selectedplanTime = $("#popup_req_plan_time").val();
 
+		if (!selectedplanTime || selectedplanTime === "") {
+			alert("요구사항 예정 일정을 입력해주세요.");
+			return false;
+		}
+		else {
+			if (isNaN(selectedplanTime)) {
+				alert("예상 일정에는 숫자를 입력해주세요.");
+				return false;
+			}
+		}
+
 		let reqTitle = $("#req_title").val();
 		if(reqTitle) {
 			reqTitle = reqTitle.trim();
