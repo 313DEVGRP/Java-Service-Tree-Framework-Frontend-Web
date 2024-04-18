@@ -1548,7 +1548,7 @@ function responsiveTreeBar(svg) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 	var columnList = [
-		{ name: "pdServiceEntity.c_id", title: "제품(서비스) 아이디", data: "pdServiceEntity.c_id", visible: false },
+		{ name: "pdServiceEntity.c_id", title: "제품(서비스) 아이디", data: "pdServiceEntity.c_id", visible: false, defaultContent: 'N/A' },
 		{
 			name: "c_req_pdservice_versionset_link",
 			title: "버전",
