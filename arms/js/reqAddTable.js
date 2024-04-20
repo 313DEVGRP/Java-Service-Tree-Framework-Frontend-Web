@@ -65,7 +65,8 @@ const ReqDifficulty = {
 const ReqStatus = {
 	열림: 10,
 	진행중: 11,
-	해결됨: 12
+	해결됨: 12,
+	닫힘: 13
 };
 
 const createUUID = () => {
@@ -209,9 +210,9 @@ const mapperPivotTableData = (data) => {
 				writer: c_req_writer,
 				_writer: c_req_writer,
 				open: reqStateEntity?.c_id === 10 ? 1 : "",
-				investigation: "",
-				resolved: reqStateEntity?.c_id === 11 ? 1 : "",
-				closeStatus: reqStateEntity?.c_id === 12 ? 1 : "",
+				investigation: reqStateEntity?.c_id === 11 ? 1 : "",
+				resolved: reqStateEntity?.c_id === 12 ? 1 : "",
+				closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
 				statusTotal: "",
 				...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
 				content: c_title,
@@ -272,6 +273,7 @@ class Table {
 								_writer: cur[0].writer,
 								col: 1,
 								colSpan: 3,
+								node:"leaf",
 								origin: version,
 								...calcStatus(cur)
 							}
@@ -285,6 +287,7 @@ class Table {
 					colSpan: 4,
 					root: "version",
 					origin: version,
+					node:"root",
 					children: childrenItem,
 					...calcStatus(filterItems)
 				};
@@ -308,6 +311,7 @@ class Table {
 				col: 0,
 				colSpan: 4,
 				root: "writer",
+				node:"root",
 				children: rearrangement(group, "version", "version").reduce((acc, cur) => {
 					return [
 						...acc,
@@ -320,7 +324,8 @@ class Table {
 								col: 1,
 								colSpan: 3,
 								...calcStatus(cur)
-							}
+							},
+							node:"leaf"
 						}
 					];
 				}, []),
@@ -383,8 +388,24 @@ class Table {
 		});
 	}
 
-	removeElment(selector) {
-		const elements = document.querySelectorAll(selector);
+	removeElement(data) {
+	    let selector;
+	    if(data.node === "root"){
+	        selector = `[data-${data.root}="${data[`_${[data.root]}`]}"]`;
+	    }else{
+	        const writer = `[data-writer="${data.writer}"]`;
+        	const version = `[data-version="${data._version}"]`;
+            selector = `${writer}${version}`;
+	    }
+	    const elements = document.querySelectorAll(selector);
+        if (data.node === "root") {
+            elements.forEach((el) => {
+                const buttons = el.querySelectorAll('.btn.pivot-toggle.active');
+                buttons.forEach((button) => {
+                    button.classList.remove('active');
+                });
+            });
+        }
 
 		Array.from(elements)
 			.filter((el, index) => index)
@@ -423,8 +444,10 @@ class Table {
 			if (btn.classList.contains("active")) {
 				this.insertElement(this.getElement(e.target, "TR"), rows);
 			} else {
-				this.removeElment(`[data-${data.root}="${data[`_${[data.root]}`]}"]`);
 				console.log("##### delete", data);
+				//this.removeElment(`[data-${data.root}="${data[`_${[data.root]}`]}"]`);
+				this.removeElement(data);
+
 			}
 		});
 
@@ -616,10 +639,10 @@ class Table {
 			const $progress = this.getElement(e.target, "TD", "progress");
 			const $endDate = this.getElement(e.target, "TD", "endDate");
 
-			if ($writer) {
-				this.addInput($writer, "writer");
-				return;
-			}
+//			if ($writer) {
+//				this.addInput($writer, "writer");
+//				return;
+//			}
 
 			if ($content) {
 				this.addInput($content, "content");
