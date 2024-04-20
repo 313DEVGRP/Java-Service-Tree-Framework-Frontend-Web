@@ -1373,6 +1373,17 @@ function click_btn_for_req_update() {
 		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
 		let selectedEditReqPlanTime = $("#editview_req_plan_time").val();
 
+		if (!selectedEditReqPlanTime || selectedEditReqPlanTime === "") {
+			alert("변경하려는 요구사항 예정 일정을 입력해주세요.");
+			return false;
+		}
+		else {
+			if (isNaN(selectedEditReqPlanTime)) {
+				alert("예상 일정에는 숫자를 입력해주세요.");
+				return false;
+			}
+		}
+
 		let dataObjectParam = {
 			c_id: $("#editview_req_id").val(),
 			c_title: $("#editview_req_name").val(),
