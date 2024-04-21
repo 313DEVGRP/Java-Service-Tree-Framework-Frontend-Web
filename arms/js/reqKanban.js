@@ -1,10 +1,10 @@
 let selectedPdServiceId;           // 선택한 제품(서비스) 아이디
 let selectedVersionId;             // 선택한 버전 아이디
 const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
-    '열림': 'kanban-open',
-    '진행중': 'kanban-progress',
-    '해결됨': 'kanban-resolve',
-    '닫힘': 'kanban-close'
+    '열림': '10',
+    '진행중': '11',
+    '해결됨': '12',
+    '닫힘': '13'
 };
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
@@ -180,7 +180,8 @@ function changeMultipleSelected() {
         url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
             selectedPdServiceId +
             "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
-            selectedVersionId,
+            selectedVersionId +
+            "&c_type=default",
         type: "GET",
         dataType: "json",
         progress: true,
@@ -188,7 +189,7 @@ function changeMultipleSelected() {
             200: function (data) {
 
                 // 요구사항 상태 별 리스트
-                const reqListByState = data.reduce((reqList, item, index) => {
+                const reqListByState = data.reduce((reqList, item) => {
 
                     // 요구사항 상태 가져오기
                     const state = (item.reqStateEntity && item.reqStateEntity.c_title) || "상태 정보 없음";
@@ -207,13 +208,12 @@ function changeMultipleSelected() {
 
                     // 현재 상태에 해당하는 리스트에 아이템 추가
                     reqList[state].push({
-                        id: state + "-" + index,
-                        title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-id="${state}-${index}" data-state="${state}"></i>`,
+                        id: item.c_id,
+                        title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-id="${item.c_id}"></i>`,
                         info: {
                             reqVersions: versions,
                             reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
                             reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
-                            reqState: state,
                             reqPlan: item.c_req_plan_time || "예상 일정 정보 없음"
                         }
                     });
@@ -268,20 +268,56 @@ function loadKanban(reqListByState, reqBoardByState) {
         gutter  : '15px',
         responsivePercentage: true,
         dragBoards: false,
-        boards  : reqBoardByState
+        boards  : reqBoardByState,
+        dropEl: function (el, target, source) {
+            // 보드 변경
+            let reqId = el.dataset.eid;
+            let reqTitle = el.innerText;
+            let state = source.parentNode.dataset.id;
+            let changeState = target.parentNode.dataset.id;
+
+            console.log('[ reqKanban :: loadKanban ] :: 보드 이동', {
+                element: el.dataset,
+                fromBoard: state,
+                toBoard: changeState
+            });
+
+            // 요구사항 상태 변경
+            let reqData = {
+                c_id: reqId,
+                c_req_state_link: changeState,
+                c_req_etc: '칸반'
+            };
+            $.ajax({
+                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateNode.do",
+                type: "POST",
+                data: reqData,
+                statusCode: {
+                    200: function () {
+                        console.log("[ reqKanban :: loadKanban ] :: 요구사항 상태 변경 -> ", changeState);
+                        jSuccess('"' + reqTitle + '"' + " 요구사항 상태가 변경되었습니다.");
+                    }
+                }
+            });
+        }
     });
 
     // 상세 정보 클릭 이벤트
     $('.show-info').click(function() {
-        const id = $(this).data('id');
-        const state = $(this).data('state');
+        const reqId = $(this).data('id');
 
-        const item = reqListByState[state].find(item => item.id === id);
+        let reqInfo;
+        Object.values(reqListByState).forEach(stateList => {
+            const reqItem = stateList.find(item => item.id === reqId);
+            if (reqItem) {
+                reqInfo = reqItem.info;
+            }
+        });
 
-        if (item && item.info) {
-            alert(JSON.stringify(item.info));
+        if (reqInfo) {
+            alert(JSON.stringify(reqInfo));
         } else {
-            console.error('[ reqKanban :: loadKanban ] :: info 정보를 찾을 수 없습니다.', { id, state });
+            console.error('[ reqKanban :: loadKanban ] :: info 정보를 찾을 수 없습니다.', { reqId });
         }
     });
 }
