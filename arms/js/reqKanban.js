@@ -174,6 +174,11 @@ function changeMultipleSelected() {
     console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 제품 = " + selectedPdServiceId);
     console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 버전 = " + selectedVersionId);
 
+    if (selectedVersionId.length === 0) {
+        emptyKanban();
+        return;
+    }
+
     // selectedVersionId로 선택한 제품(서비스)를 구분하고
     // version 정보를 매핑해서 요구사항 이슈 가져오기
     $.ajax({
@@ -221,10 +226,7 @@ function changeMultipleSelected() {
                     return reqList;
                 }, {});
                 //console.log("[ reqKanban :: changeMultipleSelected ] :: 요구사항 상태 별 리스트 => ", JSON.stringify(reqListByState));
-
-                // 요구사항 개수 표시
-                setReqCount(reqListByState);
-
+                
                 // 칸반 보드 구성
                 const reqBoardByState = Object.keys(reqStateToIdMapping).map(state => ({
                                             id: reqStateToIdMapping[state], // 요구사항 상태 별 id
@@ -235,6 +237,10 @@ function changeMultipleSelected() {
                 // 칸반 보드 로드
                 loadKanban(reqListByState, reqBoardByState);
                 jSuccess("보드가 로드 되었습니다.");
+                
+                // 요구사항 개수 표시
+                setReqCount(reqListByState);
+                
             }
         },
         error: function (e) {
@@ -243,19 +249,29 @@ function changeMultipleSelected() {
     });
 }
 
-function setReqCount(reqListByState) {
+function setReqCount() {
 
-    let open = (reqListByState["열림"] && reqListByState["열림"].length) || 0;
-    let progress = (reqListByState["진행중"] && reqListByState["진행중"].length) || 0;
-    let resolve = (reqListByState["해결됨"] && reqListByState["해결됨"].length) || 0;
-    let close = (reqListByState["닫힘"] && reqListByState["닫힘"].length) || 0;
-    let total = open + progress + resolve + close;
+    // 개수
+    let counts = {
+        "열림": 0,
+        "진행중": 0,
+        "해결됨": 0,
+        "닫힘": 0
+    };
 
-    $("#req-count").text(total);
-    $("#req-open-count").text(open);
-    $("#req-progress-count").text(progress);
-    $("#req-resolve-count").text(resolve);
-    $("#req-close-count").text(close);
+    // 각 상태 별 개수 카운트
+    let className = '.kanban-item';
+    Object.keys(reqStateToIdMapping).forEach(state => {
+        counts[state] = $('div[data-id="' + reqStateToIdMapping[state] + '"]').find(className).length;
+    });
+    let 총합 = Object.values(counts).reduce((acc, currentValue) => acc + currentValue, 0);
+
+    // 개수 표시
+    $("#req-count").text(총합);
+    $("#req-open-count").text(counts["열림"]);
+    $("#req-progress-count").text(counts["진행중"]);
+    $("#req-resolve-count").text(counts["해결됨"]);
+    $("#req-close-count").text(counts["닫힘"]);
 
 }
 
@@ -296,6 +312,7 @@ function loadKanban(reqListByState, reqBoardByState) {
                     200: function () {
                         console.log("[ reqKanban :: loadKanban ] :: 요구사항 상태 변경 -> ", changeState);
                         jSuccess('"' + reqTitle + '"' + " 요구사항 상태가 변경되었습니다.");
+                        setReqCount();
                     }
                 }
             });
@@ -353,4 +370,5 @@ function emptyKanban() {
             }
         ]
     });
+    setReqCount();
 }
