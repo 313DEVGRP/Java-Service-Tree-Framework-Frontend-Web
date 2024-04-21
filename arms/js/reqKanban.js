@@ -113,6 +113,26 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function(e) {
         selectedPdServiceId = $("#selected_pdService").val();
+
+        var selectedService = $("#selected_pdService").select2("data")[0].text;
+
+        $("#select-pdService").text(selectedService);
+
+        var selectedHtml =
+            `<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
+					<span class="text" style="color: #a4c6ff;">
+					` +
+            selectedService +
+            `
+					</span>
+				</div>
+			</div>
+			`;
+        $("#reqSender").html(selectedHtml); // 선택된 제품(서비스)
+
         //refreshDetailChart(); 변수값_초기화();
         // 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
         // 디폴트는 base version 을 선택하게 하고 ( select all )
@@ -163,14 +183,15 @@ function bind_VersionData_By_PdService() {
 //제품(서비스) 선택 후, 버전을 선택하면 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function changeMultipleSelected() {
-    let result = [];
+    let versions = [];
     let versionIds = [];
     $("#multi-version option:selected").map(function (a, item) {
-        //result.push(item.innerText);
+        versions.push(item.innerText);
         versionIds.push(item.value);
     });
+    $("#select-version").text(isEmpty(versions) ? "선택되지 않음" : versions.join(', '));
+
     selectedVersionId = versionIds;
-    //$("#select_Version").text(isEmpty(result) ? "선택되지 않음" : result);
     console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 제품 = " + selectedPdServiceId);
     console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 버전 = " + selectedVersionId);
 

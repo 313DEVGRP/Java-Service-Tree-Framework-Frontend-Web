@@ -91,10 +91,66 @@
                             <div class="body">
                                 <div class="column">
                                     <blockquote class="font13">
-                                        1. Product
-                                        <sup>service</sup>
-                                        를 선택해 주세요
+                                        1. 제품
+                                        <sup>서비스</sup>
+                                        선택 → 버전 선택
                                     </blockquote>
+                                    <div class="clearfix widget-content">
+                                        <!-- 컴포넌트 대상 -->
+                                        <div id="selected_info">
+                                            <div
+                                                    class="panel-group json-menu"
+                                                    id="versionAccordion"
+                                                    style="margin-bottom: 0px !important">
+                                                <li
+                                                        class="list-group-item json-menu-header"
+                                                        style="padding: 0px">
+                                                    <div class="chat-message">
+                                                        <div
+                                                                class="chat-message-body"
+                                                                style="margin-left: 0px !important; border-right: 2px solid #e5603b; border-left: 0px">
+													<span
+                                                            id="toRight"
+                                                            class="arrow"
+                                                            style="
+															top: 10px !important;
+															right: -7px;
+															border-top: 5px solid transparent;
+															border-bottom: 5px solid transparent;
+															border-left: 5px solid #e5603b;
+															border-right: 0px;
+															left: unset;
+														"></span>
+                                                            <div
+                                                                    class="sender"
+                                                                    style="padding-bottom: 5px; padding-top: 3px">
+                                                                <i class="fa fa-check"></i>
+                                                                선택된 제품
+                                                                <sup>서비스</sup>
+                                                                :
+                                                                <span
+                                                                        id="select-pdService"
+                                                                        style="color: #a4c6ff">
+                                                                    선택되지 않음
+														        </span>
+                                                            </div>
+                                                            <div
+                                                                    class="sender"
+                                                                    style="padding-bottom: 5px; padding-top: 3px">
+                                                                <i class="fa fa-check"></i>
+                                                                선택된 버전 :
+                                                                <span
+                                                                        id="select-version"
+                                                                        style="color: #a4c6ff">
+                                                                    선택되지 않음
+														        </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div
                                             class="control-group"
                                             style="padding-top: 10px; padding-bottom: 10px; border: 0">
@@ -113,11 +169,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <blockquote class="font13">
-                                        2. Product
-                                        <sup>service</sup>
-                                        의 버전을 선택해 주세요
-                                    </blockquote>
                                     <div
                                             class="control-group"
                                             style="padding-bottom: 10px; border: 0">
@@ -157,7 +208,7 @@
                             </header>
                             <div class="body">
                                 <div class="column">
-                                    <blockquote class="font13">3. 제품(서비스) 요구사항 통계</blockquote>
+                                    <blockquote class="font13">2. 제품(서비스) 요구사항 통계</blockquote>
 
                                     <div
                                             class="control-group"
@@ -302,7 +353,7 @@
                 <blockquote
                         class="font13"
                         style="margin-top: 5px">
-                    2. 칸반 보드를 통해 요구사항 상태 관리
+                    3. 칸반 보드를 통해 요구사항 상태 관리
                     <div style="float: right">
                         <button
                                 class="btn btn-transparent btn-xs"
