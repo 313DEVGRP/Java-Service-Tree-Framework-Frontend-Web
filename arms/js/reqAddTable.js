@@ -216,7 +216,8 @@ const mapperPivotTableData = (data) => {
 				statusTotal: "",
 				...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
 				content: c_title,
-				origin: cur
+				origin: cur,
+				c_parentid:c_parentid
 			}
 		];
 	}, []);
@@ -249,14 +250,18 @@ class Table {
 
 	setTableData(data) {
 		if (pivotType === "normal") {
-			return tableData;
+			return tableData
+			.filter((item) => item.category !== "Group") // 폴더 제거
+			.sort((a, b) =>  a._version - b._version || a.c_parentid - b.c_parentid);; // 정렬
 		}
 
 		if (pivotType === "version") {
 			return versionList.map((version) => {
 				const filterItems = pivotTableData
 					.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제거
-					.filter((item) => item.version?.includes(`${version.c_id}`));
+					.filter((item) => item.version?.includes(`${version.c_id}`))
+					.sort((a, b) => a.writer?.localeCompare(b.writer) ||
+                    				    a.c_parentid - b.c_parentid); // 데이터 정렬
 
 				const childrenItem = rearrangement(filterItems, "writer", "writer", {
 					version: version.c_title,
@@ -304,7 +309,10 @@ class Table {
 						return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
 					}, [])
 				)
-				.sort((a, b) => a.writer?.localeCompare(b.writer) || a._version - b._version); // 데이터 정렬
+				.sort((a, b) => a.writer?.localeCompare(b.writer) ||
+				    a._version - b._version ||
+				    a.c_parentid - b.c_parentid); // 데이터 정렬
+
 			return rearrangement(모든_요구사항데이터, "writer", "writer").map((group) => ({
 				writer: `${group[0].writer} 총계`,
 				_writer: group[0].writer,
