@@ -213,83 +213,22 @@ function makePdServiceSelectBox() {
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
 
-		var checked = $("#checkbox1").is(":checked");
+		/*var checked = $("#checkbox1").is(":checked");
 		var endPointUrl = "";
 
 		if (checked) {
-			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
+			//endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
+			console.log("checked");
+			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do";
 		} else {
-			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
+			console.log("unchecked");
+			endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do";
 		}
 		//
-		getMonitorData($("#selected_pdService").val(), endPointUrl);
+		getMonitorData($("#selected_pdService").val(), endPointUrl);*/
 	});
 } // end makePdServiceSelectBox()
 
-function progressLoad(pdservice_id, pdservice_version_id) {
-	$("#progress_status").empty(); // 모든 자식 요소 삭제
-
-	//제품 서비스 셀렉트 박스 데이터 바인딩
-	$.ajax({
-		url:
-			"/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" +
-			pdservice_id +
-			"/getProgress.do?version=" +
-			pdservice_version_id,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-
-					var html_piece =
-						'<div	class="controls form-group darkBack"\n' +
-						'		style="margin-bottom: 5px !important; padding-top: 5px !important;">\n' +
-						"<span>✡ " +
-						key +
-						' : <a id="alm_server_count" style="font-weight: bold;"> ' +
-						value +
-						"</a> 개</span>\n" +
-						"</div>";
-					$("#progress_status").append(html_piece);
-				}
-			}
-		}
-	});
-}
-
-function statisticsLoad(pdservice_id, pdservice_version_id) {
-	//제품 서비스 셀렉트 박스 데이터 바인딩
-	$.ajax({
-		url:
-			"/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" +
-			pdservice_id +
-			"/getStatistics.do?version=" +
-			pdservice_version_id,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-				}
-
-				$("#version_count").text(data["version"]);
-				$("#req_count").text(data["req"]);
-				$("#alm_server_count").text(data["jiraServer"]);
-				$("#alm_project_count").text(data["jiraProject"]);
-				$("#alm_issue_count").text(data["issue"]);
-			}
-		}
-	});
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //버전 멀티 셀렉트 박스
@@ -314,8 +253,9 @@ function makeVersionMultiSelectBox() {
 			TopMenuApi.톱메뉴_초기화();
 			TopMenuApi.톱메뉴_세팅();
 
-			//진행상태 가져오기
-			progressLoad($("#selected_pdService").val(), selectedVersionId);
+			let endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do";
+			getMonitorData($("#selected_pdService").val(), endPointUrl, selectedVersionId);
+
 		}
 	});
 }
@@ -344,7 +284,8 @@ function bind_VersionData_By_PdService() {
 					console.log("display 재설정.");
 				}
 				var versionTag = $(".multiple-select").val();
-				console.log("[ analysisScope :: bind_VersionData_By_PdService ] :: versionTag");
+				console.log("[ reqGantt :: bind_VersionData_By_PdService ] :: versionTag");
+				console.log(versionTag);
 				console.log(pdServiceVersionIds);
 				selectedVersionId = pdServiceVersionIds.join(",");
 				console.log("bind_VersionData_By_PdService :: selectedVersionId");
@@ -353,13 +294,24 @@ function bind_VersionData_By_PdService() {
 				TopMenuApi.톱메뉴_초기화();
 				TopMenuApi.톱메뉴_세팅();
 
-				//진행상태 가져오기
-				progressLoad($("#selected_pdService").val(), selectedVersionId);
-
 				//$('#multiversion').multipleSelect('refresh');
 				//$('#edit_multi_version').multipleSelect('refresh');
 				$(".multiple-select").multipleSelect("refresh");
 				//////////////////////////////////////////////////////////
+
+				var checked = $("#checkbox1").is(":checked");
+				var endPointUrl = "";
+
+				if (checked) {
+					//endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getMonitor.do";
+					console.log("checked");
+					endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do";
+				} else {
+					console.log("unchecked");
+					endPointUrl = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getReqAddListByFilter.do";
+				}
+				//
+				getMonitorData($("#selected_pdService").val(), endPointUrl, selectedVersionId);
 			}
 		}
 	});
@@ -1180,6 +1132,8 @@ function click_btn_for_req_add() {
 			c_type_value = $("input[name=reqType]:checked").val();
 		}
 
+		var versionset_link = JSON.stringify($("#add_multi_version").val());
+
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
 			type: "POST",
@@ -1188,7 +1142,7 @@ function click_btn_for_req_add() {
 				c_title: $("#addview_req_name").val(),
 				c_type: c_type_value,
 				c_req_pdservice_link: $("#selected_pdService").val(),
-				c_req_pdservice_versionset_link: JSON.stringify($("#add_multi_version").val()),
+				c_req_pdservice_versionset_link: versionset_link,
 				c_req_writer: "[" + userName + "]" + " - " + userID,
 				c_req_create_date: new Date(),
 				c_req_update_date: new Date(),
@@ -1220,7 +1174,7 @@ function click_btn_for_req_add() {
 			statusCode: {
 				200: function () {
 					jSuccess("신규 요구사항 ( " + reqName + " )이 추가되었습니다.");
-					getMonitorData($("#selected_pdService").val(), "/" + tableName + "/getMonitor.do");
+					getMonitorData($("#selected_pdService").val(), "/" + tableName + "/getReqAddListByFilter.do", versionset_link);
 				}
 			}
 		});
@@ -1256,13 +1210,15 @@ function click_btn_for_req_update() {
 			reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
 		}
 
+		var versionset_link = JSON.stringify($("#edit_multi_version").val())
+
 		$.ajax({
 			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
 			type: "POST",
 			data: {
 				c_id: $("#editview_req_id").val(),
 				c_title: $("#editview_req_name").val(),
-				c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
+				c_req_pdservice_versionset_link: versionset_link,
 				// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
 				c_req_update_date: new Date(),
 				c_req_priority_link: $("#editview_req_priority .btn.active input").val(),
@@ -1286,7 +1242,7 @@ function click_btn_for_req_update() {
 			statusCode: {
 				200: function () {
 					jSuccess(reqName + "의 데이터가 변경되었습니다.");
-					getMonitorData($("#selected_pdService").val(), "/" + tableName + "/getMonitor.do");
+					getMonitorData($("#selected_pdService").val(), "/" + tableName + "/getReqAddListByFilter.do", versionset_link);
 				}
 			}
 		});
@@ -1683,7 +1639,11 @@ async function draggableNode(data) {
 	});
 }
 
-function getMonitorData(selectId, endPointUrl) {
+function getMonitorData(selectId, endPointUrl, versionLists) {
+	if(versionLists) {
+		let versionInfo ="?c_req_pdservice_versionset_link="+versionLists;
+		endPointUrl += versionInfo;
+	}
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd" + endPointUrl,
 		type: "GET",
