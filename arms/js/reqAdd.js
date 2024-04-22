@@ -603,6 +603,8 @@ function bindDataEditlTab(ajaxData) {
 		$("#editview_req_pdservice_name").val(selectedPdServiceText);
 	}
 
+	$("#editview_req_type").val(ajaxData.c_type);
+
 	// 버전 데이터 바인딩
 	if (!isEmpty(ajaxData.c_req_pdservice_versionset_link)) {
 		$("#edit_multi_version").multipleSelect("setSelects", JSON.parse(ajaxData.c_req_pdservice_versionset_link));
@@ -1359,6 +1361,19 @@ function click_btn_for_req_update() {
 		).val();
 		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
 		let selectedEditReqPlanTime = $("#editview_req_plan_time").val();
+
+		let selectReqType = $("#editview_req_type").val();
+
+		if (selectReqType === "default") {
+			if (!selectedEditReqPlanTime || selectedEditReqPlanTime === "") {
+				alert("변경하려는 요구사항 예정 일정을 입력해주세요.");
+				return false;
+			}
+			else if (isNaN(selectedEditReqPlanTime)) {
+				alert("예상 일정에는 숫자를 입력해주세요.");
+				return false;
+			}
+		}
 
 		let dataObjectParam = {
 			c_id: $("#editview_req_id").val(),
