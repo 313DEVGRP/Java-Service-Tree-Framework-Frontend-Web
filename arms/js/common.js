@@ -900,9 +900,10 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			}
 		})
 		.bind("loaded.jstree", function (event, data) {
-			setTimeout(function () {
-				$(jQueryElementID).jstree("open_all");
-			}, 1500);
+			// 성능 이슈로 자동으로 전부 펼치기 닫음.
+			// setTimeout(function () {
+			// 	$(jQueryElementID).jstree("open_all");
+			// }, 1500);
 
 			$(jQueryElementID).slimscroll({
 				height: "545px"
