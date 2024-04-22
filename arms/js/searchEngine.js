@@ -56,13 +56,6 @@ function execDocReady() {
 			//setSideMenu("sidebar_menu_searchEngine", "sidebar_menu_searchEngine");
 			$(".widget").widgster();
 
-			setTimeout(function () {
-				var script = document.createElement("script");
-				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
-				script.defer = true; // defer 속성 설정
-				document.head.appendChild(script);
-			}, 2000); // 2초 후에 실행됩니다.
-
 			//highlight.js 설정.
 			hljs.highlightAll();
 			//이벤트리스너 활성화
