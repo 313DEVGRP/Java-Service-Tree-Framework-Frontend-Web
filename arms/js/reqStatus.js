@@ -154,22 +154,6 @@ function makePdServiceSelectBox() {
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
 
-		var checked = $("#checkbox1").is(":checked");
-		var endPointUrl = "";
-
-		if (checked) {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=true";
-		} else {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=false";
-		}
-		// 이슈리스트 데이터테이블
-		dataTableLoad($("#selected_pdService").val(), endPointUrl);
-		// 통계로드
-		//statisticsLoad($("#selected_pdService").val(), "");
-		// 진행상태 가져오기
-		//progressLoad($("#selected_pdService").val(), "");
-		//resourceLoad($("#selected_pdService").val(), null);
-
 	});
 } // end makePdServiceSelectBox()
 
@@ -246,17 +230,17 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 		progress: true,
 		statusCode: {
 			200: function (data) {
-
+				console.log(data);
 				for (var key in data) {
 					var value = data[key];
 					console.log(key + "=" + value);
 				}
 
-				$('#version_count').text(data["version"]);
-				$('#req_count').text(data["req"]);
-				$('#alm_server_count').text(data["jiraServer"]);
-				$('#alm_project_count').text(data["jiraProject"]);
-				$('#alm_issue_count').text(data["issue"]);
+				$('#version_count').text(data["version"]); 		   	 // 버전수
+				$('#req_count').text(data["req"]);			   			 	 // 요구사항 이슈 개수
+				$('#alm_server_count').text(data["jiraServer"]); 	 // 서버 수
+				$('#alm_project_count').text(data["jiraProject"]); // 연결된 프로젝트 수
+				$('#alm_issue_count').text(data["issue"]); 				 // 연결된 ALM 이슈 수
 			}
 		}
 	});
@@ -289,19 +273,12 @@ function makeVersionMultiSelectBox() {
 			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 			// 진행상태 가져오기
 			progressLoad($("#selected_pdService").val(), selectedVersionId);
-
+			// 작업자 정보
 			resourceLoad($("#selected_pdService").val(), selectedVersionId);
 
-
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=true&versionTag=" + versionTag;
-				dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=false&versionTag=" + versionTag;
-				dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			}
+			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
+			// 이슈리스트 데이터테이블
+			dataTableLoad($("#selected_pdService").val(), endPointUrl)
 		}
 	});
 }
@@ -335,13 +312,17 @@ function bind_VersionData_By_PdService() {
 				console.log("bind_VersionData_By_PdService :: selectedVersionId");
 				console.log(selectedVersionId);
 
+				// 통계로드
 				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 				// 진행상태 가져오기
 				progressLoad($("#selected_pdService").val(), selectedVersionId);
-
+				// 작업자 정보
 				resourceLoad($("#selected_pdService").val(), selectedVersionId);
-				//$('#multiversion').multipleSelect('refresh');
-				//$('#edit_multi_version').multipleSelect('refresh');
+
+				var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
+				// 이슈리스트 데이터테이블
+				dataTableLoad($("#selected_pdService").val(), endPointUrl);
+
 				$(".multiple-select").multipleSelect("refresh");
 				//////////////////////////////////////////////////////////
 			}
