@@ -835,7 +835,7 @@
 	</div>
 </div>
 
-<!-- 링크드이슈 서브테스크 모달 -->
+<!-- 요구사항 수정 모달 -->
 <div
 	id="my_modal"
 	class="modal fade"
@@ -864,7 +864,11 @@
 					<blockquote
 						class="search-result"
 						style="border-left: 5px solid #e5603b">
-						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">요구사항 세부 내용 조회</p>
+						<p
+							style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px"
+							id="my_modal2_desc">
+							요구사항 세부 내용 조회
+						</p>
 					</blockquote>
 				</h4>
 				<div
@@ -1039,6 +1043,7 @@
 																	<label
 																		class="btn btn-transparent btn-sm active"
 																		style="color: #f8f8f8 !important">
+																		<input type="hidden" id="editview_req_type" />
 																		<input type="radio" />
 																		요구사항 변경 모드
 																	</label>
@@ -1331,7 +1336,7 @@
 																data-placement="top"
 																required="required"
 																style="color: #a4c6ff"
-																placeholder="Requirement Plan Day"
+																placeholder="숫자만 입력해주세요(10일 -> 10)"
 															/>
 														</div>
 													</div>
@@ -1401,157 +1406,6 @@
 																	class="js-data-example-ajax form-control font13 darkBack"
 																	name="selectedReviewers[]"
 																	multiple="multiple"
-																	style="width: 100%; color: #a4c6ff"></select>
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_start_date">
-															요구사항 시작날짜 :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
-																</span>
-																<input
-																	id="editview_req_start_date"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	placeholder="요구사항 시작날짜를 입력해 주세요" />
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_end_date">
-															요구사항 종료날짜 :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
-																</span>
-																<input
-																	id="editview_req_end_date"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	placeholder="요구사항 종료날짜를 입력해 주세요" />
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_total_resource">
-															총 작업 공수 (MM) :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
-																</span>
-																<input
-																	id="editview_req_total_resource"
-																	type="number"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	placeholder="요구사항 작업 공수를 입력해 주세요" />
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_plan_resource">
-															총 계획 공수 (MM) :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
-																</span>
-																<input
-																	id="editview_req_plan_resource"
-																	type="number"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	placeholder="요구사항 계획 공수를 입력해 주세요" />
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_total_time">
-															총 작업 기간 (Day) :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
-																</span>
-																<input
-																	id="editview_req_total_time"
-																	type="number"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	placeholder="요구사항 작업 기간을 입력해 주세요" />
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_plan_time">
-															총 계획 기간 (Day) :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-envelope"></i>
-																</span>
-																<input
-																	id="editview_req_plan_time"
-																	type="number"
-																	class="form-control font13 darkBack"
-																	style="color: #a4c6ff"
-																	placeholder="요구사항 계획 기간을 입력해 주세요" />
-															</div>
-														</div>
-													</div>
-													<div class="control-group">
-														<label
-															class="control-label"
-															for="editview_req_manager">
-															요구사항 담당자 :
-														</label>
-														<div
-															class="controls form-group"
-															style="margin-bottom: 10px">
-															<div class="input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-user"></i>
-																</span>
-																<select
-																	id="editview_req_manager"
-																	class="js-data-example-ajax form-control font13 darkBack"
-																	name="selectedManager"
 																	style="width: 100%; color: #a4c6ff"></select>
 															</div>
 														</div>
@@ -2064,7 +1918,9 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<form method="post">
+				<form
+					class="form-horizontal"
+					method="post">
 					<fieldset>
 						<div class="widget">
 							<div class="form-group">
@@ -2114,9 +1970,7 @@
 									<label
 										class="control-label"
 										for="addview_req_pdservice_name">
-										요구사항 제품
-										<sup>서비스</sup>
-										:
+										반영 제품(서비스) *
 									</label>
 									<div
 										class="controls form-group"
@@ -2136,11 +1990,13 @@
 										</div>
 									</div>
 								</div>
-								<div class="control-group">
+								<div
+									class="control-group"
+									id="popup_version_div">
 									<label
 										class="control-label"
 										for="edit_multi_version">
-										요구사항 버전 :
+										반영 버전 *
 									</label>
 									<div
 										class="controls form-group"
@@ -2158,11 +2014,35 @@
 										</div>
 									</div>
 								</div>
+								<div
+									class="control-group"
+									id="popup_reviewer_div">
+									<label
+											class="control-label"
+											for="addview_req_reviewers">
+										반영 리뷰어 *
+									</label>
+									<div
+											class="controls form-group"
+											style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-inbox"></i>
+											</span>
+											<select
+													id="addview_req_reviewers"
+													class="js-data-example-ajax form-control font13 darkBack"
+													name="selectedReviewers[]"
+													multiple="multiple"
+													style="width: 100%; color: #a4c6ff"></select>
+										</div>
+									</div>
+								</div>
 								<div class="control-group">
 									<label
 										class="control-label"
-										for="addview_req_name">
-										요구사항 제목 :
+										for="addview_req_title">
+										요구사항 제목 *
 									</label>
 									<div
 										class="controls form-group"
@@ -2172,7 +2052,7 @@
 												<i class="glyphicon glyphicon-list-alt"></i>
 											</span>
 											<input
-												id="addview_req_name"
+												id="addview_req_title"
 												class="form-control font13 darkBack"
 												style="color: #a4c6ff"
 												size="16"
@@ -2181,11 +2061,13 @@
 										</div>
 									</div>
 								</div>
-								<div class="control-group">
+								<div
+									class="control-group"
+									id="popup_req_priority_div">
 									<label
 										for="addview_req_priority"
 										class="control-label font13">
-										요구사항 우선순위 :
+										요구사항 우선순위 *
 									</label>
 									<div
 										class="controls form-group input-group">
@@ -2236,11 +2118,13 @@
 										</div>
 									</div>
 								</div>
-								<div class="control-group">
+								<div
+									class="control-group"
+									id="popup_req_difficulty_div">
 									<label
 										for="addview_req_difficulty"
 										class="control-label font13">
-										요구사항 난이도 :
+										요구사항 난이도 *
 									</label>
 									<div
 										class="controls form-group input-group">
@@ -2291,11 +2175,13 @@
 										</div>
 									</div>
 								</div>
-								<div class="control-group">
+								<div
+									class="control-group"
+									id="popup_req_state_div">
 									<label
 										for="addview_req_state"
 										class="control-label font13">
-										요구사항 상태 :
+										요구사항 상태 *
 									</label>
 									<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
 									<div
@@ -2329,26 +2215,22 @@
 														value="12" />
 													해결됨
 												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_state_options"
-														value="13" />
-													닫힘
-												</label>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div
 									class="control-group"
-									for="addview_req_plan_time">
-									<label class="control-label font13">예상 일정(일) :</label>
-									<div
-										class="controls form-group input-group">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-time"></i>
-																</span>
+									id="popup_req_plan_time_div">
+									<label
+										class="control-label font13"
+										for="addview_req_plan_time">
+										예상 일정(일) *
+									</label>
+									<div class="controls form-group input-group">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-time"></i>
+										</span>
 										<input
 											type="text"
 											id="addview_req_plan_time"
@@ -2357,223 +2239,20 @@
 											data-placement="top"
 											required="required"
 											style="color: #a4c6ff"
-											placeholder="Requirement Plan Day"
+											placeholder="숫자만 입력해주세요(10일 -> 10)"
 										/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label
-										class="control-label"
-										for="addview_req_writer">
-										요구사항 요청자 :
+											class="control-label font13"
+											for="add_tabmodal_editor">
+										요구사항 내용 *
 									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-user"></i>
-											</span>
-											<input
-												id="addview_req_writer"
-												disabled="disabled"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												size="16"
-												type="text"
-												placeholder="요구사항 요청자를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_reviewers">
-										요구사항 리뷰어 :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-inbox"></i>
-											</span>
-											<select
-												id="addview_req_reviewers"
-												class="js-data-example-ajax form-control font13 darkBack"
-												name="selectedReviewers[]"
-												multiple="multiple"
-												style="width: 100%; color: #a4c6ff"></select>
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_start_date">
-										요구사항 시작날짜 :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i>
-											</span>
-											<input
-												id="addview_req_start_date"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												placeholder="요구사항 시작날짜를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_end_date">
-										요구사항 종료날짜 :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i>
-											</span>
-											<input
-												id="addview_req_end_date"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												placeholder="요구사항 종료날짜를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_total_resource">
-										총 작업 공수 (MM) :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i>
-											</span>
-											<input
-												id="addview_req_total_resource"
-												type="number"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												placeholder="요구사항 작업 공수를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_plan_resource">
-										총 계획 공수 (MM) :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i>
-											</span>
-											<input
-												id="addview_req_plan_resource"
-												type="number"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												placeholder="요구사항 계획 공수를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_total_time">
-										총 작업 기간 (Day) :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i>
-											</span>
-											<input
-												id="addview_req_total_time"
-												type="number"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												placeholder="요구사항 작업 기간을 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_plan_time">
-										총 계획 기간 (Day) :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i>
-											</span>
-											<input
-												id="addview_req_plan_time"
-												type="number"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												placeholder="요구사항 계획 기간을 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_manager">
-										요구사항 담당자 :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-user"></i>
-											</span>
-											<select
-												id="addview_req_manager"
-												class="js-data-example-ajax form-control font13 darkBack"
-												name="selectedManager"
-												style="width: 100%; color: #a4c6ff"></select>
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="add_tabmodal_editor">
-										요구사항 내용 :
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div
-											class="input-group"
-											style="padding-top: 5px">
-											<i class="fa fa-level-down"></i>
-											하단 영역 참조
-										</div>
-									</div>
+									<span class="input-group-addon" style="display: inline !important">
+										<i class="glyphicon glyphicon-book"></i>
+									</span>
+									<br />
 									<br />
 									<div
 										class="col-sm-12 darkBack"
@@ -2599,7 +2278,7 @@
 				<button
 					type="button"
 					id="save_req"
-					class="btn btn-success"
+					class="btn btn-primary"
 					data-dismiss="modal">
 					신규 요구사항 저장
 				</button>

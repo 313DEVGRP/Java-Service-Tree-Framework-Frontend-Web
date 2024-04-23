@@ -552,7 +552,7 @@ function dataTableLoad(selectId, selectRel) {
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
-	console.log("dataTableClick")
+	console.log("dataTableClick");
 }
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
