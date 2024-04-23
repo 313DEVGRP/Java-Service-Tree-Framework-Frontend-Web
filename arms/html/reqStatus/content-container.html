@@ -388,6 +388,13 @@
 					</button>
 				</div>
 			</blockquote>
+			<div class="clearfix widget-content">
+				<div style="float: right">
+					<button type="button" data-target="#batch_manual_modal" data-toggle="modal" class="btn btn-warning btn-sm">
+						수동 배치
+					</button>
+				</div>
+			</div>
 
 			<div class="row">
 				<div class="col-md-12">
@@ -591,4 +598,140 @@
 		<!-- /.modal-content -->
 	</div>
 	<!-- /.modal-dialog -->
+</div>
+<div
+	id="batch_manual_modal"
+	class="modal fade"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="batch_manual_modal_label"
+	aria-hidden="true"
+	style="display: none">
+	<div
+		class="modal-dialog"
+		style="width: 35%">
+		<div
+			class="modal-content modalDarkBack"
+			style="height: 100%">
+			<div
+				class="modal-header"
+				style="padding: 0px; border-bottom: 1px">
+				<h4
+					class="modal-title font14"
+					id="batch_manual_modal_label"
+					style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+						class="font13"
+						id="my_modal2_title"
+						style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						배치 수동 동작 모달
+					</span>
+					<blockquote
+						class="search-result"
+						style="border-left: 5px solid #e5603b">
+						<span>
+							<p style="font-size: 13px;">
+								수동으로 직접 배치를 실행합니다.
+							</p>
+							<p style="font-size: 13px;">
+								<i class="fa fa-info-circle"></i>
+								Batch 2의 경우 서버에 많은 부하를 주며, 시간이 비교적 오래 걸립니다.
+							</p>
+						</span>
+					</blockquote>
+				</h4>
+				<div
+					class="widget-controls"
+					style="padding-top: 10px">
+					<a
+						title="Options"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-cog"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<div
+				class="modal-body"
+				style="padding: 10px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<div class="row">
+					<div class="col-md-12">
+						<div
+							class="chat-message"
+							style="padding-bottom: 10px">
+						</div>
+						<div	id="execute-btn-groups"
+									class="font13"
+									style="float: left; width: 100%; padding-left: 10px; padding-right: 10px">
+							<div style="height: 30px;line-height: 30px;margin:10px;">
+								<span>Batch 1 - 서버정보백업 </span>
+								<div style="display: inline-block; float: right">
+									<button id="batch-step-1" class="btn btn-primary btn-sm step-btn">
+										<span>Batch 1 실행</span>
+									</button>
+								</div>
+							</div>
+							<div style="height: 30px;line-height: 30px;margin:10px;">
+								<span>Batch 2 - 각_제품서비스_별_요구사항이슈_조회_및_ES저장</span>
+								<div style="display: inline-block; float: right">
+									<button id="batch-step-2" class="btn btn-primary btn-sm step-btn">
+										<span>Batch 2 실행</span>
+									</button>
+								</div>
+							</div>
+							<div style="height: 30px;line-height: 30px;margin:10px;">
+								<span>Batch 3 - 각_제품서비스_별_요구사항_증분이슈_조회_및_ES저장  </span>
+								<div style="display: inline-block; float: right">
+									<button id="batch-step-3" class="btn btn-primary btn-sm step-btn">
+										<span>Batch 3 실행</span>
+									</button>
+								</div>
+							</div>
+							<div style="height: 30px;line-height: 30px;margin:10px;">
+								<span>Batch 4 - 각_제품서비스_별_요구사항_Status_업데이트_From_ES </span>
+								<div style="display: inline-block; float: right">
+									<button id="batch-step-4" class="btn btn-primary btn-sm step-btn">
+										<span>Batch 4 실행</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
 </div>

@@ -58,6 +58,9 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js"
+		],
+		[
+			"js/reqStatus/batchManualControlApi.js"
 		]
 	];
 
@@ -69,6 +72,8 @@ function execDocReady() {
 			//사이드 메뉴 처리
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
+
+			BatchManualControlApi.stepEventListenerStart();
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();

@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 				//로컬 개발 및 테스트용
 				// proxies: [
 				// 	{
-				// 		context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
+				// 		context: ['/auth-anon', '/auth-user', '/auth-admin', '/auth-check', '/auth-sche', '/sso', '/dwr', '/logout', '/login', '/oauth2', '/arms-check',
 				// 			'/swagger-ui.html', '/swagger-ui', '/webjars', '/swagger-resources', '/v2', '/engine-search-api'],
 				// 		host: '127.0.0.1',
 				// 		port: 13131,
@@ -46,6 +46,7 @@ module.exports = function (grunt) {
 							"/auth-user",
 							"/auth-admin",
 							"/auth-check",
+							"/auth-sche",
 							"/engine-search-api",
 							"/sso",
 							"/dwr",
