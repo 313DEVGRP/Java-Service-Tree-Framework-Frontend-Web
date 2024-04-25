@@ -1936,14 +1936,15 @@ svg .ghostCircle.show {
     margin-bottom: 0;
 }
 
-.kanban-container {
-   	color: black;
+.kanban-board {
+    background: rgba(51, 51, 51, .425) !important;
 }
 
 .kanban-item {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
+	color: black;
 }
 
 .kanban-drag {

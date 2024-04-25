@@ -1,4 +1,5 @@
 let selectedPdServiceId;           // 선택한 제품(서비스) 아이디
+let selectedPdService;             // 선택한 제품(서비스) 이름
 let selectedVersionId;             // 선택한 버전 아이디
 const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
     '열림': '10',
@@ -113,19 +114,17 @@ function makePdServiceSelectBox() {
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_pdService").on("select2:select", function(e) {
         selectedPdServiceId = $("#selected_pdService").val();
+        selectedPdService = $("#selected_pdService").select2("data")[0].text;
 
-        var selectedService = $("#selected_pdService").select2("data")[0].text;
-
-        $("#select-pdService").text(selectedService);
-
-        var selectedHtml =
+        $("#select-pdService").text(selectedPdService);
+        let selectedHtml =
             `<div class="chat-message">
 				<div class="chat-message-body" style="margin-left: 0px !important;">
 					<span class="arrow" style="top: 35% !important;"></span>
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
 					<span class="text" style="color: #a4c6ff;">
 					` +
-            selectedService +
+            selectedPdService +
             `
 					</span>
 				</div>

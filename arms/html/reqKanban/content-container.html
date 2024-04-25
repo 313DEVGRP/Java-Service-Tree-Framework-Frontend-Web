@@ -73,9 +73,7 @@
 
                 <div class="row">
                     <div class="col-md-3 kanban-top">
-                        <section
-                                class="widget"
-                                style="margin-bottom: 0px !important; border: dashed; border-width: thin; border-color: lightsteelblue">
+                        <section class="widget">
                             <header style="margin-bottom: 20px">
                                 <h4>
                                 <span
@@ -151,40 +149,38 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                            class="control-group"
-                                            style="padding-top: 10px; padding-bottom: 10px; border: 0">
+                                    <div class="wrapper">
                                         <div
-                                                class="controls form-group select-box"
-                                                style="margin-bottom: 5px !important">
-                                            <select
-                                                    id="selected_pdService"
-                                                    required="required"
-                                                    data-placeholder="Select Product(Service)"
-                                                    class="select-block-level chzn-select darkBack"
-                                                    tabindex="-1"
-                                                    name="selected_pdService"
-                                                    style="width: 100% !important">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div
-                                            class="control-group"
-                                            style="padding-bottom: 10px; border: 0">
-                                        <div
-                                                class="controls form-group select-box"
-                                                style="margin-bottom: 5px !important">
-                                            <select
-                                                    multiple="multiple"
-                                                    id="multi-version"
-                                                    class="multiple-select btn-block darkBack"
-                                                    onchange="changeMultipleSelected()"
-                                                    placeholder="&nbsp;&nbsp;Select Version"></select>
-                                            <select
-                                                    multiple="multiple"
-                                                    id="req-versions"
-                                                    class="multiple-select hidden"></select>
+                                                class="control-group"
+                                                style="border: dashed; border-width: thin; border-color: lightsteelblue; margin-bottom: 10px">
+                                                <div
+                                                        class="controls form-group select-box"
+                                                        style="margin-bottom: 15px !important">
+                                                    <select
+                                                            id="selected_pdService"
+                                                            required="required"
+                                                            data-placeholder="Select Product(Service)"
+                                                            class="select-block-level chzn-select darkBack"
+                                                            tabindex="-1"
+                                                            name="selected_pdService"
+                                                            style="width: 100% !important">
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                            <div
+                                                    class="controls form-group select-box"
+                                                    style="margin-bottom: 5px !important">
+                                                <select
+                                                        multiple="multiple"
+                                                        id="multi-version"
+                                                        class="multiple-select btn-block darkBack"
+                                                        onchange="changeMultipleSelected()"
+                                                        placeholder="&nbsp;&nbsp;Select Version"></select>
+                                                <select
+                                                        multiple="multiple"
+                                                        id="req-versions"
+                                                        class="multiple-select hidden"></select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -353,7 +349,7 @@
                 <blockquote
                         class="font13"
                         style="margin-top: 5px">
-                    3. 칸반 보드를 통해 요구사항 상태 관리
+                    2. 칸반 보드를 통해 요구사항 상태 관리
                     <div style="float: right">
                         <button
                                 class="btn btn-transparent btn-xs"
