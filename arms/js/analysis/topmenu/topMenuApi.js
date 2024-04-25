@@ -14,7 +14,6 @@ var TopMenuApi = (function () {
         "in-progress" : 0, // 진행중
         "resolved" : 0,    // 해결됨
         "closed" : 0       // 닫힘
-
     };
     // Version 시작일, 종료일
     var period_date = {
@@ -32,15 +31,15 @@ var TopMenuApi = (function () {
 
 
     var resource = {
-        "resource" : 0,
-        "req_total" : 0,
-        "sub_total" : 0,
-        "req_max" : null,
-        "req_avg" : null,
-        "req_min" : null,
-        "sub_max" : null,
-        "sub_avg" : null,
-        "sub_min" : null
+        "resource" : 0,   // 총 작업자수
+        "req_total" : 0,  // 요구사항 이슈 총수
+        "sub_total" : 0,  // 하위작업 이슈 총수
+        "req_max" : null, // 1명이 맡은 가장 많은 요구사항 이슈 수
+        "req_avg" : null, // 평균 맡고 있는 요구사항 이슈 ( req_total / resource)
+        "req_min" : null, // 1명이 맡은 가장 적은 요구사항 이슈 수
+        "sub_max" : null, // 1명이 가장 많은 하위작업 이슈를 갖는 정도
+        "sub_avg" : null, // 평균 맡고 있는 하위작업 이슈 ( sub_total / resource)
+        "sub_min" : null  // 1명이 맡은 가장 적은 하위작업 이슈 수
     };
 
     var expectedEndDate = {
@@ -244,8 +243,13 @@ var TopMenuApi = (function () {
     function 톱메뉴_초기화() {
         $("#remaining_days").text(" - ");
         $("#progressDateRate").text(" - ");
-        $("#req_in_action_count").text(" - ");// 작업중
+
         $("#req_count").text(" - "); 						// 작업대상
+        $("#req_open").text(" - "); 						// 작업대상
+        $("#req_in_progress").text(" - "); 						// 작업대상
+        $("#req_resolved").text(" - "); 						// 작업대상
+        $("#req_closed").text(" - "); 						// 작업대상
+
         $("#req_progress").text(" - "); // 진척도
         $("#req_completed").text(" - "); // 완료된_요구사항(resolved+closed)
         $("#total_req_issue_count").text(" - ");  // 생성된 요구사항 이슈
@@ -406,9 +410,10 @@ var TopMenuApi = (function () {
           .then(() => {
               //범위현황
               $("#req_in_action_count").text(req_state["not-open"]);// 작업중
-              $("#req_count").text(req_state["total"]); 						// 작업대상
-              $("#req_progress").text(TopMenuApi.getReqProgress()); // 진척도
-              $("#req_completed").text(req_state["resolved-and-closed"]);
+              $("#req_count").text(req_state["total"]); 						// 전체
+              $("#req_open").text(req_state["open"]); 						// 전체
+              $("#req_in_progress").text(req_state["in-progress"]); 						// 전체
+              $("#req_resolved").text(req_state["resolved"]); 						// 전체
               $("#req_closed").text(req_state["closed"]);
 
               $("#total_req_issue_count").text(issue_info["req"]);  // 생성된 요구사항 이슈
@@ -418,6 +423,8 @@ var TopMenuApi = (function () {
               //전체 일정
               $("#start_date_summary").text(period_info["start_date"].substr(0,10).replaceAll("\/","-"));
               $("#end_date_summary").text(period_info["end_date"].substr(0,10).replaceAll("\/","-"));
+              $("#req_progress").text(TopMenuApi.getReqProgress()); // 진척도
+              $("#req_completed").text(req_state["resolved-and-closed"]);
               TopMenuApi.calExpectedEndDate(selectedPdServiceId, selectedVersionId,resource_info["req_total"], total_days_progress)
                 .then( () => {
                     return TopMenuApi.getExpectedEndDate();

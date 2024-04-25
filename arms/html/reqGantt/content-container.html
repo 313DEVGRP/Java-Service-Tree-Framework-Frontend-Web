@@ -178,63 +178,55 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
-								<div
-									class="box"
-									style="display: flex; justify-content: space-evenly; margin: 10px 0">
-									<div>
-										<div
-											id="req_in_action_count"
-											style="
-												color: #a4c6ff;
-												margin-top: 5px;
-												font-size: 20px;
-												line-height: 20px;
-												height: 20px;
-												font-weight: 700;
-											">
-											-
-										</div>
-										<div class="description">
-											<i class="fa fa-wrench"></i>
-											진행 중
-										</div>
-									</div>
-									<div style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px">|</div>
-									<div>
-										<div
-											id="req_count"
-											style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700">
-											-
-										</div>
-										<div class="description">【총 요구사항】</div>
-									</div>
-								</div>
-								<div class="column">
-									<div
-										class="control-group"
-										style="padding-bottom: 10px; border: 0">
-										<div
-											class="controls form-group darkBack col-md-12"
-											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
-											<span>
-												요구사항 진척도 :
-												<!--													id="linkedIssue_subtask_count_per_req_in_action"-->
-												<a
-													id="req_progress"
-													style="font-weight: bold">
-													-
-												</a>
-												%
-											</span>
-											<br />
-											<span>(완료된 요구사항 : <a id="req_completed" style="font-weight: bold">-</a>)</span>
-										</div>
-									</div>
-									<div
-										class="control-group"
-										style="padding-bottom: 10px; border: 0;">
-
-									</div>
+								<div class="body">
+									<ul class="overall-stats"
+											style="background-color: rgba(51, 51, 51, .425); padding: 5px 10px;">
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-inbox"></i>
+											</div>
+											<span class="key">총 요구사항</span>
+											<div class="value pull-right">
+												<span id="req_count" class="badge badge-info"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa  fa-folder-o"></i>
+											</div>
+											<span class="key">열림</span>
+											<div class="value pull-right">
+												<span id="req_open" class="badge"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-fire"></i>
+											</div>
+											<span class="key">진행중</span>
+											<div class="value pull-right">
+												<span id="req_in_progress" class="badge"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-fire-extinguisher"></i>
+											</div>
+											<span class="key">해결됨</span>
+											<div class="value pull-right">
+												<span id="req_resolved" class="badge"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-folder"></i>
+											</div>
+											<span class="key">닫힘</span>
+											<div class="value pull-right">
+												<span id="req_closed" class="badge"> - </span>
+											</div>
+										</li>
+									</ul>
 								</div>
 								<div
 									class="box"
@@ -345,6 +337,27 @@
 											-
 										</div>
 										<div class="description">【 경과 】</div>
+									</div>
+								</div>
+								<div class="column">
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group darkBack col-md-12"
+											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
+											<span>
+												요구사항 진척도 :
+												<a
+													id="req_progress"
+													style="font-weight: bold">
+													-
+												</a>
+												%
+											</span>
+											<br />
+											<span>(완료된 요구사항 : <a id="req_completed" style="font-weight: bold">-</a>)</span>
+										</div>
 									</div>
 								</div>
 								<div
