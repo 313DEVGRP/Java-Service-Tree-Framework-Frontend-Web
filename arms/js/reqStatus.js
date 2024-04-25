@@ -392,7 +392,12 @@ function dataTableLoad(selectId, endPointUrl) {
 							verHtml+= versionInfo["c_title"]+`<br/>`;
 						}
 					});
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + verHtml + "</div>";
+					} else {
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
+					}
+
 				}
 				return data;
 			},
@@ -461,7 +466,12 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+					} else {
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					}
+
 				}
 			},
 			className: "dt-body-left",
