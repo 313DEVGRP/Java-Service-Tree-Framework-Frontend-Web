@@ -1944,7 +1944,8 @@ svg .ghostCircle.show {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
-	color: black;
+	background: rgba(51, 51, 51, 1) !important;
+	border-radius: 6px;
 }
 
 .kanban-drag {
