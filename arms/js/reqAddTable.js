@@ -14,7 +14,7 @@ const ContentType = {
 		depth1: "Depth 1",
 		depth2: "Depth 2",
 		depth3: "Depth 3",
-		content: "기능",
+		content: "요구사항 제목",
 		priority: "우선순위",
 		difficulty: "난이도",
 		createDate: "생성일",
@@ -26,7 +26,7 @@ const ContentType = {
 		version: "Version",
 		writer: "TASK OWNER",
 		depth1: "Depth 1",
-		content: "기능",
+		content: "요구사항 제목",
 		open: "열림",
 		investigation: "진행중",
 		resolved: "해결됨",
@@ -37,7 +37,7 @@ const ContentType = {
 		writer: "TASK OWNER",
 		version: "Version",
 		depth1: "Depth 1",
-		content: "기능",
+		content: "요구사항 제목",
 		open: "열림",
 		investigation: "진행중",
 		resolved: "해결됨",
@@ -67,6 +67,11 @@ const ReqStatus = {
 	진행중: 11,
 	해결됨: 12,
 	닫힘: 13
+};
+
+const getReqWriterName = (writerId) =>{
+    let writer = writerId.match(/\[(.*?)\]/);
+    return writer[1];
 };
 
 const createUUID = () => {
@@ -165,7 +170,7 @@ const mapperTableData = (data) => {
 					version: getVersionTitle(vid),
 					id: c_id,
 					category: CategoryName[c_type],
-					writer: c_type !== "folder" ? c_req_writer : "",
+					writer: c_type !== "folder" ? getReqWriterName(c_req_writer) : "",
 					status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
 					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
 					content: c_title,
@@ -209,7 +214,7 @@ const mapperPivotTableData = (data) => {
 			{
 				id: c_id,
 				version: JSON.parse(c_req_pdservice_versionset_link) ?? "",
-				writer: c_req_writer,
+				writer: getReqWriterName(c_req_writer),
 				_writer: c_req_writer,
 				open: reqStateEntity?.c_id === 10 ? 1 : "",
 				investigation: reqStateEntity?.c_id === 11 ? 1 : "",
