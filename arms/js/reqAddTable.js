@@ -408,7 +408,7 @@ class Table {
 	    if(data.node === "root"){
 	        selector = `[data-${data.root}="${data[`_${[data.root]}`]}"]`;
 	    }else{
-	        const writer = `[data-writer="${data.writer}"]`;
+	        const writer = `[data-writer="${data._writer}"]`;
         	const version = `[data-version="${data._version}"]`;
             selector = `${writer}${version}`;
 	    }
@@ -475,6 +475,7 @@ class Table {
 			$tr.setAttribute("data-id", cur.id ?? "");
 			$tr.setAttribute("data-version", cur._version ?? "");
 			$tr.setAttribute("data-writer", cur._writer ?? "");
+            const radioButtonName = `status_${cur.id}`;
 			Object.keys(ContentType[pivotType]).forEach((key, index) => {
 				const $col = this.makeElement(tag);
 				$col.className = key;
@@ -501,6 +502,11 @@ class Table {
 					if (pivotType === "version"){
 					    $tr.removeAttribute('data-writer');
 					}
+				}else{
+                    if(['open', 'investigation', 'resolved', 'closeStatus'].includes($col.className)){
+                        const checkedAttribute = $col.innerHTML === "1" ? " checked" : "";
+                        $col.innerHTML = `<input type="radio" name="${radioButtonName}"${checkedAttribute}>`;
+                     }
 				}
 
 				if (cur.root === key) {
