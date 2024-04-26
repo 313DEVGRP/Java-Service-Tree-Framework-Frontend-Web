@@ -59,7 +59,7 @@ module.exports = function (grunt) {
 							"/webjars",
 							"/swagger-resources",
 							"/v2",
-							"/php"
+							"/php",
 						],
 						host: "www.313.co.kr",
 						port: 80,
