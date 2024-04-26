@@ -154,8 +154,10 @@ const mapperTableData = (data) => {
 				c_type
 			} = cur;
 			if (cur.c_parentid < 2) return acc;
-
-			const vid = JSON.parse(c_req_pdservice_versionset_link)[0] ?? "";
+			let vid = "";
+            if (c_req_pdservice_versionset_link !== null) {
+                vid = JSON.parse(c_req_pdservice_versionset_link)[0] ?? "";
+            }
 
 			return [
 				...acc,
