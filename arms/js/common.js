@@ -278,12 +278,12 @@ function includeLayout(page) {
 			});
 		} else if (url.indexOf("page-sidebar") !== -1) {
 			if (mode == "detail" || hrefLink.indexOf("detail.html") > 0) {
-				url = "html/detail/page-sidebar.html";
+				url = "/arms/html/detail/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
 			} else {
-				url = "html/template/page-sidebar.html";
+				url = "/arms/html/template/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
