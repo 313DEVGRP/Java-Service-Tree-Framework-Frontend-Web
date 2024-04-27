@@ -1943,9 +1943,18 @@ svg .ghostCircle.show {
 .kanban-item {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-end;
 	background: rgba(51, 51, 51, 1) !important;
 	border-radius: 6px;
+}
+
+.req_item {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-right: 2rem;
+	word-break: keep-all;
 }
 
 .kanban-drag {

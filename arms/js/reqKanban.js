@@ -234,12 +234,14 @@ function changeMultipleSelected() {
                     // 현재 상태에 해당하는 리스트에 아이템 추가
                     reqList[state].push({
                         id: item.c_id,
-                        title: `${item.c_title} <i class="fa fa-ellipsis-h show-info" data-id="${item.c_id}"></i>`,
+                        title: `<span class="req_item">${item.c_title}</span>
+                                <i class="fa fa-ellipsis-h show-info" data-id="${item.c_id}"></i>`,
                         info: {
                             reqVersions: versions,
                             reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
                             reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
-                            reqPlan: item.c_req_plan_time || "예상 일정 정보 없음"
+                            reqPlan: item.c_req_plan_time || "예상 일정 정보 없음",
+                            reqSummary: item.c_title
                         }
                     });
 
