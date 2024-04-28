@@ -1763,7 +1763,7 @@ function tableSelect(id) {
 				}
 			});
 		},
-		onUpdate: function (id, params) {
+		onUpdate: function (id, params) { // 요구사항 제목
 			$.ajax({
 				url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/updateNode.do`,
 				type: "POST",
@@ -1774,7 +1774,19 @@ function tableSelect(id) {
 					}
 				}
 			});
-		}
+		},
+		onDBUpdate: function (id ,params) { // 상태, 우선순위, 난이도, 시작일, 종료일
+            $.ajax({
+       			url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/updateDataBase.do`,
+   				type: "POST",
+  				data: params,
+        		statusCode: {
+   					200: function () {
+       				jSuccess(" 요구사항이 변경되었습니다.");
+        			}
+       			}
+   			});
+   		}
 	});
 }
 

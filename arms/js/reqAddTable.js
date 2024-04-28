@@ -3,13 +3,13 @@ let versionList,
 	pivotTableData,
 	tableOptions,
 	TableInstance,
-	pivotType = "normal";
+	pivotType = "normal",
+	editContents = {};
 const ContentType = {
 	normal: {
 		version: "Version",
 		category: "구분",
-		id: "TASK NO",
-		writer: "TASK OWNER",
+		writer: "요구사항 작성자",
 		status: "Status",
 		depth1: "Depth 1",
 		depth2: "Depth 2",
@@ -19,12 +19,11 @@ const ContentType = {
 		difficulty: "난이도",
 		createDate: "생성일",
 		startDate: "시작일",
-		endDate: "종료일",
-		progress: "진행률"
+		endDate: "종료일"
 	},
 	version: {
 		version: "Version",
-		writer: "TASK OWNER",
+		writer: "요구사항 작성자",
 		depth1: "Depth 1",
 		content: "요구사항 제목",
 		open: "열림",
@@ -34,7 +33,7 @@ const ContentType = {
 		statusTotal: "총계"
 	},
 	owner: {
-		writer: "TASK OWNER",
+		writer: "요구사항 작성자",
 		version: "Version",
 		depth1: "Depth 1",
 		content: "요구사항 제목",
@@ -67,6 +66,13 @@ const ReqStatus = {
 	진행중: 11,
 	해결됨: 12,
 	닫힘: 13
+};
+
+const ReqStatusEnglish = {
+	open: 10,
+	investigation: 11,
+	resolved: 12,
+	closeStatus: 13
 };
 
 const getReqWriterName = (writerId) =>{
@@ -459,10 +465,7 @@ class Table {
 			if (btn.classList.contains("active")) {
 				this.insertElement(this.getElement(e.target, "TR"), rows);
 			} else {
-				console.log("##### delete", data);
-				//this.removeElment(`[data-${data.root}="${data[`_${[data.root]}`]}"]`);
 				this.removeElement(data);
-
 			}
 		});
 
@@ -561,7 +564,7 @@ class Table {
 		task[key] = value;
 
 		tableOptions.onUpdate(tableOptions.id, {
-			c_id: task.id,
+            c_id: task.id,
 			c_title: task.content,
 			c_req_pdservice_versionset_link: task.origin.c_req_pdservice_versionset_link,
 			c_req_priority_link: task._priority ?? null, // 5 - 중간
@@ -578,6 +581,20 @@ class Table {
 			c_req_plan_progress: task.progress,
 			c_req_end_date: new Date(task.endDate)
 		});
+	}
+
+	updatePivotData(reqId,editContents){
+	    if(editContents.statusId !== null) {// DB 까지만 변경이 필요한 경우
+	        tableOptions.onDBUpdate(tableOptions.id,{
+    			c_id: reqId,
+    			c_req_state_link: editContents.statusId ?? null
+    		});
+	    }else{ // ALM 까지 데이터 변경이 필요할 시
+	        tableOptions.onUpdate(tableOptions.id, {
+    			c_id: reqId,
+    			c_title: editContents.content ?? null
+    		});
+	    }
 	}
 
 	addInput(node, updateKey, type = text) {
@@ -659,26 +676,40 @@ class Table {
 			const $content = this.getElement(e.target, "TD", "content");
 			const $progress = this.getElement(e.target, "TD", "progress");
 			const $endDate = this.getElement(e.target, "TD", "endDate");
-
-//			if ($writer) {
-//				this.addInput($writer, "writer");
+            const tdElement = e.target.closest("td");
+            const trElement = e.target.closest("tr");
+            console.log($content);
+            if ($content) {
+                this.addInput($content, "content");
+                return;
+            }
+//			if ($progress) {
+//				this.addInput($progress, "progress", "number");
+//				return;
+//			}
+//
+//			if ($endDate) {
+//				this.addInput($endDate, "endDate", "date");
 //				return;
 //			}
 
-			if ($content) {
-				this.addInput($content, "content");
-				return;
-			}
+            if (pivotType !== "normal"){ // 피벗 테이블의 경우 이름을 변경할 때
+                if ($content) {
+                    editContents.content = $content;
+                    this.updatePivotData(trElement.dataset.id,editContents);
+                    return;
+                }
+            }else{
+                if ($content) {
+                    this.addInput($content, "content");
+                    return;
+                }
+            }
 
-			if ($progress) {
-				this.addInput($progress, "progress", "number");
-				return;
-			}
-
-			if ($endDate) {
-				this.addInput($endDate, "endDate", "date");
-				return;
-			}
+            if (e.target.type === "radio") {
+                editContents.statusId =ReqStatusEnglish[tdElement.className];
+                this.updatePivotData(trElement.dataset.id,editContents);
+            }
 
 			// select
 			if (["A", "I"].includes(tagName)) {
