@@ -828,8 +828,12 @@ function bindDataDetailTab(ajaxData) {
 		}
 	});
 
-	$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.c_req_start_date)));
-	$("#detailview_req_end_date").val(formatDate(new Date(ajaxData.c_req_end_date)));
+	if (ajaxData.c_req_start_date) {
+		$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.c_req_start_date)));
+	}
+	if (ajaxData.c_req_end_date) {
+		$("#detailview_req_end_date").val(formatDate(new Date(ajaxData.c_req_end_date)));
+	}
 
 	$("#detailview_req_writer").val(ajaxData.c_req_writer);
 	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
