@@ -66,6 +66,11 @@ function execDocReady() {
             // 빈 칸반 보드
             emptyKanban();
 
+            // 높이 조정
+            $('.kanban_board').matchHeight({
+                target: $('.kanban_sidebar')
+            });
+
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
