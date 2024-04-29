@@ -120,8 +120,10 @@ function execDocReady() {
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
-			/*TopMenuApi.setEqualHeight(".top-menu-div");
-			TopMenuApi.resizeHeightEvent();*/
+			// 높이 조정
+			$('.top-menu-div').matchHeight({
+				target: $('.top-menu-div-scope')
+			});
 
 			popup_size_setting();
 
