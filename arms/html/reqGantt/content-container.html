@@ -346,17 +346,27 @@
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
-											<span>
-												요구사항 진척도 :
-												<a
-													id="req_progress"
-													style="font-weight: bold">
-													-
-												</a>
-												%
-											</span>
-											<br />
-											<span>(완료된 요구사항 : <a id="req_completed" style="font-weight: bold">-</a>)</span>
+											<li style="list-style: none;">
+												<div style="display: flex; justify-content: space-between">
+													<span style="margin-left: 10px;">
+														요구사항 진척도
+													</span>
+													<span style="margin-right: 10px;">
+<!--														<a
+														id="req_progress"
+														style="font-weight: bold">
+															-
+														</a>/-->
+														<a id="req_completed" style="font-weight: bold">-</a>
+														<a id="req_total2" style="font-weight: bold">-</a>
+													</span>
+												</div>
+											</li>
+											<li style="list-style: none;">
+												<div class="progress progress-small progress-striped" style="margin: 5px 10px; height:18px; line-height: 13px">
+													<div id="req_progress_bar" class="progress-bar progress-bar-warning"></div>
+												</div>
+											</li>
 										</div>
 									</div>
 								</div>

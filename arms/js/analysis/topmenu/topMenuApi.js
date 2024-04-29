@@ -244,14 +244,18 @@ var TopMenuApi = (function () {
         $("#remaining_days").text(" - ");
         $("#progressDateRate").text(" - ");
 
-        $("#req_count").text(" - "); 						// 작업대상
-        $("#req_open").text(" - "); 						// 작업대상
-        $("#req_in_progress").text(" - "); 						// 작업대상
-        $("#req_resolved").text(" - "); 						// 작업대상
-        $("#req_closed").text(" - "); 						// 작업대상
+        $("#req_count").text(" - ");
+        $("#req_open").text(" - ");
+        $("#req_in_progress").text(" - ");
+        $("#req_resolved").text(" - ");
+        $("#req_closed").text(" - ");
 
-        $("#req_progress").text(" - "); // 진척도
+        $("#req_progress").text(""); // 진척도
+        $("#req_progress_bar").text("");
+        $("#req_progress_bar").css("width","0%");
         $("#req_completed").text(" - "); // 완료된_요구사항(resolved+closed)
+        $("#req_total2").text("");
+
         $("#total_req_issue_count").text(" - ");  // 생성된 요구사항 이슈
         $("#no_assigned_req_issue_count").text(" - "); // 생성된 요구사항 이슈(미할당)
         $("#total_linkedIssue_subtask_count").text(" - "); //생성한 연결이슈
@@ -423,8 +427,12 @@ var TopMenuApi = (function () {
               //전체 일정
               $("#start_date_summary").text(period_info["start_date"].substr(0,10).replaceAll("\/","-"));
               $("#end_date_summary").text(period_info["end_date"].substr(0,10).replaceAll("\/","-"));
-              $("#req_progress").text(TopMenuApi.getReqProgress()); // 진척도
+              let progress_per = TopMenuApi.getReqProgress() +"%";
+              $("#req_progress").text(progress_per); // 진척도
+              $("#req_progress_bar").text(progress_per);
+              $("#req_progress_bar").css("width",progress_per);
               $("#req_completed").text(req_state["resolved-and-closed"]);
+              $("#req_total2").text("("+req_state["total"]+")");
               TopMenuApi.calExpectedEndDate(selectedPdServiceId, selectedVersionId,resource_info["req_total"], total_days_progress)
                 .then( () => {
                     return TopMenuApi.getExpectedEndDate();
