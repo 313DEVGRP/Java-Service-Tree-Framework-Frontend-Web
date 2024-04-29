@@ -206,7 +206,7 @@ function changeMultipleSelected() {
     console.log("[ reqKanban :: changeMultipleSelected ] :: 선택한 버전 = " + selectedVersionId);
 
     if (selectedVersionId.length === 0) {
-        emptyKanban();
+        initKanban();
         return;
     }
 
@@ -369,6 +369,43 @@ function loadKanban(reqListByState, reqBoardByState) {
         } else {
             console.error('[ reqKanban :: loadKanban ] :: info 정보를 찾을 수 없습니다.', { reqId });
         }
+    });
+
+    // 툴팁
+    $('.req_item').hover(function() {
+
+        let reqSummary = $(this).text(); // 요구사항 제목
+
+        // req_item 요소
+        let target = $(this);
+        let reqItem = target[0].getBoundingClientRect()
+
+        // 툴팁 요소
+        let tooltip = $('<div class="req_item_tooltip"></div>')
+                        .text(reqSummary)
+                        .appendTo('body')
+                        .fadeIn('slow');
+
+        let tooltipWidth = tooltip.outerWidth();
+        let tooltipHeight = tooltip.outerHeight();
+
+        // 요소의 가운데 아래에 툴팁 위치 설정
+        let topPosition = reqItem.bottom + window.scrollY + 5; // 페이지 스크롤을 고려하여 bottom 위치 사용
+        let leftPosition = reqItem.left + window.scrollX + (target.outerWidth() - tooltipWidth) / 2; // 요소의 가운데 정렬
+        if (leftPosition < 0) {
+            leftPosition = 0; // 화면 왼쪽을 넘지 않도록 보정
+        }
+        tooltip.css({top: topPosition + 'px', left: leftPosition + 'px'});
+
+    }, function() {
+        // 툴팁 제거
+        $('.req_item_tooltip').fadeOut('fast', function() {
+            $(this).remove();
+        });
+    }).mousemove(function(e) {
+        // 마우스 위치에 따라 툴팁 위치 조정
+        /*$('.req_item_tooltip')
+            .css({top: e.pageY + 20 + 'px', left: e.pageX - 20 + 'px'});*/
     });
 }
 
