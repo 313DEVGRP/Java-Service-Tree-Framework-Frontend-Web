@@ -7,6 +7,10 @@ const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
     '해결됨': '12',
     '닫힘': '13'
 };
+let boardData = Object.keys(reqStateToIdMapping).map(state => ({ // 기본 보드 데이터
+                     id: reqStateToIdMapping[state],
+                     title: state
+                 }));
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -45,8 +49,10 @@ function execDocReady() {
             "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"
         ],
         [
+            // 칸반 보드
             "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.css",
-            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.js"
+            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.js",
+            "../arms/js/reqKanban/kanban.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -63,8 +69,8 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            // 빈 칸반 보드
-            emptyKanban();
+            // 칸반 보드 초기화
+            initKanban();
 
             // 높이 조정
             $('.kanban_board').matchHeight({
@@ -366,36 +372,8 @@ function loadKanban(reqListByState, reqBoardByState) {
     });
 }
 
-function emptyKanban() {
+function initKanban() {
 
-    $("#myKanban").empty();
-
-    let kanban = new jKanban({
-        element : '#myKanban',          // 칸반 보드 선택자
-        gutter  : '15px',               // 보드 간 간격
-        responsivePercentage: true,     // 반응형 여부
-        dragBoards: false,              // 보드 drag 가능 여부
-        click : function(el){
-            alert(el.innerHTML);
-        },
-        boards  :[
-            {
-                'id' : 'kanban_open',
-                'title'  : '열림'
-            },
-            {
-                'id' : 'kanban_progress',
-                'title'  : '진행 중'
-            },
-            {
-                'id' : 'kanban_resolved',
-                'title'  : '해결됨'
-            },
-            {
-                'id' : 'kanban_closed',
-                'title'  : '닫힘'
-            }
-        ]
-    });
+    KanbanBoard.init('myKanban', boardData);
     setReqCount();
 }
