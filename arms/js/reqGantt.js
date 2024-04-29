@@ -182,6 +182,8 @@ function makePdServiceSelectBox() {
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
 					$("#selected_pdService").append(newOption).trigger("change");
 				}
+
+				resetProjectProgress();
 				//////////////////////////////////////////////////////////
 			}
 		}
@@ -233,7 +235,7 @@ function makeVersionMultiSelectBox() {
 			TopMenuApi.톱메뉴_세팅();
 
 			getMonitorData($("#selected_pdService").val(), selectedVersionId);
-
+			resetProjectProgress();
 		}
 	});
 }
@@ -1556,10 +1558,6 @@ function setGanttTasks(data) {
 				priority: cur.state,
 				custom_class: cur.status, // optional
 				type: cur.c_type,
-				tmm:`${cur.c_req_total_resource || 0} M/M`,
-				p_work: `${cur.c_req_plan_resource || 0} M/M`,
-				t_period: cur.c_req_total_time,
-				tpp: cur.c_req_plan_time,
 				etc: cur.c_req_etc,
 				manager: cur.c_req_manager,
 				result: cur.c_req_output,
@@ -1579,9 +1577,14 @@ function setGanttTasks(data) {
 
 			if (cur.c_type === "folder") {
 				common_object.etc = "폴더";
-			} else {
-				common_object.plan = `${cur.c_req_plan_progress || 0}%`;
-				common_object.performance = `${cur.c_req_performance_progress || 0}%`;
+			}
+			else {
+				common_object.total_resource = cur.c_req_total_resource == null ? 0 : cur.c_req_total_resource;
+				common_object.plan_resouce =  cur.c_req_plan_resource == null ? 0 : cur.c_req_plan_resource;
+				common_object.total_time = cur.c_req_total_time == null ? 0 : cur.c_req_total_time;
+				common_object.plan_time = cur.c_req_plan_time == null ? 0 : cur.c_req_plan_time;
+				common_object.plan = cur.c_req_plan_progress == null ? 0 : cur.c_req_plan_progress;
+				common_object.performance = cur.c_req_performance_progress == null ? 0 : cur.c_req_performance_progress;
 			}
 
 			acc.push(common_object);
@@ -1691,9 +1694,9 @@ function initGantt(data) {
 					{
 						start: getDate(start),
 						end: getDate(end),
-						tmm: `${dateDiff.diffMM} M/M`,
-						t_period: dateDiff.dayDiff,
-						plan: `${plan_progress}%`,
+						total_resource: dateDiff.diffMM,
+						total_time: dateDiff.dayDiff,
+						plan: plan_progress,
 					}
 				);
 			},
@@ -1803,7 +1806,7 @@ function initGantt(data) {
 						return data;
 					}
 
-					if (row.performance === "100%") {
+					if (row.performance === 100) {
 						let text = "완료";
 						let btnWrapper = $("<span />")
 							.addClass("label label-success")
@@ -1820,17 +1823,84 @@ function initGantt(data) {
 			},
 			{ data: "start", title: "시작일" },
 			{ data: "end", title: "완료일" },
-			{ data: "tmm", title: "총 작업량" },
-			{ data: "p_work", title: "계획작업" },
-			{ data: "t_period", title: "총 기간" },
-			{ data: "tpp", title: "계획기간" },
+			{
+				data: "total_resource",
+				title: "총 작업량",
+				render: (data, row) => {
+					if (data != null) {
+						return data + ' M/M';
+					}
+					else {
+						return '';
+					}
+				}
+			},
+			{
+				data: "plan_resouce",
+				title: "계획 작업량",
+				render: (data, row) => {
+					if (data != null) {
+						return data + ' M/M';
+					}
+					else {
+						return '';
+					}
+				}
+			},
+			{
+				data: "total_time",
+				title: "총 기간(일)",
+				render: (data, row) => {
+					if (data != null) {
+						return data;
+					}
+					else {
+						return '';
+					}
+				}
+			},
+			{
+				data: "plan_time",
+				title: "계획기간(일)",
+				render: (data, row) => {
+					if (data != null) {
+						return data;
+					}
+					else {
+						return '';
+					}
+				}
+			},
 			{ data: "manager", title: "담당자" },
 			{ data: "result", title: "산출물" },
-			{ data: "plan", title: "계획" },
-			{ data: "performance", title: "실적" }
-    	]
+			{
+				data: "plan",
+				title: "계획%",
+				render: (data, row) => {
+					if (data != null) {
+						return row.plan + '%';
+					}
+					else {
+						return '';
+					}
+				}
+			},
+			{
+				data: "performance",
+				title: "실적%",
+				render: (data, row) => {
+					if (data != null) {
+						return row.performance + '%';
+					}
+					else {
+						return '';
+					}
+				}
+			}
+		]
 	);
 }
+
 function getDate(stamp) {
 	const time = !stamp || stamp < 0 ? new Date() : new Date(stamp);
 	return `${time.getFullYear()}-${addZero(time.getMonth() + 1)}-${addZero(time.getDate())}`;
@@ -1944,18 +2014,19 @@ function scheduleUpdate() {
 function bindProjectProgress(data) {
 	console.log(data);
 	let pdservice_progress = data.reduce((acc, cur) => {
-		// console.log(cur); // 필요하다면 로그 확인
 
-		// default 요구사항의 경우에만 계산
+		// default의 경우에만 계산
 		if (cur.type === "default") {
 			// 계산식 추가 예정
-			acc.total_work += 1;
-			acc.plan_work += 1;
+			acc.total_work += cur.total_time;
+			acc.plan_work += cur.plan_time;
 			acc.performance += 1;
 			acc.actual_input += 1;
-			acc.plan_progress += 1;
-			acc.performance_progress += 1;
-			acc.result += 1;
+			acc.plan_progress += cur.plan;
+			acc.total_performance_progress += cur.performance;
+			acc.req_count += 1;
+
+			console.log(cur);
 		}
 
 		return acc;
@@ -1965,19 +2036,45 @@ function bindProjectProgress(data) {
 		performance: 0,
 		actual_input: 0,
 		plan_progress: 0,
-		performance_progress: 0,
-		result: 0
+		total_performance_progress: 0,
+		req_count: 0
 	});
 
 	console.log(pdservice_progress);
+
+	let planned_progress = 0;
+	let performance_progress = 0;
+	let project_progress= 0;
+	if (pdservice_progress.req_count > 0) {
+		performance_progress = pdservice_progress.total_performance_progress / pdservice_progress.req_count;
+		planned_progress = pdservice_progress.plan_progress / pdservice_progress.req_count;
+		project_progress = performance_progress - planned_progress;
+	}
 
 	$("#total_work").val(pdservice_progress.total_work);
 	$("#planed_work").val(pdservice_progress.plan_work);
 	$("#performance_capability").val(pdservice_progress.performance);
 	$("#actual_input").val(pdservice_progress.actual_input);
-	$("#planned_progress").val(pdservice_progress.plan_progress);
-	$("#performance_progress").val(pdservice_progress.performance_progress);
-	$("#project_progress").val(pdservice_progress.result);
+	$("#planned_progress").val(planned_progress.toFixed(2));
+	$("#performance_progress").val(performance_progress.toFixed(2));
+	$("#project_progress").val(project_progress.toFixed(2));
+
+	if (project_progress < 0) {
+		$("#project_progress").css("color" ,"#DB2A34");
+	}
+	else {
+		$("#project_progress").css("color", "#a4c6ff");
+	}
+}
+
+function resetProjectProgress() {
+	$("#total_work").val(null);
+	$("#planed_work").val(null);
+	$("#performance_capability").val(null);
+	$("#actual_input").val(null);
+	$("#planned_progress").val(null);
+	$("#performance_progress").val(null);
+	$("#project_progress").val(null);
 }
 
 function calculatePlanProgress(startDate, endDate) {
