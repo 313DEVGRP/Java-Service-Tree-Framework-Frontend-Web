@@ -641,7 +641,12 @@ class Table {
 			$li.className = text.trim() === label ? "active" : "";
 			$li.innerHTML = `<a href="#resSelectOption" data-toggle="tab">${label}</a>`;
 			$li.addEventListener("click", (e) => {
-				this.updateData($li.parentElement.parentElement.parentElement.dataset.id, keyname, value);
+				if(keyname === "_status"){
+                    editContents.statusId = value;
+                    this.updatePivotData($li.parentElement.parentElement.parentElement.dataset.id,editContents);
+                }else{
+                    this.updateData($li.parentElement.parentElement.parentElement.dataset.id, keyname, value);
+                }
 				$li.parentElement.previousElementSibling.innerHTML = `${e.target.textContent} <i class="fa fa-caret-down"></i>`;
 
 				document.getElementById(uuid).remove();
@@ -772,4 +777,5 @@ const makeReqTable = async (options) => {
 const changeTableType = (type) => {
 	pivotType = type;
 	TableInstance.rerenderTable();
+	tableSelect(tableOptions.id);
 };

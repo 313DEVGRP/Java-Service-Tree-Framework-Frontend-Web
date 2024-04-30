@@ -1736,9 +1736,11 @@ function tableSelectOption(obj) {
 }
 
 function checkAnswer(e) {
-	const radioEl = document.querySelector('[name="pivot"]:checked');
+	//const radioEl = document.querySelector('[name="pivot"]:checked');
+	//changeTableType(radioEl.value);
 
-	changeTableType(radioEl.value);
+	const selectEl = document.querySelector('.select-type select');
+	changeTableType(selectEl.value);
 }
 
 function tableSelect(id) {

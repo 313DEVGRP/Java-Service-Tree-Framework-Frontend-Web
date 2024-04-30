@@ -1805,28 +1805,38 @@
 								id="pivotRadio"
 								style="margin: 0 !important"
 								onchange="checkAnswer()">
-								<label class="radio-inline">
-									<input
-										type="radio"
-										name="pivot"
-										value="normal"
-										checked />
-									Pivot 없음
-								</label>
-								<label class="radio-inline">
-									<input
-										type="radio"
-										name="pivot"
-										value="version" />
-									Version
-								</label>
-								<label class="radio-inline">
-									<input
-										type="radio"
-										name="pivot"
-										value="owner" />
-									Task Owner
-								</label>
+								<div class="font13" style="font-weight: bold; display: flex; align-items: center;">
+									<!--<div style="margin-right: 20px;"><i class="fa fa-tasks"></i></div>-->
+									<div class="control-group select-type" >
+										<select style="background: transparent; border: none;">
+											<option value="normal">Table</option>
+											<option value="version">Version</option>
+											<option value="owner">Task Owner</option>
+										</select>
+									</div>
+								</div>
+<!--								<label class="radio-inline">-->
+<!--									<input-->
+<!--										type="radio"-->
+<!--										name="pivot"-->
+<!--										value="normal"-->
+<!--										checked />-->
+<!--									Pivot 없음-->
+<!--								</label>-->
+<!--								<label class="radio-inline">-->
+<!--									<input-->
+<!--										type="radio"-->
+<!--										name="pivot"-->
+<!--										value="version" />-->
+<!--									Version-->
+<!--								</label>-->
+<!--								<label class="radio-inline">-->
+<!--									<input-->
+<!--										type="radio"-->
+<!--										name="pivot"-->
+<!--										value="owner" />-->
+<!--									Task Owner-->
+<!--								</label>-->
 							</div>
 						</div>
 					</blockquote>
@@ -2298,3 +2308,8 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
+<style>
+	[type="radio"] {
+         accent-color: #a4c6ff;
+    }
+</style>
