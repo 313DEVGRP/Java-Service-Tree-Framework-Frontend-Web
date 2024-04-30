@@ -82,7 +82,6 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-            "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js",
             "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.js",
             "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.css",
             "../arms/js/analysis/resource/sankey.js"
@@ -92,6 +91,23 @@ function execDocReady() {
 
     loadPluginGroupsParallelAndSequential(pluginGroups)
         .then(function() {
+
+            //vfs_fonts 파일이 커서 defer 처리 함.
+            setTimeout(function () {
+                var script = document.createElement("script");
+                script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
+                script.defer = true; // defer 속성 설정
+                document.head.appendChild(script);
+            }, 5000); // 5초 후에 실행됩니다.
+
+            //pdfmake 파일이 커서 defer 처리 함.
+            setTimeout(function () {
+                var script = document.createElement("script");
+                script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js";
+                script.defer = true; // defer 속성 설정
+                document.head.appendChild(script);
+            }, 5000); // 5초 후에 실행됩니다.
+
             // 사이드 메뉴 색상 설정
             $('.widget').widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_resource");
