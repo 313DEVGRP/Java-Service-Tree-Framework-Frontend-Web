@@ -58,10 +58,7 @@ function execDocReady() {
             "../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js",
             // 최상단 메뉴
             "js/analysis/topmenu/topMenuApi.js",
-            "js/analysis/topmenu/basicRadar.js",
-
-            //matchHeight
-            "../reference/jquery-plugins/jquery-match-height-0.7.2/dist/jquery.matchHeight-min.js"
+            "js/analysis/topmenu/basicRadar.js"
         ],
         [
             "js/common/table.js",
@@ -122,9 +119,10 @@ function execDocReady() {
             //데이터테이블초기화
             table = initTable();
 
-            //Top메뉴 높이 맞추기
-            /*TopMenuApi.setEqualHeight(".top-menu-div");
-            TopMenuApi.resizeHeightEvent();*/
+            // 높이 조정
+            $('.top-menu-div').matchHeight({
+                target: $('.top-menu-div-scope')
+            });
 
         })
         .catch(function() {

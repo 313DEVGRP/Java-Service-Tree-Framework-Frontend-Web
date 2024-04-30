@@ -162,7 +162,7 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section top-menu-div"
+							class="widget dashboard-top-section top-menu-div-scope"
 							style="overflow: auto; margin-bottom: 15px">
 							<header style="margin-bottom: 15px">
 								<h4>
@@ -346,17 +346,27 @@
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
-											<span>
-												요구사항 진척도 :
-												<a
-													id="req_progress"
-													style="font-weight: bold">
-													-
-												</a>
-												%
-											</span>
-											<br />
-											<span>(완료된 요구사항 : <a id="req_completed" style="font-weight: bold">-</a>)</span>
+											<li style="list-style: none;">
+												<div style="display: flex; justify-content: space-between">
+													<span style="margin-left: 10px;">
+														요구사항 진척도
+													</span>
+													<span style="margin-right: 10px;">
+<!--														<a
+														id="req_progress"
+														style="font-weight: bold">
+															-
+														</a>/-->
+														<a id="req_completed" style="font-weight: bold">-</a>
+														<a id="req_total2" style="font-weight: bold">-</a>
+													</span>
+												</div>
+											</li>
+											<li style="list-style: none;">
+												<div class="progress progress-small progress-striped" style="margin: 5px 10px; height:18px; line-height: 13px">
+													<div id="req_progress_bar" class="progress-bar progress-bar-warning"></div>
+												</div>
+											</li>
 										</div>
 									</div>
 								</div>
@@ -1139,7 +1149,7 @@
 													<div class="control-group">
 														<label
 															class="control-label"
-															for="editview_req_name">
+															for="editview_req_title">
 															요구사항 제목 :
 														</label>
 														<div
@@ -1150,7 +1160,7 @@
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
 																<input
-																	id="editview_req_name"
+																	id="editview_req_title"
 																	class="form-control font13 darkBack"
 																	style="color: #a4c6ff"
 																	size="16"
@@ -1332,25 +1342,46 @@
 															</div>
 														</div>
 													</div>
-													<div
-														class="control-group"
-														for="editview_req_plan_time">
-														<label class="control-label font13">예상 일정(일) :</label>
+													<div class="control-group">
+														<label
+																class="control-label"
+																for="editview_req_start_date">
+																요구사항 시작날짜 :
+														</label>
 														<div
-															class="controls form-group input-group">
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
 																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-time"></i>
+																	<i class="glyphicon glyphicon-calendar"></i>
 																</span>
-															<input
-																type="text"
-																id="editview_req_plan_time"
-																name="editview_req_plan_time"
-																class="form-control parsley-validated font13 darkBack"
-																data-placement="top"
-																required="required"
-																style="color: #a4c6ff"
-																placeholder="숫자만 입력해주세요(10일 -> 10)"
-															/>
+																<input
+																		id="editview_req_start_date"
+																		class="form-control font13 darkBack"
+																		style="color: #a4c6ff"
+																		placeholder="요구사항 시작날짜를 입력해 주세요" />
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+																class="control-label"
+																for="editview_req_end_date">
+																요구사항 종료날짜 :
+														</label>
+														<div
+															class="controls form-group"
+															style="margin-bottom: 10px">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-calendar"></i>
+																</span>
+																<input
+																		id="editview_req_end_date"
+																		class="form-control font13 darkBack"
+																		style="color: #a4c6ff"
+																		placeholder="요구사항 종료날짜를 입력해 주세요" />
+															</div>
 														</div>
 													</div>
 													<div class="control-group">
@@ -2232,28 +2263,46 @@
 										</div>
 									</div>
 								</div>
-								<div
-									class="control-group"
-									id="popup_req_plan_time_div">
+								<div class="control-group">
 									<label
-										class="control-label font13"
-										for="addview_req_plan_time">
-										예상 일정(일) *
+											class="control-label"
+											for="addview_req_start_date">
+											요구사항 시작날짜 :
 									</label>
-									<div class="controls form-group input-group">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-time"></i>
-										</span>
-										<input
-											type="text"
-											id="addview_req_plan_time"
-											name="addview_req_plan_time"
-											class="form-control parsley-validated font13 darkBack"
-											data-placement="top"
-											required="required"
-											style="color: #a4c6ff"
-											placeholder="숫자만 입력해주세요(10일 -> 10)"
-										/>
+									<div
+											class="controls form-group"
+											style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</span>
+											<input
+													id="addview_req_start_date"
+													class="form-control font13 darkBack"
+													style="color: #a4c6ff"
+													placeholder="요구사항 시작날짜를 입력해 주세요" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label
+											class="control-label"
+											for="addview_req_end_date">
+											요구사항 종료날짜 :
+									</label>
+									<div
+											class="controls form-group"
+											style="margin-bottom: 10px">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</span>
+											<input
+													id="addview_req_end_date"
+													class="form-control font13 darkBack"
+													style="color: #a4c6ff"
+													placeholder="요구사항 종료날짜를 입력해 주세요" />
+										</div>
 									</div>
 								</div>
 								<div class="control-group">

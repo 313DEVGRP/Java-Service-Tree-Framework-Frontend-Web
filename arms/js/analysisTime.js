@@ -104,8 +104,11 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
-			/*TopMenuApi.setEqualHeight(".top-menu-div");
-			TopMenuApi.resizeHeightEvent();*/
+			// 높이 조정
+			$('.top-menu-div').matchHeight({
+				target: $('.top-menu-div-scope')
+			});
+
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
@@ -286,22 +289,6 @@ function makeVersionMultiSelectBox() {
 			// timeline chart
 			timeLineChart(selectedPdServiceId, selectedVersionId);
 
-
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" +
-					selectedPdServiceId +
-					"/getStatusMonitor.do?disable=true&versionTag=" +
-					versionTag;
-				//dataTableLoad(selectedPdServiceId, endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" +
-					selectedPdServiceId +
-					"/getStatusMonitor.do?disable=false&versionTag=" +
-					versionTag;
-				//dataTableLoad(selectedPdServiceId, endPointUrl);
-			}
 		}
 	});
 }

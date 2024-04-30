@@ -393,12 +393,10 @@ function jsTreeClick(selectedNode) {
 		$(".newReqDiv").show();
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(1)").hide(); //상세보기
 
-		$("#req_edit_layer_version").hide();
 		$("#req_edit_layer_id").hide();
 		$("#req_edit_layer_priority").hide();
 		$("#req_edit_layer_difficulty").hide();
 		$("#req_edit_layer_state").hide();
-		$("#req_edit_layer_plantime").hide();
 		$("#req_edit_layer_writer").hide();
 		$("#req_edit_layer_write_date").hide();
 		$("#req_edit_layer_reviewers").hide();
@@ -425,6 +423,8 @@ function jsTreeClick(selectedNode) {
 		$("#req_edit_layer_priority").show();
 		$("#req_edit_layer_difficulty").show();
 		$("#req_edit_layer_state").show();
+		$("#req_edit_layer_start_date").show();
+		$("#req_edit_layer_end_date").show();
 		$("#req_edit_layer_plantime").show();
 		$("#req_edit_layer_writer").show();
 		$("#req_edit_layer_write_date").show();
@@ -597,7 +597,7 @@ function setDetailAndEditViewTab() {
 	})
 		.done(function (data) {
 			// ------------------ 편집하기 ------------------ //
-			bindDataEditlTab(data);
+			bindDataEditTab(data);
 			// ------------------ 상세보기 ------------------ //
 			bindDataDetailTab(data);
 		})
@@ -606,8 +606,7 @@ function setDetailAndEditViewTab() {
 }
 
 // ------------------ 편집하기 ------------------ //
-function bindDataEditlTab(ajaxData) {
-	console.log("checl edit data" + ajaxData.c_req_reviewer01);
+function bindDataEditTab(ajaxData) {
 	console.table(ajaxData);
 
 	//제품(서비스) 데이터 바인딩
@@ -628,7 +627,7 @@ function bindDataEditlTab(ajaxData) {
 	}
 
 	$("#editview_req_id").val(ajaxData.c_id);
-	$("#editview_req_name").val(ajaxData.c_title);
+	$("#editview_req_title").val(ajaxData.c_title);
 
 	//radio 버튼 - 선택 초기화
 	$("#editview_req_priority label").removeClass("active");
@@ -670,7 +669,32 @@ function bindDataEditlTab(ajaxData) {
 		}
 	});
 
-	$("#editview_req_plan_time").val(ajaxData.c_req_plan_time);
+	var datepickerOption = {
+		timepicker: false,
+		format: "Y/m/d",
+		formatDate: "Y/m/d",
+		scrollInput: false,
+		value: null
+	};
+
+	if (ajaxData.c_req_start_date) {
+		$("#editview_req_start_date").datetimepicker(
+			$.extend({}, datepickerOption, { value: new Date(ajaxData.c_req_start_date) })
+		);
+	}
+	else {
+		$("#editview_req_start_date").val(null);
+		$("#editview_req_start_date").datetimepicker(datepickerOption);
+	}
+	if (ajaxData.c_req_end_date) {
+		$("#editview_req_end_date").datetimepicker(
+			$.extend({}, datepickerOption, { value: new Date(ajaxData.c_req_end_date) })
+		);
+	}
+	else {
+		$("#editview_req_end_date").val(null);
+		$("#editview_req_end_date").datetimepicker(datepickerOption);
+	}
 
 	// -------------------- reviewer setting -------------------- //
 	//reviewer clear
@@ -678,7 +702,7 @@ function bindDataEditlTab(ajaxData) {
 
 	var selectedReviewerArr = [];
 	if (ajaxData.c_req_reviewer01 == null || ajaxData.c_req_reviewer01 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer01 empty");
+		console.log("bindDataEditTab :: ajaxData.c_req_reviewer01 empty");
 	} else {
 		selectedReviewerArr.push(ajaxData.c_req_reviewer01);
 		// Set the value, creating a new option if necessary
@@ -692,7 +716,7 @@ function bindDataEditlTab(ajaxData) {
 		}
 	}
 	if (ajaxData.c_req_reviewer02 == null || ajaxData.c_req_reviewer02 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer02 empty");
+		console.log("bindDataEditTab :: ajaxData.c_req_reviewer02 empty");
 	} else {
 		selectedReviewerArr.push(ajaxData.c_req_reviewer02);
 		// Set the value, creating a new option if necessary
@@ -706,7 +730,7 @@ function bindDataEditlTab(ajaxData) {
 		}
 	}
 	if (ajaxData.c_req_reviewer03 == null || ajaxData.c_req_reviewer03 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer03 empty");
+		console.log("bindDataEditTab :: ajaxData.c_req_reviewer03 empty");
 	} else {
 		selectedReviewerArr.push(ajaxData.c_req_reviewer03);
 		// Set the value, creating a new option if necessary
@@ -720,7 +744,7 @@ function bindDataEditlTab(ajaxData) {
 		}
 	}
 	if (ajaxData.c_req_reviewer04 == null || ajaxData.c_req_reviewer04 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer04 empty");
+		console.log("bindDataEditTab :: ajaxData.c_req_reviewer04 empty");
 	} else {
 		selectedReviewerArr.push(ajaxData.c_req_reviewer04);
 		// Set the value, creating a new option if necessary
@@ -734,7 +758,7 @@ function bindDataEditlTab(ajaxData) {
 		}
 	}
 	if (ajaxData.c_req_reviewer05 == null || ajaxData.c_req_reviewer05 == "none") {
-		console.log("bindDataEditlTab :: ajaxData.c_req_reviewer05 empty");
+		console.log("bindDataEditTab :: ajaxData.c_req_reviewer05 empty");
 	} else {
 		selectedReviewerArr.push(ajaxData.c_req_reviewer05);
 		// Set the value, creating a new option if necessary
@@ -819,7 +843,12 @@ function bindDataDetailTab(ajaxData) {
 		}
 	});
 
-	$("#detailview_req_plan_time").val(ajaxData.c_req_plan_time);
+	if (ajaxData.c_req_start_date) {
+		$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.c_req_start_date)));
+	}
+	if (ajaxData.c_req_end_date) {
+		$("#detailview_req_end_date").val(formatDate(new Date(ajaxData.c_req_end_date)));
+	}
 
 	$("#detailview_req_writer").val(ajaxData.c_req_writer);
 	$("#detailview_req_write_date").val(new Date(ajaxData.c_req_create_date).toLocaleString());
@@ -849,7 +878,6 @@ function bindDataDetailTab(ajaxData) {
 	} else {
 		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
 	}
-	//$("#detailview_req_contents").html(ajaxData.c_req_contents);
 
 	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
 	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
@@ -1062,8 +1090,18 @@ function registNewPopup() {
 	$("input[name='popup_req_difficulty_options']:checked").prop("checked", false);
 	$("input[name='popup_req_state_options']:checked").prop("checked", false);
 
-	//예상 일정 초기화
-	$("#my_modal1 #req_plan_time").val(null);
+	var datepickerOption = {
+		timepicker: false,
+		format: "Y/m/d",
+		formatDate: "Y/m/d",
+		value: null,
+		scrollInput: false
+	};
+
+	$("#popup_req_start_date").val(null);
+	$("#popup_req_end_date").val(null);
+	$("#popup_req_start_date").datetimepicker(datepickerOption);
+	$("#popup_req_end_date").datetimepicker(datepickerOption);
 
 	//리뷰어 셋팅
 	$.ajax({
@@ -1159,7 +1197,7 @@ function registNewPopup() {
 ///////////////////////////////////////////////////////////////////////////////
 function switch_action_for_mode() {
 	$(".form-horizontal input[name=reqType]").on("change", function () {
-		if ($("input[name=reqType]:checked").val() == "default") {
+		if ($("input[name=reqType]:checked").val() === "default") {
 			$("#popup_version_div").show();
 			$("#popup_reviewer_div").show();
 			$("#popup_priority_div").show();
@@ -1167,18 +1205,14 @@ function switch_action_for_mode() {
 			$("#popup_req_priority_div").show();
 			$("#popup_req_difficulty_div").show();
 			$("#popup_req_state_div").show();
-
-			$("#popup_req_plan_time_div").show();
-		} else {
-			$("#popup_version_div").hide();
+		}
+		else {
 			$("#popup_reviewer_div").hide();
 			$("#popup_priority_div").hide();
 
 			$("#popup_req_priority_div").hide();
 			$("#popup_req_difficulty_div").hide();
 			$("#popup_req_state_div").hide();
-
-			$("#popup_req_plan_time_div").hide();
 		}
 	});
 }
@@ -1188,141 +1222,106 @@ function switch_action_for_mode() {
 ///////////////////////////////////////////////////////////////////////////////
 function save_req() {
 	$("#save_req").click(function () {
-		var reviewers01 = "none";
-		var reviewers02 = "none";
-		var reviewers03 = "none";
-		var reviewers04 = "none";
-		var reviewers05 = "none";
-		if ($("#popup_pdservice_reviewers").select2("data")[0] != undefined) {
-			reviewers01 = $("#popup_pdservice_reviewers").select2("data")[0].text;
-		}
-		if ($("#popup_pdservice_reviewers").select2("data")[1] != undefined) {
-			reviewers02 = $("#popup_pdservice_reviewers").select2("data")[1].text;
-		}
-		if ($("#popup_pdservice_reviewers").select2("data")[2] != undefined) {
-			reviewers03 = $("#popup_pdservice_reviewers").select2("data")[2].text;
-		}
-		if ($("#popup_pdservice_reviewers").select2("data")[3] != undefined) {
-			reviewers04 = $("#popup_pdservice_reviewers").select2("data")[3].text;
-		}
-		if ($("#popup_pdservice_reviewers").select2("data")[4] != undefined) {
-			reviewers05 = $("#popup_pdservice_reviewers").select2("data")[4].text;
-		}
+		let table_name = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
-		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-
-		var c_type_value;
+		let c_type_value;
 		if (isEmpty($("input[name=reqType]:checked").val())) {
 			c_type_value = "default";
 		} else {
 			c_type_value = $("input[name=reqType]:checked").val();
 		}
 
-		console.log(
-			"save_req :: popup_req_priority  -> " +
-				$("#popup_req_priority input[name='popup_req_priority_options']:checked").val()
-		);
-		console.log(
-			"save_req :: popup_req_difficulty  -> " +
-				$("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val()
-		);
-		console.log(
-			"save_req :: popup_req_state  -> " + $("#popup_req_state input[name='popup_req_state_options']:checked").val()
-		);
-		console.log("save_req :: popup_req_plan_time  -> " + $("#popup_req_plan_time").val());
-		let selectedReqPriorityLink = $("#popup_req_priority input[name='popup_req_priority_options']:checked").val();
-		let selectedReqDifficultLink = $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val();
-		let selectedReqStateLink = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
-		let selectedplanTime = $("#popup_req_plan_time").val();
-
-		let reqTitle = $("#req_title").val();
-		if(reqTitle) {
-			reqTitle = reqTitle.trim();
+		let req_title = $("#req_title").val().trim();
+		if(!req_title) {
+			alert("요구사항 제목이 없습니다.");
+			return false;
 		}
 
-		let dataObjectParam = {
+		let versionset_link = $("#popup_version").val();
+		if (versionset_link.length < 1) {
+			alert("선택된 버전이 없습니다.");
+			return false;
+		}
+
+		var reviewers01 = getReviewer(0, "popup_pdservice_reviewers");
+		var reviewers02 = getReviewer(1, "popup_pdservice_reviewers");
+		var reviewers03 = getReviewer(2, "popup_pdservice_reviewers");
+		var reviewers04 = getReviewer(3, "popup_pdservice_reviewers");
+		var reviewers05 = getReviewer(4, "popup_pdservice_reviewers");
+
+		let priority_value = $("#popup_req_priority input[name='popup_req_priority_options']:checked").val();
+		let select_req_priority_link = priority_value === undefined ? "5" : priority_value;
+
+		let difficulty_value = $("#popup_req_difficulty input[name='popup_req_difficulty_options']:checked").val();
+		let	select_req_difficulty_link = difficulty_value === undefined ? "5" : difficulty_value;
+
+		let state_value = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
+		let	select_req_state_link = state_value === undefined ? "10" : state_value;
+
+		let start_date_value = $("#popup_req_start_date").val();
+		let c_req_start_date;
+		if (start_date_value) {
+			c_req_start_date = new Date(start_date_value);
+		}
+
+		let end_date_value = $("#popup_req_end_date").val();
+		let c_req_end_date;
+		if (end_date_value) {
+			c_req_end_date = new Date(end_date_value);
+		}
+
+		let data_object_param = {
 			ref: selectedJsTreeId,
-			c_title: reqTitle,
+			c_title: req_title,
 			c_type: c_type_value,
 			c_req_pdservice_link: $("#selected_pdService").val(),
-			c_req_pdservice_versionset_link: JSON.stringify($("#popup_version").val()),
+			c_req_pdservice_versionset_link: JSON.stringify(versionset_link),
+			c_req_start_date: c_req_start_date,
+			c_req_end_date: c_req_end_date,
 			c_req_writer: "[" + userName + "]" + " - " + userID,
-			c_req_priority_link: selectedReqPriorityLink === undefined ? "5" : selectedReqPriorityLink, // 5 - 중간
-			c_req_difficulty_link: selectedReqDifficultLink === undefined ? "5" : selectedReqDifficultLink, // 5 - 보통
-			c_req_state_link: selectedReqStateLink === undefined ? "10" : selectedReqStateLink, //10 - 열림
-			c_req_plan_time: selectedplanTime,
-			c_req_reviewer01: reviewers01,
-			c_req_reviewer02: reviewers02,
-			c_req_reviewer03: reviewers03,
-			c_req_reviewer04: reviewers04,
-			c_req_reviewer05: reviewers05,
-			c_req_reviewer01_status: "Draft",
-			c_req_reviewer02_status: "Draft",
-			c_req_reviewer03_status: "Draft",
-			c_req_reviewer04_status: "Draft",
-			c_req_reviewer05_status: "Draft",
 			c_req_contents: CKEDITOR.instances["modal_editor"].getData(),
 			c_req_desc: "설명",
 			c_req_etc: "비고"
 		};
-		console.log(dataObjectParam);
 
-		// 폴더일때
-		if(c_type_value === "folder") {
-			if(reqTitle) {
-				$.ajax({
-					url: "/auth-user/api/arms/reqAdd/" + tableName + "/addFolderNode.do",
-					type: "POST",
-					data: dataObjectParam,
-					statusCode: {
-						200: function () {
-							$("#req_tree").jstree("refresh");
-							$("#close_req").trigger("click");
-							jSuccess('"' + reqTitle + '"' + " 요구사항이 등록되었습니다.");
-						}
-					}
-				});
-			} else {
-				alert("요구사항 제목이 없습니다.");
-				return false;
-			}
+		if (c_type_value === "default") {
+			Object.assign(data_object_param, {
+				c_req_priority_link: select_req_priority_link,
+				c_req_difficulty_link: select_req_difficulty_link,
+				c_req_state_link: select_req_state_link,
+				c_req_reviewer01: reviewers01,
+				c_req_reviewer02: reviewers02,
+				c_req_reviewer03: reviewers03,
+				c_req_reviewer04: reviewers04,
+				c_req_reviewer05: reviewers05,
+				c_req_reviewer01_status: "Draft",
+				c_req_reviewer02_status: "Draft",
+				c_req_reviewer03_status: "Draft",
+				c_req_reviewer04_status: "Draft",
+				c_req_reviewer05_status: "Draft"
+			});
 		}
-		else {
 
-			if (!selectedplanTime || selectedplanTime === "") {
-				alert("요구사항 예정 일정을 입력해주세요.");
-				return false;
-			}
-			else {
-				if (isNaN(selectedplanTime)) {
-					alert("예상 일정에는 숫자를 입력해주세요.");
-					return false;
+		console.log("save_req :: save data ->");
+		console.log(data_object_param);
+
+		let url_suffix = c_type_value === "default" ? "/addNode.do" : "/addFolderNode.do";
+		let success_message = c_type_value === "default" ?
+			"신규 요구사항 ( " + req_title + " )이 추가되었습니다." :
+			" 요구사항 폴더 ( " + req_title + " )가 등록되었습니다.";
+
+		$.ajax({
+			url: "/auth-user/api/arms/reqAdd/" + table_name + url_suffix,
+			type: "POST",
+			data: data_object_param,
+			statusCode: {
+				200: function () {
+					$("#req_tree").jstree("refresh");
+					$("#close_req").trigger("click");
+					jSuccess(success_message);
 				}
 			}
-
-			if ($("#popup_version").val().length >= 1) {
-				if (reqTitle !== "") {
-					$.ajax({
-						url: "/auth-user/api/arms/reqAdd/" + tableName + "/addNode.do",
-						type: "POST",
-						data: dataObjectParam,
-						statusCode: {
-							200: function () {
-								$("#req_tree").jstree("refresh");
-								$("#close_req").trigger("click");
-								jSuccess('"' + reqTitle + '"' + " 요구사항이 등록되었습니다.");
-							}
-						}
-					});
-				} else {
-					alert("요구사항 제목이 없습니다.");
-					return false;
-				}
-			} else {
-				alert("선택된 버전이 없습니다.");
-				return false;
-			}
-		}
+		});
 	});
 }
 
@@ -1331,94 +1330,78 @@ function save_req() {
 ///////////////////////////////////////////////////////////////////////////////
 function click_btn_for_req_update() {
 	$("#edit_tab_req_update").click(function () {
-		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
-		var reqName = $("#editview_req_name").val();
-
-		var reviewers01 = "none";
-		var reviewers02 = "none";
-		var reviewers03 = "none";
-		var reviewers04 = "none";
-		var reviewers05 = "none";
-		if ($("#editview_req_reviewers").select2("data")[0] != undefined) {
-			reviewers01 = $("#editview_req_reviewers").select2("data")[0].text;
-		}
-		if ($("#editview_req_reviewers").select2("data")[1] != undefined) {
-			reviewers02 = $("#editview_req_reviewers").select2("data")[1].text;
-		}
-		if ($("#editview_req_reviewers").select2("data")[2] != undefined) {
-			reviewers03 = $("#editview_req_reviewers").select2("data")[2].text;
-		}
-		if ($("#editview_req_reviewers").select2("data")[3] != undefined) {
-			reviewers04 = $("#editview_req_reviewers").select2("data")[3].text;
-		}
-		if ($("#editview_req_reviewers").select2("data")[4] != undefined) {
-			reviewers05 = $("#editview_req_reviewers").select2("data")[4].text;
-		}
-		console.log(
-			"click_btn_for_req_update :: editview_req_priority  -> " +
-				$("#editview_req_priority input[name='editview_req_priority_options']:checked").val()
-		);
-		console.log(
-			"click_btn_for_req_update :: editview_req_difficulty  -> " +
-				$("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val()
-		);
-		console.log(
-			"click_btn_for_req_update :: editview_req_state  -> " +
-				$("#editview_req_state input[name='editview_req_state_options']:checked").val()
-		);
-		console.log("click_btn_for_req_update :: editview_req_plan_time  -> " + $("#editview_req_plan_time").val());
-
-		let selectedEditReqPriorityLink = $(
-			"#editview_req_priority input[name='editview_req_priority_options']:checked"
-		).val();
-		let selectedEditReqDifficultyLink = $(
-			"#editview_req_difficulty input[name='editview_req_difficulty_options']:checked"
-		).val();
-		let selectedEditReqStateLink = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
-		let selectedEditReqPlanTime = $("#editview_req_plan_time").val();
-
-		let selectReqType = $("#editview_req_type").val();
-
-		if (selectReqType === "default") {
-			if (!selectedEditReqPlanTime || selectedEditReqPlanTime === "") {
-				alert("변경하려는 요구사항 예정 일정을 입력해주세요.");
-				return false;
-			}
-			else if (isNaN(selectedEditReqPlanTime)) {
-				alert("예상 일정에는 숫자를 입력해주세요.");
-				return false;
-			}
+		let table_name = "T_ARMS_REQADD_" + $("#selected_pdService").val();
+		let edit_req_title = $("#editview_req_title").val().trim();
+		if(!edit_req_title) {
+			alert("변경할 요구사항 제목이 없습니다.");
+			return false;
 		}
 
-		let dataObjectParam = {
+		let edit_versionset_link = $("#edit_multi_version").val();
+		if (edit_versionset_link.length < 1) {
+			alert("선택된 버전이 없습니다.");
+			return false;
+		}
+
+		var reviewers01 = getReviewer(0, "editview_req_reviewers");
+		var reviewers02 = getReviewer(1, "editview_req_reviewers");
+		var reviewers03 = getReviewer(2, "editview_req_reviewers");
+		var reviewers04 = getReviewer(3, "editview_req_reviewers");
+		var reviewers05 = getReviewer(4, "editview_req_reviewers");
+
+		let edit_priority_value = $("#editview_req_priority input[name='editview_req_priority_options']:checked").val();
+		let edit_difficulty_value = $("#editview_req_difficulty input[name='editview_req_difficulty_options']:checked").val();
+		let edit_state_value = $("#editview_req_state input[name='editview_req_state_options']:checked").val();
+		let edit_req_priority_link = edit_priority_value === undefined ? "5" : edit_priority_value;
+		let	edit_req_difficulty_link = edit_difficulty_value === undefined ? "5" : edit_difficulty_value;
+		let	edit_req_state_link = edit_state_value === undefined ? "10" : edit_state_value;
+		let c_type_value = $("#editview_req_type").val();
+
+		let edit_start_date_value = $("#editview_req_start_date").val();
+		let c_req_start_date;
+		if (edit_start_date_value) {
+			c_req_start_date = new Date(edit_start_date_value);
+		}
+
+		let edit_ent_date_value = $("#editview_req_end_date").val();
+		let c_req_end_date;
+		if (edit_ent_date_value) {
+			c_req_end_date = new Date(edit_ent_date_value);
+		}
+
+		let data_object_param = {
 			c_id: $("#editview_req_id").val(),
-			c_title: $("#editview_req_name").val(),
-			c_req_pdservice_versionset_link: JSON.stringify($("#edit_multi_version").val()),
-			// c_req_writer: "[" + userName + "]" + " - " + userID, 요청자는 최초 요청자로 고정. 수정 시 요청자는 변경하지 않는 것으로 처리
-			c_req_priority_link: selectedEditReqPriorityLink === undefined ? "5" : selectedEditReqPriorityLink, // 5 - 중간
-			c_req_difficulty_link: selectedEditReqDifficultyLink === undefined ? "5" : selectedEditReqDifficultyLink, // 5 - 보통
-			c_req_state_link: selectedEditReqStateLink === undefined ? "10" : selectedEditReqStateLink, //10 - 열림
-			c_req_plan_time: selectedEditReqPlanTime,
-			c_req_update_date: new Date(),
-			c_req_reviewer01: reviewers01,
-			c_req_reviewer02: reviewers02,
-			c_req_reviewer03: reviewers03,
-			c_req_reviewer04: reviewers04,
-			c_req_reviewer05: reviewers05,
-			c_req_status: "ChangeReq",
+			c_title: edit_req_title,
+			c_req_pdservice_versionset_link: JSON.stringify(edit_versionset_link),
+			c_req_start_date: c_req_start_date,
+			c_req_end_date: c_req_end_date,
 			c_req_contents: CKEDITOR.instances["edit_tabmodal_editor"].getData()
 		};
 
-		console.log(dataObjectParam);
+		if (c_type_value === "default") {
+			Object.assign(data_object_param, {
+				c_req_priority_link: edit_req_priority_link,
+				c_req_difficulty_link: edit_req_difficulty_link,
+				c_req_state_link: edit_req_state_link,
+				c_req_reviewer01: reviewers01,
+				c_req_reviewer02: reviewers02,
+				c_req_reviewer03: reviewers03,
+				c_req_reviewer04: reviewers04,
+				c_req_reviewer05: reviewers05,
+			});
+		}
+
+		console.log("update_req :: update data ->");
+		console.log(data_object_param);
 
 		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + tableName + "/updateNode.do",
+			url: "/auth-user/api/arms/reqAdd/" + table_name + "/updateNode.do",
 			type: "POST",
-			data: dataObjectParam,
+			data: data_object_param,
 			statusCode: {
 				200: function () {
 					$("#req_tree").jstree("refresh");
-					jSuccess('"' + reqName + '"' + " 요구사항이 변경되었습니다.");
+					jSuccess('"' + edit_req_title + '"' + " 요구사항이 변경되었습니다.");
 				}
 			}
 		});
@@ -1795,7 +1778,7 @@ function tableSelect(id) {
 				}
 			});
 		},
-		onUpdate: function (id, params) {
+		onUpdate: function (id, params) { // 요구사항 제목
 			$.ajax({
 				url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/updateNode.do`,
 				type: "POST",
@@ -1806,6 +1789,33 @@ function tableSelect(id) {
 					}
 				}
 			});
-		}
+		},
+		onDBUpdate: function (id ,params) { // 상태, 우선순위, 난이도, 시작일, 종료일
+            $.ajax({
+       			url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/updateDataBase.do`,
+   				type: "POST",
+  				data: params,
+        		statusCode: {
+   					200: function () {
+       				jSuccess(" 요구사항이 변경되었습니다.");
+        			}
+       			}
+   			});
+   		}
 	});
+}
+
+function getReviewer(index, req_reviewers_id) {
+	let reviewer = "none";
+	if ($("#"+req_reviewers_id).select2("data")[index] != undefined) {
+		reviewer = $("#"+req_reviewers_id).select2("data")[0].text;
+	}
+	return reviewer;
+}
+
+function formatDate(date) {
+	var year = date.getFullYear().toString(); // 연도의 마지막 두 자리를 얻습니다.
+	var month = (date.getMonth() + 1).toString().padStart(2, "0");
+	var day = date.getDate().toString().padStart(2, "0");
+	return year + "-" + month + "-" + day;
 }

@@ -110,9 +110,10 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
-			//Top메뉴 높이 맞추기
-			/*TopMenuApi.setEqualHeight(".top-menu-div");
-			TopMenuApi.resizeHeightEvent();*/
+			// 높이 조정
+			$('.top-menu-div').matchHeight({
+				target: $('.top-menu-div-scope')
+			});
 
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
@@ -209,10 +210,13 @@ function makeVersionMultiSelectBox() {
 			getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
 			// 나이팅게일로즈 차트(pie) - 버전별 요구사항
-			getReqPerMappedVersions(selectedPdServiceId, selectedVersionId, versionTag);
+			getReqPerMappedVersions(selectedPdServiceId, selectedVersionId);
 
 			treeBar();
 
+			var 요구사항_호출_주소 = "/state-per-version/T_ARMS_REQADD_" + selectedPdServiceId + "/getReqAddListByFilter.do?" +
+				"pdServiceId="+selectedPdServiceId+"&pdServiceVersionLinks="+selectedVersionId;
+			요구사항_현황_데이터_테이블($("#selected_pdService").val(), 요구사항_호출_주소);
 		}
 	});
 }
@@ -255,7 +259,7 @@ function bind_VersionData_By_PdService() {
 				getRelationJiraIssueByPdServiceAndVersions($("#selected_pdService").val(), selectedVersionId);
 
 				// 나이팅게일로즈 차트(pie) - 버전별 요구사항
-				getReqPerMappedVersions(selectedPdServiceId, selectedVersionId, versionTag);
+				getReqPerMappedVersions(selectedPdServiceId, selectedVersionId);
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
@@ -264,7 +268,8 @@ function bind_VersionData_By_PdService() {
 				$(".multiple-select").multipleSelect("refresh");
 
 				//요구사항 현황 데이터 테이블 로드
-				var 요구사항_호출_주소 = "/T_ARMS_REQADD_" + $("#selected_pdService").val() + "/getNodesWithoutRoot.do";
+				var 요구사항_호출_주소 = "/state-per-version/T_ARMS_REQADD_" + selectedPdServiceId + "/getReqAddListByFilter.do?" +
+					"pdServiceId="+selectedPdServiceId+"&pdServiceVersionLinks="+selectedVersionId;
 				요구사항_현황_데이터_테이블($("#selected_pdService").val(), 요구사항_호출_주소);
 				//////////////////////////////////////////////////////////
 			}
@@ -1192,7 +1197,7 @@ function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
 /////////////////////////////////////////////////////////
 // Radial Polar Bar Chart - 제품(서비스)의 버전별 요구사항 수
 /////////////////////////////////////////////////////////
-function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks, versionTag) {
+function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks) {
 	let reqAddUrl = "/T_ARMS_REQADD_"+ pdService_id +"/getReqAddListByFilter.do?";
 
 	$.ajax({
@@ -1563,16 +1568,23 @@ function responsiveTreeBar(svg) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 	var columnList = [
-		{ name: "pdServiceEntity.c_id", title: "제품(서비스) 아이디", data: "pdServiceEntity.c_id", visible: false, defaultContent: 'N/A' },
+		{ name: "reqAddEntity.pdServiceEntity.c_id", title: "제품(서비스) 아이디", data: "pdServiceEntity.c_id", visible: false, defaultContent: 'N/A' },
 		{
-			name: "c_req_pdservice_versionset_link",
+			name: "version_name",
 			title: "버전",
-			data: "c_req_pdservice_versionset_link",
+			data: "version_name",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
+				} else if (data.includes(",")) {
+					let verNameArr = data.split(",");
+					let verHtml = ``;
+					verNameArr.forEach(verName => {
+						verHtml += verName+`<br/>`;
+					});
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + getStrLimit(data, 25) + "</div>";
 				}
 				return data;
 			},
@@ -1580,9 +1592,9 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "c_title",
+			name: "reqAddEntity.c_title",
 			title: "요구사항",
-			data: "c_title",
+			data: "reqAddEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1595,9 +1607,9 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "reqPriorityEntity.c_title",
+			name: "reqAddEntity.reqPriorityEntity.c_title",
 			title: "우선순위",
-			data: "reqPriorityEntity.c_title",
+			data: "reqAddEntity.reqPriorityEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1610,9 +1622,9 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "reqDifficultyEntity.c_title",
+			name: "reqAddEntity.reqDifficultyEntity.c_title",
 			title: "난이도",
-			data: "reqDifficultyEntity.c_title",
+			data: "reqAddEntity.reqDifficultyEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1625,9 +1637,9 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "reqStateEntity.c_title",
+			name: "reqAddEntity.reqStateEntity.c_title",
 			title: "상태",
-			data: "reqStateEntity.c_title",
+			data: "reqAddEntity.reqStateEntity.c_title",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1650,7 +1662,7 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 	];
 	var orderList = [[1, "asc"]];
 	var jquerySelector = "#reqstatustable";
-	var ajaxUrl = "/auth-user/api/arms/reqAdd" + endPointUrl;
+	var ajaxUrl = "/auth-user/api/arms/analysis/scope" + endPointUrl;
 	var jsonRoot = "";
 	var buttonList = [
 		"copy",

@@ -1938,21 +1938,43 @@ svg .ghostCircle.show {
 
 .kanban-board {
     background: rgba(51, 51, 51, .425) !important;
+	margin-bottom: 12px !important;
 }
 
 .kanban-item {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-end;
 	background: rgba(51, 51, 51, 1) !important;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.08);
 	border-radius: 6px;
+	cursor: pointer !important;
+}
+
+.req_item {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-right: 2rem;
+	word-break: keep-all;
 }
 
 .kanban-drag {
-	height: 550px !important;
+	padding: 10px !important;
+	height: 570px !important;
 	overflow: auto;
 }
 
 .show-info {
 	cursor: pointer;
+}
+
+.req_item_tooltip {
+    position: absolute;
+    background-color: rgb(89 89 89 / 50%);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    z-index: 1000;
 }

@@ -117,8 +117,10 @@ function execDocReady() {
           //버전 멀티 셀렉트 박스 이니시에이터
           makeVersionMultiSelectBox();
 
-          /*TopMenuApi.setEqualHeight(".top-menu-div");
-          TopMenuApi.resizeHeightEvent();*/
+          // 높이 조정
+          $('.top-menu-div').matchHeight({
+              target: $('.top-menu-div-scope')
+          });
 
           비용분석계산버튼();
 
