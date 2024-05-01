@@ -4,7 +4,8 @@ let versionList,
 	tableOptions,
 	TableInstance,
 	pivotType = "normal",
-	editContents = {};
+	editContents = {},
+	res;
 const ContentType = {
 	normal: {
 		version: "버전",
@@ -471,6 +472,43 @@ class Table {
 
 		return btn;
 	}
+    makeEditableButton(cur, key) {
+        const uuid = createUUID(); // Ensure a unique ID for each input element
+        const that = this;
+        const btn = this.makeElement("button");
+        const editIcon = this.makeElement("i");
+        btn.className = "btn pivot-toggle";
+        editIcon.className = "fa fa-pencil";
+        editIcon.style.marginRight = "10px";
+        btn.appendChild(editIcon);
+        const text = document.createTextNode(cur[key] ?? "");
+        btn.appendChild(text);
+        btn.addEventListener("click", function(e) {
+            const input = that.makeElement("input");
+            input.id = uuid;
+            input.type = "text";
+            input.value = cur[key] ?? "";
+            input.className = "edit-input";
+            btn.parentNode.replaceChild(input, btn); // 버튼을 입력 필드로 바꿈
+            input.focus(); // 입력 필드에 자동으로 포커스를 줌
+
+            input.addEventListener("blur", () => {
+                cur[key] = input.value;
+                const updatedBtn = that.makeEditableButton(cur, key);
+                input.parentNode.replaceChild(updatedBtn, input);
+                editContents.content = cur[key];
+                that.updateData(cur['id'],editContents);
+            });
+
+            input.addEventListener("keyup", function(e) {
+                if (e.key === "Enter") {
+                    input.blur(); // 엔터 키를 누르면 blur 이벤트를 강제로 호출하여 업데이트 처리를 함
+                }
+            });
+        });
+
+        return btn;
+    }
 
 	makePivotRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
@@ -509,7 +547,10 @@ class Table {
                     if(['open', 'investigation', 'resolved', 'closeStatus'].includes($col.className)){
                         const checkedAttribute = $col.innerHTML === "1" ? " checked" : "";
                         $col.innerHTML = `<input type="radio" name="${radioButtonName}"${checkedAttribute}>`;
-                     }
+                    }
+                    /*else if(['content'].includes($col.className)){
+                        $col.prepend(this.makeEditableButton(cur,  key));
+                    }*/
 				}
 
 				if (cur.root === key) {
@@ -534,9 +575,7 @@ class Table {
 
 				const $col = this.makeElement(tag);
 				$col.className = key;
-
 				if (tag === "td") {
-					$col.innerHTML = cur[key];
 
 					if ((["status"].includes(key) && cur.category !== "Group") || ["priority", "difficulty"].includes(key)) {
 						$col.innerHTML = `
@@ -544,7 +583,12 @@ class Table {
 						${cur[key]}
 						<i class="fa fa-caret-down"></i>
 					</a>`;
+					}else if(['content'].includes($col.className)){
+					    $col.prepend(this.makeEditableButton(cur,  key));
+					}else{
+					    $col.innerHTML = cur[key];
 					}
+
 				} else {
 					$col.innerHTML = cur[key];
 				}
@@ -567,6 +611,7 @@ class Table {
         if(editContents.statusId) dataToSend.c_req_state_link = editContents.statusId;
         if(editContents.priorityId) dataToSend.c_req_priority_link = editContents.priorityId;
         if(editContents.difficultyId) dataToSend.c_req_difficulty_link = editContents.difficultyId;
+        if(editContents.content) dataToSend.c_title = editContents.content;
 
         // startDate와 endDate 값 검증 후 객체에 추가
         if(editContents.startDate && !isNaN(new Date(editContents.startDate).getTime())) {
@@ -576,16 +621,17 @@ class Table {
             dataToSend.c_req_end_date = new Date(editContents.endDate);
         }
 
-        // 조건에 따라 DB 업데이트 혹은 ALM 업데이트 실행
         if(dataToSend.c_req_state_link || dataToSend.c_req_priority_link || dataToSend.c_req_difficulty_link || dataToSend.c_req_start_date || dataToSend.c_req_end_date) {
             // DB까지만 변경 필요한 경우
             tableOptions.onDBUpdate(tableOptions.id, dataToSend);
         } else {
            // ALM까지 데이터 변경 필요
-            tableOptions.onUpdate(tableOptions.id, {
+           const versionSetLink = res.find(item => item.c_id === reqId);
+           tableOptions.onUpdate(tableOptions.id, {
                 c_id: reqId,
-                c_title: editContents.content ?? null
-            });
+                c_title: editContents.content ?? null,
+                c_req_pdservice_versionset_link : versionSetLink ? versionSetLink.c_req_pdservice_versionset_link : null
+           });
         }
     }
 
@@ -781,7 +827,7 @@ class Table {
 const makeReqTable = async (options) => {
 	tableOptions = options;
 	const data = await tableOptions.onGetVersion(tableOptions.id);
-	const res = await tableOptions.onGetData(tableOptions.id);
+	res = await tableOptions.onGetData(tableOptions.id);
 	versionList = data.response.sort((a, b) => a.c_id - b.c_id);
 
 	tableData = mapperTableData([...res]);

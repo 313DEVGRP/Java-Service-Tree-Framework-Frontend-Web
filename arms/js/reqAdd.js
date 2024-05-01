@@ -1789,7 +1789,11 @@ function tableSelect(id) {
 					200: function () {
 						jSuccess('"' + params.c_title + '"' + " 요구사항이 변경되었습니다.");
 					}
-				}
+				},
+                error: function() {
+                    jError("요구사항 변경에 실패하였습니다.");
+                    tableSelect(id);
+                }
 			});
 		},
 		onDBUpdate: function (id ,params) { // 상태, 우선순위, 난이도, 시작일, 종료일
@@ -1799,9 +1803,13 @@ function tableSelect(id) {
   				data: params,
         		statusCode: {
    					200: function () {
-       				jSuccess(" 요구사항이 변경되었습니다.");
+       				jSuccess("요구사항이 변경되었습니다.");
         			}
-       			}
+       			},
+                error: function() {
+                    jError("요구사항 변경에 실패하였습니다.");
+                    tableSelect(id);
+                }
    			});
    		}
 	});
