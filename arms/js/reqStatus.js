@@ -83,6 +83,11 @@ function execDocReady() {
 				document.head.appendChild(script);
 			}, 5000); // 5초 후에 실행됩니다.
 
+			// 높이 조정
+			$('.status-top').matchHeight({
+				target: $('.status-top-statistics')
+			});
+
 			//사이드 메뉴 처리
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
