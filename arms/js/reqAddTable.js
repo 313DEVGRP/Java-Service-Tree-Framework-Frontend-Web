@@ -7,14 +7,14 @@ let versionList,
 	editContents = {};
 const ContentType = {
 	normal: {
-		version: "Version",
+		version: "버전",
 		category: "구분",
 		writer: "요구사항 작성자",
-		status: "Status",
 		depth1: "Depth 1",
 		depth2: "Depth 2",
 		depth3: "Depth 3",
 		content: "요구사항 제목",
+		status: "요구사항 상태",
 		priority: "우선순위",
 		difficulty: "난이도",
 		createDate: "생성일",
@@ -22,7 +22,7 @@ const ContentType = {
 		endDate: "종료일"
 	},
 	version: {
-		version: "Version",
+		version: "버전",
 		writer: "요구사항 작성자",
 		depth1: "Depth 1",
 		content: "요구사항 제목",
@@ -34,7 +34,7 @@ const ContentType = {
 	},
 	owner: {
 		writer: "요구사항 작성자",
-		version: "Version",
+		version: "버전",
 		depth1: "Depth 1",
 		content: "요구사항 제목",
 		open: "열림",
@@ -528,7 +528,7 @@ class Table {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
 			$tr.setAttribute("data-id", cur.id);
-
+            $tr.setAttribute("data-version", cur._version ?? "");
 			Object.keys(ContentType[pivotType]).forEach((key) => {
 				if ([`_${key}`].includes(key)) return;
 
@@ -556,46 +556,39 @@ class Table {
 		}, []);
 	}
 
-	updateData(id, key, value) {
-		const task = this.$data.find((item) => item.id === Number(id));
+	updateData(reqId, editContents) {
+        // 초기 데이터 객체 생성
+        let dataToSend = {
+            c_id: reqId,
+            c_req_update_date: new Date()
+        };
 
-		if (task[key] === value) return;
+        // 조건 검사 후 조건을 만족하는 경우에만 프로퍼티 추가
+        if(editContents.statusId) dataToSend.c_req_state_link = editContents.statusId;
+        if(editContents.priorityId) dataToSend.c_req_priority_link = editContents.priorityId;
+        if(editContents.difficultyId) dataToSend.c_req_difficulty_link = editContents.difficultyId;
 
-		task[key] = value;
+        // startDate와 endDate 값 검증 후 객체에 추가
+        if(editContents.startDate && !isNaN(new Date(editContents.startDate).getTime())) {
+            dataToSend.c_req_start_date = new Date(editContents.startDate);
+        }
+        if(editContents.endDate && !isNaN(new Date(editContents.endDate).getTime())) {
+            dataToSend.c_req_end_date = new Date(editContents.endDate);
+        }
 
-		tableOptions.onUpdate(tableOptions.id, {
-            c_id: task.id,
-			c_title: task.content,
-			c_req_pdservice_versionset_link: task.origin.c_req_pdservice_versionset_link,
-			c_req_priority_link: task._priority ?? null, // 5 - 중간
-			c_req_difficulty_link: task._difficulty ?? null, // 5 - 보통
-			c_req_state_link: task._status ?? null, //10 - 열림
-			c_req_update_date: new Date(),
-			c_req_reviewer01: task.origin.c_req_reviewer01,
-			c_req_reviewer02: task.origin.c_req_reviewer02,
-			c_req_reviewer03: task.origin.c_req_reviewer03,
-			c_req_reviewer04: task.origin.c_req_reviewer04,
-			c_req_reviewer05: task.origin.c_req_reviewer05,
-			c_req_status: "ChangeReq",
-			c_req_contents: task.origin.c_req_contents,
-			c_req_plan_progress: task.progress,
-			c_req_end_date: new Date(task.endDate)
-		});
-	}
+        // 조건에 따라 DB 업데이트 혹은 ALM 업데이트 실행
+        if(dataToSend.c_req_state_link || dataToSend.c_req_priority_link || dataToSend.c_req_difficulty_link || dataToSend.c_req_start_date || dataToSend.c_req_end_date) {
+            // DB까지만 변경 필요한 경우
+            tableOptions.onDBUpdate(tableOptions.id, dataToSend);
+        } else {
+           // ALM까지 데이터 변경 필요
+            tableOptions.onUpdate(tableOptions.id, {
+                c_id: reqId,
+                c_title: editContents.content ?? null
+            });
+        }
+    }
 
-	updatePivotData(reqId,editContents){
-	    if(editContents.statusId !== null) {// DB 까지만 변경이 필요한 경우
-	        tableOptions.onDBUpdate(tableOptions.id,{
-    			c_id: reqId,
-    			c_req_state_link: editContents.statusId ?? null
-    		});
-	    }else{ // ALM 까지 데이터 변경이 필요할 시
-	        tableOptions.onUpdate(tableOptions.id, {
-    			c_id: reqId,
-    			c_title: editContents.content ?? null
-    		});
-	    }
-	}
 
 	addInput(node, updateKey, type = text) {
 		const uuid = createUUID();
@@ -615,6 +608,41 @@ class Table {
 		document.getElementById(uuid).value = text;
 		document.getElementById(uuid).focus();
 	}
+	addDateInput(node, updateKey) {
+        const uuid = createUUID();
+    	const text = node.textContent;
+
+    	const version = this.getElement(node, "TR").dataset.version
+
+    	const versionData = versionList.find(item => item.c_id === Number(version));
+    	const versionStartDate = getDate(versionData.c_pds_version_start_date);
+    	const versionEndDate   = getDate(versionData.c_pds_version_end_date);
+
+        const $input = this.makeElement("input");
+
+
+        $input.setAttribute("type", "date");
+        $input.setAttribute("min",versionStartDate);
+        $input.setAttribute("max",versionEndDate);
+
+        $input.id = uuid;
+
+        $input.addEventListener("blur", () => {
+            if(updateKey === "startDate"){
+                editContents.startDate = $input.value; // 요구사항 시작일
+            }else if(updateKey === "endDate"){
+                editContents.endDate = $input.value;
+            }
+    	    this.updateData(this.getElement(node, "TR").dataset.id, editContents);
+    		node.textContent = $input.value;
+        });
+
+    		node.textContent = "";
+    		node.appendChild($input);
+
+    		document.getElementById(uuid).value = text;
+    		document.getElementById(uuid).focus();
+    }
 
 	setOptions(name, text, uuid) {
 		let options;
@@ -643,10 +671,13 @@ class Table {
 			$li.addEventListener("click", (e) => {
 				if(keyname === "_status"){
                     editContents.statusId = value;
-                    this.updatePivotData($li.parentElement.parentElement.parentElement.dataset.id,editContents);
-                }else{
-                    this.updateData($li.parentElement.parentElement.parentElement.dataset.id, keyname, value);
+                }else if(keyname === "_priority"){
+                    editContents.priorityId = value;
+                }else if(keyname === "_difficulty"){
+                    editContents.difficultyId = value;
                 }
+                this.updateData($li.parentElement.parentElement.parentElement.dataset.id,editContents);
+
 				$li.parentElement.previousElementSibling.innerHTML = `${e.target.textContent} <i class="fa fa-caret-down"></i>`;
 
 				document.getElementById(uuid).remove();
@@ -680,40 +711,26 @@ class Table {
 			const $writer = this.getElement(e.target, "TD", "writer");
 			const $content = this.getElement(e.target, "TD", "content");
 			const $progress = this.getElement(e.target, "TD", "progress");
+			const $createDate = this.getElement(e.target, "TD", "createDate");
+			const $startDate = this.getElement(e.target, "TD", "startDate");
 			const $endDate = this.getElement(e.target, "TD", "endDate");
             const tdElement = e.target.closest("td");
             const trElement = e.target.closest("tr");
-            console.log($content);
-            if ($content) {
-                this.addInput($content, "content");
-                return;
-            }
-//			if ($progress) {
-//				this.addInput($progress, "progress", "number");
-//				return;
-//			}
-//
-//			if ($endDate) {
-//				this.addInput($endDate, "endDate", "date");
-//				return;
-//			}
 
-            if (pivotType !== "normal"){ // 피벗 테이블의 경우 이름을 변경할 때
-                if ($content) {
-                    editContents.content = $content;
-                    this.updatePivotData(trElement.dataset.id,editContents);
-                    return;
-                }
-            }else{
-                if ($content) {
-                    this.addInput($content, "content");
-                    return;
-                }
-            }
+            if ($startDate) {
+				this.addDateInput($startDate, "startDate");
+				return;
+			}
+
+			if ($endDate) {
+			    console.log($endDate);
+				this.addDateInput($endDate, "endDate");
+				return;
+			}
 
             if (e.target.type === "radio") {
                 editContents.statusId =ReqStatusEnglish[tdElement.className];
-                this.updatePivotData(trElement.dataset.id,editContents);
+                this.updateData(trElement.dataset.id,editContents);
             }
 
 			// select
