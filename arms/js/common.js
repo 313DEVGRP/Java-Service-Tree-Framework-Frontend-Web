@@ -257,6 +257,8 @@ function loadPluginGroupsParallelAndSequential(groups) {
 function includeLayout(page) {
 	var includeArea = $("[data-include]");
 	var self, url;
+	var str = window.location.href;
+
 	$.each(includeArea, function () {
 		self = $(this);
 		url = self.data("include");
@@ -279,6 +281,11 @@ function includeLayout(page) {
 		} else if (url.indexOf("page-sidebar") !== -1) {
 			if (mode == "detail" || hrefLink.indexOf("detail.html") > 0) {
 				url = "/arms/html/detail/page-sidebar.html";
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
+			} else if (str.indexOf("controltower") > 0) {
+				url = "/controltower/html/template/page-sidebar.html";
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
