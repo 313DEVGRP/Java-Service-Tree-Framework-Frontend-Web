@@ -80,9 +80,8 @@ function execDocReady() {
             // 칸반 보드 초기화
             initKanban();
 
-            // 높이 조정
-            $('.kanban_board').matchHeight({
-                target: $('.kanban_sidebar')
+            $(window).resize(function() {
+                adjustHeight();
             });
 
         })
@@ -278,7 +277,10 @@ function changeMultipleSelected() {
                 // 칸반 보드 로드
                 loadKanban(reqListByState, reqBoardByState);
                 jSuccess("보드가 로드 되었습니다.");
-                
+
+                // 높이 조정
+                adjustHeight();
+
                 // 요구사항 개수 표시
                 setReqCount(reqListByState);
                 
@@ -424,7 +426,23 @@ function loadKanban(reqListByState, reqBoardByState) {
     });
 }
 
+function adjustHeight() {
+
+    // 높이 조정
+    $('.kanban_board').matchHeight({
+        target: $('.kanban_sidebar')
+    });
+
+    var sidebarHeight = $('.kanban_sidebar').height();
+    console.log("사이드바: " + sidebarHeight);
+    $('.kanban-drag').each(function() {
+        this.style.setProperty('height', `calc(${sidebarHeight}px - 182px)`, 'important');
+    });
+}
+
+
 function initKanban() {
     KanbanBoard.init('myKanban', boardData);
+    adjustHeight();
     setReqCount();
 }
