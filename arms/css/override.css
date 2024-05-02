@@ -1963,7 +1963,6 @@ svg .ghostCircle.show {
 
 .kanban-drag {
 	padding: 10px !important;
-	height: 570px !important;
 	overflow: auto;
 }
 
