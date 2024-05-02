@@ -8,6 +8,22 @@ const TourGuideApi = (function () {
         return tg;
     }
 
+    const makeModalInstance = function (data) {
+
+        //TgGroup.modalReqKanban(data);
+
+        let tg = new tourguide.TourGuideClient({
+            autoScroll: false,
+            hidePrev: true,
+            hideNext: true,
+            showStepDots: false,
+            stepDotsPlacement: 'body',
+            showStepProgress: false,
+            steps: modalFetchSteps(data),
+        });
+        return tg;
+    }
+
     const fetchSteps = function (pageName) {
         let steps;
         console.log("[ tgApi :: TourGuideApi.fetchSteps ] :: pageName → " + pageName);
@@ -49,6 +65,13 @@ const TourGuideApi = (function () {
         return steps;
     };
 
+    const modalFetchSteps = function (data) {
+        let steps = TgGroup.modalReqKanban(data);
+        return steps;
+    }
+
     return {fetchSteps : fetchSteps,
-            makeInstance :makeInstance}; // 내부 함수 key : value ( function )
+            makeInstance : makeInstance,
+            makeModalInstance : makeModalInstance,
+            modalFetchSteps : modalFetchSteps}; // 내부 함수 key : value ( function )
 })();

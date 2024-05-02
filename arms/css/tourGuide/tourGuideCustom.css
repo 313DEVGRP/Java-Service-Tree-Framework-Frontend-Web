@@ -15,3 +15,7 @@
 .tgOnOff {
     color: #DB2A34 !important;
 }
+
+.tg-dialog .tg-dialog-footer {
+    padding: 0;
+}

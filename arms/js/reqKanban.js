@@ -1,7 +1,7 @@
 let selectedPdServiceId;           // 선택한 제품(서비스) 아이디
 let selectedPdService;             // 선택한 제품(서비스) 이름
 let selectedVersionId;             // 선택한 버전 아이디
-const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
+const reqStateToIdMapping = { // 요구사항 상태에 id 매핑
     '열림': '10',
     '진행중': '11',
     '해결됨': '12',
@@ -11,6 +11,14 @@ let boardData = Object.keys(reqStateToIdMapping).map(state => ({ // 기본 보�
                      id: reqStateToIdMapping[state],
                      title: state
                  }));
+
+const reqKanbanTg = new tourguide.TourGuideClient({              // 상세 정보 투어 가이드
+                        autoScroll: false,
+                        hidePrev: true,
+                        hideNext: true,
+                        showStepDots: false,
+                        showStepProgress: false
+                    });
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -244,9 +252,9 @@ function changeMultipleSelected() {
 
                     // 현재 상태에 해당하는 리스트에 아이템 추가
                     reqList[state].push({
-                        id: item.c_id,
+                        id: "req_" + item.c_id,
                         title: `<span class="req_item">${item.c_title}</span>
-                                <i class="fa fa-ellipsis-h show-info" data-id="${item.c_id}"></i>`,
+                                <i class="fa fa-ellipsis-h show-info" data-id="req_${item.c_id}"></i>`,
                         info: {
                             reqVersions: versions,
                             reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
@@ -353,7 +361,7 @@ function loadKanban(reqListByState, reqBoardByState) {
     });
 
     // 상세 정보 클릭 이벤트
-    $('.show-info').click(function() {
+    $(".show-info").on('click', function() {
         const reqId = $(this).data('id');
 
         let reqInfo;
@@ -364,11 +372,18 @@ function loadKanban(reqListByState, reqBoardByState) {
             }
         });
 
-        if (reqInfo) {
-            alert(JSON.stringify(reqInfo));
-        } else {
-            console.error('[ reqKanban :: loadKanban ] :: info 정보를 찾을 수 없습니다.', { reqId });
+        let reqData = {
+            reqId: reqId,
+            reqInfo: reqInfo
         }
+
+        TgGroup.modalReqKanban(reqData);
+        reqKanbanTg.start();
+
+        reqKanbanTg.onAfterExit(() => {
+            $(`[data-id="${reqId}"]`).removeAttr('data-tg-tour');
+            $(`[data-id="${reqId}"]`).removeAttr('data-tg-title');
+        });
     });
 
     // 툴팁
@@ -410,7 +425,6 @@ function loadKanban(reqListByState, reqBoardByState) {
 }
 
 function initKanban() {
-
     KanbanBoard.init('myKanban', boardData);
     setReqCount();
 }

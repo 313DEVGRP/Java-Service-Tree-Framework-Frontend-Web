@@ -1944,6 +1944,7 @@ svg .ghostCircle.show {
 .kanban-item {
 	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
 	background: rgba(51, 51, 51, 1) !important;
 	box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.08);
 	border-radius: 6px;
@@ -1976,5 +1977,5 @@ svg .ghostCircle.show {
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 11px;
-    z-index: 1000;
+    z-index: 900;
 }
