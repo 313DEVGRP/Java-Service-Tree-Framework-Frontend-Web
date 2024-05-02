@@ -483,6 +483,7 @@ class Table {
         btn.appendChild(editIcon);
         const text = document.createTextNode(cur[key] ?? "");
         btn.appendChild(text);
+        const tempText = cur[key] ;
         btn.addEventListener("click", function(e) {
             const input = that.makeElement("input");
             input.id = uuid;
@@ -493,11 +494,18 @@ class Table {
             input.focus(); // 입력 필드에 자동으로 포커스를 줌
 
             input.addEventListener("blur", () => {
-                cur[key] = input.value;
-                const updatedBtn = that.makeEditableButton(cur, key);
-                input.parentNode.replaceChild(updatedBtn, input);
-                editContents.content = cur[key];
-                that.updateData(cur['id'],editContents);
+                console.log(input.value);
+                if (tempText !==  input.value){
+                    cur[key] = input.value;
+                    const updatedBtn = that.makeEditableButton(cur, key);
+                    input.parentNode.replaceChild(updatedBtn, input);
+                    editContents.content = cur[key];
+                    that.updateData(cur['id'],editContents);
+                }else{
+                    cur[key] = input.value;
+                    const updatedBtn = that.makeEditableButton(cur, key);
+                    input.parentNode.replaceChild(updatedBtn, input);
+                }
             });
 
             input.addEventListener("keyup", function(e) {
@@ -521,7 +529,10 @@ class Table {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
-				if (cur[key]) {
+
+                if(['content'].includes($col.className)){
+                        $col.prepend(this.makeEditableButton(cur,  key));
+                }else if (cur[key]) {
 					$col.innerHTML = cur[key];
 				}
 
@@ -548,9 +559,7 @@ class Table {
                         const checkedAttribute = $col.innerHTML === "1" ? " checked" : "";
                         $col.innerHTML = `<input type="radio" name="${radioButtonName}"${checkedAttribute}>`;
                     }
-                    /*else if(['content'].includes($col.className)){
-                        $col.prepend(this.makeEditableButton(cur,  key));
-                    }*/
+
 				}
 
 				if (cur.root === key) {
