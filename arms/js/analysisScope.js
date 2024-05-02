@@ -1159,7 +1159,7 @@ function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function (result) {
-				console.log("[ analysisScope :: getReqStatusAndInvolvedAssignees ========= ] :: result");
+				console.log("[ analysisScope :: getReqStatusAndInvolvedAssignees ] :: result");
 				console.log(result);
 				let pdServiceName;
 				pdServiceListData.forEach(elements => {
@@ -1219,79 +1219,6 @@ function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks) {
 				}
 				let colorArr = dashboardColor.nightingaleRose;
 				drawRadialPolarBarChart("reqPerVersionRoseChart", outputArray, colorArr);
-			}
-		}
-	});
-}
-
-function getReqPerVersion(pdService_id, pdServiceVersionLinks, versionTag) {
-	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/pdservice-id/"+pdService_id+"/req-per-version",
-		type: "GET",
-		data: {	pdServiceVersionLinks: pdServiceVersionLinks },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (result) {
-				console.log("[ analysisScope :: getReqPerVersion ] :: result");
-				console.log(result);
-				console.log("해당 결과는 ES에서 가져온 결과 입니다.");
-				let reqPerVersionDataArr = [];
-
-				// 집계 데이터 바탕
-				if (result["전체합계"] !== 0) {
-					let 버전별집계 = result["검색결과"]["group_by_pdServiceVersions"];
-					for (let i = 0; i < 버전별집계.length; i++) {
-						let mandatoryDataList = {
-							versionId: "",
-							title: "",
-							req: ""
-						};
-						mandatoryDataList.versionId = 버전별집계[i]["필드명"];
-						let isReqArr = 버전별집계[i]["하위검색결과"]["group_by_isReq"];
-						isReqArr.forEach((target) => {
-							if (target["필드명"] === "true") {
-								mandatoryDataList.req = target["개수"];
-							}
-						});
-						reqPerVersionDataArr.push(mandatoryDataList);
-					}
-				}
-
-				//1.선택한 제품서비스의 버전과, ES 조회결과 가져온 버전의 갯수가 다른지 확인
-				//2.없는 버전의 경우, versionId만 넣어주고 나머지는 자료구조만 세팅.
-				let versionIdSet = new Set();
-				versionTag.forEach((e) => versionIdSet.add(e));
-				reqPerVersionDataArr.forEach((e) => {
-					if (versionIdSet.has(e.versionId)) {
-						versionIdSet.delete(e.versionId);
-					}
-				});
-				for (let value of versionIdSet) {
-					reqPerVersionDataArr.push({ versionId: value, title: "", req: 0 });
-				}
-
-				// 만든 버전데이터배열에 버전의 title 매핑.
-				for (let i = 0; i < versionListData.length; i++) {
-					reqPerVersionDataArr.forEach((e) => {
-						if (e.versionId == versionListData[i]["c_id"]) {
-							//e.title = (versionListData[i].versionTitle).replaceAll(".","_");
-							e.title = versionListData[i].c_title;
-						}
-					});
-				}
-
-				let chartDataArr = []; // 결국 버전명과 수치만 들어갑니다. [{버전명
-
-				reqPerVersionDataArr.forEach((e) => {
-					chartDataArr.push({ name: e.title, value: e.req });
-				});
-				let colorArr = dashboardColor.nightingaleRose;
-				console.log("[ analysisScope :: getReqPerVersion ] :: chartDataArr")
-				console.log(chartDataArr);
-				console.log("====== ====== ====== ====== ======")
-				drawRadialPolarBarChart("reqPerVersionRoseChart", chartDataArr, colorArr);
 			}
 		}
 	});

@@ -13,9 +13,13 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
         "rgba(151,78,163,0.73)",
         "rgba(77,175,74,0.65)",
         "rgba(255,127,0,0.7)",
-        "rgba(55,125,184,0.62)",
         "rgba(166,86,40,0.7)",
-        "rgba(227,26,27,0.66)"
+        "rgba(44,145,157,0.9)",
+        "rgba(227,26,27,0.66)",
+        "rgba(55,125,184,0.62)",
+        "rgba(142,223,138,0.9)",
+        "rgba(156,148,255,0.7)",
+        "rgba(58,186,161,0.9)"
     ];
 
     if(rawData) {
@@ -24,7 +28,6 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
 
     function run(rawData) {
         const dataWrap = prepareData(rawData);
-        console.log(dataWrap);
         dataWrap.seriesData.forEach(element => {
             if (element["depth"] === 2) {
                 reqCount++; // 총 진행중인 요구사항 수
@@ -72,6 +75,7 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
             maxDepth: maxDepth
         };
     }
+
     function initChart(seriesData, maxDepth) {
         console.log("[circularPackingChart :: initChart] :: seriesData ===> ");
         console.log(seriesData);
@@ -197,8 +201,7 @@ function drawCircularPacking(target, psServiceName,rawData, issueStatusList, col
                 itemStyle: {
                     color: function(params) {
                         if (params.data.value) {
-
-                            return defaultColorSet[issueStatusList.indexOf(params.data.status)];
+                            return defaultColorSet[statusDataArr.findIndex(item => item.name === params.data.status)];
                         } else {
                             return "rgba(55,125,184,0.62)";
                         }
