@@ -61,7 +61,7 @@ function execDocReady() {
 
 			// 사이드 메뉴 색상 설정
 			$('.widget').widgster();
-			setSideMenu("sidebar_menu_product", "sidebar_menu_product_manage");
+			setSideMenu("sidebar_menu_system", "sidebar_menu_system_logging");
 
 		})
 		.catch(function() {
