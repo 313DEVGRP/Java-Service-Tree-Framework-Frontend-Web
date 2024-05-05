@@ -13,6 +13,7 @@ let boardData = Object.keys(reqStateToIdMapping).map(state => ({ // 기본 보�
                  }));
 
 const reqKanbanTg = new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
+                        exitOnClickOutside: true,
                         autoScroll: false,
                         hidePrev: true,
                         hideNext: true,
@@ -314,6 +315,7 @@ function loadKanban(reqListByState, reqBoardByState) {
         dropEl: function (el, target, source) {
             // 보드 변경
             let reqId = el.dataset.eid;
+            reqId = reqId.replace("req_", "");
             let reqTitle = el.innerText;
             let state = source.parentNode.dataset.id;
             let changeState = target.parentNode.dataset.id;
