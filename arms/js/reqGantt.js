@@ -151,8 +151,8 @@ function execDocReady() {
 			click_btn_for_search_history();
 			change_tab_action();
 			click_btn_for_connect_req_jira();
-			change_input_for_req_date("editview_");
-			change_input_for_req_date("addview_");
+//			change_input_for_req_date("editview_");
+//			change_input_for_req_date("addview_");
 
 			change_form_with_req_type();
 
@@ -200,7 +200,7 @@ function makePdServiceSelectBox() {
 					$("#selected_pdService").append(newOption).trigger("change");
 				}
 
-				resetProjectProgress();
+
 				//////////////////////////////////////////////////////////
 			}
 		}
@@ -224,6 +224,7 @@ function makePdServiceSelectBox() {
 
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
+		resetProjectProgress();
 	});
 } // end makePdServiceSelectBox()
 
@@ -1500,18 +1501,40 @@ function click_btn_for_connect_req_jira() {
 }
 
 function handle_change_date(start, end) {
-	var startDate = new Date(start);
-	var endDate = new Date(end);
+	// 시작일, 종료일, 오늘 날짜를 Date 객체로 변환
+	const startDate = new Date(start);
+	const endDate = new Date(end);
+	const today = new Date();
 
-	var diffYear = endDate.getFullYear() - startDate.getFullYear();
-	var diffMonth = endDate.getMonth() - startDate.getMonth();
-	var timeDiff = endDate.getTime() - startDate.getTime();
-	var dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+	// 시작일과 오늘 사이의 일수 차이 계산
+	const dayDiff = Math.max(0, diff_day(start, end));
+	const todayDiff = Math.max(0, diff_day(start, today));
+
+	// 시작일이 오늘보다 미래인 경우
+	if (startDate > today) {
+		return {
+			dayDiff: dayDiff,
+			todayDiff: 0,
+			plan_progress: 0
+		};
+	}
+
+	// 시작일이 종료일보다 같거나 큰 경우
+	if (startDate >= endDate) {
+		return {
+			dayDiff: 0,
+			todayDiff: 0,
+			plan_progress: 0
+		};
+	}
+
+	// 진행률 계산
+	const progress = dayDiff > 0 ? (todayDiff / dayDiff) * 100 : 0;
 
 	return {
 		dayDiff: dayDiff,
-		diffMonth: diffYear * 12 + diffMonth,
-		diffMM: Math.round(dayDiff / 22)
+		todayDiff: todayDiff,
+		plan_progress: Math.min(progress, 100)
 	};
 }
 
@@ -1528,11 +1551,11 @@ function change_input_for_req_date(prefix) {
 
 		var dateDiff = handle_change_date(start.val(), end.val());
 
-		$("#" + prefix + "req_total_resource").val(dateDiff.diffMonth);
-		$("#" + prefix + "req_plan_resource").val(dateDiff.diffMonth);
+		$("#" + prefix + "req_total_resource").val(dateDiff.dayDiff);
+		$("#" + prefix + "req_plan_resource").val(dateDiff.planDiff);
 
-		$("#" + prefix + "req_total_time").val(dateDiff.dayDiff);
-		$("#" + prefix + "req_plan_time").val(dateDiff.dayDiff);
+		// $("#" + prefix + "req_total_time").val(dateDiff.dayDiff);
+		// $("#" + prefix + "req_plan_time").val(dateDiff.dayDiff);
 	}
 
 	start.change(handle_change_req_date);
@@ -1597,9 +1620,9 @@ function setGanttTasks(data) {
 			}
 			else {
 				common_object.total_resource = cur.c_req_total_resource == null ? 0 : cur.c_req_total_resource;
-				common_object.plan_resouce =  cur.c_req_plan_resource == null ? 0 : cur.c_req_plan_resource;
-				common_object.total_time = cur.c_req_total_time == null ? 0 : cur.c_req_total_time;
-				common_object.plan_time = cur.c_req_plan_time == null ? 0 : cur.c_req_plan_time;
+				common_object.plan_resource =  cur.c_req_plan_resource == null ? 0 : cur.c_req_plan_resource;
+				// 	common_object.total_resource = cur.c_req_total_time == null ? 0 : cur.c_req_total_time;
+				// 	common_object.plan_resouce = cur.c_req_plan_time == null ? 0 : cur.c_req_plan_time;
 				common_object.plan = cur.c_req_plan_progress == null ? 0 : cur.c_req_plan_progress;
 				common_object.performance = cur.c_req_performance_progress == null ? 0 : cur.c_req_performance_progress;
 			}
@@ -1661,6 +1684,8 @@ function updateNode(data, task) {
 		progress: true,
 		statusCode: {}
 	}).done(function () {
+//	    getMonitorData($("#selected_pdService").val(), selectedVersionId);
+
 		var tasks = $.map(ganttTasks, function (ganttTask) {
 			if (ganttTask.id === data.c_id) {
 				return $.extend({}, ganttTask, task);
@@ -1700,7 +1725,6 @@ function initGantt(data) {
 
 				console.log ("[ reqGantt :: initGantt ]");
 				console.table(task);
-				let plan_progress = calculatePlanProgress(start, end);
 
 				updateNode(
 					{
@@ -1711,9 +1735,9 @@ function initGantt(data) {
 					{
 						start: getDate(start),
 						end: getDate(end),
-						total_resource: dateDiff.diffMM,
-						total_time: dateDiff.dayDiff,
-						plan: plan_progress,
+						total_resource: dateDiff.dayDiff,
+						plan_resource: dateDiff.todayDiff,
+						plan: dateDiff.plan_progress,
 					}
 				);
 			},
@@ -1743,7 +1767,7 @@ function initGantt(data) {
 			},
 			language: navigator.language?.split("-")[0] || navigator.userLanguage
 		},
-[
+		[
 			{
 				data: "id",
 				title: "",
@@ -1840,31 +1864,9 @@ function initGantt(data) {
 			},
 			{ data: "start", title: "시작일" },
 			{ data: "end", title: "완료일" },
-			{
-				data: "total_resource",
-				title: "총 작업량",
-				render: (data, row) => {
-					if (data != null) {
-						return data + ' M/M';
-					}
-					else {
-						return '';
-					}
-				}
-			},
-			{
-				data: "plan_resouce",
-				title: "계획 작업량",
-				render: (data, row) => {
-					if (data != null) {
-						return data + ' M/M';
-					}
-					else {
-						return '';
-					}
-				}
-			},
-			{
+			{ data: "total_resource", title: "총 작업량" },
+			{ data: "plan_resource", title: "계획 작업량" },
+			/*{
 				data: "total_time",
 				title: "총 기간(일)",
 				render: (data, row) => {
@@ -1887,7 +1889,7 @@ function initGantt(data) {
 						return '';
 					}
 				}
-			},
+			},*/
 			{ data: "manager", title: "담당자" },
 			{ data: "result", title: "산출물" },
 			{
@@ -2025,6 +2027,10 @@ function popup_size_setting() {
 ///////////////////////////////////////////////////////////////////////////////
 function scheduleUpdate() {
 	console.log("::: scheduleUpdate :: ganttTaks ->");
+	if(ganttTasks == null) {
+		alert("데이터가 존재하지 않습니다.");
+		return false;
+	}
 	bindProjectProgress(ganttTasks);
 }
 
@@ -2035,13 +2041,17 @@ function bindProjectProgress(data) {
 		// default의 경우에만 계산
 		if (cur.type === "default") {
 			// 계산식 추가 예정
-			acc.total_work += cur.total_time;
-			acc.plan_work += cur.plan_time;
-			acc.performance += 1;
-			acc.actual_input += 1;
+			acc.total_work += cur.total_resource;
+			acc.plan_work += cur.plan_resource;
 			acc.plan_progress += cur.plan;
-			acc.total_performance_progress += cur.performance;
-			acc.req_count += 1;
+
+			const today = new Date();
+			const todayFormatted = getDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+
+			if ((cur.start && cur.end) && (cur.start < todayFormatted)) {
+				acc.total_performance_progress += cur.performance;
+				acc.req_count += 1;
+			}
 
 			console.log(cur);
 		}
@@ -2050,8 +2060,6 @@ function bindProjectProgress(data) {
 	}, {
 		total_work: 0,
 		plan_work: 0,
-		performance: 0,
-		actual_input: 0,
 		plan_progress: 0,
 		total_performance_progress: 0,
 		req_count: 0
@@ -2059,21 +2067,27 @@ function bindProjectProgress(data) {
 
 	console.log(pdservice_progress);
 
-	let planned_progress = 0;
-	let performance_progress = 0;
 	let project_progress= 0;
+	let plan_progress_rate = 0;
+	let performance_progress_rate = 0;
+	let performance_capability = 0;
+
 	if (pdservice_progress.req_count > 0) {
-		performance_progress = pdservice_progress.total_performance_progress / pdservice_progress.req_count;
-		planned_progress = pdservice_progress.plan_progress / pdservice_progress.req_count;
-		project_progress = performance_progress - planned_progress;
+		performance_progress_rate = pdservice_progress.total_performance_progress / pdservice_progress.req_count;
 	}
+
+	if (pdservice_progress.total_work > 0) {
+		plan_progress_rate = (pdservice_progress.plan_work / pdservice_progress.total_work) * 100.0;
+	}
+
+	project_progress = performance_progress_rate - plan_progress_rate;
+	performance_capability = pdservice_progress.total_work * performance_progress_rate / 100.0;
 
 	$("#total_work").val(pdservice_progress.total_work);
 	$("#planed_work").val(pdservice_progress.plan_work);
-	$("#performance_capability").val(pdservice_progress.performance);
-	$("#actual_input").val(pdservice_progress.actual_input);
-	$("#planned_progress").val(planned_progress.toFixed(2));
-	$("#performance_progress").val(performance_progress.toFixed(2));
+	$("#performance_capability").val(performance_capability.toFixed(0));
+	$("#plan_progress_rate").val(plan_progress_rate.toFixed(2));
+	$("#performance_progress_rate").val(performance_progress_rate.toFixed(2));
 	$("#project_progress").val(project_progress.toFixed(2));
 
 	if (project_progress < 0) {
@@ -2089,30 +2103,20 @@ function resetProjectProgress() {
 	$("#planed_work").val(null);
 	$("#performance_capability").val(null);
 	$("#actual_input").val(null);
-	$("#planned_progress").val(null);
-	$("#performance_progress").val(null);
+	$("#plan_progress_rate").val(null);
+	$("#performance_progress_rate").val(null);
 	$("#project_progress").val(null);
 }
 
-function calculatePlanProgress(startDate, endDate) {
+function diff_day(startDate, endDate) {
 	const start = new Date(startDate);
 	const end = new Date(endDate);
-	const today = new Date();
-	const todayFormatted = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-	// 시작일이 오늘보다 이후일 경우
-	if (start > todayFormatted) {
+	if (start > end) {
 		return 0;
 	}
 
-	const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-	const progressDays = Math.ceil((todayFormatted - start) / (1000 * 60 * 60 * 24));
+	let result = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
-	let progress = (progressDays / totalDays) * 100;
-
-	if (progress > 100) {
-		progress = 100;
-	}
-
-	return progress.toFixed(0);
+	return result;
 }
