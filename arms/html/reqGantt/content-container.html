@@ -58,7 +58,7 @@
 				<blockquote
 					class="font13"
 					style="margin-top: 5px">
-					선택한 제품(서비스)와 버전의 Time 관점 요구사항 현황
+					선택한 제품(서비스)와 버전의 분석별 요구사항 현황
 					<div style="float: right">
 						<button
 							class="btn btn-transparent btn-xs"
@@ -560,11 +560,15 @@
 						</button>
 					</div>
 					2. 일정변경 관리하지 않을 때
-					<p class="font12">
+					<p class="font12" style="margin-bottom: 0px!important;">
 						<i class="fa fa-info-circle"></i>
 						프로젝트 작업량과 진척율을 보여줍니다.
 						<strong>"스케쥴 업데이트"</strong>
 						버튼 클릭 시 아래 항목이 자동 계산됩니다.
+					</p>
+					<p class="font10">
+						<i class="fa fa-warning"></i>
+						시작일과 완료일이 선택되지 않은 데이터는 진행율 계산에서 제외됩니다.
 					</p>
 				</blockquote>
 				<div
@@ -656,7 +660,7 @@
 										</span>
 									</div>
 								</div>
-								<div class="progress-group">
+<!--								<div class="progress-group">
 									<label for="actual_input">실제 투입된 작업량 :</label>
 									<div class="progress-desc">
 										<span class="icon input-group-addon">
@@ -679,9 +683,9 @@
 											<span class="font11">일정변경 관리할 때 현재까지 실제로 투입된 작업기간을 표시함</span>
 										</span>
 									</div>
-								</div>
+								</div>-->
 								<div class="progress-group">
-									<label for="planned_progress">계획 진척율(A) :</label>
+									<label for="plan_progress_rate">계획 진척율(A) :</label>
 									<div class="progress-desc">
 										<span class="icon input-group-addon">
 											<i class="glyphicon glyphicon-list-alt"></i>
@@ -689,8 +693,8 @@
 										<span class="progress-input font11">
 											<input
 												type="text"
-												id="planned_progress"
-												name="planned_progress"
+												id="plan_progress_rate"
+												name="plan_progress_rate"
 												class="form-control parsley-validated font13 darkBack"
 												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
 												placeholder="0000.00"
@@ -707,7 +711,7 @@
 									</div>
 								</div>
 								<div class="progress-group">
-									<label for="performance_progress">실적 진척율(B) :</label>
+									<label for="performance_progress_rate">실적 진척율(B) :</label>
 									<div class="progress-desc">
 										<span class="icon input-group-addon">
 											<i class="glyphicon glyphicon-list-alt"></i>
@@ -715,8 +719,8 @@
 										<span class="progress-input font11">
 											<input
 												type="text"
-												id="performance_progress"
-												name="performance_progress"
+												id="performance_progress_rate"
+												name="performance_progress_rate"
 												class="form-control parsley-validated font13 darkBack"
 												style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
 												placeholder="0000.00"
@@ -825,7 +829,7 @@
 				<blockquote
 					class="font13"
 					style="margin-top: 5px">
-					3. 제품(서비스)의 내용을 확인하고 편집/삭제
+					3. 제품(서비스)의 요구사항 별 진척율 및 진행상황을 확인
 					<div style="float: right">
 						<button
 							class="btn btn-transparent btn-xs"
