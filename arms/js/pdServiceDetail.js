@@ -369,13 +369,13 @@ function formatUserSelection(jsonData) {
 function file_upload_setting() {
 	var $fileupload = $("#fileupload");
 	$fileupload.fileupload({
-		autoUpload: true,
+		autoUpload: false,
+		sequentialUploads: true,
 		url: "/auth-user/api/arms/pdServiceDetail/uploadFileToNode.do",
 		dropZone: $("#dropzone")
 	});
 
 	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
-		// The example input, doesn't have to be part of the upload form:
 		var input = $("#fileIdlink");
 		data.formData = { pdServiceDetailId: input.val() };
 		if (!data.formData.pdServiceDetailId) {
