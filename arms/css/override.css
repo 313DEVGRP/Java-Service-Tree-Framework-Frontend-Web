@@ -1978,3 +1978,13 @@ svg .ghostCircle.show {
     font-size: 11px;
     z-index: 900;
 }
+
+.kanban_search_clear {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	cursor: pointer;
+	display: none;
+	z-index: 5;
+}
