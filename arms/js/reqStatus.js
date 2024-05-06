@@ -302,7 +302,7 @@ function makeVersionMultiSelectBox() {
 
 			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
 			// 이슈리스트 데이터테이블
-			dataTableLoad($("#selected_pdService").val(), endPointUrl)
+			dataTableLoad($("#selected_pdService").val(), endPointUrl);
 		}
 	});
 }
@@ -444,7 +444,7 @@ function dataTableLoad(selectId, endPointUrl) {
 		{
 			name: "project.project_key",
 			title: "ALM project",
-			data: "project.project_key",
+			data: "project.project_name",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
