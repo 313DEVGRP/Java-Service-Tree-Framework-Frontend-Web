@@ -369,7 +369,8 @@ function dataTableLoad() {
 			})
 			.fail(function (e) {})
 			.always(function () {});
-	} else {
+	}
+	else {
 		console.log("folder clicked");
 		var columnList = [
 			{ data: "c_id", defaultContent: "-" },
@@ -726,7 +727,7 @@ function bindDataEditTab(ajaxData) {
 	}
 
 	$("#editview_req_id").val(ajaxData.c_id);
-	$("#editview_req_name").val(ajaxData.c_title);
+	$("#editview_req_title").val(ajaxData.c_title);
 
 	$("#editview_req_priority").children(".btn.active").removeClass("active");
 	if (!isEmpty(ajaxData.reqPriorityEntity)) {
@@ -2027,6 +2028,7 @@ function popup_size_setting() {
 ///////////////////////////////////////////////////////////////////////////////
 function scheduleUpdate() {
 	console.log("::: scheduleUpdate :: ganttTaks ->");
+	console.log(ganttTasks);
 	if(ganttTasks == null) {
 		alert("데이터가 존재하지 않습니다.");
 		return false;
@@ -2035,7 +2037,6 @@ function scheduleUpdate() {
 }
 
 function bindProjectProgress(data) {
-	console.log(data);
 	let pdservice_progress = data.reduce((acc, cur) => {
 
 		// default의 경우에만 계산
@@ -2052,8 +2053,6 @@ function bindProjectProgress(data) {
 				acc.total_performance_progress += cur.performance;
 				acc.req_count += 1;
 			}
-
-			console.log(cur);
 		}
 
 		return acc;
@@ -2064,8 +2063,6 @@ function bindProjectProgress(data) {
 		total_performance_progress: 0,
 		req_count: 0
 	});
-
-	console.log(pdservice_progress);
 
 	let project_progress= 0;
 	let plan_progress_rate = 0;
