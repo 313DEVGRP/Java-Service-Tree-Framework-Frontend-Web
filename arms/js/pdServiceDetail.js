@@ -242,14 +242,14 @@ function popup_size_setting(){
 	console.log("popup_size_setting() is activated");
 
 	$("#btn_modal_product_detail_edit").click(function () {
-		var height = $(document).height() - 900;
+		var height = $(document).height() - 1000;
 
 		$(".modal-body")
 			.find(".cke_contents:eq(0)")
 			.css("height", height + "px");
 	});
 	$("#btn_modal_product_add").click(function () {
-
+		var height = $(document).height() - 1000;
 		//모달 초기화
 		$("#modal_product_add").on("hidden.bs.modal", function (e) {
 			$(this).find('form')[0].reset();
@@ -269,10 +269,18 @@ function popup_size_setting(){
 			$("#modal_product_add_pdservice_reviewer").css("height", resultValue + "px");
 		}, 250);
 
+		$(".modal-body")
+			.find(".cke_contents:eq(0)")
+			.css("height", height + "px");
+
 	});
 
 	// 팝업하여 편집
 	$("#btn_modal_product_edit").click(function () {
+		if (selectId == "" || selectId == undefined) {
+			jError("선택된 제품(서비스)가 없습니다.");
+			return false;
+		}
 		var height = $(document).height() - 1000;
 		$(".modal-body")
 			.find(".cke_contents:eq(0)")
@@ -536,7 +544,7 @@ function draw(main, menu) {
 // 제품 디테일 추가 팝업 실행 시 데이터 초기화 및 팝업 사이즈 조절
 ////////////////////////////////////////////////////////////////////////////////////////
 function product_detail_add_clear () {
-	var height = $(document).height() - 900;
+	var height = $(document).height() - 1000;
 
 	//모달 초기화
 	$("#modal_product_detail_add").on("hidden.bs.modal", function (e) {
@@ -1020,10 +1028,11 @@ function product_detail_update_btn_click() {
 					productServiceDetailDataLoad(tempSelectId);
 					setTimeout(function() {
 						productServiceDetailDataLoad(tempSelectId);
+						setTimeout(function() {
+							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
+						}, 500);
 					}, 300);
-					setTimeout(function() {
-						detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
-					}, 500);
+
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
 			}
@@ -1060,10 +1069,11 @@ function product_detail_update_btn_click() {
 					pdServiceDataTableClick(tempSelectId);
 					setTimeout(function() {
 						productServiceDetailDataLoad(tempSelectId);
+						setTimeout(function() {
+							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
+						}, 500);
 					}, 300);
-					setTimeout(function() {
-						detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
-					}, 500);
+
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
 			}
