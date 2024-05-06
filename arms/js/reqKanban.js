@@ -85,6 +85,33 @@ function execDocReady() {
                 adjustHeight();
             });
 
+            // 검색
+            $("#kanban_search").on("input", function () {
+                let searchText = $(this).val().toLowerCase();
+                // console.log("검색: " + searchText);
+
+                $('.kanban-item').each(function() {
+                    let itemText = $(this).find('.req_item').text().toLowerCase();
+                    if (itemText.indexOf(searchText) !== -1) {
+                        $(this).removeClass('hidden');
+                    } else {
+                        $(this).addClass('hidden');
+                    }
+                });
+
+                if ($(this).val().length > 0) {
+                    $('.kanban_search_clear').show();
+                } else {
+                    $('.kanban_search_clear').hide();
+                }
+            });
+
+            $('.kanban_search_clear').click(function() {
+                $('#kanban_search').val('').focus();
+                $('.kanban-item').removeClass('hidden');
+                $(this).hide();
+            });
+
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
