@@ -9,8 +9,7 @@ let versionList,
 const ContentType = {
 	normal: {
 		version: "버전",
-		category: "구분",
-		writer: "요구사항 작성자",
+		assignee: "요구사항 담당자",
 		depth1: "Depth 1",
 		depth2: "Depth 2",
 		depth3: "Depth 3",
@@ -24,7 +23,7 @@ const ContentType = {
 	},
 	version: {
 		version: "버전",
-		writer: "요구사항 작성자",
+		assignee: "요구사항 담당자",
 		depth1: "Depth 1",
 		content: "요구사항 제목",
 		open: "열림",
@@ -34,7 +33,7 @@ const ContentType = {
 		statusTotal: "총계"
 	},
 	owner: {
-		writer: "요구사항 작성자",
+		assignee: "요구사항 담당자",
 		version: "버전",
 		depth1: "Depth 1",
 		content: "요구사항 제목",
@@ -154,6 +153,7 @@ const mapperTableData = (data) => {
                 c_parentid,
                 c_title,
                 c_req_writer,
+                assignee,
                 c_req_contents,
                 reqStateEntity,
                 reqPriorityEntity,
@@ -169,11 +169,13 @@ const mapperTableData = (data) => {
 
             const versions = (c_req_pdservice_versionset_link !== null) ? JSON.parse(c_req_pdservice_versionset_link) : [];
             versions.forEach((vid) => {
+                const assigneeNames = assignee.length > 0 ? assignee.map(a => a.담당자_이름).join(', ') : "담당자 미배정";
+
                 acc.push({
                   version: getVersionTitle(vid),
                   id: c_id,
                   category: CategoryName[c_type],
-                  writer: c_type !== "folder" ? getReqWriterName(c_req_writer) : "",
+                  assignee: assigneeNames ,
                   status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
                   ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
                   content: c_title,
@@ -201,6 +203,7 @@ const mapperPivotTableData = (data) => {
 			c_parentid,
 			c_title,
 			c_req_writer,
+			assignee,
 			c_req_contents,
 			reqStateEntity,
 			reqPriorityEntity,
@@ -213,28 +216,53 @@ const mapperPivotTableData = (data) => {
 		} = cur;
 		if (cur.c_parentid < 2) return acc;
 
-		const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
+		if (assignee.length === 0) { // 담당자 데이터가 없는 경우 처리
+	        const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
+            versions.forEach((version) => {
+                acc.push({
+                    id: c_id,
+                    version: version,
+                    assignee: "담당자 미배정",
+                    _assignee: "담당자 미배정",
+                    open: reqStateEntity?.c_id === 10 ? 1 : "",
+                    investigation: reqStateEntity?.c_id === 11 ? 1 : "",
+                    resolved: reqStateEntity?.c_id === 12 ? 1 : "",
+                    closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
+                    statusTotal: "",
+                    ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+                    content: c_title,
+                    origin: cur,
+                    c_parentid: c_parentid
+                });
+            });
 
-    // 각 버전별로 데이터 생성
-    versions.forEach((version) => {
-        acc.push({
-            id: c_id,
-            version: version,
-            writer: getReqWriterName(c_req_writer),
-            _writer: c_req_writer,
-            open: reqStateEntity?.c_id === 10 ? 1 : "",
-            investigation: reqStateEntity?.c_id === 11 ? 1 : "",
-            resolved: reqStateEntity?.c_id === 12 ? 1 : "",
-            closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
-            statusTotal: "",
-            ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
-            content: c_title,
-            origin: cur,
-            c_parentid: c_parentid
-        });
-    });
-    return acc;
-  }, []);
+        }else{
+            assignee.forEach(({ 담당자_아이디, 담당자_이름 }) => { // 담당자 별로 데이터 생성
+                const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
+                versions.forEach((version) => {// 각 버전별로 데이터 생성
+                    acc.push({
+                        id: c_id,
+                        version: version,
+                        assignee:  담당자_이름, //getReqWriterName(c_req_writer),
+                        _assignee: 담당자_아이디,
+                        open: reqStateEntity?.c_id === 10 ? 1 : "",
+                        investigation: reqStateEntity?.c_id === 11 ? 1 : "",
+                        resolved: reqStateEntity?.c_id === 12 ? 1 : "",
+                        closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
+                        statusTotal: "",
+                        ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+                        content: c_title,
+                        origin: cur,
+                        c_parentid: c_parentid
+                    });
+                });
+            });
+        }
+
+
+
+        return acc;
+    }, []);
 };
 const rearrangement = (
 	arr,
@@ -273,10 +301,10 @@ class Table {
 				const filterItems = pivotTableData
 					.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제거
 					.filter((item) => item.version?.includes(`${version.c_id}`))
-					.sort((a, b) => a.writer?.localeCompare(b.writer) ||
+					.sort((a, b) => a.assignee?.localeCompare(b.assignee) ||
                     				    a.c_parentid - b.c_parentid); // 데이터 정렬
 
-				const childrenItem = rearrangement(filterItems, "writer", "writer", {
+				const childrenItem = rearrangement(filterItems, "assignee", "assignee", {
 					version: version.c_title,
 					_version: version.c_id
 				}).reduce((acc, cur) => {
@@ -287,8 +315,8 @@ class Table {
 							children: cur.slice(1, cur.length),
 							lastChild: {
 								_version: version.c_id,
-								writer: `${cur[0].writer} 총계`,
-								_writer: cur[0].writer,
+								assignee: `${cur[0].assignee} 총계`,
+								_assignee: cur[0]._assignee,
 								col: 1,
 								colSpan: 3,
 								node:"leaf",
@@ -316,22 +344,23 @@ class Table {
 			// Task Owner
 			const 모든_요구사항데이터 = pivotTableData
 				.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제외(요구사항만 포함)
-				.flatMap((task) =>
-					task.version.reduce((acc, cur) => {
-						const versionItem = versionList.find((item) => item.c_id === Number(cur));
-						return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
-					}, [])
-				)
-				.sort((a, b) => a.writer?.localeCompare(b.writer) ||
+				.flatMap(task => {
+                    const versions = Array.isArray(task.version) ? task.version : [task.version];
+                    return versions.reduce((acc, cur) => {
+                    const versionItem = versionList.find(item => item.c_id === Number(cur));
+                    return [...acc, { ...task, _version: versionItem.c_id, version: versionItem.c_title }];
+                    }, []);
+                })
+				.sort((a, b) => a.assignee?.localeCompare(b.assignee) ||
 				    a._version - b._version ||
 				    a.c_parentid - b.c_parentid); // 데이터 정렬
 
-			return rearrangement(모든_요구사항데이터, "writer", "writer").map((group) => ({
-				writer: `${group[0].writer} 총계`,
-				_writer: group[0].writer,
+			return rearrangement(모든_요구사항데이터, "assignee", "assignee").map((group) => ({
+				assignee: `${group[0].assignee} 총계`,
+				_assignee: group[0]._assignee,
 				col: 0,
 				colSpan: 4,
-				root: "writer",
+				root: "assignee",
 				node:"root",
 				children: rearrangement(group, "version", "version").reduce((acc, cur) => {
 					return [
@@ -340,8 +369,8 @@ class Table {
 							...cur[0],
 							children: cur.slice(1, cur.length),
 							lastChild: {
-								writer: `${cur[0].version} 총계`,
-								_writer: group[0].writer,
+								assignee: `${cur[0].version}의 총계`,
+								_assignee: group[0]._assignee,
 								col: 1,
 								colSpan: 3,
 								...calcStatus(cur)
@@ -413,10 +442,11 @@ class Table {
 	    let selector;
 	    if(data.node === "root"){
 	        selector = `[data-${data.root}="${data[`_${[data.root]}`]}"]`;
+
 	    }else{
-	        const writer = `[data-writer="${data._writer}"]`;
+	        const assignee = `[data-assignee="${data._assignee}"]`;
         	const version = `[data-version="${data._version}"]`;
-            selector = `${writer}${version}`;
+            selector = `${assignee}${version}`;
 	    }
 	    const elements = document.querySelectorAll(selector);
         if (data.node === "root") {
@@ -522,14 +552,14 @@ class Table {
 			const $tr = this.makeElement("tr");
 			$tr.setAttribute("data-id", cur.id ?? "");
 			$tr.setAttribute("data-version", cur._version ?? "");
-			$tr.setAttribute("data-writer", cur._writer ?? "");
+			$tr.setAttribute("data-assignee", cur._assignee ?? "");
             const radioButtonName = `status_${cur.id}`;
 			Object.keys(ContentType[pivotType]).forEach((key, index) => {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
 
-                if(['content'].includes($col.className)){
+                if(['content'].includes($col.className) && tag === "tr"){
                         $col.prepend(this.makeEditableButton(cur,  key));
                 }else if (cur[key]) {
 					$col.innerHTML = cur[key];
@@ -551,7 +581,7 @@ class Table {
 				if (cur.colSpan) {
 					$tr.classList.add("highlight");
 					if (pivotType === "version"){
-					    $tr.removeAttribute('data-writer');
+					    $tr.removeAttribute('data-assignee');
 					}
 				}else{
                     if(['open', 'investigation', 'resolved', 'closeStatus'].includes($col.className)){
@@ -560,6 +590,10 @@ class Table {
                     }
 
 				}
+
+				if (['assignee'].includes($col.className) && $col.innerHTML === "담당자 미배정") {
+                    $col.style.color = "red";
+                }
 
 				if (cur.root === key) {
 					$col.prepend(this.makePivotButton($tr, cur));
@@ -600,6 +634,11 @@ class Table {
 				} else {
 					$col.innerHTML = cur[key];
 				}
+
+	            // 담당자 미지정일 경우 빨간색으로 표시
+                if (['assignee'].includes($col.className) && $col.innerHTML === "담당자 미배정") {
+                    $col.style.color = "red";
+                }
 
 				$tr.appendChild($col);
 			});
@@ -753,7 +792,7 @@ class Table {
 
 	bindHeadEvent($el) {
 		$el.addEventListener("click", (e) => {
-			!["writer", "depth1", "depth2", "depth3", "content"].includes(e.target.className) &&
+			!["assignee", "depth1", "depth2", "depth3", "content"].includes(e.target.className) &&
 				this.handleSorting(e, e.target.classList.item(0));
 		});
 	}
@@ -762,7 +801,7 @@ class Table {
 		$el.addEventListener("click", (e) => {
 			const { tagName, classList, parentElement } = e.target;
 
-			const $writer = this.getElement(e.target, "TD", "writer");
+			const $assignee = this.getElement(e.target, "TD", "assignee");
 			const $content = this.getElement(e.target, "TD", "content");
 			const $progress = this.getElement(e.target, "TD", "progress");
 			const $createDate = this.getElement(e.target, "TD", "createDate");
@@ -835,11 +874,15 @@ class Table {
 const makeReqTable = async (options) => {
 	tableOptions = options;
 	const data = await tableOptions.onGetVersion(tableOptions.id);
+	const assigneeData  =await tableOptions.onGetReqAssignee(tableOptions.id);
+	const assigneeResponse = assigneeData.response;
 	res = await tableOptions.onGetData(tableOptions.id);
+    res = mergeData(res,assigneeResponse);
 	versionList = data.response.sort((a, b) => a.c_id - b.c_id);
 
 	tableData = mapperTableData([...res]);
 	pivotTableData = mapperPivotTableData([...res]);
+
 	TableInstance = new Table();
 
 	TableInstance.rendering();
@@ -850,3 +893,10 @@ const changeTableType = (type) => {
 	TableInstance.rerenderTable();
 	tableSelect(tableOptions.id);
 };
+
+const mergeData = (res, assigneeResponse) =>{
+  return res.map(res => {
+    const matchedAssignees = assigneeResponse.filter(assignee => assignee.요구사항_아이디 == res.c_id);
+    return { ...res, assignee: matchedAssignees };
+  });
+}
