@@ -1924,6 +1924,7 @@
 	<!-- /.modal-dialog -->
 </div>
 
+<!-- 요구사항 생성 모달 -->
 <div
 	id="my_modal1"
 	class="modal fade"
@@ -1933,19 +1934,11 @@
 	style="display: none">
 	<div
 		class="modal-dialog"
-		style="width: 90%; height: 70%">
+		style="width: 80%;">
 		<div class="modal-content modalDarkBack">
 			<div
 				class="modal-header"
-				style="padding: 0px; border-bottom: 0px">
-				<button
-					type="button"
-					class="close"
-					data-dismiss="modal"
-					aria-hidden="true"
-					style="color: #ffffff; font-size: 20px; opacity: 0.8; padding: 5px">
-					×
-				</button>
+				style="padding: 0px; border-bottom: 1px">
 				<h4
 					class="modal-title font14"
 					id="my_modal_label1"
@@ -1956,380 +1949,394 @@
 						<i class="fa fa-edit"></i>
 						신규 요구사항 등록 팝업
 					</span>
-					<section
-						class="search-result"
-						style="border-left: 5px solid #e5603b">
-						<p style="font-size: 13px; margin: 5px 0px 0px 0px; padding-left: 5px">
+					<blockquote
+							class="search-result"
+							style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
 							A-RMS에 신규 요구사항을 등록합니다.
 						</p>
-					</section>
+					</blockquote>
 				</h4>
 			</div>
-			<div class="modal-body">
-				<form
-					class="form-horizontal"
-					method="post">
-					<fieldset>
-						<div class="widget">
-							<div class="form-group">
-								<div class="control-group">
-									<label
-										class="control-label"
-										style="vertical-align: center">
-										요구사항 등록 모드 :
-									</label>
+			<div
+				class="modal-body"
+				style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<div class="body">
+					<div class="row">
+						<div class="col-md-12">
+							<section
+									class="widget widget-tabs"
+									style="margin-bottom: 0">
+								<div class="body tab-content">
 									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div
-											class="input-group"
-											style="text-align: left">
+											class="tab-pane active clearfix"
+											style="padding-top: 10px !important">
+										<form method="post">
+											<fieldset>
+												<div class="form-group">
+													<div class="control-group">
+														<label
+																class="control-label"
+																style="vertical-align: center">
+															요구사항 등록 모드 :
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div
+																	class="input-group"
+																	style="text-align: left">
 											<span class="input-group-addon">
 												<i class="fa fa-sliders"></i>
 											</span>
-											<div
-												class="btn-group"
-												data-toggle="buttons">
-												<label
-													class="btn btn-transparent btn-sm active"
-													data-toggle-class="btn-primary"
-													data-toggle-passive-class="btn-default">
-													<input
-														type="radio"
-														name="reqType"
-														value="default" />
-													일반 요구사항 등록 모드
-												</label>
-												<label
-													class="btn btn-transparent btn-sm"
-													data-toggle-class="btn-primary"
-													data-toggle-passive-class="btn-default">
-													<input
-														type="radio"
-														name="reqType"
-														value="folder" />
-													폴더 형식으로 등록
-												</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_pdservice_name">
-										반영 제품(서비스) *
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
+																<div
+																		class="btn-group"
+																		data-toggle="buttons">
+																	<label
+																			class="btn btn-transparent btn-sm active"
+																			data-toggle-class="btn-primary"
+																			data-toggle-passive-class="btn-default">
+																		<input
+																				type="radio"
+																				name="reqType"
+																				value="default" />
+																		일반 요구사항 등록 모드
+																	</label>
+																	<label
+																			class="btn btn-transparent btn-sm"
+																			data-toggle-class="btn-primary"
+																			data-toggle-passive-class="btn-default">
+																		<input
+																				type="radio"
+																				name="reqType"
+																				value="folder" />
+																		폴더 형식으로 등록
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+																class="control-label"
+																for="addview_req_pdservice_name">
+															반영 제품(서비스) *
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
 											<span class="input-group-addon">
 												<i class="glyphicon glyphicon-th-list"></i>
 											</span>
-											<input
-												id="addview_req_pdservice_name"
-												disabled="disabled"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												size="16"
-												type="text"
-												placeholder="제품(서비스)명을 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div
-									class="control-group"
-									id="popup_version_div">
-									<label
-										class="control-label"
-										for="edit_multi_version">
-										반영 버전 *
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-gift"></i>
-											</span>
-											<select
-												multiple="multiple"
-												id="add_multi_version"
-												class="multiple-select btn-block darkBack"
-												placeholder="&nbsp;버전을 선택해주세요"
-												style="color: #a4c6ff"></select>
-										</div>
-									</div>
-								</div>
-								<div
-									class="control-group"
-									id="popup_reviewer_div">
-									<label
-											class="control-label"
-											for="addview_req_reviewers">
-										반영 리뷰어 *
-									</label>
-									<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-inbox"></i>
-											</span>
-											<select
-													id="addview_req_reviewers"
-													class="js-data-example-ajax form-control font13 darkBack"
-													name="selectedReviewers[]"
-													multiple="multiple"
-													style="width: 100%; color: #a4c6ff"></select>
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-										class="control-label"
-										for="addview_req_title">
-										요구사항 제목 *
-									</label>
-									<div
-										class="controls form-group"
-										style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-list-alt"></i>
-											</span>
-											<input
-												id="addview_req_title"
-												class="form-control font13 darkBack"
-												style="color: #a4c6ff"
-												size="16"
-												type="text"
-												placeholder="요구사항 제목을 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div
-									class="control-group"
-									id="popup_req_priority_div">
-									<label
-										for="addview_req_priority"
-										class="control-label font13">
-										요구사항 우선순위 *
-									</label>
-									<div
-										class="controls form-group input-group">
+																<input
+																		id="addview_req_pdservice_name"
+																		disabled="disabled"
+																		class="form-control font13 darkBack"
+																		style="color: #a4c6ff"
+																		size="16"
+																		type="text"
+																		placeholder="제품(서비스)명을 입력해 주세요" />
+															</div>
+														</div>
+													</div>
+													<div
+															class="control-group"
+															id="popup_version_div">
+														<label
+																class="control-label"
+																for="edit_multi_version">
+															반영 버전 *
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-gift"></i>
+																</span>
+																<select
+																		multiple="multiple"
+																		id="add_multi_version"
+																		class="multiple-select btn-block darkBack"
+																		placeholder="&nbsp;버전을 선택해주세요"
+																		style="color: #a4c6ff"></select>
+															</div>
+														</div>
+													</div>
+													<div
+															class="control-group"
+															id="popup_reviewer_div">
+														<label
+																class="control-label"
+																for="addview_req_reviewers">
+															반영 리뷰어 *
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-inbox"></i>
+																</span>
+																<select
+																		id="addview_req_reviewers"
+																		class="js-data-example-ajax form-control font13 darkBack"
+																		name="selectedReviewers[]"
+																		multiple="multiple"
+																		style="width: 100%; color: #a4c6ff"></select>
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+																class="control-label"
+																for="addview_req_title">
+															요구사항 제목 *
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
-										<div style="display: flex; align-items: center; gap: 10px; padding: 0">
-											<div
-												id="addview_req_priority"
-												class="btn-group"
-												data-toggle="buttons">
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_priority_options"
-														value="7" />
-													매우 높음
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_priority_options"
-														value="6" />
-													높음
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_priority_options"
-														value="5" />
-													중간
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_priority_options"
-														value="4" />
-													낮음
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_priority_options"
-														value="3" />
-													매우 낮음
-												</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div
-									class="control-group"
-									id="popup_req_difficulty_div">
-									<label
-										for="addview_req_difficulty"
-										class="control-label font13">
-										요구사항 난이도 *
-									</label>
-									<div
-										class="controls form-group input-group">
+																<input
+																		id="addview_req_title"
+																		class="form-control font13 darkBack"
+																		style="color: #a4c6ff"
+																		size="16"
+																		type="text"
+																		placeholder="요구사항 제목을 입력해 주세요" />
+															</div>
+														</div>
+													</div>
+													<div
+															class="control-group"
+															id="popup_req_priority_div">
+														<label
+																for="addview_req_priority"
+																class="control-label font13">
+															요구사항 우선순위 *
+														</label>
+														<div
+																class="controls form-group input-group">
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
-										<div style="display: flex; align-items: center; gap: 10px; padding: 0">
-											<div
-												id="addview_req_difficulty"
-												class="btn-group"
-												data-toggle="buttons">
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_difficulty_options"
-														value="3" />
-													매우 어려움
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_difficulty_options"
-														value="4" />
-													어려움
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_difficulty_options"
-														value="5" />
-													보통
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_difficulty_options"
-														value="6" />
-													쉬움
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_difficulty_options"
-														value="7" />
-													매우 쉬움
-												</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div
-									class="control-group"
-									id="popup_req_state_div">
-									<label
-										for="addview_req_state"
-										class="control-label font13">
-										요구사항 상태 *
-									</label>
-									<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
-									<div
-										class="controls form-group input-group">
+															<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																<div
+																		id="addview_req_priority"
+																		class="btn-group"
+																		data-toggle="buttons">
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_priority_options"
+																				value="7" />
+																		매우 높음
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_priority_options"
+																				value="6" />
+																		높음
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_priority_options"
+																				value="5" />
+																		중간
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_priority_options"
+																				value="4" />
+																		낮음
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_priority_options"
+																				value="3" />
+																		매우 낮음
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div
+															class="control-group"
+															id="popup_req_difficulty_div">
+														<label
+																for="addview_req_difficulty"
+																class="control-label font13">
+															요구사항 난이도 *
+														</label>
+														<div
+																class="controls form-group input-group">
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
-										<div style="display: flex; align-items: center; gap: 10px; padding: 0">
-											<div
-												id="addview_req_state"
-												class="btn-group"
-												data-toggle="buttons">
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_state_options"
-														value="10" />
-													열림
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_state_options"
-														value="11" />
-													진행중
-												</label>
-												<label class="btn btn-warning btn-disabled">
-													<input
-														type="radio"
-														name="addview_req_state_options"
-														value="12" />
-													해결됨
-												</label>
-											</div>
-										</div>
+															<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																<div
+																		id="addview_req_difficulty"
+																		class="btn-group"
+																		data-toggle="buttons">
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_difficulty_options"
+																				value="3" />
+																		매우 어려움
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_difficulty_options"
+																				value="4" />
+																		어려움
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_difficulty_options"
+																				value="5" />
+																		보통
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_difficulty_options"
+																				value="6" />
+																		쉬움
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_difficulty_options"
+																				value="7" />
+																		매우 쉬움
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div
+															class="control-group"
+															id="popup_req_state_div">
+														<label
+																for="addview_req_state"
+																class="control-label font13">
+															요구사항 상태 *
+														</label>
+														<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+														<div
+																class="controls form-group input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+															<div style="display: flex; align-items: center; gap: 10px; padding: 0">
+																<div
+																		id="addview_req_state"
+																		class="btn-group"
+																		data-toggle="buttons">
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_state_options"
+																				value="10" />
+																		열림
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_state_options"
+																				value="11" />
+																		진행중
+																	</label>
+																	<label class="btn btn-warning btn-disabled">
+																		<input
+																				type="radio"
+																				name="addview_req_state_options"
+																				value="12" />
+																		해결됨
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+																class="control-label"
+																for="addview_req_start_date">
+															요구사항 시작날짜 :
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-calendar"></i>
+																</span>
+																<input
+																		id="addview_req_start_date"
+																		class="form-control font13 darkBack"
+																		style="color: #a4c6ff"
+																		placeholder="요구사항 시작날짜를 입력해 주세요" />
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+																class="control-label"
+																for="addview_req_end_date">
+															요구사항 종료날짜 :
+														</label>
+														<div
+																class="controls form-group"
+																style="margin-bottom: 10px">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-calendar"></i>
+																</span>
+																<input
+																		id="addview_req_end_date"
+																		class="form-control font13 darkBack"
+																		style="color: #a4c6ff"
+																		placeholder="요구사항 종료날짜를 입력해 주세요" />
+															</div>
+														</div>
+													</div>
+													<div class="control-group">
+														<label
+																class="control-label font13"
+																for="add_tabmodal_editor">
+															요구사항 내용 *
+														</label>
+														<span class="input-group-addon" style="display: inline !important">
+															<i class="glyphicon glyphicon-book"></i>
+														</span>
+														<br />
+														<br />
+														<div
+																class="col-sm-12 darkBack"
+																id="add_tabmodal_editor">
+															<p>요구사항 내용을 기록합니다.</p>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+										</form>
 									</div>
 								</div>
-								<div class="control-group">
-									<label
-											class="control-label"
-											for="addview_req_start_date">
-											요구사항 시작날짜 :
-									</label>
-									<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-calendar"></i>
-											</span>
-											<input
-													id="addview_req_start_date"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													placeholder="요구사항 시작날짜를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-											class="control-label"
-											for="addview_req_end_date">
-											요구사항 종료날짜 :
-									</label>
-									<div
-											class="controls form-group"
-											style="margin-bottom: 10px">
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="glyphicon glyphicon-calendar"></i>
-											</span>
-											<input
-													id="addview_req_end_date"
-													class="form-control font13 darkBack"
-													style="color: #a4c6ff"
-													placeholder="요구사항 종료날짜를 입력해 주세요" />
-										</div>
-									</div>
-								</div>
-								<div class="control-group">
-									<label
-											class="control-label font13"
-											for="add_tabmodal_editor">
-										요구사항 내용 *
-									</label>
-									<span class="input-group-addon" style="display: inline !important">
-										<i class="glyphicon glyphicon-book"></i>
-									</span>
-									<br />
-									<br />
-									<div
-										class="col-sm-12 darkBack"
-										id="add_tabmodal_editor">
-										<p>요구사항 내용을 기록합니다.</p>
-									</div>
-								</div>
-							</div>
+							</section>
 						</div>
-					</fieldset>
-				</form>
+					</div>
+				</div>
 			</div>
 			<div
 				class="modal-footer"
