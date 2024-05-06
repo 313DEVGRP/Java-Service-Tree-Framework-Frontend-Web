@@ -1765,6 +1765,24 @@ function tableSelect(id) {
 				}
 			});
 		},
+        onGetReqAssignee: async function (id) {
+			return await $.ajax({
+				url: `/auth-user/api/arms/reqAdd/getRequirementAssignee.do?c_id=${id}`,
+				type: "GET",
+				dataType: "json",
+				progress: true,
+				statusCode: {
+					200: function (data) {
+						if (!isEmpty(data)) {
+							return data.response;
+						}
+					}
+				},
+				error: function (e) {
+					jError("버전 조회 중 에러가 발생했습니다.");
+				}
+			});
+		},
 		onGetData: async function (id) {
 			return await $.ajax({
 				url: `/auth-user/api/arms/reqAdd/T_ARMS_REQADD_${id}/getMonitor.do`,
