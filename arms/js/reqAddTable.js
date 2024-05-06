@@ -146,55 +146,52 @@ const CategoryName = {
 };
 
 const mapperTableData = (data) => {
-	return data
-		?.sort((a, b) => a.c_parentid - b.c_parentid)
-		.reduce((acc, cur) => {
-			const {
-				c_id,
-				c_parentid,
-				c_title,
-				c_req_writer,
-				c_req_contents,
-				reqStateEntity,
-				reqPriorityEntity,
-				reqDifficultyEntity,
-				c_req_create_date,
-				c_req_start_date,
-				c_req_end_date,
-				c_req_plan_progress,
-				c_req_pdservice_versionset_link,
-				c_type
-			} = cur;
-			if (cur.c_parentid < 2) return acc;
-			let vid = "";
-            if (c_req_pdservice_versionset_link !== null) {
-                vid = JSON.parse(c_req_pdservice_versionset_link)[0] ?? "";
-            }
+    return data
+        ?.sort((a, b) => a.c_parentid - b.c_parentid)
+        .reduce((acc, cur) => {
+            const {
+                c_id,
+                c_parentid,
+                c_title,
+                c_req_writer,
+                c_req_contents,
+                reqStateEntity,
+                reqPriorityEntity,
+                reqDifficultyEntity,
+                c_req_create_date,
+                c_req_start_date,
+                c_req_end_date,
+                c_req_plan_progress,
+                c_req_pdservice_versionset_link,
+                c_type
+            } = cur;
+            if (cur.c_parentid < 2) return acc;
 
-			return [
-				...acc,
-				{
-					version: getVersionTitle(vid),
-					id: c_id,
-					category: CategoryName[c_type],
-					writer: c_type !== "folder" ? getReqWriterName(c_req_writer) : "",
-					status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
-					...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
-					content: c_title,
-					priority: reqPriorityEntity?.data ?? "",
-					difficulty: reqDifficultyEntity?.data ?? "",
-					createDate: getDate(c_req_create_date),
-					startDate: getDate(c_req_start_date),
-					endDate: getDate(c_req_end_date),
-					progress: c_req_plan_progress || 0,
-					origin: cur,
-					_status: reqStateEntity?.c_id,
-					_priority: reqPriorityEntity?.c_id,
-					_difficulty: reqDifficultyEntity?.c_id,
-					_version: Number(vid)
-				}
-			];
-		}, []);
+            const versions = (c_req_pdservice_versionset_link !== null) ? JSON.parse(c_req_pdservice_versionset_link) : [];
+            versions.forEach((vid) => {
+                acc.push({
+                  version: getVersionTitle(vid),
+                  id: c_id,
+                  category: CategoryName[c_type],
+                  writer: c_type !== "folder" ? getReqWriterName(c_req_writer) : "",
+                  status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
+                  ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+                  content: c_title,
+                  priority: reqPriorityEntity?.data ?? "",
+                  difficulty: reqDifficultyEntity?.data ?? "",
+                  createDate: getDate(c_req_create_date),
+                  startDate: getDate(c_req_start_date),
+                  endDate: getDate(c_req_end_date),
+                  progress: c_req_plan_progress || 0,
+                  origin: cur,
+                  _status: reqStateEntity?.c_id,
+                  _priority: reqPriorityEntity?.c_id,
+                  _difficulty: reqDifficultyEntity?.c_id,
+                  _version: Number(vid)
+                });
+             });
+      return acc;
+    }, []);
 };
 
 const mapperPivotTableData = (data) => {
@@ -216,27 +213,29 @@ const mapperPivotTableData = (data) => {
 		} = cur;
 		if (cur.c_parentid < 2) return acc;
 
-		return [
-			...acc,
-			{
-				id: c_id,
-				version: JSON.parse(c_req_pdservice_versionset_link) ?? "",
-				writer: getReqWriterName(c_req_writer),
-				_writer: c_req_writer,
-				open: reqStateEntity?.c_id === 10 ? 1 : "",
-				investigation: reqStateEntity?.c_id === 11 ? 1 : "",
-				resolved: reqStateEntity?.c_id === 12 ? 1 : "",
-				closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
-				statusTotal: "",
-				...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
-				content: c_title,
-				origin: cur,
-				c_parentid:c_parentid
-			}
-		];
-	}, []);
-};
+		const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
 
+    // 각 버전별로 데이터 생성
+    versions.forEach((version) => {
+        acc.push({
+            id: c_id,
+            version: version,
+            writer: getReqWriterName(c_req_writer),
+            _writer: c_req_writer,
+            open: reqStateEntity?.c_id === 10 ? 1 : "",
+            investigation: reqStateEntity?.c_id === 11 ? 1 : "",
+            resolved: reqStateEntity?.c_id === 12 ? 1 : "",
+            closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
+            statusTotal: "",
+            ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+            content: c_title,
+            origin: cur,
+            c_parentid: c_parentid
+        });
+    });
+    return acc;
+  }, []);
+};
 const rearrangement = (
 	arr,
 	key,
