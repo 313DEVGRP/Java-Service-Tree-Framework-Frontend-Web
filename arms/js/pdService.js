@@ -242,14 +242,14 @@ function popup_size_setting(){
 	console.log("popup_size_setting() is activated");
 
 	$("#btn_modal_product_detail_edit").click(function () {
-		var height = $(document).height() - 1000;
+		var height = $(document).height() - 900;
 
 		$(".modal-body")
 			.find(".cke_contents:eq(0)")
 			.css("height", height + "px");
 	});
 	$("#btn_modal_product_add").click(function () {
-		var height = $(document).height() - 1000;
+		var height = $(document).height() - 900;
 		//모달 초기화
 		$("#modal_product_add").on("hidden.bs.modal", function (e) {
 			$(this).find('form')[0].reset();
@@ -281,7 +281,7 @@ function popup_size_setting(){
 			jError("선택된 제품(서비스)가 없습니다.");
 			return false;
 		}
-		var height = $(document).height() - 1000;
+		var height = $(document).height() - 900;
 		$(".modal-body")
 			.find(".cke_contents:eq(0)")
 			.css("height", height + "px");
@@ -544,7 +544,7 @@ function draw(main, menu) {
 // 제품 디테일 추가 팝업 실행 시 데이터 초기화 및 팝업 사이즈 조절
 ////////////////////////////////////////////////////////////////////////////////////////
 function product_detail_add_clear () {
-	var height = $(document).height() - 1000;
+	var height = $(document).height() - 900;
 
 	//모달 초기화
 	$("#modal_product_detail_add").on("hidden.bs.modal", function (e) {
@@ -982,10 +982,10 @@ function product_detail_delete_btn_click(){
 				200: function () {
 					jError($("#report_pdservice_detail_name").val() + " 데이터가 삭제되었습니다.");
 					// pdServiceDataTableClick(tempSelectId);
-					productServiceDetailDataLoad(tempSelectId);
 					productDetailNameClear();
 					productDetailEditorClear();
 					productDetailArrowClear();
+					productServiceDetailDataLoad(tempSelectId);
 				}
 			}
 		});
