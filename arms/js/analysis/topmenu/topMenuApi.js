@@ -48,13 +48,49 @@ var TopMenuApi = (function () {
     };
 
 
+    function LimitedQueue(socketCount) {
+        this.running = 0; // 현재 실행 중인 요청 수
+        this.queues = {}; // 여러 개의 큐를 관리하기 위한 객체
+        for (var i = 0; i < socketCount; i++) {
+            this.queues[i] = $({}); // jQuery 객체를 사용하여 각 큐 초기화
+        }
+    }
+
+    LimitedQueue.prototype.addRequest = function(request) {
+        // 실행 중인 요청 수가 소켓 수를 초과하지 않으면 다음 큐에 요청 추가
+        for (var i = 0; i < Object.keys(this.queues).length; i++) {
+            var queue = this.queues[i];
+            if (this.running < Object.keys(this.queues).length) {
+                if (!queue.is(":animated")) { // 큐가 비어있을 때만 요청 추가
+                    queue.queue(function(next) {
+                        request().then(function() {
+                            this.running--; // 요청 완료 후 실행 중인 요청 수 감소
+                            next(); // 다음 요청 실행
+                        });
+                    });
+                    this.running++; // 실행 중인 요청 수 증가
+                    break; // 요청을 추가한 후 종료
+                }
+            }
+        }
+    };
+
+// 큐 생성 및 요청 추가
+    var limitedQueue = new LimitedQueue(2); // 동시에 처리되는 소켓 수를 2개로 제한
+
     var pullTotalApi = function(pdService_id, pdServiceVersionLinks) {
-        return Promise.all([
-            reqStateData(pdService_id, pdServiceVersionLinks),
-            versionPeriod(pdServiceVersionLinks),
-            reqAndSubtaskIssue(pdService_id, pdServiceVersionLinks),
-            resourceInfo(pdService_id, pdServiceVersionLinks)
-        ]);
+
+        return reqStateData(pdService_id, pdServiceVersionLinks)
+          .then(() => {
+              return versionPeriod(pdServiceVersionLinks);
+          })
+          .then(() => {
+              return reqAndSubtaskIssue(pdService_id, pdServiceVersionLinks);
+          })
+          .then(() => {
+              return resourceInfo(pdService_id, pdServiceVersionLinks);
+          });
+
     };
 
     var getReqProgress = function () {
