@@ -75,9 +75,6 @@ var TopMenuApi = (function () {
         }
     };
 
-// 큐 생성 및 요청 추가
-    var limitedQueue = new LimitedQueue(2); // 동시에 처리되는 소켓 수를 2개로 제한
-
     var pullTotalApi = function(pdService_id, pdServiceVersionLinks) {
 
         return reqStateData(pdService_id, pdServiceVersionLinks)
