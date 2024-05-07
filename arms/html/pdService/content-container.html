@@ -1,4 +1,4 @@
-<div class="col-lg-5 col-layer">
+<div class="col-lg-4 col-layer">
 	<section
 		class="widget"
 		id="firstSection">
@@ -132,11 +132,24 @@
 				<div style="float: right">
 					<button
 						class="btn btn-primary btn-block btn-sm"
-						data-target="#my_modal2"
+						data-target="#modal_product_add"
 						data-toggle="modal"
-						id="modal_popup_id"
+						id="btn_modal_product_add"
 						type="button">
 						제품(서비스) 추가
+					</button>
+				</div>
+
+				<div
+					style="float: right; margin-right: 5px;"
+					id="">
+					<button
+						class="btn btn-warning btn-sm"
+						data-target="#modal_product_edit"
+						data-toggle="modal"
+						id="btn_modal_product_edit"
+						type="button">
+						제품(서비스) 편집
 					</button>
 				</div>
 			</div>
@@ -159,7 +172,114 @@
 		</div>
 	</section>
 </div>
-<div class="col-lg-7 col-layer">
+<div class="col-lg-3 col-layer">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
+					class="font13"
+					style="font-weight: bold">
+					<i
+						class="fa fa-edit"
+						style="vertical-align: middle; font-size: 14px"></i>
+					제품(서비스) 디테일 조회
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+					data-widgster="toleft"
+					title="change width to left"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+				<a
+					data-widgster="expand"
+					title="Expand"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+					data-widgster="collapse"
+					title="Collapse"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+					data-widgster="toright"
+					title="change width to right"
+					href="#">
+					<i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a
+					data-widgster="restore"
+					title="Restore"
+					href="#">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</a>
+				<a
+					data-widgster="fullscreen"
+					title="Fullscreen"
+					href="#">
+					<i
+						class="glyphicon glyphicon-fullscreen"
+						style="font-size: 11px"></i>
+				</a>
+			</div>
+		</header>
+		<div class="body">
+			<div
+				class="gradient_middle_border"
+				style="width: 100%; height: 2px"></div>
+			<blockquote
+				class="font13"
+				style="margin-top: 5px">
+				2. 선택된 제품(서비스) 디테일 조회
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="window.open('docs/guide.html#version_inquiry')">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div
+				class="clearfix widget-content"
+				id="default_non_version">
+				<!-- 컴포넌트 대상 -->
+				<div
+					id="selected_info"
+					style="float: left; width: 100% !important">
+					<div
+						class="panel-group json-menu"
+						style="margin-bottom: 0px !important">
+						<li class="list-group-item json-menu-header list-group-item-detail" style="padding: 0px">
+							<div class="chat-message">
+								<div class="chat-message-body" style="
+										margin-left: 0px !important;
+										padding: 0px 10px 0px 10px !important;
+										border-left: 2px solid #a4c6ff;
+									">
+									<span id="" class="arrow" style="top: 10px !important; border-right: 5px solid #a4c6ff"></span>
+									<div class="sender" style="padding-bottom: 5px; padding-top: 5px">선택된 제품(서비스) :
+										<span id="" style="color: #a4c6ff">선택되지 않음</span>
+									</div>
+								</div>
+							</div>
+						</li>
+					</div>
+				</div>
+			</div>
+			<div
+				class="panel-group"
+				id="version_accordion"></div>
+		</div>
+	</section>
+</div>
+<div class="col-lg-5 col-layer">
 	<section
 		class="widget"
 		id="secondSection">
@@ -171,7 +291,7 @@
 					<i
 						class="fa fa-edit"
 						style="vertical-align: middle; font-size: 14px"></i>
-					제품(서비스) 상세 보기 / 변경
+					제품(서비스) 디테일 보기 / 변경
 				</span>
 			</h4>
 			<div class="widget-controls">
@@ -224,7 +344,7 @@
 			<blockquote
 				class="font13"
 				style="margin-top: 5px">
-				2. 제품(서비스)의 내용을 확인하고 편집/삭제
+				3. 제품(서비스) 디테일을 확인하고 편집/삭제
 				<div style="float: right">
 					<button
 						class="btn btn-transparent btn-xs"
@@ -247,28 +367,14 @@
 						id="versionAccordion"
 						style="margin-bottom: 0px !important">
 						<li
-							class="list-group-item json-menu-header"
+							class="list-group-item json-menu-header list-group-item-detail-edit"
 							style="padding: 0px">
 							<div class="chat-message">
-								<div
-									class="chat-message-body"
-									style="
-										margin-left: 0px !important;
-										padding: 0px 10px 0px 10px !important;
-										border-left: 2px solid #a4c6ff;
-									">
-									<span
-										class="arrow"
-										style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
-									<div
-										class="sender"
-										style="padding-bottom: 5px; padding-top: 5px">
-										선택된 제품(서비스) :
-										<span
-											id="select_Service"
-											style="color: #a4c6ff">
-											선택되지 않음
-										</span>
+								<div class="chat-message-body" style="margin-left: 0px !important;padding: 0px 10px 0px 10px !important;border-left: 2px solid #a4c6ff;">
+									<span id="list-group-item-detail-edit-arrow" class="arrow" style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
+									<div class="sender" style="padding-bottom: 5px; padding-top: 5px">
+										선택된 제품(서비스) 디테일 :
+										<span id="selected_pdservice_detail" style="color: #a4c6ff">선택되지 않음</span>
 									</div>
 								</div>
 							</div>
@@ -278,45 +384,31 @@
 
 				<div
 					style="float: right"
-					id="pdservice_details_popup_div">
-					<button
-						type="button"
-						data-target="#my_modal1"
-						data-toggle="modal"
-						id="extend_modal_readOnly"
-						class="btn btn-warning btn-sm"
-						onClick="modalPopup('modal_popup_readonly')">
-						새 창으로 제품(서비스) 내용 보기
-					</button>
-				</div>
-				<div
-					style="float: right"
 					class="hidden"
-					id="pdservice_update_div">
+					id="div_modal_product_detail">
 					<button
 						class="btn btn-warning btn-sm"
-						data-target="#my_modal1"
+						data-target="#modal_product_detail_edit"
 						data-toggle="modal"
-						id="extend_modal_popup_id"
-						type="button"
-						onClick="modalPopup('modal_popup_update')">
-						팝업 창으로 편집 하기
+						id="btn_modal_product_detail_edit"
+						type="button">
+						제품(서비스) 디테일 편집하기
 					</button>
 					<button
 						type="button"
-						id="pdservice_update"
+						id="btn_product_detail_edit_submit"
 						class="btn btn-success btn-sm">
-						제품(서비스) 변경 사항 저장
+						제품(서비스) 디테일 저장
 					</button>
 				</div>
 				<div
 					style="float: right"
 					class="hidden"
-					id="pdservice_delete_div">
+					id="div_product_detail_delete">
 					<button
-						id="delete_pdservice"
-						class="btn btn-danger btn-sm ladda-delete-pdservice">
-						제품(서비스) 삭제
+						id="btn_product_detail_delete"
+						class="btn btn-danger btn-sm ladda-delete-pdservice-detail">
+						제품(서비스) 디테일 삭제
 					</button>
 				</div>
 			</div>
@@ -339,9 +431,9 @@
 										<strong>편집 하기</strong>
 									</a>
 								</li>
-								<li class="nav-tabs-dropdown1">
+								<li class="nav-tabs-delete">
 									<a
-										href="#dropdown1"
+										href="#delete"
 										data-toggle="tab">
 										<strong>삭제 하기</strong>
 									</a>
@@ -357,166 +449,26 @@
 									class="form-horizontal"
 									method="post">
 									<fieldset>
-										<div
-											class="control-group"
-											for="detailview_pdservice_name">
+										<div class="control-group" for="stats_pdservice_name">
 											<label class="control-label font13">제품(서비스) 이름 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_name"
-													name="detailview_pdservice_name"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="수정은 편집 탭에서 해주세요"
-													required="required"
-													placeholder="service name"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 수정은 편집 탭에서 해주세요</span>
+											<div class="controls form-group input-group" style="margin-left: 180px">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+												<input type="text" id="stats_pdservice_name" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" style="color: #a4c6ff" placeholder="service name" readonly/>
 											</div>
 										</div>
-										<div
-											class="control-group"
-											for="detailview_pdservice_owner">
-											<label class="control-label font13">제품(서비스) 오너 :</label>
-											<div
-												class="controls form-group input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-user"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_owner"
-													name="detailview_pdservice_owner"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="책임자 변경"
-													required="required"
-													placeholder="service owner"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 책임자 확인</span>
+										<div class="control-group" for="stats_pdservice_detail_name">
+											<label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+												<input type="text" id="stats_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" style="color: #a4c6ff" placeholder="service name" readonly/>
 											</div>
 										</div>
 										<div class="control-group">
-											<label class="control-label font13">제품(서비스) 리뷰어 :</label>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_reviewer01"
-													name="detailview_pdservice_reviewer01"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="service reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_reviewer02"
-													name="detailview_pdservice_reviewer02"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="service reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_reviewer03"
-													name="detailview_pdservice_reviewer03"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="service reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_reviewer04"
-													name="detailview_pdservice_reviewer04"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="service reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-											<div
-												class="controls input-group"
-												style="margin-left: 180px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-inbox"></i>
-												</span>
-												<input
-													type="text"
-													id="detailview_pdservice_reviewer05"
-													name="detailview_pdservice_reviewer05"
-													class="form-control parsley-validated font13 darkBack"
-													data-placement="top"
-													data-original-title="공동 책임자"
-													required="required"
-													placeholder="service reviewer"
-													disabled="disabled"
-													style="border: 0px !important; color: #a4c6ff !important" />
-												<span class="input-group-addon font11">INFO : 공동 책임자</span>
-											</div>
-										</div>
-										<div class="control-group">
-											<label
-												class="control-label"
-												style="margin-top: 10px">
-												제품(서비스) 컨텐츠 :
-											</label>
+											<label class="control-label" style="margin-top: 10px">제품(서비스) 디테일 컨텐츠 :</label>
 											<br />
 											<br />
 											<br />
-											<div
-												class="col-sm-12 darkBack"
-												id="detailview_pdservice_contents"
-												style="padding-top: 10px; padding-bottom: 10px"
-												readonly></div>
+											<div class="col-sm-12 darkBack" id="stats_pdservice_detail_editor" style="padding-top: 10px; padding-bottom: 10px" readonly></div>
 										</div>
 									</fieldset>
 								</form>
@@ -530,85 +482,31 @@
 										class="form-horizontal"
 										method="post">
 										<fieldset>
-											<div
-												class="control-group"
-												for="editview_pdservice_name">
+											<div class="control-group" for="report_pdservice_name">
 												<label class="control-label font13">제품(서비스) 이름 :</label>
-												<div
-													class="controls form-group input-group"
-													style="margin-left: 180px">
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-gift"></i>
-													</span>
-													<input
-														type="text"
-														id="editview_pdservice_name"
-														name="editview_pdservice_name"
-														class="form-control parsley-validated font13 darkBack"
-														data-placement="top"
-														data-original-title="수정은 편집 탭에서 해주세요"
-														required="required"
-														placeholder="service name"
-														readonly
-														style="border: 0px !important; color: #a4c6ff !important" />
-													<span class="input-group-addon font11">INFO : 제품(서비스) 명은 중복 될 수 없습니다.</span>
+												<div class="controls form-group input-group" style="margin-left: 180px">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+													<input type="text" id="report_pdservice_name" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" style="color: #a4c6ff" placeholder="service name" readonly/>
 												</div>
 											</div>
-											<div
-												class="control-group"
-												for="editview_pdservice_owner">
-												<label class="control-label font13">제품(서비스) 오너 :</label>
-												<div
-													class="controls form-group input-group"
-													style="margin-left: 180px">
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-user"></i>
-													</span>
-													<select
-														type="text"
-														id="editview_pdservice_owner"
-														name="editview_pdservice_owner"
-														class="js-data-example-ajax form-control parsley-validated font13 darkBack"
-														data-placement="top"
-														data-original-title="책임자 변경"
-														required="required"
-														placeholder="service name"
-														style="border: 0px !important; color: #a4c6ff !important"></select>
-												</div>
-											</div>
-											<div
-												class="control-group"
-												for="editview_pdservice_reviewers">
-												<label class="control-label font13">제품(서비스) 리뷰어 :</label>
-												<div
-													class="controls form-group input-group"
-													style="margin-left: 180px">
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-inbox"></i>
-													</span>
-													<select
-														type="text"
-														id="editview_pdservice_reviewers"
-														name="selectedReviewers[]"
-														multiple="multiple"
-														class="js-data-example-ajax form-control parsley-validated font13 darkBack"
-														data-placement="top"
-														data-original-title="제품(서비스) 리뷰어는 최대 5명입니다."
-														required="required"
-														placeholder="service name"></select>
+											<div class="control-group" for="report_pdservice_detail_name">
+												<label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+												<div class="controls form-group input-group" style="margin-left: 180px">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+													<input type="text" id="report_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" style="color: #a4c6ff" placeholder="service name"/>
 												</div>
 											</div>
 											<div class="control-group">
 												<label
 													class="control-label"
 													style="color: #f8f8f8">
-													제품(서비스) 컨텐츠 :
+													제품(서비스) 디테일 컨텐츠 :
 												</label>
 												<div class="controls form-group">
 													<div
 														class="col-sm-12"
 														style="padding-top: 10px">
-														<div id="input_pdservice_editor">
+														<div id="report_pdservice_detail_editor">
 															<p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
 														</div>
 													</div>
@@ -619,10 +517,10 @@
 								</div>
 							</div>
 							<div
-								id="dropdown1"
+								id="delete"
 								class="tab-pane">
 								<p>
-									제품(서비스) "
+									제품(서비스) 디테일 "
 									<label
 										id="delete_text"
 										style="color: #a4c6ff; font-weight: bold"></label>
@@ -633,6 +531,9 @@
 									<strong>Jira 프로젝트에서 제품(서비스)와 연관된 버전은 삭제되지 않습니다.</strong>
 								</p>
 								<br />
+								<p>
+									<strong>( 주의하세요 ) 제품(서비스)와 연관된 디테일은 모두 삭제됩니다.</strong>
+								</p>
 								<p>
 									<strong>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong>
 								</p>
@@ -653,7 +554,7 @@
 										type="hidden"
 										id="fileIdlink"
 										value="" />
-									<div class="row pdservice-image-row">
+									<div class="row pdservice-detail-image-row">
 										<div class="col-md-12">
 											<div
 												id="dropzone"
@@ -679,7 +580,7 @@
 											<div class="progress-extended font12">&nbsp;</div>
 										</div>
 									</div>
-									<div class="form-actions fileupload-buttonbar no-margin pdservice-image-row">
+									<div class="form-actions fileupload-buttonbar no-margin pdservice-detail-image-row">
 										<span class="btn btn-sm btn-inverse fileinput-button">
 											<i class="fa fa-plus"></i>
 											<span>Add files...</span>
@@ -725,10 +626,10 @@
 </div>
 
 <div
-	id="my_modal1"
+	id="modal_product_edit"
 	class="modal fade"
 	role="dialog"
-	aria-labelledby="myModalLabel"
+	aria-labelledby="modalProductEditLabel"
 	aria-hidden="true"
 	style="display: none; border-radius: 10px">
 	<div class="modal-dialog">
@@ -738,22 +639,22 @@
 				style="padding: 0px; border-bottom: 1px">
 				<h4
 					class="modal-title font14"
-					id="my_modal_label1"
+					id="modal_product_edit_label"
 					style="color: #f8f8f8; text-align: left; padding: 5px">
 					<i class="fa fa-edit"></i>
 					<span
 						class="font13"
-						id="my_modal1_title"
+						id="modal_product_edit_title"
 						style="font-weight: bold">
-						신규 제품(서비스) 수정 팝업
+						제품(서비스) 수정 팝업
 					</span>
 					<blockquote
 						class="search-result"
 						style="border-left: 5px solid #e5603b">
 						<p
-							id="my_modal1_sub"
+							id="modal_product_edit_sub"
 							style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-							A-RMS에 신규 제품(서비스)의 정보를 수정합니다.
+							A-RMS에 제품(서비스)의 정보를 수정합니다.
 						</p>
 					</blockquote>
 				</h4>
@@ -797,32 +698,33 @@
 					class="form-horizontal"
 					method="post">
 					<fieldset>
+						modal_product_edit
 						<div
 							class="control-group"
-							for="popup_editview_pdservice_name">
+							for="modal_product_edit_pdservice_name">
 							<label class="control-label font13">제품(서비스) 이름 :</label>
 							<div
 								class="controls form-group input-group"
 								style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
-								</span>
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-gift"></i>
+													</span>
 								<input
 									type="text"
-									id="extend_editview_pdservice_name"
-									name="extend_editview_pdservice_name"
+									id="modal_product_edit_pdservice_name"
+									name="editview_pdservice_name"
 									class="form-control parsley-validated font13 darkBack"
 									data-placement="top"
-									data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+									data-original-title="수정은 편집 탭에서 해주세요"
 									required="required"
-									style="color: #a4c6ff"
-									placeholder="service name" />
-								<span class="input-group-addon font11">INFO : 제품(서비스) 이름은 중복될 수 없습니다.</span>
+									placeholder="service name"
+									style="border: 0px !important; color: #a4c6ff !important" />
+								<span class="input-group-addon font11">INFO : 제품(서비스) 명은 중복 될 수 없습니다.</span>
 							</div>
 						</div>
 						<div
 							class="control-group"
-							for="extend_editview_pdservice_owner">
+							for="modal_product_edit_pdservice_owner">
 							<label class="control-label font13">제품(서비스) 오너 :</label>
 							<div
 								class="controls form-group input-group"
@@ -832,8 +734,8 @@
 								</span>
 								<select
 									type="text"
-									id="extend_editview_pdservice_owner"
-									name="extend_editview_pdservice_owner"
+									id="modal_product_edit_pdservice_owner"
+									name="editview_pdservice_owner"
 									class="js-data-example-ajax form-control parsley-validated font13 darkBack"
 									data-placement="top"
 									data-original-title="제품(서비스) 오너(책임자)는 1명입니다."
@@ -844,8 +746,8 @@
 						</div>
 						<div
 							class="control-group"
-							id="extend_editview_pdservice_reviewer"
-							for="extend_editview_pdservice_reviewers">
+							id="modal_product_edit_pdservice_reviewer"
+							for="modal_product_edit_pdservice_reviewers">
 							<label class="control-label font13">제품(서비스) 리뷰어 :</label>
 							<div
 								class="controls form-group input-group"
@@ -855,7 +757,7 @@
 								</span>
 								<select
 									type="text"
-									id="extend_editview_pdservice_reviewers"
+									id="modal_product_edit_pdservice_reviewers"
 									name="selectedReviewers[]"
 									multiple="multiple"
 									class="js-data-example-ajax form-control parsley-validated font13 darkBack"
@@ -876,7 +778,7 @@
 								<div
 									class="col-sm-12"
 									style="padding-top: 10px">
-									<div id="extend_modal_editor">
+									<div id="modal_product_edit_editor">
 										<p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
 									</div>
 								</div>
@@ -890,7 +792,15 @@
 				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
 				<button
 					type="button"
-					id="extendclose_pdservice"
+					style="float: left;"
+					id="btn_modal_product_delete"
+					class="btn btn-danger btn-sm ladda-delete-pdservice"
+					data-dismiss="modal">
+					제품(서비스) 삭제
+				</button>
+				<button
+					type="button"
+					id="btn_modal_product_edit_close"
 					class="btn btn-default"
 					data-dismiss="modal">
 					Close
@@ -898,13 +808,12 @@
 				<button
 					type="button"
 					id="extend_change_to_update_pdservice"
-					class="btn btn-success hidden"
-					onclick="modalPopup('modal_popup_update')">
+					class="btn btn-success hidden">
 					편집 하기
 				</button>
 				<button
 					type="button"
-					id="extendupdate_pdservice"
+					id="btn_modal_product_edit_submit"
 					class="btn btn-success ladda ladda-button">
 					제품(서비스) 변경 사항 저장
 				</button>
@@ -916,7 +825,7 @@
 </div>
 
 <div
-	id="my_modal2"
+	id="modal_product_add"
 	class="modal fade"
 	role="dialog"
 	aria-labelledby="myModalLabel"
@@ -944,7 +853,7 @@
 						class="search-result"
 						style="border-left: 5px solid #e5603b">
 						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-							A-RMS에 신규 제품(서비스)에 버전을 등록합니다.
+							A-RMS에 신규 제품(서비스)을 등록합니다.
 						</p>
 					</blockquote>
 				</h4>
@@ -990,7 +899,7 @@
 					<fieldset>
 						<div
 							class="control-group"
-							for="popup_editview_pdservice_name">
+							for="modal_product_add_pdservice_name">
 							<label class="control-label font13">제품(서비스) 이름 :</label>
 							<div
 								class="controls form-group input-group"
@@ -1000,7 +909,7 @@
 								</span>
 								<input
 									type="text"
-									id="popup_editview_pdservice_name"
+									id="modal_product_add_pdservice_name"
 									name="popup_editview_pdservice_name"
 									class="form-control parsley-validated font13 darkBack"
 									data-placement="top"
@@ -1012,7 +921,7 @@
 						</div>
 						<div
 							class="control-group"
-							for="popup_editview_pdservice_owner">
+							for="modal_product_add_pdservice_owner">
 							<label class="control-label font13">제품(서비스) 오너 :</label>
 							<div
 								class="controls form-group input-group"
@@ -1022,7 +931,7 @@
 								</span>
 								<select
 									type="text"
-									id="popup_editview_pdservice_owner"
+									id="modal_product_add_pdservice_owner"
 									name="popup_editview_pdservice_owner"
 									class="js-data-example-ajax form-control parsley-validated font13 darkBack"
 									data-placement="top"
@@ -1034,8 +943,8 @@
 						</div>
 						<div
 							class="control-group"
-							id="popup_editview_pdservice_reviewer"
-							for="popup_editview_pdservice_reviewers">
+							id="modal_product_add_pdservice_reviewer"
+							for="modal_product_add_pdservice_reviewers">
 							<label class="control-label font13">제품(서비스) 리뷰어 :</label>
 							<div
 								class="controls form-group input-group"
@@ -1045,7 +954,7 @@
 								</span>
 								<select
 									type="text"
-									id="popup_editview_pdservice_reviewers"
+									id="modal_product_add_pdservice_reviewers"
 									name="selectedReviewers[]"
 									multiple="multiple"
 									class="js-data-example-ajax form-control parsley-validated font13 darkBack"
@@ -1067,7 +976,7 @@
 									class="col-sm-12"
 									style="padding-top: 10px">
 									<div
-										id="modal_editor"
+										id="modal_product_add_editor"
 										class="darkBack">
 										<p>제품(서비스)의 기획서 및 Project Charter 의 내용을 기록합니다.</p>
 									</div>
@@ -1082,16 +991,277 @@
 				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
 				<button
 					type="button"
-					id="close_pdservice"
+					id="btn_modal_product_add_close"
 					class="btn btn-default"
 					data-dismiss="modal">
 					Close
 				</button>
 				<button
 					type="button"
-					id="regist_pdservice"
+					id="btn_modal_product_add_submit"
 					class="btn btn-primary ladda-new-pdservice">
 					신규 제품(서비스) 저장
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+
+<div
+	id="modal_product_detail_add"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="modalProductDetailAddLabel"
+	aria-hidden="true"
+	style="display: none; border-radius: 10px">
+	<div class="modal-dialog">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+				style="padding: 0px; border-bottom: 1px">
+				<h4
+					class="modal-title font14"
+					id="modal_product_detail_add_label"
+					style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+						class="font13"
+						style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						신규 제품(서비스) 디테일 등록 팝업
+					</span>
+					<div
+						class="gradient_middle_border"
+						style="margin-top: 10px; width: 100%; height: 2px"></div>
+					<blockquote
+						class="search-result"
+						style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+							A-RMS에 신규 제품(서비스)에 디테일을 등록합니다.
+						</p>
+					</blockquote>
+				</h4>
+				<div
+					class="widget-controls"
+					style="padding-top: 10px">
+					<a
+						title="Options"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-cog"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						class="hidden"
+						title="Expand"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						class="hidden"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<div
+				class="modal-body"
+				style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<form
+					class="form-horizontal"
+					method="post">
+					<fieldset>
+						<div class="control-group" for="modal_product_detail_add_pdservice_name"><label class="control-label font13">제품(서비스) 이름 :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="text" id="modal_product_detail_add_pdservice_name" name="" class="form-control parsley-validated font13 darkBack" readonly
+											 data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
+							</div>
+						</div>
+						<div class="control-group" for="modal_product_detail_add_pdservice_detail_name"><label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="text" id="modal_product_detail_add_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack"
+									data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								제품(서비스) 디테일 컨텐츠 :
+							</label>
+							<div class="controls form-group">
+								<div
+									class="col-sm-12"
+									style="padding-top: 10px">
+									<div
+										id="modal_product_detail_add_editor"
+										class="darkBack">
+										<p>제품(서비스)의 디테일한 내용을 기록합니다.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="btn_modal_product_detail_add_close"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+				<button
+					type="button"
+					id="btn_modal_product_detail_add_submit"
+					class="btn btn-primary ladda-new-pdservice-detail">
+					신규 제품(서비스) 디테일 저장
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+<div
+	id="modal_product_detail_edit"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="modalProductDetailEditLabel"
+	aria-hidden="true"
+	style="display: none; border-radius: 10px">
+	<div class="modal-dialog">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+				style="padding: 0px; border-bottom: 1px">
+				<h4
+					class="modal-title font14"
+					id="modal_product_detail_edit_label"
+					style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+						class="font13"
+						style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						제품(서비스) 디테일 편집 팝업
+					</span>
+					<div
+						class="gradient_middle_border"
+						style="margin-top: 10px; width: 100%; height: 2px"></div>
+					<blockquote
+						class="search-result"
+						style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+							A-RMS에 제품(서비스)에 디테일을 수정합니다.
+						</p>
+					</blockquote>
+				</h4>
+				<div
+					class="widget-controls"
+					style="padding-top: 10px">
+					<a
+						title="Options"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-cog"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						class="hidden"
+						title="Expand"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						class="hidden"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<div
+				class="modal-body"
+				style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<form
+					class="form-horizontal"
+					method="post">
+					<fieldset>
+						<div class="control-group" for="modal_product_detail_edit_pdservice_name"><label class="control-label font13">제품(서비스) 이름 :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="text" id="modal_product_detail_edit_pdservice_name" name="" class="form-control parsley-validated font13 darkBack" readonly
+											 data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
+							</div>
+						</div>
+						<div class="control-group" for="modal_product_detail_edit_pdservice_detail_name"><label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="text" id="modal_product_detail_edit_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack"
+									data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label
+								class="control-label"
+								style="color: #f8f8f8">
+								제품(서비스) 디테일 컨텐츠 :
+							</label>
+							<div class="controls form-group">
+								<div
+									class="col-sm-12"
+									style="padding-top: 10px">
+									<div
+										id="modal_product_detail_edit_editor"
+										class="darkBack">
+										<p>제품(서비스)의 디테일한 내용을 기록합니다.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="btn_modal_product_detail_edit_close"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+				<button
+					type="button"
+					id="btn_modal_product_detail_edit_submit"
+					class="btn btn-primary">
+					제품(서비스) 디테일 변경 사항 저장
 				</button>
 			</div>
 		</div>
