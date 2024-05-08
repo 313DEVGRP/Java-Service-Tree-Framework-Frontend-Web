@@ -1023,9 +1023,7 @@ function product_detail_update_btn_click() {
 			statusCode: {
 				200: function () {
 					$("#btn_modal_product_detail_edit_close").trigger("click");
-					// dataTableLoad();
 					pdServiceDataTableClick(tempSelectId);
-					productServiceDetailDataLoad(tempSelectId);
 					setTimeout(function() {
 						productServiceDetailDataLoad(tempSelectId);
 						setTimeout(function() {
@@ -1065,7 +1063,6 @@ function product_detail_update_btn_click() {
 			},
 			statusCode: {
 				200: function () {
-					// dataTableLoad();
 					pdServiceDataTableClick(tempSelectId);
 					setTimeout(function() {
 						productServiceDetailDataLoad(tempSelectId);
