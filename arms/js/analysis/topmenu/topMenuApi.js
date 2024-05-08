@@ -307,56 +307,36 @@ var TopMenuApi = (function () {
                 resultData["css_color"] = "rgb(164,198,255)";
                 setExpectedEndDate(resultData);
                 resolve();
-            } else {
-                const url = new UrlBuilder()
-                  .setBaseUrl("/auth-user/api/arms/analysis/top-menu/normal-version/resolution")
-                  .addQueryParam("pdServiceLink", pdServiceLink)
-                  .addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-                  .addQueryParam("isReqType", "REQUIREMENT")
-                  .addQueryParam("resolution", "resolutiondate")
-                  .addQueryParam("메인그룹필드", "isReq")
-                  .addQueryParam("크기", 1000)
-                  .addQueryParam("컨텐츠보기여부", true)
-                  .build();
+            }
+            else {
+                let req_resolution_count = req_state["resolved"] + req_state["closed"];
+                let req_total_count = req_state["total"];
 
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    contentType: "application/json;charset=UTF-8",
-                    dataType: "json",
-                    progress: true,
-                    statusCode: {
-                        200: async function (data) {
-                            console.log("[ topMenu :: getExpectedEndDate ] :: Resolution 개수 확인 = " + data.전체합계);
-                            console.log("[ topMenuAPI :: getExpectedEndDate ] :: 전체 할당된 요구사항 개수 = " + all_req_count);
+                if (req_total_count !== 0) {
+                    let workingRatio = (req_resolution_count / req_total_count) * 100;
+                    console.log(workingRatio);
 
-                            if (data.전체합계 !== 0) {
-                                let workingRatio = (data.전체합계 / all_req_count) * 100;
-                                if (all_req_count === data.전체합계) {
-                                    resultData["text"] = "작업_완료";
-                                    resultData["css_color"] = "rgb(45, 133, 21)";
-
-                                }
-                                else {
-                                    console.log("totalDaysProgress : " + totalDaysProgress);
-                                    let result = Math.abs((100 / workingRatio) * totalDaysProgress).toFixed(0);
-                                    resultData["text"] = addDaysToDate(result);
-                                    resultData["css_color"] = "rgb(164,198,255)";
-                                }
-                            }
-                            else {
-                                resultData["text"] = "예측 불가.(완료 0)";
-                                resultData["css_color"] = "rgb(219, 42, 52)";
-                            }
-                            setExpectedEndDate(resultData);
-                            resolve();
-                        }
+                    if (req_total_count === req_resolution_count) {
+                        resultData["text"] = "작업_완료";
+                        resultData["css_color"] = "rgb(45, 133, 21)";
                     }
-                });
+                    else {
+                        const progressPercentage = (req_resolution_count / req_total_count);
+                        const expectedEnddays = totalDaysProgress / progressPercentage;
+                        const addDay = expectedEnddays - totalDaysProgress;
+                        resultData["text"] = addDaysToDate(addDay);
+                        resultData["css_color"] = "rgb(164,198,255)";
+                    }
+                }
+                else {
+                    resultData["text"] = "예측 불가.(완료 0)";
+                    resultData["css_color"] = "rgb(219, 42, 52)";
+                }
+                setExpectedEndDate(resultData);
+                resolve();
+
             }
         });
-
-
     };
 
     function addDaysToDate(daysToAdd) {
