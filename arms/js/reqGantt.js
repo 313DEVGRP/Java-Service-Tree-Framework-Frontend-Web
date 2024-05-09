@@ -1529,6 +1529,14 @@ function handle_change_date(start, end) {
 		};
 	}
 
+	if (endDate <= today) {
+		return {
+			dayDiff: dayDiff,
+			todayDiff: dayDiff,
+			plan_progress: 100
+		};
+	}
+
 	// 진행률 계산
 	const progress = dayDiff > 0 ? (todayDiff / dayDiff) * 100 : 0;
 
