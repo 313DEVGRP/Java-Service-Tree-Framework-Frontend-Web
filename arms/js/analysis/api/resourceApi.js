@@ -24,6 +24,7 @@ var ResourceApi = (function () {
             contentType: "application/json;charset=UTF-8",
             dataType: "json",
             progress: true,
+            async: false,
             statusCode: {
                 200: function (data) {
                     //console.log("=== === === 작업자 상태 집계 시작=== === ===")

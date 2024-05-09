@@ -534,6 +534,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (json) {
 				pdServiceData = json;
@@ -553,7 +554,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
-		async: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				// 버전 선택 시 데이터 파싱
@@ -1157,6 +1158,7 @@ function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
 		dataType: "json",
 		data: {"pdServiceVersionLinks" : pdServiceVersionLinks},
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (result) {
 				console.log("[ analysisScope :: getReqStatusAndInvolvedAssignees ] :: result");
@@ -1207,6 +1209,7 @@ function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks) {
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (result) {
 				console.log("[ analysisScope :: getReqPerMappedVersions ] :: result");
@@ -1339,7 +1342,8 @@ function treeBar() {
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
-		progress: true
+		progress: true,
+		async: false
 	})
 		.done(function (apiResponse) {
 			const data = apiResponse.response;

@@ -317,6 +317,7 @@ function makePdServiceSelectBox() {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function (data) {
                 //////////////////////////////////////////////////////////
@@ -414,6 +415,7 @@ function wordCloud() {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function (apiResponse) {
                 const data = apiResponse.response;
@@ -504,6 +506,7 @@ function req_subtask_pie(pdService_id, pdServiceVersionLinks, size) {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function (data) {
                 //요구사항,연결이슈 파이차트용 데이터배열
@@ -596,6 +599,7 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function (data) {
                 let assigneesArr = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
@@ -618,44 +622,6 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
     });
 }
 
-function getAssigneeInfo2(pdservice_id, pdServiceVersionLinks) {
-    mailAddressList = [];
-    $.ajax({
-        url: "/auth-user/api/arms/analysis/resource/workerStatus/"+pdservice_id,
-        type: "GET",
-        data: {
-            "pdServiceLink": pdservice_id,
-            "pdServiceVersionLinks": pdServiceVersionLinks,
-            "메인그룹필드": "assignee.assignee_emailAddress.keyword",
-            "컨텐츠보기여부": true,
-            "크기" : 1000,
-            "하위크기": 1000
-        },
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function (data) {
-                let assigneesArr = data["검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
-
-                if (data["전체합계"] === 0) { //담당자(작업자) 없음.
-                    refreshDetailChart(); //상세 바차트 초기화
-                } else {
-                    assigneesArr.forEach((element,idx) =>{
-                        mailAddressList.push(element["필드명"]);
-                    });
-                }
-
-                //모든작업자 - 상세차트
-                drawDetailChartForAll(pdservice_id, pdServiceVersionLinks,mailAddressList);
-            },
-            error: function (e) {
-                jError("Resource Status 조회에 실패했습니다. 나중에 다시 시도 바랍니다.");
-            }
-        }
-    });
-}
-// isServerSide: true 하면 페이지 사이즈 만큼만 가져온다. 체크 --------------------------------
 
 function refreshDetailChart() { // 차트8개 초기화
     disposeDetailChartInstance();
@@ -900,6 +866,7 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function (apiResponse) {
                 const data = apiResponse.response;
