@@ -286,7 +286,7 @@ function makeVersionMultiSelectBox() {
 
 			// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
-			// timeline chart
+			// timeline chart (비동기 유지 API 2개)
 			timeLineChart(selectedPdServiceId, selectedVersionId);
 
 		}
@@ -492,6 +492,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (json) {
 				let versionData = json.pdServiceVersionEntities;
@@ -935,7 +936,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
-		async: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				console.log("[ analysisTime :: calendarHeatMap ] :: 누적 업데이트 히트맵 차트데이터 = ");
@@ -999,6 +1000,7 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				console.log("[ analysisTime :: dailyUpdatedStatusScatterChart ] :: 일별 업데이트 상태 스캐터 차트데이터 = ");
@@ -1235,6 +1237,7 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				console.log("[ analysisTime :: dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart ] :: 일별 이슈 생성 개수 및 업데이트 현황 데이터 = ");
@@ -1249,28 +1252,28 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 							if (data[date].totalRequirements !== 0 || data[date].totalRelationIssues !== 0) {
 								acc.dates.push(date);
 
-								accumulateRequirementCount += data[date].totalRequirements;
-								accumulateRelationIssueCount += data[date].totalRelationIssues;
+							accumulateRequirementCount += data[date].totalRequirements;
+							accumulateRelationIssueCount += data[date].totalRelationIssues;
 
-								acc.totalRequirements.push(accumulateRequirementCount);
-								acc.totalRelationIssues.push(accumulateRelationIssueCount);
-							}
+							acc.totalRequirements.push(accumulateRequirementCount);
+							acc.totalRelationIssues.push(accumulateRelationIssueCount);
+						}
 
-							if (data[date].requirementStatuses !== null) {
-								Object.keys(data[date].requirementStatuses).forEach((status) => {
-									if (!acc.statusKeys.includes(status)) {
-										acc.statusKeys.push(status);
-									}
-								});
-							}
+						if (data[date].requirementStatuses !== null) {
+							Object.keys(data[date].requirementStatuses).forEach((status) => {
+								if (!acc.statusKeys.includes(status)) {
+									acc.statusKeys.push(status);
+								}
+							});
+						}
 
-							if (data[date].relationIssueStatuses !== null) {
-								Object.keys(data[date].relationIssueStatuses).forEach((status) => {
-									if (!acc.statusKeys.includes(status)) {
-										acc.statusKeys.push(status);
-									}
-								});
-							}
+						if (data[date].relationIssueStatuses !== null) {
+							Object.keys(data[date].relationIssueStatuses).forEach((status) => {
+								if (!acc.statusKeys.includes(status)) {
+									acc.statusKeys.push(status);
+								}
+							});
+						}
 
 						return acc;
 					},
@@ -1393,10 +1396,10 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 							axisPointer: {
 								type: "shadow"
 							},
-							formatter: function (params) {
+							formatter: function(params) {
 								var tooltipText = "";
 								tooltipText += params[0].axisValue + "<br/>";
-								params.forEach(function (item) {
+								params.forEach(function(item) {
 									if (item.value !== 0) {
 										// 0인 데이터는 무시
 										if (item.seriesType === "bar") {
@@ -1510,10 +1513,10 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 						],
 						series: multiCombinationChartSeries,
 						backgroundColor: "rgba(255,255,255,0)",
-						animationDelay: function (idx) {
+						animationDelay: function(idx) {
 							return idx * 20;
 						},
-						animationDelayUpdate: function (idx) {
+						animationDelayUpdate: function(idx) {
 							return idx * 20;
 						}
 					};
@@ -1535,17 +1538,17 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 					myChart.setOption(option, true);
 				}
 
-				window.addEventListener("resize", function () {
+				window.addEventListener("resize", function() {
 					myChart.resize();
 				});
 
-				myChart.on("mouseover", function (params) {
+				myChart.on("mouseover", function(params) {
 					var option = myChart.getOption();
 					option.series[params.seriesIndex].label.show = true;
 					myChart.setOption(option);
 				});
 
-				myChart.on("mouseout", function (params) {
+				myChart.on("mouseout", function(params) {
 					var option = myChart.getOption();
 					option.series[params.seriesIndex].label.show = false;
 					myChart.setOption(option);
@@ -1830,7 +1833,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("pdServiceLink", pdServiceLink)
     		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
     		.addQueryParam("일자기준", "updated")
-			.addQueryParam("isReqType", "REQUIREMENT")
+				.addQueryParam("isReqType", "REQUIREMENT")
     		.addQueryParam("시작일", startDate)
     		.addQueryParam("종료일", endDate)
     		.addQueryParam("크기", 1000)
