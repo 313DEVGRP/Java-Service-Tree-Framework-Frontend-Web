@@ -236,26 +236,30 @@ const mapperPivotTableData = (data) => {
                 });
             });
 
-        }else{
-            assignee.forEach(({ 담당자_아이디, 담당자_이름 }) => { // 담당자 별로 데이터 생성
+        }
+        else{
+            assignee.forEach(({ 담당자_아이디, 담당자_이름,요구사항_여부 }) => { // 담당자 별로 데이터 생성
                 const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
-                versions.forEach((version) => {// 각 버전별로 데이터 생성
-                    acc.push({
-                        id: c_id,
-                        version: version,
-                        assignee:  담당자_이름, //getReqWriterName(c_req_writer),
-                        _assignee: 담당자_아이디,
-                        open: reqStateEntity?.c_id === 10 ? 1 : "",
-                        investigation: reqStateEntity?.c_id === 11 ? 1 : "",
-                        resolved: reqStateEntity?.c_id === 12 ? 1 : "",
-                        closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
-                        statusTotal: "",
-                        ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
-                        content: c_title,
-                        origin: cur,
-                        c_parentid: c_parentid
+                if(요구사항_여부){
+                    versions.forEach((version) => {// 각 버전별로 데이터 생성
+                        acc.push({
+                            id: c_id,
+                            version: version,
+                            assignee:  담당자_이름, //getReqWriterName(c_req_writer),
+                            _assignee: 담당자_아이디,
+                            open: reqStateEntity?.c_id === 10 ? 1 : "",
+                            investigation: reqStateEntity?.c_id === 11 ? 1 : "",
+                            resolved: reqStateEntity?.c_id === 12 ? 1 : "",
+                            closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
+                            statusTotal: "",
+                            ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+                            content: c_title,
+                            origin: cur,
+                            c_parentid: c_parentid
+                        });
                     });
-                });
+                }
+
             });
         }
 
@@ -860,7 +864,36 @@ class Table {
 		$wrapper.innerHTML = null;
 
 		$wrapper.appendChild(this.makeTable());
+
+		this.mergeVersionRows();
 	}
+	mergeVersionRows() {
+        const tables = document.querySelectorAll('.reqTable');
+        tables.forEach((table) => {
+            let lastVersion = null;
+            let lastRow = null;
+            let rowspan = 1
+            Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
+                const versionCell = row.querySelector('.version');
+                const version = versionCell.textContent;
+
+                if (version === lastVersion) {
+                    versionCell.style.display = 'none';
+                    if (lastRow) {
+                        const versionCellInLastRow = lastRow.querySelector('.version');
+                        if (versionCellInLastRow) {
+                            versionCellInLastRow.rowSpan = rowspan + 1;
+                        }
+                    }
+                    rowspan++;
+                } else {
+                    rowspan = 1;
+                    lastVersion = version;
+                    lastRow = row;
+                }
+            });
+        });
+    }
 
 	rerenderTable() {
 		this.$data = this.setTableData();
