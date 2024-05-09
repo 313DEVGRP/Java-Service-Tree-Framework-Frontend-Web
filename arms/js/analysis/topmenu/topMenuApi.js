@@ -88,7 +88,7 @@ var TopMenuApi = (function () {
         return req_state_data;
     };
 
-    //완료
+
     var reqStateData = function (pdService_id, pdServiceVersionLinks) {
         return new Promise((resolve, reject) => {
             let reqAddUrl = "/T_ARMS_REQADD_"+ pdService_id +"/getReqAddListByFilter.do?";
@@ -100,6 +100,7 @@ var TopMenuApi = (function () {
                 contentType: "application/json;charset=UTF-8",
                 dataType: "json",
                 progress: true,
+                async:false,
                 statusCode: {
                     200: function (result) {
                         console.log("[ topMenuApi :: reqStateData ] :: result");
@@ -125,6 +126,7 @@ var TopMenuApi = (function () {
                     contentType: "application/json;charset=UTF-8",
                     dataType: "json",
                     progress: true,
+                    async:false,
                     statusCode: {
                         200: function (result) {
                             console.log("[ topMenuApi :: versionPeriod ] :: result");
@@ -186,6 +188,7 @@ var TopMenuApi = (function () {
                 contentType: "application/json;charset=UTF-8",
                 dataType: "json",
                 progress: true,
+                async:false,
                 statusCode: {
                     200: function(result) {
                         console.log("[ topMenuApi :: reqAndSubtaskIssue ] :: result");
@@ -217,6 +220,7 @@ var TopMenuApi = (function () {
                 contentType: "application/json;charset=UTF-8",
                 dataType: "json",
                 progress: true,
+                async:false,
                 statusCode: {
                     200: function(result) {
                         console.log("[ topMenuApi :: resourceInfo ] :: result");
