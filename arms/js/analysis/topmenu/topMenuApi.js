@@ -309,14 +309,16 @@ var TopMenuApi = (function () {
             if(total_days_progress < 0) {
                 resultData["text"] = "일정 시작일 전 입니다.";
                 resultData["css_color"] = "rgb(164,198,255)";
-                setExpectedEndDate(resultData);
-                resolve();
             }
             else {
                 let req_resolution_count = req_state["resolved"] + req_state["closed"];
                 let req_total_count = req_state["total"];
 
-                if (req_total_count !== 0) {
+                if (req_total_count === 0 || req_resolution_count === 0) {
+                    resultData["text"] = "예측 불가.(완료 0)";
+                    resultData["css_color"] = "rgb(219, 42, 52)";
+                }
+                else {
                     let workingRatio = (req_resolution_count / req_total_count) * 100;
                     console.log(workingRatio);
 
@@ -332,14 +334,10 @@ var TopMenuApi = (function () {
                         resultData["css_color"] = "rgb(164,198,255)";
                     }
                 }
-                else {
-                    resultData["text"] = "예측 불가.(완료 0)";
-                    resultData["css_color"] = "rgb(219, 42, 52)";
-                }
-                setExpectedEndDate(resultData);
-                resolve();
-
             }
+
+            setExpectedEndDate(resultData);
+            resolve();
         });
     };
 
