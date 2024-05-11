@@ -182,7 +182,7 @@
 					<i
 						class="fa fa-edit"
 						style="vertical-align: middle; font-size: 14px"></i>
-					제품(서비스) 디테일 조회
+					제품(서비스) 산출물 조회
 				</span>
 			</h4>
 			<div class="widget-controls">
@@ -233,7 +233,7 @@
 			<blockquote
 				class="font13"
 				style="margin-top: 5px">
-				2. 선택된 제품(서비스) 디테일 조회
+				2. 선택된 제품(서비스) 산출물 조회
 				<div style="float: right">
 					<button
 						class="btn btn-transparent btn-xs"
@@ -291,7 +291,7 @@
 					<i
 						class="fa fa-edit"
 						style="vertical-align: middle; font-size: 14px"></i>
-					제품(서비스) 디테일 보기 / 변경
+					제품(서비스) 산출물 보기 / 변경
 				</span>
 			</h4>
 			<div class="widget-controls">
@@ -344,7 +344,7 @@
 			<blockquote
 				class="font13"
 				style="margin-top: 5px">
-				3. 제품(서비스) 디테일을 확인하고 편집/삭제
+				3. 제품(서비스) 산출물을 확인하고 편집/삭제
 				<div style="float: right">
 					<button
 						class="btn btn-transparent btn-xs"
@@ -373,7 +373,7 @@
 								<div class="chat-message-body" style="margin-left: 0px !important;padding: 0px 10px 0px 10px !important;border-left: 2px solid #a4c6ff;">
 									<span id="list-group-item-detail-edit-arrow" class="arrow" style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
 									<div class="sender" style="padding-bottom: 5px; padding-top: 5px">
-										선택된 제품(서비스) 디테일 :
+										선택된 제품(서비스) 산출물 :
 										<span id="selected_pdservice_detail" style="color: #a4c6ff">선택되지 않음</span>
 									</div>
 								</div>
@@ -392,13 +392,13 @@
 						data-toggle="modal"
 						id="btn_modal_product_detail_edit"
 						type="button">
-						제품(서비스) 디테일 편집하기
+						제품(서비스) 산출물 편집하기
 					</button>
 					<button
 						type="button"
 						id="btn_product_detail_edit_submit"
 						class="btn btn-success btn-sm">
-						제품(서비스) 디테일 저장
+						제품(서비스) 산출물 저장
 					</button>
 				</div>
 				<div
@@ -408,7 +408,7 @@
 					<button
 						id="btn_product_detail_delete"
 						class="btn btn-danger btn-sm ladda-delete-pdservice-detail">
-						제품(서비스) 디테일 삭제
+						제품(서비스) 산출물 삭제
 					</button>
 				</div>
 			</div>
@@ -457,14 +457,29 @@
 											</div>
 										</div>
 										<div class="control-group" for="stats_pdservice_detail_name">
-											<label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+											<label class="control-label font13">제품(서비스) 산출물 이름 :</label>
 											<div class="controls form-group input-group" style="margin-left: 180px">
 												<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
 												<input type="text" id="stats_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" style="color: #a4c6ff" placeholder="service name" readonly/>
 											</div>
 										</div>
+
+										<div class="control-group" for="product_detail_view_pdservice_detail_drawio_contents"><label class="control-label font13">drawio :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+												<input type="hidden" id="product_detail_view_pdservice_detail_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+												<button type="button" id="btn_product_detail_view_drawio" class="btn btn-primary btn-sm" style="margin-left: 10px">drawio 보러가기</button>
+											</div>
+										</div>
+
+										<div class="control-group" for="product_detail_view_pdservice_detail_drawdb_contents"><label class="control-label font13">drawdb :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+												<input type="hidden" id="product_detail_view_pdservice_detail_drawdb_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+												<button type="button" id="btn_product_detail_view_drawdb" class="btn btn-primary btn-sm" style="margin-left: 10px">drawdb 보러가기</button>
+											</div>
+										</div>
+
 										<div class="control-group">
-											<label class="control-label" style="margin-top: 10px">제품(서비스) 디테일 컨텐츠 :</label>
+											<label class="control-label" style="margin-top: 10px">제품(서비스) 산출물 컨텐츠 :</label>
 											<br />
 											<br />
 											<br />
@@ -490,17 +505,32 @@
 												</div>
 											</div>
 											<div class="control-group" for="report_pdservice_detail_name">
-												<label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+												<label class="control-label font13">제품(서비스) 산출물 이름 :</label>
 												<div class="controls form-group input-group" style="margin-left: 180px">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
 													<input type="text" id="report_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" style="color: #a4c6ff" placeholder="service name"/>
 												</div>
 											</div>
+
+											<div class="control-group" for="product_detail_update_pdservice_detail_drawio_contents"><label class="control-label font13">drawio :</label>
+												<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+													<input type="hidden" id="product_detail_update_pdservice_detail_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+													<button type="button" id="btn_product_detail_edit_drawio" class="btn btn-primary btn-sm" style="margin-left: 10px">drawio 편집하러 가기</button>
+												</div>
+											</div>
+
+											<div class="control-group" for="product_detail_update_pdservice_detail_drawdb_contents"><label class="control-label font13">drawdb :</label>
+												<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+													<input type="hidden" id="product_detail_update_pdservice_detail_drawdb_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+													<button type="button" id="btn_product_detail_edit_drawdb" class="btn btn-primary btn-sm" style="margin-left: 10px">drawdb 편집하러 가기</button>
+												</div>
+											</div>
+
 											<div class="control-group">
 												<label
 													class="control-label"
 													style="color: #f8f8f8">
-													제품(서비스) 디테일 컨텐츠 :
+													제품(서비스) 산출물 컨텐츠 :
 												</label>
 												<div class="controls form-group">
 													<div
@@ -520,7 +550,7 @@
 								id="delete"
 								class="tab-pane">
 								<p>
-									제품(서비스) 디테일 "
+									제품(서비스) 산출물 "
 									<label
 										id="delete_text"
 										style="color: #a4c6ff; font-weight: bold"></label>
@@ -532,7 +562,7 @@
 								</p>
 								<br />
 								<p>
-									<strong>( 주의하세요 ) 제품(서비스)와 연관된 디테일은 모두 삭제됩니다.</strong>
+									<strong>( 주의하세요 ) 제품(서비스)와 연관된 산출물 및 파일은 모두 삭제됩니다.</strong>
 								</p>
 								<p>
 									<strong>( 주의하세요 ) A-RMS 의 버전 하위 요구사항은 삭제됩니다.</strong>
@@ -1031,7 +1061,7 @@
 						class="font13"
 						style="font-weight: bold">
 						<i class="fa fa-edit"></i>
-						신규 제품(서비스) 디테일 등록 팝업
+						신규 제품(서비스) 산출물 등록 팝업
 					</span>
 					<div
 						class="gradient_middle_border"
@@ -1040,7 +1070,7 @@
 						class="search-result"
 						style="border-left: 5px solid #e5603b">
 						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-							A-RMS에 신규 제품(서비스)에 디테일을 등록합니다.
+							A-RMS에 신규 제품(서비스)에 산출물을 등록합니다.
 						</p>
 					</blockquote>
 				</h4>
@@ -1090,27 +1120,38 @@
 											 data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
 							</div>
 						</div>
-						<div class="control-group" for="modal_product_detail_add_pdservice_detail_name"><label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+						<div class="control-group" for="modal_product_detail_add_pdservice_detail_name"><label class="control-label font13">제품(서비스) 산출물 이름 :</label>
 							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
 								<input type="text" id="modal_product_detail_add_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack"
 									data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
 							</div>
 						</div>
+
+						<div class="control-group" for="modal_product_detail_add_pdservice_detail_drawio_contents"><label class="control-label font13">drawio :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="hidden" id="modal_product_detail_add_pdservice_detail_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+								<button type="button" id="btn_modal_product_detail_add_drawio" class="btn btn-primary btn-sm" style="margin-left: 10px">drawio 등록하러 가기</button>
+							</div>
+						</div>
+
+						<div class="control-group" for="modal_product_detail_add_pdservice_detail_drawdb_contents"><label class="control-label font13">drawdb :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="hidden" id="modal_product_detail_add_pdservice_detail_drawdb_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+								<button type="button" id="btn_modal_product_detail_add_drawdb" class="btn btn-primary btn-sm" style="margin-left: 10px">drawdb 등록하러 가기</button>
+							</div>
+						</div>
+
 						<div class="control-group">
 							<label
 								class="control-label"
 								style="color: #f8f8f8">
-								제품(서비스) 디테일 컨텐츠 :
+								제품(서비스) 산출물 컨텐츠 :
 							</label>
 							<div class="controls form-group">
 								<div
 									class="col-sm-12"
 									style="padding-top: 10px">
-									<div
-										id="modal_product_detail_add_editor"
-										class="darkBack">
-										<p>제품(서비스)의 디테일한 내용을 기록합니다.</p>
-									</div>
+									<div id="modal_product_detail_add_editor" class="darkBack"></div>
 								</div>
 							</div>
 						</div>
@@ -1131,7 +1172,7 @@
 					type="button"
 					id="btn_modal_product_detail_add_submit"
 					class="btn btn-primary ladda-new-pdservice-detail">
-					신규 제품(서비스) 디테일 저장
+					신규 제품(서비스) 산출물 저장
 				</button>
 			</div>
 		</div>
@@ -1161,7 +1202,7 @@
 						class="font13"
 						style="font-weight: bold">
 						<i class="fa fa-edit"></i>
-						제품(서비스) 디테일 편집 팝업
+						제품(서비스) 산출물 편집 팝업
 					</span>
 					<div
 						class="gradient_middle_border"
@@ -1170,7 +1211,7 @@
 						class="search-result"
 						style="border-left: 5px solid #e5603b">
 						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-							A-RMS에 제품(서비스)에 디테일을 수정합니다.
+							A-RMS에 제품(서비스)에 산출물을 수정합니다.
 						</p>
 					</blockquote>
 				</h4>
@@ -1220,27 +1261,38 @@
 											 data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
 							</div>
 						</div>
-						<div class="control-group" for="modal_product_detail_edit_pdservice_detail_name"><label class="control-label font13">제품(서비스) 디테일 이름 :</label>
+						<div class="control-group" for="modal_product_detail_edit_pdservice_detail_name"><label class="control-label font13">제품(서비스) 산출물 이름 :</label>
 							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
 								<input type="text" id="modal_product_detail_edit_pdservice_detail_name" name="" class="form-control parsley-validated font13 darkBack"
 									data-placement="top" data-original-title="" required="required" placeholder="service name" style="border: 0px !important; color: #a4c6ff !important" />
 							</div>
 						</div>
+
+						<div class="control-group" for="modal_product_detail_edit_pdservice_detail_drawio_contents"><label class="control-label font13">drawio :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="hidden" id="modal_product_detail_edit_pdservice_detail_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+								<button type="button" id="btn_modal_product_detail_edit_drawio" class="btn btn-primary btn-sm" style="margin-left: 10px">drawio 등록하러 가기</button>
+							</div>
+						</div>
+
+						<div class="control-group" for="modal_product_detail_edit_pdservice_detail_drawdb_contents"><label class="control-label font13">drawdb :</label>
+							<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+								<input type="hidden" id="modal_product_detail_edit_pdservice_detail_drawdb_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+								<button type="button" id="btn_modal_product_detail_edit_drawdb" class="btn btn-primary btn-sm" style="margin-left: 10px">drawdb 등록하러 가기</button>
+							</div>
+						</div>
+
 						<div class="control-group">
 							<label
 								class="control-label"
 								style="color: #f8f8f8">
-								제품(서비스) 디테일 컨텐츠 :
+								제품(서비스) 산출물 컨텐츠 :
 							</label>
 							<div class="controls form-group">
 								<div
 									class="col-sm-12"
 									style="padding-top: 10px">
-									<div
-										id="modal_product_detail_edit_editor"
-										class="darkBack">
-										<p>제품(서비스)의 디테일한 내용을 기록합니다.</p>
-									</div>
+									<div id="modal_product_detail_edit_editor" class="darkBack"></div>
 								</div>
 							</div>
 						</div>
@@ -1261,7 +1313,7 @@
 					type="button"
 					id="btn_modal_product_detail_edit_submit"
 					class="btn btn-primary">
-					제품(서비스) 디테일 변경 사항 저장
+					제품(서비스) 산출물 변경 사항 저장
 				</button>
 			</div>
 		</div>
