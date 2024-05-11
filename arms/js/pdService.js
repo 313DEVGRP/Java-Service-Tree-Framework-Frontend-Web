@@ -8,7 +8,7 @@ var selectedPage; // 데이터테이블 선택한 인덱스
 var dataTableRef; // 데이터테이블 참조 변수
 var selectedDetailId = ""; // 선택한 디테일 아이디
 var selectedDetailName = ""; // 선택한 디테일 이름
-
+var uuid;
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +139,9 @@ function execDocReady() {
 
 			popup_size_setting(); // 모달 클릭 시 height 조절
 
+			drawio();
+
+			drawdb();
 
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			var 라따적용_클래스이름_배열 = ['.ladda-new-pdservice', 'ladda-new-pdservice-detail', '.ladda-delete-pdservice', ' ladda-delete-pdservice-detail'];
@@ -148,8 +151,116 @@ function execDocReady() {
 		.catch(function() {
 			console.error('플러그인 로드 중 오류 발생');
 		});
-
 }
+
+class UUIDManager {
+	constructor() {
+		if (UUIDManager.instance) {
+			return UUIDManager.instance;
+		}
+
+		this.uuid = this.generateUUID();
+		UUIDManager.instance = this;
+	}
+
+	generateUUID() {
+		var userId = this.getUserId();
+		var date = new Date();
+		return userId + '-' + date.getTime();
+	}
+
+	getUserId() {
+		return userID;
+	}
+
+	getUUID() {
+		return this.uuid;
+	}
+
+	removeUUID() {
+		this.uuid = null;
+	}
+}
+
+
+function removeDrawIOConfig() {
+	localStorage.removeItem('.drawio-config');
+}
+
+function drawio() {
+	$("#btn_modal_product_detail_add_drawio, #btn_product_detail_edit_drawio, #btn_modal_product_detail_edit_drawio, #btn_product_detail_view_drawio").on("click", function () {
+		const uuidManager = new UUIDManager();
+		console.log(uuidManager.getUUID());
+		if (this.id === 'btn_modal_product_detail_add_drawio') {
+			if(selectId == "" || selectId == undefined){
+				jError("제품(서비스)을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawio?id='+uuidManager.getUUID()+ '&mode=create', '_blank');
+		} else if (this.id === 'btn_product_detail_edit_drawio') {
+			if(selectedDetailId == "" || selectedDetailId == undefined){
+				jError("제품(서비스) 산출물을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawio?id=' + selectedDetailId + '&mode=update', '_blank');
+		} else if(this.id === "btn_modal_product_detail_edit_drawio") {
+			if(selectedDetailId == "" || selectedDetailId == undefined){
+				jError("제품(서비스) 산출물을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawio?id=' + selectedDetailId + '&mode=update', '_blank');
+		} else if(this.id === "btn_product_detail_view_drawio") {
+			if(selectedDetailId == "" || selectedDetailId == undefined){
+				jError("제품(서비스) 산출물을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawio?id=' + selectedDetailId + '&mode=view', '_blank');
+		} else {
+			jError("drawio was clicked but id is not matched");
+			return false;
+		}
+	});
+}
+
+function drawdb() {
+	$("#btn_modal_product_detail_add_drawdb, #btn_product_detail_edit_drawdb, #btn_modal_product_detail_edit_drawdb, #btn_product_detail_view_drawdb").on("click", function () {
+		const uuidManager = new UUIDManager();
+		console.log(uuidManager.getUUID());
+		if (this.id === 'btn_modal_product_detail_add_drawdb') {
+			if(selectId == "" || selectId == undefined){
+				jError("제품(서비스)을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawdb?id='+uuidManager.getUUID()+ '&mode=create', '_blank');
+		} else if (this.id === 'btn_product_detail_edit_drawdb') {
+			if(selectedDetailId == "" || selectedDetailId == undefined){
+				jError("제품(서비스) 산출물을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawdb/?id=' + selectedDetailId + '&mode=update', '_blank');
+		} else if (this.id === 'btn_modal_product_detail_edit_drawdb') {
+			if(selectedDetailId == "" || selectedDetailId == undefined){
+				jError("제품(서비스) 산출물을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawdb/?id=' + selectedDetailId + '&mode=update', '_blank');
+		}  else if (this.id === 'btn_product_detail_view_drawdb') {
+			if(selectedDetailId == "" || selectedDetailId == undefined){
+				jError("제품(서비스) 산출물을 선택해 주세요.");
+				return false;
+			}
+			window.open('/reference/drawdb/?id=' + selectedDetailId + '&mode=view', '_blank');
+		} else {
+			jError("drawdb was clicked but id is not matched");
+			return false;
+		}
+	});
+}
+
+window.onload = function() {
+	localStorage.removeItem('UUID');
+	localStorage.removeItem('.drawio-config');
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 탭 클릭 이벤트 처리
@@ -517,7 +628,7 @@ function draw(main, menu) {
 					data-target="#modal_product_detail_add"
 					onclick="product_detail_add_clear();"
 					style="margin-bottom: 10px !important; margin-top: 10px;">
-					제품(서비스) 디테일 등록하기
+					제품(서비스) 산출물 등록하기
 				</button>
 				<div class="gradient_bottom_border" style="width: 100%; height: 2px; margin-bottom: 10px;"></div>`;
 
@@ -844,15 +955,32 @@ function productDetailEditorClear() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function product_detail_save_btn_click() {
 	$("#btn_modal_product_detail_add_submit").click(function() {
+		var requestParams = {
+			ref: 2,
+			c_type: "default",
+			c_title: $('#modal_product_detail_add_pdservice_detail_name').val(),
+			c_contents: CKEDITOR.instances.modal_product_detail_add_editor.getData()
+		};
+		const uuidManager = new UUIDManager();
+		var uuid = uuidManager.getUUID();
+
+
+		var drawioXML = localStorage.getItem("drawio-" + uuid);
+		console.log("product_detail_save_btn_click :: drawioXML → ", drawioXML);
+		if(drawioXML !== null) {
+			requestParams.c_drawio_contents = drawioXML;
+		}
+
+		var drawdbXML = localStorage.getItem("drawdb-" + uuid);
+		console.log("product_detail_save_btn_click :: drawdbXML → ", drawdbXML);
+		if(drawdbXML !== null) {
+			requestParams.c_drawdb_contents = drawdbXML;
+		}
+
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceDetail/addNode.do/" + selectId,
 			type: "POST",
-			data: {
-				ref: 2,
-				c_type: "default",
-				c_title: $('#modal_product_detail_add_pdservice_detail_name').val(),
-				c_contents: CKEDITOR.instances.modal_product_detail_add_editor.getData()
-			},
+			data: requestParams,
 			progress: true,
 			statusCode: {
 				200: function (data) {
@@ -861,6 +989,10 @@ function product_detail_save_btn_click() {
 					jSuccess("신규 제품 디테일 등록이 완료 되었습니다.");
 					pdServiceDataTableClick(selectId);
 					productServiceDetailDataLoad(selectId);
+					localStorage.removeItem("drawio-" + uuid);
+					localStorage.removeItem("drawdb-" + uuid);
+					uuidManager.removeUUID();
+					removeDrawIOConfig();
 				}
 			},
 			beforeSend: function () {
@@ -996,7 +1128,6 @@ function product_detail_delete_btn_click(){
 // 제품(서비스) 기획서 변경 저장 버튼
 ////////////////////////////////////////////////////////////////////////////////////////
 function product_detail_update_btn_click() {
-
 	// 모달에서 편집하기
 	$("#btn_modal_product_detail_edit_submit").click(function () {
 		var detailName = $("#modal_product_detail_edit_pdservice_detail_name").val().trim();
@@ -1004,22 +1135,37 @@ function product_detail_update_btn_click() {
 		var tempSelectDetailId = selectedDetailId;
 
 		if(selectedDetailId == "" || selectedDetailName == "") {
-			jError("선택된 제품(서비스) 디테일이 없습니다.");
+			jError("선택된 제품(서비스) 산출물이 없습니다.");
 			return false;
 		}
 
 		if (detailName == "") {
-			jError("제품(서비스) 디테일명을 입력해 주세요.");
+			jError("제품(서비스) 산출물명을 입력해 주세요.");
 			return false;
 		}
+
+		var requestParams = {
+			c_id: selectedDetailId,
+			c_title: detailName,
+			c_contents: CKEDITOR.instances.modal_product_detail_edit_editor.getData()
+		};
+
+		var drawioXML = localStorage.getItem("drawio-" + selectedDetailId);
+		console.log("product_detail_update_btn_click :: btn_modal_product_detail_edit_submit :: drawioXML → ", drawioXML);
+		if(drawioXML !== null) {
+			requestParams.c_drawio_contents = drawioXML;
+		}
+
+		var drawdbXML = localStorage.getItem("drawdb-" + selectedDetailId);
+		console.log("product_detail_update_btn_click :: btn_modal_product_detail_edit_submit :: drawdbXML → ", drawdbXML);
+		if(drawdbXML !== null) {
+			requestParams.c_drawdb_contents = drawdbXML;
+		}
+
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceDetail/updateNode.do",
 			type: "put",
-			data: {
-				c_id: selectedDetailId,
-				c_title: detailName,
-				c_contents: CKEDITOR.instances.modal_product_detail_edit_editor.getData()
-			},
+			data: requestParams,
 			statusCode: {
 				200: function () {
 					$("#btn_modal_product_detail_edit_close").trigger("click");
@@ -1030,7 +1176,9 @@ function product_detail_update_btn_click() {
 							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
 						}, 500);
 					}, 300);
-
+					localStorage.removeItem("drawio-" + tempSelectDetailId);
+					localStorage.removeItem("drawdb-" + tempSelectDetailId);
+					removeDrawIOConfig();
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
 			}
@@ -1044,23 +1192,37 @@ function product_detail_update_btn_click() {
 		var tempSelectId = selectId;
 		var tempSelectDetailId = selectedDetailId;
 		if(selectedDetailId == "" || selectedDetailName == "") {
-			jError("선택된 제품(서비스) 디테일이 없습니다.");
+			jError("선택된 제품(서비스) 산출물이 없습니다.");
 			return false;
 		}
 
 		if (detailName == "") {
-			jError("제품(서비스) 디테일명을 입력해 주세요.");
+			jError("제품(서비스) 산출물명을 입력해 주세요.");
 			return false;
+		}
+
+		var requestParams = {
+			c_id: selectedDetailId,
+			c_title: detailName,
+			c_contents: CKEDITOR.instances.report_pdservice_detail_editor.getData()
+		};
+
+		var drawioXML = localStorage.getItem("drawio-" + selectedDetailId);
+		console.log("btn_product_detail_edit_submit :: drawioXML → ", drawioXML);
+		if(drawioXML !== null) {
+			requestParams.c_drawio_contents = drawioXML;
+		}
+
+		var drawdbXML = localStorage.getItem("drawdb-" + selectedDetailId);
+		console.log("btn_product_detail_edit_submit :: drawdbXML → ", drawdbXML);
+		if(drawdbXML !== null) {
+			requestParams.c_drawdb_contents = drawdbXML;
 		}
 
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceDetail/updateNode.do",
 			type: "put",
-			data: {
-				c_id: selectedDetailId,
-				c_title: detailName,
-				c_contents: CKEDITOR.instances.report_pdservice_detail_editor.getData()
-			},
+			data: requestParams,
 			statusCode: {
 				200: function () {
 					pdServiceDataTableClick(tempSelectId);
@@ -1070,7 +1232,9 @@ function product_detail_update_btn_click() {
 							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
 						}, 500);
 					}, 300);
-
+					localStorage.removeItem("drawio-" + tempSelectDetailId);
+					localStorage.removeItem("drawdb-" + tempSelectDetailId);
+					removeDrawIOConfig();
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
 			}
