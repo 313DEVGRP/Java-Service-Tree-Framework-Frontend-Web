@@ -1,15 +1,21 @@
 let selectedPdServiceId;           // 선택한 제품(서비스) 아이디
 let selectedPdService;             // 선택한 제품(서비스) 이름
 let selectedVersionId;             // 선택한 버전 아이디
-const reqStateToIdMapping = { // 요구사항 상태에 id 매핑
+const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
     '열림': '10',
     '진행중': '11',
     '해결됨': '12',
     '닫힘': '13'
 };
+const reqStateToIconMapping = {     // 요구사항 상태에 아이콘 매핑
+    '열림': '<i class="fa fa-sign-in text-danger"></i>',
+    '진행중': '<i class="fa fa-search" style="color: #E49400;"></i>',
+    '해결됨': '<i class="fa fa-check text-success"></i>',
+    '닫힘': '<i class="fa fa-sign-out text-primary"></i>'
+};
 let boardData = Object.keys(reqStateToIdMapping).map(state => ({ // 기본 보드 데이터
                      id: reqStateToIdMapping[state],
-                     title: state
+                     title: `${reqStateToIconMapping[state]} ${state}`
                  }));
 
 const reqKanbanTg = new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
@@ -307,9 +313,9 @@ function setKanban() {
                 
                 // 칸반 보드 구성
                 const reqBoardByState = Object.keys(reqStateToIdMapping).map(state => ({
-                                            id: reqStateToIdMapping[state], // 요구사항 상태 별 id
-                                            title: state,                   // 요구사항 제목
-                                            item: reqListByState[state]     // 요구사항 상태 별 리스트
+                                            id: reqStateToIdMapping[state],                    // 요구사항 상태 별 id
+                                            title: `${reqStateToIconMapping[state]} ${state}`, // 요구사항 제목
+                                            item: reqListByState[state]                        // 요구사항 상태 별 리스트
                                         }));
 
                 // 칸반 보드 로드
@@ -477,6 +483,18 @@ function setReqCount() {
     $("#req-resolve-count").text(counts["해결됨"]);
     $("#req-close-count").text(counts["닫힘"]);
 
+    // 통계 표시
+    $("#req-open-stats").text(setStatsFormat(counts["열림"], 총합));
+    $("#req-progress-stats").text(setStatsFormat(counts["진행중"], 총합));
+    $("#req-resolve-stats").text(setStatsFormat(counts["해결됨"], 총합));
+    $("#req-close-stats").text(setStatsFormat(counts["닫힘"], 총합));
+}
+
+function setStatsFormat(값, 총합) {
+    if (총합 == 0) {
+        return 0;
+    }
+    return Math.round((값 / 총합) * 1000) / 10;
 }
 
 function initKanban() {

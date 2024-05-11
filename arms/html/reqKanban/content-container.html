@@ -363,16 +363,37 @@
                 </blockquote>
                 <div class="row">
                     <div class="col-md-12">
-                        <div style="width: 48%; margin: 0 0 10px 1%;">
-                            <div class="input-group"
-                                 style="width: 100%;">
-                                <input
-                                        type="text"
-                                        id="kanban_search"
-                                        class="form-control searchDarkBack"
-                                        style="color: #f8f8f8; padding: 5px 28px; border-radius: 3px;"
-                                        placeholder="찾을 요구사항 입력" />
-                                <i class="kanban_search_clear glyphicon glyphicon-remove"></i>
+                        <div class="kanban_assist">
+                            <div style="width: 48%; margin: 0 0 10px 1%;">
+                                <div class="input-group"
+                                     style="width: 100%;">
+                                    <input
+                                            type="text"
+                                            id="kanban_search"
+                                            class="form-control searchDarkBack"
+                                            style="color: #f8f8f8; padding: 5px 28px; border-radius: 3px;"
+                                            placeholder="찾을 요구사항 입력" />
+                                    <i class="kanban_search_clear glyphicon glyphicon-remove"></i>
+                                </div>
+                            </div>
+                            <div class="kanban_stats"
+                                 style="width: 48%; margin: 0 1% 10px 0;">
+                                <div>
+                                    <i class="fa fa-sign-in text-danger"></i> :
+                                    <span id="req-open-stats">0</span>%
+                                </div>
+                                <div>
+                                    <i class="fa fa-search" style="color: #E49400;"></i> :
+                                    <span id="req-progress-stats">0</span>%
+                                </div>
+                                <div>
+                                    <i class="fa fa-check text-success"></i> :
+                                    <span id="req-resolve-stats">0</span>%
+                                </div>
+                                <div>
+                                    <i class="fa fa-sign-out text-primary"></i> :
+                                    <span id="req-close-stats">0</span>%
+                                </div>
                             </div>
                         </div>
                         <div id="myKanban"></div>

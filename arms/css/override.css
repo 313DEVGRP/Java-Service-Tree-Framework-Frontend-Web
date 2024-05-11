@@ -1979,6 +1979,12 @@ svg .ghostCircle.show {
     z-index: 900;
 }
 
+.kanban_assist {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .kanban_search_clear {
 	position: absolute;
 	top: 50%;
@@ -1987,4 +1993,14 @@ svg .ghostCircle.show {
 	cursor: pointer;
 	display: none;
 	z-index: 5;
+}
+
+.kanban_stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 3px;
+    padding: 4.9px;
+    background: rgba(51, 51, 51, 0.425);
+    border: 1px solid rgba(51, 51, 51, 0.5);
 }
