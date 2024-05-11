@@ -19,3 +19,16 @@
 .tg-dialog .tg-dialog-footer {
     padding: 0;
 }
+
+.tg-dialog {
+    color: #f8f8f8;
+    background: rgb(51, 51, 51);
+}
+
+.tg-dialog .tg-arrow {
+    background: rgb(51, 51, 51);
+}
+
+.tg-dialog-close-btn {
+    fill: #f8f8f8;
+}
