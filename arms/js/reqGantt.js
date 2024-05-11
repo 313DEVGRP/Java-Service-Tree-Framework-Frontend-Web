@@ -1794,7 +1794,9 @@ function initGantt(data) {
 							background: "none"
 						})
 						.attr({ "data-placement": "left", "data-original-title": "상세정보 조회 및 수정" })
-						.tooltip()
+						.tooltip({
+							container: 'body'
+						})
 						.on("click", (e) => {
 							closeTooltip(e);
 							updateNodeModalOpen(row);
@@ -1811,7 +1813,9 @@ function initGantt(data) {
 							background: "none"
 						})
 						.attr({ "data-placement": "left", "data-original-title": "동일 레벨에 요구사항 추가" })
-						.tooltip()
+						.tooltip({
+							container: 'body'
+						})
 						.on("click", (e) => {
 							closeTooltip(e);
 							addNodeModalOpen(row.parentId);
@@ -1832,8 +1836,10 @@ function initGantt(data) {
 								outline: "none",
 								background: "none"
 							})
-							.attr({ "data-placement": "left", "data-original-title": "하위에 요구사항 추가" })
-							.tooltip()
+							.attr({ "data-placement": "left", "data-original-title": "폴더 하위에 요구사항 추가" })
+							.tooltip({
+								container: 'body'
+							})
 							.on("click", (e) => {
 								closeTooltip(e);
 								addNodeModalOpen(row.id);
@@ -1964,7 +1970,8 @@ function updateNodeModalOpen(item) {
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
 		dataTableLoad();
-	} else {
+	}
+	else {
 		$("#my_modal2_title").text(" 요구사항 수정 팝업");
 		$("#my_modal2_desc").text(" ARMS에 요구사항을 수정합니다.");
 
