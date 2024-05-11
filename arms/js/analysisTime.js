@@ -289,6 +289,11 @@ function makeVersionMultiSelectBox() {
 			// timeline chart (비동기 유지 API 2개)
 			timeLineChart(selectedPdServiceId, selectedVersionId);
 
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }

@@ -217,6 +217,11 @@ function makeVersionMultiSelectBox() {
 			var 요구사항_호출_주소 = "/state-per-version/T_ARMS_REQADD_" + selectedPdServiceId + "/getReqAddListByFilter.do?" +
 				"pdServiceId="+selectedPdServiceId+"&pdServiceVersionLinks="+selectedVersionId;
 			요구사항_현황_데이터_테이블($("#selected_pdService").val(), 요구사항_호출_주소);
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }

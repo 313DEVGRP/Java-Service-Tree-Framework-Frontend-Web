@@ -212,8 +212,11 @@ function makeVersionMultiSelectBox() {
             TopMenuApi.톱메뉴_세팅();
 
             버전별_요구사항별_인력정보가져오기(selectedPdServiceId, selectedVersionId);
-
-
+            $(".ms-parent").css("z-index", 1000);
+        },
+        onOpen: function() {
+            console.log("open event");
+            $(".ms-parent").css("z-index", 9999);
         }
     });
 }

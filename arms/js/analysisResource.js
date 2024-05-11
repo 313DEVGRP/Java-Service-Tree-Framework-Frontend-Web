@@ -389,6 +389,11 @@ function makeVersionMultiSelectBox() {
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
             stackedHorizontalBar();
             wordCloud();
+            $(".ms-parent").css("z-index", 1000);
+        },
+        onOpen: function() {
+            console.log("open event");
+            $(".ms-parent").css("z-index", 9999);
         }
     });
 }

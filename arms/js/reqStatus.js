@@ -303,6 +303,11 @@ function makeVersionMultiSelectBox() {
 			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
 			// 이슈리스트 데이터테이블
 			dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }
