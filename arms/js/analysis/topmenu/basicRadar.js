@@ -131,7 +131,7 @@ function drawBasicRadar(target,objectiveArr,currentProgressArr) {
                 }
             },
             nameGap: 30,
-            center: ["52%","63%"],
+            center: ["52%","68%"],
             radius: "55%",
             axisLine: {
                 lineStyle: {
