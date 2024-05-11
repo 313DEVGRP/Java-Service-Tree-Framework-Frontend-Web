@@ -7,7 +7,6 @@ var dataTableRef;
 var mailAddressList;
 var dashboardColor;
 var req_state, resource_info, issue_info, period_info, total_days_progress;
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var resourceSet = new Set(); // 담당자 set
 var searchMap = [
@@ -461,7 +460,6 @@ function bind_VersionData_By_PdService() {
                 req_subtask_pie(selectedPdServiceId, selectedVersionId);
                 // 작업자수 및 평균계산
                 getAssigneeInfo(selectedPdServiceId, selectedVersionId);
-
                 // 작업자별 상태 - dataTable
                 drawResource(selectedPdServiceId, selectedVersionId);
 
@@ -502,7 +500,7 @@ function req_subtask_pie(pdService_id, pdServiceVersionLinks, size) {
     $.ajax({
         url: "/auth-user/api/arms/analysis/resource/req-subtask-pie/pdServiceId/"+pdService_id,
         type: "GET",
-        data: { "pdServiceVersionLinks": pdServiceVersionLinks, "size" : (size ? size : 1000) },
+        data: { "pdServiceVersionLinks": pdServiceVersionLinks, "size" : (size ? size : 5) },
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
@@ -510,8 +508,8 @@ function req_subtask_pie(pdService_id, pdServiceVersionLinks, size) {
         statusCode: {
             200: function (data) {
                 //요구사항,연결이슈 파이차트용 데이터배열
-                let reqDataMapForPie = [];
-                let subtaskDataMapForPie = [];
+                let reqDataMapForPie = []; let top5reqTotal=0; let reqIssueTot=0;
+                let subtaskDataMapForPie = []; let top5subTotal=0; let subIssueTot=0;
                 console.log(data);
                 if (data["전체합계"] === 0) {
                     alert("작업자 업무 처리현황 데이터가 없습니다.");
@@ -521,20 +519,27 @@ function req_subtask_pie(pdService_id, pdServiceVersionLinks, size) {
                     isReqGrpArr.forEach((elementArr,index) => {
                         // 요구사항 이슈
                         if(elementArr["필드명"] == "true") {
+                            reqIssueTot = elementArr["개수"];
                             let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
                             tempArrReq.forEach(e => {
                                 reqDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                                top5reqTotal += e["개수"];
                             });
                         }
                         // 연결이슈
                         if(elementArr["필드명"] == "false") {
+                            subIssueTot = elementArr["개수"];
                             let tempArrReq= elementArr["하위검색결과"]["group_by_assignee.assignee_emailAddress.keyword"];
                             tempArrReq.forEach(e => {
                                 subtaskDataMapForPie.push({name: getIdFromMail(e["필드명"]), value: e["개수"]});
+                                top5subTotal += e["개수"];
                             });
                         }
                     });
+                    reqDataMapForPie.push({name: "etc.", value: (reqIssueTot - top5reqTotal)});
+                    subtaskDataMapForPie.push({name: "etc.", value: (subIssueTot - top5subTotal)});
                 }
+
                 // 요구사항 및 연결이슈 파이차트
                 drawSimplePieChart("req_pie","요구사항",reqDataMapForPie);
                 drawSimplePieChart("linkedIssue_subtask_pie","연결이슈 및 하위작업",subtaskDataMapForPie);
