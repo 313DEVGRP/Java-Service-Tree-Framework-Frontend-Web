@@ -5,21 +5,11 @@ let versionList,
 	TableInstance,
 	pivotType = "normal",
 	editContents = {},
-	res;
+	folderDepth = {},
+	res,
+	maxDepth;
 const ContentType = {
 	normal: {
-		version: "버전",
-		assignee: "요구사항 담당자",
-		depth1: "Depth 1",
-		depth2: "Depth 2",
-		depth3: "Depth 3",
-		content: "요구사항 제목",
-		status: "요구사항 상태",
-		priority: "우선순위",
-		difficulty: "난이도",
-		createDate: "생성일",
-		startDate: "시작일",
-		endDate: "종료일"
 	},
 	version: {
 		version: "버전",
@@ -115,23 +105,27 @@ const addZero = (n) => {
 	return n < 10 ? `0${n}` : n;
 };
 
-const setDepth = (data, parentId, titles) => {
-	if (parentId === 2) return { depth1: titles[0] };
+const setDepth = (data, parentId, titles = []) => {
+    const node = data.find((task) => task.c_id === parentId);
+    if (!node || node.c_parentid < 2) {
+        // 동적으로 깊이 정보 생성
+        const depths = {};
+        titles.reverse().forEach((title, index) => {
+            depths[`depth${index + 1}`] = title;
+        });
 
-	const node = data.find((task) => task.c_id === parentId);
+        for (let i = 1; i <= maxDepth; i++) {
+            if (!depths[`depth${i}`]) {
+                depths[`depth${i}`] = "";
+            }
+        }
+        return depths;
+    }
 
-	if (node.c_parentid <= 2) {
-		const reulst = {};
-
-		titles
-			.concat(node.c_title)
-			.reverse()
-			.forEach((title, index) => (reulst[`depth${index + 1}`] = title));
-
-		return reulst;
-	}
-
-	return setDepth(data, node.c_parentid, titles.concat(node.c_title));
+    if (node.c_type === 'folder') {
+        titles.push(node.c_title);
+    }
+  return setDepth(data, node.c_parentid, titles);
 };
 
 const getVersionTitle = (id) => {
@@ -147,6 +141,7 @@ const CategoryName = {
 const mapperTableData = (data) => {
     return data
         ?.sort((a, b) => a.c_parentid - b.c_parentid)
+         .filter(({ c_type }) => c_type === 'default') // 'default' 타입만 필터링
         .reduce((acc, cur) => {
             const {
                 c_id,
@@ -171,25 +166,26 @@ const mapperTableData = (data) => {
             versions.forEach((vid) => {
                 const assigneeNames = assignee.length > 0 ? assignee.map(a => a.담당자_이름).join(', ') : "담당자 미배정";
 
+                const depthInfo = setDepth(data, c_parentid);
                 acc.push({
-                  version: getVersionTitle(vid),
-                  id: c_id,
-                  category: CategoryName[c_type],
-                  assignee: assigneeNames ,
-                  status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
-                  ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
-                  content: c_title,
-                  priority: reqPriorityEntity?.data ?? "",
-                  difficulty: reqDifficultyEntity?.data ?? "",
-                  createDate: getDate(c_req_create_date),
-                  startDate: getDate(c_req_start_date),
-                  endDate: getDate(c_req_end_date),
-                  progress: c_req_plan_progress || 0,
-                  origin: cur,
-                  _status: reqStateEntity?.c_id,
-                  _priority: reqPriorityEntity?.c_id,
-                  _difficulty: reqDifficultyEntity?.c_id,
-                  _version: Number(vid)
+                    version: getVersionTitle(vid),
+                    id: c_id,
+                    category: CategoryName[c_type],
+                    assignee: assigneeNames ,
+                    status: c_type !== "folder" ? reqStateEntity?.data ?? "" : "",
+                    ...depthInfo,
+                    content: c_title,
+                    priority: reqPriorityEntity?.data ?? "",
+                    difficulty: reqDifficultyEntity?.data ?? "",
+                    createDate: getDate(c_req_create_date),
+                    startDate: getDate(c_req_start_date),
+                    endDate: getDate(c_req_end_date),
+                    progress: c_req_plan_progress || 0,
+                    origin: cur,
+                    _status: reqStateEntity?.c_id,
+                    _priority: reqPriorityEntity?.c_id,
+                    _difficulty: reqDifficultyEntity?.c_id,
+                    _version: Number(vid)
                 });
              });
       return acc;
@@ -295,6 +291,23 @@ class Table {
 
 	setTableData(data) {
 		if (pivotType === "normal") {
+
+            for (let i = 1; i <= maxDepth; i++) {
+                folderDepth[`depth${i}`] = `Depth${i}`;
+            }
+            ContentType["normal"] = {
+                version: "버전",
+                assignee: "요구사항 담당자",
+                ...folderDepth,
+        		content: "요구사항 제목",
+        		status: "요구사항 상태",
+        		priority: "우선순위",
+        		difficulty: "난이도",
+        		createDate: "생성일",
+        		startDate: "시작일",
+        		endDate: "종료일"
+            };
+
 			return tableData
 			.filter((item) => item.category !== "Group") // 폴더 제거
 			.sort((a, b) =>  a._version - b._version || a.c_parentid - b.c_parentid);; // 정렬
@@ -375,11 +388,11 @@ class Table {
 							lastChild: {
 								assignee: `${cur[0].version}의 총계`,
 								_assignee: group[0]._assignee,
-								col: 1,
-								colSpan: 3,
-								...calcStatus(cur)
+								col: 0,
+								colSpan: 4,
+								...calcStatus(cur),
+							    node:"leaf"
 							},
-							node:"leaf"
 						}
 					];
 				}, []),
@@ -562,9 +575,8 @@ class Table {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 
-
-                if(['content'].includes($col.className) && tag === "tr"){
-                        $col.prepend(this.makeEditableButton(cur,  key));
+                if(['content'].includes($col.className) && (tag !== "th")){
+                    $col.prepend(this.makeEditableButton(cur,  key));
                 }else if (cur[key]) {
 					$col.innerHTML = cur[key];
 				}
@@ -584,6 +596,10 @@ class Table {
 
 				if (cur.colSpan) {
 					$tr.classList.add("highlight");
+                    if(cur.node ==="leaf"){
+                        $tr.style.backgroundColor  ="rgba(50, 50, 50,0.8)";
+                    }
+
 					if (pivotType === "version"){
 					    $tr.removeAttribute('data-assignee');
 					}
@@ -600,7 +616,10 @@ class Table {
                 }
 
 				if (cur.root === key) {
-					$col.prepend(this.makePivotButton($tr, cur));
+				    if (cur.children.length !== 0) {
+                        $col.prepend(this.makePivotButton($tr, cur));
+                    }
+
 					$col.classList.add("root");
 				}
 
@@ -622,14 +641,20 @@ class Table {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 				if (tag === "td") {
-
-					if ((["status"].includes(key) && cur.category !== "Group") || ["priority", "difficulty"].includes(key)) {
+					if ((["status"].includes(key) && cur.category !== "Group") || ["priority"].includes(key)) {
 						$col.innerHTML = `
 					<a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
 						${cur[key]}
 						<i class="fa fa-caret-down"></i>
 					</a>`;
-					}else if(['content'].includes($col.className)){
+					}else if( ["difficulty"].includes(key)){
+						$col.innerHTML = `
+                        <a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
+                            ${cur[key]}
+                        <i class="fa fa-caret-down"></i>
+                        </a>`;
+					}
+					else if(['content'].includes($col.className)){
 					    $col.prepend(this.makeEditableButton(cur,  key));
 					}else{
 					    $col.innerHTML = cur[key];
@@ -865,31 +890,44 @@ class Table {
 
 		$wrapper.appendChild(this.makeTable());
 
-		this.mergeVersionRows();
+        this.mergeRowsByClassName('version');
+		const keys = Object.keys(folderDepth);
+
+        keys.forEach(key => {
+            this.mergeRowsByClassName(key);
+        });
 	}
-	mergeVersionRows() {
+
+    mergeRowsByClassName(className) {
         const tables = document.querySelectorAll('.reqTable');
         tables.forEach((table) => {
-            let lastVersion = null;
+            let lastValue = null;
             let lastRow = null;
-            let rowspan = 1
+            let rowspan = 1;
+            let groupIndex = 0; // 그룹 인덱스 추가
             Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
-                const versionCell = row.querySelector('.version');
-                const version = versionCell.textContent;
-
-                if (version === lastVersion) {
-                    versionCell.style.display = 'none';
-                    if (lastRow) {
-                        const versionCellInLastRow = lastRow.querySelector('.version');
-                        if (versionCellInLastRow) {
-                            versionCellInLastRow.rowSpan = rowspan + 1;
+                const cell = row.querySelector(`.${className}`);
+                const value = cell ? cell.textContent : '';
+                if (cell) {
+                    if (value === lastValue) {
+                        cell.style.display = 'none'; // 셀 병합 시 숨김 처리
+                        if (lastRow) {
+                            const cellInLastRow = lastRow.querySelector(`.${className}`);
+                            if (cellInLastRow) {
+                                cellInLastRow.rowSpan = rowspan + 1;
+                                // 병합되는 첫 번째 셀에만 배경색 적용
+                                if (groupIndex % 2 === 0) { // 짝수 그룹에 대해 배경색 적용
+                                    cellInLastRow.style.backgroundColor = 'rgba(51, 51, 51, 0.325)';
+                                }
+                            }
                         }
+                        rowspan++;
+                    } else {
+                        rowspan = 1;
+                        lastValue = value;
+                        lastRow = row;
+                        groupIndex++; // 새 그룹이 시작될 때마다 그룹 인덱스 증가
                     }
-                    rowspan++;
-                } else {
-                    rowspan = 1;
-                    lastVersion = version;
-                    lastRow = row;
                 }
             });
         });
@@ -901,18 +939,38 @@ class Table {
 		this.$table.innerHTML = "";
 
 		this.makeTable();
+
+		this.mergeRowsByClassName('version');
+        		const keys = Object.keys(folderDepth);
+
+                keys.forEach(key => {
+                    this.mergeRowsByClassName(key);
+                });
 	}
 }
 
 const makeReqTable = async (options) => {
+    // 선택옵션
 	tableOptions = options;
+	// 버전 정보
 	const data = await tableOptions.onGetVersion(tableOptions.id);
+
+	 // 요구사항 담당자 정보
 	const assigneeData  =await tableOptions.onGetReqAssignee(tableOptions.id);
 	const assigneeResponse = assigneeData.response;
+
+	// 요구사항 정보
 	res = await tableOptions.onGetData(tableOptions.id);
+
+	// 담당자 정보 + 요구사항 정보
     res = mergeData(res,assigneeResponse);
 	versionList = data.response.sort((a, b) => a.c_id - b.c_id);
 
+    // 최대 깊이 조회
+	const maxLevel = Math.max(...res.map(task => task.c_level));
+    maxDepth = maxLevel - 2;
+
+    // 테이블 데이터 생성
 	tableData = mapperTableData([...res]);
 	pivotTableData = mapperPivotTableData([...res]);
 

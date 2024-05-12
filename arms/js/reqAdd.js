@@ -1724,6 +1724,24 @@ function tableSelect(id) {
 	makeReqTable({
 		wrapper: "reqDataTable",
 		id,
+		onGetReqAssignee: async function (id) {
+                    return await $.ajax({
+              	    	url: `/auth-user/api/arms/reqAdd/getRequirementAssignee.do?c_id=${id}`,
+               			type: "GET",
+               			dataType: "json",
+                		progress: true,
+                		statusCode: {
+                			200: function (data) {
+              					if (!isEmpty(data)) {
+               						return data.response;
+             					}
+               				}
+                		},
+                		error: function (e) {
+                			jError("버전 조회 중 에러가 발생했습니다.");
+              			}
+          			});
+                },
 		onGetVersion: async function (id) {
 			return await $.ajax({
 				url: `/auth-user/api/arms/pdService/getVersionList.do?c_id=${id}`,
@@ -1734,24 +1752,6 @@ function tableSelect(id) {
 					200: function (data) {
 						if (!isEmpty(data)) {
 							return data;
-						}
-					}
-				},
-				error: function (e) {
-					jError("버전 조회 중 에러가 발생했습니다.");
-				}
-			});
-		},
-        onGetReqAssignee: async function (id) {
-			return await $.ajax({
-				url: `/auth-user/api/arms/reqAdd/getRequirementAssignee.do?c_id=${id}`,
-				type: "GET",
-				dataType: "json",
-				progress: true,
-				statusCode: {
-					200: function (data) {
-						if (!isEmpty(data)) {
-							return data.response;
 						}
 					}
 				},
