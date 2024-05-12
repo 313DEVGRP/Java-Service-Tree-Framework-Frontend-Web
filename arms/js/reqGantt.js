@@ -868,89 +868,65 @@ function setDocViewTab() {
 	$(".dd-list").empty();
 	var data = $("#req_table").DataTable().rows().data().toArray();
 
-	var firstBranchChecker = true;
-	$.each(data, function (key, value) {
-		if (value.c_contents == null || value.c_contents == "null") {
-			value.c_contents = "";
-		}
+	let treeData = buildDocTree(data); // 데이터를 계층적 구조로 변환
+	console.log("setDocViewTab :: doc data -> ");
+	console.log(treeData);
+	treeData.forEach(rootNode => {
+		$(".dd-list").append(generateDocHTML(rootNode)); // HTML 생성 및 추가
+	});
+}
 
-		console.log(value.c_id + "=" + value.c_type + "=" + value.c_title + "//" + value.c_parentid);
+function buildDocTree(data) {
+	let tree = {};
+	let roots = [];
 
-		var iconHtml;
-		if (value.c_type == "root" || value.c_type == "drive") {
-			iconHtml = "<i class='fa fa-clipboard'></i>";
-		} else if (value.c_type == "folder") {
-			iconHtml = "<i class='fa fa-files-o'></i>";
+	// 먼저 모든 노드를 id를 키로 하는 객체로 변환
+	data.forEach(item => {
+		tree[item.c_id] = {...item, children: []};
+	});
+
+	// 각 노드의 자식 노드들을 찾아서 추가
+	Object.keys(tree).forEach(id => {
+		let item = tree[id];
+		if (item.c_parentid && tree[item.c_parentid]) {
+			tree[item.c_parentid].children.push(item);
 		} else {
-			iconHtml = "<i class='fa fa-file-text-o'></i>";
-		}
-
-		if (value.c_type == "root") {
-			console.log("ROOT 노드는 처리하지 않습니다.");
-		} else if (value.c_type == "drive" || value.c_type == "folder") {
-			if (firstBranchChecker) {
-				$(".dd-list").append(
-					"<li class='dd-item' id='" +
-						"T_ARMS_REQ_" +
-						value.c_id +
-						"' data-id='" +
-						value.c_id +
-						"'>" +
-						"<div class='dd-handle'>" +
-						iconHtml +
-						" " +
-						value.c_title +
-						"<p>" +
-						value.c_contents +
-						"</p>" +
-						"</div>" +
-						"</li>"
-				);
-				firstBranchChecker = false;
-			} else {
-				$("#T_ARMS_REQ_" + value.c_parentid).append(
-					"<ol class='dd-list'>" +
-						"<li class='dd-item' id='" +
-						"T_ARMS_REQ_" +
-						value.c_id +
-						"' data-id='" +
-						value.c_id +
-						"'>" +
-						"<div class='dd-handle'>" +
-						iconHtml +
-						" " +
-						value.c_title +
-						"<p>" +
-						value.c_contents +
-						"</p>" +
-						"</div>" +
-						"</li>" +
-						"</ol>"
-				);
-			}
-		} else {
-			$("#T_ARMS_REQ_" + value.c_parentid).append(
-				"<ol class='dd-list'>" +
-					"<li class='dd-item' id='" +
-					"T_ARMS_REQ_" +
-					value.c_id +
-					"' data-id='" +
-					value.c_id +
-					"'>" +
-					"<div class='dd-handle'>" +
-					iconHtml +
-					" " +
-					value.c_title +
-					"<p>" +
-					value.c_contents +
-					"</p>" +
-					"</div>" +
-					"</li>" +
-					"</ol>"
-			);
+			roots.push(item);
 		}
 	});
-	//console.log(data);
+
+	return roots; // 최상위 노드 반환
+}
+
+function generateDocHTML(node) {
+	let iconHtml = getDocIconHtml(node.c_type);
+
+	let html = "<li class='dd-item' id='T_ARMS_REQ_" + node.c_id + "' data-id='" + node.c_id + "'>" +
+		"<div class='dd-handle'>" + iconHtml + " " + node.c_title +
+		"<p>" + (node.c_contents || "") + "</p></div>";
+
+	if (node.children.length > 0) {
+		html += "<ol class='dd-list'>";
+		node.children.forEach(child => {
+			html += generateDocHTML(child);
+		});
+		html += "</ol>";
+	}
+
+	html += "</li>";
+	return html;
+}
+
+function getDocIconHtml(type) {
+	switch (type) {
+		case "root":
+		case "drive":
+			return "<i class='fa fa-clipboard'></i>";
+		case "folder":
+			return "<i class='fa fa-folder'></i>";
+		default:
+			return "<i class='fa fa-file-text-o'></i>";
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
