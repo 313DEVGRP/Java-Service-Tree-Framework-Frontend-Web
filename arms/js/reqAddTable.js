@@ -641,18 +641,35 @@ class Table {
 				const $col = this.makeElement(tag);
 				$col.className = key;
 				if (tag === "td") {
-					if ((["status"].includes(key) && cur.category !== "Group") || ["priority"].includes(key)) {
-						$col.innerHTML = `
-					<a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
-						${cur[key]}
-						<i class="fa fa-caret-down"></i>
-					</a>`;
-					}else if( ["difficulty"].includes(key)){
+					if ((["status"].includes(key) && cur.category !== "Group")) {
+					    const iconData = this.mappingStateIcon(cur[key]);
 						$col.innerHTML = `
                         <a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
-                            ${cur[key]}
+                            ${iconData}
+                            <i class="fa fa-caret-down"></i>
+                        </a>`;
+                       // $col.style = "text-align:left";
+
+					}
+                    else if( ["priority"].includes(key)){
+                        const iconData = this.mappingPriorityIcon(cur[key]);
+						$col.innerHTML = `
+                        <a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
+                             ${iconData}
                         <i class="fa fa-caret-down"></i>
                         </a>`;
+                        //$col.style = "text-align:left";
+
+					}
+					else if( ["difficulty"].includes(key)){
+					    const iconData = this.mappingDifficultyIcon(cur[key]);
+						$col.innerHTML = `
+                        <a href="#" class="dropdown-toggle ${!cur[key] ? "empty" : ""}" data-toggle="dropdown" aria-expanded="false">
+                            ${iconData}
+                        <i class="fa fa-caret-down"></i>
+                        </a>`;
+                        //$col.style = "text-align:left";
+
 					}
 					else if(['content'].includes($col.className)){
 					    $col.prepend(this.makeEditableButton(cur,  key));
@@ -675,7 +692,43 @@ class Table {
 			return [...acc, $tr];
 		}, []);
 	}
-
+	mappingStateIcon(key){
+        if(key ==="열림"){
+        return '<i class="fa fa-sign-in text-danger"></i> 열림';
+        }else if(key ==="진행중"){
+        return '<i class="fa fa-search text-danger" style="color: #E49400;"></i> 진행중';
+        }else if(key ==="해결됨"){
+        return '<i class="fa fa-check text-success"></i> 해결됨';
+        }else if(key ==="닫힘"){
+        return '<i class="fa  fa-sign-out text-primary"></i> 닫힘';
+        }
+	}
+	mappingPriorityIcon(key){
+        if(key ==="매우 높음"){
+            return '<i class="fa  fa-angle-double-up text-danger"></i> 매우 높음';
+        }else if(key ==="높음"){
+            return '<i class="fa fa-angle-up text-danger"></i> 높음';
+        }else if(key ==="중간"){
+            return '<i class="fa  fa-align-justify text-primary"  style="color: #E49400;"></i> 중간';
+        }else if(key ==="낮음"){
+            return '<i class="fa  fa-angle-down text-primary"></i> 낮음';
+        }else if(key ==="매우 낮음"){
+            return '<i class="fa  fa-angle-double-down text-primary"></i> 매우 낮음';
+        }
+    }
+    mappingDifficultyIcon(key){
+        if(key ==="매우 어려움"){
+            return '<i class="fa  fa-angle-double-up text-danger"></i> 매우 어려움';
+        }else if(key ==="어려움"){
+            return '<i class="fa fa-angle-up text-danger"></i> 어려움';
+        }else if(key ==="보통"){
+            return '<i class="fa  fa-align-justify text-primary"  style="color: #E49400;"></i> 보통';
+        }else if(key ==="쉬움"){
+            return '<i class="fa  fa-angle-down text-primary"></i> 쉬움';
+        }else if(key ==="매우 쉬움"){
+            return '<i class="fa  fa-angle-double-down text-primary"></i> 매우 쉬움';
+        }
+    }
 	updateData(reqId, editContents) {
         // 초기 데이터 객체 생성
         let dataToSend = {
