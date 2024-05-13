@@ -436,6 +436,12 @@ function updateSalary() {
 
 
 function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
+
+    $(".spinner").html(
+      '<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+      "요구사항별 인력정보를 조회 중 입니다..."
+    );
+
     const url = new UrlBuilder()
       .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
       // .setBaseUrl('/auth-user/api/arms/analysis/cost/all-assignees')
@@ -452,6 +458,7 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
+        async: false,
         statusCode: {
             200: function(apiResponse) {
                 console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
@@ -655,7 +662,8 @@ function excel_download(인력별_연봉정보) {
 }
 
 function 비용분석계산버튼() {
-    $("#cost-analysis-calculation").on('click', function() {
+    $("#cost-analysis-calculation").on('click', async function() {
+        //spinnerSettingWithText("", "비용분석 계산 중 입니다...");
 
         if (!selectedPdServiceId || !selectedVersionId) {
             jError("제품(서비스), 버전을 선택해주세요.");
@@ -702,15 +710,19 @@ function 비용분석계산버튼() {
           .setBaseUrl("/auth-user/api/arms/reqState/complete-keyword")
           .build();
 
-        Promise.all([
-            $.ajax({ url: url, type: "GET", dataType: "json" }),
-            $.ajax({ url: url2, type: "GET", dataType: "json" }),
-            $.ajax({ url: completeKeywordUrl, type: "GET", dataType: "json" })
-        ]).then(function([data1, data2, data3]) {
+        try {
+            $(".spinner").html(
+              "<img src=\"./img/loading.gif\" width='20px' height='20px' style='margin-bottom: 3px;'/> 비용분석계산 API 실행 중입니다..."
+            );
+            const data1 = await $.ajax({ url: url, type: "GET", dataType: "json" });
             console.log("[ analysisCost :: 비용분석계산 API 1 ] :: data1 => ");
             console.log(data1);
+
+            const data2 = await $.ajax({ url: url2, type: "GET", dataType: "json" });
             console.log("[ analysisCost :: 비용분석계산 API 2 ] :: data2 => ");
             console.log(data2);
+
+            const data3 = await $.ajax({ url: completeKeywordUrl, type: "GET", dataType: "json" });
             console.log("[ analysisCost :: 비용분석계산 완료 요구사항 키워드 ] :: data3 => ");
             console.log(data3);
 
@@ -723,11 +735,10 @@ function 비용분석계산버튼() {
             console.log(버전_요구사항_담당자);
             console.log(전체담당자목록);
 
-
             /////////////////////////////////////////////////////////////////////
             ////////////////////////// 비용 분석 계산 /////////////////////////////
             /////////////////////////////////////////////////////////////////////
-            Object.values(요구사항전체목록).forEach((요구사항) => {
+            for (const 요구사항 of Object.values(요구사항전체목록)) {
                 // 요구사항 전체목록을 반복문 돌기 및 요구사항별 단가 초기화
                 요구사항.요구사항금액 = 0;
 
@@ -735,55 +746,43 @@ function 비용분석계산버튼() {
                 let 요구사항이포함된버전목록 = JSON.parse(요구사항.c_req_pdservice_versionset_link);
 
                 // 요구사항의 버전목록을 반복문 돌기
-                요구사항이포함된버전목록.forEach((버전) => {
+                for (const 버전 of 요구사항이포함된버전목록) {
                     // 해당 버전에 요구사항 키 목록을 가져옴
                     let 버전_요구사항_키목록 = 요구사항별_키목록[버전];
 
                     // 버전의 요구사항 목록 유무 확인
-                    if (버전_요구사항_키목록 == null) {
-                    } else {
+                    if (버전_요구사항_키목록 != null) {
                         // 있을 시 계산, 버전과 요구사항 c_id로 해당 요구사항이 가진 키목록 데이터 가져오기
                         let 요구사항_키목록 = 버전_요구사항_키목록[요구사항.c_id];
 
                         // 요구사항 키 목록 유무 확인
-                        if (요구사항_키목록 == null) {
-                            // console.log("버전 -> " + 버전 + "\n요구사항 -> " +요구사항.c_id);
-                        } else {
+                        if (요구사항_키목록 != null) {
                             // 있을 시 키목록을 반목문 돌기
-                            요구사항_키목록.forEach((요구사항키) => {
-
+                            for (const 요구사항키 of 요구사항_키목록) {
                                 // 키 별 담당자목록 조회를 위한 버전_요구사항_담당자 중 버전 유무 확인
                                 let 요구사항_담당자목록 = 버전_요구사항_담당자[버전];
-                                if (요구사항_담당자목록 == null) {
-
-                                } else {
+                                if (요구사항_담당자목록 != null) {
                                     // 있으면 버전_요구사항_담당자 중 담당자목록 유무 확인
                                     let 담당자목록 = 요구사항_담당자목록[요구사항키.c_issue_key];
-                                    if (담당자목록 == null) {
-                                        // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "n\요구사항_담당자목록 -> " +요구사항.c_id);
-                                    } else {
-                                        // console.log("요구사항 키 -> " + 요구사항키.c_issue_key + "\n담당자 -> " + JSON.stringify(담당자목록));
-
+                                    if (담당자목록 != null) {
                                         // 있으면 담당자목록을 반목문 돌기
-                                        Object.entries(담당자목록).forEach(([key, value]) => {
-
+                                        for (const [key, value] of Object.entries(담당자목록)) {
                                             // 요구사항의 비용 계산을 위한 날짜 카운팅 ****** 수정필요(정책) ******
 
                                             // 요구사항 단가 계산 및 인력 성과 계산 등
                                             최종비용분석계산(key, 요구사항, 버전, 요구사항키, data3);
-                                        });
+                                        }
                                     }
                                 }
-                            });
+                            }
                         }
                     }
-                });
-            });
+                }
+            }
 
             data2.requirement = 요구사항전체목록;
             $("#req-cost-analysis-chart").height("500px");
             요구사항비용분석차트(data2);
-
 
             $("#manpower-analysis-chart").height("500px");
             인력별_연봉대비_성과차트(전체담당자목록);
@@ -797,12 +796,10 @@ function 비용분석계산버튼() {
 
             $("#version-stack-container").height("500px");
             버전소모비용스택차트();
-
-
-        }).catch(function(error) {
+        } catch (error) {
             console.log('Error:', error);
             jError("비용 분석 계산 중 에러가 발생했습니다.");
-        });
+        }
 
     });
 }
@@ -1611,6 +1608,9 @@ $(document).ready(function() {
         if (!isValid) {
             jError("연봉 데이터는 숫자만 입력해야하며, 값이 존재해야 합니다.");
         } else {
+            $(".spinner").html(
+              "<img src=\"./img/loading.gif\" width='20px' height='20px' style='margin-bottom: 3px;'/> 연봉 데이터 업데이트 중입니다..."
+            );
             $.ajax({
                 url: "/auth-user/api/arms/salaries",
                 type: "PUT",
