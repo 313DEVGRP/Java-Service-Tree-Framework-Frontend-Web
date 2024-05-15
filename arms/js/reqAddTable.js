@@ -12,26 +12,8 @@ const ContentType = {
 	normal: {
 	},
 	version: {
-		version: "버전",
-		assignee: "요구사항 담당자",
-		depth1: "Depth 1",
-		content: "요구사항 제목",
-		open: "열림",
-		investigation: "진행중",
-		resolved: "해결됨",
-		closeStatus: "닫힘",
-		statusTotal: "총계"
 	},
 	owner: {
-		assignee: "요구사항 담당자",
-		version: "버전",
-		depth1: "Depth 1",
-		content: "요구사항 제목",
-		open: "열림",
-		investigation: "진행중",
-		resolved: "해결됨",
-		closeStatus: "닫힘",
-		statusTotal: "총계"
 	}
 };
 
@@ -215,6 +197,7 @@ const mapperPivotTableData = (data) => {
 		if (assignee.length === 0) { // 담당자 데이터가 없는 경우 처리
 	        const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
             versions.forEach((version) => {
+                const depthInfo = setDepth(data, c_parentid);
                 acc.push({
                     id: c_id,
                     version: version,
@@ -225,7 +208,7 @@ const mapperPivotTableData = (data) => {
                     resolved: reqStateEntity?.c_id === 12 ? 1 : "",
                     closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
                     statusTotal: "",
-                    ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+                    ...depthInfo,
                     content: c_title,
                     origin: cur,
                     c_parentid: c_parentid
@@ -238,6 +221,7 @@ const mapperPivotTableData = (data) => {
                 const versions = c_req_pdservice_versionset_link ? JSON.parse(c_req_pdservice_versionset_link) : [""];
                 if(요구사항_여부){
                     versions.forEach((version) => {// 각 버전별로 데이터 생성
+                        const depthInfo = setDepth(data, c_parentid);
                         acc.push({
                             id: c_id,
                             version: version,
@@ -248,7 +232,7 @@ const mapperPivotTableData = (data) => {
                             resolved: reqStateEntity?.c_id === 12 ? 1 : "",
                             closeStatus: reqStateEntity?.c_id === 13 ? 1 : "",
                             statusTotal: "",
-                            ...Object.assign({ depth1: "", depth2: "", depth3: "" }, setDepth(data, c_parentid, [c_title])),
+                            ...depthInfo,
                             content: c_title,
                             origin: cur,
                             c_parentid: c_parentid
@@ -258,9 +242,6 @@ const mapperPivotTableData = (data) => {
 
             });
         }
-
-
-
         return acc;
     }, []);
 };
@@ -297,10 +278,10 @@ class Table {
             }
             ContentType["normal"] = {
                 version: "버전",
-                assignee: "요구사항 담당자",
+                assignee: "담당자",
                 ...folderDepth,
         		content: "요구사항 제목",
-        		status: "요구사항 상태",
+        		status: "상태",
         		priority: "우선순위",
         		difficulty: "난이도",
         		createDate: "생성일",
@@ -314,6 +295,21 @@ class Table {
 		}
 
 		if (pivotType === "version") {
+		    for (let i = 1; i <= maxDepth; i++) {
+                folderDepth[`depth${i}`] = `Depth${i}`;
+            }
+            ContentType["version"] = {
+                version: "버전",
+                assignee: "담당자",
+                ...folderDepth,
+                content: "요구사항 제목",
+                open: "열림",
+                investigation: "진행중",
+                resolved: "해결됨",
+                closeStatus: "닫힘",
+                statusTotal: "총계"
+            };
+            console.log(folderDepth.length);
 			return versionList.map((version) => {
 				const filterItems = pivotTableData
 					.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제거
@@ -335,7 +331,7 @@ class Table {
 								assignee: `${cur[0].assignee} 총계`,
 								_assignee: cur[0]._assignee,
 								col: 1,
-								colSpan: 3,
+								colSpan: 2+maxDepth,
 								node:"leaf",
 								origin: version,
 								...calcStatus(cur)
@@ -347,7 +343,7 @@ class Table {
 					version: `${version.c_title} 총계`,
 					_version: version.c_id,
 					col: 0,
-					colSpan: 4,
+					colSpan: 3+maxDepth,
 					root: "version",
 					origin: version,
 					node:"root",
@@ -358,7 +354,20 @@ class Table {
 		}
 
 		if (pivotType === "owner") {
-			// Task Owner
+		    for (let i = 1; i <= maxDepth; i++) {
+                folderDepth[`depth${i}`] = `Depth${i}`;
+            }
+            ContentType["owner"] = {
+                assignee: "담당자",
+                version: "버전",
+                ...folderDepth,
+                content: "요구사항 제목",
+                open: "열림",
+                investigation: "진행중",
+                resolved: "해결됨",
+                closeStatus: "닫힘",
+                statusTotal: "총계"
+            };
 			const 모든_요구사항데이터 = pivotTableData
 				.filter((item) => item.origin && item.origin.attr && item.origin.attr.rel !== "folder") // 폴더 제외(요구사항만 포함)
 				.flatMap(task => {
@@ -376,7 +385,7 @@ class Table {
 				assignee: `${group[0].assignee} 총계`,
 				_assignee: group[0]._assignee,
 				col: 0,
-				colSpan: 4,
+				colSpan: 3+maxDepth,
 				root: "assignee",
 				node:"root",
 				children: rearrangement(group, "version", "version").reduce((acc, cur) => {
@@ -389,7 +398,7 @@ class Table {
 								assignee: `${cur[0].version}의 총계`,
 								_assignee: group[0]._assignee,
 								col: 0,
-								colSpan: 4,
+								colSpan: 3+maxDepth,
 								...calcStatus(cur),
 							    node:"leaf"
 							},
@@ -509,10 +518,17 @@ class Table {
 		btn.addEventListener("click", (e) => {
 			btn.classList.toggle("active");
 
+            const keys = Object.keys(folderDepth);
 			if (btn.classList.contains("active")) {
 				this.insertElement(this.getElement(e.target, "TR"), rows);
+                keys.forEach(key => {
+                    this.mergeRowsByClassName(key);
+                });
 			} else {
 				this.removeElement(data);
+				keys.forEach(key => {
+                    this.unmergeRowsByClassName(key,this.getElement(e.target, "TR"));
+                });
 			}
 		});
 
@@ -608,7 +624,6 @@ class Table {
                         const checkedAttribute = $col.innerHTML === "1" ? " checked" : "";
                         $col.innerHTML = `<input type="radio" name="${radioButtonName}"${checkedAttribute}>`;
                     }
-
 				}
 
 				if (['assignee'].includes($col.className) && $col.innerHTML === "담당자 미배정") {
@@ -622,6 +637,9 @@ class Table {
 
 					$col.classList.add("root");
 				}
+                if(['assignee', 'version'].includes($col.className) && !cur.colSpan){
+                    $col.innerHTML = ``;
+                }
 
 				!$col.classList.contains("remove") && $tr.appendChild($col);
 			});
@@ -648,7 +666,7 @@ class Table {
                             ${iconData}
                             <i class="fa fa-caret-down"></i>
                         </a>`;
-                       // $col.style = "text-align:left";
+                       $col.style = "text-align:left";
 
 					}
                     else if( ["priority"].includes(key)){
@@ -658,7 +676,7 @@ class Table {
                              ${iconData}
                         <i class="fa fa-caret-down"></i>
                         </a>`;
-                        //$col.style = "text-align:left";
+                        $col.style = "text-align:left";
 
 					}
 					else if( ["difficulty"].includes(key)){
@@ -668,12 +686,20 @@ class Table {
                             ${iconData}
                         <i class="fa fa-caret-down"></i>
                         </a>`;
-                        //$col.style = "text-align:left";
+                        $col.style = "text-align:left";
 
 					}
 					else if(['content'].includes($col.className)){
 					    $col.prepend(this.makeEditableButton(cur,  key));
-					}else{
+					}else if(['assignee'].includes($col.className) ){
+					    let 전체_담당자 = cur[key];
+                        전체_담당자 = 전체_담당자.split(', ').sort();
+
+                        전체_담당자 = Array.from(new Set(전체_담당자));
+
+					    $col.innerHTML = 전체_담당자;
+					    $col.style = "text-align:left";
+					}else {
 					    $col.innerHTML = cur[key];
 					}
 
@@ -764,7 +790,6 @@ class Table {
         }
     }
 
-
 	addInput(node, updateKey, type = text) {
 		const uuid = createUUID();
 		const text = node.textContent;
@@ -794,7 +819,6 @@ class Table {
     	const versionEndDate   = getDate(versionData.c_pds_version_end_date);
 
         const $input = this.makeElement("input");
-
 
         $input.setAttribute("type", "date");
         $input.setAttribute("min",versionStartDate);
@@ -942,27 +966,49 @@ class Table {
 		$wrapper.innerHTML = null;
 
 		$wrapper.appendChild(this.makeTable());
-
-        this.mergeRowsByClassName('version');
-		const keys = Object.keys(folderDepth);
-
-        keys.forEach(key => {
-            this.mergeRowsByClassName(key);
-        });
 	}
+    unmergeRowsByClassName(className,element) {
+        const tables = document.querySelectorAll('.reqTable');
 
+        const dataVersion = element.getAttribute('data-version');
+        const dataAssignee = element.getAttribute('data-assignee');
+
+        tables.forEach((table) => {
+            Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
+                const rowDataVersion = row.getAttribute('data-version');
+                const rowDataAssignee = row.getAttribute('data-assignee');
+                const cell = row.querySelector(`.${className}`);
+                if (rowDataVersion === dataVersion && rowDataAssignee === dataAssignee) {
+                const cell = row.querySelector(`.${className}`);
+                    if (cell) {
+                        // 숨겼던 셀을 다시 보이게 함
+                        cell.style.display = '';
+                        // 적용했던 배경색 제거
+                        cell.style.backgroundColor = '';
+                        // rowSpan 값을 기본값으로 재설정
+                        cell.rowSpan = 1;
+                    }
+                }
+            });
+        });
+    }
     mergeRowsByClassName(className) {
         const tables = document.querySelectorAll('.reqTable');
+
         tables.forEach((table) => {
             let lastValue = null;
             let lastRow = null;
+            let lastDataVersion = null;
+            let lastDataAssignee = null;
             let rowspan = 1;
             let groupIndex = 0; // 그룹 인덱스 추가
             Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
                 const cell = row.querySelector(`.${className}`);
                 const value = cell ? cell.textContent : '';
+                const dataVersion = row.getAttribute('data-version');
+                const dataAssignee = row.getAttribute('data-assignee');
                 if (cell) {
-                    if (value === lastValue) {
+                    if (value === lastValue  && dataVersion === lastDataVersion && dataAssignee === lastDataAssignee) {
                         cell.style.display = 'none'; // 셀 병합 시 숨김 처리
                         if (lastRow) {
                             const cellInLastRow = lastRow.querySelector(`.${className}`);
@@ -978,6 +1024,8 @@ class Table {
                     } else {
                         rowspan = 1;
                         lastValue = value;
+                        lastDataVersion = dataVersion;
+                        lastDataAssignee = dataAssignee;
                         lastRow = row;
                         groupIndex++; // 새 그룹이 시작될 때마다 그룹 인덱스 증가
                     }
@@ -992,13 +1040,6 @@ class Table {
 		this.$table.innerHTML = "";
 
 		this.makeTable();
-
-		this.mergeRowsByClassName('version');
-        		const keys = Object.keys(folderDepth);
-
-                keys.forEach(key => {
-                    this.mergeRowsByClassName(key);
-                });
 	}
 }
 
@@ -1030,12 +1071,28 @@ const makeReqTable = async (options) => {
 	TableInstance = new Table();
 
 	TableInstance.rendering();
+
+	TableInstance.mergeRowsByClassName('version');
+    const keys = Object.keys(folderDepth);
+
+    keys.forEach(key => {
+        TableInstance.mergeRowsByClassName(key);
+    });
+
+
 };
 
 const changeTableType = (type) => {
 	pivotType = type;
 	TableInstance.rerenderTable();
 	tableSelect(tableOptions.id);
+
+	TableInstance.mergeRowsByClassName('version');
+    const keys = Object.keys(folderDepth);
+
+    keys.forEach(key => {
+        TableInstance.mergeRowsByClassName(key);
+    });
 };
 
 const mergeData = (res, assigneeResponse) =>{
