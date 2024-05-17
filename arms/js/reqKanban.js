@@ -363,10 +363,9 @@ function loadKanban(reqListByState, reqBoardByState) {
             let reqData = {
                 c_id: reqId,
                 c_req_state_link: changeState,
-                c_req_etc: '칸반'
             };
             $.ajax({
-                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateNode.do",
+                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateDataBase.do",
                 type: "POST",
                 data: reqData,
                 statusCode: {

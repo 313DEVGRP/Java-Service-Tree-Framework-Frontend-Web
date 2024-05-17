@@ -1524,7 +1524,7 @@ function handle_change_date(start, end) {
 	return {
 		dayDiff: dayDiff,
 		todayDiff: todayDiff,
-		plan_progress: Math.min(progress, 100)
+		plan_progress: Math.min(progress.toFixed(0), 100)
 	};
 }
 
