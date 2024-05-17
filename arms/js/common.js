@@ -1,4 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////
+//Const
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+//인증관련 공통 변수
+////////////////////////////////////////////////////////////////////////////////////////
+let userName;
+let fullName;
+let userApplicationRoles;
+let userAttributes;
+let userEnabled;
+let userGroups;
+let userID;
+let userRealmRoles;
+let permissions;
+let userEmail;
+
+////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function () {
@@ -48,9 +65,38 @@ function runScript() {
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
 				dwr_login(userName, userName);
+				menu_setting();
 			});
 		}
 	}
+}
+
+function menu_setting() {
+
+	console.log("롤에 의한 메뉴를 설정합니다.");
+
+	var role_user = "ROLE_USER";
+	var role_admin = "ROLE_ADMIN";
+	if(permissions.indexOf(role_user) != -1){
+		console.log("user 권한의 메뉴를 표현합니다.");
+		$("#menu_login").addClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_alm").removeClass("hide");
+		$("#menu_requirement").removeClass("hide");
+	}
+	if(permissions.indexOf(role_admin) != -1){
+		console.log("admin 권한의 메뉴를 표현합니다.");
+		$("#menu_login").addClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_alm").removeClass("hide");
+		$("#menu_analysis").removeClass("hide");
+		$("#menu_requirement").removeClass("hide");
+	}
+	
+	
+
 }
 
 function widgsterWrapper() {
@@ -305,19 +351,6 @@ function includeLayout(page) {
 	return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//인증관련 공통 변수
-////////////////////////////////////////////////////////////////////////////////////////
-var userName;
-var fullName;
-var userApplicationRoles;
-var userAttributes;
-var userEnabled;
-var userGroups;
-var userID;
-var userRealmRoles;
-var permissions;
-var userEmail;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 상단 페이지 로드 프로그래스바 설정
@@ -380,7 +413,9 @@ function authUserCheck() {
 				200: function (json) {
 					console.log("[ common :: authUserCheck ] userName = " + json.preferred_username);
 					console.log("[ common :: authUserCheck ] sub = " + json.sub);
-					console.log(json.realm_access.roles);
+					console.log("[ common :: authUserCheck ] roles = " + json.realm_access.roles);
+					console.log("[ common :: authUserCheck ] email = " + json.email);
+					console.log("[ common :: authUserCheck ] name = " + json.name);
 					userName = json.preferred_username;
 					permissions = json.realm_access.roles;
 					userID = json.sub;
