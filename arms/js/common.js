@@ -76,8 +76,10 @@ function menu_setting() {
 	console.log("롤에 의한 메뉴를 설정합니다.");
 
 	var role_user = "ROLE_USER";
+	var role_manager = "ROLE_MANAGER";
 	var role_admin = "ROLE_ADMIN";
-	if(permissions.indexOf(role_user) != -1){
+
+	if( isEmpty(permissions) == false && permissions.indexOf(role_user) != -1){
 		console.log("user 권한의 메뉴를 표현합니다.");
 		$("#menu_login").addClass("hide");
 		$("#menu_dashboard").removeClass("hide");
@@ -85,7 +87,7 @@ function menu_setting() {
 		$("#menu_alm").removeClass("hide");
 		$("#menu_requirement").removeClass("hide");
 	}
-	if(permissions.indexOf(role_admin) != -1){
+	if( isEmpty(permissions) == false && permissions.indexOf(role_admin) != -1){
 		console.log("admin 권한의 메뉴를 표현합니다.");
 		$("#menu_login").addClass("hide");
 		$("#menu_dashboard").removeClass("hide");
