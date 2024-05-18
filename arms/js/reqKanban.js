@@ -8,10 +8,10 @@ const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
     '닫힘': '13'
 };
 const reqStateToIconMapping = {     // 요구사항 상태에 아이콘 매핑
-    '열림': '<i class="fa fa-sign-in text-danger"></i>',
-    '진행중': '<i class="fa fa-search" style="color: #E49400;"></i>',
-    '해결됨': '<i class="fa fa-check text-success"></i>',
-    '닫힘': '<i class="fa fa-sign-out text-primary"></i>'
+    '열림': '<i class="fa fa-folder-o text-danger"></i>',
+    '진행중': '<i class="fa fa-fire" style="color: #E49400;"></i>',
+    '해결됨': '<i class="fa fa-fire-extinguisher text-success"></i>',
+    '닫힘': '<i class="fa fa-folder text-primary"></i>'
 };
 let boardData = Object.keys(reqStateToIdMapping).map(state => ({ // 기본 보드 데이터
                      id: reqStateToIdMapping[state],
