@@ -481,6 +481,10 @@ class Table {
                 buttons.forEach((button) => {
                     button.classList.remove('active');
                 });
+                const keys = Object.keys(folderDepth);
+                keys.forEach(key => {
+                    this.unmergeRoot(key,el);
+                });
             });
         }
 
@@ -525,10 +529,10 @@ class Table {
                     this.mergeRowsByClassName(key);
                 });
 			} else {
-				this.removeElement(data);
 				keys.forEach(key => {
                     this.unmergeRowsByClassName(key,this.getElement(e.target, "TR"));
                 });
+                this.removeElement(data);
 			}
 		});
 
@@ -583,6 +587,7 @@ class Table {
 	makePivotRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
+			$tr.className ="reqItems";
 			$tr.setAttribute("data-id", cur.id ?? "");
 			$tr.setAttribute("data-version", cur._version ?? "");
 			$tr.setAttribute("data-assignee", cur._assignee ?? "");
@@ -613,7 +618,7 @@ class Table {
 				if (cur.colSpan) {
 					$tr.classList.add("highlight");
                     if(cur.node ==="leaf"){
-                        $tr.style.backgroundColor  ="rgba(50, 50, 50,0.8)";
+                        $tr.style.backgroundColor  ="#4a4a4a";
                     }
 
 					if (pivotType === "version"){
@@ -651,6 +656,7 @@ class Table {
 	makeRow(rows, tag) {
 		return rows.reduce((acc, cur) => {
 			const $tr = this.makeElement("tr");
+			$tr.className ="reqItems";
 			$tr.setAttribute("data-id", cur.id);
             $tr.setAttribute("data-version", cur._version ?? "");
 			Object.keys(ContentType[pivotType]).forEach((key) => {
@@ -720,13 +726,13 @@ class Table {
 	}
 	mappingStateIcon(key){
         if(key ==="열림"){
-        return '<i class="fa fa-sign-in text-danger"></i> 열림';
+        return '<i class="fa  fa-folder-o text-danger"></i> 열림';
         }else if(key ==="진행중"){
-        return '<i class="fa fa-search text-danger" style="color: #E49400;"></i> 진행중';
+        return '<i class="fa fa-fire text-danger" style="color: #E49400;"></i> 진행중';
         }else if(key ==="해결됨"){
-        return '<i class="fa fa-check text-success"></i> 해결됨';
+        return '<i class="fa fa-fire-extinguisher text-success"></i> 해결됨';
         }else if(key ==="닫힘"){
-        return '<i class="fa  fa-sign-out text-primary"></i> 닫힘';
+        return '<i class="fa fa-folder text-primary"></i> 닫힘';
         }
 	}
 	mappingPriorityIcon(key){
@@ -735,7 +741,7 @@ class Table {
         }else if(key ==="높음"){
             return '<i class="fa fa-angle-up text-danger"></i> 높음';
         }else if(key ==="중간"){
-            return '<i class="fa  fa-align-justify text-primary"  style="color: #E49400;"></i> 중간';
+            return '<i class="fa fa-minus text-primary"  style="color: #E49400;"></i> 중간';
         }else if(key ==="낮음"){
             return '<i class="fa  fa-angle-down text-primary"></i> 낮음';
         }else if(key ==="매우 낮음"){
@@ -748,7 +754,7 @@ class Table {
         }else if(key ==="어려움"){
             return '<i class="fa fa-angle-up text-danger"></i> 어려움';
         }else if(key ==="보통"){
-            return '<i class="fa  fa-align-justify text-primary"  style="color: #E49400;"></i> 보통';
+            return '<i class="fa   fa-minus text-primary"  style="color: #E49400;"></i> 보통';
         }else if(key ==="쉬움"){
             return '<i class="fa  fa-angle-down text-primary"></i> 쉬움';
         }else if(key ==="매우 쉬움"){
@@ -865,19 +871,23 @@ class Table {
 		return Object.entries(options).reduce((acc, [name, value]) => {
 			const $li = this.makeElement("li");
 			const label = name.replace("_", " ");
+			let dropdownIconData ="";
 			$li.className = text.trim() === label ? "active" : "";
 			$li.innerHTML = `<a href="#resSelectOption" data-toggle="tab">${label}</a>`;
 			$li.addEventListener("click", (e) => {
 				if(keyname === "_status"){
                     editContents.statusId = value;
+                    dropdownIconData = this.mappingStateIcon(e.target.textContent);
                 }else if(keyname === "_priority"){
                     editContents.priorityId = value;
+                     dropdownIconData = this.mappingPriorityIcon(e.target.textContent);
                 }else if(keyname === "_difficulty"){
                     editContents.difficultyId = value;
+                    dropdownIconData = this.mappingDifficultyIcon(e.target.textContent);
                 }
                 this.updateData($li.parentElement.parentElement.parentElement.dataset.id,editContents);
 
-				$li.parentElement.previousElementSibling.innerHTML = `${e.target.textContent} <i class="fa fa-caret-down"></i>`;
+				$li.parentElement.previousElementSibling.innerHTML = `${dropdownIconData} <i class="fa fa-caret-down"></i>`;
 
 				document.getElementById(uuid).remove();
 			});
@@ -992,6 +1002,29 @@ class Table {
             });
         });
     }
+    unmergeRoot(className,element) {
+        console.log(className);console.log(element);
+        const tables = document.querySelectorAll('.reqTable');
+
+        const dataVersion = element.getAttribute('data-version');
+        const dataAssignee = element.getAttribute('data-assignee');
+
+        tables.forEach((table) => {
+            Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
+            const rowDataVersion = row.getAttribute('data-version');
+            const rowDataAssignee = row.getAttribute('data-assignee');
+            const cell = row.querySelector(`.${className}`);
+            if (rowDataVersion === dataVersion || rowDataAssignee === dataAssignee) {
+                const cell = row.querySelector(`.${className}`);
+                        if (cell) {
+                            cell.style.display = '';
+                            cell.style.backgroundColor = '';
+                            cell.rowSpan = 1;
+                        }
+                    }
+                });
+            });
+        }
     mergeRowsByClassName(className) {
         const tables = document.querySelectorAll('.reqTable');
 
