@@ -2,16 +2,21 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedPdServiceId; // 제품(서비스) 아이디
+var selectedVersionId; // 선택된 버전 아이디
+//상단 메뉴 변수
+var timeStatus_info, req_state, issue_info, resource_info;
 var reqStatusDataTable;
 var dataTableRef;
-var selectedVersionId; // 선택된 버전 아이디
+
 var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
+
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;// , req_in_action;
 var top5ReqLinkedIssue = [];
+
 function execDocReady() {
 
 	var pluginGroups = [
@@ -36,7 +41,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
 			"./js/dashboard/chart/barChartOnPolar.js",
 			//chart Colors
-			"./js/dashboard/chart/colorPalette.js"
+			"./js/dashboard/chart/colorPalette.js",
+			"./js/dashboard/api/dashboardApi.js"
 		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -107,6 +113,10 @@ function execDocReady() {
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			$('.dashboard-top-section').matchHeight({
+				target: $('.dashboard-top-section-scope')
+			});
 
 			$('button').on('click', function() {
 				// Caching
@@ -203,15 +213,23 @@ function makeVersionMultiSelectBox() {
 		onClose: function () {
 			console.log("onOpen event fire!\n");
 			const versionTag = $(".multiple-select").val();
-			const pdServiceLink = $("#selected_pdService").val();
+
+			selectedPdServiceId = $("#selected_pdService").val();
 			selectedVersionId = versionTag.join(',');
+
+			DashboardApi.대시보드_톱메뉴_초기화();
+			DashboardApi.대시보드_톱메뉴_세팅();
+
 			donutChart($("#selected_pdService").val(), selectedVersionId);
 			combinationChart($("#selected_pdService").val(), selectedVersionId);
 			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 			drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
-		},
-		onChange: function () {
 
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }
@@ -223,6 +241,7 @@ function bind_VersionData_By_PdService() {
 		type: "GET",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
@@ -233,7 +252,13 @@ function bind_VersionData_By_PdService() {
 					var newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
+
+				selectedPdServiceId = $("#selected_pdService").val();
 				selectedVersionId = pdServiceVersionIds.join(',');
+
+				DashboardApi.대시보드_톱메뉴_초기화();
+				DashboardApi.대시보드_톱메뉴_세팅();
+
 				donutChart($("#selected_pdService").val(), selectedVersionId);
 				combinationChart($("#selected_pdService").val(), selectedVersionId);
 				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
@@ -346,12 +371,12 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		statusCode: {
 			200: function (json) {
 				let versionData = json.pdServiceVersionEntities;
+				console.log(versionData);
 				let version_count = versionData.length;
 				tot_ver_count = version_count;
 
 				console.log("등록된 버전 개수 = " + version_count);
 				if (version_count !== undefined) {
-					$('#version_count').text(version_count);
 
 					if (version_count >= 0) {
 						let today = new Date();

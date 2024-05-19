@@ -286,8 +286,11 @@ var DashboardApi = (function () {
 
 				// 자원 현황
 				$("#resource_count").text(resource_info["resource"]); //작업자수
-				$("#avg_req_count").text((req_state["total"])/resource_info["resource"]); // 인원별 평균 요구사항 수
-
+				if (resource_info["resource"] === 0 || isNaN(resource_info["resource"])) {
+					$("#avg_req_count").text(" - ");
+				} else {
+					$("#avg_req_count").text((req_state["total"]/resource_info["resource"]).toFixed(1)); // 인원별 평균 요구사항 수
+				}
 
 			})
 			.catch((error) => {

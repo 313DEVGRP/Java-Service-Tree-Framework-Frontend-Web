@@ -92,6 +92,9 @@
 										제품(서비스) - 버전 선택
 									</span>
 								</h4>
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; margin-top: 8px"></div>
 							</header>
 							<div class="body">
 								<div class="column">
@@ -102,11 +105,9 @@
 									</span>
 									<div
 										class="control-group"
-										class="darkBack"
 										style="padding-top: 10px; padding-bottom: 15px; border: 0">
 										<div
 											class="controls form-group"
-											class="darkBack"
 											style="margin-bottom: 5px !important">
 											<select
 												id="selected_pdService"
@@ -123,9 +124,9 @@
 									<span>2. 버전을 선택해 주세요</span>
 									<div
 										class="control-group"
-										style="padding-top: 10px; padding-bottom: 10px; border: 0">
+										style="padding-top: 10px; border: 0">
 										<div
-											class="controls form-group"
+											class="controls form-group select-box"
 											style="margin-bottom: 5px !important">
 											<select
 												multiple="multiple"
@@ -147,166 +148,170 @@
 										class="font13"
 										style="font-weight: bold">
 										<i class="fa fa-clock-o"></i>
-										Time | 작업 일정
+										Time | 일정 현황
 									</span>
 								</h4>
 							</header>
 							<div class="body">
 								<div
-									class="control-group"
-									class="darkBack"
-									style="padding-bottom: 10px; border: 0">
-									<div
-										class="darkBack"
-										style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+									class="gradient_middle_border"
+									style="width: 100%; height: 2px; margin-top: 5px"></div>
+								<div
+									class="controls form-group darkBack"
+									style="margin: 10px 0 !important; padding: 10px 0px !important; text-align: center">
 										<span>
-											총 버전 개수
-											<br />
+											선택된 버전 총 수 :
 											<a
-												id="version_count"
+												id="total_version"
 												style="font-weight: bold">
 												-
 											</a>
 											개
 										</span>
-										<br />
-									</div>
-									<div
-										class="controls form-group darkBack col-md-6"
-										style="margin-bottom: 5px !important; padding: 10px 0px; !important; text-align: center">
-										<span>
-											요구사항 존재
-											<br />
-											<a
-												id="active_version_count"
-												style="font-weight: bold">
-												-
-											</a>
-											개
-										</span>
-										<br />
-									</div>
-									<div
-										class="controls form-group darkBack col-md-6"
-										style="margin-bottom: 5px !important; padding: 10px 0px; !important; text-align: center">
-										<span>
-											요구사항 미존재
-											<br />
-											<a
-												id="inactive_version_count"
-												style="font-weight: bold">
-												-
-											</a>
-											개
-										</span>
-										<br />
-									</div>
-									<!--                                    <div    class="control-group "
-                                            style="padding-bottom: 10px; border: 0">
-                                        <div    class="controls form-group darkBack"
-                                                id="version_progress_status"
-                                                style="margin-bottom: 5px !important;">
-                                        </div>
-                                    </div>-->
 								</div>
-								<!--                                <div class="color-light">-->
-								<!--                                    <div id="light">-->
-								<!--                                        <span class="active" id="red"></span>-->
-								<!--                                        <span id="orange"></span>-->
-								<!--                                        <span id="green"></span>-->
-								<!--                                    </div>-->
-
-								<!--                                    <button class="btn btn-primary btn-block btn-sm hidden">Switch Light</button>-->
-								<!--                                </div>-->
+								<div
+									class="controls form-group darkBack"
+									style="margin-bottom: 10px !important; padding: 10px 0px !important; text-align: center">
+										<span>
+											진행 중 일정 :
+											<a
+												id="current_version"
+												style="font-weight: bold">
+												-
+											</a>
+											개
+										</span>
+								</div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div
+										class="controls form-group"
+										style="margin-bottom: 0px !important; padding: 10px 0px !important; text-align: center">
+										<span>
+											지난 일정 :
+											<a
+												id="past_version"
+												style="font-weight: bold">
+												-
+											</a>
+											개
+										</span>
+									</div>
+									<div
+										class="controls form-group"
+										style="margin-bottom: 0px !important; padding: 10px 0px !important; text-align: center">
+										<span>
+											남은 일정 :
+											<a
+												id="upcoming_version"
+												style="font-weight: bold">
+												-
+											</a>
+											개
+										</span>
+									</div>
+								</div>
 							</div>
 						</section>
 					</div>
 
 					<div class="col-md-3">
-						<section class="widget dashboard-top-section">
+						<section class="widget dashboard-top-section-scope">
 							<header style="margin-bottom: 15px">
 								<h4>
 									<span
 										class="font13"
 										style="font-weight: bold">
 										<i class="fa fa-calendar-o"></i>
-										Scope | 이슈 현황
+										Scope | 범위 현황
 									</span>
 								</h4>
 							</header>
 							<div class="body">
 								<div
-									class="control-group"
-									style="padding-bottom: 10px; border: 0">
-									<div
-										class="controls form-group darkBack col-md-6"
-										style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
+									class="gradient_middle_border"
+									style="width: 100%; height: 2px; margin-top: 5px"></div>
+								<div
+									class="controls form-group darkBack"
+									style="margin: 10px 0 !important; padding: 10px 0px !important; text-align: center">
 										<span>
-											총 요구사항
-											<br />
+											요구사항 수 :
 											<a
-												id="req_count"
+												id="total_req_count"
 												style="font-weight: bold">
 												-
 											</a>
 											개
 										</span>
+								</div>
+								<div class="column">
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group darkBack col-md-12"
+											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
+											<li style="list-style: none;">
+												<div style="display: flex; justify-content: space-between">
+														<span style="margin-left: 10px;">
+															요구사항 진척도
+														</span>
+													<span style="margin-right: 10px;">
+															<a id="req_completed" style="font-weight: bold">-</a>
+															<a id="req_total2" style="font-weight: bold">-</a>
+														</span>
+												</div>
+											</li>
+											<li style="list-style: none;">
+												<div class="progress progress-small progress-striped" style="margin: 5px 10px; height:18px; line-height: 13px">
+													<div id="req_progress_bar" class="progress-bar progress-bar-warning"></div>
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div
+										class="controls form-group col-md-6"
+										style="margin-bottom: 0px !important; padding: 10px 0px; !important; text-align: center">
+											<span>
+												생성된 요구사항 이슈
+												<br />
+												<small>(미할당)</small>
+												<br />
+												<a
+													id="total_req_issue_count"
+													style="font-weight: bold">
+													-
+												</a>
+												개 (
+													<span id="no_assigned_req_issue_count">-</span>
+													)
+											</span>
 										<br />
 									</div>
 									<div
-										class="controls form-group darkBack col-md-6"
-										style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-										<span>
-											총 이슈
-											<br />
-											<a
-												id="linkedIssue_subtask_count"
-												style="font-weight: bold">
-												-
-											</a>
-											개
-										</span>
+										class="controls form-group col-md-6"
+										style="margin-bottom: 0px !important; padding: 10px 0px; !important; text-align: center">
+											<span>
+												생성한 하위 이슈
+												<br />
+												<small>(미할당)</small>
+												<br />
+												<a
+													id="total_linkedIssue_subtask_count"
+													style="font-weight: bold">
+													-
+												</a>
+												개 (
+													<span id="no_assigned_linkedIssue_subtask_count">-</span>
+													)
+											</span>
 										<br />
 									</div>
-									<div
-										class="controls form-group darkBack col-md-12"
-										style="margin-bottom: 10px !important; padding: 10px 0px; !important; text-align: center">
-										<span>
-											요구사항별 평균 이슈 :
-											<a
-												id="linkedIssue_subtask_count_per_req"
-												style="font-weight: bold">
-												-
-											</a>
-											개
-										</span>
-										<br />
-									</div>
-									<!--                                    <div    class="controls form-group darkBack col-md-12"
-                                            style="margin-bottom: 5px !important; padding: 8px 0px; !important; text-align: center">
-                                        <span>이슈 평균 처리일 : <a id="linkedIssue_subtask_count" style="font-weight: bold;">-</a> 일</span><br>
-                                    </div>-->
-									<div
-										class="controls form-group darkBack col-md-12"
-										style="margin-bottom: 5px !important; padding: 8px 0px; !important; text-align: center">
-										<span>
-											담당자 미지정 이슈 :
-											<a
-												id="no_assigned_issue_count"
-												style="font-weight: bold">
-												-
-											</a>
-											개
-										</span>
-										<br />
-									</div>
-									<!--                                    <div    class="control-group darkBack"
-                                            style="padding-bottom: 10px; border: 0">
-                                        <div    class="controls form-group darkBack"
-                                                id="scope_progress_status"
-                                                style="margin-bottom: 5px !important;">
-                                        </div>
-                                    </div>-->
 								</div>
 							</div>
 						</section>
@@ -320,17 +325,20 @@
 										class="font13"
 										style="font-weight: bold">
 										<i class="fa fa-dollar"></i>
-										Resource | 자원분배
+										Resource | 자원 현황
 									</span>
 								</h4>
 							</header>
 							<div class="body">
 								<div
+									class="gradient_middle_border"
+									style="width: 100%; height: 2px; margin-top: 5px"></div>
+								<div
 									class="control-group"
 									style="padding-bottom: 10px; border: 0">
 									<div
 										class="controls form-group darkBack"
-										style="margin-bottom: 10px !important; padding: 10px 0px !important; text-align: center">
+										style="margin: 10px 0 !important; padding: 10px 0px !important; text-align: center">
 										<span>
 											투입 총 인원 :
 											<a
@@ -359,21 +367,6 @@
 										</span>
 										<br />
 									</div>
-									<!--                                    <div    class="controls form-group darkBack"
-                                            style="margin-bottom: 5px !important; padding: 10px 0px !important; text-align: center">
-                                        <span>일평균 요구사항 처리 : <a id="avg_req_resolve_or_close_count" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>-->
-									<!--                                    <div    class="controls form-group darkBack"
-                                            style="padding: 10px 0px !important; text-align: center; margin-bottom: 0px">
-                                        <span>일평균 이슈 처리 : <a id="avg_req_linkedIssue_resolve_or_close_count" style="font-weight: bold;">-</a> 개</span><br>
-                                    </div>-->
-									<!--                                    <div    class="control-group darkBack"
-                                            style="padding-bottom: 10px; border: 0">
-                                        <div    class="controls form-group darkBack"
-                                                id="scope_progress_status"
-                                                style="margin-bottom: 5px !important;">
-                                        </div>
-                                    </div>-->
 								</div>
 							</div>
 						</section>
