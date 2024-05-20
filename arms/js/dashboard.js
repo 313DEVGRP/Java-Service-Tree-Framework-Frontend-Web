@@ -241,7 +241,6 @@ function bind_VersionData_By_PdService() {
 		type: "GET",
 		dataType: "json",
 		progress: true,
-		async: false,
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
