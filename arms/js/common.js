@@ -89,6 +89,7 @@ function menu_setting() {
 		console.log("manager 권한의 메뉴를 표현합니다.");
 		$("#menu_login").addClass("hide");
 		$("#menu_dashboard").removeClass("hide");
+		$("#menu_detail").addClass("hide");
 		$("#menu_product").removeClass("hide");
 		$("#menu_alm").removeClass("hide");
 		$("#menu_requirement").removeClass("hide");
@@ -97,10 +98,11 @@ function menu_setting() {
 		console.log("admin 권한의 메뉴를 표현합니다.");
 		$("#menu_login").addClass("hide");
 		$("#menu_dashboard").removeClass("hide");
+		$("#menu_detail").addClass("hide");
 		$("#menu_product").removeClass("hide");
 		$("#menu_alm").removeClass("hide");
-		$("#menu_analysis").removeClass("hide");
 		$("#menu_requirement").removeClass("hide");
+		$("#menu_analysis").removeClass("hide");
 	}
 	
 	
