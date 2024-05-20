@@ -83,6 +83,12 @@ function menu_setting() {
 		console.log("user 권한의 메뉴를 표현합니다.");
 		$("#menu_login").addClass("hide");
 		$("#menu_dashboard").removeClass("hide");
+		$("#menu_detail").removeClass("hide");
+	}
+	if( isEmpty(permissions) == false && permissions.indexOf(role_manager) != -1){
+		console.log("manager 권한의 메뉴를 표현합니다.");
+		$("#menu_login").addClass("hide");
+		$("#menu_dashboard").removeClass("hide");
 		$("#menu_product").removeClass("hide");
 		$("#menu_alm").removeClass("hide");
 		$("#menu_requirement").removeClass("hide");
