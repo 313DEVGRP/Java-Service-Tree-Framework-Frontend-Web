@@ -1688,14 +1688,14 @@ function verticalTimeLineChart(data) {
 				contentSet[item.summary] = {
 					version: item.pdServiceVersion,
 					summary: item.summary,
-					issuekey: [item.key],
+					projectName: [item.project.project_name],
 					date: formatDateTime(item.updated)
 				};
 			} else {
-				// issuekey에 item.key가 없는 경우에만 추가
-				if (!contentSet[item.summary].issuekey.includes(item.key)) {
-					contentSet[item.summary].issuekey.push(item.key);
-					contentSet[item.summary].issuekey.sort();
+				// projectName에 item.project.project_name이 없는 경우에만 추가
+				if (!contentSet[item.summary].projectName.includes(item.project.project_name)) {
+					contentSet[item.summary].projectName.push(item.project.project_name);
+					contentSet[item.summary].projectName.sort();
 				}
 			}
 		});
@@ -1705,7 +1705,7 @@ function verticalTimeLineChart(data) {
 
 	items = Object.values(contentSet).map(item => ({
 		...item,
-		issuekey: item.issuekey.join('  |  ')
+		projectName: item.projectName
 	}));
 
 	// 날짜를 기준으로 오름차순 정렬
@@ -1747,76 +1747,65 @@ function verticalTimeLineChart(data) {
 function makeVerticalTimeline(data) {
 
 	// 데이터 세팅
-	const $container = document.querySelector(".timeline-container");
-	$container.innerHTML = '';
+	const $container = $(".timeline-container");
+    $container.empty();
 
-	// const upIcon = document.createElement("i");
-	// upIcon.className = "fa fa-chevron-up vertical-chevron-up";
-	// $container.append(upIcon);
+    if (data.length == 0) {
+        const noDataMessage = $('<p></p>').text('데이터가 없습니다.').css({
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+        });
+        $container.append(noDataMessage);
+    } else {
+        // 날짜별로 데이터 그룹화
+        let groupedData = data.reduce((group, item) => {
+            let date = item.date;
+            if (!group[date]) group[date] = [];
+            group[date].push(item);
+            return group;
+        }, {});
 
-	if (data.length == 0) {
-		const noDataMessage = document.createElement('p');
-		noDataMessage.textContent = '데이터가 없습니다.';
-		noDataMessage.style.position = 'absolute';
-		noDataMessage.style.top = '50%';
-		noDataMessage.style.left = '50%';
-		noDataMessage.style.transform = 'translate(-50%, -50%)';
+        const $ul = $('<ul></ul>');
 
-		$container.appendChild(noDataMessage);
-	} else {
-		// 날짜별로 데이터 그룹화
-		let groupedData = data.reduce((group, item) => {
-			let date = item.date;
-			if (!group[date]) group[date] = [];
-			group[date].push(item);
-			return group;
-		}, {});
+        Object.entries(groupedData).forEach(([date, items]) => {
+            items.forEach(({ version, summary, projectName }, index) => {
+                const $li = $('<li></li>').addClass('session');
 
-		const $ul = document.createElement("ul");
+                if (index === 0) {
+                    $li.append(`
+                        <span class="time-range">
+                            <span class="date">${date}</span>
+                        </span>
+                    `);
+                }
 
-		Object.entries(groupedData).forEach(([date, items]) => {
-			items.forEach(({version, summary, issuekey}, index) => {
-				const $li = document.createElement("li");
-				$li.className = "session";
+                const $sessionContent = $(`
+                    <div class="session-content">
+                        <div class="version" style="color: ${getColorByVersion(version)}">${convertVersionIdToTitle(version)}</div>
+                        <div class="summary">${summary}</div>
+                    </div>
+                `);
 
-				if (index === 0) {
-					$li.innerHTML += `
-                    <span class="time-range">
-                      <span class="date">${date}</span>
-                    </span>
-                    `;
-				}
-				$li.innerHTML += `
-                <div class="session-content">
-                  <div class="version" style="color: ${getColorByVersion(version)}">${convertVersionIdToTitle(version)}</div>
-                  <div class="summary">${summary}</div>
-                  <div class="issuekey">${issuekey}</div>
-                </div>
-                `;
+                const $projectNameDiv = $('<div></div>').addClass('project-names');
 
-				$ul.append($li);
-			});
-		});
+                // projectName 배열의 각 요소를 추가
+                projectName.forEach(name => {
+                    const $button = $('<button></button>').addClass('project-name').text(name);
+                    $projectNameDiv.append($button);
+                });
 
-		$container.append($ul);
-	}
+                $sessionContent.append($projectNameDiv);
+                $li.append($sessionContent);
+                $ul.append($li);
+            });
+        });
+
+        $container.append($ul);
+    }
 
 	adjustHeight();
-
-	// const downIcon = document.createElement("i");
-	// downIcon.className = "fa fa-chevron-down vertical-chevron-down";
-	// $container.append(downIcon);
-
-	// 버튼 클릭 이벤트
-	// $('.fa-chevron-up').on('click', function() {
-	// 	verticalTimeLineChart(pdServiceLink, pdServiceVersions, week+1);
-	// });
-	//
-	// $('.fa-chevron-down').on('click', function() {
-	// 	if (week - 1 > 0) {
-	// 		verticalTimeLineChart(pdServiceLink, pdServiceVersions, week-1);
-	// 	}
-	// });
 }
 
 function formatDateTime(dateTime) {
@@ -1838,7 +1827,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("pdServiceLink", pdServiceLink)
     		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
     		.addQueryParam("일자기준", "updated")
-				.addQueryParam("isReqType", "REQUIREMENT")
+			.addQueryParam("isReqType", "REQUIREMENT")
     		.addQueryParam("시작일", startDate)
     		.addQueryParam("종료일", endDate)
     		.addQueryParam("크기", 1000)
