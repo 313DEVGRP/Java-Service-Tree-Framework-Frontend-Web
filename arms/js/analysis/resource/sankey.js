@@ -226,7 +226,7 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
         .addQueryParam('메인그룹필드', "pdServiceVersions")
         .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
         .addQueryParam('크기', pdServiceVersionLinks.split(",").length)
-        .addQueryParam('하위크기', 3)
+        .addQueryParam('하위크기', 5)
         .addQueryParam("isReqType", "ISSUE")
         .addQueryParam('컨텐츠보기여부', true)
         .build();
