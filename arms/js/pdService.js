@@ -266,8 +266,8 @@ function drawio() {
 // }
 
 window.onload = function() {
-	localStorage.removeItem('UUID');
-	localStorage.removeItem('.drawio-config');
+	localStorage.clear();
+	localStorage.setItem(".mode", "mad");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
