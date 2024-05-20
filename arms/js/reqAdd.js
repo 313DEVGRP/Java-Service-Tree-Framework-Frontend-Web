@@ -1282,13 +1282,12 @@ function save_req() {
 		console.log("save_req :: save data ->");
 		console.log(data_object_param);
 
-		let url_suffix = c_type_value === "default" ? "/addNode.do" : "/addFolderNode.do";
 		let success_message = c_type_value === "default" ?
 			"신규 요구사항 ( " + req_title + " )이 추가되었습니다." :
 			" 요구사항 폴더 ( " + req_title + " )가 등록되었습니다.";
 
 		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + table_name + url_suffix,
+			url: "/auth-user/api/arms/reqAdd/" + table_name + "/addNode.do",
 			type: "POST",
 			data: data_object_param,
 			statusCode: {
