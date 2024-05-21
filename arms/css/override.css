@@ -1267,10 +1267,19 @@ svg .ghostCircle.show {
 	font-weight: 300;
 }
 
-.timeline-container .session-content .issuekey {
+.timeline-container .session-content .project-names {
 	margin-top: 5px;
-	font-weight: 600;
-	font-size: 12px;
+}
+
+.project-name {
+    margin: 2px 5px 2px 0;
+    padding: 3px 5px;
+    font-size: 11px;
+    font-weight: bold;
+    background-color: #2477FF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 .tree-container.widget.large,

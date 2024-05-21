@@ -2,7 +2,7 @@ var DashboardApi = (function () {
 	"use strict";
 
 	// 버전정보 - gauge, timeLine
-	var version_info;
+	var version_info = [];
 
 	// MySQL - 요구사항(DB)의 상태
 	var req_state_data = {
@@ -293,6 +293,9 @@ var DashboardApi = (function () {
 				}
 
 			})
+			.then(() => {
+				대시보드_도넛차트("donut-chart");
+			})
 			.catch((error) => {
 			console.error('Error occurred:', error);
 		});
@@ -318,6 +321,100 @@ var DashboardApi = (function () {
 		$("#no_assigned_req_issue_count").text(" - "); // 생성된 요구사항 이슈(미할당)
 		$("#total_linkedIssue_subtask_count").text(" - "); //생성한 연결이슈
 		$("#no_assigned_linkedIssue_subtask_count").text(" - "); //생성한 연결이슈(미할당)
+	}
+
+	function 대시보드_변수_초기화() {
+		// 선언 예정
+	}
+	function 대시보드_도넛차트(targetElementId) {
+		if(!targetElementId) {
+			donutChartNoData();
+			return false;
+		}
+		let $targetId = "#"+targetElementId; // "#donut-chart"
+
+		let reqStateData = getReqStateData();
+		let reqStateKey = ["open", "in-progress", "resolved", "closed"];
+
+		console.log("[ dashboardApi :: 대시보드_도넛차트 ] total => " + reqStateData["total"]);
+
+		function donutChartNoData() {
+			c3.generate({
+				bindto: $targetId,
+				data: {
+					columns: [],
+					type: 'donut',
+				},
+				donut: {
+					title: "Total : 0"
+				},
+			});
+		}
+
+		if(reqStateData.total === 0) {
+			donutChartNoData();
+			return;
+		}
+
+		const columnsData = [];
+
+		reqStateKey.forEach( key => {
+			if(reqStateData.hasOwnProperty(key)) {
+				columnsData.push([key,reqStateData[key]]);
+			}
+		});
+
+		let totalDocCount = reqStateData["total"];
+
+		const chart = c3.generate({
+			bindto: '#donut-chart',
+			data: {
+				columns: columnsData,
+				type: 'donut',
+			},
+			donut: {
+				title: "Total : " + totalDocCount
+			},
+			color: {
+				pattern: dashboardColor.reqStateColor
+			},
+			tooltip: {
+				format: {
+					value: function (value, ratio, id, index) {
+						return value;
+					}
+				},
+			},
+		});
+
+		$(document).on('click', '#donut-chart .c3-legend-item', function () {
+			const id = $(this).text();
+			let isHidden = false;
+
+			if($(this).hasClass('c3-legend-item-hidden')) {
+				isHidden = false;
+				$(this).removeClass('c3-legend-item-hidden');
+			} else {
+				isHidden = true;
+				$(this).addClass('c3-legend-item-hidden');
+			}
+			let docCount = 0;
+
+			for (const key of reqStateKey) {
+				if (key === id) {
+					docCount = reqStateData[key];
+					break;
+				}
+			}
+			if (docCount) {
+				if (isHidden) {
+					totalDocCount -= docCount;
+				} else {
+					totalDocCount += docCount;
+				}
+			}
+			$($targetId +'.c3-chart-arcs-title').text("Total : " + totalDocCount);
+		});
 	}
 
 	return {

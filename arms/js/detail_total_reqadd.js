@@ -78,7 +78,7 @@ function jsTreeClick(selectedNode) {
 
 function setDetailAndEditViewTab() {
 	console.log("Detail Tab ::::");
-	var tableName = "T_ARMS_REQADD_" + 22;
+	var tableName = "T_ARMS_REQADD_" + selectedPdService;
 	$.ajax({
 		url: "/auth-user/api/arms/reqAdd/" + tableName + "/getNode.do?c_id=" + selectedJsTreeId,
 		type: "GET",

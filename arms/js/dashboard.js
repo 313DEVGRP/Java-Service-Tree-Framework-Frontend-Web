@@ -106,7 +106,6 @@ function execDocReady() {
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard");
 
-			// 컬러 테스트 by 장지윤
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
@@ -220,7 +219,6 @@ function makeVersionMultiSelectBox() {
 			DashboardApi.대시보드_톱메뉴_초기화();
 			DashboardApi.대시보드_톱메뉴_세팅();
 
-			donutChart($("#selected_pdService").val(), selectedVersionId);
 			combinationChart($("#selected_pdService").val(), selectedVersionId);
 			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 			drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
@@ -241,7 +239,6 @@ function bind_VersionData_By_PdService() {
 		type: "GET",
 		dataType: "json",
 		progress: true,
-		async: false,
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
@@ -259,7 +256,6 @@ function bind_VersionData_By_PdService() {
 				DashboardApi.대시보드_톱메뉴_초기화();
 				DashboardApi.대시보드_톱메뉴_세팅();
 
-				donutChart($("#selected_pdService").val(), selectedVersionId);
 				combinationChart($("#selected_pdService").val(), selectedVersionId);
 				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 				drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
