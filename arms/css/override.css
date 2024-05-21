@@ -1896,10 +1896,10 @@ svg .ghostCircle.show {
 }
 
 .page-header .search-query {
-	width: 200px;
+	width: 300px;
 }
 .page-header .search-query:focus {
-	width: 240px;
+	width: 340px;
 }
 
 #nav-search-button {
