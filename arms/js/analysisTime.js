@@ -26,7 +26,7 @@ function execDocReady() {
 			// d3(게이지 차트 사용)
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// chart Colors
-			"./js/common/colorPalette.js",
+			"./js/dashboard/chart/colorPalette.js",
 			// 최상단 메뉴
 			"js/analysis/topmenu/topMenuApi.js",
 			"js/analysis/topmenu/basicRadar.js",
@@ -179,6 +179,12 @@ function makePdServiceSelectBox() {
 
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
+
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"bind_VersionData_By_PdService 정보를 가져오는 중입니다..."
+	);
+
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
@@ -489,6 +495,11 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("[ analysisTime :: statisticsMonitor ] :: 선택된 서비스 ===> " + pdservice_id);
 	console.log("[ analysisTime :: statisticsMonitor ] :: 선택된 버전 리스트 ===> " + pdservice_version_id);
 
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"진행 현황 정보를 가져오는 중입니다..."
+	);
+
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	$.ajax({
@@ -516,36 +527,36 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						$("#project-start").show();
 						$("#project-end").show();
 
-                        $("#versionGaugeChart").html(""); //게이지 차트 초기화
-                        var versionGauge = [];
-                        var versionTimeline = [];
-                        var versionCustomTimeline = [];
-                        versionData.forEach(function (versionElement, idx) {
-                            if (pdservice_version_id.includes(versionElement.c_id)) {
-                                var gaugeElement = {
-                                    "current_date": today.toString(),
-                                    "version_name": versionElement.c_title,
-                                    "version_id": versionElement.c_id,
-                                    "start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                                    "end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                                }
-                                versionGauge.push(gaugeElement);
-                            }
-                            var timelineElement = {
-                                "id" : versionElement.c_id,
-                                "title" : "버전: "+versionElement.c_title,
-                                "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                                "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                            };
+            $("#versionGaugeChart").html(""); //게이지 차트 초기화
+            var versionGauge = [];
+            var versionTimeline = [];
+            var versionCustomTimeline = [];
+            versionData.forEach(function (versionElement, idx) {
+                if (pdservice_version_id.includes(versionElement.c_id)) {
+                    var gaugeElement = {
+                        "current_date": today.toString(),
+                        "version_name": versionElement.c_title,
+                        "version_id": versionElement.c_id,
+                        "start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                        "end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                    }
+                    versionGauge.push(gaugeElement);
+                }
+                var timelineElement = {
+                    "id" : versionElement.c_id,
+                    "title" : "버전: "+versionElement.c_title,
+                    "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                    "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                };
 
-                            versionTimeline.push(timelineElement);
-                            var versionTimelineCustomData = {
-                                "title" : versionElement.c_title,
-                                "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                                "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                            };
-                            versionCustomTimeline.push(versionTimelineCustomData);
-                        });
+                versionTimeline.push(timelineElement);
+                var versionTimelineCustomData = {
+                    "title" : versionElement.c_title,
+                    "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                    "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                };
+                versionCustomTimeline.push(versionTimelineCustomData);
+            });
 
 						drawVersionProgress(versionGauge); // 버전 게이지
 						// 이번 달의 첫째 날 구하기
@@ -565,26 +576,26 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						};
 						versionTimeline.push(today_flag);
 
-                        $("#version-timeline-bar").show();
-                        Timeline.init($("#version-timeline-bar"), versionTimeline);
+              $("#version-timeline-bar").show();
+              Timeline.init($("#version-timeline-bar"), versionTimeline);
 
 						var basePosition = $("#today_flag").css("left");
 						var baseWidth = $(".month").css("width");
 						var calFlagPosition = (parseFloat(baseWidth) / daysCount) * day;
 						var flagPosition = parseFloat(basePosition) + calFlagPosition + "px";
 
-                        $("#today_flag").removeAttr("style");
-                        $("#today_flag").removeClass("block");
-                        $("#today_flag").css("position", "absolute");
+            $("#today_flag").removeAttr("style");
+            $("#today_flag").removeClass("block");
+            $("#today_flag").css("position", "absolute");
 
 						$("#today_flag").css("height", "170px");
-                        $("#today_flag").css("bottom", "-35px");
+            $("#today_flag").css("bottom", "-35px");
 						$("#today_flag span").remove();
 						$(".block .label").css("text-align", "left");
 						$("#today_flag").css("left", flagPosition);
 
-                        $("#today_flag").css("position", "relative");
-                        $("#today_flag").prepend("<div class='today_flag_text'>오늘</div>");
+            $("#today_flag").css("position", "relative");
+            $("#today_flag").prepend("<div class='today_flag_text'>오늘</div>");
 
 						 $("#today_flag").css("text-align", "center");
 
@@ -831,7 +842,7 @@ async function drawVersionProgress(data) {
 			.on("mouseleave", mouseleave)
 			.append("path")
 			.attr("fill", function (d) {
-				return dashboardColor.projectProgressColor[(sectionIndx - 1) % data.length];
+				return dashboardColor.gaugeChartColor[(sectionIndx - 1) % dashboardColor.gaugeChartColor.length];
 			})
 			.attr("stroke", "white")
 			.style("stroke-width", "0.4px")
@@ -998,6 +1009,11 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 		.addQueryParam("하위크기", 1000)
 		.addQueryParam("컨텐츠보기여부", true)
 		.build();
+
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"일별 업데이트 상태 차트를 로딩 중입니다..."
+	);
 
 	$.ajax({
 		url: url,
@@ -1236,6 +1252,11 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 		.addQueryParam("컨텐츠보기여부", true)
 		.build();
 
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"생성 개수 및 업데이트 상태 현황 정보를 로딩 중입니다..."
+	);
+	
 	$.ajax({
 		url: url,
 		type: "GET",
@@ -1834,6 +1855,12 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("하위크기", 1000)
     		.addQueryParam("컨텐츠보기여부", true)
     		.build();
+
+		$(".spinner").html(
+			'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+			"수직 타임라인 차트를 로딩 중입니다..."
+		);
+
     $.ajax({
             url: verticalUrl,
             type: "GET",
@@ -1863,20 +1890,25 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		.build();
 
     function executeAjaxCall(url) {
-        $.ajax({
-            url: url,
-            type: "GET",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function (data) {
-                console.log("[ analysisTime :: ridgeLineData ] :: = ");
-                console.log(data);
-                updateRidgeLine(data);
-                }
-            }
-        });
+			$(".spinner").html(
+				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+				"요구사항 업데이트 현황(능선차트)를 로딩 중입니다..."
+			);
+
+      $.ajax({
+          url: url,
+          type: "GET",
+          contentType: "application/json;charset=UTF-8",
+          dataType: "json",
+          progress: true,
+          statusCode: {
+              200: function (data) {
+              console.log("[ analysisTime :: ridgeLineData ] :: = ");
+              console.log(data);
+              updateRidgeLine(data);
+              }
+          }
+      });
     }
     executeAjaxCall(ridgeLineUrl);
 

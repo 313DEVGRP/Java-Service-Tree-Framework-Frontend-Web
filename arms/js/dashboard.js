@@ -428,8 +428,9 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 }
 
-
-//
+//////////////////////
+// 게이지 차트
+//////////////////////
 function drawVersionProgress(data) {
 	var Needle,
 		arc,
@@ -475,7 +476,7 @@ function drawVersionProgress(data) {
 
 	width = 220;
 	height = width;
-	radius = Math.min(width, height) / 2.5;
+	radius = Math.min(width, height) / 2.2;
 
 	// percToDeg percToRad degToRad 고정
 	percToDeg = function (perc) {
@@ -611,7 +612,7 @@ function drawVersionProgress(data) {
 			.on("mouseleave", mouseleave)
 			.append("path")
 			.attr("fill", function (d) {
-				return dashboardColor.projectProgressColor[(sectionIndx - 1) % data.length];
+					return dashboardColor.gaugeChartColor[(sectionIndx - 1) % dashboardColor.gaugeChartColor.length];
 			})
 			.attr("stroke", "white")
 			.style("stroke-width", "0.4px")
