@@ -621,7 +621,9 @@ function productServiceDetailDataLoad(selectId) {
 
 		showDefaultTab();
 		dropzoneDataClear();
-
+		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
+		changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
+		changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
 	});
 }
 
@@ -688,6 +690,14 @@ function detailClick(element, c_id) {
 	showDefaultTab();
 	dropzoneDataClear();
 	hideDropzoneArea();
+	changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
+	changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
+	changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
+
+	if(localStorage.getItem("drawio-"+c_id)) {
+		changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집 완료');
+		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집 완료');
+	}
 
 	$("a[id^='pdservice_detail_link_']").each(function() {
 		this.style.background = "";
@@ -896,6 +906,9 @@ function pdServiceDataTableClick(c_id) {
 			productDetailArrowClear();
 			$("#modal_product_detail_add_pdservice_name").val(json.c_title); // 제품 디테일 등록에 제품명 추가해줌. readonly
 
+			changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
+			changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
+			changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
 
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
