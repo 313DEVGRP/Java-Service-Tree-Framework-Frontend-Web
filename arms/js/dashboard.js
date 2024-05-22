@@ -195,7 +195,7 @@ function makePdServiceSelectBox() {
 
 		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
 
-		statisticsMonitor($("#selected_pdService").val());
+
 
 	});
 } // end makePdServiceSelectBox()
@@ -219,6 +219,7 @@ function makeVersionMultiSelectBox() {
 			DashboardApi.대시보드_톱메뉴_초기화();
 			DashboardApi.대시보드_톱메뉴_세팅(selectedPdServiceId, selectedVersionId);
 
+			statisticsMonitor(selectedPdServiceId,selectedVersionId);
 			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 			drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
@@ -256,6 +257,7 @@ function bind_VersionData_By_PdService() {
 				DashboardApi.대시보드_톱메뉴_초기화();
 				DashboardApi.대시보드_톱메뉴_세팅(selectedPdServiceId,selectedVersionId);
 
+				statisticsMonitor(selectedPdServiceId,selectedVersionId);
 				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 				drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
@@ -347,7 +349,8 @@ function drawReqTimeSeries(data) {
 // 1. 제품서비스로만 볼 경우
 // 2. 버전만 따로 선택해서 보고싶은 경우(미완)
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
-	console.log("선택된 서비스 ===> " + pdservice_id);
+	console.log("[ dashboard :: statisticsMonitor ] :: 선택된 서비스 ===> " + pdservice_id);
+	console.log("[ dashboard :: statisticsMonitor ] :: 선택된 버전 리스트 ===> " + pdservice_version_id);
 	tot_ver_count = 0;
 	active_ver_count = 0;
 	req_count = 0;
@@ -366,7 +369,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		statusCode: {
 			200: function (json) {
 				let versionData = json.pdServiceVersionEntities;
-				console.log(versionData);
 				let version_count = versionData.length;
 				tot_ver_count = version_count;
 
@@ -385,15 +387,18 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						var versionTimeline = [];
 						versionData.forEach(function (versionElement, idx) {
 
-							var gaugeElement = {
-								"current_date": today.toString(),
-								"version_name": versionElement.c_title,
-								"version_id": versionElement.c_id,
-								"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
-								"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+							if (pdservice_version_id.includes(versionElement.c_id)) {
+								var gaugeElement = {
+									"current_date": today.toString(),
+									"version_name": versionElement.c_title,
+									"version_id": versionElement.c_id,
+									"start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+									"end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+								}
+								versionGauge.push(gaugeElement);
 							}
-							versionGauge.push(gaugeElement);
 							var timelineElement = {
+								"id" : versionElement.c_id,
 								"title" : "버전: "+versionElement.c_title,
 								"startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
 								"endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
