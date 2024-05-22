@@ -8,7 +8,7 @@ var selectedPage; // 데이터테이블 선택한 인덱스
 var dataTableRef; // 데이터테이블 참조 변수
 var selectedDetailId = ""; // 선택한 디테일 아이디
 var selectedDetailName = ""; // 선택한 디테일 이름
-var uuid;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -161,50 +161,18 @@ function execDocReady() {
 		});
 }
 
-class UUIDManager {
-	constructor() {
-		if (UUIDManager.instance) {
-			return UUIDManager.instance;
-		}
-
-		this.uuid = this.generateUUID();
-		UUIDManager.instance = this;
-	}
-
-	generateUUID() {
-		var userId = this.getUserId();
-		var date = new Date();
-		return userId + '-' + date.getTime();
-	}
-
-	getUserId() {
-		return userID;
-	}
-
-	getUUID() {
-		return this.uuid;
-	}
-
-	removeUUID() {
-		this.uuid = null;
-	}
-}
-
-
 function removeDrawIOConfig() {
 	localStorage.removeItem('.drawio-config');
 }
 
 function drawio() {
 	$("#btn_modal_product_detail_add_drawio, #btn_product_detail_edit_drawio, #btn_modal_product_detail_edit_drawio, #btn_product_detail_view_drawio").on("click", function () {
-		const uuidManager = new UUIDManager();
-		console.log(uuidManager.getUUID());
 		if (this.id === 'btn_modal_product_detail_add_drawio') {
 			if(selectId == "" || selectId == undefined){
 				jError("제품(서비스)을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id='+uuidManager.getUUID()+ '&type=create&splash=0', '_blank');
+			window.open('/reference/drawio?id='+selectId+ '&type=create&splash=0', '_blank');
 		} else if (this.id === 'btn_product_detail_edit_drawio') {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
@@ -234,44 +202,8 @@ function changeBtnText(btn, msg) {
     $(btn).text(msg);
 }
 
-// function drawdb() {
-// 	$("#btn_modal_product_detail_add_drawdb, #btn_product_detail_edit_drawdb, #btn_modal_product_detail_edit_drawdb, #btn_product_detail_view_drawdb").on("click", function () {
-// 		const uuidManager = new UUIDManager();
-// 		console.log(uuidManager.getUUID());
-// 		if (this.id === 'btn_modal_product_detail_add_drawdb') {
-// 			if(selectId == "" || selectId == undefined){
-// 				jError("제품(서비스)을 선택해 주세요.");
-// 				return false;
-// 			}
-// 			window.open('/reference/drawdb/editor?id='+uuidManager.getUUID()+ '&mode=create', '_blank');
-// 		} else if (this.id === 'btn_product_detail_edit_drawdb') {
-// 			if(selectedDetailId == "" || selectedDetailId == undefined){
-// 				jError("제품(서비스) 산출물을 선택해 주세요.");
-// 				return false;
-// 			}
-// 			window.open('/reference/drawdb/editor?id=' + selectedDetailId + '&mode=update', '_blank');
-// 		} else if (this.id === 'btn_modal_product_detail_edit_drawdb') {
-// 			if(selectedDetailId == "" || selectedDetailId == undefined){
-// 				jError("제품(서비스) 산출물을 선택해 주세요.");
-// 				return false;
-// 			}
-// 			window.open('/reference/drawdb/editor?id=' + selectedDetailId + '&mode=update', '_blank');
-// 		}  else if (this.id === 'btn_product_detail_view_drawdb') {
-// 			if(selectedDetailId == "" || selectedDetailId == undefined){
-// 				jError("제품(서비스) 산출물을 선택해 주세요.");
-// 				return false;
-// 			}
-// 			window.open('/reference/drawdb/editor?id=' + selectedDetailId + '&mode=view', '_blank');
-// 		} else {
-// 			jError("drawdb was clicked but id is not matched");
-// 			return false;
-// 		}
-// 	});
-// }
-
 window.onload = function() {
 	localStorage.clear();
-/*	localStorage.setItem(".mode", "mad");*/
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -681,6 +613,10 @@ function product_detail_add_clear () {
 	$(".modal-body")
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
+
+	if(localStorage.getItem("create-drawio-"+selectId)) {
+		changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록 완료');
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -694,7 +630,7 @@ function detailClick(element, c_id) {
 	changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
 	changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
 
-	if(localStorage.getItem("drawio-"+c_id)) {
+	if(localStorage.getItem("update-drawio-"+c_id)) {
 		changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집 완료');
 		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집 완료');
 	}
@@ -993,21 +929,12 @@ function product_detail_save_btn_click() {
 			c_title: title,
 			c_contents: CKEDITOR.instances.modal_product_detail_add_editor.getData()
 		};
-		const uuidManager = new UUIDManager();
-		var uuid = uuidManager.getUUID();
 
-
-		var drawioXML = localStorage.getItem("drawio-" + uuid);
+		var drawioXML = localStorage.getItem("create-drawio-" + selectId);
 		console.log("product_detail_save_btn_click :: drawioXML → ", drawioXML);
 		if(drawioXML !== null) {
 			requestParams.c_drawio_contents = drawioXML;
 		}
-
-		// var drawdbXML = localStorage.getItem("drawdb-" + uuid);
-		// console.log("product_detail_save_btn_click :: drawdbXML → ", drawdbXML);
-		// if(drawdbXML !== null) {
-		// 	requestParams.c_drawdb_contents = drawdbXML;
-		// }
 
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceDetail/addNode.do/" + selectId,
@@ -1021,9 +948,7 @@ function product_detail_save_btn_click() {
 					jSuccess("신규 제품 디테일 등록이 완료 되었습니다.");
 					pdServiceDataTableClick(selectId);
 					productServiceDetailDataLoad(selectId);
-					localStorage.removeItem("drawio-" + uuid);
-					// localStorage.removeItem("drawdb-" + uuid);
-					uuidManager.removeUUID();
+					localStorage.removeItem("create-drawio-" + selectId);
 					removeDrawIOConfig();
 				}
 			},
@@ -1185,17 +1110,11 @@ function product_detail_update_btn_click() {
 			c_contents: CKEDITOR.instances.modal_product_detail_edit_editor.getData()
 		};
 
-		var drawioXML = localStorage.getItem("drawio-" + selectedDetailId);
+		var drawioXML = localStorage.getItem("update-drawio-" + selectedDetailId);
 		console.log("product_detail_update_btn_click :: btn_modal_product_detail_edit_submit :: drawioXML → ", drawioXML);
 		if(drawioXML !== null) {
 			requestParams.c_drawio_contents = drawioXML;
 		}
-
-		// var drawdbXML = localStorage.getItem("drawdb-" + selectedDetailId);
-		// console.log("product_detail_update_btn_click :: btn_modal_product_detail_edit_submit :: drawdbXML → ", drawdbXML);
-		// if(drawdbXML !== null) {
-		// 	requestParams.c_drawdb_contents = drawdbXML;
-		// }
 
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceDetail/updateNode.do",
@@ -1211,8 +1130,7 @@ function product_detail_update_btn_click() {
 							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
 						}, 500);
 					}, 300);
-					localStorage.removeItem("drawio-" + tempSelectDetailId);
-					// localStorage.removeItem("drawdb-" + tempSelectDetailId);
+					localStorage.removeItem("update-drawio-" + tempSelectDetailId);
 					removeDrawIOConfig();
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
@@ -1244,17 +1162,11 @@ function product_detail_update_btn_click() {
 			c_contents: CKEDITOR.instances.report_pdservice_detail_editor.getData()
 		};
 
-		var drawioXML = localStorage.getItem("drawio-" + selectedDetailId);
+		var drawioXML = localStorage.getItem("update-drawio-" + selectedDetailId);
 		console.log("btn_product_detail_edit_submit :: drawioXML → ", drawioXML);
 		if(drawioXML !== null) {
 			requestParams.c_drawio_contents = drawioXML;
 		}
-
-		// var drawdbXML = localStorage.getItem("drawdb-" + selectedDetailId);
-		// console.log("btn_product_detail_edit_submit :: drawdbXML → ", drawdbXML);
-		// if(drawdbXML !== null) {
-		// 	requestParams.c_drawdb_contents = drawdbXML;
-		// }
 
 		$.ajax({
 			url: "/auth-user/api/arms/pdServiceDetail/updateNode.do",
@@ -1269,8 +1181,7 @@ function product_detail_update_btn_click() {
 							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
 						}, 500);
 					}, 300);
-					localStorage.removeItem("drawio-" + tempSelectDetailId);
-					// localStorage.removeItem("drawdb-" + tempSelectDetailId);
+					localStorage.removeItem("update-drawio-" + tempSelectDetailId);
 					removeDrawIOConfig();
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
