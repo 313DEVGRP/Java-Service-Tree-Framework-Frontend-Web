@@ -1425,7 +1425,7 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 						}
 					);
 				}
-				var colorArr = dashboardColor.issueStatusColor;
+				var colorArr = dashboardColor.resourcePerformance;
 
 				var testSeries = {
 					type: 'bar',
@@ -1447,11 +1447,10 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 					let _temp = JSON.parse(JSON.stringify(testSeries));
 					//var _temp = Object.assign({}, testSeries); 이 경우 2단 복사 안됨.
 					_temp.data = arr2di[i];
-					_temp.itemStyle.color = colorArr[i];
+					_temp.itemStyle.color = colorArr[i % colorArr.length];
 					_temp.name = legend_arr[i];
 					arrSeries[i] = _temp;
 				}
-
 				drawBarOnPolar("polar_bar", cat_persons, legend_arr, arrSeries);
 			}
 		}
