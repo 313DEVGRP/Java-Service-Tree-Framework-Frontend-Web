@@ -748,6 +748,15 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						};
 					},
 					success: function (n) {
+					    n.forEach(item => {
+					        let type = item.attr.rel;
+					        if(type !== "folder"){
+                                if (item.reqStateEntity && item.reqStateEntity.c_title) {
+                                    let state = item.reqStateEntity.c_title;
+                                    item.data = mappingStateIcon(state) +" "+item.data;
+                                }
+					        }
+                        });
 						jSuccess("Product(service) Data Load Complete");
 						$(jQueryElementID).jstree("search", $("#text").val());
 					}
@@ -988,6 +997,19 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 
 		$(jQueryElementID).jstree("search", document.getElementById("text").value);
 	});
+
+    function mappingStateIcon(key) {
+        if (key === "열림") {
+            return '<i class="fa fa-folder-o text-danger"></i>';
+        } else if (key === "진행중") {
+            return '<i class="fa fa-fire text-danger" style="color: #E49400;"></i>';
+        } else if (key === "해결됨") {
+            return '<i class="fa fa-fire-extinguisher text-success"></i>';
+        } else if (key === "닫힘") {
+            return '<i class="fa fa-folder text-primary"></i>';
+        }
+        return ''; // 기본적으로 빈 문자열 반환
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

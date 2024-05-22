@@ -1812,11 +1812,15 @@
 					$.each(js.data, function (i, m) {
 						tmp = $("<a />");
 						if($.isFunction(m)) { m = m.call(this, js); }
-						if(typeof m == "string") { tmp.attr('href','#')[ t ? "html" : "text" ](m); }
+						if(typeof m == "string") {
+						//tmp.attr('href','#')[ t ? "html" : "text" ](m);
+						tmp.attr('href', '#').html(m);
+						}
 						else {
 							if(!m.attr) { m.attr = {}; }
 							if(!m.attr.href) { m.attr.href = '#'; }
-							tmp.attr(m.attr)[ t ? "html" : "text" ](m.title);
+							//tmp.attr(m.attr)[ t ? "html" : "text" ](m.title);
+							 tmp.attr(m.attr).html(m.title);
 							if(m.language) { tmp.addClass(m.language); }
 						}
 						tmp.prepend("<ins class='jstree-icon'>&#160;</ins>");
