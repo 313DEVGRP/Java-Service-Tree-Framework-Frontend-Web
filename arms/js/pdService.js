@@ -204,25 +204,25 @@ function drawio() {
 				jError("제품(서비스)을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id='+uuidManager.getUUID()+ '&type=create', '_blank');
+			window.open('/reference/drawio?id='+uuidManager.getUUID()+ '&type=create&splash=0', '_blank');
 		} else if (this.id === 'btn_product_detail_edit_drawio') {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update&splash=0', '_blank');
 		} else if(this.id === "btn_modal_product_detail_edit_drawio") {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update&splash=0', '_blank');
 		} else if(this.id === "btn_product_detail_view_drawio") {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&type=view', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=view&splash=0', '_blank');
 		} else {
 			jError("drawio was clicked but id is not matched");
 			return false;
