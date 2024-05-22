@@ -217,9 +217,8 @@ function makeVersionMultiSelectBox() {
 			selectedVersionId = versionTag.join(',');
 
 			DashboardApi.대시보드_톱메뉴_초기화();
-			DashboardApi.대시보드_톱메뉴_세팅();
+			DashboardApi.대시보드_톱메뉴_세팅(selectedPdServiceId, selectedVersionId);
 
-			combinationChart($("#selected_pdService").val(), selectedVersionId);
 			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 			drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
@@ -234,6 +233,7 @@ function makeVersionMultiSelectBox() {
 
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
+	console.log("[Dashboard :: bind_VersionData_By_PdService] :: 실행");
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
@@ -254,9 +254,8 @@ function bind_VersionData_By_PdService() {
 				selectedVersionId = pdServiceVersionIds.join(',');
 
 				DashboardApi.대시보드_톱메뉴_초기화();
-				DashboardApi.대시보드_톱메뉴_세팅();
+				DashboardApi.대시보드_톱메뉴_세팅(selectedPdServiceId,selectedVersionId);
 
-				combinationChart($("#selected_pdService").val(), selectedVersionId);
 				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 				drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
@@ -1122,7 +1121,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 		.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
 		.addQueryParam('크기', 1000)
 		.addQueryParam('하위크기', 1000)
-		.addQueryParam('컨텐츠보기여부', true)
+		.addQueryParam('컨텐츠보기여부', false)
 		.build();
 
 	$.ajax({
@@ -1188,7 +1187,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 						groups: [issueStatusTypes]
 					},
 					color: {
-						pattern: dashboardColor.accumulatedIssueStatusColor,
+						pattern: dashboardColor.combinationChartColor,
 					},
 					onrendered: function() {
 						d3.selectAll('.c3-line, .c3-bar, .c3-arc')
