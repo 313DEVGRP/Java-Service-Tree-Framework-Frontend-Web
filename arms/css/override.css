@@ -2013,3 +2013,8 @@ svg .ghostCircle.show {
     background: rgba(51, 51, 51, 0.425);
     border: 1px solid rgba(51, 51, 51, 0.5);
 }
+
+.kanban-board header {
+	font-size: 14px !important;
+	padding: 14px !important;
+}

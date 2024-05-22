@@ -65,8 +65,8 @@ function execDocReady() {
         ],
         [
             // 칸반 보드
-            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.css",
-            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.js",
+            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.css",
+            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.js",
             "../arms/js/reqKanban/kanban.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
