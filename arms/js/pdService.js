@@ -204,30 +204,34 @@ function drawio() {
 				jError("제품(서비스)을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id='+uuidManager.getUUID()+ '&mode=create', '_blank');
+			window.open('/reference/drawio?id='+uuidManager.getUUID()+ '&type=create', '_blank');
 		} else if (this.id === 'btn_product_detail_edit_drawio') {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&mode=update', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update', '_blank');
 		} else if(this.id === "btn_modal_product_detail_edit_drawio") {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&mode=update', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update', '_blank');
 		} else if(this.id === "btn_product_detail_view_drawio") {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&mode=view', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=view', '_blank');
 		} else {
 			jError("drawio was clicked but id is not matched");
 			return false;
 		}
 	});
+}
+
+function changeBtnText(btn, msg) {
+    $(btn).text(msg);
 }
 
 // function drawdb() {
@@ -267,7 +271,7 @@ function drawio() {
 
 window.onload = function() {
 	localStorage.clear();
-	localStorage.setItem(".mode", "mad");
+/*	localStorage.setItem(".mode", "mad");*/
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -963,10 +967,17 @@ function productDetailEditorClear() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function product_detail_save_btn_click() {
 	$("#btn_modal_product_detail_add_submit").click(function() {
+
+        let title = $('#modal_product_detail_add_pdservice_detail_name').val();
+	    if (!title) {
+	        alert('제품(서비스) 산출물 이름을 작성해 주세요');
+	        return;
+	    }
+
 		var requestParams = {
 			ref: 2,
 			c_type: "default",
-			c_title: $('#modal_product_detail_add_pdservice_detail_name').val(),
+			c_title: title,
 			c_contents: CKEDITOR.instances.modal_product_detail_add_editor.getData()
 		};
 		const uuidManager = new UUIDManager();
@@ -1013,6 +1024,9 @@ function product_detail_save_btn_click() {
 				jError("신규 제품 디테일 등록 중 에러가 발생했습니다.");
 			}
 		});
+
+		// 버튼 원상복구
+		changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
 	});
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1192,6 +1206,8 @@ function product_detail_update_btn_click() {
 			}
 		});
 
+		// 버튼 원상복구
+        changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
 	});
 
 	// 편집하기
@@ -1247,6 +1263,9 @@ function product_detail_update_btn_click() {
 				}
 			}
 		});
+
+        // 버튼 원상복구
+		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
 	});
 
 }
