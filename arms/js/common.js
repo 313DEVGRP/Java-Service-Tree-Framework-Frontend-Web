@@ -14,7 +14,7 @@ let userID;
 let userRealmRoles;
 let permissions;
 let userEmail;
-
+let scrollPos = 0;
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1136,6 +1136,10 @@ function dataTable_build(
 	}
 
 	var tempDataTable = $(jQueryElementID).DataTable(options);
+
+	$(jQueryElementID).on('page.dt', function() {
+		scrollPos = $(window).scrollTop();
+	});
 
 	/*var tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {
