@@ -1608,6 +1608,7 @@ function setGanttTasks(data) {
 				common_object.etc = "폴더";
 			}
 			else {
+				common_object.etc = cur.reqStateEntity.c_title;
 				common_object.total_resource = cur.c_req_total_resource == null ? 0 : cur.c_req_total_resource;
 				common_object.plan_resource =  cur.c_req_plan_resource == null ? 0 : cur.c_req_plan_resource;
 				// 	common_object.total_resource = cur.c_req_total_time == null ? 0 : cur.c_req_total_time;
@@ -1650,7 +1651,7 @@ function getMonitorData(selectId, selecteVersionId) {
 	}
 
 	$.ajax({
-		url: "/auth-user/api/arms/reqAddPure" + endPointUrl,
+		url: "/auth-user/api/arms/reqAddStatePure" + endPointUrl,
 		type: "GET",
 		dataType: "json",
 		progress: true,
@@ -1838,23 +1839,16 @@ function initGantt(data) {
 				data: "etc",
 				title: "비고",
 				render: (data, row) => {
-					if (row.type !== "default") {
-						return data;
-					}
+					let iconClass = mappingStateIconClass(data);
+					let iconWrapper = $("<i />")
+						.addClass(iconClass);
 
-					if (row.performance === 100) {
-						let text = "완료";
-						let btnWrapper = $("<span />")
-							.addClass("label label-success")
-							.css({
-								padding: ".2em .6em .3em",
-								margin: 0
-							});
-						btnWrapper.text(text);
+					let textWrapper = $("<span />")
+						.text(" " + data);
 
-						return btnWrapper[0];
-					}
-					return '';
+					let parentElement = $("<div />").append(iconWrapper).append(textWrapper);
+
+					return parentElement[0];
 				}
 			},
 			{ data: "start", title: "시작일" },
@@ -2111,4 +2105,25 @@ function diff_day(startDate, endDate) {
 	let result = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
 	return result;
+}
+
+function mappingStateIconClass(key){
+	if (key === "열림"){
+		return "fa fa-folder-o text-danger";
+	}
+	else if (key === "진행중"){
+		return "fa fa-fire text-warning";
+	}
+	else if (key === "해결됨"){
+		return "fa fa-fire-extinguisher text-success";
+	}
+	else if (key === "닫힘"){
+		return "fa fa-folder text-primary";
+	}
+	else if (key === "폴더"){
+		return "fa fa-folder-open-o";
+	}
+	else {
+		return '';
+	}
 }
