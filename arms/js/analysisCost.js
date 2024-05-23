@@ -1014,12 +1014,12 @@ function 요구사항비용분석차트(data) {
                     show: false
                 },
                 axisLabel: {
-                    color: '#FFFFFFFF',
-                    rotate: 45,
+                    color: '#a4c6ff',
+                    rotate: 0,
                     formatter: function(value) {
-                        // 최대 10자까지 표시
-                        if (value.length > 9) {
-                            return value.substring(0, 9) + '...';
+                        // 최대 20자까지 표시
+                        if (value.length > 40) {
+                            return value.substring(0, 40) + '...';
                         } else {
                             return value;
                         }
@@ -1051,12 +1051,26 @@ function 요구사항비용분석차트(data) {
                 type: 'pie',
                 radius: [0, '30%'],
                 center: ['80%', '25%'],
+                label: {
+                    show: true,
+                    textStyle: {
+                        color: 'white',
+                        fontSize: 12
+                    }
+                },
                 data: difficultyData,
             },
             {
                 type: 'pie',
                 radius: [0, '30%'],
                 center: ['80%', '75%'],
+                label: {
+                    show: true,
+                    textStyle: {
+                        color: 'white',
+                        fontSize: 12
+                    }
+                },
                 data: priorityData
             }
         ],

@@ -180,11 +180,6 @@ function makePdServiceSelectBox() {
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
 
-	$(".spinner").html(
-		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
-		"bind_VersionData_By_PdService 정보를 가져오는 중입니다..."
-	);
-
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
