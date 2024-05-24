@@ -1139,6 +1139,7 @@ function dataTable_build(
 
 	$(jQueryElementID).on('page.dt', function() {
 		scrollPos = $(window).scrollTop();
+		$(window).scrollTop(scrollPos);
 	});
 
 	/*var tempDataTable = $(jQueryElementID).DataTable({
