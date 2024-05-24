@@ -221,6 +221,7 @@ function search_with_date(search_string, range_date) {
 		}
 	});
 
+	/*
 	$.ajax({
 		url: "/engine-search-api/engine/search/log/with-date",
 		type: "GET",
@@ -235,9 +236,13 @@ function search_with_date(search_string, range_date) {
 	});
 
 	getTop5LogName(search_string,range_date);
+	*/
 	getTop5projectName(search_string,range_date);
 }
 
+//////////////////////////////
+// 로그명(Top5) 집계
+//////////////////////////////
 function getTop5LogName(search_string, range_date){
 	console.log("[searchEngine :: getTop5LogName] 실행");
 /*	$(".spinner").html(
@@ -300,6 +305,9 @@ function getTop5LogName(search_string, range_date){
 	});
 }
 
+//////////////////////////////
+// 프로젝트명(Top5) 집계
+//////////////////////////////
 function getTop5projectName(search_string, range_date) {
 	console.log("[searchEngine :: getTop5projectName] 실행");
 	/*	$(".spinner").html(
@@ -439,7 +447,9 @@ function checkQueryStringOnUrl() {
 	}
 }
 
-
+////////////////////////////////////////
+// 페이지 변경 시
+////////////////////////////////////////
 function changePage(search_section,page) {
 	console.log("[searchEngine :: chagne] :: search_section -> " +search_section + ", page -> " +page);
 	let requestPage = page-1 ;
@@ -448,9 +458,10 @@ function changePage(search_section,page) {
 	}
 	section_search(search_section, requestPage, SearchApiModule.getRangeDate());
 }
-////////////////////////////
+
+////////////////////////////////////////
 // 검색날짜 기간 설정 세팅
-////////////////////////////
+////////////////////////////////////////
 function datetTimePicker() {
 	$('#date_timepicker_start').datetimepicker({
 		format: 'Y-m-d', // 날짜 및 시간 형식 지정
