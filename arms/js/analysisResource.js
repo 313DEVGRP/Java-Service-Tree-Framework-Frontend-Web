@@ -499,7 +499,6 @@ function dataTableCallBack(settings, json) {
 //데이터 테이블 그리고 난 후 시퀀스 이벤트
 function dataTableDrawCallback(tableInfo) {
     console.log("dataTableDrawCallback");
-    $(window).scrollTop(scrollPos);
 }
 
 function req_subtask_pie(pdService_id, pdServiceVersionLinks, size) {
@@ -562,14 +561,12 @@ var initTable = function () {
 
     $("#analysis_worker_status_table").on('page.dt', function() {
         scrollPos = $(window).scrollTop();
+        $(window).scrollTop(scrollPos);
     });
 
     workerStatusTable.dataTableBuild({
         rowGroup: [0],
-        isAddCheckbox: true,
-        drawCallback: function(settings) {
-            $(window).scrollTop(scrollPos);
-        }
+        isAddCheckbox: true
     });
 
     workerStatusTable.onDataTableClick = function (selectedData) {

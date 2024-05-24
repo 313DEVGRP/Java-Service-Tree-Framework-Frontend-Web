@@ -635,6 +635,11 @@ function dataTableLoad(selectId, endPointUrl) {
 		isServerSide,
 		700
 	);
+
+	$("#reqstatustable").on('page.dt', function() {
+		scrollPos = $(window).scrollTop();
+		$(window).scrollTop(scrollPos);
+	});
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 
@@ -653,7 +658,6 @@ function dataTableDrawCallback(tableInfo) {
 		.DataTable()
 		.columns.adjust()
 		.responsive.recalc();
-	$(window).scrollTop(scrollPos);
 }
 
 $("#copychecker").on("click", function () {

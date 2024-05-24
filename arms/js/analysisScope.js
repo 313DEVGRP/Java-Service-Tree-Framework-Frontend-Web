@@ -1652,8 +1652,6 @@ function dataTableDrawCallback(tableInfo) {
 		.DataTable()
 		.columns.adjust()
 		.responsive.recalc();
-
-	$(window).scrollTop(scrollPos);
 }
 
 $("#copychecker").on("click", function () {
