@@ -64,7 +64,7 @@ var TopMenuApi = (function () {
 
     var getReqProgress = function () {
         let state_data = getReqStateData();
-        if (state_data["total"] !== 0 || !isNaN(state_data["total"])) {
+        if (state_data["total"] !== 0 && !isNaN(state_data["total"])) {
             return (( state_data["resolved-and-closed"] / state_data["total"] ) * 100 ).toFixed(1);
         } else {
             return " - (invalid)";
@@ -402,10 +402,10 @@ var TopMenuApi = (function () {
               //범위현황
               $("#req_in_action_count").text(req_state["not-open"]);// 작업중
               $("#req_count").text(req_state["total"]); 						// 전체
-              $("#req_open").text(req_state["open"]); 						// 전체
-              $("#req_in_progress").text(req_state["in-progress"]); 						// 전체
-              $("#req_resolved").text(req_state["resolved"]); 						// 전체
-              $("#req_closed").text(req_state["closed"]);
+              $("#req_open").text(req_state["open"]); 						  // 열림
+              $("#req_in_progress").text(req_state["in-progress"]); // 진행중
+              $("#req_resolved").text(req_state["resolved"]); 			// 해결됨
+              $("#req_closed").text(req_state["closed"]);           // 닫힘
 
               $("#total_req_issue_count").text(issue_info["req"]);  // 생성된 요구사항 이슈
               $("#no_assigned_req_issue_count").text(issue_info["req"]-resource_info["req_total"]); // 생성된 요구사항 이슈(미할당)

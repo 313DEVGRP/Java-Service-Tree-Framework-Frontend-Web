@@ -142,10 +142,10 @@ var DashboardApi = (function () {
 	//요구사항 진척도
 	var getReqProgress = function () {
 		let state_data = getReqStateData();
-		if (state_data["total"] !== 0 || !isNaN(state_data["total"])) {
+		if (state_data["total"] !== 0 && !isNaN(state_data["total"])) {
 			return (( state_data["resolved-and-closed"] / state_data["total"] ) * 100 ).toFixed(1);
 		} else {
-			return " - (invalid)";
+			return "0";
 		}
 	};
 	
