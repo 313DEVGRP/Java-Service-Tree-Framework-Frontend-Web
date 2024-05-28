@@ -759,6 +759,9 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
                         });
 						jSuccess("Product(service) Data Load Complete");
 						$(jQueryElementID).jstree("search", $("#text").val());
+						 if (typeof changeMultipleSelected === "function") {
+                            changeMultipleSelected();
+                         }
 					}
 				}
 			},
@@ -1000,13 +1003,13 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 
     function mappingStateIcon(key) {
         if (key === "열림") {
-            return '<i class="fa fa-folder-o text-danger"></i>';
+            return '<i class="fa fa-folder-o text-danger status-icon"></i>';
         } else if (key === "진행중") {
-            return '<i class="fa fa-fire text-danger" style="color: #E49400;"></i>';
+            return '<i class="fa fa-fire text-danger status-icon" style="color: #E49400;"></i>';
         } else if (key === "해결됨") {
-            return '<i class="fa fa-fire-extinguisher text-success"></i>';
+            return '<i class="fa fa-fire-extinguisher text-success status-icon"></i>';
         } else if (key === "닫힘") {
-            return '<i class="fa fa-folder text-primary"></i>';
+            return '<i class="fa fa-folder text-primary status-icon"></i>';
         }
         return ''; // 기본적으로 빈 문자열 반환
     }

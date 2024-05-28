@@ -275,7 +275,9 @@ function changeMultipleSelected() {
 		$(this)
 			.find("a i")
 			.each(function () {
-				$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
+				if (!$(this).hasClass('status-icon')) { // 요구사항 상태 아이콘은 초기화에서 제외
+                    $(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
+                }
 			});
 	});
 
@@ -294,54 +296,62 @@ function changeMultipleSelected() {
 	// version 정보를 매치 해서 대상 요구사항 이슈 c_id 를 받아오는 로직이 필요.
 	console.log("select pdservice:: " + $("#selected_pdService").val());
 
-	$.ajax({
-		url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
-			 $("#selected_pdService").val() +
-			 "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
-			 result_cids,
-		type: "GET",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				var appIds = [];
-				var loopCount = data.length;
-				for (var i = 0; i < loopCount; i++) {
-					appIds.push(data[i].c_id);
-				}
-				console.log(appIds);
-				var mappedApps = [];
-				for (var appId of appIds) {
-					$("#req_tree #node_2 ul li").each(function (a, item) {
-						$(this)
-							.find("a i")
-							.each(function () {
-								$(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
-							});
-						console.log(
-							"[ reqAdd :: changeMultipleSelected ] :: version node value = " +
-								item.id.substring(item.id.indexOf("_") + 1)
-						);
-						console.log("[ reqAdd :: changeMultipleSelected ] :: version filterNode value = " + appId);
-						if (item.id.substring(item.id.indexOf("_") + 1) == appId) {
-							mappedApps.push($(this));
-							return false;
-						}
-					});
-				}
+    if(result_cids != ''){ // 아무 버전도 선택 하지 않을 경우 처리 아이콘 초기화 까지만 수행
+        $.ajax({
+    		url: "/auth-user/api/arms/reqAdd/T_ARMS_REQADD_" +
+    			 $("#selected_pdService").val() +
+    			 "/getReqAddListByFilter.do?c_req_pdservice_versionset_link=" +
+    			 result_cids,
+    		type: "GET",
+    		dataType: "json",
+    		progress: true,
+    		statusCode: {
+    			200: function (data) {
+                    console.log(data);
+    				var appIds = [];
+    				var loopCount = data.length;
+    				for (var i = 0; i < loopCount; i++) {
+    				    if(data[i].attr.rel != 'folder'){
+    				        appIds.push(data[i].c_id); // 조회해온 노드 아이디
+    				    }
+    				}
+    				console.log(appIds);
+    				var mappedApps = [];
+    				for (var appId of appIds) {
+    					$("#req_tree #node_2 ul li").each(function (a, item) {
+    						$(this)
+    							.find("a i")
+    							.each(function () {
+    								if (!$(this).hasClass('status-icon')) { // 상태 아이콘 제외
+                                        $(this).replaceWith("<ins class='jstree-icon' style='color: rgb(164, 198, 255)'>&nbsp;</ins>");
+                                    }
+    							});
+    						console.log(
+    							"[ reqAdd :: changeMultipleSelected ] :: version node value = " +
+    								item.id.substring(item.id.indexOf("_") + 1)
+    						);
+    						console.log("[ reqAdd :: changeMultipleSelected ] :: version filterNode value = " + appId);
+    						if (item.id.substring(item.id.indexOf("_") + 1) == appId) {
+    							mappedApps.push($(this));
+    							return false;
+    						}
+    					});
+    				}
 
-				console.log(" mappedApps::: " + mappedApps);
-				for (var mappedApp of mappedApps) {
-					mappedApp.find("a ins").each(function () {
-						$(this).replaceWith("<i class='fa fa-check' style='color: #1ea726'>&nbsp;&nbsp;</i>");
-					});
-				}
-			}
-		},
-		error: function (e) {
-			jError("버전 조회 중 에러가 발생했습니다.");
-		}
-	});
+    				console.log(" mappedApps::: " + mappedApps);
+    				for (var mappedApp of mappedApps) {
+    					mappedApp.find("a ins").each(function () {
+    						$(this).replaceWith("<i class='fa fa-check' style='color: #1ea726'>&nbsp;&nbsp;</i>");
+    					});
+    				}
+    			}
+    		},
+    		error: function (e) {
+    			jError("버전 조회 중 에러가 발생했습니다.");
+    		}
+    	});
+
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
