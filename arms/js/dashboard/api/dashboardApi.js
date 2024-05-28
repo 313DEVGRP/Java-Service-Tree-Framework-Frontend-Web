@@ -424,6 +424,7 @@ var DashboardApi = (function () {
 		});
 	}
 
+	// 좌하단
 	function 대시보드_콤비네이션차트(targetElementId) {
 		let $targetId = "#"+targetElementId; // "#combination-chart"
 
@@ -583,6 +584,27 @@ var DashboardApi = (function () {
 		});
 
 	}
+
+	// 우하단
+	function 대시보드_수평스택바(targetElementId) {
+
+		var ajax_url = "/auth-user/api/arms/dashboard/reqIssue-assignee-top5/"+dashboard_pdServiceId;
+
+		$.ajax({
+			url: ajax_url,
+			type: "GET",
+			data: { pdServiceVersionLinks: dashboard_pdServiceVersionLinks },
+			dataType: "json",
+			statusCode: {
+				200: function (result) {
+					var data = result.response;
+
+
+				}
+			}
+		});
+	}
+
 
 	return {
 		대시보드_톱메뉴_세팅, 대시보드_톱메뉴_초기화,

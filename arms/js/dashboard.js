@@ -419,8 +419,8 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	// 제품서비스별 담당자 통계
 	getAssigneeInfo(pdservice_id, "");
 
-	// 상위 5명 - 요구사항 및 연결이슈
-	getReqAndLinkedIssueTop5(pdservice_id);
+	// 상위 5명 - 요구사항 이슈
+	getReqIssueTop5(pdservice_id, pdservice_version_id);
 	// 상위 5명 - 이슈상태 누적
 	getIssueResponsibleStatusTop5(pdservice_id);
 
@@ -1459,63 +1459,39 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 
 
 
-function getReqAndLinkedIssueTop5(pdservice_id) {
-	var url1 = "/auth-user/api/arms/dashboard/exclusion-isreq-normal/req-and-linked-issue-top5/"+pdservice_id;
+function getReqIssueTop5(pdservice_id, pdServiceVersionLinks) {
+
+	var url = "/auth-user/api/arms/dashboard/reqIssueTop5/"+pdservice_id;
+
 	$.ajax({
-		url: url1,
 		type: "GET",
-		data: { "서비스아이디" : pdservice_id,
-			"메인그룹필드" : "assignee.assignee_emailAddress.keyword",
-			"isReq" : false,
-			"컨텐츠보기여부" : true,
-			"크기" : 5,
-			"하위그룹필드들" : "isReq"},
+		url: url,
+		data: { pdServiceVersionLinks : pdServiceVersionLinks	},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (apiResponse) {
-				const data = apiResponse.response;
+				let data = apiResponse.response;
+				console.log("[ dashboard :: getReqIssueTop5 ] ==> ");
+				console.log(data);
 				top5ReqLinkedIssue = []; // 초기화
 
-				for(let i =0; i<5; i++) {
+				let index = 0;
 
-					var issueCount = 0;
-					var relatedIssueCount =0;
-
-					if (data[i] !== undefined) {
-						var 아이디 = getIdFromMail(data[i].필드명);
-						var groupByIsReq = data[i].하위검색결과.group_by_isReq;
-
-						if(groupByIsReq[0] !== undefined) {
-							if(groupByIsReq[0]["필드명"] === "true") {
-								issueCount = groupByIsReq[0]["개수"]; // 요구사항 갯수
-							}
-							if(groupByIsReq[0]["필드명"] ==="false") {
-								relatedIssueCount = groupByIsReq[0]["개수"]; // 연결이슈 갯수
-							}
-						}
-						if(groupByIsReq[1] !== undefined) {
-							if(groupByIsReq[1]["필드명"] === "true") {
-								issueCount = groupByIsReq[1]["개수"]; // 요구사항 갯수
-							}
-							if(groupByIsReq[1]["필드명"] ==="false") {
-								relatedIssueCount = groupByIsReq[1]["개수"]; // 연결이슈 갯수
-							}
-						}
-						var performance = {
-							"manpowerId" : i,
-							"manpowerName" : 아이디,
-							"issueCount" : issueCount,
-							"relatedIssueCount" : relatedIssueCount
-						}
-						top5ReqLinkedIssue.push(performance)
-					}
-					 else {
-						 console.log("data[" + i +"] 는 존재하지 않습니다.");
+				for (let key in data) {
+					if (data.hasOwnProperty(key)) {
+						let performance = {
+							"manpowerId": index,
+							"manpowerName": key,
+							"issueCount": data[key],
+							"relatedIssueCount" : 0
+						};
+						top5ReqLinkedIssue.push(performance);
+						index++;
 					}
 				}
-
+				top5ReqLinkedIssue.sort((a, b) => b.issueCount - a.issueCount);
 				drawIssuePerManPower(top5ReqLinkedIssue);
 
 			}
@@ -1625,7 +1601,7 @@ function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function drawIssuePerManPower(data) {
 	$("#issue-manpower-chart").html("");
-
+	console.log(data);
 	var width = 270,
 		height = 430,
 		margin = 10;
@@ -1668,7 +1644,7 @@ function drawIssuePerManPower(data) {
 		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
 		.style("font-size", "17px").style("font-weight","700");
 
-	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.manpowerReqColor);
+	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.resourceReqColor);
 
 	var stackedData = d3.stack().keys(subgroups)(data).concat(data);
 
