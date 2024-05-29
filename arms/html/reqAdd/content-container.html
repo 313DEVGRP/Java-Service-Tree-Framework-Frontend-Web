@@ -398,7 +398,7 @@
 									style="float: right"
 									class="delete_btn_group hidden">
 									<button
-										id="delete_pdservice"
+										id="delete_tab_req"
 										class="btn btn-danger btn-sm">
 										요구사항 삭제
 									</button>
@@ -441,14 +441,22 @@
 														<strong>문서로 보기</strong>
 													</a>
 												</li>
-												<li class="hidden">
+												<li>
+													<a
+														href="#delete"
+														data-toggle="tab"
+														id="delete_tab">
+														<strong>삭제 하기</strong>
+													</a>
+												</li>
+<!--												<li class="hidden">
 													<a
 														href="#history"
 														data-toggle="tab"
 														id="history_tab">
 														<strong>History(이력)</strong>
 													</a>
-												</li>
+												</li>-->
 											</ul>
 										</header>
 										<div class="body tab-content">
@@ -1411,22 +1419,38 @@
 													id="jira_project_table"
 													style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
 											</div>
-
 											<div
+													id="delete"
+													class="tab-pane">
+												<p>
+													"
+													<label
+															id="delete_text"
+															style="color: #a4c6ff; font-weight: bold"></label>
+													"을(를) 삭제 하시겠습니까?
+												</p>
+												<p>
+													<strong>ALM 서버의 요구사항 이슈는 삭제되지 않고 Soft Delete 처리됩니다.</strong>
+												</p>
+												<p>
+													<strong>( 주의하세요 ) Soft Delete 처리된 요구사항 이슈는 통계에 반영되지 않습니다.</strong>
+												</p>
+											</div>
+<!--											<div
 												id="history"
 												class="tab-pane"
 												style="padding-top: 10px !important">
-												<!-- The timeline -->
+												&lt;!&ndash; The timeline &ndash;&gt;
 												<ul class="timeline timeline-inverse">
-													<!-- timeline time label -->
+													&lt;!&ndash; timeline time label &ndash;&gt;
 													<li class="time-label">
 														<a class="btn btn-danger btn-sm">
 															A-RMS 모든 이력을 시간순으로 표시 :
 															<i class="fa fa-check"></i>
 														</a>
 													</li>
-													<!-- /.timeline-label -->
-													<!-- timeline item -->
+													&lt;!&ndash; /.timeline-label &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-head">
 														<i class="fa fa-search bg-maroon"></i>
 														<div
@@ -1494,8 +1518,8 @@
 																style="padding: 0px !important; font-size: 11px"></h3>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-balance-scale bg-maroon"></i>
 														<div class="timeline-item">
@@ -1535,8 +1559,8 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-check-square-o bg-yellow"></i>
 
@@ -1576,8 +1600,8 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-cubes bg-teal"></i>
 
@@ -1617,10 +1641,10 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline time label -->
-													<!-- /.timeline-label -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline time label &ndash;&gt;
+													&lt;!&ndash; /.timeline-label &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-sitemap bg-light-blue"></i>
 
@@ -1676,8 +1700,8 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-bug bg-purple"></i>
 
@@ -1733,10 +1757,10 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline time label -->
-													<!-- /.timeline-label -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline time label &ndash;&gt;
+													&lt;!&ndash; /.timeline-label &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-train bg-black"></i>
 
@@ -1776,12 +1800,12 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-clock-o bg-gray"></i>
 													</li>
 												</ul>
-											</div>
+											</div>-->
 										</div>
 									</section>
 								</div>
