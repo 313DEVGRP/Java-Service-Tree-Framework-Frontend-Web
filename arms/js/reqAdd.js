@@ -120,26 +120,27 @@ function execDocReady() {
 				}
 			}, 313 /*milli*/);
 
-			makeDatePicker($("#btn_start_calendar_popup"));
-			makeDatePicker($("#btn_end_calendar_popup"));
-
 			autoCompleteForUser();
-
 			selected_after_action_for_select2();
-			click_btn_for_new_req();
-			switch_action_for_mode();
 
+			click_btn_for_regist_req_popup();
+			click_btn_for_req_save();
 			click_btn_for_req_update();
-			click_btn_for_search_history();
-			change_tab_action();
-			click_btn_for_connect_req_jira();
+			click_btn_for_req_delete();
 
-			save_req();
+			switch_action_for_mode();
+			tab_click_event();
 
 			// 스크립트 실행 로직을 이곳에 추가합니다.
-			//save_req
 			var 라따적용_클래스이름_배열 = ['.ladda_save_req'];
 			laddaBtnSetting(라따적용_클래스이름_배열);
+
+			/* 사용되지 않는 코드 주석 처리
+			click_btn_for_connect_req_jira();
+			click_btn_for_search_history();
+			makeDatePicker($("#btn_start_calendar_popup"));
+			makeDatePicker($("#btn_end_calendar_popup"));
+			*/
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
@@ -372,7 +373,7 @@ function jsTreeClick(selectedNode) {
 	console.log(selectedNode);
 
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
-	selectedJsTreeName = $("#req_tree").jstree("get_selected").text();
+	selectedJsTreeName = $("#req_tree").jstree("get_selected").text().trim();
 
 	var selectRel = selectedNode.attr("rel");
 
@@ -382,6 +383,7 @@ function jsTreeClick(selectedNode) {
 		$("#select_Req").text("(folder)" + $(".jstree-clicked").text());
 	} else {
 		$("#select_Req").text($("#req_tree").jstree("get_selected").text());
+		$("#delete_text").text(selectedJsTreeName);
 	}
 
 	//요구사항 타입에 따라서 탭의 설정을 변경
@@ -392,7 +394,8 @@ function jsTreeClick(selectedNode) {
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").hide(); //편집하기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //삭제하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(6)").hide(); //JIRA연결설정
 
 		// 리스트로 보기(DataTable) 설정 ( 폴더나 루트니까 )
 		// 상세보기 탭 셋팅이 데이터테이블 렌더링 이후 시퀀스 호출 함.
@@ -414,7 +417,8 @@ function jsTreeClick(selectedNode) {
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").show(); //리스트보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").show(); //문서로보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //JIRA연결설정
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").hide(); //삭제하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(6)").hide(); //JIRA연결설정
 
 		//상세보기 탭 셋팅
 		setDetailAndEditViewTab();
@@ -443,7 +447,8 @@ function jsTreeClick(selectedNode) {
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(2)").show(); //편집하기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(3)").hide(); //리스트보기
 		$(".widget-tabs").children("header").children("ul").children("li:nth-child(4)").hide(); //문서로보기
-		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //JIRA연결설정
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(5)").show(); //삭제하기
+		$(".widget-tabs").children("header").children("ul").children("li:nth-child(6)").hide(); //JIRA연결설정
 
 		//이전에 화면에 렌더링된 데이터 초기화
 		//상세보기 탭 셋팅
@@ -573,7 +578,6 @@ function dataTableLoad(selectId, selectRel) {
 		);
 	}
 }
-
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
@@ -1037,7 +1041,7 @@ function selected_after_action_for_select2() {
 ///////////////////////////////////////////////////////////////////////////////
 // 신규 요구사항 팝업 데이터 셋팅
 ///////////////////////////////////////////////////////////////////////////////
-function click_btn_for_new_req() {
+function click_btn_for_regist_req_popup() {
 	$("#new_reqregist01").click(function () {
 		registNewPopup();
 	});
@@ -1207,7 +1211,7 @@ function switch_action_for_mode() {
 ///////////////////////////////////////////////////////////////////////////////
 // 팝업에서 신규 요구사항 저장 버튼
 ///////////////////////////////////////////////////////////////////////////////
-function save_req() {
+function click_btn_for_req_save() {
 	$("#save_req").click(function () {
 		let table_name = "T_ARMS_REQADD_" + $("#selected_pdService").val();
 
@@ -1394,6 +1398,49 @@ function click_btn_for_req_update() {
 	});
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// 요구사항 삭제 버튼
+///////////////////////////////////////////////////////////////////////////////
+function click_btn_for_req_delete() {
+	$("#delete_tab_req").click(function () {
+
+		if(!selectedJsTreeId) {
+			alert("선택된 요구사항이 없습니다.");
+			return false;
+		}
+
+		// if(!confirm("삭제하시겠습니까?\n폴더 타입의 경우 하위 데이터가 모두 삭제됩니다.\n요구사항 제목 : " + selectedJsTreeName )) {
+		if(!confirm("삭제하시겠습니까?\n요구사항 제목 : " + selectedJsTreeName )) {
+			console.log("삭제하지 않음");
+			return false;
+		}
+		else {
+
+			let table_name = "T_ARMS_REQADD_" + $("#selected_pdService").val();
+
+			let data_object_param = {
+				c_id: selectedJsTreeId
+			};
+
+			console.log("update_req :: update data ->");
+			console.log(data_object_param);
+
+			$.ajax({
+				url: "/auth-user/api/arms/reqAdd/" + table_name + "/removeNode.do",
+				type: "DELETE",
+				data: data_object_param,
+				statusCode: {
+					200: function () {
+						$("#req_tree").jstree("refresh");
+						jSuccess('"' + selectedJsTreeName + '"' + " 요구사항이 삭제되었습니다.");
+					}
+				}
+			});
+		}
+	});
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // 달력
 ///////////////////////////////////////////////////////////////////////////////
@@ -1416,7 +1463,7 @@ function makeDatePicker(calender) {
 ///////////////////////////////////////////////////////////////////////////////
 // History TAB 검색 버튼
 ///////////////////////////////////////////////////////////////////////////////
-function click_btn_for_search_history() {
+/*function click_btn_for_search_history() {
 	$("#logsearch").click(function () {
 		$(".timeline-item-body").remove();
 		var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
@@ -1437,7 +1484,7 @@ function click_btn_for_search_history() {
 					jSuccess("데이터 조회가 완료되었습니다.");
 				}
 			}
-		})
+		})z
 			.done(function (data) {
 				for (var k in data) {
 					var obj = data[k];
@@ -1606,25 +1653,30 @@ function click_btn_for_search_history() {
 			.fail(function (e) {})
 			.always(function () {});
 	});
-}
+}*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // 탭 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
-function change_tab_action() {
+function tab_click_event() {
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 
-		if (target == "#stats") {
+		if (target === "#stats") {
 			$(".edit_btn_group").addClass("hidden");
+			$(".delete_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-		} else if (target == "#edit") {
+		}
+		else if (target === "#edit") {
 			$(".edit_btn_group").removeClass("hidden");
+			$(".delete_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-		} else if (target == "#jira") {
+		}
+		else if (target === "#jira") {
 			$(".edit_btn_group").addClass("hidden");
+			$(".delete_btn_group").addClass("hidden");
 			$(".jira_btn_group").removeClass("hidden");
 			$(".newReqDiv").hide();
 
@@ -1643,15 +1695,27 @@ function change_tab_action() {
 			console.log("jira selectedJsTreeId" + selectedJsTreeId);
 			console.log("jira tableName" + tableName);
 			console.log("jira datatables_jira_project 완료 ");
-		} else if (target == "#report") {
+		}
+		else if (target === "#report") {
 			$(".newReqDiv").show();
 			$(".edit_btn_group").addClass("hidden");
-		} else if (target == "#doc") {
+			$(".delete_btn_group").addClass("hidden");
+		}
+		else if (target === "#doc") {
 			$(".edit_btn_group").addClass("hidden");
+			$(".delete_btn_group").addClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
-		} else if (target == "#history") {
+		}
+		else if (target === "#history") {
 			$(".edit_btn_group").addClass("hidden");
+			$(".delete_btn_group").addClass("hidden");
+			$(".jira_btn_group").addClass("hidden");
+			$(".newReqDiv").hide();
+		}
+		else if (target === "#delete") {
+			$(".edit_btn_group").addClass("hidden");
+			$(".delete_btn_group").removeClass("hidden");
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
 		}
@@ -1661,7 +1725,7 @@ function change_tab_action() {
 ///////////////////////////////////////////////////////////////////////////////
 // 요구사항 - 지라 연결설정 변경 버튼 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
-function click_btn_for_connect_req_jira() {
+/*function click_btn_for_connect_req_jira() {
 	$("#req_jiraver_connect_change").click(function () {
 		console.log("req_jiraver_connect_change");
 
@@ -1700,7 +1764,7 @@ function click_btn_for_connect_req_jira() {
 			.fail(function (e) {})
 			.always(function () {});
 	});
-}
+}*/
 
 $("#text").on("input", function () {
 	var searchString = $(this).val();
