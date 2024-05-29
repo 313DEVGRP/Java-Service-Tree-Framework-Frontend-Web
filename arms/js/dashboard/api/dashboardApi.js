@@ -300,8 +300,16 @@ var DashboardApi = (function () {
 
 			})
 			.then(() => {
+				// 타임라인 (then 으로)
+
+				// 도넛, 콤피네이션 (then 으로)
 				대시보드_도넛차트("donut-chart");
 				대시보드_콤비네이션차트("combination-chart");
+
+				// 샌키, 트리맵 (then으로)
+
+				// 수평스택바, 폴라바 (then으로)
+
 			})
 			.catch((error) => {
 			console.error('Error occurred:', error);

@@ -184,19 +184,7 @@ function makePdServiceSelectBox() {
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
 
-		var checked = $("#checkbox1").is(":checked");
-		var endPointUrl = "";
-
-		if (checked) {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
-		} else {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
-		}
-
 		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
-
-
-
 	});
 } // end makePdServiceSelectBox()
 
@@ -347,7 +335,7 @@ function drawReqTimeSeries(data) {
 }
 
 // 1. 제품서비스로만 볼 경우
-// 2. 버전만 따로 선택해서 보고싶은 경우(미완)
+// 2. 버전만 따로 선택해서 보고싶은 경우
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("[ dashboard :: statisticsMonitor ] :: 선택된 서비스 ===> " + pdservice_id);
 	console.log("[ dashboard :: statisticsMonitor ] :: 선택된 버전 리스트 ===> " + pdservice_version_id);
@@ -415,21 +403,22 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	});
 
 	// 제품서비스 - status
-	getReqCount(pdservice_id, "");
+//	getReqCount(pdservice_id, "");
 	// 제품서비스별 담당자 통계
-	getAssigneeInfo(pdservice_id, "");
+//	getAssigneeInfo(pdservice_id, "");
 
-	// 상위 5명 - 요구사항 이슈
+	// 상위 5명 - 요구사항 이슈 (우하1)
 	getReqIssueTop5(pdservice_id, pdservice_version_id);
-	// 상위 5명 - 이슈상태 누적
-	getIssueResponsibleStatusTop5(pdservice_id);
+	// 상위 5명 - 요구사항 상태 누적 (우하2)
+	//getIssueResponsibleStatusTop5(pdservice_id, pdservice_version_id);
+	reqStatePerAssigneeTop5(pdservice_id, pdservice_version_id);
 
-	setTimeout(function () {
-		//Scope - (2) 요구사항에 연결된 이슈 총 개수
-		getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
-
-		$('#inactive_version_count').text( tot_ver_count - active_ver_count );
-	},1000);
+	// setTimeout(function () {
+	// 	//Scope - (2) 요구사항에 연결된 이슈 총 개수
+	// 	getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
+	//
+	// 	$('#inactive_version_count').text( tot_ver_count - active_ver_count );
+	// },1000);
 
 }
 
@@ -816,7 +805,7 @@ var SankeyChart = (function ($) {
 			.style("font-weight", 5)
 			.text("선택된 어플리케이션이 없습니다.")
 			.attr("x", width / 2)
-			.attr("y", height / 2);R
+			.attr("y", height / 2);
 	};
 
 	var loadChart = function (data) {
@@ -1372,6 +1361,82 @@ function dataTableDrawCallback(tableInfo) {
 		.responsive.recalc();
 }
 
+function reqStatePerAssigneeTop5(pdservice_id, pdServiceVersionLinks) {
+
+	var endPointUrl = "T_ARMS_REQADD_"+pdservice_id+"/getReqAddListByFilter.do";
+	var ajaxUrl = "/auth-user/api/arms/dashboard/reqStatePerAssigneeTop5/"+endPointUrl;
+	console.log("[ dashboard :: reqStatePerAssigneeTop5] :: pdServiceId => " + pdservice_id);
+	console.log("[ dashboard :: reqStatePerAssigneeTop5] :: pdServiceVersionLinks => " + pdServiceVersionLinks);
+	$.ajax({
+		url: ajaxUrl,
+		data: { pdServiceId : pdservice_id, pdServiceVersionLinks : pdServiceVersionLinks	},
+		type: "GET",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		progress: true,
+		statusCode: {
+			200: function(apiResponse) {
+				var colorArr = dashboardColor.reqStateColor;
+
+				console.log(apiResponse.response);
+				var resultData = apiResponse.response;
+				//레전드 리스트
+				var legend_arr = ["open", "in-progress", "resolved", "closed"]; // 10, 11,12, 13
+
+				let keySumList = Object.keys(resultData).map(key => {
+					let sum = Object.values(resultData[key]).reduce((acc, value) => acc + value, 0);
+					return { key: key, sum: sum };
+				});
+				keySumList.sort((a, b) => b.sum - a.sum);
+
+				var assigneeList = keySumList.map(item => item.key);
+				var assigneeSize = assigneeList.length;
+				var arr_open = new Array(assigneeSize).fill(0);
+				var arr_in_progress = new Array(assigneeSize).fill(0);
+				var arr_resolved = new Array(assigneeSize).fill(0);
+				var arr_closed = new Array(assigneeSize).fill(0);
+
+				assigneeList.forEach((key, index) => {
+					arr_open[index] = resultData[key]["10"] || 0;
+					arr_in_progress[index] = resultData[key]["11"] || 0;
+					arr_resolved[index] = resultData[key]["12"] || 0;
+					arr_closed[index] = resultData[key]["13"] || 0;
+				});
+
+				var statusArr = []; // 요구사항 상태가 4개므로
+				statusArr.push(arr_open, arr_in_progress, arr_resolved, arr_closed);
+				console.log(statusArr);
+				var sampleSeries = {
+					type: 'bar',
+					data: "", // seriesArr1
+					itemStyle: {
+						color: ""
+					},
+					coordinateSystem: 'polar',
+					name: "",
+					stack: 'a',
+					emphasis: {
+						focus: 'series'
+					}
+				}
+
+				var arrSeries = new Array(4);
+
+				for (let i=0; i<4; i++) {
+					let _temp = JSON.parse(JSON.stringify(sampleSeries));
+					//var _temp = Object.assign({}, testSeries); 이 경우 2단 복사 안됨.
+					_temp.data = statusArr[i];
+					_temp.itemStyle.color = colorArr[i]; // 열림, 진행중, 해결됨, 닫힘
+					_temp.name = legend_arr[i];
+					arrSeries[i] = _temp;
+				}
+				drawBarOnPolar("polar_bar", assigneeList, legend_arr, arrSeries);
+
+			}
+		}
+	});
+}
+
 function getIssueResponsibleStatusTop5(pdservice_id) {
 
 	var _url = "/auth-user/api/arms/dashboard/normal/issue-responsible-status-top5/"+pdservice_id;
@@ -1451,7 +1516,11 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 					_temp.name = legend_arr[i];
 					arrSeries[i] = _temp;
 				}
-				drawBarOnPolar("polar_bar", cat_persons, legend_arr, arrSeries);
+				console.log("drawBarOnPolar");
+				console.log(cat_persons);
+				console.log(legend_arr);
+				console.log(arrSeries);
+				//drawBarOnPolar("polar_bar", cat_persons, legend_arr, arrSeries);
 			}
 		}
 	});
@@ -1505,6 +1574,7 @@ function getIdFromMail (param) {
 	return full_str.substring(0,indexOfAt);
 }
 
+// Deprecated
 function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 	var _url = "/auth-user/api/arms/dashboard/normal/"+pdservice_id;
 	$.ajax({
@@ -1540,7 +1610,7 @@ function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
 	});
 }
 
-
+// Deprecated
 function getReqCount(pdservice_id, pdServiceVersionLinks) {
 	$.ajax({
 		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdServiceVersionLinks,
@@ -1571,6 +1641,8 @@ function getReqCount(pdservice_id, pdServiceVersionLinks) {
 		}
 	});
 }
+
+// Deprecated
 function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
 	$.ajax({
 		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
