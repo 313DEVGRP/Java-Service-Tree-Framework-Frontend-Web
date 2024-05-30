@@ -220,6 +220,16 @@ function changeBtnText(btn, msg) {
     $(btn).text(msg);
 }
 
+function setDefaultBtnText() {
+    changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
+    changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
+    changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
+
+    changeBtnText('#modal_product_detail_add_drawio_time', '');
+    changeBtnText('#modal_product_detail_edit_drawio_time', '');
+    changeBtnText('#product_detail_edit_drawio_time', '');
+}
+
 /*window.onload = function() {
 	localStorage.clear();
 };*/
@@ -571,9 +581,7 @@ function productServiceDetailDataLoad(selectId) {
 
 		showDefaultTab();
 		dropzoneDataClear();
-		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
-		changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
-		changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
+		setDefaultBtnText();
 		drawioImageClear();
 	});
 }
@@ -660,9 +668,7 @@ function detailClick(element, c_id) {
 	showDefaultTab();
 	dropzoneDataClear();
 	hideDropzoneArea();
-	changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
-	changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
-	changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
+	setDefaultBtnText();
 	drawioImageClear();
 
 	$("a[id^='pdservice_detail_link_']").each(function() {
@@ -885,9 +891,7 @@ function pdServiceDataTableClick(c_id) {
 			productDetailArrowClear();
 			$("#modal_product_detail_add_pdservice_name").val(json.c_title); // 제품 디테일 등록에 제품명 추가해줌. readonly
 
-			changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
-			changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
-			changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
+			setDefaultBtnText();
 
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
@@ -1015,6 +1019,7 @@ function product_detail_save_btn_click() {
 
 		// 버튼 원상복구
 		changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록하러 가기');
+		changeBtnText('#modal_product_detail_add_drawio_time', '');
 	});
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1196,6 +1201,7 @@ function product_detail_update_btn_click() {
 
 		// 버튼 원상복구
         changeBtnText('#btn_modal_product_detail_edit_drawio', 'drawio 편집하러 가기');
+        changeBtnText('#modal_product_detail_edit_drawio_time', '');
 	});
 
 	// 편집하기
@@ -1254,6 +1260,7 @@ function product_detail_update_btn_click() {
 
         // 버튼 원상복구
 		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
+		changeBtnText('#product_detail_edit_drawio_time', '');
 	});
 
 }

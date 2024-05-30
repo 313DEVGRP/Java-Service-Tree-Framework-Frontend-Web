@@ -2018,3 +2018,8 @@ svg .ghostCircle.show {
 	font-size: 14px !important;
 	padding: 14px !important;
 }
+
+.drawio_time {
+    color: #f8f8f8;
+    margin-left: 10px;
+}
