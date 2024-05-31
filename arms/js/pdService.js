@@ -641,8 +641,9 @@ function product_detail_add_clear () {
 		.find(".cke_contents:eq(0)")
 		.css("height", height + "px");
 
-	if(localStorage.getItem("create-drawio-"+selectId)) {
+	if(localStorage.getItem("create-drawio-"+selectId) && localStorage.getItem("create-drawio-time-"+selectId)) {
 		changeBtnText('#btn_modal_product_detail_add_drawio', 'drawio 등록 완료');
+		changeBtnText('#modal_product_detail_add_drawio_time', localStorage.getItem("create-drawio-time-"+selectId));
 	}
 
 	if(localStorage.getItem("create-drawio-image-raw-"+selectId)) {
