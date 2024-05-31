@@ -722,9 +722,11 @@ function detailClick(element, c_id) {
 			$(".list-group-item-detail-edit .chat-message-body").css({"border-left":""});
 			$(".list-group-item-detail-edit .arrow").css({"border-right":""});
 
-			if (localStorage.getItem("update-drawio-" + c_id)) {
+			if (localStorage.getItem("update-drawio-" + c_id) && localStorage.getItem("update-drawio-time-" + c_id)) {
 				changeBtnText("#btn_modal_product_detail_edit_drawio", "drawio 편집 완료");
 				changeBtnText("#btn_product_detail_edit_drawio", "drawio 편집 완료");
+				changeBtnText('#modal_product_detail_edit_drawio_time', localStorage.getItem("update-drawio-time-" + c_id));
+				changeBtnText('#product_detail_edit_drawio_time', localStorage.getItem("update-drawio-time-" + c_id));
 			}
 
 			if (localStorage.getItem("update-drawio-image-raw" + c_id)) {
