@@ -729,7 +729,7 @@ function detailClick(element, c_id) {
 				changeBtnText('#product_detail_edit_drawio_time', localStorage.getItem("update-drawio-time-" + c_id));
 			}
 
-			if (localStorage.getItem("update-drawio-image-raw" + c_id)) {
+			if (localStorage.getItem("update-drawio-image-raw-" + c_id)) {
 				setDrawioImage("update-drawio-image-raw-" + c_id, localStorage.getItem("update-drawio-image-raw-" + c_id), "update");
 			}
 
