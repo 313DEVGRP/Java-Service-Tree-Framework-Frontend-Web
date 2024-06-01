@@ -25,7 +25,7 @@ var Log = {
 function init(treeMapInfos) {
     const colorMapping = {};
     // 현재 512개의 색상 지원
-    let colors = dashboardColor.treeMapColor;
+    let colors = dashboardColor.resourcePerformance;
     function getColorForName(name) {
         if (!colorMapping[name]) {
             const selectedColor = colors.shift();
