@@ -2023,3 +2023,89 @@ svg .ghostCircle.show {
     color: #f8f8f8;
     margin-left: 10px;
 }
+.edit-red{
+    border:1px solid #DB2A34;
+    margin-left: 10px;
+}
+.edit-red:hover{
+    background-color: rgba(219,42,52,0.5);
+}
+.edit-red:hover .fa {
+    color: #FFFFFF !important;
+}
+.edit-red.active,
+.edit-red.active.focus,
+.edit-red.active:focus{
+    background-color: rgba(219,42,52,0.5) !important;
+}
+.edit-red.active .fa,
+.edit-red.active.focus .fa ,
+.edit-red.active:focus .fa {
+    color: #FFFFFF !important;
+}
+.edit-orange{
+    border:1px solid #E49400;
+    margin-left: 10px;
+}
+.edit-orange:hover{
+    background-color: rgba(228,148,0,0.5);
+}
+.edit-orange:hover .fa {
+    color: #FFFFFF !important;
+}
+.edit-orange.active,
+.edit-orange.active.focus,
+.edit-orange.active:focus{
+    background-color: rgba(228,148,0,0.5) !important;
+}
+.edit-orange.active .fa,
+.edit-orange.active.focus .fa,
+.edit-orange.active:focus .fa {
+    color: #FFFFFF !important;
+}
+.edit-green{
+    border:1px solid #2D8515;
+    margin-left: 10px;
+}
+.edit-green:hover{
+    background-color: rgba(45,133,21,0.5);
+}
+.edit-green:hover .fa {
+    color: #FFFFFF !important;
+}
+.edit-green.active,
+.edit-green.active.focus,
+.edit-green.active:focus{
+    background-color: rgba(45,133,21,0.5) !important;
+}
+.edit-green.active .fa,
+.edit-green.active.focus .fa,
+.edit-green.active:focus .fa {
+    color: #FFFFFF !important;
+}
+.edit-blue{
+    border:1px solid #2477FF;
+    margin-left: 10px;
+}
+.edit-blue:hover{
+    background-color: rgba(36,119,255,0.5);
+}
+.edit-blue:hover .fa {
+    color: #FFFFFF !important;
+}
+.edit-blue:hover{
+    background-color: rgba(36,119,255,0.5);
+}
+.edit-blue:hover .fa {
+    color: #FFFFFF !important;
+}
+.edit-blue.active,
+.edit-blue.active.focus,
+.edit-blue.active:focus{
+    background-color: rgba(36,119,255,0.5) !important;
+}
+.edit-blue.active .fa,
+.edit-blue.active.focus .fa,
+.edit-blue.active:focus .fa {
+    color: #FFFFFF !important;
+}

@@ -7,19 +7,6 @@ var selectedJsTreeName; // 요구사항 이름
 var tempDataTable;
 var isChecked = []; // 지라 프로젝트 연결 목록 체크
 var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
-
-const buttonBackgroundColor ={
-    red : "rgba(219,42,52,0.5)",
-    orange : " rgba(228,148,0,0.5)",
-    green : "rgba(45,133,21,0.5)",
-    blue : "rgba(36,119,255,0.5)"
-};
-const buttonColor = {
-    red : "#DB2A34",
-    orange : "#E49400",
-    green : "#2D8515",
-    blue : "#2477FF"
-};
 function execDocReady() {
 	var pluginGroups = [
 		[
@@ -139,8 +126,6 @@ function execDocReady() {
 			click_btn_for_req_save();
 			click_btn_for_req_update();
 			click_btn_for_req_delete();
-
-            changeButtonState();
 
 			switch_action_for_mode();
 			tab_click_event();
@@ -609,68 +594,6 @@ function dataTableDrawCallback(tableInfo) {
 		.columns.adjust()
 		.responsive.recalc();
 }
-function selectButtonColor(type,value){
-    let colorPalette = {};
-    let color;
-    let background;
-    if(type === "priority"){
-        switch (value) {
-            case 3:
-            case 4:
-                color = buttonColor.blue;
-                background = buttonBackgroundColor.blue;
-                break;
-            case 5:
-                color = buttonColor.orange;
-                background = buttonBackgroundColor.orange;
-                break;
-            case 6:
-            case 7: // 높음
-                color = buttonColor.red;
-                background = buttonBackgroundColor.red;
-                break;
-        }
-    }else if(type === "difficulty"){
-        switch (value) {
-            case 3:
-            case 4:
-                color = buttonColor.red;
-                background = buttonBackgroundColor.red;
-                break;
-            case 5:
-                color = buttonColor.orange;
-                background = buttonBackgroundColor.orange;
-                break;
-            case 6:
-            case 7:
-                color = buttonColor.blue;
-                background = buttonBackgroundColor.blue;
-                break;
-        }
-    }else if(type === "state"){
-        switch (value) {
-            case 10:
-                color = buttonColor.red;
-                background = buttonBackgroundColor.red;
-                break;
-            case 11:
-                color = buttonColor.orange;
-                background = buttonBackgroundColor.orange;
-                break;
-            case 12:
-                color = buttonColor.green;
-                background = buttonBackgroundColor.green;
-                break;
-            case 13:
-                color = buttonColor.blue;
-                background = buttonBackgroundColor.blue;
-                break;
-        }
-    }
-    colorPalette.color = color;
-    colorPalette.background = background;
-    return colorPalette;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //상세 보기 탭 & 편집 탭
@@ -731,54 +654,33 @@ function bindDataEditTab(ajaxData) {
 	//편집하기 - 우선순위 버튼
 	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");
 	priorityRadioButtons.each(function () {
-        const value = parseInt($(this).val(), 10); // val() 값을 숫자로 변환
-        let colorPalette  = selectButtonColor("priority",value);
-
 		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 
-			$(this).parent().css("background-color", colorPalette.background);
-            $(this).parent().find("i").css("color", "#FFFFFF");
 		} else {
 			$(this).prop("checked", false);
-			$(this).parent().css("background-color", "");
-            $(this).parent().find("i").css("color", colorPalette.color);
 		}
 	});
 	//편집하기 - 난이도 버튼
 	let difficultRadioButtons = $("#editview_req_difficulty input[type='radio']");
 	difficultRadioButtons.each(function () {
-        const value = parseInt($(this).val(), 10); // val() 값을 숫자로 변환
-        let colorPalette  = selectButtonColor("difficulty",value);
-
 		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 
-            $(this).parent().css("background-color", colorPalette.background);
-            $(this).parent().find("i").css("color", "#FFFFFF");
 		} else {
 			$(this).prop("checked", false);
-			$(this).parent().css("background-color", "");
-            $(this).parent().find("i").css("color", colorPalette.color);
 		}
 	});
 	//편집하기 - 상태 버튼
 	let stateRadioButtons = $("#editview_req_state input[type='radio']");
 	stateRadioButtons.each(function () {
-        const value = parseInt($(this).val(), 10); // val() 값을 숫자로 변환
-        let colorPalette  = selectButtonColor("state",value);
-
 		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
-			$(this).parent().css("background-color", colorPalette.background);
-            $(this).parent().find("i").css("color", "#FFFFFF");
 		} else {
 			$(this).prop("checked", false);
-			$(this).parent().css("background-color", "");
-            $(this).parent().find("i").css("color", colorPalette.color);
 		}
 	});
 
@@ -893,40 +795,6 @@ function bindDataEditTab(ajaxData) {
 	CKEDITOR.instances.edit_tabmodal_editor.setData(ajaxData.c_req_contents);
 	CKEDITOR.instances.edit_tabmodal_editor.setReadOnly(false);
 }
-// -------- 버튼 선택 --------- //
-function changeButtonState() {
-    function setupChangeHandler(groupSelector, labelSelector, iconClass) {
-        $(`input[type='radio'][name='${groupSelector}']`).change(function() {
-            $(labelSelector + " label").removeClass("active").css("background-color", "").find("i").css("color", "");
-            $(labelSelector + " label").removeClass("active").css("background-color", "").each(function() {
-                if ($(this).hasClass("edit-orange")) {
-                    $(this).find(`i.${iconClass}`).css("color", "#E49400");
-                }
-            });
-            $(this).parent().addClass("active");
-            selectedColor($(this).parent());
-        });
-    }
-
-    setupChangeHandler('editview_req_priority_options', '#editview_req_priority', 'fa-minus');
-    setupChangeHandler('editview_req_difficulty_options', '#editview_req_difficulty', 'fa-minus');
-    setupChangeHandler('editview_req_state_options', '#editview_req_state', 'fa-fire');
-    setupChangeHandler('popup_req_priority_options', '#popup_req_priority', 'fa-minus');
-    setupChangeHandler('popup_req_difficulty_options', '#popup_req_difficulty', 'fa-minus');
-    setupChangeHandler('popup_req_state_options', '#popup_req_state', 'fa-fire');
-
-    function selectedColor(item) {
-        if (item.hasClass("edit-red")) {
-            item.css("background-color", buttonBackgroundColor.red).find("i").css("color", "#FFFFFF");
-        } else if (item.hasClass("edit-orange")) {
-            item.css("background-color", buttonBackgroundColor.orange).find("i").css("color", "#FFFFFF");
-        } else if (item.hasClass("edit-green")) {
-            item.css("background-color", buttonBackgroundColor.green).find("i").css("color", "#FFFFFF");
-        } else if (item.hasClass("edit-blue")) {
-            item.css("background-color", buttonBackgroundColor.blue).find("i").css("color", "#FFFFFF");
-        }
-    }
-}
 
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
@@ -962,58 +830,31 @@ function bindDataDetailTab(ajaxData) {
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
 	priorityRadioButtons.each(function () {
-        const value = parseInt($(this).val(), 10); // val() 값을 숫자로 변환
-        let colorPalette  = selectButtonColor("priority",value);
-
 		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
-
-            $(this).parent().css("background-color", colorPalette.background);
-            $(this).parent().find("i").css("color", "#FFFFFF");
 		} else {
 			$(this).prop("checked", false);
-
-			$(this).parent().css("background-color", "");
-            $(this).parent().find("i").css("color", colorPalette.color);
 		}
 	});
 	//상세보기 - 난이도 버튼
 	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
 	difficultRadioButtons.each(function () {
-        const value = parseInt($(this).val(), 10); // val() 값을 숫자로 변환
-        let colorPalette  = selectButtonColor("difficulty",value);
-
 		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
-
-            $(this).parent().css("background-color", colorPalette.background);
-            $(this).parent().find("i").css("color", "#FFFFFF");
 		} else {
 			$(this).prop("checked", false);
-
-			$(this).parent().css("background-color", "");
-            $(this).parent().find("i").css("color", colorPalette.color);
 		}
 	});
 	//상세보기 - 상태 버튼
 	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
 	stateRadioButtons.each(function () {
-        const value = parseInt($(this).val(), 10); // val() 값을 숫자로 변환
-        let colorPalette  = selectButtonColor("state",value);
-
 		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
-
-            $(this).parent().css("background-color", colorPalette.background);
-            $(this).parent().find("i").css("color", "#FFFFFF");
 		} else {
 			$(this).prop("checked", false);
-
-			$(this).parent().css("background-color", "");
-            $(this).parent().find("i").css("color", colorPalette.color);
 		}
 	});
 
@@ -1240,28 +1081,6 @@ function registNewPopup() {
 	$("input[name='popup_req_priority_options']:checked").prop("checked", false);
 	$("input[name='popup_req_difficulty_options']:checked").prop("checked", false);
 	$("input[name='popup_req_state_options']:checked").prop("checked", false);
-
-    // radio 버튼 - 우선순위 스타일 초기화
-    $("#popup_req_priority label").removeClass("active").css("background-color", "").find("i").css("color", "");
-    $("#popup_req_priority label").removeClass("active").css("background-color", "").each(function(){
-        if ($(this).hasClass("edit-orange")) {
-            $(this).find("i.fa-minus").css("color", "#E49400");
-        }
-    });
-     // radio 버튼 - 우선순위 난이도 초기화
-    $("#popup_req_difficulty label").removeClass("active").css("background-color", "").find("i").css("color", "");
-    $("#popup_req_difficulty label").removeClass("active").css("background-color", "").each(function(){
-        if ($(this).hasClass("edit-orange")) {
-            $(this).find("i.fa-minus").css("color", "#E49400");
-        }
-    });
-    // radio 버튼 - 우선순위 상태 초기화
-    $("#popup_req_state label").removeClass("active").css("background-color", "").find("i").css("color", "");
-    $("#popup_req_state label").removeClass("active").css("background-color", "").each(function(){
-        if ($(this).hasClass("edit-orange")) {
-            $(this).find("i.fa-fire").css("color", "#E49400");
-        }
-    });
 
 	var datepickerOption = {
 		timepicker: false,
