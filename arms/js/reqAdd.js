@@ -10,7 +10,7 @@ var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
 
 const buttonBackgroundColor ={
     red : "rgba(219,42,52,0.5)",
-    orange : " rgba(228,148,0,0.5)",
+    orange : "rgba(228,148,0,0.5)",
     green : "rgba(45,133,21,0.5)",
     blue : "rgba(36,119,255,0.5)"
 };

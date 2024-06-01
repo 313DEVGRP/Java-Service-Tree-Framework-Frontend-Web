@@ -168,6 +168,10 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
     };
     myChart.setOption(option,true);
 
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
+
     return myChart;
 }
 
