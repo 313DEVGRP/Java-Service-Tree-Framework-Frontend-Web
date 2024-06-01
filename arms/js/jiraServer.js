@@ -286,7 +286,8 @@ function jiraServerCardClick(c_id) {
 
 				$("li a[href='#related_project'] strong").text("지라 프로젝트");
 
-			}else if(selectServerType === "온프레미스") {// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 유형, 삭제하기
+			}
+			else if(selectServerType === "온프레미스") {// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 유형, 삭제하기
 				$("#type_tab").show();// 이슈 유형 보여주기
 				$("#status_tab").hide(); // 이슈 상태 숨김
 				$("#resolution_tab").hide(); //해결책 숨김
@@ -295,7 +296,8 @@ function jiraServerCardClick(c_id) {
 
 				$("li a[href='#related_project'] strong").text("지라 프로젝트");
 
-			} else{ // 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 상태, 삭제하기
+			}
+			else{ // 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 상태, 삭제하기
 
 				$("#type_tab").hide(); // 이슈 유형 슴김
 				$("#resolution_tab").hide(); // 해결책 숨기기
@@ -400,11 +402,13 @@ function project_dataTableLoad(c_id) {
 			searchable: false,
 			orderable: false,
 			render: function (data, type, row, meta) {
+				let splitData = splitAndColor(data);
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
-				} else {
+				}
+				else {
 					var _render =
-						'<div style=\'white-space: nowrap; color: #f8f8f8\'>' + data +
+						'<div style=\'white-space: nowrap; color: #f8f8f8\'>' + splitData +
 						'<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_projectList_table(\'' + data + '\',\'' + selectServerType + '\')"><i class="fa fa-th-list"></i>' + "</button>"+
 						"</div>";
 					return _render;
@@ -1923,4 +1927,28 @@ function notReadyModalPopup(jiraServerId, type) {
 
 	$('#modal_project_table tbody').off('click', 'tr');
 
+}
+
+function splitAndColor(text) {
+	// &nbsp;-&nbsp;을 기준으로 문자열을 분할
+	const list = text.split('&nbsp;-&nbsp;');
+	let htmlContent = '';
+
+	// 분할된 리스트를 순회하면서 처리
+	list.forEach((item, index) => {
+		if (index === list.length - 1) {
+			// 마지막 요소는 하얀색으로 처리
+			htmlContent += `<span style="color: white;">${item}</span>`;
+		} else {
+			// 나머지는 노란색으로 처리
+			htmlContent += `<span style="color: #808080;">${item}</span>`;
+			// 요소 사이에 원래의 구분자 추가
+			if (index < list.length - 1) {
+				htmlContent += `<span style="color: #808080;">&nbsp;-&nbsp;</span>` ;
+			}
+		}
+	});
+
+	// 결과를 HTML 요소에 할당
+	return htmlContent;
 }

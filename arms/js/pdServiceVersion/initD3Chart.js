@@ -520,7 +520,7 @@ function initD3Chart(href) {
                     return d.children || d._children ? "end" : "start";
                 })
                 .text(function(d) {
-                    return d.name;
+                    return replaceNbsp(d.name);
                 });
 
             // Change the circle fill depending on whether it has children and is collapsed
@@ -617,6 +617,10 @@ function initD3Chart(href) {
         centerNode(root);
     });
 
+}
+
+function replaceNbsp(text) {
+    return text.replace(/&nbsp;/g, ' ');
 }
 
 
