@@ -29,6 +29,20 @@ function execDocReady() {
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_reqadd");
 
 			build_ReqData_By_PdService();
+
+			// --- 에디터 설정 --- //
+			var waitCKEDITOR = setInterval(function () {
+				try {
+					if (window.CKEDITOR) {
+						if (window.CKEDITOR.status === "loaded") {
+							CKEDITOR.replace("detailview_req_contents", { skin: "office2013" });
+							clearInterval(waitCKEDITOR);
+						}
+					}
+				} catch (err) {
+					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+				}
+			}, 313 /*milli*/);
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
@@ -145,5 +159,6 @@ function bindDataDetailTab(ajaxData) {
 	} else {
 		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
 	}
-	$("#detailview_req_contents").html(ajaxData.c_req_contents);
+	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
+	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
 }

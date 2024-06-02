@@ -7,11 +7,13 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var calledAPIs = {};
 
 function execDocReady() {
 	var pluginGroups = [
-		["../reference/lightblue4/docs/lib/widgster/widgster.js", "../reference/light-blue/lib/vendor/jquery.ui.widget.js"]
+		[
+			"../reference/lightblue4/docs/lib/widgster/widgster.js",
+			"../reference/light-blue/lib/vendor/jquery.ui.widget.js"
+		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
@@ -21,21 +23,25 @@ function execDocReady() {
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
 			getDetailViewTab();
+
+			// --- 에디터 설정 --- //
+			var waitCKEDITOR = setInterval(function () {
+				try {
+					if (window.CKEDITOR) {
+						if (window.CKEDITOR.status === "loaded") {
+							CKEDITOR.replace("detailview_req_contents", { skin: "office2013" });
+							clearInterval(waitCKEDITOR);
+						}
+					}
+				} catch (err) {
+					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+				}
+			}, 313 /*milli*/);
 		})
 		.catch(function (errorMessage) {
 			console.error(errorMessage);
 			console.error("플러그인 로드 중 오류 발생");
 		});
-}
-
-// ------------------ api 호출 여부 확인(여러번 발생시키지 않기 위하여) ------------------ //
-function callAPI(apiName) {
-	if (calledAPIs[apiName]) {
-		console.log("This API has already been called: " + apiName);
-		return true;
-	}
-
-	return false;
 }
 
 function setUrlParams() {
@@ -48,9 +54,6 @@ function setUrlParams() {
 }
 
 function getDetailViewTab() {
-	if (callAPI("detailAPI")) {
-		return;
-	}
 
 	console.log("Detail Tab ::::");
 	var tableName = "T_ARMS_REQADD_";
@@ -85,7 +88,6 @@ function getDetailViewTab() {
 				bindDataDetailTab(data);
 				//////////////////////////////////////////////////////////
 				jSuccess("요구사항 조회가 완료 되었습니다.");
-				calledAPIs["detailAPI"] = true;
 			}
 		},
 		beforeSend: function () {},
@@ -100,6 +102,7 @@ function bindDataDetailTab(ajaxData) {
 	console.log(ajaxData);
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = ajaxData.pdService_c_title;
+	let contents = ajaxData.reqAdd_c_req_contents;
 
 	if (isEmpty(selectedPdServiceText)) {
 		$("#detailview_req_pdservice_name").val("");
@@ -146,6 +149,7 @@ function bindDataDetailTab(ajaxData) {
 		$("#detailview_req_reviewer05").val(ajaxData.reqAdd_c_req_reviewer05);
 	}
 
-	$("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
-	$("#req_detail_contents").html(ajaxData.reqAdd_c_req_contents);
+	CKEDITOR.instances.detailview_req_contents.setData(contents);
+	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
+
 }
