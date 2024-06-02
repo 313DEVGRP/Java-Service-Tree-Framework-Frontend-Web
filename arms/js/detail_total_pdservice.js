@@ -7,7 +7,6 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var calledAPIs = {};
 /* 요구사항 전체목록 전역변수 */
 
 var getFiles = [];
@@ -90,15 +89,6 @@ function execDocReady() {
 		});
 }
 
-function callAPI(apiName) {
-	if (calledAPIs[apiName]) {
-		console.log("This API has already been called: " + apiName);
-		return true;
-	}
-
-	return false;
-}
-
 function setUrlParams() {
 	urlParams = new URL(location.href).searchParams;
 	selectedPdService = urlParams.get("pdService");
@@ -124,7 +114,6 @@ function fileLoadByPdService() {
 		dataType: "json"
 	}).done(function (result) {
 		console.log(result.files);
-		calledAPIs["fileAPI"] = true;
 
 		bindFileList(result);
 
