@@ -13,8 +13,9 @@ function execDocReady() {
 		[
 			"../reference/lightblue4/docs/lib/widgster/widgster.js",
 			"../reference/light-blue/lib/vendor/jquery.ui.widget.js"
-		]
+		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+		[ "css/jiraServerCustom.css"]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -113,6 +114,53 @@ function bindDataDetailTab(ajaxData) {
 	$("#detailview_req_id").val(selectedJsTreeId);
 	$("#detailview_req_name").val(ajaxData.reqAdd_c_title);
 
+//radio 버튼 - 선택 초기화
+	$("#detailview_req_priority label").removeClass("active");
+	$("#detailview_req_difficulty label").removeClass("active");
+	$("#detailview_req_state label").removeClass("active");
+	//radio 버튼 - 상태 초기화
+	$("input[name='detailview_req_priority_options']:checked").prop("checked", false);
+	$("input[name='detailview_req_difficulty_options']:checked").prop("checked", false);
+	$("input[name='detailview_req_state_options']:checked").prop("checked", false);
+
+	//상세보기 - 우선순위 버튼
+	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
+	priorityRadioButtons.each(function () {
+		if ( $(this).val() == ajaxData.reqAdd_c_req_priority_link) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 난이도 버튼
+	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
+	difficultRadioButtons.each(function () {
+		if ($(this).val() == ajaxData.reqAdd_c_req_difficulty_link) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 상태 버튼
+	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
+	stateRadioButtons.each(function () {
+		if ($(this).val() == ajaxData.reqAdd_c_req_state_link) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+
+	if (ajaxData.reqAdd_c_req_start_date) {
+		$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.reqAdd_c_req_start_date)));
+	}
+	if (ajaxData.reqAdd_c_req_end_date) {
+		$("#detailview_req_end_date").val(formatDate(new Date(ajaxData.reqAdd_c_req_end_date)));
+	}
+
 	//Version 데이터 바인딩
 	if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
 		$("#detailview_req_pdservice_version").val("요구사항에 등록된 버전이 없습니다.");
@@ -152,4 +200,10 @@ function bindDataDetailTab(ajaxData) {
 	CKEDITOR.instances.detailview_req_contents.setData(contents);
 	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
 
+}
+function formatDate(date) {
+	var year = date.getFullYear().toString(); // 연도의 마지막 두 자리를 얻습니다.
+	var month = (date.getMonth() + 1).toString().padStart(2, "0");
+	var day = date.getDate().toString().padStart(2, "0");
+	return year + "-" + month + "-" + day;
 }
