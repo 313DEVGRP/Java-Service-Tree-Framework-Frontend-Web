@@ -114,6 +114,35 @@
 					<section
 						class="widget widget-tabs"
 						style="margin-top: 15px">
+						<header>
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a
+											href="#stats"
+											data-toggle="tab"
+											id="default_tab">
+										<strong>상세 보기</strong>
+									</a>
+								</li>
+								<li>
+									<a
+											href="#report"
+											data-toggle="tab"
+											id="folder_tab">
+										<strong>리스트로 보기</strong>
+									</a>
+								</li>
+								<li>
+									<a
+											href="#doc"
+											data-toggle="tab"
+											id="docu_tab">
+										<strong>문서로 보기</strong>
+									</a>
+								</li>
+
+							</ul>
+						</header>
 						<div class="body tab-content">
 							<div
 								id="stats"
@@ -123,6 +152,32 @@
 									class="form-horizontal"
 									method="post">
 									<fieldset>
+										<div
+												class="control-group"
+												for="detailview_req_pdservice_name">
+											<label class="control-label font13">
+												요구사항 제품
+												<sup>서비스</sup>
+												:
+											</label>
+											<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-th-list"></i>
+												</span>
+												<input
+														type="text"
+														id="detailview_req_pdservice_name"
+														name="detailview_req_pdservice_name"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														data-original-title="제품(서비스) 이름은 중복될 수 없습니다."
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Service Name" />
+											</div>
+										</div>
 										<div
 											class="control-group"
 											for="detailview_req_pdservice_version">
@@ -187,6 +242,217 @@
 													required="required"
 													style="color: #a4c6ff"
 													placeholder="Requirement Title" />
+											</div>
+										</div>
+										<div class="control-group">
+											<label
+													for="detailview_req_priority"
+													class="control-label font13">
+												요구사항 우선순위 :
+											</label>
+											<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+												<div
+														id="detailview_req_priority"
+														data-toggle="buttons">
+													<label class="btn btn-disabled edit-red">
+														<input
+																type="radio"
+																name="detailview_req_priority_options"
+																value="7" />
+														<i class="fa  fa-angle-double-up text-danger"></i>
+														매우 높음
+													</label>
+													<label class="btn btn-disabled edit-red" >
+														<input
+																type="radio"
+																name="detailview_req_priority_options"
+																value="6" />
+														<i class="fa fa-angle-up text-danger"></i>
+														높음
+													</label>
+													<label class="btn btn-disabled edit-orange">
+														<input
+																type="radio"
+																name="detailview_req_priority_options"
+																value="5" />
+														<i class="fa fa-minus"  style="color: #E49400;"></i>
+														중간
+													</label>
+													<label class="btn btn-disabled edit-blue" >
+														<input
+																type="radio"
+																name="detailview_req_priority_options"
+																value="4" />
+														<i class="fa  fa-angle-down text-primary"></i>
+														낮음
+													</label>
+													<label class="btn btn-disabled edit-blue">
+														<input
+																type="radio"
+																name="detailview_req_priority_options"
+																value="3" />
+														<i class="fa  fa-angle-double-down text-primary"></i>
+														매우 낮음
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="control-group">
+											<label
+													for="detailview_req_difficulty"
+													class="control-label font13">
+												요구사항 난이도 :
+											</label>
+											<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+												<div
+														id="detailview_req_difficulty"
+														data-toggle="buttons">
+													<label class="btn btn-disabled edit-red">
+														<input
+																type="radio"
+																name="detailview_req_difficulty_options"
+																value="3" />
+														<i class="fa  fa-angle-double-up text-danger"></i>
+														매우 어려움
+													</label>
+													<label class="btn btn-disabled edit-red">
+														<input
+																type="radio"
+																name="detailview_req_difficulty_options"
+																value="4" />
+														<i class="fa fa-angle-up text-danger"></i>
+														어려움
+													</label>
+													<label class="btn btn-disabled edit-orange">
+														<input
+																type="radio"
+																name="detailview_req_difficulty_options"
+																value="5" />
+														<i class="fa   fa-minus"  style="color: #E49400;"></i>
+														보통
+													</label>
+													<label class="btn btn-disabled edit-blue">
+														<input
+																type="radio"
+																name="detailview_req_difficulty_options"
+																value="6" />
+														<i class="fa  fa-angle-down text-primary"></i>
+														쉬움
+													</label>
+													<label class="btn btn-disabled edit-blue">
+														<input
+																type="radio"
+																name="detailview_req_difficulty_options"
+																value="7" />
+														<i class="fa  fa-angle-double-down text-primary"></i>
+														매우 쉬움
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="control-group">
+											<label
+													for="detailview_req_state"
+													class="control-label font13">
+												요구사항 상태 :
+											</label>
+											<!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+											<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-list-alt"></i>
+																</span>
+												<div
+														id="detailview_req_state"
+														data-toggle="buttons">
+													<label class="btn btn-disabled edit-red">
+														<input
+																type="radio"
+																name="detailview_req_state_options"
+																value="10" />
+														<i class="fa fa-folder-o text-danger"></i>
+														열림
+													</label>
+													<label class="btn btn-disabled edit-orange">
+														<input
+																type="radio"
+																name="detailview_req_state_options"
+																value="11" />
+														<i class="fa fa-fire"  style="color: #E49400;"></i>
+														진행중
+													</label>
+													<label class="btn btn-disabled edit-green" >
+														<input
+																type="radio"
+																name="detailview_req_state_options"
+																value="12" />
+														<i class="fa fa-fire-extinguisher text-success"></i>
+														해결됨
+													</label>
+													<label class="btn btn-disabled edit-blue" >
+														<input
+																type="radio"
+																name="detailview_req_state_options"
+																value="13" />
+														<i class="fa fa-folder text-primary"></i>
+														닫힘
+													</label>
+												</div>
+											</div>
+										</div>
+										<div
+												class="control-group"
+												for="detailview_req_start_date">
+											<label class="control-label font13">요구사항 시작날짜 :</label>
+											<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+												<input
+														type="text"
+														id="detailview_req_start_date"
+														name="detailview_req_start_date"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Requirement Start Date"
+														readonly />
+											</div>
+										</div>
+										<div
+												class="control-group"
+												for="detailview_req_end_date">
+											<label class="control-label font13">요구사항 종료날짜 :</label>
+											<div
+													class="controls form-group input-group"
+													style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+												<input
+														type="text"
+														id="detailview_req_end_date"
+														name="detailview_req_end_date"
+														class="form-control parsley-validated font13 darkBack"
+														data-placement="top"
+														required="required"
+														style="color: #a4c6ff"
+														placeholder="Requirement End Date"
+														readonly />
 											</div>
 										</div>
 										<div
