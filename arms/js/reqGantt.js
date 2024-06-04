@@ -993,7 +993,7 @@ function formatUserSelection(jsonData) {
 }
 
 function change_form_with_req_type() {
-	$(".form-horizontal input[name=reqType]").on("change", function () {
+	$("form input[name=reqType]").on("change", function () {
 		if ($("input[name=reqType]:checked").val() === "default") {
 			$("#popup_reviewer_div").show();
 			$("#popup_priority_div").show();
