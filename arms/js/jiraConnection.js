@@ -515,32 +515,38 @@ function setdata_for_multiSelect() {
         progress: true
     })
         .done(function (data) {
-            var optionData = [];
-            for (var k in data) {
-                var obj = data[k];
-                var server_name = obj.c_jira_server_name;
-                var server_type = obj.c_jira_server_type;
-                for(var p in data[k].jiraProjectIssueTypePureEntities) {
-                    var obj2 = data[k].jiraProjectIssueTypePureEntities[p];
-                    var jira_name = obj2.c_jira_name;
-                    var jira_idx = obj2.c_id;
-                    if (server_type === "클라우드" || server_type === "레드마인_온프레미스") {
-                        if (obj2.jiraIssueTypeEntities && obj2.jiraIssueTypeEntities.length > 0) {
-                            const issueType = obj2.jiraIssueTypeEntities.find(issuetype => issuetype.c_check === "true");
+            console.log(data);
+            let option_data = [];
+            for (let i in data) {
+                let alm_server = data[i];
+                let server_name = alm_server.c_jira_server_name;
+                let server_type = alm_server.c_jira_server_type;
 
-                            if (issueType) {
-                                optionData.push("<option data-server-type='" + server_type + "' value='" + jira_idx + "'>" + "[" + server_name + "] " + jira_name + "</option>");
-                            }
-                        }
+                for (let j in alm_server.jiraProjectIssueTypePureEntities) {
+                    let alm_project = alm_server.jiraProjectIssueTypePureEntities[j];
+                    let alm_project_name = alm_project.c_jira_name;
+                    let alm_project_c_id = alm_project.c_id;
+
+                    let issue_type_entities = server_type === "온프레미스" ?
+                                                                alm_server.jiraIssueTypeEntities : alm_project.jiraIssueTypeEntities;
+
+                    const issue_type = find_checked_true_entity(issue_type_entities);
+
+                    let is_add_option = issue_type && (server_type === "클라우드" || server_type === "온프레미스");
+
+                    if (server_type === "레드마인_온프레미스") {
+                        const issue_priority = find_checked_true_entity(alm_server.jiraIssuePriorityEntities);
+                        is_add_option = issue_type && issue_priority;
                     }
-                    else {
-                        optionData.push("<option data-server-type='"+server_type+"' value='" + jira_idx + "'>"+"["+server_name+"] "+ jira_name + "</option>");
+
+                    if (is_add_option) {
+                        option_data.push(`<option data-server-type='${server_type}' value='${alm_project_c_id}'>[${server_name}] ${alm_project_name}</option>`);
                     }
                 }
             }
 
             //프로젝트 목록 추가
-            $(".searchable").html(optionData.join(""));
+            $(".searchable").html(option_data.join(""));
 
             ////////////////////////////////////////////////
             // 멀티 셀렉트 빌드
@@ -553,7 +559,10 @@ function setdata_for_multiSelect() {
         .always(function () {
             console.log("always call");
         });
+}
 
+function find_checked_true_entity(entities) {
+    return entities && entities.length > 0 ? entities.find(entity => entity.c_check === "true") : null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
