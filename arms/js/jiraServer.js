@@ -399,7 +399,7 @@ function project_dataTableLoad(c_id) {
 	var columnDefList_cloud = [
 		{
 			targets: 0,
-			searchable: false,
+			searchable: true,
 			orderable: false,
 			render: function (data, type, row, meta) {
 				let splitData = splitAndColor(data);

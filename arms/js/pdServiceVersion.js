@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Page 전역 변수
 ////////////////////////////////////////////////////////////////////////////////////////
-var selectId; // 제품 아이디
-var selectName; // 제품 이름
+var selectPdServiceId; // 제품 아이디
+var selectPdServiceName; // 제품 이름
 var selectedIndex; // 데이터테이블 선택한 인덱스
 var selectedPage; // 데이터테이블 선택한 인덱스
 var selectVersion; // 선택한 버전 아이디
@@ -224,8 +224,8 @@ function dataTableLoad() {
 function dataTableClick(tempDataTable, selectedData) {
 	$("#version_contents").html(""); // 버전 상세 명세 초기화
 
-	selectId = selectedData.c_id;
-	selectName = selectedData.c_title;
+	selectPdServiceId = selectedData.c_id;
+	selectPdServiceName = selectedData.c_title;
 	console.log("selectedData.c_id : ", selectedData.c_id);
 
 	$("#default_non_version").empty();
@@ -297,7 +297,7 @@ function click_btn_for_delete_version() {
 				url: "/auth-user/api/arms/pdService/removeVersion.do",
 				type: "DELETE",
 				data: {
-					pdservice_c_id: selectId,
+					pdservice_c_id: selectPdServiceId,
 					version_c_id: selectVersion
 				},
 				statusCode: {
@@ -307,7 +307,7 @@ function click_btn_for_delete_version() {
 						$("#close_version").trigger("click");
 						$("#select_version").text("선택되지 않음");
 						//버전 데이터 재 로드
-						dataLoad(selectId, selectName);
+						dataLoad(selectPdServiceId, selectPdServiceName);
 					}
 				}
 			});
@@ -333,7 +333,7 @@ function click_btn_for_update_version() {
 			c_pds_version_end_date: $("#input_pdservice_end_date").val()
 		};
 		$.ajax({
-			url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link=" + selectId,
+			url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link=" + selectPdServiceId,
 			type: "put",
 			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify(send_data),
@@ -344,7 +344,7 @@ function click_btn_for_update_version() {
 					//모달 팝업 끝내고
 					$("#close_version").trigger("click");
 					//버전 데이터 재 로드
-					dataLoad(selectId, selectName);
+					dataLoad(selectPdServiceId, selectPdServiceName);
 				}
 			}
 		});
@@ -361,7 +361,7 @@ function modalPopupNewUpdate() {
 	}
 
 	var send_data = {
-		c_id: selectId,
+		c_id: selectPdServiceId,
 		pdServiceVersionEntities: [
 			{
 				ref:2,
@@ -385,7 +385,7 @@ function modalPopupNewUpdate() {
 				jSuccess("데이터가 저장되었습니다.");
 				$("#close_version").trigger("click");
 				//버전 데이터 재 로드
-				dataLoad(selectId, selectName);
+				dataLoad(selectPdServiceId, selectPdServiceName);
 			}
 		}
 	});
@@ -417,7 +417,7 @@ function modalPopupUpdate() {
 				//모달 팝업 끝내고
 				$("#close_version").trigger("click");
 				//버전 데이터 재 로드
-				dataLoad(selectId, selectName);
+				dataLoad(selectPdServiceId, selectPdServiceName);
 			}
 		}
 	});
@@ -522,9 +522,9 @@ function dataLoad(getSelectedText, selectedText) {
 
 		$("#tooltip_enabled_service_name").val(selectedText);
 
-		setTimeout(function () {
-			$("#pdService_Version_First_Child").trigger("click");
-		}, 500);
+		// setTimeout(function () {
+		// 	$("#pdService_Version_First_Child").trigger("click");
+		// }, 500);
 	});
 }
 
@@ -627,19 +627,20 @@ function versionClick(element, c_id) {
 	})
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
-			console.log(" → " + json.c_contents);
+			console.log(" → ");
 			console.log(json);
 
 			selectVersionName = json.c_title;
+			console.log(selectPdServiceName);
 
-			$("#pdservice_name").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+			$("#pdservice_name").text(selectPdServiceName);
 
 			$("#pdservice_version").val(json.c_title);
 			$("#version_start_date").val(json.c_pds_version_start_date);
 			$("#version_end_date").val(json.c_pds_version_end_date);
 			CKEDITOR.instances.version_contents.setData(json.c_pds_version_contents);
 
-			$("#input_pdservice_name").val($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+			$("#input_pdservice_name").val(selectPdServiceName);
 			$("#input_pdservice_version").val(json.c_title);
 			$("#input_pdservice_start_date").val(json.c_pds_version_start_date);
 			$("#input_pdservice_end_date").val(json.c_pds_version_end_date);
