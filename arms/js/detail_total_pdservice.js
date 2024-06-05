@@ -49,9 +49,16 @@ var iconsMap = {
 function execDocReady() {
 	var pluginGroups = [
 		[
-			"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js",
-			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"
+            "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+            "../reference/lightblue4/docs/lib/widgster/widgster.js",
+            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
+            "../reference/light-blue/lib/jquery.iframe-transport.js",
+            "../reference/light-blue/lib/jquery.fileupload.js",
+            "../reference/light-blue/lib/jquery.fileupload-fp.js",
+            "../reference/light-blue/lib/jquery.fileupload-ui.js"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -66,12 +73,19 @@ function execDocReady() {
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_pdservice");
 
+            // 파일 업로드 관련 레이어 숨김 처리
+            $(".body-middle").hide();
+
+			file_upload_setting();
+			init_pdDetailList();
+			dataLoad();
+
 			// --- 에디터 설정 --- //
 			var waitCKEDITOR = setInterval(function () {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded"){
-							CKEDITOR.replace("detail_pdservice_contents",{ skin: "office2013" });//상세보기
+							CKEDITOR.replace("pdservice_detail_contents",{ skin: "office2013" });//상세보기
 							clearInterval(waitCKEDITOR);
 						}
 					}
@@ -79,10 +93,6 @@ function execDocReady() {
 					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
 				}
 			}, 313 /*milli*/);
-
-			// 스크립트 실행 로직을 이곳에 추가합니다.
-			getNodeInfo();
-			fileLoadByPdService();
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
@@ -98,139 +108,147 @@ function setUrlParams() {
 	selectedJiraProject = urlParams.get("jiraProject");
 }
 
-function fileLoadByPdService() {
-	console.log("File Tab ::::");
+function file_upload_setting() {
+	var $fileupload = $("#fileupload");
+	$fileupload.fileupload({
+		autoUpload: false,
+		sequentialUploads: true,
+		url: "/auth-user/api/arms/pdServiceDetail/uploadFileToNode.do",
+		dropZone: $("#dropzone")
+	});
 
-	// if (callAPI("fileAPI")) {
-	// 	return;
-	// }
-
-	// $("#fileIdlink").val(selectedPdService);
-	$(".spinner").html('<i class="fa fa-spinner fa-spin"></i> 데이터를 로드 중입니다...');
-	$.ajax({
-		url: "/auth-user/api/arms/fileRepository/getFilesByNode.do",
-		data: { fileIdLink: selectedPdService },
-		async: false,
-		dataType: "json"
-	}).done(function (result) {
-		console.log(result.files);
-
-		bindFileList(result);
-
-		jSuccess("기획서 조회가 완료 되었습니다.");
+	$("#fileupload").bind("fileuploadsubmit", function (e, data) {
+		var input = $("#fileIdlink");
+		data.formData = { pdServiceDetailId: input.val() };
+		if (!data.formData.pdServiceDetailId) {
+			data.context.find("button").prop("disabled", false);
+			input.focus();
+			return false;
+		}
 	});
 }
 
-function getNodeInfo() {
-	$.ajax({
-		url: "/auth-user/api/arms/pdServicePure/getNode.do",
-		data: { c_id: selectedPdService },
-		async: false,
-		dataType: "json"
-	}).done(function (result) {
-		//document.getElementById("file_description").innerHTML = result.c_pdservice_contents;
+function hideDropzoneArea() {
+   $(".pdservice-detail-file").hide();
+   $("table tbody.files").empty();
+   $(".file-delete-btn").hide();
 
-		// CKEditor 로드된 후, 기획 정보 세팅
-		CKEDITOR.on('instanceReady', function(event) {
-			var editor = event.editor;
-			if(editor.name === 'detail_pdservice_contents'){
-				editor.setData(result.c_pdservice_contents);
-			}
-		});
+   if (selectedPdService == undefined) {
+      $(".body-middle").hide();
+   } else {
+      $(".body-middle").show();
+   }
+}
+
+function init_pdDetailList() {
+	var menu;
+	$.fn.jsonMenu = function (action, items, options) {
+		$(this).addClass("json-menu");
+		if (action == "add") {
+			menu.body.push(items);
+			draw($(this), menu);
+		} else if (action == "set") {
+			menu = items;
+			draw($(this), menu);
+		}
+		return this;
+	};
+}
+
+function dataLoad() {
+    console.log("dataLoad :: getSelectedID → " + selectedPdService);
+    $.ajax({
+        url: "/auth-user/api/arms/pdServicePure/getNode.do",
+        data: { c_id: selectedPdService },
+        method: "GET",
+        dataType: "json",
+    }).done(function (json) {
+        $("#selected_pdservice").text(json.c_title); // sender 이름 바인딩
+    });
+
+	$.ajax("/auth-user/api/arms/pdServiceDetail/getNodes.do/" + selectedPdService).done(function (json) {
+		console.log("dataLoad :: success → ", json);
+		$("#pdservice_detail_accordion").jsonMenu("set", json.response, { speed: 5000 });
 	});
 }
 
-function bindFileList(result) {
-	if (result.files.length === 0) {
-		noFileMessage();
-		return;
+function draw(main, menu) {
+	main.html("");
+
+	var data = "";
+	for (var i = 0; i < menu.length; i++) {
+		data += `
+           <div class="panel">
+               <div class="panel-heading">
+                   <a class="accordion-toggle collapsed"
+                            data-toggle="collapse"
+                            id="pdservice_detail_link_${menu[i].c_id}"
+                            style="color: #a4c6ff; text-decoration: none; cursor: pointer;"
+                            onclick="detailClick(this, ${menu[i].c_id});
+                            return false;">
+                       ${menu[i].c_title}
+                   </a>
+               </div>
+           </div>`;
 	}
 
-	getFiles = result.files;
-
-	createFileList(result.files);
+	main.html(data);
 }
 
-function formatBytes(bytes, decimals = 2) {
-	if (bytes === 0) return "0 Bytes";
+function detailClick(element, c_id) {
+	console.log("detailClick:: c_id  -> ", c_id);
+	hideDropzoneArea();
 
-	const k = 1024;
-	const dm = decimals < 0 ? 0 : decimals;
-	const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-	const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-	return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-}
-
-function noFileMessage() {
-	let $container = $("#files-container");
-
-	var $noDataHtml = $(`<p style="width: 100%; text-align: center; font-size: 20px;">
-                                    <i class="bi bi-file-earmark-x" style="font-size:50px;"></i><br>
-                                    등록된 파일이 없습니다.
-                                  </p>`);
-	$container.append($noDataHtml);
-}
-
-function filteredFiles(type) {
-	if (!type) return getFiles;
-	return getFiles.filter((file) => type.some((t) => file.contentType.includes(type)));
-}
-
-function createFileList(files) {
-	const $portfolioContainer = $("#filter-files");
-	$portfolioContainer.empty();
-
-	files.forEach(function (file) {
-		var filterClass;
-		if (file.contentType.includes("image")) {
-			filterClass = "filter-image";
-		} else if (file.contentType.includes("text")) {
-			filterClass = "filter-doc";
-		} else if (file.contentType.includes("application")) {
-			filterClass = "filter-doc";
-		} else {
-			filterClass = "filter-etc";
+	$("a[id^='pdservice_detail_link_']").each(function() {
+		this.style.background = "";
+		if (c_id == this.id.split("_")[3]) {
+			this.style.background = "rgba(229, 96, 59, 0.3)";
+			this.style.color = "rgb(164, 198, 255)";
+			this.style.textDecoration = "none";
+			this.style.cursor = "pointer";
 		}
+	});
 
-		var imgSrc = iconsMap[file.contentType] || prefix + "Default.png";
-		var title = file.fileName;
-		var downloadUrl = file.url;
-		var thumbnailUrl = file.thumbnailUrl;
-		var fileSize = formatBytes(file.size, 3);
-		var imageLinkHtml = "";
+	$.ajax({
+		url: "/auth-user/api/arms/pdServiceDetail/getNode.do",
+		data: { c_id: c_id },
+		method: "GET",
+		dataType: "json"
+	}).done(function (json) {
+			console.log(json);
 
-		var $newHtml = $(`
-				<div class="col-lg-2 col-md-3 col-sm-3 portfolio-item ${filterClass}">
-					<div class="portfolio-item-wrap">
-						<img src="${imgSrc}" class="img-fluid" alt="" style="margin:auto;">
-						<div class="portfolio-info">
-							<h4>${title}</h4>
-							<p>${fileSize}</p>
-							<div class="portfolio-links">
-									<a href="${downloadUrl}" class="portfolio-details-lightbox" data-glightbox="type: external" title="${title}"><i class="fa fa-download"></i></a>
-								${imageLinkHtml}
-							</div>
-						</div>
-					</div>
-				</div>
-			`);
+			selectedDetailId = json.c_id;
+			selectedDetailName = json.c_title;
 
-		const imgLoadCheck = new Image();
-		imgLoadCheck.src = imgSrc;
+			$("#fileIdlink").val(selectedDetailId);
 
-		imgLoadCheck.onload = function () {
-			$portfolioContainer.append($newHtml);
-		};
+			$("#selected_pdservice_detail").text(selectedDetailName);
+
+			CKEDITOR.instances.pdservice_detail_contents.setData(json.c_contents); // 상세 보기
+
+			if (json.c_drawio_image_raw != null && json.c_drawio_image_raw != "") {
+				$("#pdservice_detail_drawio_image_raw").attr("src", json.c_drawio_image_raw);
+				$("#pdservice_detail_drawio_image_raw").removeClass('hidden');
+			}
+
+			var $fileupload = $("#fileupload");
+
+			$.ajax({
+				url: "/auth-user/api/arms/pdServiceDetail/getFilesByNode.do",
+				data: { fileIdLink: selectedDetailId },
+				dataType: "json",
+				context: $fileupload[0]
+			}).done(function(result) {
+				$(this).fileupload("option", "done").call(this, null, { result: result.response });
+				$(".file-delete-btn").hide();
+
+			    jSuccess("기획서 조회가 완료 되었습니다.");
+			});
+
+	}).fail(function(xhr, status, errorThrown) {
+		console.log(xhr + status + errorThrown);
+	}).always(function(xhr, status) {
+		$("#text").html("요청이 완료되었습니다!");
+		console.log(xhr + status);
 	});
 }
-
-$(".filter-option").click(function () {
-	$(this).siblings().removeClass("filter-active");
-	$(this).addClass("filter-active");
-
-	console.log($(this).data("filter"));
-
-	createFileList(filteredFiles($(this).data("filter").split(",")));
-});
