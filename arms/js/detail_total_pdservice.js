@@ -49,12 +49,14 @@ var iconsMap = {
 function execDocReady() {
 	var pluginGroups = [
 		[
-			"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
-			"../reference/lightblue4/docs/lib/widgster/widgster.js",
-			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"
-		],
-		[
-		    "../reference/light-blue/lib/jquery.fileupload.js",
+            "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+            "../reference/lightblue4/docs/lib/widgster/widgster.js",
+            "../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
+            "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
+            "../reference/light-blue/lib/jquery.iframe-transport.js",
+            "../reference/light-blue/lib/jquery.fileupload.js",
             "../reference/light-blue/lib/jquery.fileupload-fp.js",
             "../reference/light-blue/lib/jquery.fileupload-ui.js"
 		]
@@ -70,6 +72,9 @@ function execDocReady() {
 			//좌측 메뉴
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_total_pdservice");
+
+            // 파일 업로드 관련 레이어 숨김 처리
+            $(".body-middle").hide();
 
 			file_upload_setting();
 			init_pdDetailList();
@@ -121,6 +126,18 @@ function file_upload_setting() {
 			return false;
 		}
 	});
+}
+
+function hideDropzoneArea() {
+   $(".pdservice-detail-file").hide();
+   $("table tbody.files").empty();
+   $(".file-delete-btn").hide();
+
+   if (selectedPdService == undefined) {
+      $(".body-middle").hide();
+   } else {
+      $(".body-middle").show();
+   }
 }
 
 function init_pdDetailList() {
@@ -180,6 +197,7 @@ function draw(main, menu) {
 
 function detailClick(element, c_id) {
 	console.log("detailClick:: c_id  -> ", c_id);
+	hideDropzoneArea();
 
 	$("a[id^='pdservice_detail_link_']").each(function() {
 		this.style.background = "";
@@ -192,7 +210,7 @@ function detailClick(element, c_id) {
 	});
 
 	$.ajax({
-		url: "/auth-user/api/arms/pdServiceDetail/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		url: "/auth-user/api/arms/pdServiceDetail/getNode.do",
 		data: { c_id: c_id },
 		method: "GET",
 		dataType: "json"
@@ -222,11 +240,12 @@ function detailClick(element, c_id) {
 				context: $fileupload[0]
 			}).done(function(result) {
 				$(this).fileupload("option", "done").call(this, null, { result: result.response });
-				$(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리 -> 편집하기 tab 에서만 보여준다.
+				$(".file-delete-btn").hide();
+
+			    jSuccess("기획서 조회가 완료 되었습니다.");
 			});
 
-			jSuccess("기획서 조회가 완료 되었습니다.");
-		}).fail(function(xhr, status, errorThrown) {
+	}).fail(function(xhr, status, errorThrown) {
 		console.log(xhr + status + errorThrown);
 	}).always(function(xhr, status) {
 		$("#text").html("요청이 완료되었습니다!");
