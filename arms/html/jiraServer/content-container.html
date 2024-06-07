@@ -107,7 +107,7 @@
                                         클라우드 : 요구사항 이슈 만드는 방법
                                     </span>
                                 </a>
-                             </div>
+                            </div>
                             <div class="item">
                                 <a href="docs/create-onpremise-issue-type.html" target="_blank" style="text-decoration: none;  color: white;">
                                     <span class="no-margin font13" style="font-weight: bold; color: #a4c6ff; border-bottom: 1px dashed #a4c6ff;">
@@ -513,10 +513,6 @@
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
                                                         placeholder="ALM BASE URL"
                                                         required="required" readonly/>
-<!--                                                <span class="input-group-addon font11">
-													<i class="fa fa-question-circle"></i>
-													ex: X.X.X
-												</span>-->
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -570,11 +566,6 @@
                                             <label  class="control-label">
                                                 ALM 서버 내용 :
                                             </label>
-<!--                                            <div    class="col-sm-12 darkBack"-->
-<!--                                                    id="detailview_jira_server_contents"-->
-<!--                                                    style="padding-top: 10px; padding-bottom: 10px">-->
-<!--                                                -->
-<!--                                            </div>-->
                                             <div class="controls form-group">
                                                 <div    class="col-sm-12"
                                                         style="padding-top: 10px">
@@ -651,42 +642,38 @@
                                                                         value="레드마인_온프레미스"/>
                                                                 레드마인
                                                             </label>
-                                                    </div>
+                                                        </div>
                                                         <span class="font11" id="redmine_info_edit" style="display:none;">INFO : 레드마인 서버는 관리자 계정으로 등록해야합니다.</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="control-group">
-                                                <label  for="editview_jira_server_base_url"
-                                                        class="control-label"
-                                                        style="width: 130px !important">
-                                                    ALM URL :
-                                                </label>
-                                                <div    class="controls form-group input-group"
-                                                        style="margin-left: 100px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-share"></i>
-												</span>
-                                                    <input  type="text"
-                                                            id="editview_jira_server_base_url"
-                                                            name="editview_jira_server_base_url"
-                                                            class="form-control parsley-validated font13 darkBack"
-                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="ALM BASE URL"
-                                                            required="required" readonly/>
-<!--
-													<i class="fa fa-question-circle"></i>
-													ex: X.X.X
-												</span>-->
+                                                <div class="control-group">
+                                                    <label  for="editview_jira_server_base_url"
+                                                            class="control-label"
+                                                            style="width: 130px !important">
+                                                        ALM URL :
+                                                    </label>
+                                                    <div    class="controls form-group input-group"
+                                                            style="margin-left: 100px">
+                                                        <span class="input-group-addon">
+                                                            <i class="glyphicon glyphicon-share"></i>
+                                                        </span>
+                                                        <input  type="text"
+                                                                id="editview_jira_server_base_url"
+                                                                name="editview_jira_server_base_url"
+                                                                class="form-control parsley-validated font13 darkBack"
+                                                                style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                                placeholder="ALM BASE URL"
+                                                                required="required" readonly/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="control-group">
-                                                <label  for="version_start_date"
-                                                        class="control-label"
-                                                        style="width: 130px !important">
-                                                    ALM ID :
-                                                </label>
-                                                <div    class="controls form-group input-group"
-                                                        style="margin-left: 100px">
+                                                <div class="control-group">
+                                                    <label  for="version_start_date"
+                                                            class="control-label"
+                                                            style="width: 130px !important">
+                                                        ALM ID :
+                                                    </label>
+                                                    <div    class="controls form-group input-group"
+                                                            style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
@@ -814,9 +801,8 @@
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
                                     <tr>
+                                        <th>c_issue_status_name</th>
                                         <th>c_id</th>
-                                        <th>c_issue_priority_id</th>
-                                        <th>c_issue_priority_name</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -949,7 +935,7 @@
                             <button type="button"
                                     onClick="jira_renew('project')"
                                     class="btn btn-success btn-sm mr-1 jira_renew_btn">
-                            항목 갱신
+                                항목 갱신
                             </button>
                         </li>
                         <li>
@@ -959,7 +945,7 @@
                                     data-style="contract"
                                     class="ladda btn btn-success btn-sm mr-1"
                                     style="width:77%; margin-top: 2px;">
-                            기본 설정 저장
+                                기본 설정 저장
                             </button>
                         </li>
                     </ul>
@@ -1010,9 +996,8 @@
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
                                     <tr>
-                                        <th>c_id</th>
-                                        <th>c_issue_status_id</th>
                                         <th>c_issue_status_name</th>
+                                        <th>c_id</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -1510,7 +1495,6 @@
                                             레드마인_온프레미스
                                         </label>
                                     </div>
-<!--                                    <span class="input-group-addon font11">INFO : 지라(서버) 환경은 수정할 수 없습니다.</span>-->
                                 </div>
                             </div>
                         </div>
