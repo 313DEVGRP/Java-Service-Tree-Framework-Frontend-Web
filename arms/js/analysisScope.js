@@ -284,251 +284,6 @@ function bind_VersionData_By_PdService() {
 	});
 }
 
-// 도넛차트
-function donutChart(pdServiceLink, pdServiceVersionLinks) {
-	console.log("pdServiceId : " + pdServiceLink);
-	console.log("pdService Version : " + pdServiceVersionLinks);
-	function donutChartNoData() {
-		c3.generate({
-			bindto: "#donut-chart",
-			data: {
-				columns: [],
-				type: "donut"
-			},
-			donut: {
-				title: "Total : 0"
-			}
-		});
-	}
-
-	if (pdServiceLink === "" || pdServiceVersionLinks === "") {
-		donutChartNoData();
-		return;
-	}
-
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/dashboard/aggregation/flat")
-		.addQueryParam("pdServiceLink", pdServiceLink)
-		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-		.addQueryParam("메인그룹필드", "status.status_name.keyword")
-		.addQueryParam("하위그룹필드들", "")
-		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("컨텐츠보기여부", true)
-		.build();
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				let 검색결과 = data["검색결과"]["group_by_status.status_name.keyword"];
-				if (
-					(Array.isArray(data) && data.length === 0) ||
-					(typeof data === "object" && Object.keys(data).length === 0) ||
-					(typeof data === "string" && data === "{}")
-				) {
-					donutChartNoData();
-					return;
-				}
-
-				const columnsData = [];
-
-				검색결과.forEach((status) => {
-					columnsData.push([status.필드명, status.개수]);
-				});
-
-				let totalDocCount = data.전체합계;
-
-				const chart = c3.generate({
-					bindto: "#donut-chart",
-					data: {
-						columns: columnsData,
-						type: "donut"
-					},
-					donut: {
-						title: "Total : " + totalDocCount
-					},
-					color: {
-						pattern: dashboardColor.issueStatusColor
-					},
-					tooltip: {
-						format: {
-							value: function (value, ratio, id, index) {
-								return value;
-							}
-						}
-					}
-				});
-
-				$(document).on("click", "#donut-chart .c3-legend-item", function () {
-					const id = $(this).text();
-					const isHidden = $(this).hasClass("c3-legend-item-hidden");
-					let docCount = 0;
-
-					for (const status of 검색결과) {
-						if (status.필드명 === id) {
-							docCount = status.개수;
-							break;
-						}
-					}
-					if (docCount) {
-						if (isHidden) {
-							totalDocCount -= docCount;
-						} else {
-							totalDocCount += docCount;
-						}
-					}
-					$("#donut-chart .c3-chart-arcs-title").text("Total : " + totalDocCount);
-				});
-			}
-		}
-	});
-}
-
-// 바차트
-function combinationChart(pdServiceLink, pdServiceVersionLinks) {
-	function combinationChartNoData() {
-		c3.generate({
-			bindto: "#combination-chart",
-			data: {
-				x: "x",
-				columns: [],
-				type: "bar",
-				types: {}
-			}
-		});
-	}
-
-	if (pdServiceLink === "" || pdServiceVersionLinks === "") {
-		combinationChartNoData();
-		return;
-	}
-
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/dashboard/requirements-jira-issue-statuses")
-		.addQueryParam("pdServiceLink", pdServiceLink)
-		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
-		.addQueryParam("메인그룹필드", "pdServiceVersion")
-		.addQueryParam("하위그룹필드들", "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
-		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("컨텐츠보기여부", true)
-		.build();
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				if (
-					(Array.isArray(data) && data.length === 0) ||
-					(typeof data === "object" && Object.keys(data).length === 0) ||
-					(typeof data === "string" && data === "{}")
-				) {
-					combinationChartNoData();
-					return;
-				}
-
-				const issueStatusTypesSet = new Set();
-				for (const month in data) {
-					for (const status in data[month].statuses) {
-						issueStatusTypesSet.add(status);
-					}
-				}
-				const issueStatusTypes = [...issueStatusTypesSet];
-
-				let columnsData = [];
-
-				issueStatusTypes.forEach((status) => {
-					const columnData = [status];
-					for (const month in data) {
-						const count = data[month].statuses[status] || 0;
-						columnData.push(count);
-					}
-					columnsData.push(columnData);
-				});
-
-				const requirementCounts = ["요구사항"];
-				for (const month in data) {
-					requirementCounts.push(data[month].totalRequirements);
-				}
-				columnsData.push(requirementCounts);
-
-				let monthlyTotals = {};
-
-				for (const month in data) {
-					monthlyTotals[month] = data[month].totalIssues + data[month].totalRequirements;
-				}
-
-				const chart = c3.generate({
-					bindto: "#combination-chart",
-					data: {
-						x: "x",
-						columns: [["x", ...Object.keys(data)], ...columnsData],
-						type: "bar",
-						types: {
-							요구사항: "area"
-						},
-						groups: [issueStatusTypes]
-					},
-					color: {
-						pattern: dashboardColor.accumulatedIssueStatusColor
-					},
-					onrendered: function () {
-						d3.selectAll(".c3-line, .c3-bar, .c3-arc").style("stroke", "white").style("stroke-width", "0.3px");
-					},
-					axis: {
-						x: {
-							type: "category"
-						}
-					},
-					tooltip: {
-						format: {
-							title: function (index) {
-								const month = Object.keys(data)[index];
-								const total = monthlyTotals[month];
-								return `${month} | Total : ${total}`;
-							}
-						}
-					}
-				});
-
-				$(document).on("click", "#combination-chart .c3-legend-item", function () {
-					const id = $(this).text();
-					const isHidden = $(this).hasClass("c3-legend-item-hidden");
-					let docCount = 0;
-
-					for (const month in data) {
-						if (data[month].statuses.hasOwnProperty(id)) {
-							docCount = data[month].statuses[id];
-						} else if (id === "요구사항") {
-							docCount = data[month].totalRequirements;
-						}
-					}
-
-					// 월별 통계 값 업데이트
-					for (const month in data) {
-						if (isHidden) {
-							monthlyTotals[month] -= docCount;
-						} else {
-							monthlyTotals[month] += docCount;
-						}
-					}
-				});
-			}
-		}
-	});
-}
-
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("[ analysisScope :: statisticsMonitor ] :: pdservice_id => " + pdservice_id);
 	console.log("[ analysisScope :: statisticsMonitor ] :: pdservice_version_id => " + pdservice_version_id);
@@ -555,7 +310,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/pdService/pdServiceVersions",
+		url: "/auth-admin/api/arms/analysis/scope/pdService/pdServiceVersions",
 		type: "GET",
 		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
 		contentType: "application/json;charset=UTF-8",
@@ -953,7 +708,7 @@ function formatDate(date) {
 function getReqStatusAndInvolvedAssignees(pdServiceId, pdServiceVersionLinks) {
 
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/"+pdServiceId+"/req-status-and-reqInvolved-unique-assignees-per-version",
+		url: "/auth-admin/api/arms/analysis/scope/"+pdServiceId+"/req-status-and-reqInvolved-unique-assignees-per-version",
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
@@ -1004,7 +759,7 @@ function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks) {
 	let reqAddUrl = "/T_ARMS_REQADD_"+ pdService_id +"/getReqAddListByFilter.do?";
 
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/scope/req-per-version" +reqAddUrl,
+		url: "/auth-admin/api/arms/analysis/scope/req-per-version" +reqAddUrl,
 		type: "GET",
 		data: {	pdServiceId: pdService_id, pdServiceVersionLinks: pdServiceVersionLinks },
 		contentType: "application/json;charset=UTF-8",
@@ -1129,7 +884,7 @@ function groupTicks(d, step) {
 
 function treeBar() {
 	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/scope/tree-bar-top10")
+		.setBaseUrl("/auth-admin/api/arms/analysis/scope/tree-bar-top10")
 		.addQueryParam("pdServiceLink", selectedPdServiceId)
 		.addQueryParam("pdServiceVersionLinks", selectedVersionId)
 		.addQueryParam('메인그룹필드', "cReqLink")
@@ -1394,7 +1149,7 @@ function 요구사항_현황_데이터_테이블(selectId, endPointUrl) {
 	];
 	var orderList = [[1, "asc"]];
 	var jquerySelector = "#reqstatustable";
-	var ajaxUrl = "/auth-user/api/arms/analysis/scope" + endPointUrl;
+	var ajaxUrl = "/auth-admin/api/arms/analysis/scope" + endPointUrl;
 	var jsonRoot = "";
 	var buttonList = [
 		"copy",
