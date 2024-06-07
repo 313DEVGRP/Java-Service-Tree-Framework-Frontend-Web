@@ -1,8 +1,6 @@
 //////////////////////////////////
 // Page 전역 변수
 //////////////////////////////////
-var selectId;   // 선택한 대상 아이디(c_id)
-var selectName; // 선택한 대상 이름 (c_title)
 var selectServerId;   // 선택한 서버 이름 (c_id)
 var selectServerName; // 선택한 서버 이름 (c_jira_server_name )
 var selectServerType; // 선택한 서버 타입 (c_jira_server_type, 클라우드 or 온프레미스)
@@ -10,14 +8,17 @@ var selectedTab;     // 선택한 탭
 var selectProjectId; // 선택한 지라프로젝트 아이디
 var selectRadioId; // 이슈 유형 or 이슈 상태 or 이슈 해결책
 
-var selectedIndex; // 데이터테이블 선택한 인덱스
-var selectedPage;  // 데이터테이블 선택한 인덱스
-
 var dataTableRef; // 데이터테이블 참조 변수
 
 var serverDataList; // 서버 전체 맵
 
 var isAccountVerified = false; // 계정 검증 완료 플래그
+var req_state_data = {
+	"10": "열림",
+	"11": "진행중",
+	"12": "해결됨",
+	"13": "닫힘"
+};
 
 ////////////////
 //Document Ready
@@ -118,7 +119,6 @@ function execDocReady() {
 			update_btn_click();
 
 			popup_buttons_click();
-
 			popup_update_btn_click();
 
 			autoSlide();
@@ -232,21 +232,6 @@ function draw_card_deck(alm_server_list) {
 	$("#jira_server_card_deck").html(data);
 }
 
-// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-// 데이터 테이블을 사용하지 않으므로, 쓰지 않아도 된다.
-function dataTableClick(tempDataTable, selectedData) {
-	// => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
-	console.log("[ jiraServer :: dataTableClick] :: selectedData =>  " + selectedData);
-	selectId = selectedData.c_id;
-	// c_id로 getNode 실행
-
-	//jiraServerCardClick(selectId);
-	if(selectedData.c_jira_name !== undefined) {
-		selectProjectId = selectedData.c_id;
-		console.log("[ jiraServer :: dataTableClick ] :: selectProjectId => " + selectProjectId)
-	}
-}
-
 /////////////////////////////////////
 // 지라 서버 클릭할 때 동작하는 함수
 // 1. 상세보기 데이터 바인딩
@@ -327,16 +312,14 @@ function jiraServerCardClick(alm_server_c_id) {
 			// Sender 설정
 			var selectedHtml =
 				`<div class="chat-message">
-            <div class="chat-message-body" style="margin-left: 0px !important;">
-               <span class="arrow" style="top: 35% !important;"></span>
-               <span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
-            <span class="text" style="color: #a4c6ff;">
-            ` + json.c_title +
-				`
-            </span>
-            </div>
-            </div>
-            `;
+					<div class="chat-message-body" style="margin-left: 0px !important;">
+					   <span class="arrow" style="top: 35% !important;"></span>
+					   <span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
+						<span class="text" style="color: #a4c6ff;">
+						` + json.c_title + `	
+						</span>
+					</div>
+				</div>`;
 
 			$(".list-group-item").html(selectedHtml);
 
@@ -417,18 +400,19 @@ function project_dataTableLoad(c_id) {
 			searchable: true,
 			orderable: false,
 			render: function (data, type, row, meta) {
-				let splitData = splitAndColor(data);
 				if (isEmpty(data) || data === "unknown") {
-					return "<div style='color: #808080'>N/A</div>";
+					return `<div style='color: #808080'>N/A</div>`;
 				}
-				else {
-					var _render =
-						'<div style=\'white-space: nowrap; color: #f8f8f8\'>' + splitData +
-						'<button style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" onclick="click_projectList_table(\'' + data + '\',\'' + selectServerType + '\')"><i class="fa fa-th-list"></i>' + "</button>"+
-						"</div>";
-					return _render;
-				}
-				return data;
+
+				let project_c_id = row.c_id;
+				let splitData = splitAndColor(data);
+				let buttonHTML = `<button 
+												style="border:0; background:rgba(51,51,51,0.425); color:#fbeed5; vertical-align: middle" 
+												onclick="click_projectList_table('${data}', '${selectServerType}', '${project_c_id}')">
+												<i class="fa fa-th-list" />
+											</button>`;
+
+				return `<div style='white-space: nowrap; color: #f8f8f8'>${splitData}${buttonHTML}</div>`;
 			},
 		}
 	];
@@ -499,7 +483,37 @@ function dataTableDrawCallback(tableInfo) {
 }
 
 //데이터 테이블 ajax load 이후 콜백.
-function dataTableCallBack(settings, json) {}
+function dataTableCallBack(settings, json) {
+
+	// 데이터 테이블 그려진 후 상태 매핑 select2 적용
+	$(".chzn-select").each(function () {
+		// $(this).select2($(this).data());
+		$(this).select2({
+			...$(this).data(),
+			minimumResultsForSearch: -1 // 검색 기능 제거
+		});
+	});
+
+	// slim scroll 적용
+	// $(".select_status_mapping").on("select2:open", function () {
+	// 	makeSlimScroll(".select2-results__options");
+	// });
+
+	$(".select_status_mapping").on("select2:select", function (e) {
+
+		console.log(e);
+		console.log(e.params);
+		console.log(e.params.data.element);
+		let issue_status_c_id = $(e.params.data.element).data('id');
+		let issue_status_name = $(e.params.data.element).data('title');
+		let req_state_c_id = $(e.params.data.element).val();
+		let req_state_c_title = $(e.params.data.element).text();
+		console.log(issue_status_c_id);
+		console.log(req_state_c_id);
+
+		// ajax updateNode 호출
+	});
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 신규 제품(서비스) 등록 팝업 및 팝업 띄울때 사이즈 조정 -- //
@@ -942,7 +956,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 			$("#jira_server_update_div").addClass("hidden");
 			$("#jira_server_delete_div").addClass("hidden");
 			$("#jira_renew_button_div").addClass("hidden");
-			if (selectId == undefined) {
+			if (selectServerId === undefined) {
 				$(".body-middle").hide();
 			} else {
 				$(".body-middle").show();
@@ -978,7 +992,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 					$("#jira_default_update_div").addClass("hidden");
 					$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
 					set_renew_btn_3rd_grid(selectedTab, selectServerId, selectProjectId);
-					projectIssueTypeDataTable();
+					projectIssueTypeDataTable(selectProjectId);
 				}
 				if (selectServerType === "온프레미스") {
 					$("#server_issue_type").removeClass("hidden");
@@ -990,7 +1004,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 					$("#jira_default_update_div").addClass("hidden");
 					$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
 					set_redmine_renew_btn_3rd_grid(selectedTab, selectServerId);
-					projectIssueTypeDataTable();
+					projectIssueTypeDataTable(selectProjectId);
 				}
 
 			}
@@ -1007,13 +1021,15 @@ function tab_click_event() { // 탭 클릭시 이벤트
 					$("#jira_default_update_div").addClass("hidden");
 					$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
 					set_renew_btn_3rd_grid(selectedTab, selectServerId, selectProjectId);
-					projectIssueStatusDataTable();
+					// projectIssueStatusDataTable();
+					draw_req_state_mapping_datatable("project_issuestatus", selectProjectId);
 				}
 				if (selectServerType === "온프레미스") {
 					$("#server_issue_status").removeClass("hidden");
 					$("#jira_renew_button_div").removeClass("hidden");
 					set_renew_btn(selectedTab, selectServerId);
-					jiraServerDataTable(selectedTab);
+					// jiraServerDataTable(selectedTab);
+					draw_req_state_mapping_datatable(selectedTab);
 				}
 
 				if (selectServerType === "레드마인_온프레미스")  {
@@ -1022,8 +1038,8 @@ function tab_click_event() { // 탭 클릭시 이벤트
 					$("#jira_renew_button_div").removeClass("hidden");
 					set_renew_btn(selectedTab, selectServerId);
 					display_set_wide_projectTable();
-					jiraServerDataTable(selectedTab);
-
+					// jiraServerDataTable(selectedTab);
+					draw_req_state_mapping_datatable(selectedTab);
 				}
 			}
 		}
@@ -1055,7 +1071,14 @@ function jira_renew(renewJiraType, serverId, projectId) { // 서버 c_id
 				//jiraServerCardClick(serverId);
 				if(renewJiraType === 'almProject'){
 					project_dataTableLoad(selectServerId);
-				}else{
+				}
+				else if (renewJiraType === 'issueStatus') {
+					if (projectId) {
+						renewJiraType = "project_issuestatus";
+					}
+					draw_req_state_mapping_datatable(renewJiraType, projectId);
+				}
+				else {
 					jiraServerDataTable(renewJiraType);
 				}
 			}
@@ -1063,77 +1086,7 @@ function jira_renew(renewJiraType, serverId, projectId) { // 서버 c_id
 	});
 }
 
-function projectIssueStatusDataTable() {
-	var columnList= [
-		{ title:"설정",
-			data: "c_id",
-			className: "dt-body-left texe-align-center",
-			render: function (data, type, row,meta) {
-				if (type === "display") {
-					if(isEmpty(data)) {
-						return `<div class="no-project-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
-                                    <input type="radio" name="c_id" value="' + ${data} + '"> </div>`;
-					}
-					else {
-						return `<div class="project-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
-                                    <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
-                                </div>`;
-					}
-				}
-				return data;
-			},
-		},
-		{ title:"이슈 상태",
-			data: "c_issue_status_name",
-			render: function (data, type, row, meta) {
-				if (type === "display") {
-					if (isEmpty(data)) {
-						return "<div style='color: #808080'>N/A</div>";
-					} else {
-						return '<div style="white-space: nowrap;">' + data + "</div>";
-					}
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ title:"이슈 상태 아이디",
-			data: "c_issue_status_id",
-			className: "dt-body-left",
-			defaultContent: "<div style='color: #808080'>N/A</div>"
-		}
-	];
-	var rowsGroupList = null; //그룹을 안쓰려면 null 처리
-	var columnDefList = [];
-	var selectList = {};
-	var orderList = [[1, "asc"]];
-	var buttonList = [];
-	console.log("[ jiraServer :: projectIssueStatusDataTable ] selectProjectId => " + selectProjectId);
-	var jquerySelector = "#issue_status_table";
-	var ajaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueStatus.do?c_id="+selectProjectId;
-	var jsonRoot = "response";
-	var isServerSide = false;
-
-	dataTableRef = dataTable_build(
-		jquerySelector,
-		ajaxUrl,
-		jsonRoot,
-		columnList,
-		rowsGroupList,
-		columnDefList,
-		selectList,
-		orderList,
-		buttonList,
-		isServerSide
-	);
-	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
-	//datatable 좌상단 datarow combobox style
-	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
-	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-}
-
-function projectIssueTypeDataTable() {
+function projectIssueTypeDataTable(project_c_id) {
 	var columnList= [
 		{
 			title:"설정",
@@ -1181,7 +1134,7 @@ function projectIssueTypeDataTable() {
 	var selectList = {};
 	var orderList = [[1, "asc"]];
 	var buttonList = [];
-	console.log("[ jiraServer :: projectIssueTypeDataTable ] selectProjectId => " + selectProjectId);
+	console.log("[ jiraServer :: projectIssueTypeDataTable ] selectProjectId => " + project_c_id);
 	var jquerySelector;
 	if(selectServerType==="레드마인_온프레미스"){
 		jquerySelector = "#redmine_issue_type_table";
@@ -1189,7 +1142,7 @@ function projectIssueTypeDataTable() {
 		jquerySelector = "#issue_type_table";
 	}
 	//var jquerySelector = "#issue_type_table";
-	var ajaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueType.do?c_id=" + selectProjectId; // 사용 예정
+	var ajaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueType.do?c_id=" + project_c_id; // 사용 예정
 	var jsonRoot = "response";
 	var isServerSide = false;
 
@@ -1261,49 +1214,6 @@ function jiraServerDataTable(target) {
 			defaultContent: "<div style='color: #808080'>N/A</div>"
 		}
 	];
-	var columnList_status= [
-		{
-			title:"설정",
-			data: "c_id",
-			className: "dt-body-left",
-			render: function (data, type, row,meta) {
-				if (type === "display") {
-					if(isEmpty(data)) {
-						return `<div class="no-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
-                                        <input type="radio" name="c_id" value="' + ${data} + '">
-                                </div>`;
-					}
-					else {
-						return `<div class="issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
-                                        <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
-                                </div>`;
-					}
-				}
-				return data;
-			},
-		},
-		{ title:"이슈 상태",
-			data: "c_issue_status_name",
-			render: function (data, type, row, meta) {
-				if (type === "display") {
-					if (isEmpty(data)) {
-						return "<div style='color: #808080'>N/A</div>";
-					} else {
-						return '<div style="white-space: nowrap;">' + data + "</div>";
-					}
-				}
-				return data;
-			},
-			className: "dt-body-left",
-			visible: true
-		},
-		{ title:"이슈 상태 아이디",
-			data: "c_issue_status_id",
-			className: "dt-body-left",
-			defaultContent: "<div style='color: #808080'>N/A</div>"
-		}
-
-	];
 	var columnList_priority= [
 		{
 			title:"설정",
@@ -1351,11 +1261,6 @@ function jiraServerDataTable(target) {
 		columnList = columnList_type;
 		targetAjaxUrl = "getJiraIssueType.do?c_id=" + selectServerId;
 		targetSelector = "#server_issue_type_table";
-	}
-	if(target === "issueStatus")  {
-		columnList = columnList_status;
-		targetAjaxUrl = "getJiraIssueStatus.do?c_id=" + selectServerId;
-		targetSelector = "#server_issue_status_table";
 	}
 	if(target === "issuePriority") {
 		columnList = columnList_priority;
@@ -1441,8 +1346,9 @@ function default_setting_event() {
 
 }
 
-//지라 프로젝트 - 데이터테이블 프로젝트 명 클릭시
-function click_projectList_table(projectName, selectServerType) {
+//지라 프로젝트 - 데이터테이블 프로젝트 명 클릭시, 프로젝트 관련 데이터 가져오는 중 Ajax 오류 픽스(전역 데이터의 undefined)
+function click_projectList_table(projectName, selectServerType, project_c_id) {
+	selectProjectId = project_c_id;
 	console.log("[ jiraServer :: click_projectList_table ] :: projectName => " + projectName);
 	$(".grid3rd").html("");
 	// Sender 설정
@@ -1460,7 +1366,7 @@ function click_projectList_table(projectName, selectServerType) {
 
 	//풀사이즈 그리드이면 줄이고, 호스트 정보를 보여준다
 	console.log($("#serverInfo_Wrapper")[0].className);
-	console.log("[ jiraServer :: click_projectList_table ] :: selectProjectId => " + selectProjectId);
+	console.log("[ jiraServer :: click_projectList_table ] :: selectProjectId => " + project_c_id);
 
 	if ($("#serverInfo_Wrapper").hasClass("col-lg-7")) {
 		//서버 정보 줄이기
@@ -1490,16 +1396,17 @@ function click_projectList_table(projectName, selectServerType) {
 
 		if(selectedTab === "issueStatus") {
 			$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
-			set_renew_btn_3rd_grid(selectedTab, selectServerId, selectProjectId);
-			projectIssueStatusDataTable();
-		} else {
+			set_renew_btn_3rd_grid(selectedTab, selectServerId, project_c_id);
+			draw_req_state_mapping_datatable("project_issuestatus", project_c_id);
+		}
+		else {
 			selectedTab = "issueType";
 			$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
-			set_renew_btn_3rd_grid(selectedTab, selectServerId, selectProjectId);
+			set_renew_btn_3rd_grid(selectedTab, selectServerId, project_c_id);
 
 			$("#redmine_renew_button_div_3rd_grid").removeClass("hidden");
-			set_redmine_renew_btn_3rd_grid(selectedTab, selectServerId, selectProjectId);
-			projectIssueTypeDataTable();
+			set_redmine_renew_btn_3rd_grid(selectedTab, selectServerId, project_c_id);
+			projectIssueTypeDataTable(project_c_id);
 		}
 	}, 313);
 }
@@ -1755,3 +1662,196 @@ function splitAndColor(text) {
 	// 결과를 HTML 요소에 할당
 	return htmlContent;
 }
+
+// 이슈 상태 매핑 데이터테이블
+function draw_req_state_mapping_datatable(target, project_c_id) {
+	console.log("[ jiraServer :: draw_req_state_mapping_datatable] target = " +target);
+
+	var targetAjaxUrl ="";
+	var targetSelector ="";
+
+	if (target === "issueStatus") {
+		targetAjaxUrl = "/auth-user/api/arms/jiraServer/getJiraIssueStatus.do?c_id=" + selectServerId;
+		targetSelector = "#server_issue_status_table";
+	}
+	else if (target === "project_issuestatus") {
+		targetAjaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueStatus.do?c_id=" + project_c_id;
+		targetSelector = "#issue_status_table";
+	}
+
+	var columnList= [
+		{
+			title:"이슈 상태",
+			data: "c_issue_status_name",
+			render: function (data, type, row, meta) {
+				let issue_status = row.c_issue_status_name + "[" + row.c_issue_status_id + "]";
+				if (type === "display") {
+					if (isEmpty(data)) {
+						return "<div style='color: #808080'>N/A</div>";
+					} else {
+						return '<div style="white-space: nowrap;">' + issue_status + "</div>";
+					}
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true,
+		},
+		{
+			title:"매핑 설정",
+			data: "c_id",
+			className: "dt-body-center",
+			render: function (data, type, row,meta) {
+				console.log(row);
+
+				let issue_status = row.c_issue_status_name + "[" + row.c_issue_status_id + "]";
+
+				// select 박스의 초기 옵션 설정
+
+				if (type === "display") {
+					if(isEmpty(data)) {
+						return `<div class="no-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+									<input type="radio" name="c_id" value="' + ${data} + '">
+								</div>`;
+					}
+					else {
+						let option_html = `<option data-id="${data}" data-title="${issue_status}" value=""></option>`;
+
+						Object.keys(req_state_data).forEach(key => {
+							let select_html = "";
+							let value = key;
+							let text = req_state_data[key];
+							if (Number(value) === row.c_req_state_mapping_link) {
+								select_html = "selected";
+							}
+
+							option_html += `<option data-id="${data}" data-title="${issue_status}" value="${value}" ${select_html}>${text}</option>`;
+						});
+
+						return 	`<select
+									class="select_status_mapping select-block-level chzn-select darkBack"
+									tabIndex="-1">
+									${option_html}
+								</select>`;
+					}
+				}
+				return data;
+			},
+		},
+	];
+
+	var rowsGroupList = null; //그룹을 안쓰려면 null 처리
+	var columnDefList = [];
+	var selectList = {};
+	var orderList = [[1, "asc"]];
+	var buttonList = [];
+	var jquerySelector = targetSelector; //
+	var jsonRoot = "response";
+	var isServerSide = false;
+
+	dataTableRef = dataTable_build(
+		jquerySelector,
+		targetAjaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide
+	);
+
+	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
+	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
+
+	$(jquerySelector+' tbody').off('click', 'tr');
+}
+
+// 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
+// 데이터 테이블을 사용하지 않으므로, 쓰지 않아도 된다.
+/*
+function dataTableClick(tempDataTable, selectedData) {
+	// => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
+	console.log("[ jiraServer :: dataTableClick] :: selectedData =>  " + selectedData);
+	selectId = selectedData.c_id;
+	// c_id로 getNode 실행
+
+	//jiraServerCardClick(selectId);
+	if(selectedData.c_jira_name !== undefined) {
+		selectProjectId = selectedData.c_id;
+		console.log("[ jiraServer :: dataTableClick ] :: selectProjectId => " + selectProjectId)
+	}
+}
+
+function projectIssueStatusDataTable() {
+	var columnList= [
+		{ title:"설정",
+			data: "c_id",
+			className: "dt-body-left texe-align-center",
+			render: function (data, type, row,meta) {
+				if (type === "display") {
+					if(isEmpty(data)) {
+						return `<div class="no-project-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                    <input type="radio" name="c_id" value="' + ${data} + '"> </div>`;
+					}
+					else {
+						return `<div class="project-issueStatus-data${meta.row}" style="white-space: nowrap; text-align: center">
+                                    <input type="radio" name="c_id" value="' + ${data} + '" onclick="fn_urlHandler(${data})">
+                                </div>`;
+					}
+				}
+				return data;
+			},
+		},
+		{ title:"이슈 상태",
+			data: "c_issue_status_name",
+			render: function (data, type, row, meta) {
+				if (type === "display") {
+					if (isEmpty(data)) {
+						return "<div style='color: #808080'>N/A</div>";
+					} else {
+						return '<div style="white-space: nowrap;">' + data + "</div>";
+					}
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{ title:"이슈 상태 아이디",
+			data: "c_issue_status_id",
+			className: "dt-body-left",
+			defaultContent: "<div style='color: #808080'>N/A</div>"
+		}
+	];
+	var rowsGroupList = null; //그룹을 안쓰려면 null 처리
+	var columnDefList = [];
+	var selectList = {};
+	var orderList = [[1, "asc"]];
+	var buttonList = [];
+	console.log("[ jiraServer :: projectIssueStatusDataTable ] selectProjectId => " + selectProjectId);
+	var jquerySelector = "#issue_status_table";
+	var ajaxUrl = "/auth-user/api/arms/jiraProject/getProjectIssueStatus.do?c_id="+selectProjectId;
+	var jsonRoot = "response";
+	var isServerSide = false;
+
+	dataTableRef = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide
+	);
+	// ----- 데이터 테이블 빌드 이후 스타일 구성 ------ //
+	//datatable 좌상단 datarow combobox style
+	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
+	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
+}*/
