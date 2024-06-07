@@ -941,7 +941,7 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 	$("#calendar_yearview_blocks_chart_2 svg").remove();
 
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/heatmap",
+		url: "/auth-admin/api/arms/analysis/time/heatmap",
 		type: "GET",
 		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
 		contentType: "application/json;charset=UTF-8",
@@ -993,7 +993,7 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 	}
 
 	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
+		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
@@ -1234,7 +1234,7 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 	}
 
 	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
+		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
@@ -1839,7 +1839,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		return;
 	}
 	const verticalUrl = new UrlBuilder()
-    		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-jira-issue")
+    		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/updated-jira-issue")
     		.addQueryParam("pdServiceLink", pdServiceLink)
     		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
     		.addQueryParam("일자기준", "updated")
@@ -1872,7 +1872,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
         });
 
 	const ridgeLineUrl = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-ridgeline")
+		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/updated-ridgeline")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
@@ -2312,29 +2312,4 @@ function versionTimelineChart(versionData) {
 	}
 
 	window.addEventListener('resize', myChart.resize);
-}
-
-////////////////////
-//서비스, 버전으로 연결된 이슈 전체 호출
-////////////////////
-function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
-	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
-		type: "GET",
-		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		async: true,
-		statusCode: {
-			200: function (data) {
-				//sevenTimeline(data);
-			}
-		}
-	});
-}
-
-//톱 메뉴 세팅
-function top_menu_setting() {
-
 }

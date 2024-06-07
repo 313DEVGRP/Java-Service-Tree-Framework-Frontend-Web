@@ -115,6 +115,7 @@ function execDocReady() {
 				target: $('.top-menu-div-scope')
 			});
 
+
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
 			//d3Chart 그리기
@@ -271,12 +272,13 @@ function bind_VersionData_By_PdService() {
 				}
 				treeBar();
 				$(".multiple-select").multipleSelect("refresh");
-
+				
 				//요구사항 현황 데이터 테이블 로드
 				var 요구사항_호출_주소 = "/state-per-version/T_ARMS_REQADD_" + selectedPdServiceId + "/getReqAddListByFilter.do?" +
 					"pdServiceId="+selectedPdServiceId+"&pdServiceVersionLinks="+selectedVersionId;
 				요구사항_현황_데이터_테이블($("#selected_pdService").val(), 요구사항_호출_주소);
 				//////////////////////////////////////////////////////////
+
 			}
 		}
 	});
@@ -553,7 +555,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
+		url: "/auth-user/api/arms/analysis/scope/pdService/pdServiceVersions",
 		type: "GET",
 		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
 		contentType: "application/json;charset=UTF-8",
@@ -565,7 +567,7 @@ function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVers
 				// 버전 선택 시 데이터 파싱
 
 				setTimeout(function () {
-					console.log("[ analysisScope :: getRelationJiraIssueByPdServiceAndVersions ] 네트워크차트 그리기")
+					console.log("[ analysisScope :: getRelationJ :: iraIssueByPdServiceAndVersions ] 네트워크차트 그리기");
 					networkChart(pdServiceVersions, data);
 				}, 1500);
 			}
@@ -935,212 +937,6 @@ function networkChart(pdServiceVersions, jiraIssueData) {
 
 	/******** network graph create ********/
 	networkGraph.createGraph();
-}
-
-function versionUpdateIssueScatterChart(pdservice_id, pdservice_version_id, versionData) {
-	console.log("[ analysisScope :: versionUpdateIssueScatterChart ] :: 버전별 요구사항 업데이트 상태 스캐터 차트 버전데이터 = ");
-	console.log(versionData);
-
-	var yVersionData = [];
-	var xVesrionStartEndData = [];
-	var yearData = new Set();
-	versionData.forEach(version => {
-		yVersionData.push(version.title);
-		var arrayData = [version.title, +new Date(version.startDate), +new Date(version.endDate)];
-		yearData.add(new Date(version.startDate).getFullYear());
-		yearData.add(new Date(version.endDate).getFullYear());
-		xVesrionStartEndData.push(arrayData);
-	});
-
-	var versionDataMap = versionData.reduce(function(map, obj) {
-		map[obj.c_id] = obj;
-		return map;
-	}, {});
-
-	var dom = document.getElementById('boxplot-scatter-chart-container');
-
-	let myChart = echarts.init(dom, null, {
-		renderer: 'canvas',
-		useDirtyRect: false
-	});
-
-	let colorList = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC'];
-	let scatterData = [];
-
-	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
-		.addQueryParam("pdServiceLink", pdservice_id)
-		.addQueryParam("pdServiceVersionLinks", pdservice_version_id)
-		.addQueryParam("일자기준", "updated")
-		.addQueryParam("메인그룹필드", "isReq")
-		.addQueryParam("하위그룹필드들", "pdServiceVersion")
-		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("컨텐츠보기여부", true)
-		.build();
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log("[ analysisScope :: versionUpdateIssueScatterChart ] :: 버전별 요구사항 업데이트 상태 스캐터 차트데이터 = ");
-				console.log(data);
-
-				let result = Object.keys(data).reduce(
-					(acc, date) => {
-
-						if (data[date].requirementStatuses !== null) {
-							Object.keys(data[date].requirementStatuses).forEach((versionId) => {
-								if (data[date].requirementStatuses[versionId] !== 0) {
-									acc.versionScatterData.push([versionDataMap[versionId].title, new Date(date).getTime(), data[date].requirementStatuses[versionId]]);
-								}
-							});
-						}
-
-						return acc;
-					},
-					{
-						versionScatterData: []
-					}
-				);
-				scatterData = result.versionScatterData;
-
-				var option = {
-					legend: {
-						data: ['요구사항'],
-						textStyle: {
-							color: '#fff'  // 범례의 텍스트 색상을 설정합니다.
-						}
-					},
-					yAxis: {
-						type: 'time',
-						axisLabel: {
-							interval: 0,
-							textStyle: {
-								color: "white"
-							},
-							fontSize: 9,
-							rotate: 0,
-							formatter: function(params) {
-								return formatDate(new Date(params));
-							}
-						},
-						axisTick: { show: false },
-						splitLine: {
-							show: true,
-							lineStyle: {
-								color: "rgba(255,255,255,0.2)",
-								width: 1,
-								type: "dashed"
-							}
-						},
-						// splitNumber: 5, // 라벨의 간격을 조절합니다. 이 값은 원하는 간격에 따라 조절할 수 있습니다.
-					},
-					xAxis: {
-						data: yVersionData.reverse(),
-						inverse: true,
-						axisLabel: {
-							interval: 0,
-							textStyle: {
-								color: "white"
-							}
-						}
-					},
-					series: [
-						{
-							name: 'Versions',
-							type: 'custom',
-							itemStyle: {
-								color: function(params) {
-									return colorList[params.dataIndex % colorList.length];
-								}
-							},
-							renderItem: function(params, api) {
-								var categoryIndex = api.value(0);
-								var start = api.coord([categoryIndex, api.value(1)]);
-								var end = api.coord([categoryIndex, api.value(2)]);
-								var gap = 40; // 간격의 크기를 설정
-								var width  = (params.coordSys.width - gap * (yVersionData.length - 1)) / yVersionData.length; // 간격을 고려하여 사각형의 너비를 계산합니다.
-
-								if (width > 90) {
-									width = 90;
-								}
-
-								return {
-									type: 'rect',
-									shape: {
-										x: start[0] - width / 2,
-										y: start[1],
-										width: width,
-										height: end[1] - start[1]
-									},
-									style: api.style(params.dataIndex) // apply color here
-								};
-							},
-							encode: {
-								y: [1, 2],
-								x: 0
-							},
-							data: xVesrionStartEndData
-						},
-						{
-							name: '요구사항',
-							type: 'scatter',
-							encode: {
-								y: 1,
-								x: 0
-							},
-							itemStyle: {
-								color: "rgba(255,106,0,0.82)",
-								borderColor: '#fff',
-								borderWidth: 1
-							},
-							label: {
-								normal: {
-									show: true,
-									color: "#FFFFFF"
-								},
-							},
-							symbolSize: function (data) {
-								let sSize = Math.sqrt(data[2]) * 3;
-								if (sSize < 5) {
-									sSize = 5;
-								}
-								return sSize;
-							},
-							data: scatterData
-						}
-					],
-					tooltip: {
-						trigger: 'item',
-						formatter: function (params) {
-							if (params.seriesType === 'scatter') {
-								return params.marker + params.name + '<br/>' + new Date(params.value[1]).toLocaleDateString() + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + params.value[2] + '개<br/>';
-							} else {
-								var tooltipText = '';
-								tooltipText += params.marker + params.name + '<br/><span style="float: right;">' + new Date(params.value[1]).toLocaleDateString()+ " ~ " + new Date(params.value[2]).toLocaleDateString() + '</span>' + '<br/>';
-								return tooltipText;
-							}
-						}
-					},
-					grid: {
-						left: '15%',
-						containLabel: false
-					}
-				};
-
-				if (option && typeof option === 'object') {
-					myChart.setOption(option, true);
-				}
-
-				window.addEventListener('resize', myChart.resize);
-			}
-		}
-	});
 }
 
 
