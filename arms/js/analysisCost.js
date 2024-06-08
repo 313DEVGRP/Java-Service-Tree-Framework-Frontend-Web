@@ -223,7 +223,7 @@ function makeVersionMultiSelectBox() {
 
 function productCostChart() {
     const url = new UrlBuilder()
-      .setBaseUrl('/auth-user/api/arms/analysis/cost/product-accumulate-cost-by-month')
+      .setBaseUrl('/auth-admin/api/arms/analysis/cost/product-accumulate-cost-by-month')
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
       .addQueryParam("isReqType", "ISSUE")
@@ -420,20 +420,6 @@ function bind_VersionData_By_PdService() {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 연봉 정보 수정 PUT API 호출
 ////////////////////////////////////////////////////////////////////////////////////////
-function updateSalary() {
-    return $.ajax({
-        url: "/auth-user/api/arms/salaries/update.do",
-        type: "PUT",
-        data: {
-            c_annual_income: $("#editview_assignee_salary").val(),
-            c_key: $("#editview_assignee_key").val()
-            // plan_resource: $("#editview_assignee_plan_resource").val(),
-            // assignee_start_date: new Date($("#editview_assignee_start_date").val()),
-            // assignee_end_date: new Date($("#editview_assignee_end_date").val()),
-        }
-    });
-}
-
 
 function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdServiceVersionLinks) {
 
@@ -443,8 +429,7 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
     );
 
     const url = new UrlBuilder()
-      .setBaseUrl('/auth-user/api/arms/analysis/cost/version-req-assignees')
-      // .setBaseUrl('/auth-user/api/arms/analysis/cost/all-assignees')
+      .setBaseUrl('/auth-admin/api/arms/analysis/cost/version-req-assignees')
       .addQueryParam('pdServiceLink', pdServiceLink)
       .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
       .addQueryParam('크기', 1000)
@@ -574,7 +559,7 @@ function file_upload_setting() {
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
         autoUpload: true,
-        url: "/auth-user/api/arms/salaries/excel-upload.do",
+        url: "/auth-admin/api/arms/salaries/excel-upload.do",
         dropZone: $("#dropzone"),
         limitMultiFileUploads: 1,
         paramName: 'excelFile',
@@ -637,7 +622,7 @@ function excel_download(인력별_연봉정보) {
             jError("다운로드할 인력 정보가 없습니다.");
         } else {
             $.ajax({
-                url: "/auth-user/api/arms/salaries/excel-download.do?excelFileName=" + fileName,
+                url: "/auth-admin/api/arms/salaries/excel-download.do?excelFileName=" + fileName,
                 type: "POST",
                 data: JSON.stringify(인력별_연봉정보),
                 contentType: "application/json",
@@ -696,13 +681,13 @@ function 비용분석계산버튼() {
         console.log(전체담당자목록);
 
         const url = new UrlBuilder()
-          .setBaseUrl("/auth-user/api/arms/analysis/cost/req-linked-issue")
+          .setBaseUrl("/auth-admin/api/arms/analysis/cost/req-linked-issue")
           .addQueryParam("pdServiceLink", selectedPdServiceId)
           .addQueryParam("pdServiceVersionLinks", selectedVersionId)
           .build();
 
         const url2 = new UrlBuilder()
-          .setBaseUrl("/auth-user/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId + "/req-difficulty-priority-list")
+          .setBaseUrl("/auth-admin/api/arms/analysis/cost/T_ARMS_REQADD_" + selectedPdServiceId + "/req-difficulty-priority-list")
           .addQueryParam("c_req_pdservice_versionset_link", selectedVersionId)
           .build();
 
@@ -1626,7 +1611,7 @@ $(document).ready(function() {
               "<img src=\"./img/loading.gif\" width='20px' height='20px' style='margin-bottom: 3px;'/> 연봉 데이터 업데이트 중입니다..."
             );
             $.ajax({
-                url: "/auth-user/api/arms/salaries",
+                url: "/auth-admin/api/arms/salaries",
                 type: "PUT",
                 data: JSON.stringify(modifiedRows),
                 contentType: "application/json",
