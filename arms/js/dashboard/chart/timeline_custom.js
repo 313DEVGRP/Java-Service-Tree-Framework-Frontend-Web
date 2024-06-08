@@ -37,13 +37,23 @@ var Timeline = (function () {
 				},
 				allMonthArray: []
 			};
-			// 컬러 테스트 by 장지윤
-			colors = [
-				'#f8f4ff',
-				'#B15EFF',
-				'#FFA33C',
-				'#FFFB73'
-			];
+
+			if(dashboardColor.timeLineChartColor) {
+				colors = dashboardColor.timeLineChartColor;
+			} else {
+				colors = [
+					"rgba(158, 1, 66, 0.8)",
+					"rgba(213, 62, 79, 0.8)",
+					"rgba(244, 109, 67, 0.8)",
+					"rgba(253, 174, 97, 0.8)",
+					"rgba(254, 224, 139, 0.8)",
+					"rgba(230, 245, 152, 0.8)",
+					"rgba(171, 221, 164, 0.8)",
+					"rgba(102, 194, 165, 0.8)",
+					"rgba(50, 136, 189, 0.8)",
+					"rgba(94, 79, 162, 0.8)"
+				];
+			}
 
 			var t = [];
 			if (!_target) throw new Error("타임라인을 그릴 타겟을 입력하세요.");
@@ -181,7 +191,7 @@ var Timeline = (function () {
 				})();
 
 				// 색상을 정한다
-				d.color = colors[i % colors.length].concat("c7");
+				d.color = colors[i % colors.length];
 
 				// 높이 레벨을 정한다
 				d.height = (function () {

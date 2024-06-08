@@ -1,132 +1,46 @@
 <div class="navbar">
 
-	<ul class="nav navbar-nav navbar-right pull-right">
+	<ul class="nav navbar-nav navbar-right pull-right" style="display: flex; align-items: center; flex-wrap: wrap;">
 		<li class="hidden-xs">
-			<a
-				href="#"
-				id="search_toggle">
-				<i class="fa fa-search"></i>
-			</a>
+			<form id="search_form" class="navbar-form pull-right" role="search" style="margin: 0px; display: flex; align-items: center;">
+				<input id="nav-search-input" type="search" class="form-control search-query" placeholder="Search...">
+				<a href="#" id="nav-search-button">
+					<i class="fa fa-search"></i>
+				</a>
+			</form>
 		</li>
-		<li class="dropdown">
-			<a  href="#"
-				title="Messages"
-				id="messages"
-				class="dropdown-toggle"
-				data-toggle="dropdown">
-				<i class="glyphicon glyphicon-comment"></i>
-			</a>
-			<ul id="messages_menu"
-				class="dropdown-menu messages"
-				role="menu">
-				<li role="presentation">
-					<a  href="#"
-						class="message">
-						<img    src="../reference/lightblue4/docs/img/1.png"
-							    alt="" />
-						<div class="details">
-							<div class="sender">Jane Hew</div>
-							<div class="text">Hey, John! How is it going? ...</div>
-						</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="message">
-						<img    src="../reference/lightblue4/docs/img/2.png"
-						    	alt="" />
-						<div class="details">
-							<div class="sender">Alies Rumiancaŭ</div>
-							<div class="text">I'll definitely buy this template</div>
-						</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="message">
-						<img    src="../reference/lightblue4/docs/img/3.png"
-							    alt="" />
-						<div class="details">
-							<div class="sender">Michał Rumiancaŭ</div>
-							<div class="text">Is it really Lore ipsum? Lore ...</div>
-						</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="text-align-center see-all">
-						See all messages
-						<i class="fa fa-arrow-right"></i>
-					</a>
-				</li>
-			</ul>
-		</li>
+        <li class="divider"></li>
 		<li class="dropdown">
 			<a  href="#"
 				title="8 support tickets"
 				class="dropdown-toggle"
 				data-toggle="dropdown">
 				<i class="glyphicon glyphicon-globe"></i>
-				<span class="count">8</span>
+				<span class="count">3</span>
 			</a>
 			<ul id="support_menu"
-				class="dropdown-menu support"
+				class="dropdown-menu support locale-menu"
 				role="menu">
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-important"><i class="fa fa-bell-o"></i></span>
-						</div>
-						<div class="details">Check out this awesome ticket</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-warning"><i class="fa fa-question-circle"></i></span>
-						</div>
-						<div class="details">"What is the best way to get ...</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-success"><i class="fa fa-tag"></i></span>
-						</div>
-						<div class="details">This is just a simple notification</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-info"><i class="fa fa-info-circle"></i></span>
-						</div>
-						<div class="details">12 new orders has arrived today</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="support-ticket">
-						<div class="picture">
-							<span class="label label-important"><i class="fa fa-plus"></i></span>
-						</div>
-						<div class="details">One more thing that just happened</div>
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="text-align-center see-all">
-						See all tickets
-						<i class="fa fa-arrow-right"></i>
-					</a>
-				</li>
+                <li role="presentation" class="locale-item">
+                    <a href="#" class="locale-selector" data-key="ko">
+                        <div class="picture"><span class="fi fi-kr"></span></div>
+                        <div class="details" data-locale="nav.language.ko">한국어</div>
+                    </a>
+                </li>
+                <li role="presentation" class="locale-item">
+                    <a href="#" class="locale-selector" data-key="jp">
+                        <div class="picture"><span class="fi fi-jp"></span></div>
+                        <div class="details" data-locale="nav.language.jp">일본어</div>
+                    </a>
+                </li>
+                <li role="presentation" class="locale-item">
+                    <a href="#" class="locale-selector" data-key="en">
+                        <div class="picture"><span class="fi fi-us"></span></div>
+                        <div class="details" data-locale="nav.language.en">영어</div>
+                    </a>
+                </li>
 			</ul>
 		</li>
-		<li class="divider"></li>
 		<li class="hidden-xs">
 			<a  href="#"
 				id="settings"
@@ -136,6 +50,7 @@
 				<i class="glyphicon glyphicon-cog"></i>
 			</a>
 		</li>
+        <li class="divider"></li>
 		<li class="hidden-xs dropdown">
 			<a  href="#"
 				title="Account"
@@ -147,31 +62,28 @@
 			<ul id="account_menu"
 				class="dropdown-menu account"
 				role="menu">
-				<li role="presentation"
-					class="account-picture">
-
-				</li>
+                <li role="presentation"
+                    class="account-picture">
+                    <img    src="./img/seal_tree.png"
+                            alt=""
+                            class="img-circle" />
+                    <strong style="color: #a4c6ff">Welcome A-RMS</strong>
+                </li>
 				<li role="presentation">
 					<a  href="#"
 						class="link">
 						<i class="fa fa-user"></i>
-						Profile
+                        Profile ⇥&nbsp;
+                        <span id="login_id"></span>
 					</a>
 				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="link">
-						<i class="fa fa-calendar"></i>
-						Calendar
-					</a>
-				</li>
-				<li role="presentation">
-					<a  href="#"
-						class="link">
-						<i class="fa fa-inbox"></i>
-						Inbox
-					</a>
-				</li>
+                <li role="presentation">
+                    <a  href="/controltower"
+                        class="link">
+                        <i class="fa fa-building"></i>
+                        Back Office
+                    </a>
+                </li>
 			</ul>
 		</li>
 		<li class="visible-xs">
@@ -188,15 +100,47 @@
 					class="link logout"><i class="glyphicon glyphicon-off"></i></a>
 		</li>
 	</ul>
-	<form   id="search_form"
-            class="hidden-xs navbar-form pull-right"
-            role="search">
-		<input  type="search"
-                class="form-control search-query"
-                placeholder="Search..." />
-	</form>
     <div class="notifications pull-right" style="line-height: 21px !important;"></div>
 </div>
+
+
+<style>
+    /* Locale 선택 메뉴 스타일링 */
+    .locale-selector {
+        .picture {
+            float: left;
+            text-align: center;
+        }
+        .details {
+            margin-left: 30px;
+        }
+    }
+    .locale-menu {
+        min-width: 120px;
+        /* 국기 아이콘 적용 (ref: https://github.com/lipis/flag-icons) */
+        .fi {
+            background-size: contain;
+            background-position: 50%;
+            background-repeat: no-repeat;
+            position: relative;
+            display: inline-block;
+            width: 1.333333em;
+            line-height: 1em;
+        }
+        .fi:before {
+            content: " ";
+        }
+        .fi-kr {
+            background-image: url('./img/flags/kr.svg');
+        }
+        .fi-jp {
+            background-image: url('./img/flags/jp.svg');
+        }
+        .fi-us {
+            background-image: url('./img/flags/us.svg');
+        }
+    }
+</style>
 
 <script>
 
@@ -221,9 +165,16 @@
 				complete: function () {
 				}
 			});
-
-
 		});
+
+        $(".locale-selector").click(function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const $this = $(this);
+            const selectedLocale = $this.attr("data-key");
+            changeLocale(selectedLocale);
+            $this.closest(".dropdown-menu").dropdown("toggle");
+        });
 	})(jQuery);
 
 </script>

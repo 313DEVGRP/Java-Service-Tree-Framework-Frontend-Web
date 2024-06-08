@@ -75,7 +75,7 @@
 				<div class="row">
 					<div class="col-md-3">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section top-menu-div"
 							style="border: dashed; border-width: thin; border-color: lightsteelblue">
 							<header style="margin-bottom: 20px">
 								<h4>
@@ -92,11 +92,11 @@
 							</header>
 							<div class="body">
 								<div class="column">
-									<span>
+									<blockquote class="font13">
 										1. Product
 										<sup>service</sup>
 										를 선택해 주세요
-									</span>
+									</blockquote>
 									<div
 										class="control-group"
 										style="padding-top: 10px; padding-bottom: 10px; border: 0">
@@ -139,7 +139,7 @@
 					</div>
 					<div class="col-md-3">
 						<section
-							class="widget large"
+							class="widget large top-menu-div"
 							style="margin-bottom: 15px; height: 290px">
 							<header>
 								<h4>
@@ -163,7 +163,7 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section top-menu-div-scope"
 							style="overflow: auto; margin-bottom: 15px">
 							<header style="margin-bottom: 15px">
 								<h4>
@@ -179,81 +179,83 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; margin-top: 8px"></div>
+								<div class="body">
+									<ul class="overall-stats"
+											style="background-color: rgba(51, 51, 51, .425); padding: 5px 10px;">
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-inbox"></i>
+											</div>
+											<span class="key">총 요구사항</span>
+											<div class="value pull-right">
+												<span id="req_count" class="badge badge-info"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa  fa-folder-o"></i>
+											</div>
+											<span class="key">열림</span>
+											<div class="value pull-right">
+												<span id="req_open" class="badge"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-fire"></i>
+											</div>
+											<span class="key">진행중</span>
+											<div class="value pull-right">
+												<span id="req_in_progress" class="badge"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-fire-extinguisher"></i>
+											</div>
+											<span class="key">해결됨</span>
+											<div class="value pull-right">
+												<span id="req_resolved" class="badge"> - </span>
+											</div>
+										</li>
+										<li style="margin: 12px 10px;">
+											<div class="icon pull-left" style="margin: 0 10px;">
+												<i class="fa fa-folder"></i>
+											</div>
+											<span class="key">닫힘</span>
+											<div class="value pull-right">
+												<span id="req_closed" class="badge"> - </span>
+											</div>
+										</li>
+									</ul>
+								</div>
 								<div
 									class="box"
 									style="display: flex; justify-content: space-evenly; margin: 10px 0">
-									<div>
-										<div
-											id="req_in_action_count"
-											style="
-												color: #a4c6ff;
-												margin-top: 5px;
-												font-size: 20px;
-												line-height: 20px;
-												height: 20px;
-												font-weight: 700;
-											">
-											-
-										</div>
-										<div class="description">
-											<i class="fa fa-wrench"></i>
-											작업 중
-										</div>
-									</div>
-									<div style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px">|</div>
-									<div>
-										<div
-											id="req_count"
-											style="margin-top: 5px; font-size: 20px; line-height: 20px; height: 20px; font-weight: 700">
-											-
-										</div>
-										<div class="description">└ 작업 대상 ┘</div>
-									</div>
-								</div>
-								<div class="column">
 									<div
-										class="control-group"
-										style="padding-bottom: 10px; border: 0">
-										<div
-											class="controls form-group darkBack col-md-12"
-											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
+										class="controls form-group col-md-6"
+										style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												요구사항(
-												<i class="fa fa-wrench"></i>
-												) 연결이슈 평균:
-												<a
-													id="linkedIssue_subtask_count_per_req_in_action"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
-											<br />
-										</div>
-										<div
-											class="controls form-group darkBack col-md-6"
-											style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
-											<span>
-												총 요구사항
+												생성된 요구사항 이슈
 												<br />
 												<small>(미할당)</small>
 												<br />
 												<a
-													id="total_req_count"
+													id="total_req_issue_count"
 													style="font-weight: bold">
 													-
 												</a>
 												개 (
-												<span id="no_assigned_req_count">-</span>
+												<span id="no_assigned_req_issue_count">-</span>
 												)
 											</span>
-											<br />
-										</div>
-										<div
-											class="controls form-group darkBack col-md-6"
-											style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
+										<br />
+									</div>
+									<div
+										class="controls form-group col-md-6"
+										style="margin-bottom: 5px !important; padding: 10px 0 !important; text-align: center">
 											<span>
-												총 연결이슈
+												생성한 연결이슈
 												<br />
 												<small>(미할당)</small>
 												<br />
@@ -266,15 +268,14 @@
 												<span id="no_assigned_linkedIssue_subtask_count">-</span>
 												)
 											</span>
-											<br />
-										</div>
+										<br />
 									</div>
 								</div>
 							</div>
 						</section>
 					</div>
 					<div class="col-md-2">
-						<section class="widget">
+						<section class="widget dashboard-top-section top-menu-div">
 							<header style="margin-bottom: 15px">
 								<h4>
 									<span
@@ -289,6 +290,28 @@
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; height: 2px; margin-top: 5px"></div>
+								<div
+									class="box"
+									style="display: flex; justify-content: space-evenly; margin: 10px 0">
+									<div>
+										<span>
+											전체 일정
+											<br />
+											<a
+												id="start_date_summary"
+												style="font-weight: bold">
+												-
+											</a>
+											~
+											<a
+												id="end_date_summary"
+												style="font-weight: bold">
+												-
+											</a>
+										</span>
+										<br />
+									</div>
+								</div>
 								<div
 									class="box"
 									style="display: flex; justify-content: space-evenly; margin: 10px 0">
@@ -317,6 +340,37 @@
 										<div class="description">【 경과 】</div>
 									</div>
 								</div>
+								<div class="column">
+									<div
+										class="control-group"
+										style="padding-bottom: 10px; border: 0">
+										<div
+											class="controls form-group darkBack col-md-12"
+											style="margin-bottom: 10px !important; padding: 10px 0 !important; text-align: center">
+											<li style="list-style: none;">
+												<div style="display: flex; justify-content: space-between">
+													<span style="margin-left: 10px;">
+														요구사항 진척도
+													</span>
+													<span style="margin-right: 10px;">
+<!--														<a
+														id="req_progress"
+														style="font-weight: bold">
+															-
+														</a>/-->
+														<a id="req_completed" style="font-weight: bold">-</a>
+														<a id="req_total2" style="font-weight: bold">-</a>
+													</span>
+												</div>
+											</li>
+											<li style="list-style: none;">
+												<div class="progress progress-small progress-striped" style="margin: 5px 10px; height:18px; line-height: 13px">
+													<div id="req_progress_bar" class="progress-bar progress-bar-warning"></div>
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
 								<div
 									class="box"
 									style="display: flex; justify-content: space-evenly; margin: 10px 0">
@@ -338,7 +392,7 @@
 					</div>
 					<div class="col-md-2">
 						<section
-							class="widget dashboard-top-section"
+							class="widget dashboard-top-section top-menu-div"
 							style="overflow: auto">
 							<header style="margin-bottom: 15px">
 								<h4>
@@ -358,7 +412,7 @@
 									class="box"
 									style="margin: 10px 0">
 									<div
-										id="resource_count"
+										id="resource"
 										style="
 											color: #a4c6ff;
 											margin-top: 5px;
@@ -381,31 +435,51 @@
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
-											<span>
-												작업 중 요구사항 평균 :
-												<a
-													id="req_in_action_avg"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
+											<span> 1인당 요구사항 이슈 수 <br/>(최대 / 평균 / 최소) </span>
 											<br />
+											<span>
+												<a id="req_max" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="req_avg" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="req_min" style="font-weight: bold"> - </a>
+											</span>
 										</div>
 										<div
 											class="controls form-group darkBack col-md-12"
 											style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
-											<span>
-												생성한 연결이슈 평균 :
-												<a
-													id="avg_linkedIssue_count"
-													style="font-weight: bold">
-													-
-												</a>
-												개
-											</span>
+											<span> 1인당 생성한 연결이슈 수 <br/>(최대 / 평균 / 최소)</span>
 											<br />
+											<span>
+												<a id="sub_max" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="sub_avg" style="font-weight: bold"> - </a>
+											</span>
+											/
+											<span>
+												<a id="sub_min" style="font-weight: bold"> - </a>
+											</span>
 										</div>
+										<!--										<div
+																					class="controls form-group darkBack col-md-12"
+																					style="margin-bottom: 10px !important; padding: 10px 0; !important; text-align: center">
+																					<span>
+																						생성한 연결이슈 평균 :
+																						<a
+																							id="avg_linkedIssue_count"
+																							style="font-weight: bold">
+																							-
+																						</a>
+																						개
+																					</span>
+																					<br />
+																				</div>-->
 									</div>
 								</div>
 							</div>
@@ -499,6 +573,46 @@
 										제품 버전 별 작업자
 									</span>
 								</h4>
+                                <div class="widget-controls">
+                                    <a
+                                            data-widgster="toleft"
+                                            title="change width to left"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="expand"
+                                            title="Expand"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="collapse"
+                                            title="Collapse"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="toright"
+                                            title="change width to right"
+                                            href="#">
+                                        <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </a>
+                                    <a
+                                            data-widgster="restore"
+                                            title="Restore"
+                                            href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                    <a
+                                            data-widgster="fullscreen"
+                                            title="Fullscreen"
+                                            href="#">
+                                        <i
+                                                class="glyphicon glyphicon-fullscreen"
+                                                style="font-size: 11px"></i>
+                                    </a>
+                                </div>
 							</header>
 							<div class="body">
 								<div
@@ -507,7 +621,7 @@
 								<blockquote
 									class="font13"
 									style="margin-top: 5px">
-									제품 및 버전에 투입된 작업자 관계도
+									제품 및 버전에 투입된 작업자 (Top 5)
 								</blockquote>
 								<div
 									class="body echart-no-data"
@@ -527,6 +641,46 @@
 											작업자별 요구사항 관여도
 										</span>
 									</h4>
+                  <div class="widget-controls">
+                    <a
+                            data-widgster="toleft"
+                            title="change width to left"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a
+                            data-widgster="expand"
+                            title="Expand"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a
+                            data-widgster="toright"
+                            title="change width to right"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                    <a
+                            data-widgster="restore"
+                            title="Restore"
+                            href="#">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </a>
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                  </div>
 								</header>
 								<div class="body">
 									<div
@@ -652,28 +806,13 @@
 						class="font13"
 						style="font-weight: bold">
 						<i class="fa fa-calendar-o"></i>
-						작업자별 요구사항 및 연결이슈 항목별 상세
+						작업자별 요구사항 및 연결이슈 항목별 상세 (Top 5)
 					</span>
-					<button
-						type="button"
-						class="btn btn-default btn-sm ml-1 hidden"
-						style="margin-top: 0; vertical-align: baseline"
-						onclick="refreshDetailChart()">
-						<span class="glyphicon glyphicon-repeat"></span>
-						refresh
-					</button>
-					<button
-						type="button"
-						class="btn btn-default btn-sm ml-1 hidden"
-						style="margin-top: 0; vertical-align: baseline"
-						onclick="drawDetailOverallChart()">
-						<span class="glyphicon glyphicon-repeat"></span>
-						전체보기
-					</button>
+
 				</h4>
 				<div class="widget-controls">
 					<a
-						class="hidden"
+
 						data-widgster="toleft"
 						title="change width to left"
 						href="#">
@@ -692,7 +831,7 @@
 						<i class="glyphicon glyphicon-chevron-down"></i>
 					</a>
 					<a
-						class="hidden"
+
 						data-widgster="toright"
 						title="change width to right"
 						href="#">
@@ -733,6 +872,28 @@
 						</button>
 					</div>
 				</blockquote>
+
+				<div class="clearfix widget-content hidden">
+					<div style="float: left">
+						<button
+							type="button"
+							class="btn btn-default btn-sm ml-1"
+							style="margin-top: 0; vertical-align: baseline"
+							onclick="refreshDetailChart()">
+							<span class="glyphicon glyphicon-repeat"></span>
+							refresh
+						</button>
+						<button
+							type="button"
+							class="btn btn-default btn-sm ml-1"
+							style="margin-top: 0; vertical-align: baseline"
+							onclick="drawDetailOverallChart()">
+							<span class="glyphicon glyphicon-repeat"></span>
+							전체보기
+						</button>
+					</div>
+				</div>
+
 				<div class="row">
 					<div class="col-lg-3 col-md-6 col-sm-12">
 						<section class="widget large">
@@ -747,7 +908,6 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -766,7 +926,6 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -807,7 +966,7 @@
 								</h5>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -826,7 +985,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -867,7 +1026,7 @@
 								</h5>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -886,7 +1045,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -927,7 +1086,7 @@
 								</h5>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -946,7 +1105,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -993,7 +1152,7 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -1012,7 +1171,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -1057,7 +1216,7 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -1076,7 +1235,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -1121,7 +1280,7 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -1140,7 +1299,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -1185,7 +1344,7 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -1204,7 +1363,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -1257,7 +1416,6 @@
 				</h4>
 				<div class="widget-controls">
 					<a
-						class="hidden"
 						data-widgster="toleft"
 						title="change width to left"
 						href="#">
@@ -1276,7 +1434,6 @@
 						<i class="glyphicon glyphicon-chevron-down"></i>
 					</a>
 					<a
-						class="hidden"
 						data-widgster="toright"
 						title="change width to right"
 						href="#">
@@ -1331,7 +1488,7 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -1350,7 +1507,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">
@@ -1413,7 +1570,7 @@
 								</h4>
 								<div class="widget-controls">
 									<a
-										class="hidden"
+
 										data-widgster="toleft"
 										title="change width to left"
 										href="#">
@@ -1432,7 +1589,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									<a
-										class="hidden"
+
 										data-widgster="toright"
 										title="change width to right"
 										href="#">

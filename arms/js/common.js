@@ -1,4 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////
+//Const
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+//인증관련 공통 변수
+////////////////////////////////////////////////////////////////////////////////////////
+let userName;
+let fullName;
+let userApplicationRoles;
+let userAttributes;
+let userEnabled;
+let userGroups;
+let userID;
+let userRealmRoles;
+let permissions;
+let userEmail;
+let scrollPos = 0;
+////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function () {
@@ -48,9 +65,48 @@ function runScript() {
 				/* 로그인 인증 여부 체크 함수 */
 				execDocReady();
 				dwr_login(userName, userName);
+				menu_setting();
 			});
 		}
 	}
+}
+
+function menu_setting() {
+
+	console.log("롤에 의한 메뉴를 설정합니다.");
+
+	var role_user = "ROLE_USER";
+	var role_manager = "ROLE_MANAGER";
+	var role_admin = "ROLE_ADMIN";
+
+	if( isEmpty(permissions) == false && permissions.indexOf(role_user) != -1){
+		console.log("user 권한의 메뉴를 표현합니다.");
+		$("#menu_login").addClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_detail").removeClass("hide");
+	}
+	if( isEmpty(permissions) == false && permissions.indexOf(role_manager) != -1){
+		console.log("manager 권한의 메뉴를 표현합니다.");
+		$("#menu_login").addClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_detail").addClass("hide");
+		$("#menu_product").removeClass("hide");
+		$("#menu_alm").removeClass("hide");
+		$("#menu_requirement").removeClass("hide");
+	}
+	if( isEmpty(permissions) == false && permissions.indexOf(role_admin) != -1){
+		console.log("admin 권한의 메뉴를 표현합니다.");
+		$("#menu_login").addClass("hide");
+		$("#menu_dashboard").removeClass("hide");
+		$("#menu_detail").addClass("hide");
+		$("#menu_product").removeClass("hide");
+		$("#menu_alm").removeClass("hide");
+		$("#menu_requirement").removeClass("hide");
+		$("#menu_analysis").removeClass("hide");
+	}
+	
+	
+
 }
 
 function widgsterWrapper() {
@@ -158,9 +214,28 @@ function widgsterWrapper() {
 
 function 로드_완료_이후_실행_함수() {
 	톱니바퀴_초기설정();
-	setLocale();
+	loadLocale();
 	widgsterWrapper();
+	검색_이벤트_트리거();
+
+	우측_상단_사용자_정보_설정();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 우측_상단_사용자_정보_설정
+////////////////////////////////////////////////////////////////////////////////////////
+function 우측_상단_사용자_정보_설정() {
+
+	var str = window.location.href;
+	if (str.indexOf("php") > 0) {
+		var account_html = "<span style='color:#a4c6ff;'>not supported</span>";
+		$("#login_id").append(account_html);
+	}else {
+		var account_html = "<span style='color:#a4c6ff;'>\"" + userName + "\"</span>";
+		$("#login_id").append(account_html);
+	}
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 플러그인 로드 모듈 ( 병렬 시퀀스 )
@@ -169,7 +244,7 @@ function loadPlugin(url) {
 	return new Promise(function (resolve, reject) {
 		if (isJavaScriptFile(url)) {
 			$(".spinner").html(
-				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 					getFileNameFromURL(url) +
 					" 자바스크립트를 다운로드 중입니다..."
 			);
@@ -191,7 +266,7 @@ function loadPlugin(url) {
 			});
 		} else {
 			$(".spinner").html(
-				'<img src="./img/circleloading.gif" alt="로딩" style="width: 16px;"> ' +
+				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
 					getFileNameFromURL(url) +
 					" 스타일시트를 다운로드 중입니다..."
 			);
@@ -238,6 +313,8 @@ function loadPluginGroupsParallelAndSequential(groups) {
 function includeLayout(page) {
 	var includeArea = $("[data-include]");
 	var self, url;
+	var str = window.location.href;
+
 	$.each(includeArea, function () {
 		self = $(this);
 		url = self.data("include");
@@ -263,6 +340,11 @@ function includeLayout(page) {
 				self.load(url, function () {
 					self.removeAttr("data-include");
 				});
+			} else if (str.indexOf("controltower") > 0) {
+				url = "/controltower/html/template/page-sidebar.html";
+				self.load(url, function () {
+					self.removeAttr("data-include");
+				});
 			} else {
 				url = "/arms/html/template/page-sidebar.html";
 				self.load(url, function () {
@@ -279,19 +361,6 @@ function includeLayout(page) {
 	return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//인증관련 공통 변수
-////////////////////////////////////////////////////////////////////////////////////////
-var userName;
-var fullName;
-var userApplicationRoles;
-var userAttributes;
-var userEnabled;
-var userGroups;
-var userID;
-var userRealmRoles;
-var permissions;
-var userEmail;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 상단 페이지 로드 프로그래스바 설정
@@ -353,18 +422,15 @@ function authUserCheck() {
 			statusCode: {
 				200: function (json) {
 					console.log("[ common :: authUserCheck ] userName = " + json.preferred_username);
-					console.log("[ common :: authUserCheck ] permissions = ");
 					console.log("[ common :: authUserCheck ] sub = " + json.sub);
-					console.log(json.realm_access.roles);
+					console.log("[ common :: authUserCheck ] roles = " + json.realm_access.roles);
+					console.log("[ common :: authUserCheck ] email = " + json.email);
+					console.log("[ common :: authUserCheck ] name = " + json.name);
 					userName = json.preferred_username;
 					permissions = json.realm_access.roles;
 					userID = json.sub;
 					userEmail = json.email;
 					fullName = json.name;
-
-					var account_html = "<img" + " src='./img/seal_tree.png'" + "alt=''" + "class='img-circle' />";
-					account_html = account_html + "user : <span style='color:#a4c6ff;'>" + json.preferred_username + "</span>";
-					$(".account-picture").append(account_html);
 
 					runScript();
 				},
@@ -682,8 +748,20 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 						};
 					},
 					success: function (n) {
+					    n.forEach(item => {
+					        let type = item.attr.rel;
+					        if(type !== "folder"){
+                                if (item.reqStateEntity && item.reqStateEntity.c_title) {
+                                    let state = item.reqStateEntity.c_title;
+                                    item.data = mappingStateIcon(state) +" "+item.data;
+                                }
+					        }
+                        });
 						jSuccess("Product(service) Data Load Complete");
 						$(jQueryElementID).jstree("search", $("#text").val());
+						 if (typeof changeMultipleSelected === "function") {
+                            changeMultipleSelected();
+                         }
 					}
 				}
 			},
@@ -886,9 +964,10 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 			}
 		})
 		.bind("loaded.jstree", function (event, data) {
-			setTimeout(function () {
-				$(jQueryElementID).jstree("open_all");
-			}, 1500);
+			// 성능 이슈로 자동으로 전부 펼치기 닫음.
+			// setTimeout(function () {
+			// 	$(jQueryElementID).jstree("open_all");
+			// }, 1500);
 
 			$(jQueryElementID).slimscroll({
 				height: "545px"
@@ -921,6 +1000,19 @@ function jsTreeBuild(jQueryElementID, serviceNameForURL) {
 
 		$(jQueryElementID).jstree("search", document.getElementById("text").value);
 	});
+
+    function mappingStateIcon(key) {
+        if (key === "열림") {
+            return '<i class="fa fa-folder-o text-danger status-icon"></i>';
+        } else if (key === "진행중") {
+            return '<i class="fa fa-fire text-danger status-icon" style="color: #E49400;"></i>';
+        } else if (key === "해결됨") {
+            return '<i class="fa fa-fire-extinguisher text-success status-icon"></i>';
+        } else if (key === "닫힘") {
+            return '<i class="fa fa-folder text-primary status-icon"></i>';
+        }
+        return ''; // 기본적으로 빈 문자열 반환
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1015,6 +1107,7 @@ function dataTable_build(
 		buttons: buttonList,
 		scrollX: true,
 		scrollY: scrollY,
+		// lengthMenu: [[3, 5, 7, 10], [3, 5, 7, 10]],
 		language: {
 			processing: "",
 			loadingRecords:
@@ -1046,6 +1139,11 @@ function dataTable_build(
 	}
 
 	var tempDataTable = $(jQueryElementID).DataTable(options);
+
+	$(jQueryElementID).on('page.dt', function() {
+		scrollPos = $(window).scrollTop();
+		$(window).scrollTop(scrollPos);
+	});
 
 	/*var tempDataTable = $(jQueryElementID).DataTable({
 		ajax: {
@@ -1262,9 +1360,36 @@ function hideDetail_Datagrid() {
 		});
 }
 
+//////////////////////////////////////////
 // 페이지 이동 처리
+//////////////////////////////////////////
 function goToTemplatePage(pageName) {
-	window.location.href = "template.html?page=" + pageName;
+	let current_page = getPageName(this.location.search);
+	console.log("[common :: goToTemplatePage] :: current_page => " + current_page);
+	if(current_page === "searchEngine") {
+		console.log("[common :: goToTemplatePage] :: 검색페이지");
+	} else {
+		console.log("[common :: goToTemplatePage] :: pageName => " + pageName);
+		window.location.href = "template.html?page=" + pageName;
+	}
+}
+
+//////////////////////////////////////////
+// 검색어 포함 페이지 이동 처리
+//////////////////////////////////////////
+function goToTemplatePageWithSearchString(pageName, searchString) {
+	console.log("[common :: goToTemplatePageWithSearchString] :: pageName => " + pageName+", 검색어 => " + searchString);
+	let current_page = getPageName(this.location.search);
+
+	if(current_page === "searchEngine") {
+		console.log("[common :: goToTemplatePageWithSearchString] :: current_page => " + current_page);
+		console.log("[common :: goToTemplatePageWithSearchString] :: 검색페이지");
+		$("#search-input").val(searchString);
+		$("#search-button").click();
+	} else {
+		console.log("[common :: goToTemplatePageWithSearchString] :: 검색어와 함께 페이지 이동");
+		window.location.href = "/arms/template.html?page=" + pageName+"&searchString="+searchString;
+	}
 }
 
 function laddaBtnSetting(라따적용_클래스이름_배열) {
@@ -1398,10 +1523,13 @@ function tourGuideEventListener() {
 	});
 }
 
-function getPageName(str) {
-	if (str !== "") {
-		let idxOfPageParam = str.indexOf("page"); // page param의 위치
-		return str.substring(idxOfPageParam + 5);
+function getPageName() {
+	const queryString = location.search;
+	const params = new URLSearchParams(queryString);
+	const page = params.get("page");
+
+	if (!isEmpty(page)) { // page param의 위치
+		return page;
 	}
 	return "페이지 이름 없음"; //페이지 이름이 없을 경우.
 }
@@ -1747,15 +1875,63 @@ function gnuboardIndex() {
 
 	location.href = `/php/gnuboard5/index.php?${new URLSearchParams(params).toString()}`;
 }
+////////////////////////////////////////////////////////////////////////////////////////
+// 국제화 설정
+////////////////////////////////////////////////////////////////////////////////////////
+function loadLocale() {
+	const locale = getCookie("locale");
+	changeLocale(locale || "ko");
+}
 
-/**
- * Locales
- * */
+function changeLocale(locale) {
+	const allowedLocale = ["ko", "jp", "en"];
+	const selectedLocale = allowedLocale.includes(locale) ? locale : "ko";
+	const $localeMenu = $(".locale-menu");
+	$localeMenu.find(".locale-item").removeClass("active");
+	$localeMenu.find(".locale-selector[data-key=" + selectedLocale + "]").closest(".locale-item").addClass("active");
+	setCookie("locale", selectedLocale, 365);
+	setLocale(selectedLocale);
+}
+
+function setLocale(locale = "ko") {
+	$.ajax({
+		url: `/arms/locales/${locale}.json`,
+		async: false,
+		dataType: "json"
+	}).done(function (data) {
+		bindLocaleText(flattenObject(data));
+	});
+}
+
 function bindLocaleText(locales) {
 	const targets = document.querySelectorAll("[data-locale]");
 
 	targets.forEach((tag) => {
-		tag.textContent = locales[tag.dataset.locale];
+		const content = locales[tag.dataset.locale];
+		if (content === undefined) {
+			console.warn("해당 키에 대한 국제화 문자열이 없습니다.", tag.dataset.locale);
+			return;
+		}
+		if (isIncludeHTMLTag(content)) {
+			tag.innerHTML = sanitizeHTML(content);
+		} else {
+			tag.textContent = content;
+		}
+	});
+}
+
+function isIncludeHTMLTag(content) {
+	return /<\/?[a-z][\s\S]*>/i.test(content);
+}
+
+function sanitizeHTML(content) {
+	const allowedTags = ['span', 'small', 'strong', 'p', 'b', 'ul', 'li', 'br'];
+	return content.replace(/<(\w+)[^>]*>|<\/(\w+)>/g, (match, openTag, closeTag) => {
+		const tagName = (openTag || closeTag).toLowerCase();
+		if (allowedTags.includes(tagName)) {
+			return match.replace(/ on\w+="[^"]*"| on\w+='[^']*'/g, ''); // 이벤트 핸들러 속성 제거
+		}
+		return ''; // 허용되지 않은 태그 제거
 	});
 }
 
@@ -1774,18 +1950,63 @@ function flattenObject(obj, parentKey) {
 	return result;
 }
 
-function setLocale(locale = "ko") {
-	$.ajax({
-		url: `/arms/locales/${locale}.json`,
-		async: false,
-		dataType: "json"
-	}).done(function (data) {
-		bindLocaleText(flattenObject(data));
+/////////////////////////////////////
+// 쿠키 설정
+/////////////////////////////////////
+function setCookie(name, value, exp = 1) {
+	const path = "/arms";
+	const date = new Date();
+	date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+	document.cookie = `${name}=${value};expires=${date.toUTCString()};path=${path}`;
+}
+
+/////////////////////////////////////
+// 검색_이벤트_트리거
+/////////////////////////////////////
+function 검색_이벤트_트리거() {
+	$("#nav-search-input").on("focus", function(event) {
+		$("#nav-search-button").addClass("highlight");
+	});
+
+	$("#nav-search-input").on("blur", function(event) {
+		$("#nav-search-button").removeClass("highlight");
+	});
+	// nav 검색창
+	$("#search_form").on("submit", function (event) {
+		event.preventDefault();
+
+		let 검색어 = $("#nav-search-input").val().trim();
+		if (검색어) {
+			console.log("[page-header :: nav-search-start] :: 검색어 입력 값 => " + 검색어);
+			setParameter("searchString", 검색어);
+			goToTemplatePageWithSearchString("searchEngine", 검색어);
+		} else {
+			console.log("[page-header :: nav-search-start] :: 검색어가 없습니다. 검색페이지로 이동합니다");
+			goToTemplatePage("searchEngine");
+		}
+	});
+
+	$("#nav-search-button").on("click", function (event) {
+		$("#search_form").trigger("submit");
 	});
 }
 
-function chnageLoocale() {
-	const localeSelect = document.getElementById("localeSelect");
+/////////////////////////////////////////////
+// URL 파라미터값 찾기
+/////////////////////////////////////////////
+function getParameter(param) {
+	param = param.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	let regex = new RegExp("[\\?&]" + param + "=([^&#]*)"),
+		results = regex.exec(location.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
-	setLocale(localeSelect.options[localeSelect.selectedIndex].value);
+/////////////////////////////////////////////
+// URL 파라미터값 수정
+/////////////////////////////////////////////
+function setParameter(param, value) {
+	var url = new URL(window.location.href);
+	url.searchParams.set(param, value);
+	// Replace the currnt URL without reloading the page
+	window.history.pushState({path:url.href}, '', url.href);
 }

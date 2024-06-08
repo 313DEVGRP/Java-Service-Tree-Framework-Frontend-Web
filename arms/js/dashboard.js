@@ -2,16 +2,21 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedPdServiceId; // 제품(서비스) 아이디
+var selectedVersionId; // 선택된 버전 아이디
+//상단 메뉴 변수
+var timeStatus_info, req_state, issue_info, resource_info;
 var reqStatusDataTable;
 var dataTableRef;
-var selectedVersionId; // 선택된 버전 아이디
+
 var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
 var dashboardColor;
+
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;// , req_in_action;
 var top5ReqLinkedIssue = [];
+
 function execDocReady() {
 
 	var pluginGroups = [
@@ -27,7 +32,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			"../reference/jquery-plugins/c3-0.7.20/c3.min.css",
 			"../reference/jquery-plugins/c3-0.7.20/c3.js",
-			"./js/common/colorPalette.js",
+
 			//timeline
 			"../reference/jquery-plugins/info-chart-v1/js/D.js",
 			"./js/dashboard/chart/timeline_custom.js",
@@ -36,7 +41,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
 			"./js/dashboard/chart/barChartOnPolar.js",
 			//chart Colors
-			"./js/dashboard/chart/colorPalette.js"
+			"./js/dashboard/chart/colorPalette.js",
+			"./js/dashboard/api/dashboardApi.js"
 		],
 
 		["../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
@@ -70,13 +76,15 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
+		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
+
+			console.log('모든 플러그인 로드 완료');
 
 			//vfs_fonts 파일이 커서 defer 처리 함.
 			setTimeout(function () {
@@ -84,20 +92,30 @@ function execDocReady() {
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
-			}, 3000); // 3초 후에 실행됩니다.
-			console.log('모든 플러그인 로드 완료');
+			}, 5000); // 5초 후에 실행됩니다.
+
+			//pdfmake 파일이 커서 defer 처리 함.
+			setTimeout(function () {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 5000); // 5초 후에 실행됩니다.
 
 			// 사이드 메뉴 색상 설정
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard");
 
-			// 컬러 테스트 by 장지윤
 			dashboardColor = dashboardPalette.dashboardPalette01;
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			$('.dashboard-top-section').matchHeight({
+				target: $('.dashboard-top-section-scope')
+			});
 
 			$('button').on('click', function() {
 				// Caching
@@ -166,19 +184,7 @@ function makePdServiceSelectBox() {
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
 
-		var checked = $("#checkbox1").is(":checked");
-		var endPointUrl = "";
-
-		if (checked) {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=true";
-		} else {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/getStatusMonitor.do?disable=false";
-		}
-
 		console.log("선택된 제품(서비스) c_id = " + $("#selected_pdService").val());
-
-		statisticsMonitor($("#selected_pdService").val());
-
 	});
 } // end makePdServiceSelectBox()
 
@@ -194,21 +200,29 @@ function makeVersionMultiSelectBox() {
 		onClose: function () {
 			console.log("onOpen event fire!\n");
 			const versionTag = $(".multiple-select").val();
-			const pdServiceLink = $("#selected_pdService").val();
+
+			selectedPdServiceId = $("#selected_pdService").val();
 			selectedVersionId = versionTag.join(',');
-			donutChart($("#selected_pdService").val(), selectedVersionId);
-			combinationChart($("#selected_pdService").val(), selectedVersionId);
+
+			DashboardApi.대시보드_톱메뉴_초기화();
+			DashboardApi.대시보드_톱메뉴_세팅(selectedPdServiceId, selectedVersionId);
+
+			statisticsMonitor(selectedPdServiceId,selectedVersionId);
 			drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 			drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
-		},
-		onChange: function () {
 
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }
 
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
+
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
@@ -224,9 +238,14 @@ function bind_VersionData_By_PdService() {
 					var newOption = new Option(obj.c_title, obj.c_id, true, false);
 					$(".multiple-select").append(newOption);
 				}
+
+				selectedPdServiceId = $("#selected_pdService").val();
 				selectedVersionId = pdServiceVersionIds.join(',');
-				donutChart($("#selected_pdService").val(), selectedVersionId);
-				combinationChart($("#selected_pdService").val(), selectedVersionId);
+
+				DashboardApi.대시보드_톱메뉴_초기화();
+				DashboardApi.대시보드_톱메뉴_세팅(selectedPdServiceId,selectedVersionId);
+
+				statisticsMonitor(selectedPdServiceId,selectedVersionId);
 				drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
 				drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
 
@@ -316,9 +335,10 @@ function drawReqTimeSeries(data) {
 }
 
 // 1. 제품서비스로만 볼 경우
-// 2. 버전만 따로 선택해서 보고싶은 경우(미완)
+// 2. 버전만 따로 선택해서 보고싶은 경우
 function statisticsMonitor(pdservice_id, pdservice_version_id) {
-	console.log("선택된 서비스 ===> " + pdservice_id);
+	console.log("[ dashboard :: statisticsMonitor ] :: 선택된 서비스 ===> " + pdservice_id);
+	console.log("[ dashboard :: statisticsMonitor ] :: 선택된 버전 리스트 ===> " + pdservice_version_id);
 	tot_ver_count = 0;
 	active_ver_count = 0;
 	req_count = 0;
@@ -342,7 +362,6 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 
 				console.log("등록된 버전 개수 = " + version_count);
 				if (version_count !== undefined) {
-					$('#version_count').text(version_count);
 
 					if (version_count >= 0) {
 						let today = new Date();
@@ -356,15 +375,18 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						var versionTimeline = [];
 						versionData.forEach(function (versionElement, idx) {
 
-							var gaugeElement = {
-								"current_date": today.toString(),
-								"version_name": versionElement.c_title,
-								"version_id": versionElement.c_id,
-								"start_date": (versionElement.c_pds_version_start_date == "start" ? today : versionElement.c_pds_version_start_date),
-								"end_date": (versionElement.c_pds_version_end_date == "end" ? today : versionElement.c_pds_version_end_date)
+							if (pdservice_version_id.includes(versionElement.c_id)) {
+								var gaugeElement = {
+									"current_date": today.toString(),
+									"version_name": versionElement.c_title,
+									"version_id": versionElement.c_id,
+									"start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+									"end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+								}
+								versionGauge.push(gaugeElement);
 							}
-							versionGauge.push(gaugeElement);
 							var timelineElement = {
+								"id" : versionElement.c_id,
 								"title" : "버전: "+versionElement.c_title,
 								"startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
 								"endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
@@ -381,26 +403,28 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	});
 
 	// 제품서비스 - status
-	getReqCount(pdservice_id, "");
+//	getReqCount(pdservice_id, "");
 	// 제품서비스별 담당자 통계
-	getAssigneeInfo(pdservice_id, "");
+//	getAssigneeInfo(pdservice_id, "");
 
-	// 상위 5명 - 요구사항 및 연결이슈
-	getReqAndLinkedIssueTop5(pdservice_id);
-	// 상위 5명 - 이슈상태 누적
-	getIssueResponsibleStatusTop5(pdservice_id);
+	// 상위 5명 - 요구사항 이슈 (우하1)
+	getReqIssueTop5(pdservice_id, pdservice_version_id);
+	// 상위 5명 - 요구사항 상태 누적 (우하2)
+	//getIssueResponsibleStatusTop5(pdservice_id, pdservice_version_id);
+	reqStatePerAssigneeTop5(pdservice_id, pdservice_version_id);
 
-	setTimeout(function () {
-		//Scope - (2) 요구사항에 연결된 이슈 총 개수
-		getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
-
-		$('#inactive_version_count').text( tot_ver_count - active_ver_count );
-	},1000);
+	// setTimeout(function () {
+	// 	//Scope - (2) 요구사항에 연결된 이슈 총 개수
+	// 	getLinkedIssueCount(pdservice_id, ""); // 연결된 이슈 총 개수, 평균 값 대입
+	//
+	// 	$('#inactive_version_count').text( tot_ver_count - active_ver_count );
+	// },1000);
 
 }
 
-
-//
+//////////////////////
+// 게이지 차트
+//////////////////////
 function drawVersionProgress(data) {
 	var Needle,
 		arc,
@@ -446,7 +470,7 @@ function drawVersionProgress(data) {
 
 	width = 220;
 	height = width;
-	radius = Math.min(width, height) / 2.5;
+	radius = Math.min(width, height) / 2.2;
 
 	// percToDeg percToRad degToRad 고정
 	percToDeg = function (perc) {
@@ -582,7 +606,7 @@ function drawVersionProgress(data) {
 			.on("mouseleave", mouseleave)
 			.append("path")
 			.attr("fill", function (d) {
-				return dashboardColor.projectProgressColor[(sectionIndx - 1) % data.length];
+					return dashboardColor.gaugeChartColor[(sectionIndx - 1) % dashboardColor.gaugeChartColor.length];
 			})
 			.attr("stroke", "white")
 			.style("stroke-width", "0.4px")
@@ -724,10 +748,11 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 		.setBaseUrl('/auth-user/api/arms/dashboard/version-assignees')
 		.addQueryParam('pdServiceLink', pdServiceLink)
 		.addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-		.addQueryParam('메인그룹필드', "pdServiceVersion")
+		.addQueryParam('메인그룹필드', "pdServiceVersions")
 		.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
-		.addQueryParam('크기', 3)
-		.addQueryParam('하위크기', 0)
+		.addQueryParam('크기', pdServiceVersionLinks.split(",").length)
+		.addQueryParam('하위크기', 3)
+		.addQueryParam("isReqType", "ISSUE")
 		.addQueryParam('컨텐츠보기여부', true)
 		.build();
 
@@ -752,7 +777,7 @@ var SankeyChart = (function ($) {
 
 	var initSvg = function () {
 		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
-		var width = document.getElementById("chart-product-manpower").offsetWidth;
+		var width = document.getElementById("chart-product-manpower").offsetWidth+100;
 		var height = 500 - margin.top - margin.bottom;
 
 		var vx = width + margin.left + margin.right;
@@ -780,11 +805,11 @@ var SankeyChart = (function ($) {
 			.style("font-weight", 5)
 			.text("선택된 어플리케이션이 없습니다.")
 			.attr("x", width / 2)
-			.attr("y", height / 2);R
+			.attr("y", height / 2);
 	};
 
 	var loadChart = function (data) {
-		var margin = { top: 10, right: 10, bottom: 10, left: 10 };
+		var margin = { top: 5, right: 5, bottom: 5, left: 5 };
 		var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
 		var height = 450 - margin.top - margin.bottom;
 
@@ -802,7 +827,7 @@ var SankeyChart = (function ($) {
 		if (isEmpty(data.nodes)) {
 			svg
 				.append("text")
-				.style("font-size", "12px")
+				.style("font-size", "13px")
 				.style("fill", "white")
 				.style("font-weight", 5)
 				.text("해당 프로젝트에 매핑된 버전이 없습니다.")
@@ -1091,7 +1116,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 		.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
 		.addQueryParam('크기', 1000)
 		.addQueryParam('하위크기', 1000)
-		.addQueryParam('컨텐츠보기여부', true)
+		.addQueryParam('컨텐츠보기여부', false)
 		.build();
 
 	$.ajax({
@@ -1157,7 +1182,7 @@ function combinationChart(pdServiceLink, pdServiceVersionLinks) {
 						groups: [issueStatusTypes]
 					},
 					color: {
-						pattern: dashboardColor.accumulatedIssueStatusColor,
+						pattern: dashboardColor.combinationChartColor,
 					},
 					onrendered: function() {
 						d3.selectAll('.c3-line, .c3-bar, .c3-arc')
@@ -1336,62 +1361,51 @@ function dataTableDrawCallback(tableInfo) {
 		.responsive.recalc();
 }
 
-function getIssueResponsibleStatusTop5(pdservice_id) {
+function reqStatePerAssigneeTop5(pdservice_id, pdServiceVersionLinks) {
 
-	var _url = "/auth-user/api/arms/dashboard/normal/issue-responsible-status-top5/"+pdservice_id;
+	var endPointUrl = "T_ARMS_REQADD_"+pdservice_id+"/getReqAddListByFilter.do";
+	var ajaxUrl = "/auth-user/api/arms/dashboard/reqStatePerAssigneeTop5/"+endPointUrl;
+	console.log("[ dashboard :: reqStatePerAssigneeTop5] :: pdServiceId => " + pdservice_id);
+	console.log("[ dashboard :: reqStatePerAssigneeTop5] :: pdServiceVersionLinks => " + pdServiceVersionLinks);
 	$.ajax({
-		url: _url,
+		url: ajaxUrl,
+		data: { pdServiceId : pdservice_id, pdServiceVersionLinks : pdServiceVersionLinks	},
 		type: "GET",
-		data: { "서비스아이디" : pdservice_id,
-			"메인그룹필드" : "assignee.assignee_emailAddress.keyword",
-			"isReq" : false,
-			"컨텐츠보기여부" : true,
-			"크기" : 5,
-			"하위그룹필드들" : "status.status_name.keyword",
-			"하위크기": 10},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				var cat_persons = Object.keys(data);
-				console.log(cat_persons);
-				let persion_size = cat_persons.length;
-				//console.log(data[cat_persons[0]]["group_by_status.status_name.keyword"]);
+			200: function(apiResponse) {
+				var colorArr = dashboardColor.reqStateColor;
 
-				let set = new Set();
+				var resultData = apiResponse.response;
+				//레전드 리스트
+				var legend_arr = ["open", "in-progress", "resolved", "closed"]; // 10, 11,12, 13
 
-				// 각 담당자별 status를 set에 넣는다.
-				for (let i=0; i<cat_persons.length; i++) {
-					data[cat_persons[i]]["group_by_status.status_name.keyword"].forEach( (target, idx) => {
-							//console.log('Index: ' + idx); console.log(target); console.log(target.필드명);
-							set.add(target.필드명);
-						}
-					);
-				}
+				let keySumList = Object.keys(resultData).map(key => {
+					let sum = Object.values(resultData[key]).reduce((acc, value) => acc + value, 0);
+					return { key: key, sum: sum };
+				});
+				keySumList.sort((a, b) => b.sum - a.sum);
 
-				var legend_arr = []; //레전드 리스트
-				set.forEach((element) => {legend_arr.push(element);}); // Set to List
+				var assigneeList = keySumList.map(item => item.key);
+				var assigneeSize = assigneeList.length;
+				var arr_open = new Array(assigneeSize).fill(0);
+				var arr_in_progress = new Array(assigneeSize).fill(0);
+				var arr_resolved = new Array(assigneeSize).fill(0);
+				var arr_closed = new Array(assigneeSize).fill(0);
 
-				let legend_size = legend_arr.length;
+				assigneeList.forEach((key, index) => {
+					arr_open[index] = resultData[key]["10"] || 0;
+					arr_in_progress[index] = resultData[key]["11"] || 0;
+					arr_resolved[index] = resultData[key]["12"] || 0;
+					arr_closed[index] = resultData[key]["13"] || 0;
+				});
 
-				var arr2di = new Array(legend_size); // Status의 종류의 수
-				for ( var i =0; i<arr2di.length; i++) {
-					arr2di[i] = new Array(persion_size).fill(0); // 길이5
-				}
-				for (let i=0; i<cat_persons.length; i++) {
-					data[cat_persons[i]]["group_by_status.status_name.keyword"].forEach( (target, idx) => {
-							//console.log('Index: ' + idx); console.log(target.필드명); console.log(target.개수);
-							var 상태이름 = target.필드명; // "Backlog", "Resolved"..
-							var 상태idx = legend_arr.indexOf(상태이름);
-							arr2di[상태idx][i] = target.개수;
-						}
-					);
-				}
-				var colorArr = dashboardColor.issueStatusColor;
+				var statusArr = []; // 요구사항 상태가 4개므로
+				statusArr.push(arr_open, arr_in_progress, arr_resolved, arr_closed);
 
-				var testSeries = {
+				var sampleSeries = {
 					type: 'bar',
 					data: "", // seriesArr1
 					itemStyle: {
@@ -1405,181 +1419,58 @@ function getIssueResponsibleStatusTop5(pdservice_id) {
 					}
 				}
 
-				var arrSeries = new Array(legend_size);
+				var arrSeries = new Array(4);
 
-				for (let i=0; i<legend_size; i++) {
-					let _temp = JSON.parse(JSON.stringify(testSeries));
+				for (let i=0; i<4; i++) {
+					let _temp = JSON.parse(JSON.stringify(sampleSeries));
 					//var _temp = Object.assign({}, testSeries); 이 경우 2단 복사 안됨.
-					_temp.data = arr2di[i];
-					_temp.itemStyle.color = colorArr[i];
+					_temp.data = statusArr[i];
+					_temp.itemStyle.color = colorArr[i]; // 열림, 진행중, 해결됨, 닫힘
 					_temp.name = legend_arr[i];
 					arrSeries[i] = _temp;
 				}
+				drawBarOnPolar("polar_bar", assigneeList, legend_arr, arrSeries);
 
-				drawBarOnPolar("polar_bar", cat_persons, legend_arr, arrSeries);
 			}
 		}
 	});
 }
 
+function getReqIssueTop5(pdservice_id, pdServiceVersionLinks) {
 
+	var url = "/auth-user/api/arms/dashboard/reqIssueTop5/"+pdservice_id;
 
-function getReqAndLinkedIssueTop5(pdservice_id) {
-	var url1 = "/auth-user/api/arms/dashboard/exclusion-isreq-normal/req-and-linked-issue-top5/"+pdservice_id;
 	$.ajax({
-		url: url1,
 		type: "GET",
-		data: { "서비스아이디" : pdservice_id,
-			"메인그룹필드" : "assignee.assignee_emailAddress.keyword",
-			"isReq" : false,
-			"컨텐츠보기여부" : true,
-			"크기" : 5,
-			"하위그룹필드들" : "isReq"},
+		url: url,
+		data: { pdServiceVersionLinks : pdServiceVersionLinks	},
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
 		statusCode: {
 			200: function (apiResponse) {
-				const data = apiResponse.response;
+				let data = apiResponse.response;
+				console.log("[ dashboard :: getReqIssueTop5 ] ==> ");
+				console.log(data);
 				top5ReqLinkedIssue = []; // 초기화
 
-				for(let i =0; i<5; i++) {
+				let index = 0;
 
-					var issueCount = 0;
-					var relatedIssueCount =0;
-
-					if (data[i] !== undefined) {
-						var 아이디 = getIdFromMail(data[i].필드명);
-						var groupByIsReq = data[i].하위검색결과.group_by_isReq;
-
-						if(groupByIsReq[0] !== undefined) {
-							if(groupByIsReq[0]["필드명"] === "true") {
-								issueCount = groupByIsReq[0]["개수"]; // 요구사항 갯수
-							}
-							if(groupByIsReq[0]["필드명"] ==="false") {
-								relatedIssueCount = groupByIsReq[0]["개수"]; // 연결이슈 갯수
-							}
-						}
-						if(groupByIsReq[1] !== undefined) {
-							if(groupByIsReq[1]["필드명"] === "true") {
-								issueCount = groupByIsReq[1]["개수"]; // 요구사항 갯수
-							}
-							if(groupByIsReq[1]["필드명"] ==="false") {
-								relatedIssueCount = groupByIsReq[1]["개수"]; // 연결이슈 갯수
-							}
-						}
-						var performance = {
-							"manpowerId" : i,
-							"manpowerName" : 아이디,
-							"issueCount" : issueCount,
-							"relatedIssueCount" : relatedIssueCount
-						}
-						top5ReqLinkedIssue.push(performance)
-					}
-					 else {
-						 console.log("data[" + i +"] 는 존재하지 않습니다.");
+				for (let key in data) {
+					if (data.hasOwnProperty(key)) {
+						let performance = {
+							"manpowerId": index,
+							"manpowerName": key,
+							"issueCount": data[key],
+							"relatedIssueCount" : 0
+						};
+						top5ReqLinkedIssue.push(performance);
+						index++;
 					}
 				}
-
+				top5ReqLinkedIssue.sort((a, b) => b.issueCount - a.issueCount);
 				drawIssuePerManPower(top5ReqLinkedIssue);
 
-			}
-		}
-	});
-}
-
-function getIdFromMail (param) {
-	var full_str = param;
-	var indexOfAt = full_str.indexOf('@');
-	return full_str.substring(0,indexOfAt);
-}
-
-function getLinkedIssueCount(pdservice_id, pdServiceVersionLinks) {
-	var _url = "/auth-user/api/arms/dashboard/normal/"+pdservice_id;
-	$.ajax({
-		url: _url,
-		type: "GET",
-		data: { "서비스아이디" : pdservice_id,
-			"메인그룹필드" : "pdServiceVersion",
-			"isReq" : false,
-			"컨텐츠보기여부" : false,
-			"크기" : 1000,
-			"하위그룹필드들" : "parentReqKey"},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				subtask_count = data.전체합계;
-				$('#linkedIssue_subtask_count').text(subtask_count);
-				//console.log("req_count : " + req_count); console.log("subtask_count : " + subtask_count); console.log("resource_count : " + resource_count);
-				if (req_count == 0) {
-					$('#linkedIssue_subtask_count_per_req').text("-");
-				} else {
-					$('#linkedIssue_subtask_count_per_req').text((subtask_count / req_count).toFixed(1));
-				}
-				if (resource_count == 0) {
-					$('#avg_req_count').text("-");
-				} else {
-					$('#avg_req_count').text((req_count/resource_count).toFixed(1));
-				}
-			}
-		}
-	});
-}
-
-
-function getReqCount(pdservice_id, pdServiceVersionLinks) {
-	$.ajax({
-		url: "/auth-user/api/arms/reqStatus/T_ARMS_REQSTATUS_" + pdservice_id + "/getStatistics.do?version=" + pdServiceVersionLinks,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (data) {
-				console.log(data);
-				for (var key in data) {
-					var value = data[key];
-					console.log(key + "=" + value);
-				}
-				//해당 제품의 총 요구사항 수 (by db)
-				active_ver_count = data["version"];
-				$('#active_version_count').text(active_ver_count);
-				console.log("active_ver_count = " + active_ver_count);
-
-				$('#req_count').text(data["req"]);
-				if(data["req"] == "" || data["req"] == 0) {
-					req_count = -1;
-				} else {
-					req_count = data["req"];
-				}
-
-			}
-		}
-	});
-}
-function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
-	$.ajax({
-		url:"/auth-user/api/arms/dashboard/jira-issue-assignee",
-		type: "get",
-		data: {"pdServiceId" : pdservice_id},
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				//담당자 미지정 이슈 수
-				$('#no_assigned_issue_count').text(data["담당자 미지정"]);
-				if (Object.keys(data).length !== "" || Object.keys(data).length !== undefined) {
-					//제품(서비스)에 투입된 총 인원수
-					resource_count = +Object.keys(data).length-1;
-					$('#resource_count').text(resource_count);
-				} else {
-					$('#resource_count').text("n/a");
-				}
 			}
 		}
 	});
@@ -1625,15 +1516,15 @@ function drawIssuePerManPower(data) {
 		.append("g")
 		.attr("transform", "translate(0," + height + ")")
 		.call(d3.axisBottom(x).tickValues(xAxisTicks).tickFormat(d3.format("d")).tickSizeOuter(0))
-		.style("font-size", "15px");
+		.style("font-size", "18px");
 
 	var y = d3.scaleBand().domain(groups).rangeRound([0, height]).paddingInner([0.25]).padding(0.5);
 	svg
 		.append("g")
 		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
-		.style("font-size", "17px").style("font-weight","700");
+		.style("font-size", "20px").style("font-weight","700");
 
-	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.manpowerReqColor);
+	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.resourceReqColor);
 
 	var stackedData = d3.stack().keys(subgroups)(data).concat(data);
 

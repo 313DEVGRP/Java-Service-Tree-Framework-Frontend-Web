@@ -1,156 +1,248 @@
-<div class="row">
-	<div class="col-md-12">
-		<section class="widget">
-			<header>
-				<h4 style="font-size: 13px !important; font-weight: 300 !important">
-					<span
+<div class="col-lg-5 col-layer">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
 						class="font13"
 						style="font-weight: bold">
-						<i
-							class="fa fa-file-text"
-							style="margin-right: 5px"></i>
-						제품(서비스)관련 이미지, 문서, 기타 파일 등을 확인할 수 있습니다.
-					</span>
-				</h4>
-			</header>
-			<div class="body">
-				<div
+					<i
+							class="fa fa-edit"
+							style="vertical-align: middle; font-size: 14px"></i>
+					제품(서비스) 산출물 조회
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+						data-widgster="toleft"
+						title="change width to left"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+				<a
+						data-widgster="expand"
+						title="Expand"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+						data-widgster="toright"
+						title="change width to right"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+					<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+				</a>
+			</div>
+		</header>
+		<div class="body">
+			<div
+				class="gradient_middle_border"
+				style="width: 100%; height: 2px"></div>
+			<blockquote
+				class="font13"
+				style="margin-top: 5px">
+				제품(서비스) :
+				<span
+					id="selected_pdservice"
+					style="color: #a4c6ff">
+					선택되지 않음
+				</span>
+			</blockquote>
+			<div
+				class="panel-group"
+				id="pdservice_detail_accordion">
+			</div>
+		</div>
+	</section>
+</div>
+
+<div class="col-lg-7 col-layer">
+	<section class="widget">
+		<header>
+			<h4>
+				<span
+						class="font13"
+						style="font-weight: bold">
+					<i
+							class="fa fa-edit"
+							style="vertical-align: middle; font-size: 14px"></i>
+					제품(서비스) 산출물 보기
+				</span>
+			</h4>
+			<div class="widget-controls">
+				<a
+						data-widgster="toright"
+						title="change width to left"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+				<a
+						data-widgster="expand"
+						title="Expand"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+				<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+				<a
+						data-widgster="toleft"
+						title="change width to right"
+						href="#">
+					<i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+					<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+				</a>
+			</div>
+		</header>
+		<div class="body">
+			<div
 					class="gradient_middle_border"
 					style="width: 100%; height: 2px"></div>
-				<blockquote
-					id="file_description"
+			<blockquote
 					class="font13"
 					style="margin-top: 5px">
-					문서정보
-				</blockquote>
-				<div class="row service-portfolio">
-					<div class="col-lg-2 col-layer">
-						<section class="widget">
-							<header>
-								<h4 style="font-size: 13px !important; font-weight: 300 !important">
-									<span
-										class="font13"
-										style="font-weight: bold">
-										<i
-											class="fa fa-list"
-											style="margin-right: 5px"></i>
-										문서
-									</span>
-								</h4>
-								<div class="widget-controls">
-									<a
-										data-widgster="toleft"
-										title="change width to left"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-left"></i>
-									</a>
-									<a
-										data-widgster="expand"
-										title="Expand"
-										href="#"
-										style="display: none">
-										<i class="glyphicon glyphicon-chevron-up"></i>
-									</a>
-									<a
-										data-widgster="collapse"
-										title="Collapse"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-down"></i>
-									</a>
-									<a
-										data-widgster="toright"
-										title="change width to right"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-right"></i>
-									</a>
-								</div>
-							</header>
+				선택한 제품(서비스) 산출물 :
+				<span
+						id="selected_pdservice_detail"
+						style="color: #a4c6ff">
+					선택되지 않음
+				</span>
+			</blockquote>
+			<div class="row">
+				<div class="col-md-12">
+					<section class="widget widget-tabs">
+						<div class="body tab-content">
+							<div
+									id="stats"
+									class="tab-pane active clearfix"
+									style="padding-top: 10px !important">
+								<form
+										class="form-horizontal"
+										method="post">
+									<fieldset>
+										<div id="pdservice_detail_drawio_div" class="control-group" for="pdservice_detail_drawio_image_raw">
+											<label class="font13" style="float: left; padding-top: 6px;">drawio 썸네일 :</label>
+											<div class="controls form-group input-group" style="margin-left: 105px;">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-camera"></i>
+                                                </span>
+												<div class="drawio-gallery">
+													<div class="drawio-image darkBack">
+														<img id="pdservice_detail_drawio_image_raw" class="parsley-validated font13 hidden" src="" />
+													</div>
+												</div>
+											</div>
+										</div>
 
-							<div class="body">
-								<div
-									class="gradient_middle_border"
-									style="width: 100%; height: 2px"></div>
-								<ul
-									id="portfolio-flters"
-									class="filter-options-wrap">
-									<li
-										data-filter=""
-										class="filter-option filter-active">
-										All
-									</li>
-									<li
-										data-filter="image"
-										class="filter-option">
-										Image
-									</li>
-									<li
-										data-filter="text,application"
-										class="filter-option">
-										Document
-									</li>
-									<li
-										data-filter="etc"
-										class="filter-option">
-										Etc
-									</li>
-								</ul>
+										<div class="control-group">
+											<label class="control-label" style="margin-top: 10px">제품(서비스) 산출물 컨텐츠 :</label>
+											<br />
+											<br />
+											<br />
+											<div class="col-sm-12 darkBack" id="pdservice_detail_contents" style="padding-top: 10px; padding-bottom: 10px" readonly></div>
+										</div>
+									</fieldset>
+								</form>
 							</div>
-						</section>
-					</div>
-					<div class="col-lg-10 col-layer">
-						<section class="widget">
-							<header>
-								<h4 style="font-size: 13px !important; font-weight: 300 !important">
-									<span
-										class="font13"
-										style="font-weight: bold">
-										<i
-											class="fa fa-files-o"
-											style="margin-right: 5px"></i>
-										파일
-									</span>
-								</h4>
-								<div class="widget-controls">
-									<a
-										data-widgster="toright"
-										title="change width to left"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-left"></i>
-									</a>
-									<a
-										data-widgster="expand"
-										title="Expand"
-										href="#"
-										style="display: none">
-										<i class="glyphicon glyphicon-chevron-up"></i>
-									</a>
-									<a
-										data-widgster="collapse"
-										title="Collapse"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-down"></i>
-									</a>
-									<a
-										data-widgster="toleft"
-										title="change width to right"
-										href="#">
-										<i class="glyphicon glyphicon-chevron-right"></i>
-									</a>
-								</div>
-							</header>
-
-							<div class="body">
-								<div
-									class="gradient_middle_border"
-									style="width: 100%; height: 2px"></div>
-								<div
-									id="filter-files"
-									class="portfolio-wrap"></div>
+							<div class="body-middle">
+								<form
+										id="fileupload"
+										action="uploadFileToNode.do"
+										method="POST"
+										enctype="multipart/form-data">
+									<input
+											type="hidden"
+											id="fileIdlink"
+											value="" />
+									<div class="row pdservice-detail-file">
+										<div class="col-md-12">
+											<div
+													id="dropzone"
+													class="dropzone">
+												<i class="fa fa-cloud-upload"></i>
+												Drop files here
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12 fileupload-progress fade font12">
+											<!-- The global progress bar -->
+											<div
+													class="progress progress-success progress-striped active font12"
+													role="progressbar"
+													aria-valuemin="0"
+													aria-valuemax="100">
+												<div
+														class="bar"
+														style="width: 0%"></div>
+											</div>
+											<!-- The extended global progress information -->
+											<div class="progress-extended font12">&nbsp;</div>
+										</div>
+									</div>
+									<div class="form-actions fileupload-buttonbar no-margin pdservice-detail-file">
+										<span class="btn btn-sm btn-inverse fileinput-button">
+											<i class="fa fa-plus"></i>
+											<span>Add files...</span>
+											<input
+													type="file"
+													name="files[]"
+													multiple="" />
+										</span>
+										<button
+												type="submit"
+												class="btn btn-inverse btn-sm start">
+											<i class="fa fa-upload"></i>
+											<span>Start upload</span>
+										</button>
+										<button
+												type="reset"
+												class="btn btn-inverse btn-sm cancel">
+											<i class="fa fa-ban"></i>
+											<span>Cancel upload</span>
+										</button>
+									</div>
+									<div class="fileupload-loading">
+										<i class="fa fa-spin fa-spinner"></i>
+									</div>
+									<!-- The table listing the files available for upload/download -->
+									<table
+											role="presentation"
+											class="table table-striped"
+											style="margin-bottom: 5px">
+										<tbody
+												class="files"
+												data-toggle="modal-gallery"
+												data-target="#modal-gallery"></tbody>
+									</table>
+								</form>
 							</div>
-						</section>
-					</div>
+						</div>
+					</section>
 				</div>
 			</div>
-		</section>
-	</div>
+		</div>
+	</section>
 </div>

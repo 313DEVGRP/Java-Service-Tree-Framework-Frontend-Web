@@ -138,6 +138,12 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
     var myChart = echarts.init(chartDom);
 
     var option = {
+        tooltip: {
+            trigger: 'item', // 'item'으로 설정하여 데이터 포인트에 마우스를 올리면 툴팁이 표시되도록 함
+            formatter: function(params) {
+                return `${params.seriesName}<br/>${params.name}: ${params.value}`;
+            }
+        },
         angleAxis: {
             type: 'category',
             data: categories,
@@ -150,7 +156,7 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
             },
         },
         radiusAxis: {},
-        polar: { center: ["50%", "60%"], radius: "60%"},
+        polar: { center: ["50%", "55%"], radius: "65%"},
         series: seriesArr,
         legend: {
             show: true,
@@ -161,6 +167,10 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
         }
     };
     myChart.setOption(option,true);
+
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
 
     return myChart;
 }

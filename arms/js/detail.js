@@ -7,12 +7,15 @@ var selectedPdServiceVersion;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
-var calledAPIs = {};
 
 function execDocReady() {
 	var pluginGroups = [
-		["../reference/lightblue4/docs/lib/widgster/widgster.js", "../reference/light-blue/lib/vendor/jquery.ui.widget.js"]
+		[
+			"../reference/lightblue4/docs/lib/widgster/widgster.js",
+			"../reference/light-blue/lib/vendor/jquery.ui.widget.js"
+		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
+		[ "css/jiraServerCustom.css"]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -21,21 +24,25 @@ function execDocReady() {
 			$(".widget").widgster();
 			setSideMenu("sidebar_menu_product", "sidebar_menu_detail");
 			getDetailViewTab();
+
+			// --- 에디터 설정 --- //
+			var waitCKEDITOR = setInterval(function () {
+				try {
+					if (window.CKEDITOR) {
+						if (window.CKEDITOR.status === "loaded") {
+							CKEDITOR.replace("detailview_req_contents", { skin: "office2013" });
+							clearInterval(waitCKEDITOR);
+						}
+					}
+				} catch (err) {
+					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+				}
+			}, 313 /*milli*/);
 		})
 		.catch(function (errorMessage) {
 			console.error(errorMessage);
 			console.error("플러그인 로드 중 오류 발생");
 		});
-}
-
-// ------------------ api 호출 여부 확인(여러번 발생시키지 않기 위하여) ------------------ //
-function callAPI(apiName) {
-	if (calledAPIs[apiName]) {
-		console.log("This API has already been called: " + apiName);
-		return true;
-	}
-
-	return false;
 }
 
 function setUrlParams() {
@@ -48,9 +55,6 @@ function setUrlParams() {
 }
 
 function getDetailViewTab() {
-	if (callAPI("detailAPI")) {
-		return;
-	}
 
 	console.log("Detail Tab ::::");
 	var tableName = "T_ARMS_REQADD_";
@@ -85,7 +89,6 @@ function getDetailViewTab() {
 				bindDataDetailTab(data);
 				//////////////////////////////////////////////////////////
 				jSuccess("요구사항 조회가 완료 되었습니다.");
-				calledAPIs["detailAPI"] = true;
 			}
 		},
 		beforeSend: function () {},
@@ -100,6 +103,7 @@ function bindDataDetailTab(ajaxData) {
 	console.log(ajaxData);
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = ajaxData.pdService_c_title;
+	let contents = ajaxData.reqAdd_c_req_contents;
 
 	if (isEmpty(selectedPdServiceText)) {
 		$("#detailview_req_pdservice_name").val("");
@@ -109,6 +113,53 @@ function bindDataDetailTab(ajaxData) {
 
 	$("#detailview_req_id").val(selectedJsTreeId);
 	$("#detailview_req_name").val(ajaxData.reqAdd_c_title);
+
+//radio 버튼 - 선택 초기화
+	$("#detailview_req_priority label").removeClass("active");
+	$("#detailview_req_difficulty label").removeClass("active");
+	$("#detailview_req_state label").removeClass("active");
+	//radio 버튼 - 상태 초기화
+	$("input[name='detailview_req_priority_options']:checked").prop("checked", false);
+	$("input[name='detailview_req_difficulty_options']:checked").prop("checked", false);
+	$("input[name='detailview_req_state_options']:checked").prop("checked", false);
+
+	//상세보기 - 우선순위 버튼
+	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
+	priorityRadioButtons.each(function () {
+		if ( $(this).val() == ajaxData.reqAdd_c_req_priority_link) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 난이도 버튼
+	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
+	difficultRadioButtons.each(function () {
+		if ($(this).val() == ajaxData.reqAdd_c_req_difficulty_link) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+	//상세보기 - 상태 버튼
+	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
+	stateRadioButtons.each(function () {
+		if ($(this).val() == ajaxData.reqAdd_c_req_state_link) {
+			$(this).parent().addClass("active");
+			$(this).prop("checked", true);
+		} else {
+			$(this).prop("checked", false);
+		}
+	});
+
+	if (ajaxData.reqAdd_c_req_start_date) {
+		$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.reqAdd_c_req_start_date)));
+	}
+	if (ajaxData.reqAdd_c_req_end_date) {
+		$("#detailview_req_end_date").val(formatDate(new Date(ajaxData.reqAdd_c_req_end_date)));
+	}
 
 	//Version 데이터 바인딩
 	if (isEmpty(ajaxData.pdServiceVersion_c_title)) {
@@ -146,6 +197,13 @@ function bindDataDetailTab(ajaxData) {
 		$("#detailview_req_reviewer05").val(ajaxData.reqAdd_c_req_reviewer05);
 	}
 
-	$("#detailview_req_contents").html(ajaxData.reqAdd_c_req_contents);
-	$("#req_detail_contents").html(ajaxData.reqAdd_c_req_contents);
+	CKEDITOR.instances.detailview_req_contents.setData(contents);
+	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
+
+}
+function formatDate(date) {
+	var year = date.getFullYear().toString(); // 연도의 마지막 두 자리를 얻습니다.
+	var month = (date.getMonth() + 1).toString().padStart(2, "0");
+	var day = date.getDate().toString().padStart(2, "0");
+	return year + "-" + month + "-" + day;
 }

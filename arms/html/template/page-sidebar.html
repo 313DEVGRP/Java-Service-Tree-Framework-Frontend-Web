@@ -2,7 +2,26 @@
 	id="side-nav"
 	class="side-nav">
 
-    <li class="category-wrap" style="padding-top: 40px;">
+    <li class="category-wrap"
+        id="menu_login"
+        style="padding-top: 40px;">
+		<span   class="category-label"
+                id="sidebar_menu_lock">
+			<i  class="fa fa-unlock-alt"
+                style="margin-top: 3px;"></i>
+			<ul id="dashboard_elements_collapse">
+                <li class=""
+                    id="sidebar_menu_lock">
+                    <a href="/arms/template.html?page=dashboard"
+                       style="padding: 4px 10px 4px 15px; !important;">Menu is Locked</a>
+                </li>
+            </ul>
+		</span>
+    </li>
+
+    <li class="category-wrap hide"
+        id="menu_dashboard"
+        style="padding-top: 40px;">
 		<span   class="category-label"
                 id="sidebar_menu_dashboard">
 			<i  class="fa fa-dashboard"
@@ -17,7 +36,9 @@
 		</span>
     </li>
 
-	<li class="category-wrap" style="padding-top: 10px;">
+	<li class="category-wrap hide"
+        id="menu_product"
+        style="padding-top: 10px;">
 		<span   class="category-label"
 			    id="sidebar_menu_product">
 			<i class="fa fa-cubes"></i>
@@ -36,7 +57,9 @@
 		</ul>
 	</li>
 
-    <li class="category-wrap" style="padding-top: 10px;">
+    <li class="category-wrap hide"
+        id="menu_alm"
+        style="padding-top: 10px;">
         <span class="category-label"
               id="sidebar_menu_jira">
             <img src="./img/jira/mark-gradient-neutral-jira.svg"
@@ -62,7 +85,9 @@
         </ul>
     </li>
 
-	<li class="category-wrap" style="padding-top: 10px;">
+	<li class="category-wrap hide"
+        id="menu_requirement"
+        style="padding-top: 10px;">
 		<span   class="category-label"
 			    id="sidebar_menu_requirement">
 			<i class="fa fa-table"></i>
@@ -77,20 +102,26 @@
 				id="sidebar_menu_requirement_status">
 				<a href="/arms/template.html?page=reqStatus" data-locale="nav.requirement.s">현황 관리</a>
 			</li>
+            <li class=""
+                id="sidebar_menu_requirement_gantt">
+                <a href="/arms/template.html?page=reqGantt" data-locale="nav.requirement.g">간트 차트<span class="font12"> - Gantt</span></a>
+            </li>
+            <li class=""
+                id="sidebar_menu_requirement_kanban">
+                <a href="/arms/template.html?page=reqKanban" data-locale="nav.requirement.k">칸반 보드<span class="font12"> - Kanban</span></a>
+            </li>
 		</ul>
 	</li>
 
-    <li class="category-wrap" style="padding-top: 10px;">
+    <li class="category-wrap hide"
+        id="menu_analysis"
+        style="padding-top: 10px;">
 		<span   class="category-label"
                 id="sidebar_menu_analysis">
 			<i class="fa fa-bar-chart-o"></i>
 			Analysis
 		</span>
         <ul id="analysis_elements_collapse">
-            <li class=""
-                id="sidebar_menu_analysis_gantt">
-                <a href="/arms/template.html?page=analysisGantt" data-locale="nav.analysis.g">간트 차트<span class="font12"> - Gantt</span></a>
-            </li>
             <li class=""
                 id="sidebar_menu_analysis_time">
                 <a href="/arms/template.html?page=analysisTime" data-locale="nav.analysis.t">일정 분석<span class="font12"> - Time</span></a>
@@ -110,7 +141,56 @@
         </ul>
     </li>
 
-    <li class="category-wrap" style="padding-top: 10px;">
+    <li class="category-wrap hide"
+        id="menu_detail"
+        style="padding-top: 10px">
+		<span   class="category-label"
+                id="sidebar_menu_product">
+			<i class="fa fa-cubes"></i>
+			Requirement
+		</span>
+        <ul id="product_elements_collapse">
+            <li class=""
+                id="sidebar_menu_detail">
+                <a  href="#"
+                    onclick="targetLink('detail')">
+                    개별 요구사항 조회
+                </a>
+            </li>
+            <li class=""
+                id="sidebar_menu_per_version">
+                <a  href="#"
+                    onclick="targetLink('detail_per_version')">
+                    개별 버전정보 조회
+                </a>
+            </li>
+            <li class=""
+                id="sidebar_menu_total_reqadd">
+                <a  href="#"
+                    onclick="targetLink('detail_total_reqadd')">
+                    전체 요구사항 조회
+                </a>
+            </li>
+            <li class=""
+                id="sidebar_menu_total_pdservice">
+                <a  href="#"
+                    onclick="targetLink('detail_total_pdservice')">
+                    전체 기획정보 조회
+                </a>
+            </li>
+            <li class=""
+                id="sidebar_menu_qna">
+                <a  href="#"
+                    onclick="targetLink('detail_qna')">
+                    요구 내용문의 답변
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="category-wrap"
+        id="menu_community"
+        style="padding-top: 10px;">
 		<span   class="category-label"
                 id="sidebar_menu_community">
 			<i class="fa fa-child"></i>
@@ -190,7 +270,7 @@
 	<li>
 		<a href="#">
 			<i class="fa fa-circle text-primary"></i>
-			<span class="label-name font11">신규 ( insert )</span>
+			<span class="label-name font11">저장 ( insert )</span>
 		</a>
 	</li>
 	<li>
@@ -208,7 +288,7 @@
 	</li>
 </ul>
 
-<h5 class="sidebar-nav-title">Projects</h5>
+<h5 class="sidebar-nav-title">System</h5>
 <!-- A place for sidebar notifications & alerts -->
 <div class="sidebar-alerts">
 	<div class="alert fade in">
@@ -218,13 +298,13 @@
 			aria-hidden="true">
 			&times;
 		</a>
-		<span class="text-white fw-semi-bold">Sales Report</span>
+		<span class="text-white">Daily Report</span>
 		<br />
 		<div class="progress progress-xs mt-xs mb-0">
 			<div
 				class="progress-bar progress-bar-gray-light"
 				style="width: 16%"></div>
 		</div>
-		<small>Calculating x-axis bias... 65%</small>
+		<small>Calculating x-axis business... 65%</small>
 	</div>
 </div>

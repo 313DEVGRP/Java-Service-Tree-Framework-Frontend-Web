@@ -604,18 +604,18 @@ var Gantt = (function () {
         update_bar_position({ x = null, width = null }) {
             const bar = this.$bar;
             if (x) {
-                // get all x values of parent task
-                const xs = this.task.dependencies.map((dep) => {
-                    return this.gantt.get_bar(dep).$bar.getX();
-                });
-                // child task must not go before parent
-                const valid_x = xs.reduce((prev, curr) => {
-                    return x >= curr;
-                }, x);
-                if (!valid_x) {
-                    width = null;
-                    return;
-                }
+                // // get all x values of parent task
+                // const xs = this.task.dependencies.map((dep) => {
+                //     return this.gantt.get_bar(dep).$bar.getX();
+                // });
+                // // child task must not go before parent
+                // const valid_x = xs.reduce((prev, curr) => {
+                //     return x >= curr;
+                // }, x);
+                // if (!valid_x) {
+                //     width = null;
+                //     return;
+                // }
                 this.update_attr(bar, 'x', x);
             }
             if (width && width >= this.gantt.options.column_width) {
@@ -961,15 +961,28 @@ var Gantt = (function () {
     class Table {
         dragStartY = 0;
         constructor(gantt, columns) {
+
+            console.log("[Table :: constructor]");
+            console.table(gantt);
+            console.table(columns);
+
             this.set_defaults(gantt, columns);
         }
 
         set_defaults(gantt, columns) {
+
+            console.log("[Table :: set_defaults]");
+            console.table(gantt);
+            console.table(columns);
+
             this.gantt = gantt;
             this.columns = columns;
         }
 
         draw_table_header() {
+
+            console.log("[Table :: draw_table_header]");
+
             const $thead = document.createElement('thead');
             const $tr = document.createElement('tr');
 
@@ -989,11 +1002,20 @@ var Gantt = (function () {
         }
 
         get_parentNode(tag, target) {
+
+            console.log("[Table :: get_parentNode]");
+            console.table(tag);
+            console.table(target);
+
             if (target.tagName === tag.toUpperCase()) return target;
             return this.get_parentNode(tag, target.parentNode);
         }
 
         draw_table_body(tasks) {
+
+            console.log("[Table :: draw_table_body]");
+            console.table(tasks);
+
             this.tasks = this.gantt.setGroupPosition(tasks);
 
             const $tbody = document.createElement('tbody');
@@ -1012,6 +1034,10 @@ var Gantt = (function () {
         }
 
         isRowLine(id) {
+
+            console.log("[Table :: isRowLine]");
+            console.table(id);
+
             if (id <= 2) return false;
             const target = this.tasks.find((t) => t.id === `${id}`);
 
@@ -1019,6 +1045,9 @@ var Gantt = (function () {
         }
 
         make_table_row() {
+
+            console.log("[Table :: make_table_row]");
+
             return this.tasks.map((task, index) => {
                 const deps = task.level - 1;
                 const $tr = document.createElement('tr');
@@ -1114,6 +1143,11 @@ var Gantt = (function () {
         }
 
         get_drag_after_element(container, y) {
+
+            console.log("[Table :: get_drag_after_element]");
+            console.table(container);
+            console.table(y);
+
             const draggableElements = [
                 ...container.querySelectorAll('tr:not(.dragging)'),
             ];
@@ -1133,10 +1167,18 @@ var Gantt = (function () {
         }
 
         find_task_item(id) {
+
+            console.log("[Table :: find_task_item]");
+            console.table(id);
+
             return this.tasks.find((t) => t.id === id);
         }
 
         bind_draggable_event($tbody) {
+
+            console.log("[Table :: bind_draggable_event]");
+            console.table($tbody);
+
             $tbody.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 if (!this.dragStartY) this.dragStartY = e.clientY;
@@ -2260,6 +2302,9 @@ var Gantt = (function () {
             }
 
             $.on(this.$svg, 'mousedown', '.bar-wrapper, .handle', (e, element) => {
+
+                console.log ( "[gantt-0.6.1 :: mousedown]");
+
                 const bar_wrapper = $.closest('.bar-wrapper', element);
 
                 if (element.classList.contains('left')) {
@@ -2276,9 +2321,12 @@ var Gantt = (function () {
                 y_on_start = e.offsetY;
 
                 parent_bar_id = bar_wrapper.getAttribute('data-id');
+                // const ids = [
+                //     parent_bar_id,
+                //     ...this.get_all_dependent_tasks(parent_bar_id),
+                // ];
                 const ids = [
-                    parent_bar_id,
-                    ...this.get_all_dependent_tasks(parent_bar_id),
+                    parent_bar_id
                 ];
                 bars = ids.map((id) => this.get_bar(id));
 
@@ -2294,6 +2342,9 @@ var Gantt = (function () {
             });
 
             $.on(this.$svg, 'mousemove', (e) => {
+
+                console.log ( "[gantt-0.6.1 :: mousemove]");
+
                 if (!action_in_progress()) return;
                 const dx = e.offsetX - x_on_start;
                 e.offsetY - y_on_start;

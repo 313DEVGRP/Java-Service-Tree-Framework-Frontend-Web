@@ -127,7 +127,6 @@ p {
 }
 
 .row {
-	overflow: hidden;
 	clear: both;
 }
 
@@ -486,4 +485,14 @@ blockquote {
 	max-height: calc(100vh - 100px);
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+/* 헤더 사람아이콘 */
+.account-picture img {
+	width: 40px;
+	margin-right: 5px;
+}
+
+.img-circle {
+	border-radius: 50%;
 }

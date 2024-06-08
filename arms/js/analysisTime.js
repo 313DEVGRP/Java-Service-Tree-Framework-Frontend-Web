@@ -7,8 +7,7 @@ var selectedVersionId;
 var versionListData;
 var globalDeadline;
 // 최상단 메뉴 변수
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;
-var mailAddressList;
+var req_state, resource_info, issue_info, period_info, total_days_progress;
 // 필요시 작성
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -27,10 +26,10 @@ function execDocReady() {
 			// d3(게이지 차트 사용)
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// chart Colors
-			"./js/common/colorPalette.js",
-			//  최상단 메뉴
+			"./js/dashboard/chart/colorPalette.js",
+			// 최상단 메뉴
+			"js/analysis/topmenu/topMenuApi.js",
 			"js/analysis/topmenu/basicRadar.js",
-			"js/analysis/topmenu/topMenu.js",
 			// 버전 timeline js, css
 			"./js/analysis/time/D_analysisTime.js",
 			"./js/analysis/time/timeline_analysisTime.js",
@@ -70,22 +69,30 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function () {
+			console.log("모든 플러그인 로드 완료");
+
 			//vfs_fonts 파일이 커서 defer 처리 함.
 			setTimeout(function () {
 				var script = document.createElement("script");
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
-			}, 3000); // 2초 후에 실행됩니다.
-			console.log("모든 플러그인 로드 완료");
+			}, 5000); // 5초 후에 실행됩니다.
+
+			//pdfmake 파일이 커서 defer 처리 함.
+			setTimeout(function () {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 5000); // 5초 후에 실행됩니다.
 
 			// 사이드 메뉴 처리
 			$(".widget").widgster();
@@ -96,6 +103,11 @@ function execDocReady() {
 
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
+
+			// 높이 조정
+			$('.top-menu-div').matchHeight({
+				target: $('.top-menu-div-scope')
+			});
 
 			// candleStickChart();
 			dashboardColor = dashboardPalette.dashboardPalette01;
@@ -167,6 +179,7 @@ function makePdServiceSelectBox() {
 
 function bind_VersionData_By_PdService() {
 	$(".multiple-select option").remove();
+
 	$.ajax({
 		url: "/auth-user/api/arms/pdService/getVersionList.do?c_id=" + $("#selected_pdService").val(),
 		type: "GET",
@@ -198,9 +211,10 @@ function bind_VersionData_By_PdService() {
 				}
 				baseDateReset();
 
-				// 최상단 메뉴 통계
-				수치_초기화();
-				getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+				// 최상단 메뉴 세팅
+				TopMenuApi.톱메뉴_초기화();
+				TopMenuApi.톱메뉴_세팅();
+
 
 				// 버전 및 게이지차트, 버전 타임라인 차트 초기화
 				statisticsMonitor(selectedPdServiceId, selectedVersionId);
@@ -211,8 +225,6 @@ function bind_VersionData_By_PdService() {
 				// 요구사항 및 연결된 이슈 생성 누적 개수 및 업데이트 상태 현황 멀티 스택바 차트
 				dailyUpdatedStatusScatterChart(selectedPdServiceId, selectedVersionId);
 				dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(selectedPdServiceId, selectedVersionId);
-
-				// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
 				// vertical timeline chart
 				//verticalTimeLineChart(selectedPdServiceId, selectedVersionId, 1);
@@ -260,8 +272,8 @@ function makeVersionMultiSelectBox() {
 			baseDateReset();
 
 			// 최상단 메뉴 통계
-			수치_초기화();
-			getReqAndLinkedIssueData(selectedPdServiceId, selectedVersionId);
+			TopMenuApi.톱메뉴_초기화();
+			TopMenuApi.톱메뉴_세팅();
 
 			// 버전 및 게이지차트, 버전 타임라인 차트 초기화
 			statisticsMonitor(selectedPdServiceId, selectedVersionId);
@@ -275,25 +287,14 @@ function makeVersionMultiSelectBox() {
 
 			// getRelationJiraIssueByPdServiceAndVersions(selectedPdServiceId, selectedVersionId);
 
-			// timeline chart
+			// timeline chart (비동기 유지 API 2개)
 			timeLineChart(selectedPdServiceId, selectedVersionId);
 
-
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" +
-					selectedPdServiceId +
-					"/getStatusMonitor.do?disable=true&versionTag=" +
-					versionTag;
-				//dataTableLoad(selectedPdServiceId, endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" +
-					selectedPdServiceId +
-					"/getStatusMonitor.do?disable=false&versionTag=" +
-					versionTag;
-				//dataTableLoad(selectedPdServiceId, endPointUrl);
-			}
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }
@@ -489,6 +490,11 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 	console.log("[ analysisTime :: statisticsMonitor ] :: 선택된 서비스 ===> " + pdservice_id);
 	console.log("[ analysisTime :: statisticsMonitor ] :: 선택된 버전 리스트 ===> " + pdservice_version_id);
 
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"진행 현황 정보를 가져오는 중입니다..."
+	);
+
 	//1. 좌상 게이지 차트 및 타임라인
 	//2. Time ( 작업일정 ) - 버전 개수 삽입
 	$.ajax({
@@ -497,6 +503,7 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (json) {
 				let versionData = json.pdServiceVersionEntities;
@@ -515,36 +522,36 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						$("#project-start").show();
 						$("#project-end").show();
 
-                        $("#versionGaugeChart").html(""); //게이지 차트 초기화
-                        var versionGauge = [];
-                        var versionTimeline = [];
-                        var versionCustomTimeline = [];
-                        versionData.forEach(function (versionElement, idx) {
-                            if (pdservice_version_id.includes(versionElement.c_id)) {
-                                var gaugeElement = {
-                                    "current_date": today.toString(),
-                                    "version_name": versionElement.c_title,
-                                    "version_id": versionElement.c_id,
-                                    "start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                                    "end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                                }
-                                versionGauge.push(gaugeElement);
-                            }
-                            var timelineElement = {
-                                "id" : versionElement.c_id,
-                                "title" : "버전: "+versionElement.c_title,
-                                "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                                "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                            };
+            $("#versionGaugeChart").html(""); //게이지 차트 초기화
+            var versionGauge = [];
+            var versionTimeline = [];
+            var versionCustomTimeline = [];
+            versionData.forEach(function (versionElement, idx) {
+                if (pdservice_version_id.includes(versionElement.c_id)) {
+                    var gaugeElement = {
+                        "current_date": today.toString(),
+                        "version_name": versionElement.c_title,
+                        "version_id": versionElement.c_id,
+                        "start_date": (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                        "end_date": (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                    }
+                    versionGauge.push(gaugeElement);
+                }
+                var timelineElement = {
+                    "id" : versionElement.c_id,
+                    "title" : "버전: "+versionElement.c_title,
+                    "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                    "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                };
 
-                            versionTimeline.push(timelineElement);
-                            var versionTimelineCustomData = {
-                                "title" : versionElement.c_title,
-                                "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
-                                "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
-                            };
-                            versionCustomTimeline.push(versionTimelineCustomData);
-                        });
+                versionTimeline.push(timelineElement);
+                var versionTimelineCustomData = {
+                    "title" : versionElement.c_title,
+                    "startDate" : (versionElement.c_pds_version_start_date === "start" ? today : versionElement.c_pds_version_start_date),
+                    "endDate" : (versionElement.c_pds_version_end_date === "end" ? today : versionElement.c_pds_version_end_date)
+                };
+                versionCustomTimeline.push(versionTimelineCustomData);
+            });
 
 						drawVersionProgress(versionGauge); // 버전 게이지
 						// 이번 달의 첫째 날 구하기
@@ -564,26 +571,26 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 						};
 						versionTimeline.push(today_flag);
 
-                        $("#version-timeline-bar").show();
-                        Timeline.init($("#version-timeline-bar"), versionTimeline);
+              $("#version-timeline-bar").show();
+              Timeline.init($("#version-timeline-bar"), versionTimeline);
 
 						var basePosition = $("#today_flag").css("left");
 						var baseWidth = $(".month").css("width");
 						var calFlagPosition = (parseFloat(baseWidth) / daysCount) * day;
 						var flagPosition = parseFloat(basePosition) + calFlagPosition + "px";
 
-                        $("#today_flag").removeAttr("style");
-                        $("#today_flag").removeClass("block");
-                        $("#today_flag").css("position", "absolute");
+            $("#today_flag").removeAttr("style");
+            $("#today_flag").removeClass("block");
+            $("#today_flag").css("position", "absolute");
 
 						$("#today_flag").css("height", "170px");
-                        $("#today_flag").css("bottom", "-35px");
+            $("#today_flag").css("bottom", "-35px");
 						$("#today_flag span").remove();
 						$(".block .label").css("text-align", "left");
 						$("#today_flag").css("left", flagPosition);
 
-                        $("#today_flag").css("position", "relative");
-                        $("#today_flag").prepend("<div class='today_flag_text'>오늘</div>");
+            $("#today_flag").css("position", "relative");
+            $("#today_flag").prepend("<div class='today_flag_text'>오늘</div>");
 
 						 $("#today_flag").css("text-align", "center");
 
@@ -830,7 +837,7 @@ async function drawVersionProgress(data) {
 			.on("mouseleave", mouseleave)
 			.append("path")
 			.attr("fill", function (d) {
-				return dashboardColor.projectProgressColor[(sectionIndx - 1) % data.length];
+				return dashboardColor.gaugeChartColor[(sectionIndx - 1) % dashboardColor.gaugeChartColor.length];
 			})
 			.attr("stroke", "white")
 			.style("stroke-width", "0.4px")
@@ -934,13 +941,13 @@ function calendarHeatMap(pdServiceLink, pdServiceVersions) {
 	$("#calendar_yearview_blocks_chart_2 svg").remove();
 
 	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/heatmap",
+		url: "/auth-admin/api/arms/analysis/time/heatmap",
 		type: "GET",
 		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
-		async: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				console.log("[ analysisTime :: calendarHeatMap ] :: 누적 업데이트 히트맵 차트데이터 = ");
@@ -986,7 +993,7 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 	}
 
 	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
+		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
@@ -998,12 +1005,18 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 		.addQueryParam("컨텐츠보기여부", true)
 		.build();
 
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"일별 업데이트 상태 차트를 로딩 중입니다..."
+	);
+
 	$.ajax({
 		url: url,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				console.log("[ analysisTime :: dailyUpdatedStatusScatterChart ] :: 일별 업데이트 상태 스캐터 차트데이터 = ");
@@ -1221,7 +1234,7 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 	}
 
 	const url = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/jira-issue")
+		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/jira-issue")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
@@ -1234,12 +1247,18 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 		.addQueryParam("컨텐츠보기여부", true)
 		.build();
 
+	$(".spinner").html(
+		'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+		"생성 개수 및 업데이트 상태 현황 정보를 로딩 중입니다..."
+	);
+	
 	$.ajax({
 		url: url,
 		type: "GET",
 		contentType: "application/json;charset=UTF-8",
 		dataType: "json",
 		progress: true,
+		async: false,
 		statusCode: {
 			200: function (data) {
 				console.log("[ analysisTime :: dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart ] :: 일별 이슈 생성 개수 및 업데이트 현황 데이터 = ");
@@ -1254,28 +1273,28 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 							if (data[date].totalRequirements !== 0 || data[date].totalRelationIssues !== 0) {
 								acc.dates.push(date);
 
-								accumulateRequirementCount += data[date].totalRequirements;
-								accumulateRelationIssueCount += data[date].totalRelationIssues;
+							accumulateRequirementCount += data[date].totalRequirements;
+							accumulateRelationIssueCount += data[date].totalRelationIssues;
 
-								acc.totalRequirements.push(accumulateRequirementCount);
-								acc.totalRelationIssues.push(accumulateRelationIssueCount);
-							}
+							acc.totalRequirements.push(accumulateRequirementCount);
+							acc.totalRelationIssues.push(accumulateRelationIssueCount);
+						}
 
-							if (data[date].requirementStatuses !== null) {
-								Object.keys(data[date].requirementStatuses).forEach((status) => {
-									if (!acc.statusKeys.includes(status)) {
-										acc.statusKeys.push(status);
-									}
-								});
-							}
+						if (data[date].requirementStatuses !== null) {
+							Object.keys(data[date].requirementStatuses).forEach((status) => {
+								if (!acc.statusKeys.includes(status)) {
+									acc.statusKeys.push(status);
+								}
+							});
+						}
 
-							if (data[date].relationIssueStatuses !== null) {
-								Object.keys(data[date].relationIssueStatuses).forEach((status) => {
-									if (!acc.statusKeys.includes(status)) {
-										acc.statusKeys.push(status);
-									}
-								});
-							}
+						if (data[date].relationIssueStatuses !== null) {
+							Object.keys(data[date].relationIssueStatuses).forEach((status) => {
+								if (!acc.statusKeys.includes(status)) {
+									acc.statusKeys.push(status);
+								}
+							});
+						}
 
 						return acc;
 					},
@@ -1398,10 +1417,10 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 							axisPointer: {
 								type: "shadow"
 							},
-							formatter: function (params) {
+							formatter: function(params) {
 								var tooltipText = "";
 								tooltipText += params[0].axisValue + "<br/>";
-								params.forEach(function (item) {
+								params.forEach(function(item) {
 									if (item.value !== 0) {
 										// 0인 데이터는 무시
 										if (item.seriesType === "bar") {
@@ -1515,10 +1534,10 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 						],
 						series: multiCombinationChartSeries,
 						backgroundColor: "rgba(255,255,255,0)",
-						animationDelay: function (idx) {
+						animationDelay: function(idx) {
 							return idx * 20;
 						},
-						animationDelayUpdate: function (idx) {
+						animationDelayUpdate: function(idx) {
 							return idx * 20;
 						}
 					};
@@ -1540,17 +1559,17 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 					myChart.setOption(option, true);
 				}
 
-				window.addEventListener("resize", function () {
+				window.addEventListener("resize", function() {
 					myChart.resize();
 				});
 
-				myChart.on("mouseover", function (params) {
+				myChart.on("mouseover", function(params) {
 					var option = myChart.getOption();
 					option.series[params.seriesIndex].label.show = true;
 					myChart.setOption(option);
 				});
 
-				myChart.on("mouseout", function (params) {
+				myChart.on("mouseout", function(params) {
 					var option = myChart.getOption();
 					option.series[params.seriesIndex].label.show = false;
 					myChart.setOption(option);
@@ -1685,12 +1704,15 @@ function verticalTimeLineChart(data) {
 				contentSet[item.summary] = {
 					version: item.pdServiceVersion,
 					summary: item.summary,
-					issuekey: [item.key],
+					projectName: [item.project.project_name],
 					date: formatDateTime(item.updated)
 				};
 			} else {
-				contentSet[item.summary].issuekey.push(item.key);
-				contentSet[item.summary].issuekey.sort();
+				// projectName에 item.project.project_name이 없는 경우에만 추가
+				if (!contentSet[item.summary].projectName.includes(item.project.project_name)) {
+					contentSet[item.summary].projectName.push(item.project.project_name);
+					contentSet[item.summary].projectName.sort();
+				}
 			}
 		});
 
@@ -1699,11 +1721,11 @@ function verticalTimeLineChart(data) {
 
 	items = Object.values(contentSet).map(item => ({
 		...item,
-		issuekey: item.issuekey.join('  |  ')
+		projectName: item.projectName
 	}));
 
 	// 날짜를 기준으로 오름차순 정렬
-	items.sort((a, b) => new Date(a.date) - new Date(b.date));
+	items.sort((a, b) => new Date(b.date) - new Date(a.date));
 
 	makeVerticalTimeline(items);
 
@@ -1741,76 +1763,65 @@ function verticalTimeLineChart(data) {
 function makeVerticalTimeline(data) {
 
 	// 데이터 세팅
-	const $container = document.querySelector(".timeline-container");
-	$container.innerHTML = '';
+	const $container = $(".timeline-container");
+    $container.empty();
 
-	// const upIcon = document.createElement("i");
-	// upIcon.className = "fa fa-chevron-up vertical-chevron-up";
-	// $container.append(upIcon);
+    if (data.length == 0) {
+        const noDataMessage = $('<p></p>').text('데이터가 없습니다.').css({
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+        });
+        $container.append(noDataMessage);
+    } else {
+        // 날짜별로 데이터 그룹화
+        let groupedData = data.reduce((group, item) => {
+            let date = item.date;
+            if (!group[date]) group[date] = [];
+            group[date].push(item);
+            return group;
+        }, {});
 
-	if (data.length == 0) {
-		const noDataMessage = document.createElement('p');
-		noDataMessage.textContent = '데이터가 없습니다.';
-		noDataMessage.style.position = 'absolute';
-		noDataMessage.style.top = '50%';
-		noDataMessage.style.left = '50%';
-		noDataMessage.style.transform = 'translate(-50%, -50%)';
+        const $ul = $('<ul></ul>');
 
-		$container.appendChild(noDataMessage);
-	} else {
-		// 날짜별로 데이터 그룹화
-		let groupedData = data.reduce((group, item) => {
-			let date = item.date;
-			if (!group[date]) group[date] = [];
-			group[date].push(item);
-			return group;
-		}, {});
+        Object.entries(groupedData).forEach(([date, items]) => {
+            items.forEach(({ version, summary, projectName }, index) => {
+                const $li = $('<li></li>').addClass('session');
 
-		const $ul = document.createElement("ul");
+                if (index === 0) {
+                    $li.append(`
+                        <span class="time-range">
+                            <span class="date">${date}</span>
+                        </span>
+                    `);
+                }
 
-		Object.entries(groupedData).forEach(([date, items]) => {
-			items.forEach(({version, summary, issuekey}, index) => {
-				const $li = document.createElement("li");
-				$li.className = "session";
+                const $sessionContent = $(`
+                    <div class="session-content">
+                        <div class="version" style="color: ${getColorByVersion(version)}">${convertVersionIdToTitle(version)}</div>
+                        <div class="summary">${summary}</div>
+                    </div>
+                `);
 
-				if (index === 0) {
-					$li.innerHTML += `
-                    <span class="time-range">
-                      <span class="date">${date}</span>
-                    </span>
-                    `;
-				}
-				$li.innerHTML += `
-                <div class="session-content">
-                  <div class="version" style="color: ${getColorByVersion(version)}">${convertVersionIdToTitle(version)}</div>
-                  <div class="summary">${summary}</div>
-                  <div class="issuekey">${issuekey}</div>
-                </div>
-                `;
+                const $projectNameDiv = $('<div></div>').addClass('project-names');
 
-				$ul.append($li);
-			});
-		});
+                // projectName 배열의 각 요소를 추가
+                projectName.forEach(name => {
+                    const $button = $('<button></button>').addClass('project-name').text(name);
+                    $projectNameDiv.append($button);
+                });
 
-		$container.append($ul);
-	}
+                $sessionContent.append($projectNameDiv);
+                $li.append($sessionContent);
+                $ul.append($li);
+            });
+        });
+
+        $container.append($ul);
+    }
 
 	adjustHeight();
-
-	// const downIcon = document.createElement("i");
-	// downIcon.className = "fa fa-chevron-down vertical-chevron-down";
-	// $container.append(downIcon);
-
-	// 버튼 클릭 이벤트
-	// $('.fa-chevron-up').on('click', function() {
-	// 	verticalTimeLineChart(pdServiceLink, pdServiceVersions, week+1);
-	// });
-	//
-	// $('.fa-chevron-down').on('click', function() {
-	// 	if (week - 1 > 0) {
-	// 		verticalTimeLineChart(pdServiceLink, pdServiceVersions, week-1);
-	// 	}
-	// });
 }
 
 function formatDateTime(dateTime) {
@@ -1828,7 +1839,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		return;
 	}
 	const verticalUrl = new UrlBuilder()
-    		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-jira-issue")
+    		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/updated-jira-issue")
     		.addQueryParam("pdServiceLink", pdServiceLink)
     		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
     		.addQueryParam("일자기준", "updated")
@@ -1839,6 +1850,12 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("하위크기", 1000)
     		.addQueryParam("컨텐츠보기여부", true)
     		.build();
+
+		$(".spinner").html(
+			'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+			"수직 타임라인 차트를 로딩 중입니다..."
+		);
+
     $.ajax({
             url: verticalUrl,
             type: "GET",
@@ -1855,7 +1872,7 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
         });
 
 	const ridgeLineUrl = new UrlBuilder()
-		.setBaseUrl("/auth-user/api/arms/analysis/time/standard-daily/updated-ridgeline")
+		.setBaseUrl("/auth-admin/api/arms/analysis/time/standard-daily/updated-ridgeline")
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
@@ -1868,20 +1885,25 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		.build();
 
     function executeAjaxCall(url) {
-        $.ajax({
-            url: url,
-            type: "GET",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function (data) {
-                console.log("[ analysisTime :: ridgeLineData ] :: = ");
-                console.log(data);
-                updateRidgeLine(data);
-                }
-            }
-        });
+			$(".spinner").html(
+				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
+				"요구사항 업데이트 현황(능선차트)를 로딩 중입니다..."
+			);
+
+      $.ajax({
+          url: url,
+          type: "GET",
+          contentType: "application/json;charset=UTF-8",
+          dataType: "json",
+          progress: true,
+          statusCode: {
+              200: function (data) {
+              console.log("[ analysisTime :: ridgeLineData ] :: = ");
+              console.log(data);
+              updateRidgeLine(data);
+              }
+          }
+      });
     }
     executeAjaxCall(ridgeLineUrl);
 
@@ -1967,7 +1989,7 @@ document.getElementById("updateRidgeLine").innerHTML = "";
         const minHeight = 600;
         const maxHeight = 650;
         const height = Math.max(minHeight, Math.min(maxHeight, series.length * 16));
-        const marginTop = 100;
+        const marginTop = 50;
         const marginRight = 0;
         const marginBottom = 0;
         const marginLeft = 280;
@@ -2290,24 +2312,4 @@ function versionTimelineChart(versionData) {
 	}
 
 	window.addEventListener('resize', myChart.resize);
-}
-
-////////////////////
-//서비스, 버전으로 연결된 이슈 전체 호출
-////////////////////
-function getRelationJiraIssueByPdServiceAndVersions(pdServiceLink, pdServiceVersions) {
-	$.ajax({
-		url: "/auth-user/api/arms/analysis/time/pdService/pdServiceVersions",
-		type: "GET",
-		data: { pdServiceLink: pdServiceLink, pdServiceVersionLinks: pdServiceVersions },
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		async: true,
-		statusCode: {
-			200: function (data) {
-				//sevenTimeline(data);
-			}
-		}
-	});
 }

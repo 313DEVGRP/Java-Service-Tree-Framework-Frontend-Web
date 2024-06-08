@@ -24,6 +24,20 @@ function execDocReady() {
 			setSideMenu("sidebar_menu_product", "sidebar_menu_per_version");
 			init_versionList();
 			dataLoad();
+
+			// --- 에디터 설정 --- //
+			var waitCKEDITOR = setInterval(function () {
+				try {
+					if (window.CKEDITOR) {
+						if (window.CKEDITOR.status === "loaded") {
+							CKEDITOR.replace("version_contents", { skin: "office2013" });
+							clearInterval(waitCKEDITOR);
+						}
+					}
+				} catch (err) {
+					console.log("CKEDITOR 로드가 완료되지 않아서 초기화 재시도 중...");
+				}
+			}, 313 /*milli*/);
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
@@ -146,7 +160,9 @@ function versionClick(element, c_id) {
 			$("#select_Version").val(json.c_title);
 			$("#version_start_date").val(json.c_pds_version_start_date);
 			$("#version_end_date").val(json.c_pds_version_end_date);
-			$("#version_contents").html(json.c_pds_version_contents);
+
+			CKEDITOR.instances.version_contents.setData(json.c_pds_version_contents);
+			CKEDITOR.instances.version_contents.setReadOnly(true);
 
 			// sender 데이터 바인딩 및 선택 색상 표기
 			$("#select_Version").text(json.c_title);

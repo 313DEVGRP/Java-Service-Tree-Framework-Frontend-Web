@@ -6,7 +6,7 @@
                         style="font-weight: bold">
 					    <i  class="fa fa-tasks"
                             style="vertical-align: middle;font-size: 14px;"></i>
-					    지라 서버
+					    ALM 서버
 				</span>
             </h4>
             <div class="widget-controls">
@@ -47,7 +47,7 @@
             <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
             <blockquote class="font13"
                         style="margin-top: 5px;">
-                1. 등록된 지라 서버 조회 및 추가
+                1. 등록된 ALM 서버 조회 및 추가
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
                             style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
@@ -82,7 +82,7 @@
                             data-toggle="modal"
                             id="modal_popup_id"
                             type="button">
-                        JIRA Server 등록
+                        ALM Server 등록
                     </button>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                         <div class="carousel-inner text-align-center">
                             <div class="item active">
                                 <span class="no-margin font13"  style="font-weight: bold; color: #a4c6ff; border-bottom: 1px dashed #a4c6ff;">
-                                    지라 서버 목록
+                                    ALM 서버 목록
                                 </span>
                             </div>
                             <div class="item">
@@ -107,7 +107,7 @@
                                         클라우드 : 요구사항 이슈 만드는 방법
                                     </span>
                                 </a>
-                             </div>
+                            </div>
                             <div class="item">
                                 <a href="docs/create-onpremise-issue-type.html" target="_blank" style="text-decoration: none;  color: white;">
                                     <span class="no-margin font13" style="font-weight: bold; color: #a4c6ff; border-bottom: 1px dashed #a4c6ff;">
@@ -223,7 +223,7 @@
     </section>
 </div>
 
-<div class="col-lg-7 col-layer" id="serverInfo_Wrapper">
+<div class="col-lg-7 col-layer" id="server_info_wrapper">
     <section class="widget">
         <header>
             <h4>
@@ -232,7 +232,7 @@
 					    <i  class="fa fa-edit"
                             style="vertical-align: middle;font-size: 14px;">
                         </i>
-					    지라 서버 상세보기/변경
+					    ALM 서버 상세보기/변경
 				</span>
             </h4>
             <div class="widget-controls">
@@ -282,8 +282,8 @@
                             style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
                     </button>
                 </div>
-                2.지라 서버 등록 정보를 확인하고 편집/삭제
-                <p id="cloudIssueTypeInfo" class="hidden" style="margin-top: 5px !important;"><i class="fa fa-info-circle"></i> 클라우드 지라서버 <strong>이슈 유형</strong>은 지라 프로젝트 탭에서 <i class="fa fa-th-list"></i> 아이콘을 클릭하세요. </p>
+                2.ALM 서버 등록 정보를 확인하고 편집/삭제
+                <p id="cloudIssueTypeInfo" class="hidden" style="margin-top: 5px !important;"><i class="fa fa-info-circle"></i> 클라우드 지라, 레드마인 서버 <strong>이슈 유형</strong>은 프로젝트 탭에서 <i class="fa fa-th-list"></i> 아이콘을 클릭하세요. </p>
             </blockquote>
             <div class="clearfix widget-content">
                 <!-- 컴포넌트 대상 -->
@@ -292,7 +292,9 @@
                     <div    class="panel-group json-menu"
                             id="versionAccordion"
                             style="margin-bottom: 0px !important">
-                        <li     class="list-group-item json-menu-header"
+                        <li
+                                id="list-group-item"
+                                class="list-group-item json-menu-header"
                                 style="padding: 0px">
                             <div class="chat-message">
                                 <div    class="chat-message-body"
@@ -301,7 +303,7 @@
                                             style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff;"></span>
                                     <div    class="sender"
                                             style="padding-bottom: 5px; padding-top: 5px">
-                                        선택된 지라 서버 :
+                                        선택된 ALM 서버 :
                                         <span   id="select_Service"
                                                 style="color: #a4c6ff">
                                                 선택되지 않음
@@ -363,7 +365,7 @@
                      id="jira_server_delete_div">
                     <button id="delete_jira_server"
                             class="btn btn-danger btn-sm">
-                        지라(서버) 삭제
+                        ALM(서버) 삭제
                     </button>
                 </div>
                 <div style="float: right"
@@ -402,12 +404,7 @@
                                 <li>
                                     <a  href="#related_project"
                                         data-toggle="tab">
-                                        <strong>지라 프로젝트</strong>
-                                    </a>
-                                </li>
-                                <li id="resolution_tab" class="hidden">
-                                    <a href="#server_issue_resolution" data-toggle="tab">
-                                        <strong>이슈 해결책</strong>
+                                        <strong>ALM 프로젝트</strong>
                                     </a>
                                 </li>
                                 <li>
@@ -422,7 +419,7 @@
                                 </li>
                                 <li id="status_tab" class="hidden">
                                     <a href="#server_issue_status" data-toggle="tab">
-                                        <strong>이슈 상태</strong>
+                                        <strong>이슈 상태 매핑</strong>
                                     </a>
                                 </li>
                                 <li>
@@ -443,7 +440,7 @@
                                             <label  for="detailview_jira_server_name"
                                                     class="control-label"
                                                     style="width: 130px !important">
-                                                지라(서버) 이름 :
+                                                ALM(서버) 이름 :
                                             </label>
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 100px">
@@ -455,7 +452,7 @@
                                                         name="detailview_jira_server_name"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="JIRA SERVER NAME"
+                                                        placeholder="ALM SERVER NAME"
                                                         required="required" readonly/>
                                                 <span class="input-group-addon font11">
                                                 INFO: 서버 이름은 중복될 수 없습니다.
@@ -465,7 +462,7 @@
                                         <div    class="control-group"
                                                 for="detailview_jira_server_type">
                                             <label class="control-label font13"
-                                                   style="width: 130px !important">지라 환경 :</label>
+                                                   style="width: 130px !important">ALM 환경 :</label>
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 130px">
 												<span class="input-group-addon">
@@ -489,6 +486,13 @@
                                                                     value="온프레미스"/>
                                                             온프레미스
                                                         </label>
+                                                        <label class="btn btn-warning btn-disabled">
+                                                            <input  type="radio"
+                                                                    name="options"
+                                                                    id="detailview_jira_server_type_option3"
+                                                                    value="레드마인_온프레미스"/>
+                                                            레드마인
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -497,7 +501,7 @@
                                             <label  for="detailview_jira_server_base_url"
                                                     class="control-label"
                                                     style="width: 130px !important">
-                                                지라 URL :
+                                                ALM URL :
                                             </label>
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 100px">
@@ -509,19 +513,15 @@
                                                         name="detailview_jira_server_base_url"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="JIRA BASE URL"
+                                                        placeholder="ALM BASE URL"
                                                         required="required" readonly/>
-<!--                                                <span class="input-group-addon font11">
-													<i class="fa fa-question-circle"></i>
-													ex: X.X.X
-												</span>-->
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label  for="detailview_jira_server_connect_id"
                                                     class="control-label"
                                                     style="width: 130px !important">
-                                                JIRA ID :
+                                                ALM ID :
                                             </label>
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 100px">
@@ -533,19 +533,18 @@
                                                         name="detailview_jira_server_connect_id"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="JIRA SERVER CONNECT ID"
+                                                        placeholder="ALM SERVER CONNECT ID"
                                                         required="required" readonly/>
                                                 <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
-													지라 아이디
+													ALM 아이디
 												</span>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label  for="detailview_jira_pass_token"
                                                     class="control-label"
-                                                    style="width: 130px !important">
-                                                JIRA PASS or TOKEN :
+                                                    style="width: 130px !important">ALM PASS or TOKEN:
                                             </label>
                                             <div    class="controls form-group input-group"
                                                     style="margin-left: 100px">
@@ -557,7 +556,7 @@
                                                         name="detailview_jira_pass_token"
                                                         class="form-control parsley-validated font13 darkBack"
                                                         style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                        placeholder="JIRA Pass or Token"
+                                                        placeholder="ALM Pass or Token"
                                                         required="required" readonly/>
                                                 <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
@@ -567,18 +566,13 @@
                                         </div>
                                         <div class="control-group">
                                             <label  class="control-label">
-                                                지라 서버 내용 :
+                                                ALM 서버 내용 :
                                             </label>
-<!--                                            <div    class="col-sm-12 darkBack"-->
-<!--                                                    id="detailview_jira_server_contents"-->
-<!--                                                    style="padding-top: 10px; padding-bottom: 10px">-->
-<!--                                                -->
-<!--                                            </div>-->
                                             <div class="controls form-group">
                                                 <div    class="col-sm-12"
                                                         style="padding-top: 10px">
                                                     <div id="detailview_jira_server_contents" contenteditable="false">
-                                                        <p>지라 서버의 내용을 기록합니다.</p>
+                                                        <p>ALM 서버의 내용을 기록합니다.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -597,7 +591,7 @@
                                                 <label  for="editview_jira_server_name"
                                                         class="control-label"
                                                         style="width: 130px !important">
-                                                    지라(서버) 이름 :
+                                                    ALM(서버) 이름 :
                                                 </label>
                                                 <div    class="controls form-group input-group"
                                                         style="margin-left: 100px">
@@ -609,7 +603,7 @@
                                                             name="editview_jira_server_name"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="JIRA SERVER NAME"
+                                                            placeholder="ALM SERVER NAME"
                                                             required="required" />
                                                     <span class="input-group-addon font11">
                                                 INFO: 서버 이름은 중복될 수 없습니다.
@@ -619,7 +613,7 @@
                                             <div    class="control-group"
                                                     for="editview_jira_server_type">
                                                 <label class="control-label font13"
-                                                       style="width: 130px !important">지라 환경 :</label>
+                                                       style="width: 130px !important">ALM 환경 :</label>
                                                 <div    class="controls form-group input-group"
                                                         style="margin-left: 130px">
 												    <span class="input-group-addon">
@@ -643,45 +637,45 @@
                                                                         value="온프레미스"/>
                                                                 온프레미스
                                                             </label>
-<!--                                                            <span class="input-group-addon font11">
-                                                    INFO: 서버 환경은 수정할 수 없습니다.
-                                                </span>-->
+                                                            <label class="btn btn-warning btn-disabled">
+                                                                <input  type="radio"
+                                                                        name="options"
+                                                                        id="editview_jira_server_type_option3"
+                                                                        value="레드마인_온프레미스"/>
+                                                                레드마인
+                                                            </label>
+                                                        </div>
+                                                        <span class="font11" id="redmine_info_edit" style="display:none;">INFO : 레드마인 서버는 관리자 계정으로 등록해야합니다.</span>
                                                     </div>
-
                                                 </div>
-                                            </div>
-                                            <div class="control-group">
-                                                <label  for="editview_jira_server_base_url"
-                                                        class="control-label"
-                                                        style="width: 130px !important">
-                                                    지라 URL :
-                                                </label>
-                                                <div    class="controls form-group input-group"
-                                                        style="margin-left: 100px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-share"></i>
-												</span>
-                                                    <input  type="text"
-                                                            id="editview_jira_server_base_url"
-                                                            name="editview_jira_server_base_url"
-                                                            class="form-control parsley-validated font13 darkBack"
-                                                            style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="JIRA BASE URL"
-                                                            required="required" readonly/>
-<!--
-													<i class="fa fa-question-circle"></i>
-													ex: X.X.X
-												</span>-->
+                                                <div class="control-group">
+                                                    <label  for="editview_jira_server_base_url"
+                                                            class="control-label"
+                                                            style="width: 130px !important">
+                                                        ALM URL :
+                                                    </label>
+                                                    <div    class="controls form-group input-group"
+                                                            style="margin-left: 100px">
+                                                        <span class="input-group-addon">
+                                                            <i class="glyphicon glyphicon-share"></i>
+                                                        </span>
+                                                        <input  type="text"
+                                                                id="editview_jira_server_base_url"
+                                                                name="editview_jira_server_base_url"
+                                                                class="form-control parsley-validated font13 darkBack"
+                                                                style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                                placeholder="ALM BASE URL"
+                                                                required="required" readonly/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="control-group">
-                                                <label  for="version_start_date"
-                                                        class="control-label"
-                                                        style="width: 130px !important">
-                                                    JIRA ID :
-                                                </label>
-                                                <div    class="controls form-group input-group"
-                                                        style="margin-left: 100px">
+                                                <div class="control-group">
+                                                    <label  for="version_start_date"
+                                                            class="control-label"
+                                                            style="width: 130px !important">
+                                                        ALM ID :
+                                                    </label>
+                                                    <div    class="controls form-group input-group"
+                                                            style="margin-left: 100px">
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-gift"></i>
 												</span>
@@ -690,11 +684,11 @@
                                                             name="editview_jira_server_connect_id"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="JIRA SERVER CONNECT ID"
+                                                            placeholder="ALM SERVER CONNECT ID"
                                                             required="required" />
                                                     <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
-													지라 아이디
+													ALM 아이디
 												</span>
                                                 </div>
                                             </div>
@@ -702,7 +696,7 @@
                                                 <label  for="version_end_date"
                                                         class="control-label"
                                                         style="width: 130px !important">
-                                                    JIRA PASS or TOKEN :
+                                                    ALM PASS or TOKEN:
                                                 </label>
                                                 <div    class="controls form-group input-group"
                                                         style="margin-left: 100px">
@@ -714,7 +708,7 @@
                                                             name="editview_jira_pass_token"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="JIRA Pass or Token"
+                                                            placeholder="ALM Pass or Token"
                                                             required="required" />
                                                     <span class="input-group-addon font11">
 													<i class="fa fa-question-circle"></i>
@@ -725,13 +719,13 @@
                                             <div class="control-group">
                                                 <label  class="control-label"
                                                         style="color: #f8f8f8">
-                                                    지라 서버 내용 :
+                                                    ALM 서버 내용 :
                                                 </label>
                                                 <div class="controls form-group">
                                                     <div    class="col-sm-12"
                                                             style="padding-top: 10px">
                                                         <div id="input_jira_server_editor">
-                                                            <p>지라 서버의 내용을 기록합니다.</p>
+                                                            <p>ALM 서버의 내용을 기록합니다.</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -809,9 +803,8 @@
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
                                     <tr>
+                                        <th>c_issue_status_name</th>
                                         <th>c_id</th>
-                                        <th>c_issue_priority_id</th>
-                                        <th>c_issue_priority_name</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -819,14 +812,14 @@
                             <div    id="dropdown1"
                                     class="tab-pane">
                                 <p>
-                                    지라(서버) "
+                                    ALM(서버) "
                                     <label  id="delete_text"
                                             style="color: #a4c6ff; font-weight: bold">
                                     </label>
                                     "을(를) 삭제 하시겠습니까?
                                 </p>
                                 <p>
-                                    <strong>( 주의하세요 ) A-RMS 의 지라 서버와 관련 항목들도(지라 프로젝트, 이슈유형,이슈상태,이슈우선순위,이슈해결책) 삭제됩니다.</strong>
+                                    <strong>( 주의하세요 ) A-RMS 의 ALM 서버와 관련 항목들도(프로젝트, 이슈유형,이슈상태,이슈우선순위) 삭제됩니다.</strong>
                                 </p>
                                 <div>
                                     <button id="del_version"
@@ -845,7 +838,7 @@
 </div>
 
 <!-- 지라 프로젝트(클라우드) - info -->
-<div class="col-lg-3" id="serverConfig_Wrapper" style="display:none;">
+<div class="col-lg-3" id="server_project_each_config_wrapper" style="display:none;">
     <section class="widget">
         <header>
             <h4>
@@ -854,7 +847,7 @@
 					    <i  class="fa fa-edit"
                             style="vertical-align: middle;font-size: 14px;">
                         </i>
-					    지라 프로젝트 기본 설정
+					    ALM 프로젝트 기본 설정
 				</span>
             </h4>
             <div class="widget-controls">
@@ -895,7 +888,7 @@
             <div class="gradient_middle_border" style="width: 100%; height: 2px"></div>
             <blockquote class="font13"
                         style="margin-top: 5px;">
-                3.선택한 지라 프로젝트의 기본 이슈 유형, 이슈 상태 설정
+                3.선택한 ALM 프로젝트의 기본 이슈 유형, 이슈 상태 설정
                 <div style="float: right;">
                     <button class="btn btn-transparent btn-xs"
                             style="margin-top: -3px; color: #acacac; background: rgba(51,51,51,.2); padding: 1px 9px;"
@@ -922,7 +915,7 @@
                                             style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff;"></span>
                                     <div    class="sender"
                                             style="padding-bottom: 5px; padding-top: 5px">
-                                        선택된 지라 서버 :
+                                        선택된 ALM 서버 :
                                         <span   id="select_Service"
                                                 style="color: #a4c6ff">
                                                 선택되지 않음
@@ -944,17 +937,17 @@
                             <button type="button"
                                     onClick="jira_renew('project')"
                                     class="btn btn-success btn-sm mr-1 jira_renew_btn">
-                            항목 갱신
+                                항목 갱신
                             </button>
                         </li>
                         <li>
                             <button type="button"
-                                    id="default_update"
-                                    name="default_update"
+                                    id="default_project_each_update"
+                                    name="default_project_each_update"
                                     data-style="contract"
                                     class="ladda btn btn-success btn-sm mr-1"
                                     style="width:77%; margin-top: 2px;">
-                            기본 설정 저장
+                                기본 설정 저장
                             </button>
                         </li>
                     </ul>
@@ -975,10 +968,9 @@
                                 <li>
                                     <a  href="#issue_status"
                                         data-toggle="tab">
-                                        <strong>이슈 상태</strong>
+                                        <strong>이슈 상태 매핑</strong>
                                     </a>
                                 </li>
-
                             </ul>
                         </header>
                         <div class="body tab-content">
@@ -1005,9 +997,8 @@
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
                                     <tr>
-                                        <th>c_id</th>
-                                        <th>c_issue_status_id</th>
                                         <th>c_issue_status_name</th>
+                                        <th>c_id</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -1019,7 +1010,6 @@
         </div>
     </section>
 </div>
-
 
 <!-- 신규 -->
 <div    id="my_modal1"
@@ -1039,12 +1029,12 @@
 					<span   class="font13"
                             style="font-weight: bold">
                             <i class="fa fa-edit"></i>
-                            신규 지라 서버 등록 팝업
+                            신규 ALM 서버 등록 팝업
 					</span>
                     <blockquote    class="search-result"
                                    style="border-left: 5px solid #e5603b">
                         <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-                            A-RMS에 지라 서버를 등록합니다.
+                            A-RMS에 ALM 서버를 등록합니다.
                         </p>
                     </blockquote>
                 </h4>
@@ -1080,7 +1070,7 @@
                     <fieldset>
                         <div    class="control-group"
                                 for="popup_editview_jira_server_name">
-                            <label class="control-label font13">지라(서버) 이름 :</label>
+                            <label class="control-label font13">ALM(서버) 이름 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1091,15 +1081,15 @@
                                         name="popup_editview_jira_server_name"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
-                                        data-original-title="지라(서버) 이름은 중복될 수 없습니다."
+                                        data-original-title="ALM(서버) 이름은 중복될 수 없습니다."
                                         required="required"
-                                        placeholder="JIRA (server) name" />
-                                <span class="input-group-addon font11">INFO : 지라(서버) 이름은 중복될 수 없습니다.</span>
+                                        placeholder="ALM (server) name" />
+                                <span class="input-group-addon font11">INFO : ALM(서버) 이름은 중복될 수 없습니다.</span>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="popup_editview_jira_server_type">
-                            <label class="control-label font13">지라 환경 :</label>
+                            <label class="control-label font13">ALM 환경 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
                                 <span class="input-group-addon">
@@ -1123,13 +1113,21 @@
                                                     value="온프레미스"/>
                                             온프레미스
                                         </label>
+                                        <label class="btn btn-warning">
+                                            <input  type="radio"
+                                                    name="options"
+                                                    id="popup_editview_jira_server_type_option3"
+                                                    value="레드마인_온프레미스"/>
+                                            레드마인
+                                        </label>
                                     </div>
+                                    <span class=" font11" id="redmine_info" style="display:none;">INFO : 레드마인 서버는 관리자 계정으로 등록해야합니다.</span>
                                 </div>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="popup_editview_jira_server_base_url">
-                            <label class="control-label font13">지라 URL :</label>
+                            <label class="control-label font13">ALM URL :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1142,13 +1140,13 @@
                                         data-placement="top"
                                         data-original-title="jira_server_url"
                                         required="required"
-                                        placeholder="JIRA BASE URL" />
-                                <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
+                                        placeholder="ALM BASE URL" />
+                                <span class="input-group-addon font11">INFO : 등록할 ALM URL을 입력</span>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="popup_editview_jira_server_connect_id">
-                            <label class="control-label font13">지라 아이디 :</label>
+                            <label class="control-label font13">ALM 아이디 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1161,13 +1159,13 @@
                                         data-placement="top"
                                         data-original-title="JIRA ID"
                                         required="required"
-                                        placeholder="JIRA SERVER CONNECT ID" />
-                                <span class="input-group-addon font11">INFO : 등록할 지라 아이디를 입력</span>
+                                        placeholder="ALM SERVER CONNECT ID" />
+                                <span class="input-group-addon font11">INFO : 등록할 ALM 아이디를 입력</span>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="popup_editview_jira_pass_token">
-                            <label class="control-label font13">지라 암호 또는 토큰 :</label>
+                            <label class="control-label font13">ALM 암호 또는 토큰 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1178,24 +1176,32 @@
                                         name="popup_editview_jira_pass_token"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
-                                        data-original-title="지라(서버) 이름은 중복될 수 없습니다."
+                                        data-original-title="ALM(서버) 이름은 중복될 수 없습니다."
                                         required="required"
-                                        placeholder="JIRA Pass or Token" />
-                                <span class="input-group-addon font11">INFO : 지라 암호 또는 토큰 입력</span>
+                                        placeholder="ALM Pass or Token" />
+                                <span class="input-group-addon font11">INFO : ALM 암호 또는 토큰 입력</span>
                             </div>
                         </div>
-
+                        <div class="control-group">
+                            <button type="button"
+                                    id="verify_account"
+                                    data-style="contract"
+                                    style = "float:right;"
+                                    class="ladda btn btn-success">
+                                계증 검증 하기
+                            </button><br>
+                        </div>
                         <div class="control-group">
                             <label  class="control-label"
                                     style="color: #f8f8f8">
-                                지라 서버 내용 :
+                                ALM 서버 내용 :
                             </label>
                             <div class="controls form-group">
                                 <div    class="col-sm-12"
                                         style="padding-top: 10px">
                                     <div    id="modal_editor"
                                             class="darkBack">
-                                        <p>등록한 지라(서버) 관련 특이사항 등을 기록합니다.</p>
+                                        <p>등록한 ALM(서버) 관련 특이사항 등을 기록합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1231,8 +1237,7 @@
         aria-labelledby="myModalLabel"
         aria-hidden="true"
         style="display: none; border-radius: 10px">
-    <div    class="modal-dialog"
-            style="width: 80%; height: 80%">
+    <div class="modal-dialog">
         <div class="modal-content modalDarkBack">
             <div    class="modal-header"
                     style="padding: 0px; border-bottom: 1px">
@@ -1243,12 +1248,12 @@
                             id="my_modal2_title"
                             style="font-weight: bold">
                             <i class="fa fa-edit"></i>
-                            지라(서버) 수정 팝업
+                            ALM(서버) 수정 팝업
 					</span>
                     <blockquote    class="search-result"
                                    style="border-left: 5px solid #e5603b">
                         <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-                            A-RMS에 등록된 지라 서버를 수정합니다.
+                            A-RMS에 등록된 ALM 서버를 수정합니다.
                         </p>
                     </blockquote>
                 </h4>
@@ -1286,7 +1291,7 @@
                     <fieldset>
                         <div    class="control-group"
                                 for="extend_editview_jira_server_name">
-                            <label class="control-label font13">지라(서버) 이름 :</label>
+                            <label class="control-label font13">ALM(서버) 이름 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1297,15 +1302,15 @@
                                         name="extend_editview_jira_server_name"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
-                                        data-original-title="지라(서버) 이름은 중복될 수 없습니다."
+                                        data-original-title="ALM(서버) 이름은 중복될 수 없습니다."
                                         required="required"
                                         placeholder="JIRA (server) name" />
-                                <span class="input-group-addon font11">INFO : 지라(서버) 이름은 중복될 수 없습니다.</span>
+                                <span class="input-group-addon font11">INFO : ALM(서버) 이름은 중복될 수 없습니다.</span>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="extend_editview_jira_server_type">
-                            <label class="control-label font13">지라 환경 :</label>
+                            <label class="control-label font13">ALM 환경 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
                                 <span class="input-group-addon">
@@ -1329,14 +1334,20 @@
                                                     value="온프레미스"/>
                                             온프레미스
                                         </label>
+                                        <label class="btn btn-warning btn-disabled">
+                                            <input  type="radio"
+                                                    name="options"
+                                                    id="extend_editview_jira_server_type_option3"
+                                                    value="레드마인_온프레미스"/>
+                                            레드마인_온프레미스
+                                        </label>
                                     </div>
-<!--                                    <span class="input-group-addon font11">INFO : 지라(서버) 환경은 수정할 수 없습니다.</span>-->
                                 </div>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="extend_editview_jira_server_base_url">
-                            <label class="control-label font13">지라 URL :</label>
+                            <label class="control-label font13">ALM URL :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1349,13 +1360,13 @@
                                         data-placement="top"
                                         data-original-title="jira_server_url"
                                         required="required"
-                                        placeholder="JIRA BASE URL" readonly/>
-                                <span class="input-group-addon font11">INFO : 등록할 지라 URL을 입력</span>
+                                        placeholder="ALM BASE URL" readonly/>
+                                <span class="input-group-addon font11">INFO : 등록할 ALM URL을 입력</span>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="extend_editview_jira_server_connect_id">
-                            <label class="control-label font13">지라 아이디 :</label>
+                            <label class="control-label font13">ALM 아이디 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1368,13 +1379,13 @@
                                         data-placement="top"
                                         data-original-title="JIRA ID"
                                         required="required"
-                                        placeholder="JIRA SERVER CONNECT ID" />
-                                <span class="input-group-addon font11">INFO : 등록할 지라 아이디를 입력</span>
+                                        placeholder="ALM SERVER CONNECT ID" />
+                                <span class="input-group-addon font11">INFO : 등록할 ALM 아이디를 입력</span>
                             </div>
                         </div>
                         <div    class="control-group"
                                 for="extend_editview_jira_pass_token">
-                            <label class="control-label font13">지라 암호 또는 토큰 :</label>
+                            <label class="control-label font13">ALM 암호 또는 토큰 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
 								<span class="input-group-addon">
@@ -1385,23 +1396,23 @@
                                         name="extend_editview_jira_pass_token"
                                         class="form-control parsley-validated font13 darkBack"
                                         data-placement="top"
-                                        data-original-title="지라(서버) 이름은 중복될 수 없습니다."
+                                        data-original-title="ALM(서버) 이름은 중복될 수 없습니다."
                                         required="required"
-                                        placeholder="JIRA Pass or Token" />
-                                <span class="input-group-addon font11">INFO : 지라 암호 또는 토큰 입력</span>
+                                        placeholder="ALM Pass or Token" />
+                                <span class="input-group-addon font11">INFO : ALM 암호 또는 토큰 입력</span>
                             </div>
                         </div>
                         <div class="control-group">
                             <label  class="control-label"
                                     style="color: #f8f8f8">
-                                    지라 서버 내용 :
+                                ALM 서버 내용 :
                             </label>
                             <div class="controls form-group">
                                 <div    class="col-sm-12"
                                         style="padding-top: 10px">
                                     <div    id="extend_modal_editor"
                                             class="darkBack">
-                                        <p>등록한 지라(서버) 관련 특이사항 등을 기록합니다.</p>
+                                        <p>등록한 ALM(서버) 관련 특이사항 등을 기록합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1429,7 +1440,186 @@
                         type="button"
                         id="extendupdate_jira_server"
                         class="btn btn-success">
-                    지라(서버) 변경내용 저장
+                    ALM(서버) 변경내용 저장
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div
+        id="not_ready_modal"
+        class="modal fade"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+        style="display: none; border-radius: 10px">
+    <div
+            class="modal-dialog"
+            style="width: 80%">
+        <div class="modal-content modalDarkBack">
+            <div
+                    class="modal-header"
+                    style="padding: 0px; border-bottom: 1px">
+                <h4
+                        class="modal-title font14"
+                        id="my_modal_label2"
+                        style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+                            class="font13"
+                            id="my_modal2_title"
+                            style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						요구사항 이슈 생성을 위한 설정 현황
+					</span>
+                    <blockquote
+                            class="search-result"
+                            style="border-left: 5px solid #e5603b">
+                        <div id="not-ready-buttons"></div>
+                        <p id="not-ready-messages" style="font-size: 13px; margin: 10px 0px 10px 0px;"></p>
+                    </blockquote>
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="padding-top: 10px">
+                    <a
+                            title="Options"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-cog"></i>
+                    </a>
+                    <a
+                            data-widgster="expand"
+                            title="Expand"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            class="hidden"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <div
+                    class="modal-body"
+                    style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+                <div class="body">
+                    <div class="clearfix widget-content">
+                        <!-- 컴포넌트 대상 -->
+                        <div
+                                id="selected_info"
+                                style="float: left">
+                            <div
+                                    class="panel-group json-menu"
+                                    id="versionAccordion"
+                                    style="margin-bottom: 0px !important">
+                                <li
+                                        class="list-group-item json-menu-header"
+                                        style="padding: 0px">
+                                    <div class="chat-message">
+                                        <div
+                                                class="chat-message-body"
+                                                style="
+												margin-left: 0px !important;
+												padding: 0px 10px 0px 10px !important;
+												border-left: 2px solid #a4c6ff;
+											">
+											<span
+                                                    class="arrow"
+                                                    style="top: 10px !important; left: -7px; border-right: 5px solid #a4c6ff"></span>
+                                            <div
+                                                    class="sender"
+                                                    style="padding-bottom: 5px; padding-top: 5px">
+                                                선택된 서버 :
+                                                <span
+                                                        id="select_server_name"
+                                                        style="color: #a4c6ff">
+													선택되지 않음
+												</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+
+<!--                        <div
+                                style="float: right; border: 1px solid #0b67ff !important"
+                                class="newReqDiv darkBack">
+                            <label
+                                    id="new_req_regist02"
+                                    class="btn btn-primary btn-transparent btn-sm active"
+                                    data-target="#my_modal1"
+                                    data-toggle="modal"
+                                    style="width: 100%; background-color: #2477ff !important">
+                                A-RMS의 신규 요구사항 등록하기
+                            </label>
+                        </div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section
+                                    class="widget widget-tabs"
+                                    style="margin-bottom: 0">
+                                <header style="display: none;">
+                                    <ul class="nav nav-tabs">
+                                        <li>
+                                            <a
+                                                    href="#report"
+                                                    data-toggle="tab"
+                                                    id="folder_tab">
+                                                <strong>리스트로 보기</strong>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </header>
+                                <div class="body tab-content">
+                                    <div    id="report"
+                                            class="tab-pane active"
+                                            style="padding-top: 30px !important">
+                                        <table class="display"
+                                               id="modal_project_table"
+                                               style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
+                                            <thead>
+                                            <tr>
+                                                <th>c_jira_name</th>
+                                                <th>c_jira_key</th>
+                                                <th>c_desc</th>
+                                                <th>jiraIssueTypeEntities</th>
+                                                <th>c_id</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                    class="modal-footer"
+                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button type="button"
+                        id="not_ready_close_modal"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    Close
                 </button>
             </div>
         </div>

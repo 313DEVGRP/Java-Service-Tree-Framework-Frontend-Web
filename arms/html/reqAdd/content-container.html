@@ -398,7 +398,7 @@
 									style="float: right"
 									class="delete_btn_group hidden">
 									<button
-										id="delete_pdservice"
+										id="delete_tab_req"
 										class="btn btn-danger btn-sm">
 										요구사항 삭제
 									</button>
@@ -441,14 +441,22 @@
 														<strong>문서로 보기</strong>
 													</a>
 												</li>
-												<li class="hidden">
+												<li>
+													<a
+														href="#delete"
+														data-toggle="tab"
+														id="delete_tab">
+														<strong>삭제 하기</strong>
+													</a>
+												</li>
+<!--												<li class="hidden">
 													<a
 														href="#history"
 														data-toggle="tab"
 														id="history_tab">
 														<strong>History(이력)</strong>
 													</a>
-												</li>
+												</li>-->
 											</ul>
 										</header>
 										<div class="body tab-content">
@@ -484,7 +492,7 @@
 																	required="required"
 																	style="color: #a4c6ff"
 																	placeholder="Service Name"
-                                                                    readonly/>
+																	readonly />
 															</div>
 														</div>
 														<div
@@ -507,7 +515,7 @@
 																	required="required"
 																	style="color: #a4c6ff"
 																	placeholder="Service Version"
-                                                                    readonly/>
+																	readonly />
 															</div>
 														</div>
 														<div
@@ -529,7 +537,7 @@
 																	required="required"
 																	style="color: #a4c6ff"
 																	placeholder="Requirement ID"
-                                                                    readonly/>
+																	readonly />
 															</div>
 														</div>
 														<div
@@ -552,7 +560,7 @@
 																	required="required"
 																	style="color: #a4c6ff"
 																	placeholder="Requirement Title"
-                                                                    readonly/>
+																	readonly />
 															</div>
 														</div>
 														<div class="control-group">
@@ -567,48 +575,50 @@
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
-																<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 																	<div
 																		id="detailview_req_priority"
-																		class="btn-group"
 																		data-toggle="buttons">
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-red">
 																			<input
 																				type="radio"
 																				name="detailview_req_priority_options"
 																				value="7" />
+																			<i class="fa  fa-angle-double-up text-danger"></i>
 																			매우 높음
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-red" >
 																			<input
 																				type="radio"
 																				name="detailview_req_priority_options"
 																				value="6" />
+																			<i class="fa fa-angle-up text-danger"></i>
 																			높음
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-orange">
 																			<input
 																				type="radio"
 																				name="detailview_req_priority_options"
 																				value="5" />
+																			<i class="fa fa-minus"  style="color: #E49400;"></i>
 																			중간
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-blue" >
 																			<input
 																				type="radio"
 																				name="detailview_req_priority_options"
 																				value="4" />
+																			<i class="fa  fa-angle-down text-primary"></i>
 																			낮음
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-blue">
 																			<input
 																				type="radio"
 																				name="detailview_req_priority_options"
 																				value="3" />
+																			<i class="fa  fa-angle-double-down text-primary"></i>
 																			매우 낮음
 																		</label>
 																	</div>
-																</div>
 															</div>
 														</div>
 														<div class="control-group">
@@ -623,48 +633,50 @@
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
-																<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 																	<div
 																		id="detailview_req_difficulty"
-																		class="btn-group"
 																		data-toggle="buttons">
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-red">
 																			<input
 																				type="radio"
 																				name="detailview_req_difficulty_options"
 																				value="3" />
+																			<i class="fa  fa-angle-double-up text-danger"></i>
 																			매우 어려움
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-red">
 																			<input
 																				type="radio"
 																				name="detailview_req_difficulty_options"
 																				value="4" />
+																			<i class="fa fa-angle-up text-danger"></i>
 																			어려움
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-orange">
 																			<input
 																				type="radio"
 																				name="detailview_req_difficulty_options"
 																				value="5" />
+																			<i class="fa   fa-minus"  style="color: #E49400;"></i>
 																			보통
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-blue">
 																			<input
 																				type="radio"
 																				name="detailview_req_difficulty_options"
 																				value="6" />
+																			<i class="fa  fa-angle-down text-primary"></i>
 																			쉬움
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-blue">
 																			<input
 																				type="radio"
 																				name="detailview_req_difficulty_options"
 																				value="7" />
+																			<i class="fa  fa-angle-double-down text-primary"></i>
 																			매우 쉬움
 																		</label>
 																	</div>
-																</div>
 															</div>
 														</div>
 														<div class="control-group">
@@ -680,64 +692,89 @@
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-list-alt"></i>
 																</span>
-																<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 																	<div
 																		id="detailview_req_state"
-																		class="btn-group"
 																		data-toggle="buttons">
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-red">
 																			<input
 																				type="radio"
 																				name="detailview_req_state_options"
 																				value="10" />
+																			<i class="fa fa-folder-o text-danger"></i>
 																			열림
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-orange">
 																			<input
 																				type="radio"
 																				name="detailview_req_state_options"
 																				value="11" />
+																			<i class="fa fa-fire"  style="color: #E49400;"></i>
 																			진행중
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
+																		<label class="btn btn-disabled edit-green" >
 																			<input
 																				type="radio"
 																				name="detailview_req_state_options"
 																				value="12" />
+																			<i class="fa fa-fire-extinguisher text-success"></i>
 																			해결됨
 																		</label>
-																		<label class="btn btn-warning btn-disabled">
-                                                                            <input  type="radio"
-                                                                                    name="detailview_req_state_options"
-                                                                                    value="13"/>
-                                                                            닫힘
-                                                                        </label>
+																		<label class="btn btn-disabled edit-blue" >
+																			<input
+																				type="radio"
+																				name="detailview_req_state_options"
+																				value="13" />
+																			<i class="fa fa-folder text-primary"></i>
+																			닫힘
+																		</label>
 																	</div>
 																</div>
 															</div>
-														</div>
-                                                        <div
-                                                                class="control-group"
-                                                                for="detailview_req_plan_time">
-                                                            <label class="control-label font13">예상 일정(일) :</label>
-                                                            <div
-                                                                    class="controls form-group input-group"
-                                                                    style="margin-left: 180px">
+
+														<div
+																class="control-group"
+																for="detailview_req_start_date">
+															<label class="control-label font13">요구사항 시작날짜 :</label>
+															<div
+																	class="controls form-group input-group"
+																	style="margin-left: 180px">
 																<span class="input-group-addon">
 																	<i class="glyphicon glyphicon-time"></i>
 																</span>
-                                                                <input
-                                                                        type="text"
-                                                                        id="detailview_req_plan_time"
-                                                                        name="detailview_req_plan_time"
-                                                                        class="form-control parsley-validated font13 darkBack"
-                                                                        data-placement="top"
-                                                                        required="required"
-                                                                        style="color: #a4c6ff"
-                                                                        placeholder="Requirement Plan Day"
-                                                                        readonly/>
-                                                            </div>
-                                                        </div>
+																<input
+																		type="text"
+																		id="detailview_req_start_date"
+																		name="detailview_req_start_date"
+																		class="form-control parsley-validated font13 darkBack"
+																		data-placement="top"
+																		required="required"
+																		style="color: #a4c6ff"
+																		placeholder="Requirement Start Date"
+																		readonly />
+															</div>
+														</div>
+														<div
+																class="control-group"
+																for="detailview_req_end_date">
+															<label class="control-label font13">요구사항 종료날짜 :</label>
+															<div
+																	class="controls form-group input-group"
+																	style="margin-left: 180px">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-time"></i>
+																</span>
+																<input
+																		type="text"
+																		id="detailview_req_end_date"
+																		name="detailview_req_end_date"
+																		class="form-control parsley-validated font13 darkBack"
+																		data-placement="top"
+																		required="required"
+																		style="color: #a4c6ff"
+																		placeholder="Requirement End Date"
+																		readonly />
+															</div>
+														</div>
 														<div
 															class="control-group"
 															for="detailview_req_writer">
@@ -758,7 +795,7 @@
 																	required="required"
 																	style="color: #a4c6ff"
 																	placeholder="Requirements Author"
-                                                                    readonly/>
+																	readonly />
 															</div>
 														</div>
 														<div
@@ -781,7 +818,7 @@
 																	required="required"
 																	style="color: #a4c6ff"
 																	placeholder="Requirements Last Created Date"
-                                                                    readonly/>
+																	readonly />
 															</div>
 														</div>
 														<div class="control-group">
@@ -909,9 +946,7 @@
 												id="edit"
 												class="tab-pane"
 												style="padding-top: 10px !important">
-												<form
-													class="form-horizontal"
-													method="post">
+												<form method="post">
 													<fieldset>
 														<div
 															class="form-group"
@@ -940,15 +975,12 @@
 																				<input type="radio" />
 																				요구사항 변경 모드
 																			</label>
+																			<input type="hidden" id="editview_req_type" />
 																		</div>
 																	</div>
 																</div>
 															</div>
 															<div class="control-group">
-																<!--										<label  class="control-label"-->
-																<!--										    	for="editview_req_pdservice_name">-->
-																<!--										    	요구사항 제품(서비스) :-->
-																<!--										</label>-->
 																<label
 																	class="control-label"
 																	for="editview_req_pdservice_name">
@@ -974,7 +1006,8 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_version">
 																<label
 																	class="control-label"
 																	for="edit_multi_version">
@@ -996,7 +1029,8 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_id">
 																<label
 																	class="control-label"
 																	for="editview_req_id">
@@ -1023,7 +1057,7 @@
 															<div class="control-group">
 																<label
 																	class="control-label"
-																	for="editview_req_name">
+																	for="editview_req_title">
 																	요구사항 제목 :
 																</label>
 																<div
@@ -1034,7 +1068,7 @@
 																			<i class="glyphicon glyphicon-list-alt"></i>
 																		</span>
 																		<input
-																			id="editview_req_name"
+																			id="editview_req_title"
 																			class="form-control font13 darkBack"
 																			style="color: #a4c6ff"
 																			size="16"
@@ -1043,7 +1077,8 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_priority">
 																<label
 																	for="editview_req_priority"
 																	class="control-label font13">
@@ -1055,51 +1090,54 @@
 																	<span class="input-group-addon">
 																		<i class="glyphicon glyphicon-list-alt"></i>
 																	</span>
-																	<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 																		<div
 																			id="editview_req_priority"
-																			class="btn-group"
 																			data-toggle="buttons">
-																			<label class="btn btn-warning">
+																			<label class="btn edit-red">
 																				<input
 																					type="radio"
 																					name="editview_req_priority_options"
 																					value="7" />
+																				<i class="fa  fa-angle-double-up text-danger"></i>
 																				매우 높음
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-red">
 																				<input
 																					type="radio"
 																					name="editview_req_priority_options"
 																					value="6" />
+																				<i class="fa fa-angle-up text-danger"></i>
 																				높음
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-orange"  >
 																				<input
 																					type="radio"
 																					name="editview_req_priority_options"
 																					value="5" />
+																				<i class="fa fa-minus"  style="color: #E49400;"></i>
 																				중간
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-blue">
 																				<input
 																					type="radio"
 																					name="editview_req_priority_options"
 																					value="4" />
+																				<i class="fa  fa-angle-down text-primary"></i>
 																				낮음
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-blue">
 																				<input
 																					type="radio"
 																					name="editview_req_priority_options"
 																					value="3" />
+																				<i class="fa  fa-angle-double-down text-primary"></i>
 																				매우 낮음
 																			</label>
 																		</div>
-																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_difficulty">
 																<label
 																	for="editview_req_difficulty"
 																	class="control-label font13">
@@ -1111,51 +1149,54 @@
 																	<span class="input-group-addon">
 																		<i class="glyphicon glyphicon-list-alt"></i>
 																	</span>
-																	<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 																		<div
 																			id="editview_req_difficulty"
-																			class="btn-group"
 																			data-toggle="buttons">
-																			<label class="btn btn-warning">
+																			<label class="btn edit-red">
 																				<input
 																					type="radio"
 																					name="editview_req_difficulty_options"
 																					value="3" />
+																				<i class="fa  fa-angle-double-up text-danger"></i>
 																				매우 어려움
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-red">
 																				<input
 																					type="radio"
 																					name="editview_req_difficulty_options"
 																					value="4" />
+																				<i class="fa fa-angle-up text-danger"></i>
 																				어려움
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-orange"  >
 																				<input
 																					type="radio"
 																					name="editview_req_difficulty_options"
 																					value="5" />
+																				<i class="fa   fa-minus"  style="color: #E49400;"></i>
 																				보통
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-blue">
 																				<input
 																					type="radio"
 																					name="editview_req_difficulty_options"
 																					value="6" />
+																				<i class="fa  fa-angle-down text-primary"></i>
 																				쉬움
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-blue">
 																				<input
 																					type="radio"
 																					name="editview_req_difficulty_options"
 																					value="7" />
+																				<i class="fa  fa-angle-double-down text-primary"></i>
 																				매우 쉬움
 																			</label>
 																		</div>
-																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_state">
 																<label
 																	for="editview_req_state"
 																	class="control-label font13">
@@ -1168,64 +1209,88 @@
 																	<span class="input-group-addon">
 																		<i class="glyphicon glyphicon-list-alt"></i>
 																	</span>
-																	<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 																		<div
 																			id="editview_req_state"
-																			class="btn-group"
-																			data-toggle="buttons">
-																			<label class="btn btn-warning">
+																			data-toggle="buttons" >
+																			<label class="btn edit-red" >
 																				<input
 																					type="radio"
 																					name="editview_req_state_options"
 																					value="10" />
+																				<i class="fa fa-folder-o text-danger"></i>
 																				열림
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-orange"   >
 																				<input
 																					type="radio"
 																					name="editview_req_state_options"
 																					value="11" />
+																				<i class="fa fa-fire"  style="color: #E49400;"></i>
 																				진행중
 																			</label>
-																			<label class="btn btn-warning">
+																			<label class="btn edit-green"  style="border:1px solid #2D8515" >
 																				<input
 																					type="radio"
 																					name="editview_req_state_options"
 																					value="12" />
+																				<i class="fa fa-fire-extinguisher text-success"></i>
 																				해결됨
 																			</label>
-																			<label class="btn btn-warning">
-                                                                                <input  type="radio"
-                                                                                        name="editview_req_state_options"
-                                                                                        value="13"/>
-                                                                                닫힘
-                                                                            </label>
+																			<label class="btn edit-blue" >
+																				<input
+																					type="radio"
+																					name="editview_req_state_options"
+																					value="13" />
+																				<i class="fa fa-folder text-primary"></i>
+																				닫힘
+																			</label>
 																		</div>
-																	</div>
 																</div>
 															</div>
-                                                            <div
-                                                                    class="control-group"
-                                                                    for="editview_req_plan_time">
-                                                                <label class="control-label font13">예상 일정(일) :</label>
-                                                                <div
-                                                                        class="controls form-group input-group"
-                                                                        style="margin-left: 180px">
-																<span class="input-group-addon">
-																	<i class="glyphicon glyphicon-time"></i>
-																</span>
-                                                                    <input
-                                                                            type="text"
-                                                                            id="editview_req_plan_time"
-                                                                            name="editview_req_plan_time"
-                                                                            class="form-control parsley-validated font13 darkBack"
-                                                                            data-placement="top"
-                                                                            required="required"
-                                                                            style="color: #a4c6ff"
-                                                                            placeholder="숫자만 입력해주세요( 10일 → 10 )" />
-                                                                </div>
-                                                            </div>
-															<div class="control-group">
+															<div class="control-group"
+																 for="editview_req_start_date"
+																 id="req_edit_layer_start_date">
+																<label class="control-label font13">요구사항 시작날짜 :</label>
+																<div
+																		class="controls form-group input-group"
+																		style="margin-left: 180px">
+																	<span class="input-group-addon">
+																		<i class="glyphicon glyphicon-calendar"></i>
+																	</span>
+																	<input
+																			type="text"
+																			id="editview_req_start_date"
+																			name="editview_req_start_date"
+																			class="form-control parsley-validated font13 darkBack"
+																			data-placement="top"
+																			required="required"
+																			style="color: #a4c6ff"
+																			placeholder="요구사항 시작일짜를 입력해 주세요" />
+																</div>
+															</div>
+															<div class="control-group"
+																 for="editview_req_end_date"
+																 id="req_edit_layer_end_date">
+																<label class="control-label font13">요구사항 종료날짜 :</label>
+																<div
+																		class="controls form-group input-group"
+																		style="margin-left: 180px">
+																	<span class="input-group-addon">
+																		<i class="glyphicon glyphicon-calendar"></i>
+																	</span>
+																	<input
+																			type="text"
+																			id="editview_req_end_date"
+																			name="editview_req_end_date"
+																			class="form-control parsley-validated font13 darkBack"
+																			data-placement="top"
+																			required="required"
+																			style="color: #a4c6ff"
+																			placeholder="요구사항 종료날짜를 입력해 주세요" />
+																</div>
+															</div>
+															<div class="control-group"
+                                                                 id="req_edit_layer_writer">
 																<label
 																	class="control-label"
 																	for="editview_req_writer">
@@ -1249,7 +1314,8 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_write_date">
 																<label
 																	class="control-label"
 																	for="editview_req_write_date">
@@ -1273,7 +1339,8 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_reviewers">
 																<label
 																	class="control-label"
 																	for="editview_req_reviewers">
@@ -1295,7 +1362,8 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group">
+															<div class="control-group"
+                                                                 id="req_edit_layer_req_contents">
 																<label
 																	class="control-label"
 																	for="edit_tabmodal_editor">
@@ -1345,16 +1413,6 @@
 												id="doc"
 												class="tab-pane"
 												style="padding-top: 10px !important">
-												<!--								<div    style="margin-top: 10px; margin-bottom: 10px; border: 1px solid #0b67ff !important"-->
-												<!--                                        class="newReqDiv darkBack">-->
-												<!--									<label  id="new_req_regist03"-->
-												<!--                                            class="btn btn-primary btn-transparent btn-sm active"-->
-												<!--                                            data-target="#my_modal1"-->
-												<!--                                            data-toggle="modal"-->
-												<!--                                            style="width: 100%; background-color: #2477ff !important">-->
-												<!--										    A-RMS의 신규 요구사항 등록하기-->
-												<!--									</label>-->
-												<!--								</div>-->
 												<div class="col-md-12">
 													<div
 														class="dd"
@@ -1372,22 +1430,38 @@
 													id="jira_project_table"
 													style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)"></table>
 											</div>
-
 											<div
+													id="delete"
+													class="tab-pane">
+												<p>
+													"
+													<label
+															id="delete_text"
+															style="color: #a4c6ff; font-weight: bold"></label>
+													"을(를) 삭제 하시겠습니까?
+												</p>
+												<p>
+													<strong>ALM 서버의 요구사항 이슈는 삭제되지 않고 Soft Delete 처리됩니다.</strong>
+												</p>
+												<p>
+													<strong>( 주의하세요 ) Soft Delete 처리된 요구사항 이슈는 통계에 반영되지 않습니다.</strong>
+												</p>
+											</div>
+<!--											<div
 												id="history"
 												class="tab-pane"
 												style="padding-top: 10px !important">
-												<!-- The timeline -->
+												&lt;!&ndash; The timeline &ndash;&gt;
 												<ul class="timeline timeline-inverse">
-													<!-- timeline time label -->
+													&lt;!&ndash; timeline time label &ndash;&gt;
 													<li class="time-label">
 														<a class="btn btn-danger btn-sm">
 															A-RMS 모든 이력을 시간순으로 표시 :
 															<i class="fa fa-check"></i>
 														</a>
 													</li>
-													<!-- /.timeline-label -->
-													<!-- timeline item -->
+													&lt;!&ndash; /.timeline-label &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-head">
 														<i class="fa fa-search bg-maroon"></i>
 														<div
@@ -1455,8 +1529,8 @@
 																style="padding: 0px !important; font-size: 11px"></h3>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-balance-scale bg-maroon"></i>
 														<div class="timeline-item">
@@ -1496,8 +1570,8 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-check-square-o bg-yellow"></i>
 
@@ -1537,8 +1611,8 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-cubes bg-teal"></i>
 
@@ -1578,10 +1652,10 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline time label -->
-													<!-- /.timeline-label -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline time label &ndash;&gt;
+													&lt;!&ndash; /.timeline-label &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-sitemap bg-light-blue"></i>
 
@@ -1637,8 +1711,8 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-bug bg-purple"></i>
 
@@ -1694,10 +1768,10 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
-													<!-- timeline time label -->
-													<!-- /.timeline-label -->
-													<!-- timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
+													&lt;!&ndash; timeline time label &ndash;&gt;
+													&lt;!&ndash; /.timeline-label &ndash;&gt;
+													&lt;!&ndash; timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-train bg-black"></i>
 
@@ -1737,12 +1811,12 @@
 															</div>
 														</div>
 													</li>
-													<!-- END timeline item -->
+													&lt;!&ndash; END timeline item &ndash;&gt;
 													<li class="timeline-item-body">
 														<i class="fa fa-clock-o bg-gray"></i>
 													</li>
 												</ul>
-											</div>
+											</div>-->
 										</div>
 									</section>
 								</div>
@@ -1754,14 +1828,40 @@
 			<div
 				id="reqTable"
 				class="tab-pane">
-				<section
-					id="reqDataTable"
-					class="widget"></section>
+				<article class="widget">
+					<blockquote
+						class="font13"
+						style="margin-top: 0 !important; display: flex; justify-content: space-between">
+						<span id="tableTitle"></span>
+						<div class="control-group">
+							<div
+								id="pivotRadio"
+								style="margin: 0 !important"
+								onchange="checkAnswer()">
+								<div class="font13" style=" display: flex; align-items: center;">
+									<div style="margin-right: 15px;">Group</div>
+									<div class="control-group select-type" >
+										<select style="background: transparent;border: none;border-radius: 5px;padding: 5px 10px;background: rgba(51, 51, 51, 0.9);">
+											<option value="normal">All</option>
+											<option value="version">Version</option>
+											<option value="owner">Assignee</option>
+											<!--<option value="owner">Writer</option>-->
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</blockquote>
+
+					<section id="reqDataTable"></section>
+				</article>
 			</div>
 		</div>
 	</section>
 </div>
 
+
+<!-- 신규 요구사항 / 폴더 등록 팝업(모달) -->
 <div
 	id="my_modal1"
 	class="modal fade"
@@ -1771,7 +1871,7 @@
 	style="display: none">
 	<div
 		class="modal-dialog"
-		style="width: 90%; height: 70%">
+		style="height: 70%">
 		<div class="modal-content modalDarkBack">
 			<div
 				class="modal-header"
@@ -1954,7 +2054,9 @@
 									required="required" />
 							</div>
 						</div>
-						<div class="control-group col-sm-12">
+						<div
+								id="popup_req_priority_div"
+								class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label
 								for="popup_req_priority"
@@ -1971,51 +2073,55 @@
 							<div
 								class="controls form-group input-group"
 								style="margin-left: 130px">
-								<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 									<div
 										id="popup_req_priority"
-										class="btn-group"
-										data-toggle="buttons">
-										<label class="btn btn-warning">
+										data-toggle="buttons" >
+										<label class="btn edit-red">
 											<input
 												type="radio"
 												name="popup_req_priority_options"
 												value="7" />
+											<i class="fa  fa-angle-double-up text-danger"></i>
 											매우 높음
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-red">
 											<input
 												type="radio"
 												name="popup_req_priority_options"
 												value="6" />
+											<i class="fa fa-angle-up text-danger"></i>
 											높음
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-orange"  >
 											<input
 												type="radio"
 												name="popup_req_priority_options"
 												value="5" />
+											<i class="fa   fa-minus"  style="color: #E49400;"></i>
 											중간
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-blue">
 											<input
 												type="radio"
 												name="popup_req_priority_options"
 												value="4" />
+											<i class="fa  fa-angle-down text-primary"></i>
 											낮음
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-blue">
 											<input
 												type="radio"
 												name="popup_req_priority_options"
 												value="3" />
+											<i class="fa  fa-angle-double-down text-primary"></i>
 											매우 낮음
 										</label>
 									</div>
-								</div>
 							</div>
 						</div>
-						<div class="control-group col-sm-12">
+						<div
+								id="popup_req_difficulty_div"
+								class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label
 								for="popup_req_difficulty"
@@ -2032,51 +2138,56 @@
 							<div
 								class="controls form-group input-group"
 								style="margin-left: 130px">
-								<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 									<div
 										id="popup_req_difficulty"
-										class="btn-group"
+
 										data-toggle="buttons">
-										<label class="btn btn-warning">
+										<label class="btn edit-red">
 											<input
 												type="radio"
 												name="popup_req_difficulty_options"
 												value="3" />
+											<i class="fa  fa-angle-double-up text-danger"></i>
 											매우 어려움
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-red">
 											<input
 												type="radio"
 												name="popup_req_difficulty_options"
 												value="4" />
+											<i class="fa fa-angle-up text-danger"></i>
 											어려움
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-orange"  >
 											<input
 												type="radio"
 												name="popup_req_difficulty_options"
 												value="5" />
+											<i class="fa   fa-minus"  style="color: #E49400;"></i>
 											보통
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-blue">
 											<input
 												type="radio"
 												name="popup_req_difficulty_options"
 												value="6" />
+											<i class="fa  fa-angle-down text-primary"></i>
 											쉬움
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-blue">
 											<input
 												type="radio"
 												name="popup_req_difficulty_options"
 												value="7" />
+											<i class="fa  fa-angle-double-down text-primary"></i>
 											매우 쉬움
 										</label>
 									</div>
-								</div>
 							</div>
 						</div>
-						<div class="control-group col-sm-12">
+						<div
+								id="popup_req_state_div"
+								class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label
 								for="popup_req_state"
@@ -2093,66 +2204,80 @@
 							<div
 								class="controls form-group input-group"
 								style="margin-left: 130px">
-								<div style="display: flex; align-items: center; gap: 10px; padding: 0">
 									<div
 										id="popup_req_state"
-										class="btn-group"
 										data-toggle="buttons">
-										<label class="btn btn-warning">
+										<label class="btn edit-red">
 											<input
 												type="radio"
 												name="popup_req_state_options"
 												value="10" />
+											<i class="fa fa-folder-o text-danger"></i>
 											열림
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-orange"  >
 											<input
 												type="radio"
 												name="popup_req_state_options"
 												value="11" />
+											<i class="fa fa-fire"  style="color: #E49400;"></i>
 											진행중
 										</label>
-										<label class="btn btn-warning">
+										<label class="btn edit-green"  style="border:1px solid #2D8515">
 											<input
 												type="radio"
 												name="popup_req_state_options"
 												value="12" />
+											<i class="fa fa-fire-extinguisher text-success"></i>
 											해결됨
 										</label>
-										<!--                                        <label class="btn btn-warning">
-                                            <input  type="radio"
-                                                    name="popup_req_state_options"
-                                                    value="13"/>
-                                            닫힘
-                                        </label>-->
 									</div>
-								</div>
 							</div>
 						</div>
-                        <div class="control-group col-sm-12">
-                            <div class="controls form-group col-sm-1">&nbsp;</div>
-                            <label
-                                    for="popup_req_plan_time"
-                                    class="control-label"
-                                    style="color: #f8f8f8">
-                                예상 일정(일)
-                                <span class="required">*</span>
-                                <span
-                                        class="input-group-addon"
-                                        style="display: inline !important">
-									<i class="glyphicon glyphicon-time"></i>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label
+									for="popup_req_start_date"
+									class="control-label"
+									style="color: #f8f8f8">
+								요구사항 시작날짜
+								<span class="required">*</span>
+								<span
+										class="input-group-addon"
+										style="display: inline !important">
+									<i class="glyphicon glyphicon-calendar"></i>
 								</span>
-                            </label>
-                            <div class="controls form-group col-sm-8">
-                                <input
-                                        type="text"
-                                        id="popup_req_plan_time"
-                                        pattern="[0-9]"
-                                        class="form-control parsley-validated darkBack"
-                                        placeholder="숫자만 입력해주세요( 10일 → 10 )"
-                                        required="required" />
-                            </div>
-                        </div>
+							</label>
+							<div class="controls form-group col-sm-8">
+								<input
+										id="popup_req_start_date"
+										class="form-control font13 darkBack"
+										style="color: #a4c6ff"
+										placeholder="요구사항 시작날짜를 입력해 주세요" />
+							</div>
+						</div>
+						<div class="control-group col-sm-12">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label
+									for="popup_req_end_date"
+									class="control-label"
+									style="color: #f8f8f8">
+								요구사항 종료날짜
+								<span class="required">*</span>
+								<span
+										class="input-group-addon"
+										style="display: inline !important">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</span>
+							</label>
+							<div class="controls form-group col-sm-8">
+								<input
+										id="popup_req_end_date"
+										class="form-control font13 darkBack"
+										style="color: #a4c6ff"
+										placeholder="요구사항 시작날짜를 입력해 주세요" />
+							</div>
+						</div>
 						<div class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label
@@ -2191,7 +2316,7 @@
 				<button
 					type="button"
 					id="save_req"
-					class="btn btn-primary">
+					class="btn btn-primary ladda_save_req">
 					신규 요구사항 저장
 				</button>
 			</div>
@@ -2200,3 +2325,47 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
+<style>
+
+	.open [type="radio"] {
+         accent-color: #DB2A34;
+    }
+    td.open{
+    	color : #DB2A34;
+    }
+
+	.investigation [type="radio"] {
+         accent-color: #E49400;
+    }
+	td.investigation{
+    	color : #E49400;
+    }
+
+	.resolved [type="radio"] {
+         accent-color: #2D8515;
+    }
+	td.resolved{
+    	color : #2D8515;
+    }
+
+	.closeStatus [type="radio"] {
+         accent-color: #2477FF;
+    }
+	td.closeStatus{
+    	color : #2477FF;
+    }
+    a{
+    	color :white;
+    }
+
+    .reqItems:hover {
+    	background-color: rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .req-select>li:hover {
+    	background-color: #e5603b;
+	}
+
+}
+
+</style>

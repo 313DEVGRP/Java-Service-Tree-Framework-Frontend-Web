@@ -1,11 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //Page 전역 변수
 ////////////////////////////////////////////////////////////////////////////////////////
-var selectId; // 제품 아이디
-var selectName; // 제품 이름
+var selectPdServiceId; // 제품 아이디
+var selectPdServiceName; // 제품 이름
 var selectedIndex; // 데이터테이블 선택한 인덱스
 var selectedPage; // 데이터테이블 선택한 인덱스
 var selectVersion; // 선택한 버전 아이디
+var selectVersionName; // 선택한 버전 이름
 var dataTableRef; // 데이터테이블 참조 변수
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -37,22 +38,31 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
+		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function() {
 
+			console.log('모든 플러그인 로드 완료');
+
 			//vfs_fonts 파일이 커서 defer 처리 함.
-			setTimeout(function() {
+			setTimeout(function () {
 				var script = document.createElement("script");
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
-			}, 3000); // 2초 후에 실행됩니다.
-			console.log('모든 플러그인 로드 완료');
+			}, 5000); // 5초 후에 실행됩니다.
+
+			//pdfmake 파일이 커서 defer 처리 함.
+			setTimeout(function () {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 5000); // 5초 후에 실행됩니다.
 
 			//사이드 메뉴 처리
 			$('.widget').widgster();
@@ -68,6 +78,7 @@ function execDocReady() {
 				try {
 					if (window.CKEDITOR) {
 						if(window.CKEDITOR.status == "loaded") {
+							CKEDITOR.replace("version_contents", {skin: "office2013"});
 							CKEDITOR.replace("input_pdservice_editor", {skin: "office2013"});
 							CKEDITOR.replace("extend_modal_editor", {skin: "office2013"});
 							clearInterval(waitCKEDITOR);
@@ -213,8 +224,8 @@ function dataTableLoad() {
 function dataTableClick(tempDataTable, selectedData) {
 	$("#version_contents").html(""); // 버전 상세 명세 초기화
 
-	selectId = selectedData.c_id;
-	selectName = selectedData.c_title;
+	selectPdServiceId = selectedData.c_id;
+	selectPdServiceName = selectedData.c_title;
 	console.log("selectedData.c_id : ", selectedData.c_id);
 
 	$("#default_non_version").empty();
@@ -275,25 +286,32 @@ function modalPopup(popupName) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function click_btn_for_delete_version() {
 	$("#del_version").click(function () {
-		console.log("delete btn");
-		$.ajax({
-			url: "/auth-user/api/arms/pdService/removeVersion.do",
-			type: "DELETE",
-			data: {
-				pdservice_c_id: selectId,
-				version_c_id: selectVersion
-			},
-			statusCode: {
-				200: function () {
-					console.log("삭제 성공!");
-					//모달 팝업 끝내고
-					$("#close_version").trigger("click");
-					$("#select_Version").text("선택되지 않음");
-					//버전 데이터 재 로드
-					dataLoad(selectId, selectName);
+		if (!selectVersion) {
+			alert("선택된 버전이 없습니다.");
+			return false;
+		}
+
+		if (confirm(selectVersionName + " 버전을 삭제하시겠습니까?")) {
+			console.log("delete btn");
+			$.ajax({
+				url: "/auth-user/api/arms/pdService/removeVersion.do",
+				type: "DELETE",
+				data: {
+					pdservice_c_id: selectPdServiceId,
+					version_c_id: selectVersion
+				},
+				statusCode: {
+					200: function () {
+						console.log("삭제 성공!");
+						//모달 팝업 끝내고
+						$("#close_version").trigger("click");
+						$("#select_version").text("선택되지 않음");
+						//버전 데이터 재 로드
+						dataLoad(selectPdServiceId, selectPdServiceName);
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 }
 
@@ -315,7 +333,7 @@ function click_btn_for_update_version() {
 			c_pds_version_end_date: $("#input_pdservice_end_date").val()
 		};
 		$.ajax({
-			url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link=" + selectId,
+			url: "/auth-user/api/arms/pdService/updateVersionToNode.do?pdservice_link=" + selectPdServiceId,
 			type: "put",
 			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify(send_data),
@@ -326,7 +344,7 @@ function click_btn_for_update_version() {
 					//모달 팝업 끝내고
 					$("#close_version").trigger("click");
 					//버전 데이터 재 로드
-					dataLoad(selectId, selectName);
+					dataLoad(selectPdServiceId, selectPdServiceName);
 				}
 			}
 		});
@@ -343,7 +361,7 @@ function modalPopupNewUpdate() {
 	}
 
 	var send_data = {
-		c_id: selectId,
+		c_id: selectPdServiceId,
 		pdServiceVersionEntities: [
 			{
 				ref:2,
@@ -367,7 +385,7 @@ function modalPopupNewUpdate() {
 				jSuccess("데이터가 저장되었습니다.");
 				$("#close_version").trigger("click");
 				//버전 데이터 재 로드
-				dataLoad(selectId, selectName);
+				dataLoad(selectPdServiceId, selectPdServiceName);
 			}
 		}
 	});
@@ -399,7 +417,7 @@ function modalPopupUpdate() {
 				//모달 팝업 끝내고
 				$("#close_version").trigger("click");
 				//버전 데이터 재 로드
-				dataLoad(selectId, selectName);
+				dataLoad(selectPdServiceId, selectPdServiceName);
 			}
 		}
 	});
@@ -500,35 +518,13 @@ function dataLoad(getSelectedText, selectedText) {
 		$(".list-group-item").html(selectedHtml);
 
 		$("#select_PdService").text(selectedText); // sender 이름 바인딩
-
+		$("#pdservice_name").val(selectedText);
 
 		$("#tooltip_enabled_service_name").val(selectedText);
 
-		if( !isEmpty(json.pdServiceVersionEntities) ){
-			// 상세보기
-			selectVersion = json.pdServiceVersionEntities[0].c_id;
-			$("#pdservice_name").val(selectedText);
-
-			$("#version_start_date").val(json.pdServiceVersionEntities[0].c_start_date);
-			$("#version_end_date").val(json.pdServiceVersionEntities[0].c_end_date);
-
-			$("#version_contents").html(json.pdServiceVersionEntities[0].c_contents);
-
-			// 상세보기 편집하기
-			$("#input_pdservice_name").val(selectedText);
-			$("#input_pdservice_version").val(json.pdServiceVersionEntities[0].c_title);
-
-			$("#input_pdservice_start_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 , theme:'dark'});
-			$("#input_pdservice_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 , theme:'dark'});
-			CKEDITOR.instances.input_pdservice_editor.setData(json.pdServiceVersionEntities[0].c_contents);
-
-			//편집하기 팝업
-			$("#tooltip_enabled_service_name").val(selectedText);
-			$("#tooltip_enabled_service_version").val(json.pdServiceVersionEntities[0].c_title);
-			$("#btn_enabled_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_start_date + " 09:00", step: 10 , theme:'dark'});
-			$("#btn_end_date").datetimepicker({ value: json.pdServiceVersionEntities[0].c_end_date + " 18:00", step: 10 , theme:'dark'});
-			CKEDITOR.instances.extend_modal_editor.setData(json.pdServiceVersionEntities[0].c_contents);
-		}
+		// setTimeout(function () {
+		// 	$("#pdService_Version_First_Child").trigger("click");
+		// }, 500);
 	});
 }
 
@@ -544,7 +540,7 @@ function init_versionList() {
 			draw($(this), menu);
 		} else if (action == "set") {
 			menu = items;
-			// $("#select_Version").text(items[0].c_title);  // 로드시 첫번째 버전
+			// $("#select_version").text(items[0].c_title);  // 로드시 첫번째 버전
  			draw($(this), menu);
 		}
 		return this;
@@ -579,6 +575,7 @@ function draw(main, menu) {
 				   <div class="panel-heading">
 					   <a class="accordion-toggle collapsed"
 					   			data-toggle="collapse"
+					   			id="pdService_Version_First_Child"
 					   			name="versionLink_List"
 					   			style="color: #a4c6ff; text-decoration: none; cursor: pointer;  "
 					   			onclick="versionClick(this, ${menu[i].c_id});
@@ -630,17 +627,20 @@ function versionClick(element, c_id) {
 	})
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
 		.done(function (json) {
-			console.log(" → " + json.c_contents);
+			console.log(" → ");
 			console.log(json);
 
-			$("#pdservice_name").text($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+			selectVersionName = json.c_title;
+			console.log(selectPdServiceName);
+
+			$("#pdservice_name").text(selectPdServiceName);
 
 			$("#pdservice_version").val(json.c_title);
 			$("#version_start_date").val(json.c_pds_version_start_date);
 			$("#version_end_date").val(json.c_pds_version_end_date);
-			$("#version_contents").html(json.c_pds_version_contents);
+			CKEDITOR.instances.version_contents.setData(json.c_pds_version_contents);
 
-			$("#input_pdservice_name").val($("#pdservice_table").DataTable().rows(".selected").data()[0].c_title);
+			$("#input_pdservice_name").val(selectPdServiceName);
 			$("#input_pdservice_version").val(json.c_title);
 			$("#input_pdservice_start_date").val(json.c_pds_version_start_date);
 			$("#input_pdservice_end_date").val(json.c_pds_version_end_date);
@@ -652,7 +652,8 @@ function versionClick(element, c_id) {
 			$("#btn_end_date").datetimepicker({ value: json.c_pds_version_end_date + " 18:00", step: 10 , theme:'dark'});
 
 			// sender 데이터 바인딩 및 선택 색상 표기
-			$("#select_Version").text(json.c_title);
+			$("#select_version").text(json.c_title);
+			$("#delete_version_title").text(json.c_title);
 			$(".list-item1 .chat-message-body").css({"border-left":""});
 			$(".list-item1 .arrow").css({"border-right":""});
 
@@ -673,12 +674,21 @@ function tab_click_event() {
 		var target = $(e.target).attr("href"); // activated tab
 		//console.log(target);
 
-		if (target == "#report") {
-			//$("#version_update").toggleClass("hidden");
-			$("#version_update").removeClass("hidden");
-		} else {
+		if (target === "#stats") {
+			$("#del_version").addClass("hidden");
+			$("#version_popup").removeClass("hidden");
 			$("#version_update").addClass("hidden");
+		}
+		else if (target === "#report"){
+			$("#del_version").addClass("hidden");
+			$("#version_popup").removeClass("hidden");
+			$("#version_update").removeClass("hidden");
 
+		}
+		else if (target === "#dropdown1"){
+			$("#del_version").removeClass("hidden");
+			$("#version_popup").addClass("hidden");
+			$("#version_update").addClass("hidden");
 		}
 	});
 }

@@ -61,6 +61,41 @@ var TgGroup = ( function () {
             return steps;
         };
 
+        var modalReqKanban = function (data) {
+
+            let reqId = data.reqId;
+            let reqInfo = data.reqInfo;
+
+            const keyMap = {
+                reqVersions: "버전",
+                reqPriority: "우선순위",
+                reqDifficulty: "난이도",
+                reqPlan: "계획일",
+                reqSummary: "요구사항"
+            };
+
+            let formattedString = "";
+            Object.keys(reqInfo).forEach((key) => {
+                const mappedKey = keyMap[key] || key;
+                formattedString += `<div class="step-content"><strong>${mappedKey}:</strong> ${reqInfo[key]}</div>`;
+            });
+
+            $(`[data-id="${reqId}"]`).attr({
+                'data-tg-tour': formattedString,
+                'data-tg-title': "<div class=\"step-title\">요구사항 상세 정보</div>"
+            });
+
+            const steps = [
+                {
+                    title: '<div class="step-title">요구사항 상세 정보</div>',
+                    content: formattedString,
+                    target: `[data-id="${reqId}"]`,
+                }
+            ];
+
+            return steps;
+        }
+
         var tg_pdServiceVersion = function () {
 
         };
@@ -113,7 +148,9 @@ var TgGroup = ( function () {
             tg_analysisResource : tg_analysisResource,
             tg_analysisCost : tg_analysisCost,
 
-            sampleStep : sampleStep
+            sampleStep : sampleStep,
+
+            modalReqKanban : modalReqKanban
         }; // 내부함수 key : value
     }
 )();

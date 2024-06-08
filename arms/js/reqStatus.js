@@ -2,11 +2,15 @@
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
 var selectedPdServiceId; // 제품(서비스) 아이디
+var selectedVersionId; // 선택된 버전 아이디
 var reqStatusDataTable;
 var dataTableRef;
 
 var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
+
+var pdServiceListData;
+var versionListData;
 
 function execDocReady() {
 
@@ -51,25 +55,44 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js"]
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
+		],
+		[
+			"js/reqStatus/batchManualControlApi.js"
+		]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
 		.then(function() {
 
+			console.log('모든 플러그인 로드 완료');
+
 			//vfs_fonts 파일이 커서 defer 처리 함.
-			setTimeout(function() {
+			setTimeout(function () {
 				var script = document.createElement("script");
 				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/vfs_fonts.js";
 				script.defer = true; // defer 속성 설정
 				document.head.appendChild(script);
-			}, 3000); // 2초 후에 실행됩니다.
-			console.log('모든 플러그인 로드 완료');
+			}, 5000); // 5초 후에 실행됩니다.
+
+			//pdfmake 파일이 커서 defer 처리 함.
+			setTimeout(function () {
+				var script = document.createElement("script");
+				script.src = "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/pdfmake.min.js";
+				script.defer = true; // defer 속성 설정
+				document.head.appendChild(script);
+			}, 5000); // 5초 후에 실행됩니다.
+
+			// 높이 조정
+			$('.status-top').matchHeight({
+				target: $('.status-top-statistics')
+			});
 
 			//사이드 메뉴 처리
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_requirement", "sidebar_menu_requirement_status");
+
+			BatchManualControlApi.stepEventListenerStart();
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
@@ -127,12 +150,16 @@ function makePdServiceSelectBox() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
+				pdServiceListData = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
+					pdServiceListData.push({ "pdServiceId": obj.c_id, "pdServiceName": obj.c_title });
 					var newOption = new Option(obj.c_title, obj.c_id, false, false);
 					$("#selected_pdService").append(newOption).trigger("change");
 				}
 				//////////////////////////////////////////////////////////
+				console.log("[reqStatus :: makePdServiceSelectBox] :: pdServiceListData => " );
+				console.table(pdServiceListData);
 			}
 		}
 	});
@@ -145,27 +172,11 @@ function makePdServiceSelectBox() {
 
 	// --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
 	$("#selected_pdService").on("select2:select", function (e) {
+		selectedPdServiceId = $("#selected_pdService").val();
 		// 제품( 서비스 ) 선택했으니까 자동으로 버전을 선택할 수 있게 유도
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
-
-		var checked = $("#checkbox1").is(":checked");
-		var endPointUrl = "";
-
-		if (checked) {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=true";
-		} else {
-			endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=false";
-		}
-		// 이슈리스트 데이터테이블
-		dataTableLoad($("#selected_pdService").val(), endPointUrl);
-		// 통계로드
-		statisticsLoad($("#selected_pdService").val(), null);
-		// 진행상태 가져오기
-		progressLoad($("#selected_pdService").val(), null);
-
-		resourceLoad($("#selected_pdService").val(), null);
 
 	});
 } // end makePdServiceSelectBox()
@@ -243,17 +254,17 @@ function statisticsLoad(pdservice_id, pdservice_version_id){
 		progress: true,
 		statusCode: {
 			200: function (data) {
-
+				console.log(data);
 				for (var key in data) {
 					var value = data[key];
 					console.log(key + "=" + value);
 				}
 
-				$('#version_count').text(data["version"]);
-				$('#req_count').text(data["req"]);
-				$('#alm_server_count').text(data["jiraServer"]);
-				$('#alm_project_count').text(data["jiraProject"]);
-				$('#alm_issue_count').text(data["issue"]);
+				$('#version_count').text(data["version"]); 		   	 // 버전수
+				$('#req_count').text(data["req"]);			   			 	 // 요구사항 이슈 개수
+				$('#alm_server_count').text(data["jiraServer"]); 	 // 서버 수
+				$('#alm_project_count').text(data["jiraProject"]); // 연결된 프로젝트 수
+				$('#alm_issue_count').text(data["issue"]); 				 // 연결된 ALM 이슈 수
 			}
 		}
 	});
@@ -273,16 +284,30 @@ function makeVersionMultiSelectBox() {
 			var checked = $("#checkbox1").is(":checked");
 			var endPointUrl = "";
 			var versionTag = $(".multiple-select").val();
+			console.log("[ reqStatus :: makeVersionMultiSelectBox ] :: versionTag");
+			console.log(versionTag);
+			selectedVersionId = versionTag.join(",");
 
-			if (checked) {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=true&versionTag=" + versionTag;
-				dataTableLoad($("#selected_pdService").val(), endPointUrl);
-			} else {
-				endPointUrl =
-					"/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?disable=false&versionTag=" + versionTag;
-				dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			if (versionTag === null || versionTag == "") {
+				alert("버전이 선택되지 않았습니다.");
+				return;
 			}
+
+			// 통계로드
+			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+			// 진행상태 가져오기
+			progressLoad($("#selected_pdService").val(), selectedVersionId);
+			// 작업자 정보
+			resourceLoad($("#selected_pdService").val(), selectedVersionId);
+
+			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
+			// 이슈리스트 데이터테이블
+			dataTableLoad($("#selected_pdService").val(), endPointUrl);
+			$(".ms-parent").css("z-index", 1000);
+		},
+		onOpen: function() {
+			console.log("open event");
+			$(".ms-parent").css("z-index", 9999);
 		}
 	});
 }
@@ -297,20 +322,36 @@ function bind_VersionData_By_PdService() {
 		statusCode: {
 			200: function (data) {
 				//////////////////////////////////////////////////////////
+				var pdServiceVersionIds = [];
+				versionListData = [];
 				for (var k in data.response) {
 					var obj = data.response[k];
-					var $opt = $("<option />", {
-						value: obj.c_id,
-						text: obj.c_title
-					});
-					$(".multiple-select").append($opt);
+					pdServiceVersionIds.push(obj.c_id);
+					versionListData.push(obj);
+					var newOption = new Option(obj.c_title, obj.c_id, true, false);
+					$(".multiple-select").append(newOption);
 				}
 
 				if (data.length > 0) {
 					console.log("display 재설정.");
 				}
-				//$('#multiversion').multipleSelect('refresh');
-				//$('#edit_multi_version').multipleSelect('refresh');
+
+				console.log(pdServiceVersionIds);
+				selectedVersionId = pdServiceVersionIds.join(",");
+				console.log("bind_VersionData_By_PdService :: selectedVersionId");
+				console.log(selectedVersionId);
+
+				// 통계로드
+				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+				// 진행상태 가져오기
+				progressLoad($("#selected_pdService").val(), selectedVersionId);
+				// 작업자 정보
+				resourceLoad($("#selected_pdService").val(), selectedVersionId);
+
+				var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
+				// 이슈리스트 데이터테이블
+				dataTableLoad($("#selected_pdService").val(), endPointUrl);
+
 				$(".multiple-select").multipleSelect("refresh");
 				//////////////////////////////////////////////////////////
 			}
@@ -359,14 +400,28 @@ function dataTableLoad(selectId, endPointUrl) {
 			visible: true
 		},
 		{
-			name: "pdServiceVersion",
+			name: "pdServiceVersions",
 			title: "Version",
-			data: "pdServiceVersion",
+			data: "pdServiceVersions",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					let verNameList = [];
+					let verHtml =``;
+						data.forEach(version_id => {
+						let versionInfo = versionListData.find(version => version["c_id"] === version_id);
+						if(versionInfo) {
+							verNameList.push(versionInfo["c_title"]);
+							verHtml+= versionInfo["c_title"]+`<br/>`;
+						}
+					});
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + verHtml + "</div>";
+					} else {
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
+					}
+
 				}
 				return data;
 			},
@@ -394,7 +449,7 @@ function dataTableLoad(selectId, endPointUrl) {
 		{
 			name: "project.project_key",
 			title: "ALM project",
-			data: "project.project_key",
+			data: "project.project_name",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -437,10 +492,11 @@ function dataTableLoad(selectId, endPointUrl) {
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
 						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+					} else {
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+
 				}
-				return data;
 			},
 			className: "dt-body-left",
 			visible: true
@@ -579,6 +635,11 @@ function dataTableLoad(selectId, endPointUrl) {
 		isServerSide,
 		700
 	);
+
+	$("#reqstatustable").on('page.dt', function() {
+		scrollPos = $(window).scrollTop();
+		$(window).scrollTop(scrollPos);
+	});
 }
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
 

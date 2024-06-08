@@ -424,7 +424,7 @@
 										style="padding-bottom: 5px; padding-top: 3px">
 										선택된 버전 :
 										<span
-											id="select_Version"
+											id="select_version"
 											style="color: #a4c6ff">
 											선택되지 않음
 										</span>
@@ -449,6 +449,12 @@
 						id="version_update"
 						class="btn btn-success btn-sm hidden ladda-update-pdservice-version">
 						버전 정보 변경
+					</button>
+					<button
+							type="button"
+							id="del_version"
+							class="btn btn-danger btn-sm ladda_delete_pdservice_version hidden">
+						버전 삭제
 					</button>
 				</div>
 			</div>
@@ -607,10 +613,13 @@
 												style="width: 25% !important">
 												버전 내용 :
 											</label>
+											<br />
+											<br />
 											<div
 												class="col-sm-12 darkBack"
 												style="padding-top: 10px; padding-bottom: 10px; margin-top: 10px"
-												id="version_contents">
+												id="version_contents"
+												readonly>
 												Version Contents
 											</div>
 										</div>
@@ -763,7 +772,13 @@
 							<div
 								id="dropdown1"
 								class="tab-pane">
-								<p>삭제 하시겠습니까?</p>
+								<p>
+									"
+									<label
+											id="delete_version_title"
+											style="color: #a4c6ff; font-weight: bold"></label>
+									"을(를) 삭제 하시겠습니까?
+								</p>
 								<p><strong>Jira 프로젝트에서 버전은 삭제되지 않습니다.</strong></p>
 								<p>
 									<strong>( 주의하세요 ) A-RMS의 버전 하위 요구사항은 삭제됩니다.</strong>
@@ -774,14 +789,6 @@
 								<p>
 									<strong>( 주의하세요 ) 삭제된 요구사항은 통계에 반영되지 않습니다.</strong>
 								</p>
-								<div>
-									<button
-										id="del_version"
-										class="btn btn-danger ladda_delete_pdservice_version">
-										버전 삭제
-									</button>
-									<button class="btn btn-default">Cancel</button>
-								</div>
 							</div>
 						</div>
 					</section>
@@ -799,9 +806,7 @@
 	aria-labelledby="myModalLabel"
 	aria-hidden="true"
 	style="display: none">
-	<div
-		class="modal-dialog"
-		style="width: 80%; height: 80%">
+	<div class="modal-dialog">
 		<div class="modal-content modalDarkBack">
 			<div
 				class="modal-header"

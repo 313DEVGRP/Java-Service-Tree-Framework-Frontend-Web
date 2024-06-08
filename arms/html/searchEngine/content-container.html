@@ -1,0 +1,1371 @@
+<div class="col-lg-12">
+	<div class="row">
+		<div class="col-lg-10 col-md-offset-1">
+			<section
+				class="widget"
+				style="margin-bottom: 25px">
+				<div
+					class="body"
+					style="margin-top: 0px">
+					<div class="row">
+						<div
+							class="col-md-12 form-group"
+							style="margin-bottom: 0px; padding-top: 5px; padding-bottom: 5px">
+							<div class="controls input-group">
+								<input
+									type="search"
+									class="form-control searchDarkBack"
+									id="search-input"
+									placeholder="Search All About A-RMS" />
+								<span
+									class="input-group-btn"
+									id="search-button">
+									<button
+										type="button"
+										class="btn btn-success">
+										Search
+									</button>
+								</span>
+							</div>
+                    <div class="search-nav" style="margin-top: 10px">
+                        <li class="btn-group" id="date-range-group">
+                            <span class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer; color:#a4c6ff; font-size: 12px;">
+                                &nbsp; <i class="fa fa-home"></i> <span id="date-range">모든 날짜</span> &nbsp;
+                                <i class="fa fa-caret-down"></i>
+                            </span>
+                            <ul class="dropdown-menu"
+                                style="background: rgba(51, 51, 51, 0.9) !important;">
+                                <li><a href="#" id="all-time" style="color: white;">모든 날짜</a></li>
+                                <li><a href="#" id="previous-hour" style="color: white;">지난 1시간</a></li>
+                                <li><a href="#" id="previous-day" style="color: white;">지난 1일</a></li>
+                                <li><a href="#" id="previous-week" style="color: white;">지난 1주</a></li>
+                                <li><a href="#" id="previous-month" style="color: white;">지난 1개월</a></li>
+                                <li><a href="#" id="previous-year" style="color: white;">지난 1년</a></li>
+                                <li><a id="custom-range"
+                                       data-toggle="modal"
+                                       data-target="#search_range_modal"
+                                       style="color: white;">기간 설정</a>
+                                </li>
+                            </ul>
+                        </li>
+												<li style="display: flex; align-items: center;">
+													<ul id="filter_list">
+													</ul>
+												</li>
+                        <li class="divider"></li>
+                        <li>
+                            <a
+                              href=""
+                              style="font-size: 12px">
+                                <i class="fa fa-home"></i>
+                                추천 검색 :
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li style="display: flex; align-items: center;">
+                            <a
+                                    href=""
+                                    style="font-size: 12px; margin-right: 3px">
+                                <i class="fa fa-home"></i>
+                                검색 조건 :
+                            </a>
+<!--                            <ul id="filter_list">
+                            </ul>-->
+                        </li>
+                    </div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-9 col-md-9">
+			<div class="row">
+				<div
+					class="search_main_wrapper col-lg-12 col-layer">
+					<section
+						class="widget padding-increased"
+						id="jiraissue_section">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								이슈 인덱스
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							이슈 인덱스 검색 결과 <span class="search_results_total"></span>입니다.  자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body search_result_group">
+							<div class="search_result_items">
+							</div>
+							<div class="text-align-center pagination-div">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</div>
+
+			</div>
+		</div>
+		<div class="col-lg-3 col-mg-3" style="position: sticky; top: 10px;">
+			<div class="row">
+				<div class="col-lg-12">
+					<section
+						class="widget padding-increased"
+						id="jiraissue_aggs">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								이슈 프로젝트 집계
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							집계 결과 상위 5 항목 입니다.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body">
+							<div class="box" style="margin-bottom: 0px">
+								<span id="project-agg-top5"> &nbsp;&nbsp; </span>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--	<div class="row">
+		<div class="col-lg-9 col-md-9">
+			<div class="row">
+				<div class="search_main_wrapper col-lg-12 col-layer">
+					&lt;!&ndash; Logging 결과 &ndash;&gt;
+					<section
+						class="widget padding-increased"
+						id="log_section">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								로그(log) 검색 결과
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							로그 검색 결과가 <span class="search_results_total"></span>입니다.  자세한 정보를 보시려면 해당 항목을 선택해주세요.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body search_result_group">
+							<div class="search_result_items">
+							</div>
+							<div class="text-align-center pagination-div">
+								<ul class="pagination">
+									<li class="disabled"><a href="#">Prev</a></li>
+									<li class="active"><a href="#">1</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3" style="position: sticky; top: 10px;">
+			<div class="row">
+				<div class="col-lg-12">
+					<section
+						class="widget padding-increased"
+						id="log_aggs">
+						<header style="margin: 10px 0">
+							<h4 style="font-size: 13px; font-weight: 600">
+								<i class="fa fa-bars"></i>
+								로그 집계
+							</h4>
+							<div class="widget-controls">
+								<a
+									data-widgster="toleft"
+									title="change width to left"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-left"></i>
+								</a>
+								<a
+									data-widgster="expand"
+									title="Expand"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+								<a
+									data-widgster="collapse"
+									title="Collapse"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+								<a
+									data-widgster="toright"
+									title="change width to right"
+									href="#">
+									<i class="glyphicon glyphicon-chevron-right"></i>
+								</a>
+								<a
+									data-widgster="restore"
+									title="Restore"
+									href="#">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+								<a
+									data-widgster="fullscreen"
+									title="Fullscreen"
+									href="#">
+									<i
+										class="glyphicon glyphicon-fullscreen"
+										style="font-size: 11px"></i>
+								</a>
+							</div>
+						</header>
+						<div
+							class="gradient_middle_border"
+							style="width: 100%; height: 2px"></div>
+						<blockquote class="font13">
+							집계 결과 상위 5 항목 입니다.
+							<div style="float: right">
+								<button
+									class="btn btn-transparent btn-xs"
+									style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+									onclick="return true;">
+									Help
+									<i
+										class="fa fa-question"
+										style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+								</button>
+							</div>
+						</blockquote>
+						<div class="body">
+							<div class="box" style="margin-bottom: 0px">
+								<span id="log-agg-top5"> &nbsp;&nbsp; </span>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>-->
+</div>
+
+<!--   -->
+<div
+        id="search_range_modal"
+        class="modal fade"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+        style="display: none; border-radius: 10px"
+        data-backdrop="true">
+    <div class="modal-dialog" style="width: 40%;">
+        <div class="modal-content modalDarkBack">
+            <div
+                    class="modal-header"
+                    style="margin: 10px 5px; border-bottom: 1px;">
+                <h4
+                        class="modal-title font13"
+                        id="search_range_modal_label"
+                        style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+                    <i class="fa fa-file-text-o"></i>
+                    검색 기간 설정
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="top: 5px; right: 5px">
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <blockquote class="font13">
+                검색하고자 하는 시작일과 종료일을 선택해주세요.
+                <div style="float: right">
+                    <button
+                            class="btn btn-transparent btn-xs"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+                            onclick="return true;">
+                        Help
+                        <i
+                                class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                    </button>
+                </div>
+            </blockquote>
+            <div class="modal-body">
+                <form
+                        class="form-horizontal detail_contents"
+                        method="post">
+                    <fieldset>
+                        <div class="panel-group col-md-12">
+                            <div class="panel">
+                                <div class="panel-collapse in collapse">
+                                    <div class="panel-body">
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget" style="margin-bottom: 5px">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+																												<span
+																																														class="font13"
+																																														style="font-weight: bold">
+																													<i class="fa fa-asterisk"></i>
+																													시작일
+																												</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels app-progress-label">
+                                                        <div>
+                                                            <li style="display: flex">
+                                                                <a href="#" id="btn_select_calendar" class="btn btn-danger" style="background-color: #e5603b !important; border: 1px solid transparent !important" data-date-format="yyyy/mm/dd">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </a>
+                                                                <input id="date_timepicker_start"
+                                                                       class="form-control darkBack" type="text" value=""
+                                                                       required
+                                                                       pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/">
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget" style="margin-bottom: 5px">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+																												<span
+																																														class="font13"
+																																														style="font-weight: bold">
+																													<i class="fa fa-asterisk"></i>
+																													종료일
+																												</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels progress-wave-label">
+                                                        <div>
+                                                            <li style="display: flex">
+                                                                <a href="#" id="btn_select_calendar" class="btn btn-danger" style="background-color: #e5603b !important; border: 1px solid transparent !important" data-date-format="yyyy/mm/dd">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </a>
+                                                                <input id="date_timepicker_end"
+                                                                       class="form-control darkBack" type="text" value=""
+                                                                       required
+                                                                       pattern="/^\d{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/">
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div
+                 class="modal-footer"
+                 style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                <button
+                        type="button"
+                        id="modal_close_btn"
+                        class="btn btn-success"
+                        data-dismiss="modal"
+                        onClick="customRangeSetting()">
+                    검색 실행
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 검색결과_상세_모달_기본 -->
+<div
+	id="search_detail_modal"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="search_detail_modal_label"
+	aria-hidden="false"
+	style="display: none; border-radius: 10px">
+	<div
+		class="modal-dialog"
+		style="height: 50%">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+				style="margin: 10px 5px; border-bottom: 1px;">
+				<h4
+					class="modal-title font13"
+					id="search_detail_modal_label"
+					style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+					<i class="fa fa-file-text-o"></i>
+					검색 결과 상세 (임시 타이틀)
+				</h4>
+				<div
+					class="widget-controls"
+					style="top: 5px; right: 5px">
+					<!--<a
+							data-widgster="toleft"
+							title="change width to left"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>-->
+					<!--<a
+							data-widgster="expand"
+							title="Expand"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>-->
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<!--<a
+							data-widgster="toright"
+							title="change width to right"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>-->
+					<!--<a
+							data-widgster="restore"
+							title="Restore"
+							href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>-->
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<blockquote class="font13">
+				검색 결과 상세 입니다.
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="return true;">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div class="modal-body">
+				<form
+					class="form-horizontal detail_contents"
+					method="post">
+					<fieldset>
+						<div class="panel-group col-md-12">
+							<div class="panel">
+								<div class="panel-collapse in collapse">
+									<div class="panel-body">
+										<div class="col-md-6 color-legend-widget">
+											<section class="widget">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															고정항목
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<ul class="color-labels app-progress-label">
+														<div>
+															<li>
+																✔ _id :
+																<a
+																	id="detail_id"
+																	style="font-weight: bold">
+																	mock_id
+																</a>
+															</li>
+															<li>
+																✔ _index :
+																<a
+																	id="detail_index"
+																	style="font-weight: bold">
+																	fluentD-2024-02-14
+																</a>
+															</li>
+															<li>
+																✔ _score :
+																<a
+																	id="detail_score"
+																	style="font-weight: bold">
+																	-
+																</a>
+															</li>
+															<li>
+																✔ _type :
+																<a
+																	id="detail_type"
+																	style="font-weight: bold">
+																	fluentD_type
+																</a>
+															</li>
+														</div>
+														<div></div>
+													</ul>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-6 color-legend-widget">
+											<section class="widget">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그이름. 타임스탬프. 컨테이너 정보
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<ul class="color-labels progress-wave-label">
+														<div>
+															<li>
+																✔ @log_name :
+																<a
+																	id="modal_log_name"
+																	style="font-weight: bold">
+																	4
+																</a>
+															</li>
+															<li>
+																✔ @timestamp :
+																<a
+																	id="modal_timestamp"
+																	style="font-weight: bold">
+																	February 14th 2024, 17:00
+																</a>
+															</li>
+															<li>
+																✔ container_id :
+																<a
+																	id="modal_container_id"
+																	style="font-weight: bold">
+																	4
+																</a>
+															</li>
+															<li>
+																✔ container_name :
+																<a
+																	id="modal_container_name"
+																	style="font-weight: bold">
+																	4
+																</a>
+															</li>
+														</div>
+													</ul>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-12 color-legend-widget">
+											<section
+												class="widget"
+												style="overflow: hidden">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그 기록
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
+														<div
+															id="modal_detail_log"
+															name="modal_detail_log"
+															class="col-sm-12"
+															style="padding: 10px"
+															readonly>
+															10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+															/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+															HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15;
+															rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
+														</div>
+													</div>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-12 color-legend-widget">
+											<section
+												class="widget"
+												style="overflow: hidden">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															source
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
+														<div
+															id="modal_detail_source"
+															name="modal_detail_source"
+															class="col-sm-12"
+															style="padding: 10px"
+															>
+															10.0.1.206 - - [04/Feb/2024:17:59:57 +0900] "POST
+															/php/matomo/matomo.php?action_name=A-RMS%20By%20313DEVGRP&idsite=1&rec=1&r=470936&h=17&m=59&s=57&url=http%3A%2F%2Fwww.a-rms.net%2Farms%2Ftemplate.html%3Fpage%3Ddashboard&_id=db14431d39b7ad70&_idn=0&send_image=0&_refts=0&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=1728x1117&pv_id=UMPI0X&pf_net=0&pf_srv=1&pf_tfr=7&pf_dm1=90&uadata=%7B%7D
+															HTTP/1.1" 204 0 "http://www.a-rms.net/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15;
+															rv:122.0) Gecko/20100101 Firefox/122.0" "211.201.140.91"
+														</div>
+													</div>
+												</div>
+											</section>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="modal_close_btn"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 검색결과_상세_모달_지라이슈 -->
+<div
+	id="search_detail_modal_jiraissue"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="search_detail_modal_label_jiraissue"
+	aria-hidden="false"
+	style="display: none; border-radius: 10px">
+	<div
+		class="modal-dialog"
+		style="width: 80%; height: 50%">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+                style="margin: 10px 5px; border-bottom: 1px">
+				<h4
+					class="modal-title font13"
+					id="search_detail_modal_label_jiraissue"
+					style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+					<i class="fa fa-file-text-o"></i>
+					검색 결과 상세
+				</h4>
+				<div
+					class="widget-controls"
+					style="top: 5px; right: 5px">
+					<!--<a
+							data-widgster="toleft"
+							title="change width to left"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-left"></i>
+					</a>-->
+					<!--<a
+							data-widgster="expand"
+							title="Expand"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>-->
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<!--<a
+							data-widgster="toright"
+							title="change width to right"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</a>-->
+					<!--<a
+							data-widgster="restore"
+							title="Restore"
+							href="#">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>-->
+					<a
+						data-widgster="fullscreen"
+						title="Fullscreen"
+						href="#">
+						<i
+							class="glyphicon glyphicon-fullscreen"
+							style="font-size: 11px"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<blockquote class="font13">
+				검색 결과 상세 입니다.
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+						onclick="return true;">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+			<div class="modal-body">
+				<form
+					class="form-horizontal detail_contents"
+					method="post">
+					<fieldset>
+						<div class="panel-group col-md-12">
+							<div class="panel">
+								<!--<div class="panel-heading">
+									<a class="accordion-toggle collapsed font13" style="font-weight: bold;" data-toggle="collapse" href="#colorLegend">
+										<i class="fa fa-bars"></i>
+										Chart Colors
+									</a>
+								</div>-->
+								<div
+									id="colorLegend"
+									class="panel-collapse in collapse">
+									<div class="panel-body">
+										<div class="col-md-6 color-legend-widget">
+											<section class="widget">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															고정항목
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<ul class="color-labels app-progress-label">
+														<div>
+															<li>
+																✔ _id :
+																<a
+																	id="detail_id_jiraissue">
+																	mock_id
+																</a>
+															</li>
+															<li>
+																✔ _index :
+																<a
+																	id="detail_index_jiraissue">
+																	fluentD-2024-02-14
+																</a>
+															</li>
+															<li>
+																✔ _score :
+																<a
+																	id="detail_score_jiraissue">
+																	-
+																</a>
+															</li>
+															<li>
+																✔ _type :
+																<a
+																	id="detail_type_jiraissue">
+																	fluentD_type
+																</a>
+															</li>
+														</div>
+														<div></div>
+													</ul>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-6 color-legend-widget">
+											<section class="widget">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															이슈 주요 정보
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<ul class="color-labels progress-wave-label">
+														<div>
+															<li>
+																✔ 이슈 제목 :
+																<a
+																	id="detail_modal_summary_jiraissue">
+																	4
+																</a>
+															</li>
+															<li>
+																✔ 이슈 키 :
+																<a
+																	id="detail_modal_key_jiraissue">
+																	February 14th 2024, 17:00
+																</a>
+															</li>
+                              <li>
+                                  ✔ 최종수정 :
+                                  <a
+                                          id="detail_modal_timestamp_jiraissue">
+                                  </a>
+                              </li>
+															<li>
+																✔ 최초생성 :
+																<a
+																	id="detail_modal_created_jiraissue">
+																</a>
+															</li>
+															<li>
+																✔ 담당자 :
+																<a
+																	id="detail_modal_assignee_name_jiraissue">
+																	4
+																</a>
+															</li>
+														</div>
+													</ul>
+												</div>
+											</section>
+										</div>
+										<div class="col-md-12 color-legend-widget">
+											<section
+												class="widget"
+												style="overflow: hidden">
+												<header style="margin-bottom: 15px">
+													<h4>
+														<span
+															class="font13"
+															style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															이슈 상세 정보
+														</span>
+													</h4>
+												</header>
+												<div class="body">
+													<div
+														class="col-lg-12"
+														style="padding: 0px">
+														<pre style="overflow-x: hidden !important;">
+																<code
+																	id="modal_detail_log_jiraissue"
+																	name="modal_detail_log_jiraissue"
+																	class="col-sm-12 language-html"
+																	style="padding: 10px"
+																>
+																</code>
+														</pre>
+													</div>
+												</div>
+											</section>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					id="modal_close_btn"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 검색결과_상세_모달_로그(플루언트디) -->
+<div
+        id="search_detail_modal_log"
+        class="modal fade"
+        role="dialog"
+        aria-labelledby="search_detail_modal_label_log"
+        aria-hidden="false"
+        style="display: none; border-radius: 10px">
+    <div
+            class="modal-dialog"
+            style="width: 80%; height: 50%">
+        <div class="modal-content modalDarkBack">
+            <div
+                    class="modal-header"
+                    style="margin: 10px 5px; border-bottom: 1px">
+                <h4
+                        class="modal-title font13"
+                        id="search_detail_modal_label_log"
+                        style="font-size: 13px; font-weight: 600; color: #f8f8f8">
+                    <i class="fa fa-file-text-o"></i>
+                    검색 결과 상세
+                </h4>
+                <div
+                        class="widget-controls"
+                        style="top: 5px; right: 5px">
+<!--                    <a
+                          data-widgster="toleft"
+                          title="change width to left"
+                          href="#">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                      </a>
+                    <a
+                      data-widgster="expand"
+                      title="Expand"
+                      href="#">
+                    <i class="glyphicon glyphicon-chevron-up"></i>
+                  </a>-->
+                    <a
+                            data-widgster="collapse"
+                            title="Collapse"
+                            href="#">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <!--<a
+                      data-widgster="toright"
+                      title="change width to right"
+                      href="#">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                  </a>-->
+                    <!--<a
+                      data-widgster="restore"
+                      title="Restore"
+                      href="#">
+                    <span class="glyphicon glyphicon-repeat"></span>
+                  </a>-->
+                    <a
+                            data-widgster="fullscreen"
+                            title="Fullscreen"
+                            href="#">
+                        <i
+                                class="glyphicon glyphicon-fullscreen"
+                                style="font-size: 11px"></i>
+                    </a>
+                    <a
+                            data-widgster="close"
+                            title="Close"
+                            href="#"
+                            data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <blockquote class="font13">
+                검색 결과 상세 입니다.
+                <div style="float: right">
+                    <button
+                            class="btn btn-transparent btn-xs"
+                            style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px"
+                            onclick="return true;">
+                        Help
+                        <i
+                                class="fa fa-question"
+                                style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+                    </button>
+                </div>
+            </blockquote>
+            <div class="modal-body">
+                <form
+                        class="form-horizontal detail_contents"
+                        method="post">
+                    <fieldset>
+                        <div class="panel-group col-md-12">
+                            <div class="panel">
+                                <div
+                                        id="colorLegend"
+                                        class="panel-collapse in collapse">
+                                    <div class="panel-body">
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															고정항목
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels app-progress-label">
+                                                        <div>
+                                                            <li>
+                                                                ✔ _id :
+                                                                <a
+                                                                        id="detail_id_log">
+                                                                    mock_id
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ _index :
+                                                                <a
+                                                                        id="detail_index_log">
+                                                                    fluentD-2024-02-14
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ _score :
+                                                                <a
+                                                                        id="detail_score_log">
+                                                                    -
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ _type :
+                                                                <a
+                                                                        id="detail_type_log">
+                                                                    fluentD_type
+                                                                </a>
+                                                            </li>
+                                                        </div>
+                                                        <div></div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-6 color-legend-widget">
+                                            <section class="widget">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+                                                                class="font13"
+                                                                style="font-weight: bold">
+															<i class="fa fa-asterisk"></i>
+															로그 주요 정보
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <ul class="color-labels progress-wave-label">
+                                                        <div>
+                                                            <li>
+                                                                ✔ 로그명 :
+                                                                <a
+                                                                        id="detail_modal_logname_log">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ timestamp :
+                                                                <a
+                                                                        id="detail_modal_timestamp_log">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ source :
+                                                                <a
+                                                                        id="detail_modal_source_log">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ container_id (12자리)
+                                                                :
+                                                                <a
+                                                                        id="detail_modal_container_id_log">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                ✔ container_name
+                                                                :
+                                                                <a
+                                                                        id="detail_modal_container_name_log">
+                                                                    4
+                                                                </a>
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-12 color-legend-widget">
+                                            <section
+                                                    class="widget"
+                                                    style="overflow: hidden">
+                                                <header style="margin-bottom: 15px">
+                                                    <h4>
+														<span
+															 class="font13"
+															 style="font-weight: bold">
+															 <i class="fa fa-asterisk"></i>
+															 로그 정보
+														</span>
+                                                    </h4>
+                                                </header>
+                                                <div class="body">
+                                                    <div
+                                                        class="col-lg-12"
+                                                        style="padding: 0px">
+														<pre style="overflow-x: hidden !important;">
+															<code
+																id="modal_detail_log_log"
+																name="modal_detail_log_log"
+																class="col-sm-12 language-html"
+																style="padding: 10px; background: rgba(51,51,51,0.425) !important;"
+																>
+															</code>
+														</pre>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div
+                    class="modal-footer"
+                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+                <button
+                        type="button"
+                        id="modal_close_btn"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
