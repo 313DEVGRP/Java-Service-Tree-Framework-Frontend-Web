@@ -3,7 +3,6 @@ var ResourceApi = (function () {
     var selectedPdServiceversions = [];
 
     var fetchedResourceData = [];
-    var fetchedResourceDetailData = [];
 
     var setPdServiceId = function (pdServiceId) { selectedPdserviceId = pdServiceId; }
     var getPdServiceId = function () { return selectedPdserviceId; }
@@ -18,7 +17,7 @@ var ResourceApi = (function () {
         setPdServiceVersionLinks(pdServiceVersionLinks);
 
         $.ajax({
-            url: "/auth-user/api/arms/analysis/resource/workerStatus/pdServiceId/"+pdservice_id,
+            url: "/auth-admin/api/arms/analysis/resource/workerStatus/pdServiceId/"+pdservice_id,
             type: "GET",
             data: { "pdServiceVersionLinks" : pdServiceVersionLinks },
             contentType: "application/json;charset=UTF-8",

@@ -273,7 +273,7 @@ function stackedHorizontalBar(){
     }
 
     const url = new UrlBuilder()
-        .setBaseUrl(`/auth-user/api/arms/dashboard/aggregation/flat`)
+        .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
         .addQueryParam('pdServiceLink', selectedPdServiceId)
         .addQueryParam('pdServiceVersionLinks', selectedVersionId)
         .addQueryParam('메인그룹필드', "assignee.assignee_emailAddress.keyword")
@@ -402,7 +402,7 @@ function wordCloud() {
     $('#tag-cloud').jQCloud('destroy');
 
     const url = new UrlBuilder()
-        .setBaseUrl(`/auth-user/api/arms/dashboard/aggregation/flat`)
+        .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
         .addQueryParam('pdServiceLink', selectedPdServiceId)
         .addQueryParam('pdServiceVersionLinks', selectedVersionId)
         .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
@@ -503,7 +503,7 @@ function dataTableDrawCallback(tableInfo) {
 
 function req_subtask_pie(pdService_id, pdServiceVersionLinks, size) {
     $.ajax({
-        url: "/auth-user/api/arms/analysis/resource/req-subtask-pie/pdServiceId/"+pdService_id,
+        url: "/auth-admin/api/arms/analysis/resource/req-subtask-pie/pdServiceId/"+pdService_id,
         type: "GET",
         data: { "pdServiceVersionLinks": pdServiceVersionLinks, "size" : (size ? size : 5) },
         contentType: "application/json;charset=UTF-8",
@@ -608,7 +608,7 @@ var drawResource = function (pdservice_id, pdServiceVersionLinks) {
 function getAssigneeInfo(pdservice_id, pdServiceVersionLinks) {
     mailAddressList = [];
     $.ajax({
-        url: "/auth-user/api/arms/analysis/resource/assignee-infos/"+pdservice_id,
+        url: "/auth-admin/api/arms/analysis/resource/assignee-infos/"+pdservice_id,
         type: "GET",
         data: { "pdServiceVersionLinks": pdServiceVersionLinks },
         contentType: "application/json;charset=UTF-8",
@@ -723,7 +723,7 @@ function getDetailCharts(pdservice_id, pdServiceVersionLinks) {
 
 // 요구사항 및 연결이슈 상세 (수평바)
 function drawChartsPerPerson(pdservice_id, pdServiceVersionLinks, mailAddressList, targetField, targetReqId, targetSubtaskId) {
-    let _url = "/auth-user/api/arms/analysis/resource/normal-versionAndMail-filter/"+pdservice_id;
+    let _url = "/auth-admin/api/arms/analysis/resource/normal-versionAndMail-filter/"+pdservice_id;
     $.ajax({
         url: _url,
         type: "GET",
@@ -865,7 +865,7 @@ function 레이더_스택바_초기화() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
     const url = new UrlBuilder()
-        .setBaseUrl('/auth-user/api/arms/dashboard/assignees-requirements-involvements')
+        .setBaseUrl('/auth-admin/api/arms/analysis/resource/assignees-requirements-involvements')
         .addQueryParam('pdServiceLink', pdServiceLink)
         .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
         .addQueryParam('메인그룹필드', "pdServiceVersion")
