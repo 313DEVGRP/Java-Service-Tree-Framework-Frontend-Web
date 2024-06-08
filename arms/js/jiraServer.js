@@ -521,7 +521,7 @@ function dataTableCallBack(settings, json) {
 		$.ajax({
 			url: "/auth-user/api/arms/jiraIssueStatus/updateNode.do",
 			type: "put",
-			data: { c_id: issue_status_c_id, c_req_state_mapping_link: req_state_c_id},
+			data: { c_id: issue_status_c_id, c_desc: req_state_c_id},
 			statusCode: {
 				200: function () {
 					jSuccess( issue_status_name + " 상태가 " + req_state_c_title + "와 매핑 되었습니다.");
