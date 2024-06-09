@@ -521,7 +521,7 @@ function dataTableCallBack(settings, json) {
 		$.ajax({
 			url: "/auth-user/api/arms/jiraIssueStatus/updateNode.do",
 			type: "put",
-			data: { c_id: issue_status_c_id, c_req_state_mapping_link: req_state_c_id},
+			data: { c_id: issue_status_c_id, c_desc: req_state_c_id},
 			statusCode: {
 				200: function () {
 					jSuccess( issue_status_name + " 상태가 " + req_state_c_title + "와 매핑 되었습니다.");
@@ -1488,13 +1488,13 @@ function draw_ribbon(alm_server_c_id, alm_server_type) {
 							ribbonHtmlData += `<div class="ribbon ribbon-info" >Ready</div>`;
 						}
 						else if (issue_priority) {
-							ribbonHtmlData += create_ribbon_html(`not_ready_modal_popup('${alm_server_c_id}', 'issueType', '${alm_server_type}')`, "Help");
+							ribbonHtmlData += create_ribbon_html(`notReadyModalPopup('${alm_server_c_id}', 'issueType', '${alm_server_type}')`, "Help");
 						}
 						else if (issue_type_by_project) {
-							ribbonHtmlData += create_ribbon_html(`not_ready_modal_popup('${alm_server_c_id}', 'issuePriority', '${alm_server_type}')`, "Help");
+							ribbonHtmlData += create_ribbon_html(`notReadyModalPopup('${alm_server_c_id}', 'issuePriority', '${alm_server_type}')`, "Help");
 						}
 						else {
-							ribbonHtmlData += create_ribbon_html(`not_ready_modal_popup('${alm_server_c_id}', 'both', '${alm_server_type}')`, "Help");
+							ribbonHtmlData += create_ribbon_html(`notReadyModalPopup('${alm_server_c_id}', 'both', '${alm_server_type}')`, "Help");
 						}
 					}
 					else if (alm_server_type === "클라우드") {
@@ -1502,7 +1502,7 @@ function draw_ribbon(alm_server_c_id, alm_server_type) {
 							ribbonHtmlData += `<div class="ribbon ribbon-info" >Ready</div>`;
 						}
 						else {
-							ribbonHtmlData += create_ribbon_html(`not_ready_modal_popup('${alm_server_c_id}', 'issueType', '${alm_server_type}')`, "Help");
+							ribbonHtmlData += create_ribbon_html(`notReadyModalPopup('${alm_server_c_id}', 'issueType', '${alm_server_type}')`, "Help");
 						}
 					}
 				}
@@ -1539,138 +1539,120 @@ function create_ribbon_html(on_click_event, button_text) {
 			</div>`;
 }
 
-function toggle_visibility(element_id, is_visible) {
-	$("#" + element_id).toggleClass("hidden", !is_visible);
+function notReadyButtons(buttons) {
+	$("#not-ready-buttons").empty();
+
+	buttons.forEach(button => {
+		console.log("button: " + button);
+		const btn = `<div class="btn btn-warning btn-sm btn-disabled" style="border: none; border-radius: 5px; margin-right: 5px;">
+                        <i class="fa fa-times-circle"></i> ${button}
+                    </div>`;
+		$("#not-ready-buttons").append(btn);
+	});
 }
 
-function not_ready_button_setting(container_id, button_text) {
-	const container = $("#" + container_id).empty();
-	const btnHtml = `<button class="btn btn-warning btn-sm btn-disabled" style="border: none; border-radius: 5px; margin-right: 5px;">
-                        <i class="fa fa-times-circle"></i> ${button_text}
-                    </button>`;
-	container.append(btnHtml);
-}
+function notReadyMessages(messages) {
+	$("#not-ready-messages").empty();
 
-function not_ready_message_setting(container_id, message_text) {
-	const container = $("#" + container_id).empty();
-	const msgHtml = `${message_text}<br>`;
-	container.append(msgHtml);
-}
-
-function not_ready_display(type) {
-	toggle_visibility("not_ready_issuetype_title", true);
-	toggle_visibility("not_ready_priority_title", false);
-
-	not_ready_button_setting("not_ready_issuetype_buttons", "이슈 유형");
-	not_ready_message_setting("not_ready_issuetype_messages", "이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다.");
-
-	if (type === "both") {
-		toggle_visibility("not_ready_priority_title", true);
-		not_ready_button_setting("not_ready_priority_buttons", "이슈 우선순위");
-		not_ready_message_setting("not_ready_priority_messages", "이슈 우선순위가 지정되지 않으면 이슈를 생성할 수 없습니다.");
-	}
+	messages.forEach(message => {
+		console.log("message: " + message);
+		const msg = `${message}<br>`;
+		$("#not-ready-messages").append(msg);
+	});
 }
 
 function not_ready_modal_popup(jiraServerId, type, alm_server_type) {
 	$("#select_server_name").text(serverDataList[jiraServerId].c_title);
 	$("#not_ready_modal").modal("show");
 
-	if (alm_server_type === "온프레미스") {
-		alert("이슈 유형 선택이 필요합니다.");
-		move_issuetype_default_setting(jiraServerId, null, null, alm_server_type);
+	if (type === "issueType") {
+		notReadyButtons(["이슈 유형"]);
+		notReadyMessages(["이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다."]);
+	} else if (type === "both") {
+		notReadyButtons(["이슈 유형", "이슈 우선순위"]);
+		notReadyMessages(["이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다.", "이슈 우선순위가 지정되지 않으면 이슈를 생성할 수 없습니다."]);
 	}
-	else {
-		not_ready_display(type);
 
-		var columnList = [
-			{
-				name: "c_jira_name",
-				title:"프로젝트 이름",
-				data: "c_jira_name",
-				className: "dt-body-left",
-				visible: true
-			},
-			{ title:"프로젝트 키",
-				data: "c_jira_key",
-				className: "dt-body-left",
-				defaultContent: "<div style='color: #808080'>N/A</div>"
-			},
-			{ title:"프로젝트 아이디",
-				data: "c_desc",
-				className: "dt-body-left",
-				defaultContent: "<div style='color: #808080'>N/A</div>"
-			},
-			{
-				title:"선택된 이슈유형",
-				data: "jiraIssueTypeEntities",
-				className: "dt-body-left",
-				defaultContent: "<div style='color: #808080'>N/A</div>"
-			},
-			{ name: "c_id", title: "c_id", data: "c_id", visible: false },
-		];
-		var columnDefList =[];
-		var columnDefList_issuetype = [
-			{
-				targets: 3,
-				searchable: true,
-				orderable: true,
-				render: function (data, type, row, meta) {
-					let project_name = row.c_jira_name;
-					let project_c_id = row.c_id;
-					let isCheck = null;
+	var columnList = [
+		{
+			name: "c_jira_name",
+			title:"프로젝트 이름",
+			data: "c_jira_name",
+			className: "dt-body-left",
+			visible: true
+		},
+		{ title:"프로젝트 키",
+			data: "c_jira_key",
+			className: "dt-body-left",
+			defaultContent: "<div style='color: #808080'>N/A</div>"
+		},
+		{ title:"프로젝트 아이디",
+			data: "c_desc",
+			className: "dt-body-left",
+			defaultContent: "<div style='color: #808080'>N/A</div>"
+		},
+		{
+			title:"선택된 이슈유형",
+			data: "jiraIssueTypeEntities",
+			className: "dt-body-left",
+			defaultContent: "<div style='color: #808080'>N/A</div>"
+		},
+		{ name: "c_id", title: "c_id", data: "c_id", visible: false },
+	];
+	var columnDefList =[];
+	var columnDefList_issuetype = [
+		{
+			targets: 3,
+			searchable: true,
+			orderable: true,
+			render: function (data, type, row, meta) {
+				let isCheck = null;
 
-					for (const rowInfo of data) {
-						if (rowInfo.c_check === "true") {
-							isCheck = rowInfo.c_issue_type_name+"["+rowInfo.c_issue_type_id+"]";
-							break;
-						}
+				for (const rowInfo of data) {
+					if (rowInfo.c_check === "true") {
+						isCheck = rowInfo.c_issue_type_name+"["+rowInfo.c_issue_type_id+"]";
+						break;
 					}
-
-					if(isEmpty(isCheck)) {
-						return `<label
-										style="margin-left: 0px;"  
-										class="btn btn-sm btn-default" 
-										onclick="move_issuetype_default_setting('${jiraServerId}', '${project_name}', '${project_c_id}', '${alm_server_type}')">
-										<i class="fa fa-external-link">
-										</i> 설정하러 가기
-								  </label>`;
-					}
-					else {
-						return `<div class="project-issueStatus-data${meta.row}">
-							${isCheck}
-						 </div>`;
-					}
-
-					return data;
 				}
+
+				if(isEmpty(isCheck)) {
+					return "<div style='color: #808080'>N/A</div>";
+				}
+				else {
+					return `<div class="project-issueStatus-data${meta.row}">
+                        ${isCheck}
+                     </div>`;
+				}
+				return data;
 			}
-		];
-		columnDefList = columnDefList_issuetype;
-		var rowsGroupList = null;
-		var jquerySelector = "#modal_project_table";
-		var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProject.do?c_id=" + jiraServerId;
-		var jsonRoot = "response";
+		}
+	];
+	columnDefList = columnDefList_issuetype;
+	var rowsGroupList = null; //그룹을 안쓰려면 null 처리
+	var jquerySelector = "#modal_project_table"; // 장소
+	var ajaxUrl = "/auth-user/api/arms/jiraServer/getJiraProject.do?c_id=" + jiraServerId;
+	var jsonRoot = "response";
 
-		var selectList = {};
-		var orderList = [[1, "asc"]];
-		var buttonList = [];
-		var isServerSide = false;
+	var selectList = {};
+	var orderList = [[1, "asc"]];
+	var buttonList = [];
+	var isServerSide = false;
 
-		dataTableRef = dataTable_build(
-			jquerySelector,
-			ajaxUrl,
-			jsonRoot,
-			columnList,
-			rowsGroupList,
-			columnDefList,
-			selectList,
-			orderList,
-			buttonList,
-			isServerSide
-		);
+	dataTableRef = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide
+	);
 
-		$('#modal_project_table tbody').off('click', 'tr');
-	}
+	$('#modal_project_table tbody').off('click', 'tr');
+
 }
 
 function splitAndColor(text) {
@@ -1804,66 +1786,8 @@ function draw_req_state_mapping_datatable(target, project_c_id) {
 	$(jquerySelector+' tbody').off('click', 'tr');
 }
 
-function move_issuetype_default_setting(alm_server_id, project_name, project_c_id, alm_server_type) {
-	selectServerId = alm_server_id;
-	selectProjectId = project_c_id;
-	$("#not_ready_modal").trigger("click");
-
-	if (alm_server_type ==="온프레미스") {
-		jiraServerCardClick(alm_server_id)
-			.then(() => {
-				$('a[href="#server_issue_type"]').tab('show');
-			})
-			.catch(error => {
-				console.error("비동기 작업 중 에러 발생", error);
-			})
-	}
-	else if (alm_server_type ==="클라우드" || alm_server_type ==="레드마인_온프레미스"){
-		jiraServerCardClick(alm_server_id)
-			.then(() => {
-				$('a[href="#related_project"]').tab('show');
-			})
-			.catch(error => {
-				console.error("비동기 작업 중 에러 발생", error);
-			})
-			.finally(() => {
-				click_projectList_table(project_name, selectServerType, project_c_id);
-			});
-	}
-}
-
-/* 사용중이지 않은 메소드들
-function chk_default_settings_icon(list) {
-	// list에 cardList.jiraIssueTypeEntities 이런거
-	var check_default_set = "false";
-	//console.log(list);
-	if(list.length != 0) {
-		//console.log("list.length ===> " + list.length);
-		if(!isEmpty(list[0].c_check)){
-			list.forEach(function (info, index){
-				if (info.c_check ==="true"){
-					check_default_set ="true";
-				}
-			});
-			if (check_default_set ==="false") {
-				return ": "
-					+ `<i class="fa fa-exclamation-circle mr-1" style="vertical-align: middle;"></i>`
-					+ list.length
-					+ `<span style="color: #FFFFFF !important;"> 개</span>`;
-			} else if (check_default_set ==="true") {
-				return ": "+list.length+`<span style="color: #FFFFFF !important;"> 개</span>`;
-			}
-		} else { //project를 위함
-			return ": "+list.length+`<span style="color: #FFFFFF !important;"> 개</span>`;
-		}
-	} else {
-		//console.log("list.length is 0");
-		return `<i class="fa fa-exclamation-circle"></i>`;
-	}
-}
-
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(tempDataTable, selectedData) {
+/* function dataTableClick(tempDataTable, selectedData) {
 	// => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
 	console.log("[ jiraServer :: dataTableClick] :: selectedData =>  ");
 	console.log(selectedData);
