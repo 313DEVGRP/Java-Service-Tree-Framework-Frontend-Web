@@ -265,55 +265,55 @@ function jiraServerCardClick(alm_server_c_id) {
 				reject(error); // 비동기 작업 실패 시 reject 호출
 			}
 		})
-		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function (json) {
-			console.log(json);
+			// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+			.done(function (json) {
+				console.log(json);
 
-			selectServerType = "";
-			selectServerId = json.c_id;
-			selectServerName = json.c_title;
-			selectServerType = json.c_jira_server_type;
-			let alm_server_type = json.c_jira_server_type;
+				selectServerType = "";
+				selectServerId = json.c_id;
+				selectServerName = json.c_title;
+				selectServerType = json.c_jira_server_type;
+				let alm_server_type = json.c_jira_server_type;
 
-			$("#nav_stats>a").click();
-			display_set_wide_projectTable();
+				$("#nav_stats>a").click();
+				display_set_wide_projectTable();
 
-			// 디폴트
-			// 상세보기 , 편집하기, 지라프로젝트, 이슈 운선순위, 이슈 유형, 삭제하기
-			if (alm_server_type === "클라우드") {
-				// 상세보기 , 편집하기, 지라 프로젝트, 이슈 우선수위, 삭제하기
-				$("#type_tab").hide(); // 이슈 유형 숨김
-				$("#status_tab").hide(); // 이슈 상태 숨김
-				$("#resolution_tab").hide(); // 이슈 해결책 숨김
-				$("#redmine_info_edit").hide();
-				$("#cloudIssueTypeInfo").removeClass("hidden");
+				// 디폴트
+				// 상세보기 , 편집하기, 지라프로젝트, 이슈 운선순위, 이슈 유형, 삭제하기
+				if (alm_server_type === "클라우드") {
+					// 상세보기 , 편집하기, 지라 프로젝트, 이슈 우선수위, 삭제하기
+					$("#type_tab").hide(); // 이슈 유형 숨김
+					$("#status_tab").hide(); // 이슈 상태 숨김
+					$("#resolution_tab").hide(); // 이슈 해결책 숨김
+					$("#redmine_info_edit").hide();
+					$("#cloudIssueTypeInfo").removeClass("hidden");
 
-				$("li a[href='#related_project'] strong").text("지라 프로젝트");
-			}
-			else if (alm_server_type === "온프레미스") {
-				// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 유형, 삭제하기
-				$("#type_tab").show();// 이슈 유형 보여주기
-				$("#status_tab").removeClass("hidden").show();
-				$("#resolution_tab").hide(); //해결책 숨김
-				$("#redmine_info_edit").hide();
-				$("#cloudIssueTypeInfo").addClass("hidden");
+					$("li a[href='#related_project'] strong").text("지라 프로젝트");
+				}
+				else if (alm_server_type === "온프레미스") {
+					// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 유형, 삭제하기
+					$("#type_tab").show();// 이슈 유형 보여주기
+					$("#status_tab").removeClass("hidden").show();
+					$("#resolution_tab").hide(); //해결책 숨김
+					$("#redmine_info_edit").hide();
+					$("#cloudIssueTypeInfo").addClass("hidden");
 
-				$("li a[href='#related_project'] strong").text("지라 프로젝트");
-			}
-			else {
-				// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 상태, 삭제하기
-				$("#type_tab").hide(); // 이슈 유형 슴김
-				$("#status_tab").removeClass("hidden").show();
-				$("#resolution_tab").hide(); // 해결책 숨기기
-				$("#redmine_info_edit").show();
-				$("#cloudIssueTypeInfo").removeClass("hidden");
+					$("li a[href='#related_project'] strong").text("지라 프로젝트");
+				}
+				else {
+					// 상세보기, 편집하기, 지라프로젝트, 이슈 우선순위, 이슈 상태, 삭제하기
+					$("#type_tab").hide(); // 이슈 유형 슴김
+					$("#status_tab").removeClass("hidden").show();
+					$("#resolution_tab").hide(); // 해결책 숨기기
+					$("#redmine_info_edit").show();
+					$("#cloudIssueTypeInfo").removeClass("hidden");
 
-				$("li a[href='#related_project'] strong").text("레드마인 프로젝트");
-			}
+					$("li a[href='#related_project'] strong").text("레드마인 프로젝트");
+				}
 
-			// Sender 설정
-			var selectedHtml =
-				`<div class="chat-message">
+				// Sender 설정
+				var selectedHtml =
+					`<div class="chat-message">
 					<div class="chat-message-body" style="margin-left: 0px !important;">
 					   <span class="arrow" style="top: 35% !important;"></span>
 					   <span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
@@ -323,54 +323,54 @@ function jiraServerCardClick(alm_server_c_id) {
 					</div>
 				</div>`;
 
-			$("#list-group-item").html(selectedHtml);
+				$("#list-group-item").html(selectedHtml);
 
-			// => 데이터 바인딩 설정해야함.
-			$("#detailview_jira_server_name").val(json.c_title);
-			$("#editview_jira_server_name").val(json.c_title);
+				// => 데이터 바인딩 설정해야함.
+				$("#detailview_jira_server_name").val(json.c_title);
+				$("#editview_jira_server_name").val(json.c_title);
 
-			if (alm_server_type === "클라우드") {
-				$("#detailview_jira_server_type_option1").parent().click();
-				$("#editview_jira_server_type_option1").parent().click();
-			}
-			else if (alm_server_type === "온프레미스") {
-				$("#detailview_jira_server_type_option2").parent().click();
-				$("#editview_jira_server_type_option2").parent().click();
-			}
-			else{
-				$("#detailview_jira_server_type_option3").parent().click();
-				$("#editview_jira_server_type_option3").parent().click();
-			}
+				if (alm_server_type === "클라우드") {
+					$("#detailview_jira_server_type_option1").parent().click();
+					$("#editview_jira_server_type_option1").parent().click();
+				}
+				else if (alm_server_type === "온프레미스") {
+					$("#detailview_jira_server_type_option2").parent().click();
+					$("#editview_jira_server_type_option2").parent().click();
+				}
+				else{
+					$("#detailview_jira_server_type_option3").parent().click();
+					$("#editview_jira_server_type_option3").parent().click();
+				}
 
-			// BASE_URL
-			$("#detailview_jira_server_base_url").val(json.c_jira_server_base_url);
-			$("#editview_jira_server_base_url").val(json.c_jira_server_base_url);
+				// BASE_URL
+				$("#detailview_jira_server_base_url").val(json.c_jira_server_base_url);
+				$("#editview_jira_server_base_url").val(json.c_jira_server_base_url);
 
-			// 서버 ID
-			$("#detailview_jira_server_connect_id").val(json.c_jira_server_connect_id);
-			$("#editview_jira_server_connect_id").val(json.c_jira_server_connect_id);
+				// 서버 ID
+				$("#detailview_jira_server_connect_id").val(json.c_jira_server_connect_id);
+				$("#editview_jira_server_connect_id").val(json.c_jira_server_connect_id);
 
-			// 서버 PW
-			$("#detailview_jira_pass_token").val(json.c_jira_server_connect_pw);
-			$("#editview_jira_pass_token").val(json.c_jira_server_connect_pw);
+				// 서버 PW
+				$("#detailview_jira_pass_token").val(json.c_jira_server_connect_pw);
+				$("#editview_jira_pass_token").val(json.c_jira_server_connect_pw);
 
-			//상세보기 에디터 부분
-			CKEDITOR.instances.detailview_jira_server_contents.setData(json.c_jira_server_contents);
-			//편집하기 에디터 부분
-			CKEDITOR.instances.input_jira_server_editor.setData(json.c_jira_server_contents);
+				//상세보기 에디터 부분
+				CKEDITOR.instances.detailview_jira_server_contents.setData(json.c_jira_server_contents);
+				//편집하기 에디터 부분
+				CKEDITOR.instances.input_jira_server_editor.setData(json.c_jira_server_contents);
 
-			//삭제 부분
-			$("#delete_text").text(json.c_title);
-		})
-		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-		.fail(function (xhr, status, errorThrown) {
-			console.log(xhr + status + errorThrown);
-		})
-		// 항상 실행
-		.always(function (xhr, status) {
-			console.log(xhr + status);
-			$(".loader").addClass("hide");
-		});
+				//삭제 부분
+				$("#delete_text").text(json.c_title);
+			})
+			// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
+			.fail(function (xhr, status, errorThrown) {
+				console.log(xhr + status + errorThrown);
+			})
+			// 항상 실행
+			.always(function (xhr, status) {
+				console.log(xhr + status);
+				$(".loader").addClass("hide");
+			});
 	});
 
 }
@@ -1552,13 +1552,13 @@ function notReadyButtons(buttons) {
 }
 
 function notReadyMessages(messages) {
-    $("#not-ready-messages").empty();
+	$("#not-ready-messages").empty();
 
-    messages.forEach(message => {
-        console.log("message: " + message);
-        const msg = `${message}<br>`;
-        $("#not-ready-messages").append(msg);
-    });
+	messages.forEach(message => {
+		console.log("message: " + message);
+		const msg = `${message}<br>`;
+		$("#not-ready-messages").append(msg);
+	});
 }
 
 function not_ready_modal_popup(jiraServerId, type, alm_server_type) {
@@ -1566,11 +1566,11 @@ function not_ready_modal_popup(jiraServerId, type, alm_server_type) {
 	$("#not_ready_modal").modal("show");
 
 	if (type === "issueType") {
-        notReadyButtons(["이슈 유형"]);
-        notReadyMessages(["이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다."]);
+		notReadyButtons(["이슈 유형"]);
+		notReadyMessages(["이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다."]);
 	} else if (type === "both") {
-        notReadyButtons(["이슈 유형", "이슈 우선순위"]);
-        notReadyMessages(["이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다.", "이슈 우선순위가 지정되지 않으면 이슈를 생성할 수 없습니다."]);
+		notReadyButtons(["이슈 유형", "이슈 우선순위"]);
+		notReadyMessages(["이슈 유형이 지정되지 않은 프로젝트는 이슈를 생성할 수 없습니다.", "이슈 우선순위가 지정되지 않으면 이슈를 생성할 수 없습니다."]);
 	}
 
 	var columnList = [
@@ -1697,7 +1697,7 @@ function draw_req_state_mapping_datatable(target, project_c_id) {
 
 	var columnList= [
 		{
-			title:"이슈 상태",
+			title:"ALM 이슈 상태",
 			data: "c_issue_status_name",
 			render: function (data, type, row, meta) {
 				let issue_status = row.c_issue_status_name + "[" + row.c_issue_status_id + "]";
@@ -1714,10 +1714,10 @@ function draw_req_state_mapping_datatable(target, project_c_id) {
 			visible: true,
 		},
 		{
-			title:"매핑 설정",
+			title:"ARMS 요구사항 상태 매핑",
 			data: "c_id",
 			className: "dt-body-center",
-			render: function (data, type, row,meta) {
+			render: function (data, type, row, meta) {
 				console.log(row);
 
 				let issue_status = row.c_issue_status_name + "[" + row.c_issue_status_id + "]";
@@ -1787,7 +1787,7 @@ function draw_req_state_mapping_datatable(target, project_c_id) {
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
-function dataTableClick(tempDataTable, selectedData) {
+/* function dataTableClick(tempDataTable, selectedData) {
 	// => 카드 목록 클릭시 해당 카드의 c_id를 활용해서 가져오도록 만들어야 함
 	console.log("[ jiraServer :: dataTableClick] :: selectedData =>  ");
 	console.log(selectedData);
