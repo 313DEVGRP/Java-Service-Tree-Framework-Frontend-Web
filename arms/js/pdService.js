@@ -38,7 +38,7 @@ function execDocReady() {
 			"../reference/lightblue4/docs/lib/widgster/widgster.js",
 			"../reference/lightblue4/docs/lib/slimScroll/jquery.slimscroll.min.js"],
 
-		[	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
+		["../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
 			"../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
@@ -48,7 +48,9 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/dataTables.buttons.min.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
-			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
+			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
+			"../reference/swiper-11.1.4/swiper-bundle.min.js",
+			"../reference/swiper-11.1.4/swiper-bundle.min.css",
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -200,18 +202,20 @@ function setDrawioImage(localStorageKey, localStorageValue, mode) {
 	console.log("ARMS DRAWIO Key :: " + localStorageKey);
 	console.log("ARMS DRAWIO VALUE :: " + localStorageValue);
 
+	var imageSrcArray = Array(1).fill(localStorageValue);
+
 	if (mode === "create") {
-		$("#modal_product_detail_add_pdservice_detail_drawio_image_raw").attr("src", localStorageValue);
-		$("#modal_product_detail_add_pdservice_detail_drawio_div").show();
+		addImageToSwiper(imageSrcArray, 'modal_product_detail_add_pdservice_detail_drawio_swiper_container');
+		$("#modal_product_detail_add_pdservice_detail_drawio_swiper").show();
 	}
 
 	if (mode === "update") {
-        $("#product_detail_view_pdservice_detail_drawio_image_raw").attr("src", localStorageValue);
-		$("#product_detail_view_pdservice_detail_drawio_div").show();
-		$("#product_detail_update_pdservice_detail_drawio_image_raw").attr("src", localStorageValue);
-		$("#product_detail_update_pdservice_detail_drawio_div").show();
-		$("#modal_product_detail_edit_pdservice_detail_drawio_image_raw").attr("src", localStorageValue);
-		$("#modal_product_detail_edit_pdservice_detail_drawio_div").show();
+		addImageToSwiper(imageSrcArray, 'product_detail_update_pdservice_detail_drawio_swiper_container');
+		$("#product_detail_update_pdservice_detail_drawio_swiper").show();
+		addImageToSwiper(imageSrcArray, 'modal_product_detail_edit_pdservice_detail_drawio_swiper_container');
+		$("#modal_product_detail_edit_pdservice_detail_drawio_swiper").show();
+		addImageToSwiper(imageSrcArray, 'product_detail_view_pdservice_detail_drawio_swiper_container');
+		$("#product_detail_view_pdservice_detail_drawio_swiper").show();
 	}
 
 }
@@ -652,14 +656,10 @@ function product_detail_add_clear () {
 }
 
 function drawioImageClear() {
-	$("#product_detail_view_pdservice_detail_drawio_div").hide();
-	$("#product_detail_update_pdservice_detail_drawio_div").hide();
-	$("#modal_product_detail_edit_pdservice_detail_drawio_div").hide();
-	$("#modal_product_detail_add_pdservice_detail_drawio_div").hide();
-	$("#product_detail_view_pdservice_detail_drawio_image_raw").attr("src", "");
-	$("#product_detail_update_pdservice_detail_drawio_image_raw").attr("src", "");
-	$("#modal_product_detail_edit_pdservice_detail_drawio_image_raw").attr("src", "");
-	$("#modal_product_detail_add_pdservice_detail_drawio_image_raw").attr("src", "");
+	$("#product_detail_view_pdservice_detail_drawio_swiper").hide();
+	$("#product_detail_update_pdservice_detail_drawio_swiper").hide();
+	$("#modal_product_detail_edit_pdservice_detail_drawio_swiper").hide();
+	$("#modal_product_detail_add_pdservice_detail_drawio_swiper").hide();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -750,6 +750,51 @@ function detailClick(element, c_id) {
 		$("#text").html("요청이 완료되었습니다!");
 		console.log(xhr + status);
 	});
+}
+
+function addImageToSwiper(imageSrcArray, swiperContainerId) {
+	var swiperInstance = document.querySelector('#' + swiperContainerId).swiper;
+
+	if (!swiperInstance) {
+		swiperInstance = new Swiper('#' + swiperContainerId, {
+			pagination: {
+				el: '.swiper-pagination',
+				// clickable: true,
+				type: "fraction",
+			},
+				slidesPerView: 1,
+				spaceBetween: 0,
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		});
+	} else {
+		swiperInstance.removeAllSlides();
+	}
+
+	for (var i = 0; i < imageSrcArray.length; i++) {
+		var newSlideElement = document.createElement('div');
+
+		newSlideElement.className = 'swiper-slide';
+
+		var newImageElement = document.createElement('img');
+
+		newImageElement.src = imageSrcArray[i];
+
+		newSlideElement.appendChild(newImageElement);
+
+		swiperInstance.appendSlide(newSlideElement);
+	}
+
+	var slides = document.querySelectorAll('#' + swiperContainerId + ' .swiper-slide');
+	if (slides.length === 1) {
+		document.querySelector('#' + swiperContainerId + ' .swiper-pagination').style.display = 'block';
+		document.querySelector('#' + swiperContainerId + ' .swiper-button-next').style.display = 'block';
+		document.querySelector('#' + swiperContainerId + ' .swiper-button-prev').style.display = 'block';
+		swiperInstance.navigation.nextEl.classList.add('swiper-button-disabled');
+		swiperInstance.navigation.prevEl.classList.add('swiper-button-disabled');
+	}
 }
 
 function init_versionList() {
