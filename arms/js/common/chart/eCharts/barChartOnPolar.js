@@ -1,5 +1,4 @@
-//drawBarOnPolar2("polar_bar", cat_persons, dashboardColor.manpowerPerformance, legend_arr, arr2di);
-function drawBarOnPolar2(target, categories, color, legends, arr2di) {
+function sampleBarOnPolar(target, categories, color, legends, arr2di) {
     var chartDom = document.getElementById(target);
     var myChart = echarts.init(chartDom);
 
@@ -173,47 +172,4 @@ function drawBarOnPolar(target, categories, legends, seriesArr) {
     });
 
     return myChart;
-}
-
-function drawBarOnPolarAtScope(target, categories, legends, seriesArr) {
-    var chartDom = document.getElementById(target);
-    var myChart = echarts.init(chartDom);
-
-    var option = {
-        angleAxis: {
-            type: 'category',
-            data: categories,
-            axisLabel: {
-                textStyle: {
-                    color: 'white',
-                    fontWeight: "",
-                    fontSize: "11"
-                }
-            },
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            }
-        },
-        radiusAxis: {},
-        polar: { center: ["50%", "50%"], radius: "70%"},
-        series: seriesArr,
-        legend: {
-            show: true,
-            data: legends, // [ A, B , C , D, ...]
-            textStyle: {
-                color: 'white', // 이름의 텍스트 색상 설정
-                fontStyle: 'normal', // 이름의 텍스트 스타일 설정 (예: italic, normal)
-                fontWeight: '', // 이름의 텍스트 굵기 설정 (예: bold, normal)
-                fontSize: 11 // 이름의 텍스트 크기 설정
-            }
-        }
-    };
-    myChart.setOption(option,true);
-
-    window.addEventListener('resize', function () {
-        myChart.resize();
-    });
 }

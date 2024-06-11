@@ -1,7 +1,6 @@
 ///////////////////
 //Page 전역 변수
 ///////////////////
-var dashboardColor;
 var selectedPdServiceId;
 var selectedVersionId;
 var versionListData;
@@ -26,10 +25,10 @@ function execDocReady() {
 			// d3(게이지 차트 사용)
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// chart Colors
-			"./js/dashboard/chart/colorPalette.js",
+			"./js/common/colorPalette.js",
 			// 최상단 메뉴
 			"js/analysis/topmenu/topMenuApi.js",
-			"js/analysis/topmenu/basicRadar.js",
+			"./js/common/chart/eCharts/basicRadar.js",
 			// 버전 timeline js, css
 			"./js/analysis/time/D_analysisTime.js",
 			"./js/analysis/time/timeline_analysisTime.js",
@@ -110,7 +109,6 @@ function execDocReady() {
 			});
 
 			// candleStickChart();
-			dashboardColor = dashboardPalette.dashboardPalette01;
 
 		})
 		.catch(function (error) {
@@ -623,6 +621,22 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 // 두번째 박스
 ////////////////////
 async function drawVersionProgress(data) {
+	let gaugeChartColor = ColorPalette.d3Chart.gaugeChart;
+	if (gaugeChartColor.length < 0) {
+		gaugeChartColor = [
+			"rgba(158, 1, 66, 0.8)",
+			"rgba(213, 62, 79, 0.8)",
+			"rgba(244, 109, 67, 0.8)",
+			"rgba(253, 174, 97, 0.8)",
+			"rgba(254, 224, 139, 0.8)",
+			"rgba(230, 245, 152, 0.8)",
+			"rgba(171, 221, 164, 0.8)",
+			"rgba(102, 194, 165, 0.8)",
+			"rgba(50, 136, 189, 0.8)",
+			"rgba(94, 79, 162, 0.8)"
+		];
+	}
+
 	var Needle,
 		arc,
 		arcEndRad,
@@ -837,7 +851,7 @@ async function drawVersionProgress(data) {
 			.on("mouseleave", mouseleave)
 			.append("path")
 			.attr("fill", function (d) {
-				return dashboardColor.gaugeChartColor[(sectionIndx - 1) % dashboardColor.gaugeChartColor.length];
+				return gaugeChartColor[(sectionIndx - 1) % gaugeChartColor.length];
 			})
 			.attr("stroke", "white")
 			.style("stroke-width", "0.4px")

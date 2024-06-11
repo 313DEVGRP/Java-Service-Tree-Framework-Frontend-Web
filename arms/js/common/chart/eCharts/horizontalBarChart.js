@@ -1,5 +1,5 @@
 
-function exampleHorizontalBarChart() {
+function sampleHorizontalBarChart() {
     var chartDom = document.getElementById('main');
     var myChartEx = echarts.init(chartDom);
     var option;
