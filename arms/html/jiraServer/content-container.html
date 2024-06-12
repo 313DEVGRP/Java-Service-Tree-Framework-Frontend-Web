@@ -81,7 +81,8 @@
                             data-target="#my_modal1"
                             data-toggle="modal"
                             id="modal_popup_id"
-                            type="button">
+                            type="button"
+                            onClick="modalPopup('modal_popup_regist')">
                         ALM Server 등록
                     </button>
                 </div>
@@ -93,7 +94,7 @@
                         <ol class="carousel-indicators outer">
                             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                             <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+<!--                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>-->
                         </ol>
                         <div class="carousel-inner text-align-center">
                             <div class="item active">
@@ -102,19 +103,19 @@
                                 </span>
                             </div>
                             <div class="item">
-                                <a href="docs/create-cloud-issue-type.html" target="_blank" style="  text-decoration: none; color: white;">
+                                <a href="/php/gnuboard5/bbs/board.php?bo_table=manual" target="_blank" style="  text-decoration: none; color: white;">
                                     <span class="no-margin font13" style="font-weight: bold; color: #a4c6ff; border-bottom: 1px dashed #a4c6ff;">
-                                        클라우드 : 요구사항 이슈 만드는 방법
+                                        A-RMS : 메뉴얼
                                     </span>
                                 </a>
                             </div>
-                            <div class="item">
+<!--                            <div class="item">
                                 <a href="docs/create-onpremise-issue-type.html" target="_blank" style="text-decoration: none;  color: white;">
                                     <span class="no-margin font13" style="font-weight: bold; color: #a4c6ff; border-bottom: 1px dashed #a4c6ff;">
                                         온프레미스 : 요구사항 이슈 만드는 방법
                                     </span>
                                 </a>
-                            </div>
+                            </div>-->
                         </div>
                         <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
                             <i class="fa fa-angle-left"></i>
@@ -328,29 +329,10 @@
                      class="hidden"
                      id="jira_server_update_div">
                     <button type="button"
-                            id="extend_modal_popup_id"
                             class="btn btn-warning btn-sm"
                             data-toggle="modal"
-                            data-target="#my_modal2"
-                            onClick="modalPopup('jiraServerPopup')">
-                        팝업 창으로 편집하기
-                    </button>
-                    <button type="button"
-                            id="jira_server_update"
-                            data-style="contract"
-                            class="ladda btn btn-success btn-sm">
-                        변경 사항 저장
-                    </button>
-                </div>
-                <div style="float: right"
-                     class="hidden"
-                     id="jira_server_update_div">
-                    <button type="button"
-                            id="extend_modal_popup_id"
-                            class="btn btn-warning btn-sm"
-                            data-toggle="modal"
-                            data-target="#my_modal2"
-                            onClick="modalPopup('jiraServerPopup')">
+                            data-target="#my_modal1"
+                            onClick="modalPopup('modal_popup_update')">
                         팝업 창으로 편집하기
                     </button>
                     <button type="button"
@@ -459,41 +441,66 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div    class="control-group"
-                                                for="detailview_jira_server_type">
-                                            <label class="control-label font13"
-                                                   style="width: 130px !important">ALM 환경 :</label>
-                                            <div    class="controls form-group input-group"
+                                        <div class="control-group">
+                                            <label
+                                                    for="detailview_jira_server_type"
+                                                    class="control-label font13"
+                                                    style="width: 130px !important">
+                                                ALM 환경 :
+                                            </label>
+                                            <!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+                                            <div
+                                                    class="controls form-group input-group"
                                                     style="margin-left: 130px">
-												<span class="input-group-addon">
-                                                    <i class="glyphicon glyphicon-globe"></i>
-												</span>
-                                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                                    <div    id="detailview_jira_server_type"
-                                                            class="btn-group"
-                                                            data-toggle="buttons">
-                                                        <label class="btn btn-warning btn-disabled">
-                                                            <input  type="radio"
-                                                                    name="options"
-                                                                    id="detailview_jira_server_type_option1"
-                                                                    value="클라우드"/>
-                                                            클라우드
-                                                        </label>
-                                                        <label class="btn btn-warning btn-disabled">
-                                                            <input  type="radio"
-                                                                    name="options"
-                                                                    id="detailview_jira_server_type_option2"
-                                                                    value="온프레미스"/>
-                                                            온프레미스
-                                                        </label>
-                                                        <label class="btn btn-warning btn-disabled">
-                                                            <input  type="radio"
-                                                                    name="options"
-                                                                    id="detailview_jira_server_type_option3"
-                                                                    value="레드마인_온프레미스"/>
-                                                            레드마인
-                                                        </label>
-                                                    </div>
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-globe"></i>
+																</span>
+                                                <div
+                                                        id="detailview_jira_server_type_div"
+                                                        data-toggle="buttons">
+                                                    <label class="btn btn-disabled edit-blue">
+                                                        <input
+                                                                type="radio"
+                                                                name="detailview_jira_server_type_options"
+                                                                value="클라우드" />
+                                                        <img src="./img/jira/mark-gradient-blue-jira.svg"
+                                                             id="side_jira_neutral_icon"
+                                                             width="17px"
+                                                             style="margin-right: 3px"></img>
+                                                        <img src="./img/jira/mark-gradient-white-jira.svg"
+                                                             id="side_jira_white_icon"
+                                                             class="hidden"
+                                                             width="17px"
+                                                             style="margin-right: 3px"></img>
+                                                        클라우드 지라
+                                                    </label>
+                                                    <label class="btn btn-disabled edit-grey">
+                                                        <input
+                                                                type="radio"
+                                                                name="detailview_jira_server_type_options"
+                                                                value="온프레미스" />
+                                                        <img src="./img/jira/mark-gradient-neutral-jira.svg"
+                                                             id="side_jira_neutral_icon"
+                                                             class="hidden"
+                                                             width="17px"
+                                                             style="margin-right: 3px"></img>
+                                                        <img src="./img/jira/mark-gradient-white-jira.svg"
+                                                             id="side_jira_white_icon"
+                                                             width="17px"
+                                                             style="margin-right: 3px"></img>
+                                                        온프레미스 지라
+                                                    </label>
+                                                    <label class="btn btn-disabled edit-red" >
+                                                        <input
+                                                                type="radio"
+                                                                name="detailview_jira_server_type_options"
+                                                                value="레드마인_온프레미스" />
+                                                        <img src="./img/redmine/logo.png"
+                                                             id="side_jira_white_icon"
+                                                             width="17px"
+                                                             style="margin-right: 3px"></img>
+                                                        레드마인
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -564,6 +571,31 @@
 												</span>
                                             </div>
                                         </div>
+                                        <div
+                                             class="control-group hidden"
+                                             id="detailview_server_text_formatting_div">
+                                            <label  for="detailview_server_text_formatting"
+                                                    class="control-label"
+                                                    style="width: 130px !important">ALM 본문 형식:
+                                            </label>
+                                            <div    class="controls form-group input-group"
+                                                    style="margin-left: 100px">
+												<span class="input-group-addon">
+													<i class="glyphicon  glyphicon-text-width"></i>
+												</span>
+                                                <input  type="text"
+                                                        id="detailview_server_text_formatting"
+                                                        name="detailview_server_text_formatting"
+                                                        class="form-control parsley-validated font13 darkBack"
+                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                        placeholder="ALM Text Formatting"
+                                                        required="required" readonly/>
+                                                <span class="input-group-addon font11">
+													<i class="fa fa-text-width"></i>
+													이슈 본문 형식
+												</span>
+                                            </div>
+                                        </div>
                                         <div class="control-group">
                                             <label  class="control-label">
                                                 ALM 서버 내용 :
@@ -610,88 +642,104 @@
                                                 </span>
                                                 </div>
                                             </div>
-                                            <div    class="control-group"
-                                                    for="editview_jira_server_type">
-                                                <label class="control-label font13"
-                                                       style="width: 130px !important">ALM 환경 :</label>
-                                                <div    class="controls form-group input-group"
+                                            <div class="control-group">
+                                                <label
+                                                        for="editview_jira_server_type"
+                                                        class="control-label font13"
+                                                        style="width: 130px !important">
+                                                    ALM 환경 :
+                                                </label>
+                                                <!-- 해당 상태는 MySQL에 ROW 추가 안되어있음 -->
+                                                <div
+                                                        class="controls form-group input-group"
                                                         style="margin-left: 130px">
-												    <span class="input-group-addon">
-                                                        <i class="glyphicon glyphicon-globe"></i>
-												    </span>
-                                                    <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                                        <div    id="editview_jira_server_type"
-                                                                class="btn-group"
-                                                                data-toggle="buttons">
-                                                            <label class="btn btn-warning btn-disabled">
-                                                                <input  type="radio"
-                                                                        name="options"
-                                                                        id="editview_jira_server_type_option1"
-                                                                        value="클라우드"/>
-                                                                클라우드
-                                                            </label>
-                                                            <label class="btn btn-warning btn-disabled">
-                                                                <input  type="radio"
-                                                                        name="options"
-                                                                        id="editview_jira_server_type_option2"
-                                                                        value="온프레미스"/>
-                                                                온프레미스
-                                                            </label>
-                                                            <label class="btn btn-warning btn-disabled">
-                                                                <input  type="radio"
-                                                                        name="options"
-                                                                        id="editview_jira_server_type_option3"
-                                                                        value="레드마인_온프레미스"/>
-                                                                레드마인
-                                                            </label>
-                                                        </div>
-                                                        <span class="font11" id="redmine_info_edit" style="display:none;">INFO : 레드마인 서버는 관리자 계정으로 등록해야합니다.</span>
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-globe"></i>
+																</span>
+                                                    <div
+                                                            id="editview_jira_server_type_div"
+                                                            data-toggle="buttons">
+                                                        <label class="btn btn-disabled edit-blue">
+                                                            <input
+                                                                    type="radio"
+                                                                    name="editview_jira_server_type_options"
+                                                                    value="클라우드" />
+                                                            <img src="./img/jira/mark-gradient-blue-jira.svg"
+                                                                 id="side_jira_neutral_icon"
+                                                                 width="17px"
+                                                                 style="margin-right: 3px"></img>
+                                                            클라우드 지라
+                                                        </label>
+                                                        <label class="btn btn-disabled edit-grey">
+                                                            <input
+                                                                    type="radio"
+                                                                    name="editview_jira_server_type_options"
+                                                                    value="온프레미스" />
+                                                            <img src="./img/jira/mark-gradient-white-jira.svg"
+                                                                 id="side_jira_white_icon"
+                                                                 width="17px"
+                                                                 style="margin-right: 3px"></img>
+                                                            온프레미스 지라
+                                                        </label>
+                                                        <label class="btn btn-disabled edit-red" >
+                                                            <input
+                                                                    type="radio"
+                                                                    name="editview_jira_server_type_options"
+                                                                    value="레드마인_온프레미스" />
+                                                            <img src="./img/redmine/logo.png"
+                                                                 id="side_jira_white_icon"
+                                                                 width="17px"
+                                                                 style="margin-right: 3px"></img>
+                                                            레드마인
+                                                        </label>
                                                     </div>
                                                 </div>
-                                                <div class="control-group">
-                                                    <label  for="editview_jira_server_base_url"
-                                                            class="control-label"
-                                                            style="width: 130px !important">
-                                                        ALM URL :
-                                                    </label>
-                                                    <div    class="controls form-group input-group"
-                                                            style="margin-left: 100px">
-                                                        <span class="input-group-addon">
-                                                            <i class="glyphicon glyphicon-share"></i>
-                                                        </span>
-                                                        <input  type="text"
-                                                                id="editview_jira_server_base_url"
-                                                                name="editview_jira_server_base_url"
-                                                                class="form-control parsley-validated font13 darkBack"
-                                                                style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                                placeholder="ALM BASE URL"
-                                                                required="required" readonly/>
-                                                    </div>
+                                                <p class="font11" id="redmine_info_edit" style="display:none; text-align: right; margin-top: -5px; margin-bottom:10px;">INFO : 레드마인 서버는 관리자 계정으로 등록해야합니다.</p>
                                                 </div>
-                                                <div class="control-group">
-                                                    <label  for="version_start_date"
-                                                            class="control-label"
-                                                            style="width: 130px !important">
-                                                        ALM ID :
-                                                    </label>
-                                                    <div    class="controls form-group input-group"
-                                                            style="margin-left: 100px">
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-gift"></i>
-												</span>
+                                            <div class="control-group">
+                                                <label  for="editview_jira_server_base_url"
+                                                        class="control-label"
+                                                        style="width: 130px !important">
+                                                    ALM URL :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 100px">
+                                                    <span class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-share"></i>
+                                                    </span>
                                                     <input  type="text"
-                                                            id="editview_jira_server_connect_id"
-                                                            name="editview_jira_server_connect_id"
+                                                            id="editview_jira_server_base_url"
+                                                            name="editview_jira_server_base_url"
                                                             class="form-control parsley-validated font13 darkBack"
                                                             style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
-                                                            placeholder="ALM SERVER CONNECT ID"
-                                                            required="required" />
-                                                    <span class="input-group-addon font11">
-													<i class="fa fa-question-circle"></i>
-													ALM 아이디
-												</span>
+                                                            placeholder="ALM BASE URL"
+                                                            required="required" readonly/>
                                                 </div>
                                             </div>
+                                            <div class="control-group">
+                                                <label  for="version_start_date"
+                                                        class="control-label"
+                                                        style="width: 130px !important">
+                                                    ALM ID :
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 100px">
+                                                    <span class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-gift"></i>
+                                                    </span>
+                                                <input  type="text"
+                                                        id="editview_jira_server_connect_id"
+                                                        name="editview_jira_server_connect_id"
+                                                        class="form-control parsley-validated font13 darkBack"
+                                                        style="color: #a4c6ff; background: rgba(50, 50, 50, 0.99) !important"
+                                                        placeholder="ALM SERVER CONNECT ID"
+                                                        required="required" />
+                                                <span class="input-group-addon font11">
+                                                    <i class="fa fa-question-circle"></i>
+                                                    ALM 아이디
+                                                </span>
+                                            </div>
+                                        </div>
                                             <div class="control-group">
                                                 <label  for="version_end_date"
                                                         class="control-label"
@@ -714,6 +762,34 @@
 													<i class="fa fa-question-circle"></i>
 													암호 또는 토큰
 												</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                    class="control-group hidden"
+                                                    id="editview_server_text_formatting_div">
+                                                <label  for="detailview_server_text_formatting"
+                                                        class="control-label"
+                                                        style="width: 130px !important">ALM 본문 형식:
+                                                </label>
+                                                <div    class="controls form-group input-group"
+                                                        style="margin-left: 100px">
+                                                    <span class="input-group-addon">
+                                                        <i class="glyphicon  glyphicon-text-width"></i>
+                                                    </span>
+                                                    <select
+                                                            id="editview_server_text_formatting"
+                                                            name="editview_server_text_formatting"
+                                                            class="select-block-level darkBack select_text_formatting"
+                                                            style="color: #a4c6ff; background: rgba(51, 51, 51, 1.4) !important"
+                                                            tabIndex="-1">
+                                                        <option value="text">text</option>
+                                                        <option value="html">html</option>
+                                                        <option value="markdown">markdown</option>
+                                                    </select>
+                                                    <span class="input-group-addon font11">
+                                                        <i class="fa fa-text-width"></i>
+                                                        이슈 본문 형식
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="control-group">
@@ -943,7 +1019,7 @@
                         <li>
                             <button type="button"
                                     id="default_project_each_update"
-                                    name="default_project_each_update"
+                                    name="default_update"
                                     data-style="contract"
                                     class="ladda btn btn-success btn-sm mr-1"
                                     style="width:77%; margin-top: 2px;">
@@ -959,7 +1035,12 @@
                         <header>
                             <ul class="nav nav-tabs">
                                 <li class="active">
-                                    <a  href="#issue_type"
+                                    <a
+                                        href="#issue_type"
+                                        id="issue-type-tab"
+                                        role="tab"
+                                        aria-controls="issue_type"
+                                        aria-selected="false"
                                         data-toggle="tab">
                                         <strong>이슈 유형</strong>
 
@@ -975,6 +1056,7 @@
                         </header>
                         <div class="body tab-content">
                             <div id="issue_type"
+                                 role="tabpanel" aria-labelledby="issue-type-tab"
                                  class="tab-pane active clearfix"
                                  style="padding-top: 30px !important">
                                 <table id="issue_type_table"
@@ -1027,13 +1109,16 @@
                     id="my_modal_label1"
                     style="color: #f8f8f8; text-align: left; padding: 5px">
 					<span   class="font13"
-                            style="font-weight: bold">
+                            style="font-weight: bold"
+                            id="my_modal1_title">
                             <i class="fa fa-edit"></i>
                             신규 ALM 서버 등록 팝업
 					</span>
                     <blockquote    class="search-result"
                                    style="border-left: 5px solid #e5603b">
-                        <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+                        <p
+                            style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px"
+                            id="my_modal1_description">
                             A-RMS에 ALM 서버를 등록합니다.
                         </p>
                     </blockquote>
@@ -1087,37 +1172,61 @@
                                 <span class="input-group-addon font11">INFO : ALM(서버) 이름은 중복될 수 없습니다.</span>
                             </div>
                         </div>
-                        <div    class="control-group"
-                                for="popup_editview_jira_server_type">
-                            <label class="control-label font13">ALM 환경 :</label>
+                        <div    class="control-group">
+                            <label
+                                    class="control-label font13"
+                                    for="popup_editview_jira_server_type">ALM 환경 :</label>
                             <div    class="controls form-group input-group"
                                     style="margin-left: 180px">
                                 <span class="input-group-addon">
                                     <i class="glyphicon glyphicon-globe"></i>
                                 </span>
                                 <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                    <div    id="popup_editview_jira_server_type"
-                                            class="btn-group"
+                                    <div
+                                            id="popup_editview_jira_server_type_div"
                                             data-toggle="buttons">
-                                        <label class="btn btn-warning">
-                                            <input  type="radio"
-                                                    name="options"
-                                                    id="popup_editview_jira_server_type_option1"
-                                                    value="클라우드"/>
-                                            클라우드
+                                        <label class="btn edit-blue">
+                                            <input
+                                                    type="radio"
+                                                    name="popup_editview_jira_server_type_options"
+                                                    value="클라우드" />
+                                            <img src="./img/jira/mark-gradient-blue-jira.svg"
+                                                 id="side_jira_neutral_icon"
+                                                 width="17px"
+                                                 style="margin-right: 3px"></img>
+                                            <img src="./img/jira/mark-gradient-white-jira.svg"
+                                                 id="side_jira_white_icon"
+                                                 class="hidden"
+                                                 width="17px"
+                                                 style="margin-right: 3px"></img>
+                                            클라우드 지라
                                         </label>
-                                        <label class="btn btn-warning">
-                                            <input  type="radio"
-                                                    name="options"
-                                                    id="popup_editview_jira_server_type_option2"
-                                                    value="온프레미스"/>
-                                            온프레미스
+                                        <label class="btn edit-grey">
+                                            <input
+                                                    type="radio"
+                                                    name="popup_editview_jira_server_type_options"
+                                                    value="온프레미스" />
+                                            <img src="./img/jira/mark-gradient-neutral-jira.svg"
+                                                 id="side_jira_neutral_icon"
+                                                 class="hidden"
+                                                 width="17px"
+                                                 style="margin-right: 3px"></img>
+                                            <img src="./img/jira/mark-gradient-white-jira.svg"
+                                                 id="side_jira_white_icon"
+                                                 width="17px"
+                                                 style="margin-right: 3px"></img>
+                                            온프레미스 지라
                                         </label>
-                                        <label class="btn btn-warning">
-                                            <input  type="radio"
-                                                    name="options"
-                                                    id="popup_editview_jira_server_type_option3"
-                                                    value="레드마인_온프레미스"/>
+                                        <label class="btn edit-red" >
+                                            <input
+                                                    type="radio"
+                                                    name="popup_editview_jira_server_type_options"
+                                                    id="popup_editview_server_redmine_check"
+                                                    value="레드마인_온프레미스" />
+                                            <img src="./img/redmine/logo.png"
+                                                 id="side_jira_white_icon"
+                                                 width="17px"
+                                                 style="margin-right: 3px"></img>
                                             레드마인
                                         </label>
                                     </div>
@@ -1182,6 +1291,32 @@
                                 <span class="input-group-addon font11">INFO : ALM 암호 또는 토큰 입력</span>
                             </div>
                         </div>
+                        <div
+                                class="control-group"
+                                style="display: none;"
+                                id="popup_editview_text_formatting_div">
+                            <label
+                                class="control-label font13"
+                                for="popup_editview_text_formatting">
+                                ALM 서버 본문 형식 :
+                            </label>
+                            <div    class="controls form-group input-group"
+                                    style="margin-left: 180px">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-indent-left"></i>
+								</span>
+                                <select
+                                    id="popup_editview_text_formatting"
+                                    name="popup_editview_text_formatting"
+                                    class="select-block-level darkBack select_text_formatting"
+                                    tabIndex="-1">
+                                    <option value="text">text</option>
+                                    <option value="html">html</option>
+                                    <option value="markdown">markdown</option>
+                                </select>
+                                <span class="input-group-addon font11">INFO : ALM 서버 본문 형식 선택</span>
+                            </div>
+                        </div>
                         <div class="control-group">
                             <button type="button"
                                     id="verify_account"
@@ -1211,230 +1346,18 @@
             </div>
             <div    class="modal-footer"
                     style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
-                <button type="button"
-                        id="close_regist_jira_server"
-                        class="btn btn-default"
-                        data-dismiss="modal">
-                    Close
-                </button>
-                <button type="button"
-                        id="regist_jira_server"
-                        data-style="contract"
-                        class="ladda btn btn-primary">
-                    신규 서버 저장
-                </button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-<!-- 상세보기/변경 -->
-<div    id="my_modal2"
-        class="modal fade"
-        role="dialog"
-        aria-labelledby="myModalLabel"
-        aria-hidden="true"
-        style="display: none; border-radius: 10px">
-    <div class="modal-dialog">
-        <div class="modal-content modalDarkBack">
-            <div    class="modal-header"
-                    style="padding: 0px; border-bottom: 1px">
-                <h4 class="modal-title font14"
-                    id="my_modal_label2"
-                    style="color: #f8f8f8; text-align: left; padding: 5px">
-					<span   class="font13"
-                            id="my_modal2_title"
-                            style="font-weight: bold">
-                            <i class="fa fa-edit"></i>
-                            ALM(서버) 수정 팝업
-					</span>
-                    <blockquote    class="search-result"
-                                   style="border-left: 5px solid #e5603b">
-                        <p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-                            A-RMS에 등록된 ALM 서버를 수정합니다.
-                        </p>
-                    </blockquote>
-                </h4>
-                <div    class="widget-controls"
-                        style="padding-top: 10px">
-                    <a  title="Options"
-                        class="hidden"
-                        href="#">
-                        <i class="glyphicon glyphicon-cog"></i>
-                    </a>
-                    <a  data-widgster="expand"
-                        title="Expand"
-                        class="hidden"
-                        href="#">
-                        <i class="glyphicon glyphicon-chevron-up"></i>
-                    </a>
-                    <a  data-widgster="collapse" class="hidden"
-                        title="Collapse"
-                        href="#">
-                        <i class="glyphicon glyphicon-chevron-down"></i>
-                    </a>
-                    <a  data-widgster="close"
-                        title="Close"
-                        href="#"
-                        data-dismiss="modal"
-                        aria-hidden="true">
-                        <i class="glyphicon glyphicon-remove"></i>
-                    </a>
-                </div>
-            </div>
-            <div    class="modal-body"
-                    style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
-                <form   class="form-horizontal"
-                        method="post">
-                    <fieldset>
-                        <div    class="control-group"
-                                for="extend_editview_jira_server_name">
-                            <label class="control-label font13">ALM(서버) 이름 :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
-								</span>
-                                <input  type="text"
-                                        id="extend_editview_jira_server_name"
-                                        name="extend_editview_jira_server_name"
-                                        class="form-control parsley-validated font13 darkBack"
-                                        data-placement="top"
-                                        data-original-title="ALM(서버) 이름은 중복될 수 없습니다."
-                                        required="required"
-                                        placeholder="JIRA (server) name" />
-                                <span class="input-group-addon font11">INFO : ALM(서버) 이름은 중복될 수 없습니다.</span>
-                            </div>
-                        </div>
-                        <div    class="control-group"
-                                for="extend_editview_jira_server_type">
-                            <label class="control-label font13">ALM 환경 :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-                                <span class="input-group-addon">
-                                    <i class="glyphicon glyphicon-globe"></i>
-                                </span>
-                                <div style="display: flex; align-items: center; gap: 10px; padding: 0">
-                                    <div    id="extend_editview_jira_server_type"
-                                            class="btn-group"
-                                            data-toggle="buttons">
-                                        <label class="btn btn-warning btn-disabled">
-                                            <input  type="radio"
-                                                    name="options"
-                                                    id="extend_editview_jira_server_type_option1"
-                                                    value="클라우드"/>
-                                            클라우드
-                                        </label>
-                                        <label class="btn btn-warning btn-disabled">
-                                            <input  type="radio"
-                                                    name="options"
-                                                    id="extend_editview_jira_server_type_option2"
-                                                    value="온프레미스"/>
-                                            온프레미스
-                                        </label>
-                                        <label class="btn btn-warning btn-disabled">
-                                            <input  type="radio"
-                                                    name="options"
-                                                    id="extend_editview_jira_server_type_option3"
-                                                    value="레드마인_온프레미스"/>
-                                            레드마인_온프레미스
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div    class="control-group"
-                                for="extend_editview_jira_server_base_url">
-                            <label class="control-label font13">ALM URL :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-share"></i>
-								</span>
-                                <input  type="text"
-                                        id="extend_editview_jira_server_base_url"
-                                        name="extend_editview_jira_server_base_url"
-                                        class="form-control parsley-validated font13 darkBack"
-                                        data-placement="top"
-                                        data-original-title="jira_server_url"
-                                        required="required"
-                                        placeholder="ALM BASE URL" readonly/>
-                                <span class="input-group-addon font11">INFO : 등록할 ALM URL을 입력</span>
-                            </div>
-                        </div>
-                        <div    class="control-group"
-                                for="extend_editview_jira_server_connect_id">
-                            <label class="control-label font13">ALM 아이디 :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-gift"></i>
-								</span>
-                                <input  type="text"
-                                        id="extend_editview_jira_server_connect_id"
-                                        name="extend_editview_jira_server_connect_id"
-                                        class="form-control parsley-validated font13 darkBack"
-                                        data-placement="top"
-                                        data-original-title="JIRA ID"
-                                        required="required"
-                                        placeholder="ALM SERVER CONNECT ID" />
-                                <span class="input-group-addon font11">INFO : 등록할 ALM 아이디를 입력</span>
-                            </div>
-                        </div>
-                        <div    class="control-group"
-                                for="extend_editview_jira_pass_token">
-                            <label class="control-label font13">ALM 암호 또는 토큰 :</label>
-                            <div    class="controls form-group input-group"
-                                    style="margin-left: 180px">
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-indent-left"></i>
-								</span>
-                                <input  type="text"
-                                        id="extend_editview_jira_pass_token"
-                                        name="extend_editview_jira_pass_token"
-                                        class="form-control parsley-validated font13 darkBack"
-                                        data-placement="top"
-                                        data-original-title="ALM(서버) 이름은 중복될 수 없습니다."
-                                        required="required"
-                                        placeholder="ALM Pass or Token" />
-                                <span class="input-group-addon font11">INFO : ALM 암호 또는 토큰 입력</span>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label  class="control-label"
-                                    style="color: #f8f8f8">
-                                ALM 서버 내용 :
-                            </label>
-                            <div class="controls form-group">
-                                <div    class="col-sm-12"
-                                        style="padding-top: 10px">
-                                    <div    id="extend_modal_editor"
-                                            class="darkBack">
-                                        <p>등록한 ALM(서버) 관련 특이사항 등을 기록합니다.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div    class="modal-footer"
-                    style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
                 <button
                         type="button"
-                        id="extendclose_jira_server"
+                        id="close_modal_popup"
                         class="btn btn-default"
                         data-dismiss="modal">
                     Close
                 </button>
                 <button
                         type="button"
-                        id="extend_change_to_update_jira_server"
-                        class="btn btn-success hidden"
-                        onclick="modalPopup('modal_popup_update')">
-                    편집 하기
+                        id="regist_alm_server"
+                        class="btn btn-primary">
+                    신규 서버 등록
                 </button>
                 <button
                         type="button"
