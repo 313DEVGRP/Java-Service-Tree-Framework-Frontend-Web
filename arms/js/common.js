@@ -1291,7 +1291,7 @@ function ajax_setup() {
 					//    alert('jNofity is completed !');
 					// }
 				});
-				location.href = "/oauth2/authorization/middle-proxy";
+				//location.href = "/oauth2/authorization/middle-proxy";
 			} else if (jqXHR.status == 500) {
 				jError("서버가 해당 요청을 이해했지만, 실행 할 수 없습니다.");
 			}
@@ -2009,4 +2009,60 @@ function setParameter(param, value) {
 	url.searchParams.set(param, value);
 	// Replace the currnt URL without reloading the page
 	window.history.pushState({path:url.href}, '', url.href);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 날짜 확인 및 검증
+////////////////////////////////////////////////////////////////////////////////////////
+function timestampToDatepicker(timestamp) {
+	var d = new Date(timestamp), // Convert the passed timestamp to milliseconds
+		yyyy = d.getFullYear(),
+		mm = ("0" + (d.getMonth() + 1)).slice(-2), // Months are zero based. Add leading 0.
+		dd = ("0" + d.getDate()).slice(-2), // Add leading 0.
+		hh = d.getHours(),
+		h = hh,
+		min = ("0" + d.getMinutes()).slice(-2), // Add leading 0.
+		ampm = "AM",
+		time;
+	if (hh > 12) {
+		h = hh - 12;
+		ampm = "PM";
+	} else if (hh === 12) {
+		h = 12;
+		ampm = "PM";
+	} else if (hh == 0) {
+		h = 12;
+	}
+
+	// ie: 2013-02-18, 8:35 AM
+	time = yyyy + "/" + mm + "/" + dd;
+
+	return time;
+}
+
+function isValidShortFormat(dateString) {
+	// MMM dd HH:mm 형식을 확인하는 정규식
+	var regex = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{2} \d{2}:\d{2}$/;
+	return regex.test(dateString.trim());
+}
+
+function isValidISOFormat(dateString) {
+	// ISO 8601 형식을 확인하는 정규식
+	var regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}[+-]\d{2}:\d{2}$/;
+	return regex.test(dateString);
+}
+
+function parseDateString(dateString) {
+	var date;
+	if (isValidShortFormat(dateString)) {
+		var year = new Date().getFullYear(); 		     // 현재 연도 가져오기
+		var fullTimestamp = year + " " + dateString; // 연도를 포함한 전체 시간 문자열
+		date = new Date(fullTimestamp);
+	} else if (isValidISOFormat(dateString)) {
+		date = new Date(dateString); // ISO 형식 그대로 Date 객체로 변환
+	} else {
+		console.log("[ common :: parseDateString ] :: Invalid date format: " + dateString);
+		return " - ";
+	}
+	return timestampToDatepicker(date);
 }
