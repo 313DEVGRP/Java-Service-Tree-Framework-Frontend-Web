@@ -1691,8 +1691,8 @@ function draw_req_state_mapping_datatable(target, project_c_id) {
 							let select_html = "";
 							let value = key;
 							let text = req_state_data[key];
-							// 변경할 부분 c_req_state_mappin_link
-							if (Number(value) === Number(row.c_desc)) {
+							// 변경할 부분 c_req_state_mapping_link
+							if (Number(value) === Number(row.c_req_state_mapping_link)) {
 								select_html = "selected";
 							}
 
@@ -1831,7 +1831,7 @@ function select_state_mapping_event() {
 		$.ajax({
 			url: "/auth-user/api/arms/jiraIssueStatus/updateNode.do",
 			type: "put",
-			data: { c_id: issue_status_c_id, c_desc: req_state_c_id}, // 변경할 부분 c_req_state_mappin_link
+			data: { c_id: issue_status_c_id, c_req_state_mapping_link: req_state_c_id}, // 변경할 부분 c_req_state_mapping_link
 			statusCode: {
 				200: function () {
 					jSuccess( issue_status_name + " 상태가 " + req_state_c_title + "와 매핑 되었습니다.");
