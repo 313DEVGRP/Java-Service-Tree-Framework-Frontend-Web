@@ -9,9 +9,6 @@ var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId; // 선택된 버전 아이디
 // 최상단 메뉴 변수
 var req_state, resource_info, issue_info, period_info, total_days_progress;
-/*var mailAddressList; // 투입 작업자 메일
-var req_count, linkedIssue_subtask_count, resource_count, req_in_action, total_days_progress;*/
-var dashboardColor;
 
 var reqStatusDataTable;
 var dataTableRef;
@@ -78,12 +75,12 @@ function execDocReady() {
 			"../reference/light-blue/lib/bootstrap-datepicker.js",
 			"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
 			//colors
-			"./js/dashboard/chart/colorPalette.js",
+			"./js/common/colorPalette.js",
 			// Apache Echarts
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
 			// 최상단 메뉴
 			"js/analysis/topmenu/topMenuApi.js",
-			"js/analysis/topmenu/basicRadar.js"
+			"./js/common/chart/eCharts/basicRadar.js"
 		] // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
 
@@ -132,8 +129,6 @@ function execDocReady() {
 			makePdServiceSelectBox();
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
-
-			dashboardColor = dashboardPalette.dashboardPalette01;
 
 			// 높이 조정
 			$('.top-menu-div').matchHeight({

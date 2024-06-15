@@ -4,9 +4,7 @@ var dataTableRef;
 // 최상단 메뉴 변수
 var req_state, resource_info, issue_info, period_info, total_days_progress;
 
-var dashboardColor;
 var pdServiceData;
-
 var pdServiceListData;
 var versionListData;
 
@@ -25,7 +23,7 @@ function execDocReady() {
 			"../reference/light-blue/lib/jquery.fileupload-fp.js",
 			"../reference/light-blue/lib/jquery.fileupload-ui.js",
 			//chart Colors
-			"./js/dashboard/chart/colorPalette.js",
+			"./js/common/colorPalette.js",
 			// Apache Echarts
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js"
 		],
@@ -55,14 +53,11 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			// 최상단 메뉴
 			"js/analysis/topmenu/topMenuApi.js",
-			"js/analysis/topmenu/basicRadar.js",
-
+			"./js/common/chart/eCharts/basicRadar.js",
 			// 버전 별 요구사항 현황 (RadialPolarBarChart)
-			"js/analysis/resource/chart/nightingaleRosePieChart.js",
-			"js/analysis/resource/chart/RadialPolarBarChart.js",
-
+			"./js/common/chart/eCharts/RadialPolarBarChart.js",
 			//CirclePacking with d3 Chart
-			"js/analysis/resource/chart/circularPackingChart.js"
+			"./js/common/chart/eCharts/circularPackingChart.js"
 		],
 		[
 			"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -76,7 +71,7 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-			"../arms/js/analysis/resource/sankey.js"
+			"./js/common/chart/d3/sankey.js"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -115,13 +110,6 @@ function execDocReady() {
 				target: $('.top-menu-div-scope')
 			});
 
-
-			dashboardColor = dashboardPalette.dashboardPalette01;
-
-			//d3Chart 그리기
-			$.getScript("./js/pdServiceVersion/initD3Chart.js").done(function (script, textStatus) {
-				initD3Chart("/auth-user/api/arms/pdService/getD3ChartData.do");
-			});
 		})
 		.catch(function () {
 			console.error("플러그인 로드 중 오류 발생");
@@ -776,7 +764,8 @@ function getReqPerMappedVersions(pdService_id, pdServiceVersionLinks) {
 					const value = versionNameCountMap[key];
 					outputArray.push({ "name": key, "value": value});
 				}
-				let colorArr = dashboardColor.nightingaleRose;
+
+				let colorArr = ColorPalette.eCharts.radialPolarBarChart;
 				drawRadialPolarBarChart("reqPerVersionRoseChart", outputArray, colorArr);
 			}
 		}

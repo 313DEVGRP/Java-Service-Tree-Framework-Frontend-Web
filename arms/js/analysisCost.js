@@ -4,7 +4,6 @@ var dataTableRef;
 // 최상단 메뉴 변수
 var req_state, resource_info, issue_info, period_info, total_days_progress;
 var modifiedRows = {};
-var dashboardColor;
 let fileName = "인력별_연봉정보_템플릿.xlsx";
 var pdServiceListData;
 var versionListData;
@@ -30,7 +29,7 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.fileupload-fp.js",
             "../reference/light-blue/lib/jquery.fileupload-ui.js",
             //chart Colors
-            "./js/dashboard/chart/colorPalette.js",
+            "./js/common/colorPalette.js",
             // Apache Echarts
             "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js"
         ],
@@ -59,8 +58,8 @@ function execDocReady() {
             // d3-5.16.0 네트워크 차트
             "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
             //  최상단 메뉴
-            "js/analysis/topmenu/topMenuApi.js",
-            "js/analysis/topmenu/basicRadar.js",
+            "./js/analysis/topmenu/topMenuApi.js",
+            "./js/common/chart/eCharts/basicRadar.js"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -74,7 +73,7 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
-            "../arms/js/analysis/resource/sankey.js"
+            "./js/common/chart/d3/sankey.js"
         ],
         [
             "https://fonts.googleapis.com/css?family=Material+Icons",
@@ -123,8 +122,6 @@ function execDocReady() {
           });
 
           비용분석계산버튼();
-
-          dashboardColor = dashboardPalette.dashboardPalette01;
 
       })
       .catch(function(e) {
