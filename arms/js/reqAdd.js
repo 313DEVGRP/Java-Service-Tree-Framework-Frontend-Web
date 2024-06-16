@@ -7,6 +7,12 @@ var selectedJsTreeName; // 요구사항 이름
 var tempDataTable;
 var isChecked = []; // 지라 프로젝트 연결 목록 체크
 var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
+var dataTableRef;
+var reqColumnList = [
+	{ data: "c_id",	   title: "<span class='toggle-column'>c_id</span>",   visible: false, defaultContent: "-"},
+	{ data: "c_left",  title: "<span class='toggle-column'>c_left</span>", visible: false, defaultContent: "-"},
+	{ data: "c_title", title: "<span class=''>요구사항</span>", defaultContent: "-"}
+];
 function execDocReady() {
 	var pluginGroups = [
 		[
@@ -468,14 +474,10 @@ function dataTableLoad(selectId, selectRel) {
 	var c_type = $("#req_tree").jstree("get_selected").attr("rel");
 	console.log("dataTableLoad - c_type:::" + c_type);
 
-	var dataTableRef;
+	// var dataTableRef;
 	if (selectId == 2) {
 		// 데이터 테이블 컬럼 및 열그룹 구성
-		var columnList = [
-			{ data: "c_id", defaultContent: "-" },
-			{ data: "c_left", defaultContent: "-" },
-			{ data: "c_title", defaultContent: "-" }
-		];
+		var columnList = reqColumnList;
 		var rowsGroupList = [];
 		var columnDefList = [];
 		var selectList = {};
@@ -510,11 +512,7 @@ function dataTableLoad(selectId, selectRel) {
 			progress: true,
 			success: function (data) {
 				// 데이터 테이블 컬럼 및 열그룹 구성
-				var columnList = [
-					{ data: "c_id", defaultContent: "-" },
-					{ data: "c_left", defaultContent: "-" },
-					{ data: "c_title", defaultContent: "-" }
-				];
+				var columnList = reqColumnList;
 				var rowsGroupList = [];
 				var columnDefList = [];
 				var selectList = {};
@@ -547,11 +545,7 @@ function dataTableLoad(selectId, selectRel) {
 			.always(function () {});
 	} else {
 		console.log("folder clicked");
-		var columnList = [
-			{ data: "c_id", defaultContent: "-" },
-			{ data: "c_left", defaultContent: "-" },
-			{ data: "c_title", defaultContent: "-" }
-		];
+		var columnList = reqColumnList;
 		var rowsGroupList = [];
 		var columnDefList = [];
 		var selectList = {};
@@ -1660,6 +1654,7 @@ function makeDatePicker(calender) {
 // 탭 클릭 이벤트
 ///////////////////////////////////////////////////////////////////////////////
 function tab_click_event() {
+
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 
@@ -1720,6 +1715,16 @@ function tab_click_event() {
 			$(".jira_btn_group").addClass("hidden");
 			$(".newReqDiv").hide();
 		}
+	});
+
+	// 요구관리 메타데이터(c_id, c_left) 보기 토글
+	$("#metadata_toggle").on("click", function() {
+		reqColumnList.forEach((column, index) => {
+			if (column.title.includes('toggle-column')) {
+				column.visible = !column.visible;
+				dataTableRef.column(index).visible(column.visible);
+			}
+		});
 	});
 }
 
