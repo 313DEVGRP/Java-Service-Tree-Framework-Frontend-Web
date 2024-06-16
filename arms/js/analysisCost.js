@@ -440,7 +440,6 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         progress: true,
-        async: false,
         statusCode: {
             200: function(apiResponse) {
                 console.log(" [ analysisCost :: 버전별_요구사항별_인력정보가져오기 ] :: response data -> ");
