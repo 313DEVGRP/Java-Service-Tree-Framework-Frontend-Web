@@ -1563,6 +1563,7 @@ svg .ghostCircle.show {
 
 #reqDataTable .reqTable {
 	width: max-content;
+	min-width: 100%;
 	table-layout: fixed;
 }
 
