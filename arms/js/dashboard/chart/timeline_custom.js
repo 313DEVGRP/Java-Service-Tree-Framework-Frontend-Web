@@ -38,8 +38,8 @@ var Timeline = (function () {
 				allMonthArray: []
 			};
 
-			if(dashboardColor.timeLineChartColor) {
-				colors = dashboardColor.timeLineChartColor;
+			if(ColorPalette.d3Chart.timeLineChart) {
+				colors = ColorPalette.d3Chart.timeLineChart;
 			} else {
 				colors = [
 					"rgba(158, 1, 66, 0.8)",

@@ -391,7 +391,7 @@ var DashboardApi = (function () {
 				title: "Total : " + totalDocCount
 			},
 			color: {
-				pattern: dashboardColor.reqStateColor
+				pattern: ColorPalette.common.reqStateColor
 			},
 			tooltip: {
 				format: {
@@ -533,7 +533,7 @@ var DashboardApi = (function () {
 							groups: [issueStatusTypes]
 						},
 						color: {
-							pattern: dashboardColor.combinationChartColor,
+							pattern: ColorPalette.d3Chart.combinationChart,
 						},
 						onrendered: function() {
 							d3.selectAll('.c3-line, .c3-bar, .c3-arc')

@@ -5,7 +5,6 @@ var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId;   // 선택된 버전 아이디
 var dataTableRef;
 var mailAddressList;
-var dashboardColor;
 var req_state, resource_info, issue_info, period_info, total_days_progress;
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var resourceSet = new Set(); // 담당자 set
@@ -29,9 +28,8 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.fileupload-ui.js",
             //d3
             "../reference/jquery-plugins/d3-5.16.0/d3.min.js",
-            // "./js/common/colorPalette.js",
             //chart Colors
-            "./js/dashboard/chart/colorPalette.js",
+            "./js/common/colorPalette.js",
             // Apache Echarts
             "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
         ],
@@ -52,19 +50,19 @@ function execDocReady() {
             // 투입 인력별 요구사항 관여 차트
             "../reference/jquery-plugins/Jit-2.0.1/jit.js",
             "../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
-            "../arms/js/analysis/resource/treemap.js",
+            "./js/common/chart/others/treemap.js",
             // 제품-버전-투입인력 차트
             "../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js",
             // 최상단 메뉴
             "js/analysis/topmenu/topMenuApi.js",
-            "js/analysis/topmenu/basicRadar.js"
+            "./js/common/chart/eCharts/basicRadar.js"
         ],
         [
             "js/common/table.js",
             "js/analysis/api/resourceApi.js",
             "js/analysis/table/workerStatusTable.js",
-            "js/analysis/resource/chart/horizontalBarChart.js",
-            "js/analysis/resource/chart/simplePie.js",
+            "./js/common/chart/eCharts/horizontalBarChart.js",
+            "./js/common/chart/eCharts/simplePie.js",
         ],
 
         [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -80,7 +78,7 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.js",
             "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.css",
-            "../arms/js/analysis/resource/sankey.js"
+            "./js/common/chart/d3/sankey.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -107,7 +105,6 @@ function execDocReady() {
             // 사이드 메뉴 색상 설정
             $('.widget').widgster();
             setSideMenu("sidebar_menu_analysis", "sidebar_menu_analysis_resource");
-            dashboardColor = dashboardPalette.dashboardPalette01;
 
             //제품(서비스) 셀렉트 박스 이니시에이터
             makePdServiceSelectBox();

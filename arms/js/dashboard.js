@@ -11,8 +11,6 @@ var dataTableRef;
 var selectedIssue;    //선택한 이슈
 var selectedIssueKey; //선택한 이슈 키
 
-var dashboardColor;
-
 var labelType, useGradients, nativeTextSupport, animate; //투입 인력별 요구사항 관여 차트
 var tot_ver_count, active_ver_count, req_count, subtask_count, resource_count;// , req_in_action;
 var top5ReqLinkedIssue = [];
@@ -32,16 +30,15 @@ function execDocReady() {
 			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
 			"../reference/jquery-plugins/c3-0.7.20/c3.min.css",
 			"../reference/jquery-plugins/c3-0.7.20/c3.js",
-
+			//chart Colors
+			"./js/common/colorPalette.js",
 			//timeline
 			"../reference/jquery-plugins/info-chart-v1/js/D.js",
 			"./js/dashboard/chart/timeline_custom.js",
 			"./js/dashboard/chart/infographic_custom.css",
 			//echarts
 			"../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
-			"./js/dashboard/chart/barChartOnPolar.js",
-			//chart Colors
-			"./js/dashboard/chart/colorPalette.js",
+			"./js/common/chart/eCharts/barChartOnPolar.js",
 			"./js/dashboard/api/dashboardApi.js"
 		],
 
@@ -63,7 +60,7 @@ function execDocReady() {
 			// 투입 인력별 요구사항 관여 차트
 			"../reference/jquery-plugins/Jit-2.0.1/jit.js",
 			"../reference/jquery-plugins/Jit-2.0.1/Examples/css/Treemap.css",
-			"../arms/js/analysis/resource/treemap.js"
+			"./js/common/chart/others/treemap.js"
 		],
 
 		["../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -105,8 +102,6 @@ function execDocReady() {
 			// 사이드 메뉴 색상 설정
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_dashboard");
-
-			dashboardColor = dashboardPalette.dashboardPalette01;
 
 			//제품(서비스) 셀렉트 박스 이니시에이터
 			makePdServiceSelectBox();
@@ -426,6 +421,21 @@ function statisticsMonitor(pdservice_id, pdservice_version_id) {
 // 게이지 차트
 //////////////////////
 function drawVersionProgress(data) {
+	let gaugeChartColor = ColorPalette.d3Chart.gaugeChart;
+	if (gaugeChartColor.length < 0) {
+		gaugeChartColor = [
+			"rgba(158, 1, 66, 0.8)",
+			"rgba(213, 62, 79, 0.8)",
+			"rgba(244, 109, 67, 0.8)",
+			"rgba(253, 174, 97, 0.8)",
+			"rgba(254, 224, 139, 0.8)",
+			"rgba(230, 245, 152, 0.8)",
+			"rgba(171, 221, 164, 0.8)",
+			"rgba(102, 194, 165, 0.8)",
+			"rgba(50, 136, 189, 0.8)",
+			"rgba(94, 79, 162, 0.8)"
+		];
+	}
 	var Needle,
 		arc,
 		arcEndRad,
@@ -606,7 +616,7 @@ function drawVersionProgress(data) {
 			.on("mouseleave", mouseleave)
 			.append("path")
 			.attr("fill", function (d) {
-					return dashboardColor.gaugeChartColor[(sectionIndx - 1) % dashboardColor.gaugeChartColor.length];
+					return gaugeChartColor[(sectionIndx - 1) % gaugeChartColor.length];
 			})
 			.attr("stroke", "white")
 			.style("stroke-width", "0.4px")
@@ -820,7 +830,7 @@ var SankeyChart = (function ($) {
 
 		var iconXs = [10, 12, 11.5, 12];
 		var nodeIcons = ['<i class="fa fa-cube"></i>', '<i class="fa fa-server"></i>', '<i class="fa fa-database"></i>'];
-		var colors = dashboardColor.productToMan;
+		var colors = ColorPalette.d3Chart.sankeyChart;
 
 		var svg = initSvg();
 
@@ -982,264 +992,6 @@ var SankeyChart = (function ($) {
 	return { loadChart, drawEmptyChart };
 })(jQuery);
 
-function donutChart(pdServiceLink, pdServiceVersionLinks) {
-	function donutChartNoData() {
-		c3.generate({
-			bindto: '#donut-chart',
-			data: {
-				columns: [],
-				type: 'donut',
-			},
-			donut: {
-				title: "Total : 0"
-			},
-		});
-	}
-
-	if(pdServiceLink === "" || pdServiceVersionLinks === "") {
-		donutChartNoData();
-		return;
-	}
-
-	const url = new UrlBuilder()
-		.setBaseUrl('/auth-user/api/arms/dashboard/aggregation/flat')
-		.addQueryParam('pdServiceLink', pdServiceLink)
-		.addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-		.addQueryParam('메인그룹필드', "status.status_name.keyword")
-		.addQueryParam('하위그룹필드들', "")
-		.addQueryParam('크기', 1000)
-		.addQueryParam('하위크기', 1000)
-		.addQueryParam('컨텐츠보기여부', true)
-		.build();
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				let 검색결과 = data.검색결과['group_by_status.status_name.keyword'];
-				if ((Array.isArray(data) && data.length === 0) ||
-					(typeof data === 'object' && Object.keys(data).length === 0) ||
-					(typeof data === 'string' && data === "{}")) {
-					donutChartNoData();
-					return;
-				}
-
-				const columnsData = [];
-
-				검색결과.forEach(status => {
-					columnsData.push([status.필드명, status.개수]);
-				});
-
-				let totalDocCount = data.전체합계;
-
-				const chart = c3.generate({
-					bindto: '#donut-chart',
-					data: {
-						columns: columnsData,
-						type: 'donut',
-					},
-					donut: {
-						title: "Total : " + totalDocCount
-					},
-					color: {
-						pattern: dashboardColor.issueStatusColor
-					},
-					tooltip: {
-						format: {
-							value: function (value, ratio, id, index) {
-								return value;
-							}
-						},
-					},
-				});
-
-				$(document).on('click', '#donut-chart .c3-legend-item', function () {
-					const id = $(this).text();
-					let isHidden = false;
-
-					if($(this).hasClass('c3-legend-item-hidden')) {
-						isHidden = false;
-						$(this).removeClass('c3-legend-item-hidden');
-					} else {
-						isHidden = true;
-						$(this).addClass('c3-legend-item-hidden');
-					}
-					let docCount = 0;
-
-					for (const status of 검색결과) {
-						if (status.필드명 === id) {
-							docCount = status.개수;
-							break;
-						}
-					}
-					if (docCount) {
-						if (isHidden) {
-							totalDocCount -= docCount;
-						} else {
-							totalDocCount += docCount;
-						}
-					}
-					$('#donut-chart .c3-chart-arcs-title').text("Total : " + totalDocCount);
-				});
-			}
-		}
-	});
-}
-
-function combinationChart(pdServiceLink, pdServiceVersionLinks) {
-	function combinationChartNoData() {
-		c3.generate({
-			bindto: '#combination-chart',
-			data: {
-				x: 'x',
-				columns: [],
-				type: 'bar',
-				types: {},
-			},
-		});
-	}
-
-	if(pdServiceLink === "" || pdServiceVersionLinks === "") {
-		combinationChartNoData();
-		return;
-	}
-
-	const url = new UrlBuilder()
-		.setBaseUrl('/auth-user/api/arms/dashboard/requirements-jira-issue-statuses')
-		.addQueryParam('pdServiceLink', pdServiceLink)
-		.addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-		.addQueryParam('메인그룹필드', "pdServiceVersion")
-		.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
-		.addQueryParam('크기', 1000)
-		.addQueryParam('하위크기', 1000)
-		.addQueryParam('컨텐츠보기여부', false)
-		.build();
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		progress: true,
-		statusCode: {
-			200: function (apiResponse) {
-				const data = apiResponse.response;
-				if ((Array.isArray(data) && data.length === 0) ||
-					(typeof data === 'object' && Object.keys(data).length === 0) ||
-					(typeof data === 'string' && data === "{}")) {
-					combinationChartNoData();
-					return;
-				}
-
-				const issueStatusTypesSet = new Set();
-				for (const month in data) {
-					for (const status in data[month].statuses) {
-						issueStatusTypesSet.add(status);
-					}
-				}
-				const issueStatusTypes = [...issueStatusTypesSet];
-
-				let columnsData = [];
-
-				issueStatusTypes.forEach((status) => {
-					const columnData = [status];
-					for (const month in data) {
-						const count = data[month].statuses[status] || 0;
-						columnData.push(count);
-					}
-					columnsData.push(columnData);
-				});
-
-				const requirementCounts = ['요구사항'];
-				for (const month in data) {
-					requirementCounts.push(data[month].totalRequirements);
-				}
-				columnsData.push(requirementCounts);
-
-				let monthlyTotals = {};
-
-				for (const month in data) {
-					monthlyTotals[month] = data[month].totalIssues + data[month].totalRequirements;
-				}
-
-
-				const chart = c3.generate({
-					bindto: '#combination-chart',
-					data: {
-						x: 'x',
-						columns: [
-							['x', ...Object.keys(data)],
-							...columnsData,
-						],
-						type: 'bar',
-						types: {
-							'요구사항': 'area',
-						},
-						groups: [issueStatusTypes]
-					},
-					color: {
-						pattern: dashboardColor.combinationChartColor,
-					},
-					onrendered: function() {
-						d3.selectAll('.c3-line, .c3-bar, .c3-arc')
-							.style('stroke', 'white')
-							.style('stroke-width', '0.3px');
-					},
-					axis: {
-						x: {
-							type: 'category',
-						},
-					},
-					tooltip: {
-						format: {
-							title: function (index) {
-								const month = Object.keys(data)[index];
-								const total = monthlyTotals[month];
-								return `${month} | Total : ${total}`;
-							},
-						},
-					}
-				});
-
-				$(document).on('click', '#combination-chart .c3-legend-item', function () {
-					let id = this.__data__;
-					let isHidden = false;
-
-					if($(this).hasClass('c3-legend-item-hidden')) {
-						isHidden = false;
-						$(this).removeClass('c3-legend-item-hidden');
-					} else {
-						isHidden = true;
-						$(this).addClass('c3-legend-item-hidden');
-					}
-
-					let docCount = 0;
-
-					for (const month in data) {
-						if (data[month].statuses.hasOwnProperty(id)) {
-							docCount = data[month].statuses[id];
-						} else if (id === '요구사항') {
-							docCount = data[month].totalRequirements;
-						}
-					}
-
-					// 월별 통계 값 업데이트
-					for (const month in data) {
-						if (isHidden) {
-							monthlyTotals[month] -= docCount;
-						} else {
-							monthlyTotals[month] += docCount;
-						}
-					}
-				});
-			}
-		}
-	});
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 요구사항별 투입 인력 및 상태값 데이터 테이블
@@ -1376,7 +1128,7 @@ function reqStatePerAssigneeTop5(pdservice_id, pdServiceVersionLinks) {
 		progress: true,
 		statusCode: {
 			200: function(apiResponse) {
-				var colorArr = dashboardColor.reqStateColor;
+				var colorArr = ColorPalette.common.reqStateColor;
 
 				var resultData = apiResponse.response;
 				//레전드 리스트
@@ -1524,7 +1276,7 @@ function drawIssuePerManPower(data) {
 		.call(d3.axisLeft(y).tickFormat((d) => (d.length > 8 ? d.slice(0, 8) + ".." : d)))
 		.style("font-size", "20px").style("font-weight","700");
 
-	var color = d3.scaleOrdinal().domain(subgroups).range(dashboardColor.resourceReqColor);
+	var color = d3.scaleOrdinal().domain(subgroups).range(ColorPalette.d3Chart.horizontalChart);
 
 	var stackedData = d3.stack().keys(subgroups)(data).concat(data);
 

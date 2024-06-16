@@ -30,7 +30,7 @@ var SankeyChart = (function ($) {
             .style("font-weight", 5)
             .text("선택된 어플리케이션이 없습니다.")
             .attr("x", width / 2)
-            .attr("y", height / 2);R
+            .attr("y", height / 2);
     };
 
     var loadChart = function (data) {
@@ -45,7 +45,7 @@ var SankeyChart = (function ($) {
 
         var iconXs = [10, 12, 11.5, 12];
         var nodeIcons = ['<i class="fa fa-cube"></i>', '<i class="fa fa-server"></i>', '<i class="fa fa-database"></i>'];
-        var colors = dashboardColor.productToMan;
+        var colors = ColorPalette.d3Chart.sankeyChart;
 
         var svg = initSvg();
 

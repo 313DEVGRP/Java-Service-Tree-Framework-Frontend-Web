@@ -298,6 +298,7 @@ function setKanban() {
                         id: "req_" + item.c_id,
                         title: `<span class="req_item">${item.c_title}</span>
                                 <i class="fa fa-ellipsis-h show-info" data-id="req_${item.c_id}"></i>`,
+                        version: item.c_req_pdservice_versionset_link,
                         info: {
                             reqVersions: versions,
                             reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
@@ -352,6 +353,7 @@ function loadKanban(reqListByState, reqBoardByState) {
             let reqTitle = el.innerText;
             let state = source.parentNode.dataset.id;
             let changeState = target.parentNode.dataset.id;
+            let version = el.dataset.version
 
             console.log('[ reqKanban :: loadKanban ] :: 보드 이동', {
                 element: el.dataset,
@@ -363,9 +365,10 @@ function loadKanban(reqListByState, reqBoardByState) {
             let reqData = {
                 c_id: reqId,
                 c_req_state_link: changeState,
+                c_req_pdservice_versionset_link: version,
             };
             $.ajax({
-                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateDataBase.do",
+                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateNode.do",
                 type: "POST",
                 data: reqData,
                 statusCode: {
