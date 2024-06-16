@@ -464,19 +464,24 @@
 											</div>
 										</div>
 
-										<div id="product_detail_view_pdservice_detail_drawio_swiper" class="control-group" for="product_detail_view_pdservice_detail_drawio_swiper" style="display: none">
-											<label class="control-label font13">drawio 썸네일 :</label>
-											<div class="controls form-group input-group" style="margin-left: 180px;">
+
+										<div id="product_detail_view_pdservice_detail_drawio_swiper" class="control-group" for="product_detail_view_pdservice_detail_drawio_swiper" style="display: none; position: relative;">
+												<label class="control-label font13">drawio 썸네일 :</label>
+												<div class="controls form-group input-group" style="margin-left: 180px;">
 														<span class="input-group-addon">
 																<i class="glyphicon glyphicon-camera"></i>
 														</span>
-												<div class="swiper" id="product_detail_view_pdservice_detail_drawio_swiper_container">
-													<div class="swiper-wrapper"></div>
-													<div class="swiper-button-next"></div>
-													<div class="swiper-button-prev"></div>
-													<div class="swiper-pagination"></div>
+													<div class="swiper main-swiper" id="product_detail_view_pdservice_detail_drawio_swiper_container">
+														<div class="swiper-wrapper"></div>
+														<div class="swiper-button-next"></div>
+														<div class="swiper-button-prev"></div>
+														<div class="swiper-pagination"></div>
+													</div>
+													<div thumbsSlider="" class="swiper thumbnail-swiper" id="product_detail_view_pdservice_detail_drawio_swiper_container_thumbs">
+														<div class="swiper-wrapper">
+														</div>
+													</div>
 												</div>
-											</div>
 										</div>
 
 										<div class="control-group">
@@ -527,13 +532,15 @@
 													<span class="input-group-addon">
 															<i class="glyphicon glyphicon-camera"></i>
 													</span>
-													<div class="swiper" id="product_detail_update_pdservice_detail_drawio_swiper_container">
+													<div class="swiper main-swiper" id="product_detail_update_pdservice_detail_drawio_swiper_container">
 														<div class="swiper-wrapper"></div>
 														<div class="swiper-button-next"></div>
 														<div class="swiper-button-prev"></div>
 														<div class="swiper-pagination"></div>
 													</div>
-												</div>
+													<div thumbsSlider="" class="swiper thumbnail-swiper" id="product_detail_update_pdservice_detail_drawio_swiper_container_thumbs">
+														<div class="swiper-wrapper"></div>
+													</div>
 											</div>
 
 											<div class="control-group">
@@ -1151,11 +1158,14 @@
 								<span class="input-group-addon">
 										<i class="glyphicon glyphicon-camera"></i>
 								</span>
-								<div class="swiper" id="modal_product_detail_add_pdservice_detail_drawio_swiper_container">
+								<div class="swiper main-swiper" id="modal_product_detail_add_pdservice_detail_drawio_swiper_container">
 									<div class="swiper-wrapper"></div>
 									<div class="swiper-button-next"></div>
 									<div class="swiper-button-prev"></div>
 									<div class="swiper-pagination"></div>
+								</div>
+								<div thumbsSlider="" class="swiper thumbnail-swiper" id="modal_product_detail_add_pdservice_detail_drawio_swiper_container_thumbs">
+									<div class="swiper-wrapper"></div>
 								</div>
 							</div>
 						</div>
@@ -1301,11 +1311,14 @@
 								<span class="input-group-addon">
 										<i class="glyphicon glyphicon-camera"></i>
 								</span>
-								<div class="swiper" id="modal_product_detail_edit_pdservice_detail_drawio_swiper_container">
+								<div class="swiper main-swiper" id="modal_product_detail_edit_pdservice_detail_drawio_swiper_container">
 									<div class="swiper-wrapper"></div>
 									<div class="swiper-button-next"></div>
 									<div class="swiper-button-prev"></div>
 									<div class="swiper-pagination"></div>
+								</div>
+								<div thumbsSlider="" class="swiper thumbnail-swiper" id="modal_product_detail_edit_pdservice_detail_drawio_swiper_container_thumbs">
+									<div class="swiper-wrapper"></div>
 								</div>
 							</div>
 						</div>
@@ -1351,29 +1364,54 @@
 	<!-- /.modal-dialog -->
 </div>
 <style>
-    .swiper {
+    .main-swiper {
         width: 200px;
         height: 200px;
-				margin-left: 0;
-				margin-right: 0;
+        position: relative;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .thumbnail-swiper {
+        width: 200px;
+        height: 50px;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 10px 0;
     }
 
     .swiper-slide {
         text-align: center;
         font-size: 18px;
-        background: #fff;
-        //background: #f0f0f0; /* 변경할 배경 색상 */
-
         display: flex;
         justify-content: center;
         align-items: center;
+        background-size: cover;
+        background: #fff center;
+        width: 100%;
+        height: 100%;
     }
 
     .swiper-slide img {
-        //display: block;
-        width: 200px;
-        height: 200px;
+        display: block;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
+    }
+
+    .thumbnail-swiper .swiper-slide img {
+        width: 25%;
+				opacity: 0.7;
+    }
+    .thumbnail-swiper .swiper-slide {
+        width: 25%;
+        margin-right: 2px;
+        margin-left: 2px;
+        opacity: 0.7;
+    }
+
+    .thumbnail-swiper .swiper-slide-thumb-active {
+        opacity: 1;
     }
 
     .swiper-pagination-fraction,
