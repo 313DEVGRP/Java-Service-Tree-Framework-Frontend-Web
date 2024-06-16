@@ -787,11 +787,9 @@ class Table {
             dataToSend.c_req_end_date = new Date(editContents.endDate);
         }
 
-        if( dataToSend.c_req_priority_link || dataToSend.c_req_difficulty_link || dataToSend.c_req_start_date || dataToSend.c_req_end_date) {
+        if( dataToSend.c_req_state_link || dataToSend.c_req_priority_link || dataToSend.c_req_difficulty_link || dataToSend.c_req_start_date || dataToSend.c_req_end_date) {
             // DB까지만 변경 필요한 경우
             tableOptions.onDBUpdate(tableOptions.id, dataToSend);
-        } else if(dataToSend.c_req_state_link){
-            tableOptions.onUpdate(tableOptions.id,dataToSend)
         } else {
            const versionSetLink = res.find(item => item.c_id === reqId);
            tableOptions.onUpdate(tableOptions.id, {
