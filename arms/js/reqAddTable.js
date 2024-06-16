@@ -769,8 +769,13 @@ class Table {
         };
 
         // 조건 검사 후 조건을 만족하는 경우에만 프로퍼티 추가
-        if(editContents.statusId) dataToSend.c_req_state_link = editContents.statusId;
-        if(editContents.priorityId) dataToSend.c_req_priority_link = editContents.priorityId;
+        if(editContents.statusId) {
+            const reqData = res.find(item => item.c_id == reqId);
+            const c_req_pdservice_versionset_link = reqData ? reqData.c_req_pdservice_versionset_link : null;
+            dataToSend.c_req_state_link = editContents.statusId;
+            dataToSend.c_req_pdservice_versionset_link = c_req_pdservice_versionset_link;
+            dataToSend.c_title = reqData.c_title;
+        }if(editContents.priorityId) dataToSend.c_req_priority_link = editContents.priorityId;
         if(editContents.difficultyId) dataToSend.c_req_difficulty_link = editContents.difficultyId;
         if(editContents.content) dataToSend.c_title = editContents.content;
 
@@ -782,11 +787,12 @@ class Table {
             dataToSend.c_req_end_date = new Date(editContents.endDate);
         }
 
-        if(dataToSend.c_req_state_link || dataToSend.c_req_priority_link || dataToSend.c_req_difficulty_link || dataToSend.c_req_start_date || dataToSend.c_req_end_date) {
+        if( dataToSend.c_req_priority_link || dataToSend.c_req_difficulty_link || dataToSend.c_req_start_date || dataToSend.c_req_end_date) {
             // DB까지만 변경 필요한 경우
             tableOptions.onDBUpdate(tableOptions.id, dataToSend);
+        } else if(dataToSend.c_req_state_link){
+            tableOptions.onUpdate(tableOptions.id,dataToSend)
         } else {
-           // ALM까지 데이터 변경 필요
            const versionSetLink = res.find(item => item.c_id === reqId);
            tableOptions.onUpdate(tableOptions.id, {
                 c_id: reqId,
