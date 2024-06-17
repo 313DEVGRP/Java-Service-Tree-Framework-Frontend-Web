@@ -368,7 +368,7 @@ function loadKanban(reqListByState, reqBoardByState) {
                 c_req_pdservice_versionset_link: version,
             };
             $.ajax({
-                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateNode.do",
+                url: "/auth-user/api/arms/reqAdd/" + "T_ARMS_REQADD_" + selectedPdServiceId + "/updateDataBase.do",
                 type: "POST",
                 data: reqData,
                 statusCode: {

@@ -82,17 +82,24 @@ function drawRadialPolarBarChart(target, dataArr, colorArr) {
         "rgba(166,86,40,0.7)"
     ];
 
+    var colorSet = [];
+    if (!colorArr || colorArr.length < 1) {
+        colorSet = defaultColorSet;
+    } else {
+        colorSet = colorArr;
+    }
+
     function calculateTotal(dataArr) {
         const total = dataArr.reduce((acc, curr) => acc + curr.value, 0);
         return total;
     }
     const totalValue = calculateTotal(dataArr);
-    console.log ("totalValue => " + totalValue);
+
     var angleAxisArr = [], seriesDataArr=[];
     if(dataArr.length > 0) {
         dataArr.forEach((element, idx) => {
            angleAxisArr.push(element["name"]);
-           seriesDataArr.push({value: element["value"], itemStyle: { color: colorArr ? colorArr[idx] : defaultColorSet[idx] }});
+           seriesDataArr.push({value: element["value"], itemStyle: { color:colorSet[idx % colorSet.length] }});
         });
     }
 
@@ -177,7 +184,7 @@ function drawRadialPolarBarChart(target, dataArr, colorArr) {
             }
         },
         animation: false
-    }
+    };
 
     function replaceNaN(value) {
         if (isNaN(value)) {
@@ -196,11 +203,11 @@ function drawRadialPolarBarChart(target, dataArr, colorArr) {
         const chartFooter = document.createElement("div");
         chartFooter.classList.add("chart-footer");
 
-        dataArr.forEach((data,index) => {
+        dataArr.forEach((data,idx) => {
             const item = document.createElement("div");
             const portion =replaceNaN(+(data.value*100/ +total).toFixed(0));
             item.classList.add("footer-item");
-            item.style.borderColor = colorArr[index];
+            item.style.borderColor = colorSet[idx % colorSet.length];
             item.innerHTML = `<div class="item-name">${data.name}</div> <div class="item-value">${data.value} (${portion}%)</div>`;
             chartFooter.appendChild(item);
         });
