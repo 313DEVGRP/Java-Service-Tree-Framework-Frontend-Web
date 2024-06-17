@@ -1914,10 +1914,16 @@ function bindLocaleText(locales) {
 		}
 		if (isIncludeHTMLTag(content)) {
 			tag.innerHTML = sanitizeHTML(content);
+		} else if (isPlaceholder(tag)) {
+			tag.placeholder = content;
 		} else {
 			tag.textContent = content;
 		}
 	});
+}
+
+function isPlaceholder(tag) {
+	return tag.placeholder !== undefined;
 }
 
 function isIncludeHTMLTag(content) {
