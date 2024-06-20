@@ -312,12 +312,11 @@ function loadPluginGroupsParallelAndSequential(groups) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function includeLayout(page) {
 	var includeArea = $("[data-include]");
-	var self, url;
 	var str = window.location.href;
 
 	$.each(includeArea, function () {
-		self = $(this);
-		url = self.data("include");
+		var self = $(this);
+		var url = self.data("include");
 		console.log("[ common :: includeLayout ] url = " + url);
 
 		var hrefLink = window.location.href;
@@ -332,6 +331,7 @@ function includeLayout(page) {
 		} else if (url.indexOf("content-container") !== -1) {
 			url = "html/" + page + "/content-container.html";
 			self.load(url, function () {
+				includeContents(self);
 				self.removeAttr("data-include");
 			});
 		} else if (url.indexOf("page-sidebar") !== -1) {
@@ -360,7 +360,22 @@ function includeLayout(page) {
 
 	return true;
 }
+////////////////////////////////////////////////
+// content-container 내부 첨부한 html include
+////////////////////////////////////////////////
+function includeContents(contentContainer) {
+	var includeArea = contentContainer.find("[data-include]");
 
+	$.each(includeArea, function () {
+		var self = $(this);
+		var url = self.data("include");
+		console.log(url);
+
+		self.load(url, function (content) {
+			self.replaceWith(content);
+		});
+	});
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 상단 페이지 로드 프로그래스바 설정
