@@ -1,15 +1,27 @@
-var SankeyChart = (function ($) {
+var SankeyChart = (
+  function ($) {
     "use strict";
+
+      var target = {
+          "$targetId": "", // jQuery :: $ + targetId
+          "targetId" : ""  // targetId :: 차트를 그릴 element id
+      };
+
+      var setTarget = function (targetElementId) {
+          target.$targetId = "#" + targetElementId;
+          target.targetId = targetElementId;
+      };
 
     var initSvg = function () {
         var margin = { top: 10, right: 10, bottom: 10, left: 10 };
-        var width = document.getElementById("chart-product-manpower").offsetWidth;
-        var height = document.getElementById("chart-product-manpower").offsetHeight - margin.top - margin.bottom;
+        var width = document.getElementById(target.targetId).offsetWidth;
+        var height = document.getElementById(target.targetId).offsetHeight - margin.top - margin.bottom;
+
         var vx = width + margin.left + margin.right;
         var vy = height + margin.top + margin.bottom;
 
         return d3
-            .select("#chart-product-manpower") // 그려지는 위치
+            .select(target.$targetId) // 그려지는 위치
             .append("svg")
             .attr("viewBox", "0 0 " + vx + " " + vy)
             .attr("width", width)
@@ -20,7 +32,7 @@ var SankeyChart = (function ($) {
 
     var drawEmptyChart = function () {
         var margin = { top: 10, right: 10, bottom: 10, left: 10 };
-        var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+        var width = document.getElementById(target.targetId).offsetWidth - margin.left - margin.right;
         var height = 500 - margin.top - margin.bottom;
 
         initSvg()
@@ -33,9 +45,12 @@ var SankeyChart = (function ($) {
             .attr("y", height / 2);
     };
 
-    var loadChart = function (data) {
+    var loadChart = function (data, targetElementId) {
+        if(targetElementId) {
+            setTarget(targetElementId);
+        }
         var margin = { top: 10, right: 10, bottom: 10, left: 10 };
-        var width = document.getElementById("chart-product-manpower").offsetWidth - margin.left - margin.right;
+        var width = document.getElementById(target.targetId).offsetWidth - margin.left - margin.right;
         var height = 500 - margin.top - margin.bottom;
 
         var formatNumber = d3.format(",.0f");
@@ -211,9 +226,11 @@ var SankeyChart = (function ($) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // 제품-버전-투입인력 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
-function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
+function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks, targetId, 하위크기) {
+    let $target = "#"+targetId;
+
     function removeSankeyChart() {
-        const svgElement = d3.select("#chart-product-manpower").select("svg");
+        const svgElement = d3.select($target).select("svg");
         if (!svgElement.empty()) {
             svgElement.remove();
         }
@@ -226,7 +243,7 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
         .addQueryParam('메인그룹필드', "pdServiceVersions")
         .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
         .addQueryParam('크기', pdServiceVersionLinks.split(",").length)
-        .addQueryParam('하위크기', 5)
+        .addQueryParam('하위크기', 하위크기)
         .addQueryParam("isReqType", "ISSUE")
         .addQueryParam('컨텐츠보기여부', true)
         .build();
@@ -241,7 +258,7 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
             200: function (apiResponse) {
                 removeSankeyChart();
                 const data = apiResponse.response;
-                SankeyChart.loadChart(data);
+                SankeyChart.loadChart(data, targetId);
             }
         }
     });

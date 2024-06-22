@@ -18,7 +18,8 @@ var table;
 function execDocReady() {
 
     var pluginGroups = [
-        [	"../reference/light-blue/lib/vendor/jquery.ui.widget.js",
+        [
+            "../reference/light-blue/lib/vendor/jquery.ui.widget.js",
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Templates_js_tmpl.js",
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Load-Image_js_load-image.js",
             "../reference/light-blue/lib/vendor/http_blueimp.github.io_JavaScript-Canvas-to-Blob_js_canvas-to-blob.js",
@@ -33,16 +34,17 @@ function execDocReady() {
             // Apache Echarts
             "../reference/jquery-plugins/echarts-5.4.3/dist/echarts.min.js",
         ],
-
-        [	"../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
+        [
+            "../reference/jquery-plugins/select2-4.0.2/dist/css/select2_lightblue4.css",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/css/multiselect-lightblue4.css",
             "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select-bluelight.css",
             "../reference/jquery-plugins/select2-4.0.2/dist/js/select2.min.js",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.quicksearch.js",
             "../reference/jquery-plugins/lou-multi-select-0.9.12/js/jquery.multi-select.js",
-            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"],
-
-        [	"../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
+            "../reference/jquery-plugins/multiple-select-1.5.2/dist/multiple-select.min.js"
+        ],
+        [
+            "../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.min.css",
             "../reference/light-blue/lib/bootstrap-datepicker.js",
             "../reference/jquery-plugins/datetimepicker-2.5.20/build/jquery.datetimepicker.full.min.js",
             "../reference/lightblue4/docs/lib/widgster/widgster.js",
@@ -53,19 +55,21 @@ function execDocReady() {
             "./js/common/chart/others/treemap.js",
             // 제품-버전-투입인력 차트
             "../reference/jquery-plugins/d3-sankey-v0.12.3/d3-sankey.min.js",
+            "./js/common/chart/d3/sankey.js",
             // 최상단 메뉴
-            "js/analysis/topmenu/topMenuApi.js",
+            "./js/analysis/topmenu/topMenuApi.js",
             "./js/common/chart/eCharts/basicRadar.js"
         ],
         [
-            "js/common/table.js",
-            "js/analysis/api/resourceApi.js",
-            "js/analysis/table/workerStatusTable.js",
+            "./js/common/table.js",
+            "./js/analysis/api/resourceApi.js",
+            "./js/analysis/table/workerStatusTable.js",
             "./js/common/chart/eCharts/horizontalBarChart.js",
-            "./js/common/chart/eCharts/simplePie.js",
+            "./js/common/chart/eCharts/simplePie.js"
         ],
 
-        [	"../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
+        [
+            "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Select/css/select.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/media/js/jquery.dataTables.min.js",
@@ -77,8 +81,7 @@ function execDocReady() {
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
             "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.js",
-            "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.css",
-            "./js/common/chart/d3/sankey.js"
+            "../reference/jquery-plugins/jQCloud-2.0.3/dist/jqcloud.css"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -111,6 +114,9 @@ function execDocReady() {
 
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
+
+            // 전체보기 관련 이벤트 세팅
+            전체보기_관련_이벤트();
             
             //데이터테이블초기화
             table = initTable();
@@ -126,7 +132,6 @@ function execDocReady() {
         });
 
 }
-
 
 // 우하단 StackedHorizontalBar
 function stackedHorizontalBar(){
@@ -347,9 +352,9 @@ function makePdServiceSelectBox() {
     });
 } // end makePdServiceSelectBox()
 
-////////////////////
-//버전 멀티 셀렉트 박스
-////////////////////
+////////////////////////////////////////////////////////////
+//버전 멀티 셀렉트 박스 (버전 옵션 선택 시)
+////////////////////////////////////////////////////////////
 function makeVersionMultiSelectBox() {
     //버전 선택시 셀렉트 박스 이니시에이터
     $(".multiple-select").multipleSelect({
@@ -382,7 +387,8 @@ function makeVersionMultiSelectBox() {
             drawResource(selectedPdServiceId, selectedVersionId);
 
             // 샌키
-            drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId);
+            drawProductToManSankeyChart($("#selected_pdService").val(), selectedVersionId , "chart-product-manpower",5);
+            $("#btn_modal_sankey").click();
             drawManRequirementTreeMapChart($("#selected_pdService").val(), selectedVersionId);
             stackedHorizontalBar();
             wordCloud();
@@ -395,45 +401,9 @@ function makeVersionMultiSelectBox() {
     });
 }
 
-function wordCloud() {
-    $('#tag-cloud').jQCloud('destroy');
-
-    const url = new UrlBuilder()
-        .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
-        .addQueryParam('pdServiceLink', selectedPdServiceId)
-        .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-        .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
-        .addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
-        .addQueryParam('크기', 1000)
-        .addQueryParam('하위크기', 1000)
-        .addQueryParam('컨텐츠보기여부', true)
-        .addQueryParam("isReqType", "ISSUE")
-        .build();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        async: false,
-        statusCode: {
-            200: function (apiResponse) {
-                const data = apiResponse.response;
-                let words = data['검색결과']["group_by_assignee.assignee_accountId.keyword"].map(item => ({
-                    text: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["필드명"],
-                    weight: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["개수"]
-                }));
-
-                $('#tag-cloud').jQCloud(words);
-            }
-        }
-    });
-
-
-
-}
-
+////////////////////////////////////////////////////////////
+// 제품서비스 - 버전 데이터 바인딩 (제품 선택 시)
+////////////////////////////////////////////////////////////
 function bind_VersionData_By_PdService() {
     $(".multiple-select option").remove();
     $.ajax({
@@ -465,7 +435,7 @@ function bind_VersionData_By_PdService() {
                 // 작업자별 상태 - dataTable
                 drawResource(selectedPdServiceId, selectedVersionId);
 
-                drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId);
+                drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId, "chart-product-manpower", 5);
                 drawManRequirementTreeMapChart(selectedPdServiceId, selectedVersionId);
                 stackedHorizontalBar();
                 wordCloud();
@@ -481,6 +451,99 @@ function bind_VersionData_By_PdService() {
             }
         }
     });
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// 전체보기 클릭 및 모달 동작 이벤트
+////////////////////////////////////////////////////////////////////////////////////////
+function 전체보기_관련_이벤트() {
+    // 테스트용
+    $("#btn_modal_sankey").on("click", function() {
+        let serId = 22;
+        let verList = [33,35,36,37,46,55,59,61,74];
+        let verListSplit = verList.join(",");
+        let tarId = "modal_chart";
+        drawProductToManSankeyChart(serId, verListSplit, tarId, 10000);
+    });
+
+    // 모달이 띄워졌을 때 동작.
+    $('#analysis_modal_sankey').on('shown.bs.modal', function () {
+        // let serId = 22; let verList = [33,35,36,37,46,55,59,61,74]; let verListSplit = verList.join(",");
+        let tarId = "modal_chart";
+        if (selectedVersionId) {
+            drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId, tarId, 10000);
+        } else {
+            jError("서비스 및 버전을 설정 후 선택해주세요.");
+        }
+
+    });
+
+    $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
+        var target = $(e.target).attr("href"); // activated tab
+        console.log(target);
+
+        if(target === "#chart_data") {
+            let tarId = "modal_chart";
+            if (selectedVersionId) {
+                drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId, tarId, 10000);
+            } else {
+                jError("서비스 및 버전을 설정 후 선택해주세요.");
+            }
+        } else if (target === "#excel_data") {
+
+        } else if (target === "#option_toggle") {
+            $(".option_tab").removeClass("active");
+            e.preventDefault();
+            if ($(".modal-body-main").hasClass("col-lg-12")) {
+                $(".modal-body-main").removeClass("col-lg-12").addClass("col-lg-9");
+                $(".modal-body-option").removeClass("hidden");
+            } else {
+                $(".modal-body-main").removeClass("col-lg-9").addClass("col-lg-12");
+                $(".modal-body-option").addClass("hidden");
+            }
+
+        }
+    });
+}
+
+/////////////////////////////////////////
+// wordCloud
+/////////////////////////////////////////
+function wordCloud() {
+    $('#tag-cloud').jQCloud('destroy');
+
+    const url = new UrlBuilder()
+      .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
+      .addQueryParam('pdServiceLink', selectedPdServiceId)
+      .addQueryParam('pdServiceVersionLinks', selectedVersionId)
+      .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
+      .addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
+      .addQueryParam('크기', 1000)
+      .addQueryParam('하위크기', 1000)
+      .addQueryParam('컨텐츠보기여부', true)
+      .addQueryParam("isReqType", "ISSUE")
+      .build();
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        async: false,
+        statusCode: {
+            200: function (apiResponse) {
+                const data = apiResponse.response;
+                let words = data['검색결과']["group_by_assignee.assignee_accountId.keyword"].map(item => ({
+                    text: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["필드명"],
+                    weight: item["하위검색결과"]["group_by_assignee.assignee_displayName.keyword"][0]["개수"]
+                }));
+
+                $('#tag-cloud').jQCloud(words);
+            }
+        }
+    });
+
 }
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
