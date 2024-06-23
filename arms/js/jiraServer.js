@@ -899,6 +899,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 		$("#jira_server_update_div").addClass("hidden");
 		$("#jira_server_delete_div").addClass("hidden");
 		$("#jira_renew_button_div").addClass("hidden");
+		$("#alm_server_renew_button_div").addClass("hidden");
 
 		if (target === "#dropdown1") { // 삭제하기
 			$("#jira_server_delete_div").removeClass("hidden");
@@ -912,6 +913,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 			selectedTab = "almProject";
 			set_renew_btn(selectedTab, selectServerId);
 			$("#jira_renew_button_div").removeClass("hidden");
+			$("#alm_server_renew_button_div").removeClass("hidden");
 
 			project_dataTableLoad(selectServerId);
 
@@ -1048,6 +1050,32 @@ function alm_renew(renewJiraType, serverId, projectId) { // 서버 c_id
 	});
 }
 
+function alm_server_renew() {
+	let server_c_id = selectServerId;
+	$.ajax({
+		url: "/auth-user/api/arms/jiraServer/renewServer.do",
+		type: "put",
+		data: { c_id: server_c_id },
+		statusCode: {
+			200: function () {
+				jSuccess(selectServerName + " 서버의 전체 항목이 갱신되었습니다.");
+				console.log("현재 선택된 항목(c_id, 서버명) :" + server_c_id +", " + selectServerName);
+				makeJiraServerCardDeck()
+					.then(() => {
+						//데이터 테이블 데이터 재 로드
+						jiraServerCardClick(server_c_id);
+					})
+					.catch(error => {
+						console.error('Error occurred:', error);
+					})
+					.finally(() => {
+						$('a[href="#related_project"]').tab('show');
+					});
+			}
+		}
+	});
+}
+
 function projectIssueTypeDataTable(project_c_id) {
 	var columnList= [
 		{
@@ -1119,6 +1147,8 @@ function projectIssueTypeDataTable(project_c_id) {
 	//datatable 좌상단 datarow combobox style
 	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
 	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
+
+	$(jquerySelector+' tbody').off('click', 'tr');
 }
 
 // 이슈 유형, 우선순위 데이터 테이블, 상태는 draw_req_state_mapping_datatable에서 처리
@@ -1342,49 +1372,26 @@ function click_projectList_table(projectName, selectServerType, project_c_id) {
 		};
 	}
 
-	let is_issue_status_actvie = $('a[href="#issue_status"]').parent().hasClass('active');
-
 	if (selectServerType === '레드마인_온프레미스') {
 		$('a[href="#issue_status"]').hide();
-		is_issue_status_actvie = false;
 	} else {
 		$('a[href="#issue_status"]').show();
 	}
 
-	if (is_issue_status_actvie) {
-		selectedTab = "issueStatus";
-	} else {
-		selectedTab = "issueType";
-	}
+	selectedTab = "issueType";
 
-	if (selectedTab === "issueStatus") {
-		$('a[href="#issue_status"]').parent().addClass('active');
-		$('#issue_status').addClass('active');
-		$("#issue_status_table").removeClass("hidden");
+	$('a[href="#issue_status"]').parent().removeClass('active');
+	$('#issue_status').removeClass('active');
+	$("#issue_status_table").addClass("hidden");
 
-		$('a[href="#issue_type"]').parent().removeClass('active');
-		$('#issue_type').removeClass('active');
-		$("#issue_type_table").addClass("hidden");
+	$('a[href="#issue_type"]').parent().addClass('active');
+	$('#issue_type').addClass('active');
+	$("#issue_type_table").removeClass("hidden");
 
-
-		$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
-		$("#default_project_each_update").addClass("hidden");
-		set_renew_btn_3rd_grid(selectedTab, selectServerId, project_c_id);
-		draw_req_state_mapping_datatable("project_issuestatus", project_c_id);
-	} else {
-		$('a[href="#issue_status"]').parent().removeClass('active');
-		$('#issue_status').removeClass('active');
-		$("#issue_status_table").addClass("hidden");
-
-		$('a[href="#issue_type"]').parent().addClass('active');
-		$('#issue_type').addClass('active');
-		$("#issue_type_table").removeClass("hidden");
-
-		$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
-		$("#default_project_each_update").removeClass("hidden");
-		set_renew_btn_3rd_grid(selectedTab, selectServerId, project_c_id);
-		projectIssueTypeDataTable(project_c_id);
-	}
+	$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
+	$("#default_project_each_update").removeClass("hidden");
+	set_renew_btn_3rd_grid(selectedTab, selectServerId, project_c_id);
+	projectIssueTypeDataTable(project_c_id);
 }
 
 //프로젝트 목록 다시 넓게 쓰기
