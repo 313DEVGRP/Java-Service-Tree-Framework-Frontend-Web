@@ -359,6 +359,15 @@
                         프로젝트 갱신
                     </button>
                 </div>
+                <div style="float: right"
+                     class="hidden"
+                     id="alm_server_renew_button_div">
+                    <button type="button"
+                            onClick="alm_server_renew()"
+                            class="btn btn-info  btn-sm mr-1">
+                        전체 갱신
+                    </button>
+                </div>
                 <div id="returnList_Layer" style="float: right; display: none;">
                     <button type="button" id="setWide_Btn" class="btn btn-default btn-sm mr-1">
                         <span class="glyphicon glyphicon-repeat"></span>
@@ -1080,7 +1089,8 @@
 </div>
 
 <!-- 신규 -->
-<div    id="my_modal1"
+<div
+        id="my_modal1"
         class="modal fade"
         role="dialog"
         aria-labelledby="myModalLabel"
