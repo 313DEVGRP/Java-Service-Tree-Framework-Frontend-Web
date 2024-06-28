@@ -278,11 +278,11 @@ function stackedHorizontalBar(){
         .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
         .addQueryParam('pdServiceLink', selectedPdServiceId)
         .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-        .addQueryParam('메인그룹필드', "assignee.assignee_emailAddress.keyword")
-        .addQueryParam('하위그룹필드들', "status.status_name.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('메인_그룹_필드', "assignee.assignee_emailAddress.keyword")
+        .addQueryParam('하위_그룹_필드들', "status.status_name.keyword,assignee.assignee_displayName.keyword")
         .addQueryParam('크기', 1000)
-        .addQueryParam('하위크기', 1000)
-        .addQueryParam('컨텐츠보기여부', true)
+        .addQueryParam('하위_크기', 1000)
+        .addQueryParam('컨텐츠_보기_여부', true)
         .addQueryParam("isReqType", "ISSUE")
         .build();
 
@@ -516,11 +516,11 @@ function wordCloud() {
       .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
-      .addQueryParam('메인그룹필드', "assignee.assignee_accountId.keyword")
-      .addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
+      .addQueryParam('메인_그룹_필드', "assignee.assignee_accountId.keyword")
+      .addQueryParam('하위_그룹_필드들', "assignee.assignee_displayName.keyword")
       .addQueryParam('크기', 1000)
-      .addQueryParam('하위크기', 1000)
-      .addQueryParam('컨텐츠보기여부', true)
+      .addQueryParam('하위_크기', 1000)
+      .addQueryParam('컨텐츠_보기_여부', true)
       .addQueryParam("isReqType", "ISSUE")
       .build();
 
@@ -789,11 +789,11 @@ function drawChartsPerPerson(pdservice_id, pdServiceVersionLinks, mailAddressLis
         type: "GET",
         data: { "서비스아이디" : pdservice_id,
             "mailAddressList" : mailAddressList,
-            "메인그룹필드" : 'assignee.assignee_emailAddress.keyword',
-            "하위그룹필드들": 'isReq,'+targetField,
-            "컨텐츠보기여부" : true,
+            "메인_그룹_필드" : 'assignee.assignee_emailAddress.keyword',
+            "하위_그룹_필드들": 'isReq,'+targetField,
+            "컨텐츠_보기_여부" : true,
             "크기" : 1000,
-            "하위크기": 1000,
+            "하위_크기": 1000,
             "pdServiceVersionLinks" : pdServiceVersionLinks},
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
@@ -928,11 +928,11 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
         .setBaseUrl('/auth-admin/api/arms/analysis/resource/assignees-requirements-involvements')
         .addQueryParam('pdServiceLink', pdServiceLink)
         .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-        .addQueryParam('메인그룹필드', "pdServiceVersion")
-        .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('메인_그룹_필드', "pdServiceVersion")
+        .addQueryParam('하위_그룹_필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
         .addQueryParam('크기', 0)
-        .addQueryParam('하위크기', 0)
-        .addQueryParam('컨텐츠보기여부', true)
+        .addQueryParam('하위_크기', 0)
+        .addQueryParam('컨텐츠_보기_여부', true)
         .build();
 
     $.ajax({

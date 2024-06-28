@@ -226,7 +226,7 @@ var SankeyChart = (
 ////////////////////////////////////////////////////////////////////////////////////////
 // 제품-버전-투입인력 차트 생성
 ////////////////////////////////////////////////////////////////////////////////////////
-function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks, targetId, 하위크기) {
+function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks, targetId, 하위_크기) {
     let $target = "#"+targetId;
 
     function removeSankeyChart() {
@@ -240,12 +240,12 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks, targe
         .setBaseUrl('/auth-user/api/arms/dashboard/version-assignees')
         .addQueryParam('pdServiceLink', pdServiceLink)
         .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-        .addQueryParam('메인그룹필드', "pdServiceVersions")
-        .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+        .addQueryParam('메인_그룹_필드', "pdServiceVersions")
+        .addQueryParam('하위_그룹_필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
         .addQueryParam('크기', pdServiceVersionLinks.split(",").length)
-        .addQueryParam('하위크기', 하위크기)
+        .addQueryParam('하위_크기', 하위_크기)
         .addQueryParam("isReqType", "ISSUE")
-        .addQueryParam('컨텐츠보기여부', true)
+        .addQueryParam('컨텐츠_보기_여부', true)
         .build();
 
     $.ajax({

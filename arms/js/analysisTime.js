@@ -1011,12 +1011,12 @@ async function dailyUpdatedStatusScatterChart(pdServiceLink, pdServiceVersionLin
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
-		.addQueryParam("메인그룹필드", "isReq")
+		.addQueryParam("메인_그룹_필드", "isReq")
 		.addQueryParam("시작일", startDate)
 		.addQueryParam("종료일", endDate)
 		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("컨텐츠보기여부", true)
+		.addQueryParam("하위_크기", 1000)
+		.addQueryParam("컨텐츠_보기_여부", true)
 		.build();
 
 	$(".spinner").html(
@@ -1252,13 +1252,13 @@ async function dailyCreatedCountAndUpdatedStatusesMultiStackCombinationChart(pdS
 		.addQueryParam("pdServiceLink", pdServiceLink)
 		.addQueryParam("pdServiceVersionLinks", pdServiceVersionLinks)
 		.addQueryParam("일자기준", "updated")
-		.addQueryParam("메인그룹필드", "isReq")
-		.addQueryParam("하위그룹필드들", "status.status_name.keyword")
+		.addQueryParam("메인_그룹_필드", "isReq")
+		.addQueryParam("하위_그룹_필드들", "status.status_name.keyword")
 		.addQueryParam("시작일", startDate)
 		.addQueryParam("종료일", endDate)
 		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("컨텐츠보기여부", true)
+		.addQueryParam("하위_크기", 1000)
+		.addQueryParam("컨텐츠_보기_여부", true)
 		.build();
 
 	$(".spinner").html(
@@ -1861,8 +1861,8 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
     		.addQueryParam("시작일", startDate)
     		.addQueryParam("종료일", endDate)
     		.addQueryParam("크기", 1000)
-    		.addQueryParam("하위크기", 1000)
-    		.addQueryParam("컨텐츠보기여부", true)
+    		.addQueryParam("하위_크기", 1000)
+    		.addQueryParam("컨텐츠_보기_여부", true)
     		.build();
 
 		$(".spinner").html(
@@ -1894,8 +1894,8 @@ async function timeLineChart(pdServiceLink, pdServiceVersionLinks) {
 		.addQueryParam("시작일", startDate)
 		.addQueryParam("종료일", endDate)
 		.addQueryParam("크기", 1000)
-		.addQueryParam("하위크기", 1000)
-		.addQueryParam("컨텐츠보기여부", true)
+		.addQueryParam("하위_크기", 1000)
+		.addQueryParam("컨텐츠_보기_여부", true)
 		.build();
 
     function executeAjaxCall(url) {

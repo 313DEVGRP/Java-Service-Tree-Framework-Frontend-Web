@@ -463,11 +463,11 @@ var DashboardApi = (function () {
 			.setBaseUrl('/auth-user/api/arms/dashboard/requirements-jira-issue-statuses')
 			.addQueryParam('pdServiceLink', dashboard_pdServiceId)
 			.addQueryParam('pdServiceVersionLinks', dashboard_pdServiceVersionLinks)
-			.addQueryParam('메인그룹필드', "pdServiceVersion")
-			.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+			.addQueryParam('메인_그룹_필드', "pdServiceVersion")
+			.addQueryParam('하위_그룹_필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
 			.addQueryParam('크기', 1000)
-			.addQueryParam('하위크기', 1000)
-			.addQueryParam('컨텐츠보기여부', false)
+			.addQueryParam('하위_크기', 1000)
+			.addQueryParam('컨텐츠_보기_여부', false)
 			.build();
 
 		$.ajax({
