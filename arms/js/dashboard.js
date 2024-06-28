@@ -712,11 +712,11 @@ function drawManRequirementTreeMapChart(pdServiceLink, pdServiceVersionLinks) {
 		.setBaseUrl('/auth-user/api/arms/dashboard/assignees-requirements-involvements')
 		.addQueryParam('pdServiceLink', pdServiceLink)
 		.addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-		.addQueryParam('메인그룹필드', "pdServiceVersion")
-		.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+		.addQueryParam('메인_그룹_필드', "pdServiceVersion")
+		.addQueryParam('하위_그룹_필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
 		.addQueryParam('크기', 3)
-		.addQueryParam('하위크기', 0)
-		.addQueryParam('컨텐츠보기여부', true)
+		.addQueryParam('하위_크기', 0)
+		.addQueryParam('컨텐츠_보기_여부', true)
 		.build();
 
 	$.ajax({
@@ -758,12 +758,12 @@ function drawProductToManSankeyChart(pdServiceLink, pdServiceVersionLinks) {
 		.setBaseUrl('/auth-user/api/arms/dashboard/version-assignees')
 		.addQueryParam('pdServiceLink', pdServiceLink)
 		.addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
-		.addQueryParam('메인그룹필드', "pdServiceVersions")
-		.addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
+		.addQueryParam('메인_그룹_필드', "pdServiceVersions")
+		.addQueryParam('하위_그룹_필드들', "assignee.assignee_accountId.keyword,assignee.assignee_displayName.keyword")
 		.addQueryParam('크기', pdServiceVersionLinks.split(",").length)
-		.addQueryParam('하위크기', 3)
+		.addQueryParam('하위_크기', 3)
 		.addQueryParam("isReqType", "ISSUE")
-		.addQueryParam('컨텐츠보기여부', true)
+		.addQueryParam('컨텐츠_보기_여부', true)
 		.build();
 
 	$.ajax({

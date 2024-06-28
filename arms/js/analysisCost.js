@@ -224,8 +224,8 @@ function productCostChart() {
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
       .addQueryParam("isReqType", "ISSUE")
-      .addQueryParam('메인그룹필드', "cReqLink")
-      .addQueryParam('하위그룹필드들', "assignee.assignee_accountId.keyword")
+      .addQueryParam('메인_그룹_필드', "cReqLink")
+      .addQueryParam('하위_그룹_필드들', "assignee.assignee_accountId.keyword")
       .build();
 
     $.ajax({
@@ -430,8 +430,8 @@ function 버전별_요구사항별_인력정보가져오기(pdServiceLink, pdSer
       .addQueryParam('pdServiceLink', pdServiceLink)
       .addQueryParam('pdServiceVersionLinks', pdServiceVersionLinks)
       .addQueryParam('크기', 1000)
-      .addQueryParam('하위크기', 1000)
-      .addQueryParam('컨텐츠보기여부', true)
+      .addQueryParam('하위_크기', 1000)
+      .addQueryParam('컨텐츠_보기_여부', true)
       .build();
 
     $.ajax({

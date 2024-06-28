@@ -876,9 +876,9 @@ function treeBar() {
 		.setBaseUrl("/auth-admin/api/arms/analysis/scope/tree-bar-top10")
 		.addQueryParam("pdServiceLink", selectedPdServiceId)
 		.addQueryParam("pdServiceVersionLinks", selectedVersionId)
-		.addQueryParam('메인그룹필드', "cReqLink")
-		.addQueryParam('하위그룹필드들', "assignee.assignee_displayName.keyword")
-		.addQueryParam('컨텐츠보기여부', true)
+		.addQueryParam('메인_그룹_필드', "cReqLink")
+		.addQueryParam('하위_그룹_필드들', "assignee.assignee_displayName.keyword")
+		.addQueryParam('컨텐츠_보기_여부', true)
 		.addQueryParam("isReqType", "ISSUE")
 		.build();
 
