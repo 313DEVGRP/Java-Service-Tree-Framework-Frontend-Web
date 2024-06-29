@@ -1173,9 +1173,9 @@ function product_delete_btn_click(){
 			type: "post",
 			statusCode: {
 				200: function () {
-					jError(deletedPdServiceName + " 데이터가 삭제되었습니다.");
-					//데이터 테이블 데이터 재 로드
+					$("#btn_modal_product_edit_close").trigger("click");
 					reloadDataWithSameOrdering("");
+					jSuccess(deletedPdServiceName + " 데이터가 삭제되었습니다.");
 				}
 			}
 		});
@@ -1197,7 +1197,7 @@ function product_detail_delete_btn_click(){
 			type: "post",
 			statusCode: {
 				200: function () {
-					jError($("#report_pdservice_detail_name").val() + " 데이터가 삭제되었습니다.");
+					jSuccess($("#report_pdservice_detail_name").val() + " 데이터가 삭제되었습니다.");
 					// pdServiceDataTableClick(tempSelectId);
 					productDetailNameClear();
 					productDetailEditorClear();
