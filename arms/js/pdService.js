@@ -329,6 +329,15 @@ function popup_size_setting(){
 	console.log("popup_size_setting() is activated");
 
 	$("#btn_modal_product_detail_edit").click(function () {
+		if (selectId == "" || selectId == undefined) {
+			jError("선택된 제품(서비스)가 없습니다.");
+			return false;
+		}
+
+		if (selectedDetailId == "" || selectedDetailId == undefined) {
+			jError("선택된 제품(서비스) 산출물이 없습니다.");
+			return false;
+		}
 		var height = $(document).height() - 900;
 
 		$(".modal-body")
@@ -1173,8 +1182,29 @@ function product_delete_btn_click(){
 			type: "post",
 			statusCode: {
 				200: function () {
-					$("#btn_modal_product_edit_close").trigger("click");
 					reloadDataWithSameOrdering("");
+					var selectedHtml =
+						`<div class="chat-message">
+								<div class="chat-message-body" style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important;border-left: 2px solid #a4c6ff;">
+									<span id="" class="arrow" style="top: 10px !important; border-right: 5px solid #a4c6ff"></span>
+									<div class="sender" style="padding-bottom: 5px; padding-top: 5px">선택된 제품(서비스) :
+										<span id="" style="color: #a4c6ff">선택되지 않음</span>
+									</div>
+								</div>
+							</div>
+				 `;
+					$(".list-group-item-detail").html(selectedHtml);
+					$("#version_accordion").html("");
+					productDetailNameClear();
+					productDetailEditorClear();
+					showDefaultTab();
+					dropzoneDataClear();
+					productDetailArrowClear();
+					selectId = ""; // 제품 아이디
+					selectName = ""; // 제품 이름
+					selectedDetailId = ""; // 선택한 디테일 아이디
+					selectedDetailName = ""; // 선택한 디테일 이름
+					$("#btn_modal_product_edit_close").trigger("click");
 					jSuccess(deletedPdServiceName + " 데이터가 삭제되었습니다.");
 				}
 			}
@@ -1203,6 +1233,8 @@ function product_detail_delete_btn_click(){
 					productDetailEditorClear();
 					productDetailArrowClear();
 					productServiceDetailDataLoad(tempSelectId);
+					selectedDetailId = ""; // 선택한 디테일 아이디
+					selectedDetailName = ""; // 선택한 디테일 이름
 				}
 			}
 		});
