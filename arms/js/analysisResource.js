@@ -74,7 +74,8 @@ function execDocReady() {
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css",
             // "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.datatables.css",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css",
-            "./js/common/jspreadsheet/jspreadsheetApi.js"
+            "./js/common/jspreadsheet/jspreadsheetApi.js",
+            "./css/jspreadsheet/custom_sheet.css"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
@@ -465,6 +466,7 @@ function bind_VersionData_By_PdService() {
 // 전체보기 클릭 및 모달 동작 이벤트
 ////////////////////////////////////////////////////////////////////////////////////////
 function 전체보기_관련_이벤트() {
+/*
 
     window.addEventListener('resize', function() {
         var container = document.getElementById("analysis_modal_sankey");
@@ -477,6 +479,7 @@ function 전체보기_관련_이벤트() {
             ],
         });
     });
+*/
 
 
     // 테스트용

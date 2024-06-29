@@ -145,7 +145,6 @@ var JspreadsheetAPI = ( function() {
 
 			console.log(mock_data);
 			mock_data.forEach(item => {
-				console.log(item);
 				if (item.type === "제품") {
 					let itemId = item.id.split("-")[0];
 					products[itemId] = { id: itemId, name: item.name };

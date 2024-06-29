@@ -1,0 +1,26 @@
+:root {
+    --jexcel_header_color: #FFF;
+    --jexcel_header_color_highlighted: #A4C6FF;
+    --jexcel_header_background: #515151;
+    --jexcel_header_background_highlighted: #777;
+
+    --jexcel_content_color: #FFF;
+    --jexcel_content_color_highlighted: #A4C6FF;
+    --jexcel_content_background: #3e3e3e;
+    --jexcel_content_background_highlighted: #777;
+
+    --jexcel_menu_background: #7e7e7e;
+    --jexcel_menu_background_highlighted: #ebebeb;
+    --jexcel_menu_color: #ddd;
+    --jexcel_menu_color_highlighted: #222;
+
+    --jexcel_border_color: #5f5f5f;
+    --jexcel_border_color_highlighted: #999;
+
+    --active_color: #eee;
+    --active-color: var(--active_color);
+}
+
+.jexcel {
+    background: #3333336c;
+}
