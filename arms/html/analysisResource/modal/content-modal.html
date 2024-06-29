@@ -90,6 +90,14 @@
 							차트_그리기
 						</button>
 					</div>
+					<div style="float: right">
+						<button
+							type="button"
+							id="btn_modal_excel"
+							class="btn btn-success btn-sm">
+							엑셀_그리기
+						</button>
+					</div>
 				</div>
 				<div class="col-lg-12 modal-body-main" >
 					<section class="widget widget-tabs">
@@ -99,7 +107,7 @@
 								<a href="#chart_data" data-toggle="tab">차트 보기</a>
 							</li>
 							<li class="list_tab">
-								<a href="#list_data" data-toggle="tab">목록 보기</a>
+								<a href="#excel_data" data-toggle="tab">목록 보기</a>
 							</li>
 							<li class="option_tab" style="float: right !important;">
 								<a href="#option_toggle" data-toggle="tab" style="margin-right: 0px">설정</a>
@@ -116,13 +124,11 @@
 								</li>
 							</ul>
 						</div>
-						<div id="list_data" class="tab-pane">
+						<div id="excel_data" class="tab-pane">
 							<h5 class="tab-header" style="color:#f8f8f8"><i class="fa fa-sort-amount-asc"></i> List Data (Excel)</h5>
 							<ul class="news-list news-list-no-hover">
-								<li>
-									<div class="news-item-info">
-										<div class="name"><a href="#">엑셀 형식 삽입</a></div>
-									</div>
+								<li style="min-height: 500px">
+									<div id="modal_excel" class="name" style="width:100%; height: 100%;"><a href="#">엑셀 형식 삽입</a></div>
 								</li>
 							</ul>
 						</div>
@@ -183,7 +189,7 @@
 	aria-hidden="true"
 	style="border-radius: 10px">
 	<div class="modal-dialog"
-			 style="width: 90%">
+			 style="width: 100%">
 		<div class="modal-content modalDarkBack">
 			<div  class="modal-header"
 						style="padding: 0px; border-bottom: 1px">

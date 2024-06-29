@@ -67,7 +67,15 @@ function execDocReady() {
             "./js/common/chart/eCharts/horizontalBarChart.js",
             "./js/common/chart/eCharts/simplePie.js"
         ],
-
+        [
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.js",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.css",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/index.js",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css",
+            // "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.datatables.css",
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css",
+            "./js/common/jspreadsheet/jspreadsheetApi.js"
+        ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
             "../reference/jquery-plugins/dataTables-1.10.16/extensions/Responsive/css/responsive.dataTables_lightblue4.css",
@@ -117,7 +125,7 @@ function execDocReady() {
 
             // 전체보기 관련 이벤트 세팅
             전체보기_관련_이벤트();
-            
+
             //데이터테이블초기화
             table = initTable();
 
@@ -457,6 +465,20 @@ function bind_VersionData_By_PdService() {
 // 전체보기 클릭 및 모달 동작 이벤트
 ////////////////////////////////////////////////////////////////////////////////////////
 function 전체보기_관련_이벤트() {
+
+    window.addEventListener('resize', function() {
+        var container = document.getElementById("analysis_modal_sankey");
+        // Recalculate column widths on window resize
+        jspreadsheet(container, {
+            columns: [
+                { width: container.clientWidth * 0.3 }, // 30% width
+                { width: container.clientWidth * 0.2 }, // 20% width
+                { width: container.clientWidth * 0.5 }, // 50% width
+            ],
+        });
+    });
+
+
     // 테스트용
     $("#btn_modal_sankey").on("click", function() {
         let serId = 22;
@@ -464,6 +486,12 @@ function 전체보기_관련_이벤트() {
         let verListSplit = verList.join(",");
         let tarId = "modal_chart";
         drawProductToManSankeyChart(serId, verListSplit, tarId, 10000);
+    });
+
+    $("#btn_modal_excel").on("click", function() {
+        let tarId = "modal_excel";
+        JspreadsheetAPI.getSheetData();
+        JspreadsheetAPI.sheetRender(tarId);
     });
 
     // 모달이 띄워졌을 때 동작.
@@ -490,6 +518,8 @@ function 전체보기_관련_이벤트() {
                 jError("서비스 및 버전을 설정 후 선택해주세요.");
             }
         } else if (target === "#excel_data") {
+            console.log("excel_data");
+            $("#btn_modal_excel").click();
 
         } else if (target === "#option_toggle") {
             $(".option_tab").removeClass("active");
