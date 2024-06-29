@@ -1173,9 +1173,9 @@ function product_delete_btn_click(){
 			type: "post",
 			statusCode: {
 				200: function () {
-					jError(deletedPdServiceName + " 데이터가 삭제되었습니다.");
-					//데이터 테이블 데이터 재 로드
+					$("#btn_modal_product_edit_close").trigger("click");
 					reloadDataWithSameOrdering("");
+					jError(deletedPdServiceName + " 데이터가 삭제되었습니다.");
 				}
 			}
 		});
