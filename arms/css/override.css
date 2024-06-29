@@ -2160,3 +2160,7 @@ svg .ghostCircle.show {
 .edit-grey.active:focus .fa {
 	color: #FFFFFF !important;
 }
+
+div.slimScrollDiv > ul {
+	overflow: auto !important;
+}
