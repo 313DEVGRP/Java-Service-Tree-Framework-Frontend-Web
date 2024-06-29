@@ -1071,6 +1071,42 @@ function dataTable_build(
 	selectList,
 	orderList,
 	buttonList,
+
+	isServerSide,
+	scrollY,
+	data,
+	isAjax = true
+){
+	var isServerSide = false;
+
+	return dataTable_extendBuild(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+
+		isServerSide,
+		scrollY,
+		data,
+		isAjax = true
+	);
+}
+
+function dataTable_extendBuild(
+	jquerySelector,
+	ajaxUrl,
+	jsonRoot,
+	columnList,
+	rowsGroupList,
+	columnDefList,
+	selectList,
+	orderList,
+	buttonList,
 	isServerSide,
 	scrollY,
 	data,
@@ -1079,28 +1115,26 @@ function dataTable_build(
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 	var jQueryElementStr = jQueryElementID.replace(reg, "");
-
 	var responsiveRender = {
 		details: {
 			renderer: function (api, rowIdx, columns) {
 				var outer = "<tr data-dt-row=" + rowIdx + " data-dt-column='0'><td>";
+
 				var data = $.map(columns, function (col, i) {
 					return col.hidden
-						? "<div class='gradient_bottom_border' style='margin-bottom: 5px;float:left;width:180px;'>" +
-								"<div style='text-align: center;padding:3px;background: #3b3d40'><strong>" +
-								col.title +
-								"</strong></div>" +
-								"<div style='padding:3px;text-align: center;color: #a4c6ff;'>" +
-								col.data +
-								"</div>" +
-								"</div>"
-						: "";
-				}).join("");
+						? `<div class="gradient_bottom_border" style="margin-bottom: 5px;float:left;width:180px;">
+						<div style="text-align: center;padding:3px;background: #3b3d40"><strong>
+						${col.title}
+						</strong></div>
+						<div class="ajax-data" style="padding: 3px;text-align: center">
+						${col.data}
+						</div></div></div>`
+						: ``;
+				}).join(``);
 				outer += data;
 				outer += "</td></tr>";
-				data = outer;
 
-				return data ? $("<table/>").append(data) : false;
+				return outer ? $("<table/>").append(outer) : false;
 			}
 		}
 	};
@@ -1120,27 +1154,41 @@ function dataTable_build(
 
 	var options = {
 		serverSide: isServerSide,
-		stateSave: false,
 		stateDuration: -1,
 		destroy: true,
 		processing: true,
+		ordering: true,
+		stateSave: false,
 		responsive: false,
 		columns: columnList,
 		rowsGroup: rowsGroupList,
-		columnDefs: columnDefList,
+		columnDefs: columnDefList.concat([
+			{
+				targets: "_all", // 모든 컬럼에 적용.
+				createdCell: function (td) {
+					var $td = $(td);
+					// 숫자일 경우 우측 정렬
+					if ($.isNumeric($td.text())) {
+						$(td).addClass("dt-body-right");
+					}
+				}
+			}
+		]),
 		select: selectList,
 		order: orderList,
 		buttons: buttonList,
-		scrollX: true,
-		scrollY: scrollY,
-		// lengthMenu: [[3, 5, 7, 10], [3, 5, 7, 10]],
 		language: {
 			processing: "",
 			loadingRecords:
-				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>'
+				'<span class="spinner" style="font-size: 14px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>',
+			paginate: {
+				next: '<i class="fa fa-chevron-right" ></i>',
+				previous: '<i class="fa fa-chevron-left" ></i>'
+			}
 		},
+		pageLength: 10, // default pageLegth
 		initComplete: function (settings, json) {
-			console.log("dataTableBuild :: drawCallmakeSlimScrollback");
+			console.log("dataTableBuild :: initComplete");
 			if ($.isFunction(dataTableCallBack)) {
 				//데이터 테이블 그리고 난 후 시퀀스 이벤트
 				dataTableCallBack(settings, json);
@@ -1150,6 +1198,10 @@ function dataTable_build(
 			console.log("dataTableBuild :: drawCallback");
 			if ($.isFunction(dataTableDrawCallback)) {
 				//데이터 테이블 그리고 난 후 시퀀스 이벤트
+				$("#" + tableInfo.sInstance)
+					.DataTable()
+					.columns.adjust()
+					.responsive.recalc();
 				dataTableDrawCallback(tableInfo);
 			}
 		}
@@ -1171,46 +1223,6 @@ function dataTable_build(
 		$(window).scrollTop(scrollPos);
 	});
 
-	/*var tempDataTable = $(jQueryElementID).DataTable({
-		ajax: {
-			url: ajaxUrl,
-			dataSrc: jsonRoot
-		},
-		serverSide: isServerSide,
-		stateSave: false,
-		stateDuration: -1,
-		destroy: true,
-		processing: true,
-		responsive: false,
-		columns: columnList,
-		rowsGroup: rowsGroupList,
-		columnDefs: columnDefList,
-		select: selectList,
-		order: orderList,
-		buttons: buttonList,
-		scrollX: true,
-		scrollY: scrollY,
-		language: {
-			processing: "",
-			loadingRecords:
-				'<span class="spinner" style="font-size: 13px !important;"><i class="fa fa-spinner fa-spin"></i> 데이터를 처리 중입니다.</span>'
-		},
-		initComplete: function (settings, json) {
-			console.log("dataTableBuild :: drawCallmakeSlimScrollback");
-			if ($.isFunction(dataTableCallBack)) {
-				//데이터 테이블 그리고 난 후 시퀀스 이벤트
-				dataTableCallBack(settings, json);
-			}
-		},
-		drawCallback: function (tableInfo) {
-			console.log("dataTableBuild :: drawCallback");
-			if ($.isFunction(dataTableDrawCallback)) {
-				//데이터 테이블 그리고 난 후 시퀀스 이벤트
-				dataTableDrawCallback(tableInfo);
-			}
-		}
-	});*/
-
 	$(jQueryElementID + " tbody").on("click", "tr", function () {
 		if ($(this).hasClass("selected")) {
 			$(this).removeClass("selected");
@@ -1220,10 +1232,18 @@ function dataTable_build(
 		}
 
 		var selectedData = tempDataTable.row(this).data();
-		selectedData.selectedIndex = $(this).closest("tr").index();
+
+		if (selectedData !== undefined) {
+			selectedData.selectedIndex = $(this).closest("tr").index();
+		}
 
 		var info = tempDataTable.page.info();
-		selectedData.selectedPage = info.page;
+
+		if (selectedData !== undefined && info !== undefined) {
+			selectedData.selectedPage = info.page;
+		}
+
+		console.log("Show page: " + info.page + " of " + info.pages);
 
 		dataTableClick(tempDataTable, selectedData);
 	});
@@ -1232,7 +1252,10 @@ function dataTable_build(
 	//datatable 좌상단 datarow combobox style
 	$(".dataTables_length").find("select:eq(0)").addClass("darkBack");
 	$(".dataTables_length").find("select:eq(0)").css("min-height", "30px");
-	//min-height: 30px;
+	$(".dataTables_length").find("select:eq(0)").children().css("background", "#3B3D40");
+	$(".dataTables_length").find("select:eq(0)").css("border-radius", "5px");
+	$(jQueryElementID + "_wrapper").css("border-top", "1px solid rgba(51, 51, 51, 0.3)");
+	$(jQueryElementID + "_wrapper").css("padding-top", "5px");
 
 	// ----- 데이터 테이블 빌드 이후 별도 스타일 구성 ------ //
 	//datatable 좌상단 datarow combobox style
