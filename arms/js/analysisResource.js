@@ -283,7 +283,7 @@ function stackedHorizontalBar(){
     }
 
     const url = new UrlBuilder()
-        .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
+        .setBaseUrl(`/auth-user/api/arms/analysis/common/aggregation/flat`)
         .addQueryParam('pdServiceLink', selectedPdServiceId)
         .addQueryParam('pdServiceVersionLinks', selectedVersionId)
         .addQueryParam('메인_그룹_필드', "assignee.assignee_emailAddress.keyword")
@@ -543,7 +543,7 @@ function wordCloud() {
     $('#tag-cloud').jQCloud('destroy');
 
     const url = new UrlBuilder()
-      .setBaseUrl(`/auth-admin/api/arms/analysis/resource/aggregation/flat`)
+      .setBaseUrl(`/auth-user/api/arms/analysis/common/aggregation/flat`)
       .addQueryParam('pdServiceLink', selectedPdServiceId)
       .addQueryParam('pdServiceVersionLinks', selectedVersionId)
       .addQueryParam('메인_그룹_필드', "assignee.assignee_accountId.keyword")
