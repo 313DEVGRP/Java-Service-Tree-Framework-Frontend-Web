@@ -126,8 +126,10 @@ function widgsterWrapper() {
 			bottom: 0,
 			left: 0,
 			margin: 0,
-			overflow: "auto",
-			"z-index": 10000
+			"z-index": 10000,
+			"box-sizing": "border-box",
+			height: "100vh",
+			overflow: "auto"
 		});
 
 		var body = this.$element.find(".body");
@@ -182,11 +184,13 @@ function widgsterWrapper() {
 			bottom: "",
 			left: "",
 			margin: "",
-			overflow: "",
-			"z-index": ""
+			"z-index": "",
+			"box-sizing": "",
+			height: "",
+			overflow: ""
 		});
 
-		this.$element.find(".body").css("height", height);
+		this.$element.find(".body").css("height", "");
 		$("body").css("overflow", "");
 
 		this.$fullscreen.show();
@@ -203,7 +207,6 @@ function widgsterWrapper() {
 		this.wasCollapsed && this.collapse(false);
 
 		this.$element.removeClass("fullscreened");
-
 		this.$element.removeClass("modalDarkBack");
 
 		this.$element.trigger($.Event("restored.widgster"));
@@ -244,9 +247,13 @@ function loadPlugin(url) {
 	return new Promise(function (resolve, reject) {
 		if (isJavaScriptFile(url)) {
 			$(".spinner").html(
-				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
-					getFileNameFromURL(url) +
-					" 자바스크립트를 다운로드 중입니다..."
+				'<i class="fa fa-spinner fa-spin"></i> ' +
+				getFileNameFromURL(url) +
+				{
+					ko: " 자바스크립트를 다운로드 중입니다...",
+					en: " JavaScript is downloading...",
+					jp: " JavaScriptをダウンロード中です..."
+				}[getCookie("locale") || "ko"]
 			);
 			$.ajax({
 				url: url,
@@ -266,9 +273,13 @@ function loadPlugin(url) {
 			});
 		} else {
 			$(".spinner").html(
-				'<img src="./img/loading.gif" alt="로딩" style="width: 16px;"> ' +
-					getFileNameFromURL(url) +
-					" 스타일시트를 다운로드 중입니다..."
+				'<i class="fa fa fa-circle-o-notch fa-spin"></i> ' +
+				getFileNameFromURL(url) +
+				{
+					ko: " 스타일시트를 다운로드 중입니다...",
+					en: " Downloading stylesheet...",
+					jp: " スタイルシートをダウンロード中です..."
+				}[getCookie("locale") || "ko"]
 			);
 			$("<link/>", {
 				rel: "stylesheet",
