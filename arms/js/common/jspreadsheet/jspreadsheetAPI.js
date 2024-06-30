@@ -1,4 +1,4 @@
-var JspreadsheetAPI = ( function() {
+var JspreadsheetApi = ( function() {
 		"use strict";
 
 		var sheetData;

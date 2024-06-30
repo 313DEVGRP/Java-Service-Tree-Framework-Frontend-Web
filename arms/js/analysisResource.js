@@ -493,8 +493,8 @@ function 전체보기_관련_이벤트() {
 
     $("#btn_modal_excel").on("click", function() {
         let tarId = "modal_excel";
-        JspreadsheetAPI.getSheetData();
-        JspreadsheetAPI.sheetRender(tarId);
+        JspreadsheetApi.getSheetData();
+        JspreadsheetApi.sheetRender(tarId);
     });
 
     // 모달이 띄워졌을 때 동작.
