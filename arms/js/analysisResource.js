@@ -74,7 +74,7 @@ function execDocReady() {
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css",
             // "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.datatables.css",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css",
-            "./js/common/jspreadsheet/jspreadsheetApi.js",
+            "./js/common/jspreadsheet/jspreadsheetAPI.js",
             "./css/jspreadsheet/custom_sheet.css"
         ],
         [
