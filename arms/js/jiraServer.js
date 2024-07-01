@@ -755,6 +755,7 @@ function jira_server_request_create_or_update(url, type, data, successMessage) {
 function get_jira_server_create_or_update_data() {
 	return {
 		c_title: $("#popup_editview_jira_server_name").val(),
+		c_type: "default",
 		c_jira_server_name: $("#popup_editview_jira_server_name").val(),
 		c_jira_server_type: $("#popup_editview_jira_server_type_div input[name='popup_editview_jira_server_type_options']:checked").val(),
 		c_jira_server_base_url: $("#popup_editview_jira_server_base_url").val(),
