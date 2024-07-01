@@ -592,10 +592,13 @@ function dataTableLoad(selectId, endPointUrl) {
 			className: "dt-body-left",
 			visible: true
 		}
-
 	];
+
 	var rowsGroupList = [];
-	var columnDefList = [];
+	var columnDefList = [{
+		"defaultContent": "<div style='color: #808080'>N/A</div>",
+		"targets": "_all"
+	}];
 	var orderList = [[1, "asc"]];
 	var jquerySelector = "#reqstatustable";
 	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;

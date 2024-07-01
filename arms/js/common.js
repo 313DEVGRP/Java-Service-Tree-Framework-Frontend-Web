@@ -1177,6 +1177,8 @@ function dataTable_extendBuild(
 		select: selectList,
 		order: orderList,
 		buttons: buttonList,
+		scrollX: true,
+		scrollY: scrollY,
 		language: {
 			processing: "",
 			loadingRecords:
