@@ -1,0 +1,158 @@
+<div class="fullscreen-wrapper flexAndColumn h100">
+	<div class="fullscreen-header flex10p">
+		<h4
+			class="font14"
+			style="color: #f8f8f8; text-align: left; padding: 5px">
+			<i class="fa fa-edit"></i>
+			<span
+				class="font13"
+				id="fullscreen_title"
+				style="font-weight: bold">
+									제품 및 버전별 작업자
+			</span>
+			<div
+				class="gradient_middle_border"
+				style="width: 100%; height: 2px"></div>
+			<blockquote
+				class="search-result"
+				style="border-left: 5px solid #e5603b; display: flex;justify-content: space-between;align-items: center;">
+				<p
+					id="fullscreen_description"
+					style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+					제품 및 버전에 투입된 작업자 현황입니다.
+				</p>
+				<div style="float: right">
+					<button
+						class="btn btn-transparent btn-xs"
+						style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
+						Help
+						<i
+							class="fa fa-question"
+							style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+					</button>
+				</div>
+			</blockquote>
+		</h4>
+		<div class="widget-controls" style="margin:10px">
+			<a data-widgster="restore" title="Restore" href="#">
+				<span class="glyphicon glyphicon-repeat"></span>
+			</a>
+		</div>
+	</div>
+	<div  class="fullscreen-body flex1"
+				style="padding: 5px; flex: 1;">
+		<!--					<div class="clearfix widget-content hidden">
+								<div style="float: right">
+									<button
+										type="button"
+										id="btn_modal_sankey"
+										class="btn btn-success btn-sm">
+										차트_그리기
+									</button>
+								</div>
+								<div style="float: right">
+									<button
+										type="button"
+										id="btn_modal_excel"
+										class="btn btn-success btn-sm">
+										엑셀_그리기
+									</button>
+								</div>
+							</div>-->
+		<div class="col-lg-12 h100 no-padding fullscreen-body-main">
+			<section class="widget-tabs h100"
+							 style=" display: flex; flex-direction: column;">
+				<header style="flex: 0 0 5%;">
+					<ul class="nav nav-tabs">
+						<li class="chart_tab active">
+							<a href="#chart_data" data-toggle="tab">차트 보기</a>
+						</li>
+						<li class="list_tab">
+							<a href="#excel_data" data-toggle="tab">목록 보기</a>
+						</li>
+						<li class="option_tab" style="float: right !important;">
+							<a href="#option_toggle" data-toggle="tab" style="margin-right: 0px">설정</a>
+						</li>
+					</ul>
+				</header>
+				<div class="body tab-content" style="flex:1; display: flex; flex-direction: column;">
+					<div id="chart_data" class="tab-pane h100 active">
+						<div class="flexAndColumn">
+							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 5%">
+								<i class="fa fa-bar-chart-o"></i> Sankey Chart
+							</h5>
+							<div id="modal_chart" style="flex:1;"></div>
+						</div>
+					</div>
+					<div id="excel_data" class="tab-pane h100">
+						<div class="flexAndColumn">
+							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 5%">
+								<i class="fa fa-sort-amount-asc"></i> List Data (Excel)
+							</h5>
+							<div id="modal_excel" style="flex:1; overflow: scroll;"></div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-3 fullscreen-body-option hidden">
+			<section class="widget widget-tabs">
+				<header>
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#version_filter" data-toggle="tab">조건 <i class="fa fa-cog"></i></a>
+						</li>
+					</ul>
+				</header>
+				<div class="body tab-content">
+					<div id="modal_options" class="tab-pane clearfix active">
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<div class="fullscreen-footer">
+		<button
+			type="button"
+			id="fullscreen_modal_close"
+			class="btn btn-default"
+			data-dismiss="modal">
+			Close
+		</button>
+	</div>
+</div>
+
+<style>
+	.wh100 {
+			height: 100%;
+			width: 100%;
+	}
+	.w100 { width: 100%;  }
+	.h100 {	height: 100%;	}
+
+	.flexAndColumn {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.no-padding { padding: 0; }
+
+	.flex1 { flex: 1;}
+	.flex5p  { flex:0 0 5%; }
+	.flex10p {	flex:0 0 10%;	}
+
+	.fullscreen-footer {
+      background-color: transparent;padding: 5px;text-align: right;border-top: 0px;flex: 0 0 5%;
+			display: flex;flex-direction: row-reverse;align-content: center;align-items: flex-end;
+	}
+</style>
+<script>
+	function widgsterDocReady() {
+		var pluginGroups = [
+			["./js/modal/fs_analysisResource.js"]];
+
+		loadPluginGroupsParallelAndSequential(pluginGroups).then(function() {
+			console.log("해당 html 및 js 로드 완료.");
+		});
+	}
+</script>

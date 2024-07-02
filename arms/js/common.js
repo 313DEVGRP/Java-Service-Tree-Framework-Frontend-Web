@@ -110,109 +110,42 @@ function menu_setting() {
 }
 
 function widgsterWrapper() {
-	var height;
 
 	$.fn.widgster.Constructor.prototype.fullscreen = function () {
-		var e = $.Event("fullscreen.widgster");
+			var self = this.$element;
+			var $widget = $("#widget-fullscreen");
+			var url = self.data("layout");
 
-		this.$element.trigger(e);
+			if(url) {
+				$widget.load(url, function() {
+					$widget.show();
+					$widget.find("[data-widgster='restore']").show();
+					$("body").css("overflow", "hidden");
 
-		if (e.isDefaultPrevented()) return;
-
-		this.$element.css({
-			position: "fixed",
-			top: 0,
-			right: 0,
-			bottom: 0,
-			left: 0,
-			margin: 0,
-			"z-index": 10000,
-			"box-sizing": "border-box",
-			height: "100vh",
-			overflow: "auto"
-		});
-
-		var body = this.$element.find(".body");
-		var siblingsHeight = body
-			.siblings()
-			.toArray()
-			.reduce(function (acc, cur) {
-				return (acc += cur.clientHeight);
-			}, 0);
-		var margin =
-			parseInt(body.css("margin-top")) +
-			parseInt(body.css("margin-bottom")) +
-			parseInt(this.$element.css("padding-top")) +
-			parseInt(this.$element.css("padding-bottom")) +
-			parseInt(this.$element.css("margin-top")) +
-			parseInt(this.$element.css("margin-bottom"));
-
-		// height = body.css("height");
-		body.css("height", "calc(100% - " + (siblingsHeight + margin) + "px)");
-
-		$("body").css("overflow", "hidden");
-
-		this.wasCollapsed = this.collapsed;
-		this.expand(false);
-
-		this.$fullscreen.hide();
-		this.$restore.show();
-
-		this.$collapse.hide();
-		this.$expand.hide();
-
-		this.$element.addClass("fullscreened");
-
-		this.$element.addClass("modalDarkBack");
-
-		this.$element.trigger($.Event("fullscreened.widgster"));
+					self.trigger($.Event("fullscreened.widgster"));
+					widgsterDocReady();
+				});
+			} else {
+					console.log("[common :: widgsterWrapper] :: fullscreen layout 이 없습니다.");
+			}
 
 		return false;
 	};
 
 	$.fn.widgster.Constructor.prototype.restore = function () {
-		var e = $.Event("restore.widgster");
+		var $widget = $("#widget-fullscreen");
 
-		this.$element.trigger(e);
+		$widget.empty();
+		$widget.hide();
+		$widget.find("[data-widgster='restore']").hide();
 
-		if (e.isDefaultPrevented()) return;
-
-		this.$element.css({
-			position: "",
-			top: "",
-			right: "",
-			bottom: "",
-			left: "",
-			margin: "",
-			"z-index": "",
-			"box-sizing": "",
-			height: "",
-			overflow: ""
-		});
-
-		this.$element.find(".body").css("height", "");
 		$("body").css("overflow", "");
-
-		this.$fullscreen.show();
-		this.$restore.hide();
-
-		if (this.collapsed) {
-			this.$collapse.hide();
-			this.$expand.show();
-		} else {
-			this.$collapse.show();
-			this.$expand.hide();
-		}
-
-		this.wasCollapsed && this.collapse(false);
-
-		this.$element.removeClass("fullscreened");
-		this.$element.removeClass("modalDarkBack");
 
 		this.$element.trigger($.Event("restored.widgster"));
 
 		return false;
 	};
+
 }
 
 function 로드_완료_이후_실행_함수() {
