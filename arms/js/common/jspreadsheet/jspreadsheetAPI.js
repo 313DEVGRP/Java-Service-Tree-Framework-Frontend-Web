@@ -416,9 +416,176 @@ var JspreadsheetApi = ( function() {
 			},
 		};
 
+		// 각 modal별 js 세팅에 넣을것 검토 내용
+	  // 1. API 호출해서 Data 가져오기 - fetchData :: 각 API를 따로 콜하는 방법도 고려
+	  // 2. column 세팅
+	  // 3. 세부 옵션 세팅
+
+		var fetchData = function () {
+			return new Promise( (resolve) => {
+				$.ajax({
+					url: "/auth-user/api/arms/pdServicePure/getPdServiceMonitor.do",
+					type:"get",
+					statusCode: {
+						200 : function (result) {
+							console.log(result);
+							if (result) {
+								resolve(result);
+							} else {
+								resolve();
+							}
+						}
+					},
+					error: function (e) {
+						jError("[ jspreadsheetAPI :: fetchData ] :: error 발생");
+					}
+				});
+			});
+		};
+
+		var columnListExample = [
+			{ type: "text", title: "c_id", width: 100},
+			{ type: "text", title: "c_left", width: 100},
+			{ type: "text", title: "c_right", width: 100},
+			{ type: "text", title: "c_position", width: 100},
+			{ type: "text", title: "c_title", width: 100},
+			{ type: "text", title: "c_type", width: 100},
+			{ type: "text", title: "c_id", width: 100}
+		];
+
+		var setOptions = function(sheetData) {
+			return new Promise((resolve) => {
+				var optionsForSheet  = {
+					// allowComments: true,
+					contextMenu: function(o, x, y, e, items) {
+						var items = [];
+
+						// Save
+						items.push({
+							title: jSuites.translate('Save as'),
+							shortcut: 'Ctrl + S',
+							icon: 'save',
+							onclick: function () {
+								o.download();
+							}
+						});
+
+						return items;
+					},
+					search:true,
+					pagination:10,
+					data: sheetData,
+					columns: columnListExample,
+					onbeforechange: function(instance, cell, x, y, value) {
+						var cellName = jspreadsheet.getColumnNameFromId([x,y]);
+						console.log('The cell ' + cellName + ' will be changed' + '\n');
+					},
+					oninsertcolumn: function(instance) {
+						console.log('Column added' + '\n');
+					},
+					/*onchange: function(instance, cell, x, y, value) {
+						var cellName = jspreadsheet.getColumnNameFromId([x,y]);
+						console.log('onchange :: ' + cell + " :;  x :: " + x + " :: y :: " + y +" :: cellName ::" + cellName + ' to: ' + value + '\n');
+						if (x == 2) {
+							var key = instance.jexcel.getValueFromCoords(1, y);
+							if (!modifiedRows[key]) {
+								modifiedRows[key] = {};
+							}
+							modifiedRows[key].이름 = instance.jexcel.getValueFromCoords(0, y);
+							modifiedRows[key].키 = instance.jexcel.getValueFromCoords(1, y);
+							modifiedRows[key].연봉 = value;
+						}
+					},*/
+					oninsertrow: function(instance, rowNumber) {
+						console.log('Row added' + rowNumber);
+					},
+					ondeleterow: function(instance, rowNumber) {
+						console.log('Row deleted' + rowNumber);
+					},
+					ondeletecolumn: function(instance) {
+						console.log('Column deleted' +'\n');
+					},
+					onselection: function(instance, x1, y1, x2, y2, origin) {
+						var cellName1 = jspreadsheet.getColumnNameFromId([x1, y1]);
+						var cellName2 = jspreadsheet.getColumnNameFromId([x2, y2]);
+						console.log('The selection from ' + cellName1 + ' to ' + cellName2 + '' + '\n');
+					},
+					onsort: function(instance, cellNum, order) {
+						var order = (order) ? 'desc' : 'asc';
+						console.log('The column  ' + cellNum + ' sorted by ' + order + '\n');
+					},
+					onresizerow: function(instance, cell, height) {
+						console.log('The row  ' + cell + ' resized to height ' + height + ' px' + '\n');
+					},
+					onresizecolumn: function(instance, cell, width) {
+						console.log('The column  ' + cell + ' resized to width ' + width + ' px' + '\n');
+					},
+					onmoverow: function(instance, from, to) {
+						console.log('The row ' + from + ' was move to the position of ' + to + ' ' + '\n');
+					},
+					onmovecolumn: function(instance, from, to) {
+						console.log('The col ' + from + ' was move to the position of ' + to + ' ' + '\n');
+					},
+					onload: function(instance) {
+						console.log('New data is loaded' + '\n');
+					},
+					onblur: function(instance) {
+						console.log('The table ' + $(instance).prop('id') + ' is blur' + '\n');
+					},
+					onfocus: function(instance) {
+						console.log('The table ' + $(instance).prop('id') + ' is focus' + '\n');
+					},
+					onpaste: function(data) {
+						console.log('Paste on the table ' + $(instance).prop('id') + '' + '\n');
+					},
+				};
+
+				resolve(optionsForSheet);
+			});
+		};
+
+		var sheetRenderProcess = function(target) {
+
+			return fetchData()
+				.then((data) => {
+					console.log("[ jspreadsheetAPI :: sheetRenderProcess ] :: fetchData")
+					console.log(data);
+					return setOptions(data);
+				})
+				.then( (option) => {
+					var targetId = target ? target : "modal_excel";
+					sheetRender1(targetId, option);
+				}).catch((error) => {
+					console.error("Error middle of sheetRenderProcess : " + error);
+				});
+		};
+
+
+		var sheetRender1 = function (targetElementId, sheetOption) {
+			var spreadsheetElement = document.getElementById(targetElementId);
+
+			if (spreadsheetElement.jexcel) {
+				spreadsheetElement.jexcel.destroy();
+			}
+
+			console.log("[ jspreadsheetAPI :: sheerRender1 ] :: targetId => " + targetElementId);
+			console.log("[ jspreadsheetAPI :: sheerRender1 ] :: sheetOption => " );
+			console.log(sheetOption);
+
+			var sheet = jspreadsheet(spreadsheetElement, sheetOption);
+		};
+
+		var externalColumnSetting;
+
+		var setColumnSetting = function(columnList) {
+			externalColumnSetting = columnList;
+		};
+
 		return {
 			setSheetData,
 			getSheetData,
-			sheetRender
+			sheetRender,
+			sheetRenderProcess,
+			setColumnSetting
 		}
 })(); //즉시실행함수
