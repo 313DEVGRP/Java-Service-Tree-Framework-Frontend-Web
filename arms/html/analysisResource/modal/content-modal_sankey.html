@@ -17,7 +17,7 @@
 			style="width: 100%; height: 2px"></div>
 		<blockquote
 			class="search-result"
-			style="border-left: 5px solid #e5603b; display: flex;justify-content: space-between;align-items: center;">
+			style="margin: 5px 0 !important; border-left: 5px solid #e5603b; display: flex;justify-content: space-between;align-items: center; max-height: 3rem;">
 			<p
 				id="fullscreen_description"
 				style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 	<div  class="fullscreen-body flex1"
-				style="padding: 5px; flex: 1;">
+				style="padding: 5px;;">
 		<!--					<div class="clearfix widget-content hidden">
 								<div style="float: right">
 									<button
@@ -62,9 +62,8 @@
 								</div>
 							</div>-->
 		<div class="col-lg-12 h100 no-padding fullscreen-body-main">
-			<section class="widget-tabs h100"
-							 style=" display: flex; flex-direction: column;">
-				<header style="flex: 0 0 5%;">
+			<section class="widget-tabs h100 flexAndColumn">
+				<header style="flex: 0 0 3%;">
 					<ul class="nav nav-tabs">
 						<li class="chart_tab active">
 							<a href="#chart_data" data-toggle="tab">차트 보기</a>
@@ -72,26 +71,45 @@
 						<li class="list_tab">
 							<a href="#excel_data" data-toggle="tab">목록 보기</a>
 						</li>
-						<li class="option_tab" style="float: right !important;">
+<!--						<li class="option_tab" style="float: right !important;">
 							<a href="#option_toggle" data-toggle="tab" style="margin-right: 0px">설정</a>
-						</li>
+						</li>-->
 					</ul>
 				</header>
 				<div class="body tab-content" style="flex:1; display: flex; flex-direction: column;">
 					<div id="chart_data" class="tab-pane h100 active">
-						<div class="flexAndColumn">
-							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 5%">
-								<i class="fa fa-bar-chart-o"></i> Sankey Chart
+						<div class="flexAndColumn h100">
+							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px;">
+								<i class="fa fa-bar-chart-o"></i> Chart View
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; height: 1px"></div>
 							</h5>
-							<div id="modal_chart" style="flex:1;"></div>
+							<div id="modal_chart" style="flex:0 0 97%; overflow: hidden; display: flex">
+								<span style="margin: auto">
+									※ Notification ※
+									<br/>
+									전체 데이터 렌더링 영역 입니다.
+									<br/>
+									이 영역의 화면(차트 등)을 개발 진행 중입니다.
+									<br/>
+									<br/>
+									첫번째 탭은 전체 데이터를 활용한 차트 렌더링 영역입니다.
+									<br/>
+									두번째 탭은 전체 데이터를 엑셀 형태로 제공하고 있습니다.
+								</span>
+							</div>
 						</div>
 					</div>
 					<div id="excel_data" class="tab-pane h100">
-						<div class="flexAndColumn">
-							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 5%">
-								<i class="fa fa-sort-amount-asc"></i> List Data (Excel)
+						<div class="flexAndColumn h100">
+							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px;">
+								<i class="fa fa-sort-amount-asc"></i> List View (Excel)
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; height: 1px"></div>
 							</h5>
-							<div id="modal_excel" style="flex:1; overflow: scroll;"></div>
+							<div id="modal_excel" style="flex:0 0 97%; overflow: auto;">
 						</div>
 					</div>
 				</div>
@@ -113,7 +131,7 @@
 			</section>
 		</div>
 	</div>
-	<div class="fullscreen-footer">
+	<div class="fullscreen-footer flex5p">
 		<button
 			type="button"
 			id="fullscreen_modal_close"
@@ -151,7 +169,8 @@
 <script>
 	function widgsterDocReady() {
 		var pluginGroups = [
-			["./js/modal/fs_analysisResource.js"]];
+			["./js/common/jspreadsheet/modal/fs_analysisResource.js"]
+		];
 
 		loadPluginGroupsParallelAndSequential(pluginGroups).then(function() {
 			console.log("해당 html 및 js 로드 완료.");

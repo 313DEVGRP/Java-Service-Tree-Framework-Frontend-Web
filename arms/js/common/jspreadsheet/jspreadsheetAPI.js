@@ -245,7 +245,7 @@ var JspreadsheetApi = ( function() {
 					return items;
 				},
 				search:true,
-				pagination:10,
+				pagination:30,
 				// data: getSheetData(),
 				data: sheetData,
 				//columns: columnList,
