@@ -1,4 +1,16 @@
 (function(){
+	// 엑셀 데이터 높이 고정을 위한, 계산
+	let chart_height = $("#chart_data").height();
+	console.log(chart_height);
+
+	// chart_height 고정
+	if(chart_height) {
+		console.log("엑셀 데이터 높이 고정");
+		$('#excel_data').height(chart_height);
+		console.log("엑셀 높이 =>" + $("#chart_data").height());
+	}
+
+	//
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 

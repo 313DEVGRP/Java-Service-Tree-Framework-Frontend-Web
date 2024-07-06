@@ -244,7 +244,7 @@ var JspreadsheetApi = ( function() {
 
 					return items;
 				},
-				search:true,
+				search:false,
 				pagination:30,
 				// data: getSheetData(),
 				data: sheetData,
@@ -264,7 +264,8 @@ var JspreadsheetApi = ( function() {
 				oninsertcolumn: function(instance) {
 					console.log('Column added' + '\n');
 				},
-				/*onchange: function(instance, cell, x, y, value) {
+				/*
+				onchange: function(instance, cell, x, y, value) {
 					var cellName = jspreadsheet.getColumnNameFromId([x,y]);
 					console.log('onchange :: ' + cell + " :;  x :: " + x + " :: y :: " + y +" :: cellName ::" + cellName + ' to: ' + value + '\n');
 					if (x == 2) {
@@ -276,7 +277,8 @@ var JspreadsheetApi = ( function() {
 						modifiedRows[key].키 = instance.jexcel.getValueFromCoords(1, y);
 						modifiedRows[key].연봉 = value;
 					}
-				},*/
+				},
+				*/
 				oninsertrow: function(instance, rowNumber) {
 					console.log('Row added' + rowNumber);
 				},
@@ -359,7 +361,8 @@ var JspreadsheetApi = ( function() {
 			oninsertcolumn: function(instance) {
 				console.log('Column added' + '\n');
 			},
-			/*onchange: function(instance, cell, x, y, value) {
+			/*
+			onchange: function(instance, cell, x, y, value) {
 				var cellName = jspreadsheet.getColumnNameFromId([x,y]);
 				console.log('onchange :: ' + cell + " :;  x :: " + x + " :: y :: " + y +" :: cellName ::" + cellName + ' to: ' + value + '\n');
 				if (x == 2) {
@@ -371,7 +374,8 @@ var JspreadsheetApi = ( function() {
 					modifiedRows[key].키 = instance.jexcel.getValueFromCoords(1, y);
 					modifiedRows[key].연봉 = value;
 				}
-			},*/
+			},
+			*/
 			oninsertrow: function(instance, rowNumber) {
 				console.log('Row added' + rowNumber);
 			},
@@ -548,7 +552,7 @@ var JspreadsheetApi = ( function() {
 
 			return fetchData()
 				.then((data) => {
-					console.log("[ jspreadsheetAPI :: sheetRenderProcess ] :: fetchData")
+					console.log("[ jspreadsheetAPI :: sheetRenderProcess ] :: fetchData");
 					console.log(data);
 					return setOptions(data);
 				})
