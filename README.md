@@ -34,3 +34,5 @@ grunt-contrib-compass
 prettier
 ```
 
+윈도우 경우 : 커맨드 실행 ( 관리자 권한으로 실행 )
+Set-ExecutionPolicy RemoteSigned  -> Y
