@@ -38,6 +38,10 @@
     --active_color: #007aff;
 }
 
+.jexcel tbody tr:nth-child(even) td{
+    background-color: #E6E6E6 !important;
+}
+
 .jexcel {
     background: #DDD;
 }

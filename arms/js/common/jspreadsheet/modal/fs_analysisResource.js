@@ -18,6 +18,7 @@
 			let tarId = "modal_chart";
 
 			if (selectedVersionId) {
+				$("#modal_chart").html("");
 				drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId, tarId, 10000);
 			} else {
 				console.log("서비스 및 버전 선택이 안되어있습니다.");
