@@ -1,6 +1,8 @@
 (function(){
 	// 엑셀 데이터 높이 고정을 위한, 계산
 	let chart_height = $("#chart_data").height();
+	let chart_width = $("#chart_data").width();
+	let jexcel_content_height;
 	console.log(chart_height);
 
 	// chart_height 고정
@@ -38,10 +40,8 @@
 			}
 		} else if (target === "#excel_data") {
 			console.log("excel_data");
-			// $("#btn_modal_excel").click();
 			let tarId = "modal_excel";
-			JspreadsheetApi.getSheetData();
-			JspreadsheetApi.sheetRender(tarId);
+			drawExcel(tarId);
 
 		} else if (target === "#option_toggle") {
 			$(".option_tab").removeClass("active");
@@ -56,6 +56,47 @@
 
 		}
 	});
+
+	var resizeObserver = new ResizeObserver(function(entries) {
+		for (let entry of entries) {
+			var width = entry.contentRect.width;
+			var height = entry.contentRect.height;
+			handleResize(entry.target.id, width, height);
+		}
+	});
+	
+	// 모달요소 크리 변화 관찰
+	resizeObserver.observe(document.getElementById('chart_data'));
+	resizeObserver.observe(document.getElementById('excel_data'));
+
+	function handleResize(id,width, height) {
+		console.log('id: '+ id +' Modal resized to: ' + width + 'x' + height);
+		if (id ==="excel_data" && height !== 0) {
+			chart_height = height;
+			chart_width = width;
+			if(chart_height > 70) {
+				drawExcel("modal_excel");
+			} else {
+				console.log("엑셀 데이터를 그릴 영역의 넓이가 너무 작습니다.");
+			}
+		} else if (id ==="chart_data" && height !== 0) {
+			chart_height = height;
+			chart_width = width;
+		}
+	}
+
+	function drawExcel(targetId) {
+		$.when(JspreadsheetApi.getSheetData()).done(function() {
+			JspreadsheetApi.sheetRender(targetId);
+		}).done( function() {
+			// 40(pagination) 30(header)
+			jexcel_content_height = chart_height - 40 -30;
+			$("#modal_excel .jexcel_content").css("max-height",jexcel_content_height);
+			$("#modal_excel .jexcel_content").css("width","100%");
+		}).fail( function() {
+			console.log("excel_data 그리기 실패");
+		});
+	}
 
 	$("#fullscreen_modal_close").on("click", function() {
 		$(".fullscreen-header>.widget-controls>a[data-widgster='restore']").click();

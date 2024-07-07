@@ -131,6 +131,54 @@ var JspreadsheetApi = ( function() {
 				"parent": "61"
 			},
 			{
+				"id": "admin",
+				"name": "admin",
+				"type": "작업자",
+				"parent": "55"
+			},
+			{
+				"id": "63b2a039159df2c252e826e9",
+				"name": "이동민",
+				"type": "작업자",
+				"parent": "61"
+			},
+			{
+				"id": "admin",
+				"name": "admin",
+				"type": "작업자",
+				"parent": "37"
+			},
+			{
+				"id": "63b2a039159df2c252e826ee",
+				"name": "이동민",
+				"type": "작업자",
+				"parent": "61"
+			},
+			{
+				"id": "admin",
+				"name": "admin",
+				"type": "작업자",
+				"parent": "74"
+			},
+			{
+				"id": "63b2a039159df2c252e826e9",
+				"name": "이동민",
+				"type": "작업자",
+				"parent": "37"
+			},
+			{
+				"id": "admin",
+				"name": "admin",
+				"type": "작업자",
+				"parent": "36"
+			},
+			{
+				"id": "63b2a039159df2c252e826e9",
+				"name": "이동민",
+				"type": "작업자",
+				"parent": "55"
+			},
+			{
 				"id": "No-Worker",
 				"name": "No-Worker",
 				"type": "No-Worker",
@@ -248,6 +296,7 @@ var JspreadsheetApi = ( function() {
 				pagination:30,
 				// data: getSheetData(),
 				data: sheetData,
+				tableOverflow: true,
 				//columns: columnList,
 				columns: [
 					{ type: "text", title: "제품(서비스) 키", width: spreadsheetElement.clientWidth * 0.1},
