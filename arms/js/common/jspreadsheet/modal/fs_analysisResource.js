@@ -12,7 +12,7 @@
 		console.log("엑셀 높이 =>" + $("#chart_data").height());
 	}
 
-	//
+	// TAB Click 시
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
 		var target = $(e.target).attr("href"); // activated tab
 
@@ -97,8 +97,4 @@
 			console.log("excel_data 그리기 실패");
 		});
 	}
-
-	$("#fullscreen_modal_close").on("click", function() {
-		$(".fullscreen-header>.widget-controls>a[data-widgster='restore']").click();
-	});
 })(); // 이벤트 리스너 등록 및 즉시실행.
