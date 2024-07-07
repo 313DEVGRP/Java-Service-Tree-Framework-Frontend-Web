@@ -1,6 +1,7 @@
 (function(){
 	// 엑셀 데이터 높이 고정을 위한, 계산
 	let chart_height = $("#chart_data").height();
+	let chart_width = $("#chart_data").width();
 	console.log(chart_height);
 
 	// chart_height 고정
@@ -40,8 +41,17 @@
 			console.log("excel_data");
 			// $("#btn_modal_excel").click();
 			let tarId = "modal_excel";
-			JspreadsheetApi.getSheetData();
-			JspreadsheetApi.sheetRender(tarId);
+			$.when(JspreadsheetApi.getSheetData()).done(function() {
+				JspreadsheetApi.sheetRender(tarId);	
+			}).done( function() {
+				// 40(pagination) 30(header)
+				let jexcel_content_height = chart_height - 40 -30;
+			$("#modal_excel .jexcel_content").css("max-height",jexcel_content_height);
+				$("#modal_excel .jexcel_content").css("width","100%");
+			}).fail( function() {
+				console.log("excel_data 그리기 실패");
+			});
+			
 
 		} else if (target === "#option_toggle") {
 			$(".option_tab").removeClass("active");

@@ -45,3 +45,7 @@
 .jexcel {
     background: #DDD;
 }
+
+.jexcel_pagination {
+    max-height: 40px;
+}
