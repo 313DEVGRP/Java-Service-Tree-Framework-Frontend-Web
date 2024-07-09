@@ -99,7 +99,7 @@ function execDocReady() {
 			//버전 멀티 셀렉트 박스 이니시에이터
 			makeVersionMultiSelectBox();
 
-			popup_size_setting();
+			//popup_size_setting();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
@@ -392,7 +392,9 @@ function dataTableLoad(selectId, endPointUrl) {
 					if( isEmpty(row.isReq) || row.isReq == false){
 						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					// data-row 에 API에 맞는 param 설정 예정.
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data +
+						"<button class='btn btn-transparent btn-xs' data-toggle='modal' data-target='#subtask_linkedissue_modal'> <i class='fa fa-list-alt'></i></button></div>";
 				}
 				return data;
 			},
@@ -648,6 +650,7 @@ function dataTableLoad(selectId, endPointUrl) {
 
 // 데이터 테이블 구성 이후 꼭 구현해야 할 메소드 : 열 클릭시 이벤트
 function dataTableClick(tempDataTable, selectedData) {
+	console.log(selectedData);
 	selectedIssue = selectedData;
 }
 
