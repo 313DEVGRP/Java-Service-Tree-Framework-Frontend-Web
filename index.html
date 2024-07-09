@@ -103,10 +103,13 @@
 				console.log("The URL of this page is: " + window.location.href);
 
 				var str = window.location.href;
-				if (str.indexOf("313.co.kr:9999") > 0 || str.indexOf("a-rms.net:9999") > 0 || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0) {
+				if (str.indexOf("313.co.kr:9999") > 0 || str.indexOf("a-rms.net:9999") > 0 || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0 || str.indexOf("localhost:9999") > 0 || str.indexOf("127.0.0.1:9999") > 0) {
+                    console.log("개발용으로 접속한 경우");
                     alert("개발에 참여해 주셔서 감사합니다.\n기필코 그대의 노고를 잊지않고, 최대한의 보상을 약속하겠습니다.\n이동민 드림.");
                     window.location.replace("/arms/index.html");
 				} else {
+                    console.log("313 사이트에 접속했거나 arms 사이트에 접속한 경우");
+                    console.log("고객사 사이트에 접속한 경우");
 					window.location.replace("/arms/index.html");
 				}
 			};

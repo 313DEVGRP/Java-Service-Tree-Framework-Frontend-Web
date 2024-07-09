@@ -382,7 +382,13 @@
 
                 var str = window.location.href;
                 console.table(str);
-                if (str.indexOf("313.co.kr") > 0 || str.indexOf("a-rms.net") || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0) {
+                if (str.indexOf("313.co.kr:9999") > 0 || str.indexOf("a-rms.net:9999") || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0 || str.indexOf("localhost:9999") > 0 || str.indexOf("127.0.0.1:9999") > 0) {
+                    console.log("개발용으로 접속한 경우");
+                    console.log("마토모 : OFF");
+
+                } else if (str.indexOf("313.co.kr") > 0 || str.indexOf("a-rms.net") > 0) {
+                    console.log("313 사이트에 접속했거나 arms 사이트에 접속한 경우");
+                    console.log("마토모 : ON");
                     <!-- Matomo -->
                     var _paq = (window._paq = window._paq || []);
                     /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
@@ -400,8 +406,9 @@
                         s.parentNode.insertBefore(g, s);
                     })();
                     <!-- End Matomo Code -->
-
-                    console.log("matomo send");
+                } else {
+                    console.log("고객사 사이트에 접속한 경우");
+                    console.log("마토모 : OFF");
                 }
             };
             //]]>
