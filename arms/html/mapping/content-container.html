@@ -44,7 +44,7 @@
 					<button class="btn btn-primary btn-block btn-sm"
 							data-target="#my_modal1"
 							data-toggle="modal"
-							id="modal_popup_id"
+							id="save_modal_button"
 							type="button"
 							onClick="popup_modal('save_popup')">
 						상태 등록하기
@@ -560,6 +560,9 @@
 							style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
 							<form   class="form-horizontal"
 								method="post">
+								<input  type="hidden"
+										id="popup_view_state_c_id"
+										name="popup_view_state_c_id" />
 							<fieldset>
 								<div    class="control-group"
 										for="popup_view_state_name">
@@ -650,6 +653,16 @@
 					</div>
 					<div    class="modal-footer"
 							style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+							<button
+									type="button"
+									style="float: left;"
+									id="delete_req_state"
+									class="btn btn-danger btn-sm ladda-delete-pdservice ladda-button"
+									data-dismiss="modal">
+									<span class="ladda-label">
+										상태 삭제
+									</span><span class="ladda-spinner"></span>
+							</button>
 							<button
 									type="button"
 									id="close_modal_popup"
