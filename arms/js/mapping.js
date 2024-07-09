@@ -116,6 +116,8 @@ function execDocReady() {
 
             state_category_tab_group_click_event();
             save_req_state_btn_click();
+            update_req_state_btn_click();
+            delete_req_state_btn_click();
 
             $(window).resize(function() {
                 adjustHeight();
@@ -168,7 +170,6 @@ function setKanban() {
                 console.log(data.result);
                 // 요구사항 상태 별 리스트
                 const reqListByState = data.result.reduce((reqList, item) => {
-                    // 요구사항 상태 가져오기
                     const state = (item && item.c_etc) || "상태 정보 없음";
 
                     // 해당 상태의 리스트가 없으면 초기화
@@ -178,9 +179,9 @@ function setKanban() {
 
                     // 현재 상태에 해당하는 리스트에 아이템 추가
                     reqList[state].push({
-                        id: "req_state_" + item.c_id,
+                        id: item.c_id,
                         title: `<span class="req_item">${item.c_title}</span>
-                                <i class="fa fa-ellipsis-h show-info" data-id="req_state_${item.c_id}"></i>`,
+                            <i class="fa fa-ellipsis-h show-info" data-id="${item.c_id}"></i>`,
                         info: {
                             reqSummary: item.c_title
                         },
@@ -191,34 +192,18 @@ function setKanban() {
                 }, {});
                 console.log(reqListByState);
 
-                const reqBoardByState = Object.keys(reqListByState).map(state => {
-                    // reqListByState[state]가 정의되어 있는지 확인
-                    if (reqListByState[state][0] && reqListByState[state][0].data) {
-                        // console.log(reqListByState[state].data.c_etc);  // 로그 출력
-                        let state_id = '';
-                        if (reqListByState[state][0].data.c_etc) {
-                            state_id = reqListByState[state][0].data.c_etc;
-                        } else {
-                            return null; // continue 대신 null 반환
-                        }
+                const reqBoardByState = Object.keys(req_state_data).map(state => ({
+                    id: state,                                                          // 상태 카테고리 ID
+                    title: `${reqStateToIconMapping[state]} ${req_state_data[state]}`,  // 상태 카테고리 이름
+                    item: reqListByState[state]                                         // 상태 카테고리별 상태 목록
+                }));
 
-                        return {
-                            id: state_id,  // 요구사항 상태 별 id
-                            title: `${reqStateToIconMapping[state_id]} ${req_state_data[state_id]}`, // 요구사항 제목
-                            item: reqListByState[state_id] // 요구사항 상태 별 리스트
-                        };
-                    }
-                    return null; // 조건에 맞지 않으면 null 반환
-                }).filter(item => item !== null); // null 값 필터링
-
-                console.log(reqBoardByState);
 
                 // 칸반 보드 로드
                 loadKanban(reqListByState, reqBoardByState);
 
                 // 높이 조정
                 adjustHeight();
-
             }
         },
         error: function (e) {
@@ -241,7 +226,6 @@ function loadKanban(reqListByState, reqBoardByState) {
 
             // 보드 변경
             let reqId = el.dataset.eid;
-            reqId = reqId.replace("req_state_", "");
             let reqTitle = el.innerText;
             let state = source.parentNode.dataset.id;
             let changeState = target.parentNode.dataset.id;
@@ -277,28 +261,9 @@ function loadKanban(reqListByState, reqBoardByState) {
 
     // 상세 정보 클릭 이벤트
     $(".show-info").on('click', function() {
-        const reqId = $(this).data('id');
-        popup_modal('update_popup');
-/*        let reqInfo;
-        Object.values(reqListByState).forEach(stateList => {
-            const reqItem = stateList.find(item => item.id === reqId);
-            if (reqItem) {
-                reqInfo = reqItem.info;
-            }
-        });
-
-        let reqData = {
-            reqId: reqId,
-            reqInfo: reqInfo
-        }
-
-        TgGroup.modalReqKanban(reqData);
-        reqKanbanTg.start();
-
-        reqKanbanTg.onAfterExit(() => {
-            $(`[data-id="${reqId}"]`).removeAttr('data-tg-tour');
-            $(`[data-id="${reqId}"]`).removeAttr('data-tg-title');
-        });*/
+        const state_id = $(this).data('id');
+        $('#my_modal1').modal('show');
+        popup_modal('update_popup', state_id);
     });
 
     // 툴팁
@@ -559,22 +524,61 @@ function dataTableCallBack(settings, json) {
 ///////////////////////////////////
 // 팝업 띄울 때, UI 일부 수정되도록
 ///////////////////////////////////
-function popup_modal(popup_type) {
+function popup_modal(popup_type, state_id) {
 
+    $("#popup_view_state_category_div label").removeClass("active");
     $("input[name='popup_view_state_category_options']:checked").prop("checked", false);
+    $("#popup_view_state_name").val("");
+    CKEDITOR.instances.popup_view_state_description_editor.setData("상태 관련 설명 등을 기록합니다.");
+
+    $("#delete_req_state").addClass("hidden");
+    $("#update_req_state").addClass("hidden");
+    $("#save_req_state").addClass("hidden");
 
     if (popup_type === "save_popup") {
+        $("#my_modal1_title").text("ARMS 상태 등록 팝업");
+        $("#my_modal1_description").text("A-RMS 요구사항의 상태를 등록합니다.");
 
         // 모달 등록, 수정별 버튼 초기화
-        $("#update_req_state").addClass("hidden");
         $("#save_req_state").removeClass("hidden");
     }
     else if (popup_type === "update_popup") {
+        $("#my_modal1_title").text("ARMS 상태 수정 팝업");
+        $("#my_modal1_description").text("A-RMS 요구사항의 상태를 수정합니다.");
+
         $("#update_req_state").removeClass("hidden");
-        $("#save_req_state").addClass("hidden");
+        $("#delete_req_state").removeClass("hidden");
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/getNode.do?c_id=" + state_id,
+            type: "get",
+            statusCode: {
+                200: function (data) {
+                    console.log(data);
+
+                    $("#popup_view_state_c_id").val(data.c_id);
+                    $("#popup_view_state_name").val(data.c_title);
+                    CKEDITOR.instances.popup_view_state_description_editor.setData(data.c_contents);
+                    let state_category_value = data.c_etc;
+                    update_radio_buttons("#popup_view_state_category_div", state_category_value);
+                    // jSuccess('"' + reqTitle + '"' + " 상태 카테고리가 변경되었습니다.");
+                }
+            }
+        });
     }
-    else {
-    }
+}
+
+function update_radio_buttons(container_selector, value) {
+    $(container_selector + " label").removeClass("active");
+    $(container_selector + " input[type='radio']:checked").prop("checked", false);
+
+    let radio_buttons = $(container_selector + " input[type='radio']");
+    radio_buttons.each(function () {
+        if (value && $(this).val() === value) {
+            $(this).parent().addClass("active");
+            $(this).prop("checked", true);
+        }
+    });
 }
 
 function save_req_state_btn_click() {
@@ -606,6 +610,85 @@ function save_req_state_btn_click() {
             statusCode: {
                 200: function () {
                     jSuccess('"' + state_name + '"' + " 상태가 생성되었습니다.");
+                    let active_tab_name = getActiveTab();
+                    if (active_tab_name === "#board") {
+                        setKanban();
+                    }
+                    else if (active_tab_name === "#table") {
+                        dataTableLoad();
+                    }
+
+                    $("#close_modal_popup").trigger("click");
+                }
+            }
+        });
+    });
+}
+
+function update_req_state_btn_click() {
+    $("#update_req_state").off().click(function() {
+        let state_name = $("#popup_view_state_name").val().trim();
+        if (!state_name) {
+            alert("상태의 이름이 입력되지 않았습니다.");
+            return;
+        }
+        let state_category_value = $("#popup_view_state_category_div input[name='popup_view_state_category_options']:checked").val();
+        if (!state_category_value) {
+            alert("상태 카테고리가 선택되지 않았습니다.");
+            return;
+        }
+        let state_description = CKEDITOR.instances["popup_view_state_description_editor"].getData();
+
+        let data = {
+            c_id : $("#popup_view_state_c_id").val(),
+            c_etc : state_category_value,
+            c_title : state_name,
+            c_contents : state_description
+        };
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/updateNode.do",
+            type: "PUT",
+            data: data,
+            statusCode: {
+                200: function () {
+                    jSuccess('"' + state_name + '"' + " 상태가 수정되었습니다.");
+                    let active_tab_name = getActiveTab();
+                    if (active_tab_name === "#board") {
+                        setKanban();
+                    }
+                    else if (active_tab_name === "#table") {
+                        dataTableLoad();
+                    }
+
+                    $("#close_modal_popup").trigger("click");
+                }
+            }
+        });
+    });
+}
+
+function delete_req_state_btn_click() {
+    $("#delete_req_state").off().click(function() {
+        let state_name = $("#popup_view_state_name").val().trim();
+
+        let isDelete = confirm(state_name + " 상태를 삭제하시겠습니까?");
+        if (!isDelete) {
+            return;
+        }
+
+
+        let data = {
+            c_id : $("#popup_view_state_c_id").val(),
+        };
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/removeNode.do",
+            type: "DELETE",
+            data: data,
+            statusCode: {
+                200: function () {
+                    jSuccess('"' + state_name + '"' + " 상태가 삭제되었습니다.");
                     let active_tab_name = getActiveTab();
                     if (active_tab_name === "#board") {
                         setKanban();
