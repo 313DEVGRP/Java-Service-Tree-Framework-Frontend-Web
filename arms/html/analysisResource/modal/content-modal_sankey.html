@@ -1,5 +1,5 @@
 <div class="fullscreen-wrapper flexAndColumn h100">
-	<div class="fullscreen-header flex10p">
+	<div class="fullscreen-header flex5p">
 		<h4
 			class="font14"
 			style="color: #f8f8f8; text-align: left; padding: 5px">
@@ -15,26 +15,6 @@
 		<div
 			class="gradient_middle_border"
 			style="width: 100%; height: 2px"></div>
-		<blockquote
-			class="search-result"
-			style="margin: 5px 0 !important; border-left: 5px solid #e5603b; display: flex;justify-content: space-between;align-items: center; max-height: 3rem;">
-			<p
-				id="fullscreen_description"
-				style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
-				제품 및 버전에 투입된 작업자 현황입니다.
-			</p>
-			<div style="float: right">
-				<button
-					class="btn btn-transparent btn-xs"
-					style="margin-top: -3px; color: #acacac; background: rgba(51, 51, 51, 0.2); padding: 1px 9px">
-					Help
-					<i
-						class="fa fa-question"
-						style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
-				</button>
-			</div>
-		</blockquote>
-
 		<div class="widget-controls" style="margin:10px">
 			<a data-widgster="restore" title="Restore" href="#">
 				<span class="glyphicon glyphicon-remove"></span>
@@ -61,7 +41,7 @@
 				<div class="body tab-content fs-tab-content" style="flex:1; display: flex; flex-direction: column;">
 					<div id="chart_data" class="tab-pane h100 active">
 						<div class="flexAndColumn h100">
-							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px;">
+							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px; margin-bottom: 3px;">
 								<i class="fa fa-bar-chart-o"></i> Chart View
 								<div
 									class="gradient_middle_border"
@@ -85,8 +65,25 @@
 					</div>
 					<div id="excel_data" class="tab-pane h100">
 						<div class="flexAndColumn h100">
-							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px;">
-								<i class="fa fa-sort-amount-asc"></i> List View (Excel)
+							<h5 class="tab-header font13 flexAndRow" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px; align-items: center; margin-bottom: 0px">
+								<div class="tab-image-container" style="margin: 5px 3px 5px 0">
+									<img src="./img/spreadsheet/spreadsheet-2127832_1920.png" id="side_jira_white_icon" width="40px">
+								</div>
+								<div class="tab-title-container w100 flexAndColumn">
+									<div id="tab-doc-title-bar" style="line-height: 20px; font-size: 15px; margin: 8px 0 8px 8px">List View (Excel)</div>
+									<div id="tab-doc-bar" class="flexAndRow btn-group">
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">파일</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">수정</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">보기</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">삽입</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">서식</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">데이터</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도구</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">확장프로그램</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도움말</button>
+									</div>
+								</div>
+
 								<div
 									class="gradient_middle_border"
 									style="width: 100%; height: 1px"></div>
@@ -126,6 +123,10 @@
 	.flexAndColumn {
 		display: flex;
 		flex-direction: column;
+	}
+	.flexAndRow {
+    display: flex;
+    flex-direction: row;
 	}
 
 	.no-padding { padding: 0; }
