@@ -3,6 +3,7 @@ var selectName; // 제품 이름
 var dataTableRef; // 데이터테이블 참조 변수
 var selected_alm_server_id;
 var selected_alm_server_name;
+var alm_server_list = {};
 var req_state_data = {
     "10": "열림",
     "11": "진행중",
@@ -85,7 +86,9 @@ function execDocReady() {
             // 칸반 보드
             "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.css",
             "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.js",
-            "../arms/js/reqKanban/kanban.js"
+            "../arms/js/reqKanban/kanban.js",
+            /*"../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.css",
+            "../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.js"*/
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -151,7 +154,10 @@ function execDocReady() {
             });
 
             //ALM 서버 셀렉트 박스 이니시에이터
-            // make_alm_server_select_box();
+            make_alm_server_select_box();
+
+            /*flow_chart();
+            example();*/
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
@@ -244,6 +250,7 @@ function loadKanban(reqListByState, reqBoardByState) {
                 c_id: reqId,
                 c_etc: changeState,
             };
+
             $.ajax({
                 url: "/auth-user/api/arms/reqState/updateNode.do",
                 type: "put",
@@ -257,12 +264,10 @@ function loadKanban(reqListByState, reqBoardByState) {
             });
         }
     });
-    jSuccess("보드가 로드 되었습니다.");
 
     // 상세 정보 클릭 이벤트
     $(".show-info").on('click', function() {
-        const state_id = $(this).data('id');
-        $('#my_modal1').modal('show');
+        const state_id = $(this).data('id');;
         popup_modal('update_popup', state_id);
     });
 
@@ -345,11 +350,18 @@ function dataTableLoad() {
             title: "상태 이름",
             data: "c_title",
             render: function (data, type, row, meta) {
-                if (type === "display") { //// 렌더링 시 이름을 라벨로 감싸서 표시
-                    return '<label style="color: #a4c6ff">' + data + "</label>";
+                if (isEmpty(data) || data === "unknown") {
+                    return `<div style='color: #808080'>N/A</div>`;
                 }
 
-                return data;
+                console.log(row);
+                let edit_button_html =  `<button 
+                                                    style="border:0; background:rgba(51,51,51,0.425); color:#E49400; vertical-align: middle" 
+                                                    onclick="popup_modal('update_popup', ${row.c_id});">
+                                                    <i class="fa fa-edit" />
+                                                </button>`;
+
+                return `<div style='text-align: left; white-space: nowrap; color: #f8f8f8'>${data} ${edit_button_html}</div>`;
             },
             className: "dt-body-left",  // 좌측 정렬
             visible: true
@@ -383,7 +395,7 @@ function dataTableLoad() {
                         });
 
                         return 	`<select
-									class="select_status_mapping select-block-level chzn-select darkBack"
+									class="select-state-category-mapping select-block-level chzn-select darkBack"
 									tabIndex="-1">
 									${option_html}
 								</select>`;
@@ -476,11 +488,11 @@ function select_state_mapping_event() {
     });
 
     // slim scroll 적용
-    // $(".select_status_mapping").on("select2:open", function () {
+    // $(".select-state-category-mapping").on("select2:open", function () {
     // 	makeSlimScroll(".select2-results__options");
     // });
 
-    $(".select_status_mapping").off("select2:select").on("select2:select", function (e) {
+    $(".select-state-category-mapping").off("select2:select").on("select2:select", function (e) {
 
         console.log(e);
         console.log(e.params);
@@ -525,6 +537,7 @@ function dataTableCallBack(settings, json) {
 // 팝업 띄울 때, UI 일부 수정되도록
 ///////////////////////////////////
 function popup_modal(popup_type, state_id) {
+    $('#my_modal1').modal('show');
 
     $("#popup_view_state_category_div label").removeClass("active");
     $("input[name='popup_view_state_category_options']:checked").prop("checked", false);
@@ -712,14 +725,13 @@ function getActiveTab() {
 ///////////////////////
 // ALM 서버 셀렉트 박스
 //////////////////////
-/*
 function make_alm_server_select_box() {
     //제품 서비스 셀렉트 박스 이니시에이터
     $(".chzn-select").each(function() {
         $(this).select2($(this).data());
     });
 
-    //제품 서비스 셀렉트 박스 데이터 바인딩
+    //ALM 서버 셀렉트 박스 데이터 바인딩
     $.ajax({
         url: "/auth-user/api/arms/jiraServerPure/getNodesWithoutRoot.do",
         type: "GET",
@@ -732,6 +744,7 @@ function make_alm_server_select_box() {
                 //////////////////////////////////////////////////////////
                 for (var k in data.result) {
                     var obj = data.result[k];
+                    alm_server_list[obj.c_id] = obj;
                     var newOption = new Option(obj.c_title, obj.c_id, false, false);
                     $("#selected_alm_server").append(newOption).trigger("change");
                 }
@@ -751,13 +764,43 @@ function make_alm_server_select_box() {
 
     // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
     $("#selected_alm_server").on("select2:select", function(e) {
+        $("#cloud_project_tree").hide();
+        $("#select-project-div").hide();
+        $("#select-project").text("선택되지 않음");
         selected_alm_server_id = $("#selected_alm_server").val();
         selected_alm_server_name = $("#selected_alm_server").select2("data")[0].text;
-
         $("#select-alm-server").text(selected_alm_server_name);
 
-        build_alm_server_jstree(selected_alm_server_id);
-        /!*        let selectedHtml =
+        let alm_server_data = alm_server_list[selected_alm_server_id];
+        let alm_server_type = alm_server_data.c_jira_server_type;
+        if (alm_server_type === "클라우드") {
+            $("#cloud_project_tree").show();
+            $("#select-project-div").show();
+            build_alm_server_jstree(selected_alm_server_id);
+        }
+        else {
+            //ALM 서버 이슈상태 조회
+            $.ajax({
+                url: "/auth-user/api/arms/jiraServer/getJiraIssueStatus.do?c_id=" + selected_alm_server_id ,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                progress: true,
+                statusCode: {
+                    200: function(data) {
+                        console.log(data.response);
+                        //////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////
+                        jSuccess("ALM 서버 상태 조회가 완료 되었습니다.");
+                    }
+                },
+                error: function (e) {
+                    jError("ALM 서버 상태 조회 중 에러가 발생했습니다. :: " + e);
+                }
+            });
+        }
+
+        /*        let selectedHtml =
                     `<div class="chat-message">
                         <div class="chat-message-body" style="margin-left: 0px !important;">
                             <span class="arrow" style="top: 35% !important;"></span>
@@ -770,13 +813,13 @@ function make_alm_server_select_box() {
                         </div>
                     </div>
                     `;
-                $("#reqSender").html(selectedHtml); // 선택된 제품(서비스)*!/
+                $("#reqSender").html(selectedHtml); // 선택된 제품(서비스)*/
     });
 } // end make_alm_server_select_box()
 
 function build_alm_server_jstree(selected_alm_server_id) {
     var jQueryElementID = "#alm_server_tree";
-    var serviceNameForURL = "/auth-user/api/arms/jiraServer/getNode.do?c_id=" + selected_alm_server_id;
+    var serviceNameForURL = "/auth-user/api/arms/jiraServerProjectPure/getJiraProjectPure.do?c_id=" + selected_alm_server_id;
 
     jstree_build(jQueryElementID, serviceNameForURL);
 }
@@ -785,16 +828,16 @@ function build_alm_server_jstree(selected_alm_server_id) {
 // -- jstree build 설정 -- //
 ////////////////////////////////////////////////////////////////////////////////////////
 function jstree_build(jQueryElementID, serviceNameForURL) {
-    console.log("mapping :: jsTreeBuild : ( jQueryElementID ) → " + jQueryElementID);
-    console.log("mapping :: jsTreeBuild : ( serviceNameForURL ) → " + serviceNameForURL);
+    console.log("mapping :: jstree_build : ( jQueryElementID ) → " + jQueryElementID);
+    console.log("mapping :: jstree_build : ( serviceNameForURL ) → " + serviceNameForURL);
 
-    console.log("mapping :: jsTreeBuild : ( href ) → " + $(location).attr("href"));
-    console.log("mapping :: jsTreeBuild : ( protocol ) → " + $(location).attr("protocol"));
-    console.log("mapping :: jsTreeBuild : ( host ) → " + $(location).attr("host"));
-    console.log("mapping :: jsTreeBuild : ( pathname ) → " + $(location).attr("pathname"));
-    console.log("mapping :: jsTreeBuild : ( search ) → " + $(location).attr("search"));
-    console.log("mapping :: jsTreeBuild : ( hostname ) → " + $(location).attr("hostname"));
-    console.log("mapping :: jsTreeBuild : ( port ) → " + $(location).attr("port"));
+    console.log("mapping :: jstree_build : ( href ) → " + $(location).attr("href"));
+    console.log("mapping :: jstree_build : ( protocol ) → " + $(location).attr("protocol"));
+    console.log("mapping :: jstree_build : ( host ) → " + $(location).attr("host"));
+    console.log("mapping :: jstree_build : ( pathname ) → " + $(location).attr("pathname"));
+    console.log("mapping :: jstree_build : ( search ) → " + $(location).attr("search"));
+    console.log("mapping :: jstree_build : ( hostname ) → " + $(location).attr("hostname"));
+    console.log("mapping :: jstree_build : ( port ) → " + $(location).attr("port"));
 
     $(jQueryElementID)
         .jstree({
@@ -807,28 +850,13 @@ function jstree_build(jQueryElementID, serviceNameForURL) {
                     data: function (n) {
                         // the result is fed to the AJAX request `data` option
                         console.log("[ common :: jsTreeBuild ] :: json data load = " + JSON.stringify(n));
-                        console.log(n);
                         return {
                             c_id: n.attr ? n.attr("id").replace("node_", "").replace("copy_", "") : 1
                         };
                     },
-                    success: function (data) {
-                        console.log(data);
-                        if (data.c_jira_server_type === "클라우드") {
-                            // 자식 노드 추가
-                            data.children = [];
-                            data.jiraProjectEntities.forEach(item => {
-                                let children_item = {
-                                    data: [item.c_title],
-                                    attr: {id: "node_" + item.c_id, rel: "default"},
-                                    parent: "node_"+data.c_id
-                                };
-                                console.log(children_item);
-                                data.children.push(children_item);
-                            });
-                        }
-                        console.log(data);
-                        // jSuccess("Product(service) Data Load Complete");
+                    success: function (n) {
+                        console.log(n.response);
+                        jSuccess("프로젝트 조회 완료");
                         $(jQueryElementID).jstree("search", $("#text").val());
                     }
                 }
@@ -842,16 +870,16 @@ function jstree_build(jQueryElementID, serviceNameForURL) {
             types: {
                 max_depth: -2,
                 max_children: -2,
-                valid_children: ["default"],
+                valid_children: ["drive"],
                 types: {
                     default: {
-                        valid_children: "default",
+                        valid_children: "none",
                         icon: {
                             image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/attibutes.png"
                         }
                     }
                 }
-            }
+            },
         })
         .bind("select_node.jstree", function (event, data) {
             if ($.isFunction(jstree_click)) {
@@ -895,26 +923,420 @@ function jstree_build(jQueryElementID, serviceNameForURL) {
 
         $(jQueryElementID).jstree("search", document.getElementById("text").value);
     });
-
-    function mappingStateIcon(key) {
-        if (key === "열림") {
-            return '<i class="fa fa-folder-o text-danger status-icon"></i>';
-        } else if (key === "진행중") {
-            return '<i class="fa fa-fire text-danger status-icon" style="color: #E49400;"></i>';
-        } else if (key === "해결됨") {
-            return '<i class="fa fa-fire-extinguisher text-success status-icon"></i>';
-        } else if (key === "닫힘") {
-            return '<i class="fa fa-folder text-primary status-icon"></i>';
-        }
-        return ''; // 기본적으로 빈 문자열 반환
-    }
 }
 
 function jstree_click(data) {
-    console.log(data);
+    let c_id = data.attr("id").replace("node_", "").replace("copy_", "");
+    let c_title = $(".jstree-clicked").text().trim();
+    $("#select-project").text(c_title);
 }
 
 $("#text").on("input", function () {
     var searchString = $(this).val();
     $("#alm_server_tree").jstree("search", searchString);
-});*/
+});
+
+function flow_chart() {
+    var $flowchart = $('#mapping-flow-chart');
+    var $container = $flowchart.parent();
+
+    // Apply the plugin on a standard, empty div...
+    $flowchart.flowchart({
+        data: defaultFlowchartData,
+        defaultSelectedLinkColor: '#000055',
+        grid: 10,
+        multipleLinksOnInput: true,
+        multipleLinksOnOutput: true
+    });
+
+    function getOperatorData($element) {
+        var nbInputs = parseInt($element.data('nb-inputs'), 10);
+        var nbOutputs = parseInt($element.data('nb-outputs'), 10);
+        var data = {
+            properties: {
+                title: $element.text(),
+                inputs: {},
+                outputs: {}
+            }
+        };
+
+        var i = 0;
+        for (i = 0; i < nbInputs; i++) {
+            data.properties.inputs['input_' + i] = {
+                label: 'Input ' + (i + 1)
+            };
+        }
+        for (i = 0; i < nbOutputs; i++) {
+            data.properties.outputs['output_' + i] = {
+                label: 'Output ' + (i + 1)
+            };
+        }
+
+        return data;
+    }
+
+    //-----------------------------------------
+    //--- operator and link properties
+    //--- start
+    var $operatorProperties = $('#operator_properties');
+    $operatorProperties.hide();
+    var $linkProperties = $('#link_properties');
+    $linkProperties.hide();
+    var $operatorTitle = $('#operator_title');
+    var $linkColor = $('#link_color');
+
+    $flowchart.flowchart({
+        onOperatorSelect: function(operatorId) {
+            $operatorProperties.show();
+            $operatorTitle.val($flowchart.flowchart('getOperatorTitle', operatorId));
+            return true;
+        },
+        onOperatorUnselect: function() {
+            $operatorProperties.hide();
+            return true;
+        },
+        onLinkSelect: function(linkId) {
+            $linkProperties.show();
+            $linkColor.val($flowchart.flowchart('getLinkMainColor', linkId));
+            return true;
+        },
+        onLinkUnselect: function() {
+            $linkProperties.hide();
+            return true;
+        }
+    });
+
+    $operatorTitle.keyup(function() {
+        var selectedOperatorId = $flowchart.flowchart('getSelectedOperatorId');
+        if (selectedOperatorId != null) {
+            $flowchart.flowchart('setOperatorTitle', selectedOperatorId, $operatorTitle.val());
+        }
+    });
+
+    $linkColor.change(function() {
+        var selectedLinkId = $flowchart.flowchart('getSelectedLinkId');
+        if (selectedLinkId != null) {
+            $flowchart.flowchart('setLinkMainColor', selectedLinkId, $linkColor.val());
+        }
+    });
+    //--- end
+    //--- operator and link properties
+    //-----------------------------------------
+
+    //-----------------------------------------
+    //--- delete operator / link button
+    //--- start
+    $flowchart.parent().siblings('.delete_selected_button').click(function() {
+        $flowchart.flowchart('deleteSelected');
+    });
+    //--- end
+    //--- delete operator / link button
+    //-----------------------------------------
+
+
+
+    //-----------------------------------------
+    //--- create operator button
+    //--- start
+    var operatorI = 0;
+    $flowchart.parent().siblings('.create_operator').click(function() {
+        var operatorId = 'created_operator_' + operatorI;
+        var operatorData = {
+            top: ($flowchart.height() / 2) - 30,
+            left: ($flowchart.width() / 2) - 100 + (operatorI * 10),
+            properties: {
+                title: 'Operator ' + (operatorI + 3),
+                inputs: {
+                    input_1: {
+                        label: 'Input 1',
+                    }
+                },
+                outputs: {
+                    output_1: {
+                        label: 'Output 1',
+                    }
+                }
+            }
+        };
+
+        operatorI++;
+
+        $flowchart.flowchart('createOperator', operatorId, operatorData);
+
+    });
+    //--- end
+    //--- create operator button
+    //-----------------------------------------
+
+
+
+
+    //-----------------------------------------
+    //--- draggable operators
+    //--- start
+    //var operatorId = 0;
+    var $draggableOperators = $('.draggable_operator');
+    $draggableOperators.draggable({
+        cursor: "move",
+        opacity: 0.7,
+
+        // helper: 'clone',
+        appendTo: 'body',
+        zIndex: 1000,
+
+        helper: function(e) {
+            var $this = $(this);
+            var data = getOperatorData($this);
+            return $flowchart.flowchart('getOperatorElement', data);
+        },
+        stop: function(e, ui) {
+            var $this = $(this);
+            var elOffset = ui.offset;
+            var containerOffset = $container.offset();
+            if (elOffset.left > containerOffset.left &&
+                elOffset.top > containerOffset.top &&
+                elOffset.left < containerOffset.left + $container.width() &&
+                elOffset.top < containerOffset.top + $container.height()) {
+
+                var flowchartOffset = $flowchart.offset();
+
+                var relativeLeft = elOffset.left - flowchartOffset.left;
+                var relativeTop = elOffset.top - flowchartOffset.top;
+
+                var positionRatio = $flowchart.flowchart('getPositionRatio');
+                relativeLeft /= positionRatio;
+                relativeTop /= positionRatio;
+
+                var data = getOperatorData($this);
+                data.left = relativeLeft;
+                data.top = relativeTop;
+
+                $flowchart.flowchart('addOperator', data);
+            }
+        }
+    });
+    //--- end
+    //--- draggable operators
+    //-----------------------------------------
+
+
+    //-----------------------------------------
+    //--- save and load
+    //--- start
+    function Flow2Text() {
+        var data = $flowchart.flowchart('getData');
+        $('#flowchart_data').val(JSON.stringify(data, null, 2));
+    }
+    $('#get_data').click(Flow2Text);
+
+    function Text2Flow() {
+        var data = JSON.parse($('#flowchart_data').val());
+        $flowchart.flowchart('setData', data);
+    }
+    $('#set_data').click(Text2Flow);
+
+    /*global localStorage*/
+    function SaveToLocalStorage() {
+        if (typeof localStorage !== 'object') {
+            alert('local storage not available');
+            return;
+        }
+        Flow2Text();
+        localStorage.setItem("stgLocalFlowChart", $('#flowchart_data').val());
+    }
+    $('#save_local').click(SaveToLocalStorage);
+
+    function LoadFromLocalStorage() {
+        if (typeof localStorage !== 'object') {
+            alert('local storage not available');
+            return;
+        }
+        var s = localStorage.getItem("stgLocalFlowChart");
+        if (s != null) {
+            $('#flowchart_data').val(s);
+            Text2Flow();
+        }
+        else {
+            alert('local storage empty');
+        }
+    }
+    $('#load_local').click(LoadFromLocalStorage);
+    //--- end
+    //--- save and load
+    //-----------------------------------------
+
+    var defaultFlowchartData = {
+        operators: {
+            operator1: {
+                top: 20,
+                left: 20,
+                properties: {
+                    title: 'Operator 1',
+                    inputs: {},
+                    outputs: {
+                        output_1: {
+                            label: 'Output 1',
+                        }
+                    }
+                }
+            },
+            operator2: {
+                top: 80,
+                left: 300,
+                properties: {
+                    title: 'Operator 2',
+                    inputs: {
+                        input_1: {
+                            label: 'Input 1',
+                        },
+                        input_2: {
+                            label: 'Input 2',
+                        },
+                    },
+                    outputs: {}
+                }
+            },
+        },
+        links: {
+            link_1: {
+                fromOperator: 'operator1',
+                fromConnector: 'output_1',
+                toOperator: 'operator2',
+                toConnector: 'input_2',
+            },
+        }
+    };
+    if (false) console.log('remove lint unused warning', defaultFlowchartData);
+}
+
+function example() {
+        var data = {
+            operators: {
+                operator1: {
+                    top: 20,
+                    left: 20,
+                    properties: {
+                        title: 'Operator 1',
+                        inputs: {},
+                        outputs: {
+                            output_1: {
+                                label: 'Output 1',
+                            }
+                        }
+                    }
+                },
+                operator2: {
+                    top: 80,
+                    left: 300,
+                    properties: {
+                        title: 'Operator 2',
+                        inputs: {
+                            input_1: {
+                                label: 'Input 1',
+                            }
+                        },
+                        outputs: {}
+                    }
+                },
+            },
+            links: {
+                link_1: {
+                    fromOperator: 'operator1',
+                    fromConnector: 'output_1',
+                    toOperator: 'operator2',
+                    toConnector: 'input_1',
+                },
+            }
+        };
+
+        var $lastEvent = $('#last_event_example_6');
+        var $lastEventContainer = $('#last_event_example_container_6');
+
+        var $flowchart = $('#example_6');
+
+        function showEvent(txt) {
+            $lastEvent.text(txt + "\n" + $lastEvent.text());
+            $lastEventContainer.effect( "highlight", {color: '#3366ff'}, 500);
+        }
+
+        // Apply the plugin on a standard, empty div...
+        $flowchart.flowchart({
+            data: data,
+            onOperatorSelect: function(operatorId) {
+                showEvent('Operator "' + operatorId + '" selected. Title: ' + $flowchart.flowchart('getOperatorTitle', operatorId) + '.');
+                return true;
+            },
+            onOperatorUnselect: function() {
+                showEvent('Operator unselected.');
+                return true;
+            },
+            onLinkSelect: function(linkId) {
+                showEvent('Link "' + linkId + '" selected. Main color: ' + $flowchart.flowchart('getLinkMainColor', linkId) + '.');
+                return true;
+            },
+            onLinkUnselect: function() {
+                showEvent('Link unselected.');
+                return true;
+            },
+            onOperatorCreate: function(operatorId, operatorData, fullElement) {
+                showEvent('New operator created. Operator ID: "' + operatorId + '", operator title: "' + operatorData.properties.title + '".');
+                return true;
+            },
+            onLinkCreate: function(linkId, linkData) {
+                showEvent('New link created. Link ID: "' + linkId + '", link color: "' + linkData.color + '".');
+                return true;
+            },
+            onOperatorDelete: function(operatorId) {
+                showEvent('Operator deleted. Operator ID: "' + operatorId + '", operator title: "' + $flowchart.flowchart('getOperatorTitle', operatorId) + '".');
+                return true;
+            },
+            onLinkDelete: function(linkId, forced) {
+                showEvent('Link deleted. Link ID: "' + linkId + '", link color: "' + $flowchart.flowchart('getLinkMainColor', linkId) + '".');
+                return true;
+            },
+            onOperatorMoved: function(operatorId, position) {
+                showEvent('Operator moved. Operator ID: "' + operatorId + ', position: ' + JSON.stringify(position) + '.');
+            }
+        });
+
+        $flowchart.siblings('.get_data').click(function() {
+            var data = $flowchart.flowchart('getData');
+            $('#flowchart_data').val(JSON.stringify(data, null, 2));
+        });
+
+        $flowchart.siblings('.set_data').click(function() {
+            var data = JSON.parse($('#flowchart_data').val());
+            $flowchart.flowchart('setData', data);
+        });
+
+        var operatorI = 0;
+        $flowchart.siblings('.create_operator').click(function() {
+            var operatorId = 'created_operator_' + operatorI;
+            var operatorData = {
+                top: 60,
+                left: 500,
+                properties: {
+                    title: 'Operator ' + (operatorI + 3),
+                    inputs: {
+                        input_1: {
+                            label: '.',
+                        }
+                    },
+                    outputs: {
+                        output_1: {
+                            label: '.',
+                        }
+                    }
+                }
+            };
+
+            operatorI++;
+
+            $flowchart.flowchart('createOperator', operatorId, operatorData);
+        });
+
+        $flowchart.siblings('.delete_selected_button').click(function() {
+            $flowchart.flowchart('deleteSelected');
+        });
+        $(".flowchart-operator").resizable({handles:"se"});
+}
