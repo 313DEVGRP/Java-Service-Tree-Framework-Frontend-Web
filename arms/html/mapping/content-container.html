@@ -42,7 +42,6 @@
 			<div class="clearfix">
 				<div style="float: right;">
 					<button class="btn btn-primary btn-block btn-sm"
-							data-target="#my_modal1"
 							data-toggle="modal"
 							id="save_modal_button"
 							type="button"
@@ -127,7 +126,7 @@
 								<blockquote
 										class="font13"
 										style="margin-top: 5px">
-									1. 요구사항의 상태 목록을 카테고리별 보드 형태로 확인합니다.
+									1. A-RMS 요구사항의 상태 목록을 카테고리별 보드 형태로 확인합니다.
 								</blockquote>
 								<div class="row">
 									<div class="col-md-12">
@@ -155,7 +154,7 @@
 								<blockquote
 										class="font13"
 										style="margin-top: 5px">
-									2. 요구사항의 상태와 카테고리를 테이블 형태로 확인합니다.
+									2. A-RMS 요구사항의 상태와 카테고리를 테이블 형태로 확인합니다.
 								</blockquote>
 								<div class="row">
 									<div class="col-md-12">
@@ -183,14 +182,14 @@
 	</section>
 </div>
 
-<!--<div class="col-lg-12 col-layer">
+<div class="col-lg-12 col-layer">
 	<section class="widget">
 		<header>
 			<h4>
 				<strong class="font13">
 					<i class="fa fa-sitemap fs-larger media-middle"></i>
 					<span data-locale="category.state.title">
-						ARMS 상태별 ALM 상태 매핑
+						A-RMS 상태별 ALM 상태 매핑
 					</span>
 				</strong>
 			</h4>
@@ -222,11 +221,11 @@
 							style="font-size: 11px"></i>
 				</a>
 			</div>
-&lt;!&ndash;			<blockquote
+<!--			<blockquote
 					class="font13"
 					style="margin-top: 5px">
 				1. ARMS 요구사항의 상태와 ALM 이슈 상태와 연결합니다.
-			</blockquote>&ndash;&gt;
+			</blockquote>-->
 		</header>
 		<div class="body">
 			<div class="row">
@@ -250,7 +249,7 @@
 									1. ALM 서버 선택
 								</blockquote>
 								<div class="clearfix widget-content">
-									&lt;!&ndash; 컴포넌트 대상 &ndash;&gt;
+									<!-- 컴포넌트 대상 -->
 									<div id="selected_info">
 										<div
 												class="panel-group json-menu"
@@ -286,17 +285,18 @@
                                                                     선택되지 않음
 														        </span>
 														</div>
-&lt;!&ndash;														<div
+														<div
+																id="select-project-div"
 																class="sender"
-																style="padding-bottom: 5px; padding-top: 3px">
+																style="padding-bottom: 5px; padding-top: 3px; display: none;">
 															<i class="fa fa-check"></i>
-															선택된 버전 :
+															선택된 프로젝트 :
 															<span
-																	id="select-version"
+																	id="select-project"
 																	style="color: #a4c6ff">
                                                                     선택되지 않음
 														        </span>
-														</div>&ndash;&gt;
+														</div>
 													</div>
 												</div>
 											</li>
@@ -310,60 +310,64 @@
 												style="margin-bottom: 15px !important">
 											<select
 													id="selected_alm_server"
+													name="selected_alm_server"
 													required="required"
 													data-placeholder="Select ALM Server"
 													class="select-block-level chzn-select darkBack"
 													tabindex="-1"
-													name="selected_alm_server"
 													style="width: 100% !important">
 												<option value=""></option>
 											</select>
 										</div>
 									</div>
 									<div
-											class="gradient_bottom_border"
-											style="width: 100%; height: 2px"></div>
-									<div
-											id="mmenu"
-											style="padding-bottom: 5px; padding-top: 15px">
-										<form
-												class="form-search no-margin"
-												role="form">
-											<div class="input-group">
-												<input
-														type="search"
-														id="text"
-														class="form-control searchDarkBack"
-														style="color: #f8f8f8"
-														placeholder="찾을 이름 입력"
-														data-tooltip="Press Enter To Node To Search" />
-												<span class="input-group-btn">
-												<button
-														type="button"
-														id="search"
-														title="Search"
-														class="btn btn-default btn-sm"
-														style="line-height: 1.63">
-													Search
-												</button>
-											</span>
-											</div>
-										</form>
-									</div>
-									<div
-											id="alm_server_tree"
-											style="padding-top: 5px; overflow: hidden"
-											class="darkBack"></div>
-									<div
-											style="margin-top: 10px"
-											class="darkBack">
-										클라우드 지라의 경우 "프로젝트" 항목을 선택하시면 해당 이슈유형별 상태를 매핑할 수 있습니다.
+											id="cloud_project_tree"
+											style="display: none;">
+										<div
+												class="gradient_bottom_border"
+												style="width: 100%; height: 2px"></div>
+										<div
+												id="mmenu"
+												style="padding-bottom: 5px; padding-top: 15px">
+											<form
+													class="form-search no-margin"
+													role="form">
+												<div class="input-group">
+													<input
+															type="search"
+															id="text"
+															class="form-control searchDarkBack"
+															style="color: #f8f8f8"
+															placeholder="찾을 프로젝트 이름 입력"
+															data-tooltip="Press Enter To Node To Search" />
+													<span class="input-group-btn">
+														<button
+																type="button"
+																id="search"
+																title="Search"
+																class="btn btn-default btn-sm"
+																style="line-height: 1.63">
+															Search
+														</button>
+													</span>
+												</div>
+											</form>
+										</div>
+										<div
+												id="alm_server_tree"
+												style="padding-top: 5px; overflow: hidden"
+												class="darkBack"></div>
+										<div
+												style="margin-top: 10px"
+												class="darkBack">
+											클라우드 지라의 경우 "프로젝트" 항목을 선택하시면 해당 이슈유형별 상태를 매핑할 수 있습니다.
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
-&lt;!&ndash;					<section class="widget">
+<!--					<section class="widget">
 						<div class="body">
 							<div
 									class="gradient_middle_border"
@@ -502,18 +506,59 @@
 								</div>
 							</div>
 						</div>
-					</section>&ndash;&gt;
+					</section>-->
 				</div>
 				<div class="col-lg-9">
 					<section class="widget">
-						<div class="body">
-						</div>
+<!--						<div class="body">
+							<div class="flowchart-example">
+								<div class="flowchart-example-container flowchart-container" id="example_6"><svg class="flowchart-links-layer"></svg><div class="flowchart-operators-layer unselectable"></div><svg class="flowchart-temporary-link-layer" style="display: none;"><line x1="0" y1="0" x2="0" y2="0" stroke-dasharray="6,6" stroke-width="4" stroke="black" fill="none"></line></svg></div>
+								<button class="create_operator">Create operator</button>
+								<button class="delete_selected_button">Delete selected operator / link</button>
+								<button class="get_data">Get data</button>
+								<button class="set_data">Set data</button>
+								<div class="flowchart-example-event" id="last_event_example_container_6" style="">
+									Last events:
+									<pre id="last_event_example_6">
+									</pre>
+								</div>
+						</div>-->
+<!--						<div class="body">
+							<div id="chart_container">
+								<div class="flowchart-example-container" id="mapping-flow-chart"></div>
+							</div>
+							<div class="draggable_operators">
+								<div class="draggable_operators_label">
+									Operators (drag and drop them in the flowchart):
+								</div>
+								<div class="draggable_operators_divs">
+									<div class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0">1 input</div>
+									<div class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1">1 output</div>
+									<div class="draggable_operator" data-nb-inputs="1" data-nb-outputs="1">1 input &amp; 1 output</div>
+									<div class="draggable_operator" data-nb-inputs="1" data-nb-outputs="2">1 in &amp; 2 out</div>
+									<div class="draggable_operator" data-nb-inputs="2" data-nb-outputs="1">2 in &amp; 1 out</div>
+									<div class="draggable_operator" data-nb-inputs="2" data-nb-outputs="2">2 in &amp; 2 out</div>
+								</div>
+							</div>
+							<button class="create_operator">Create operator</button>
+							<button class="delete_selected_button">Delete selected operator / link</button>
+							<div id="operator_properties" style="display: block;">
+								<label for="operator_title">Operator's title: </label><input id="operator_title" type="text">
+							</div>
+							<div id="link_properties" style="display: block;">
+								<label for="link_color">Link's color: </label><input id="link_color" type="color">
+							</div>
+							<button class="get_data" id="get_data">Get data</button>
+							<button class="set_data" id="set_data">Set data</button>
+							<button id="save_local">Save to local storage</button>
+							<button id="load_local">Load from local storage</button>
+						</div>-->
 					</section>
 				</div>
 			</div>
 		</div>
 	</section>
-</div>-->
+</div>
 
 <div
 		id="my_modal1"
@@ -534,7 +579,7 @@
 										style="font-weight: bold"
 										id="my_modal1_title">
 										<i class="fa fa-edit"></i>
-										ARMS 상태 등록 팝업
+										A-RMS 상태 등록 팝업
 								</span>
 								<blockquote    class="search-result"
 											   style="border-left: 5px solid #e5603b">
