@@ -292,7 +292,7 @@ var JspreadsheetApi = ( function() {
 
 					return items;
 				},
-				search:false,
+				search:true,
 				pagination:30,
 				// data: getSheetData(),
 				data: sheetData,
@@ -306,73 +306,67 @@ var JspreadsheetApi = ( function() {
 					{ type: "text", title: "작업자 키", width: spreadsheetElement.clientWidth * 0.3},
 					{ type: "text", title: "작업자", width: spreadsheetElement.clientWidth * 0.1}
 				],
-				/*toolbar:[
+				toolbar: [
 					{
-						type: 'i',
-						content: 'undo',
-						onclick: function() {
+						type: "i",
+						k: "undo",
+						onclick: function () {
 							table.undo();
 						}
 					},
 					{
-						type: 'i',
-						content: 'redo',
-						onclick: function() {
+						type: "i",
+						k: "redo",
+						onclick: function () {
 							table.redo();
 						}
 					},
 					{
-						type: 'i',
-						content: 'save',
+						type: "i",
+						k: "save",
 						onclick: function () {
 							table.download();
 						}
 					},
 					{
-						type: 'select',
-						k: 'font-family',
-						v: ['Arial','Verdana']
+						type: "select",
+						k: "font-family",
+						v: ["Arial", "Verdana"]
 					},
 					{
-						type: 'select',
-						k: 'font-size',
-						v: ['9px','10px','11px','12px','13px','14px','15px','16px','17px','18px','19px','20px']
+						type: "select",
+						k: "font-size",
+						v: ["9px", "10px", "11px", "12px", "13px", "14px", "15px", "16px", "17px", "18px", "19px", "20px"]
 					},
 					{
-						type: 'i',
-						content: 'format_align_left',
-						k: 'text-align',
-						v: 'left'
+						type: "i",
+						k: "text-align",
+						v: "left"
 					},
 					{
-						type:'i',
-						content:'format_align_center',
-						k:'text-align',
-						v:'center'
+						type: "i",
+						k: "text-align",
+						v: "center"
 					},
 					{
-						type: 'i',
-						content: 'format_align_right',
-						k: 'text-align',
-						v: 'right'
+						type: "i",
+						k: "text-align",
+						v: "right"
 					},
 					{
-						type: 'i',
-						content: 'format_bold',
-						k: 'font-weight',
-						v: 'bold'
+						type: "i",
+						k: "font-weight",
+						v: "bold"
 					},
 					{
-						type: 'color',
-						content: 'format_color_text',
-						k: 'color'
+						type: "color",
+						k: "color"
 					},
 					{
-						type: 'color',
-						content: 'format_color_fill',
-						k: 'background-color'
-					},
-				],*/
+						type: "color",
+						k: "background-color"
+					}
+				],
 				onbeforechange: function(instance, cell, x, y, value) {
 					var cellName = jspreadsheet.getColumnNameFromId([x,y]);
 					console.log('The cell ' + cellName + ' will be changed' + '\n');
@@ -425,8 +419,18 @@ var JspreadsheetApi = ( function() {
 				onmovecolumn: function(instance, from, to) {
 					console.log('The col ' + from + ' was move to the position of ' + to + ' ' + '\n');
 				},
-				onload: function(instance) {
-					console.log('New data is loaded' + '\n');
+				onload: function(element) {
+					var $jexcel = $(element);
+
+					$jexcel.find(".jexcel_toolbar_item[data-k='undo']").addClass("fa fa-mail-reply ");
+					$jexcel.find(".jexcel_toolbar_item[data-k='redo']").addClass("fa fa-mail-forward ");
+					$jexcel.find(".jexcel_toolbar_item[data-k='save']").addClass("fa fa-save");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='left']").addClass("fa fa-align-left");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='center']").addClass("fa fa-align-center");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='right']").addClass("fa fa-align-right");
+					$jexcel.find(".jexcel_toolbar_item[data-k='font-weight'][data-v='bold']").addClass("fa fa-bold");
+					$jexcel.find(".jexcel_toolbar_item[data-k='color']").addClass("fa fa-palette");
+					$jexcel.find(".jexcel_toolbar_item[data-k='background-color']").addClass("fa-solid fa-palette");
 				},
 				onblur: function(instance) {
 					console.log('The table ' + $(instance).prop('id') + ' is blur' + '\n');
