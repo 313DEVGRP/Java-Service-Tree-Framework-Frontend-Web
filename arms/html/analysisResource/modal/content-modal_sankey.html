@@ -88,10 +88,9 @@
 									class="gradient_middle_border"
 									style="width: 100%; height: 1px"></div>
 							</h5>
-							<div id="modal_excel" style="flex:0 0 97%; max-height: 30px;">
+							<div id="modal_excel" style="flex:0 0 97%; max-height: 30px;"></div>
 						</div>
 					</div>
-				</div>
 			</section>
 		</div>
 <!--		<div class="col-lg-3 fullscreen-body-option hidden">
@@ -143,7 +142,9 @@
 <script>
 	function widgsterDocReady() {
 		var pluginGroups = [
-			["./js/common/jspreadsheet/modal/fs_analysisResource.js"]
+			[
+				"./js/common/jspreadsheet/modal/fs_analysisResource.js"
+			]
 		];
 
 		loadPluginGroupsParallelAndSequential(pluginGroups).then(function() {
