@@ -4,6 +4,7 @@ var dataTableRef; // 데이터테이블 참조 변수
 var selected_alm_server_id;
 var selected_alm_server_name;
 var alm_server_list = {};
+var arms_state_list;
 var req_state_data = {
     "10": "열림",
     "11": "진행중",
@@ -88,7 +89,13 @@ function execDocReady() {
             "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.js",
             "../arms/js/reqKanban/kanban.js",
             /*"../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.css",
-            "../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.js"*/
+            "../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.min.js",
+            "../reference/jquery-plugins/jquery-mousewheel-main/jquery.mousewheel.js",*/
+            "../reference/gojs/go-sample.js",
+            "../reference/gojs/go-debug.js",
+            "../reference/gojs/go.css",
+            "../arms/js/mapping/gojs_setup.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -114,8 +121,8 @@ function execDocReady() {
             }, 313 /*milli*/);
 
             // 칸반 보드 초기화
-            initKanban();
-            setKanban();
+            // initKanban();
+            // setKanban();
 
             state_category_tab_group_click_event();
             save_req_state_btn_click();
@@ -154,15 +161,30 @@ function execDocReady() {
             });
 
             //ALM 서버 셀렉트 박스 이니시에이터
-            make_alm_server_select_box();
+            // make_alm_server_select_box();
+            // mapping_flow_chart();
+            // flow_chart();
+            // mapping_flow_chart();
 
-            /*flow_chart();
-            example();*/
+            gojs.init();
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
             console.error(e);
         });
+}
+
+function state_category_tab_group_click_event() {
+    $('ul[data-group="state_category_tab_group"] a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+        var target = $(e.target).attr("href"); // activated tab
+
+        if (target === "#board") {
+            setKanban();
+        }
+        else if (target === "#table"){
+            dataTableLoad();
+        }
+    });
 }
 
 function setKanban() {
@@ -173,7 +195,9 @@ function setKanban() {
         progress: true,
         statusCode: {
             200: function (data) {
-                console.log(data.result);
+                arms_state_list = data.result;
+                console.log(arms_state_list);
+
                 // 요구사항 상태 별 리스트
                 const reqListByState = data.result.reduce((reqList, item) => {
                     const state = (item && item.c_etc) || "상태 정보 없음";
@@ -323,20 +347,6 @@ function initKanban() {
     KanbanBoard.init('myKanban', boardData);
     adjustHeight();
 }
-
-function state_category_tab_group_click_event() {
-    $('ul[data-group="state_category_tab_group"] a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
-        var target = $(e.target).attr("href"); // activated tab
-
-        if (target === "#board") {
-            setKanban();
-        }
-        else if (target === "#table"){
-            dataTableLoad();
-        }
-    });
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // --- 데이터 테이블 설정 --- //
@@ -773,6 +783,8 @@ function make_alm_server_select_box() {
 
         let alm_server_data = alm_server_list[selected_alm_server_id];
         let alm_server_type = alm_server_data.c_jira_server_type;
+        var $flowchart = $('#state_flow_chart');
+        $flowchart.flowchart('setData', {});
         if (alm_server_type === "클라우드") {
             $("#cloud_project_tree").show();
             $("#select-project-div").show();
@@ -787,8 +799,65 @@ function make_alm_server_select_box() {
                 dataType: "json",
                 progress: true,
                 statusCode: {
-                    200: function(data) {
-                        console.log(data.response);
+                    200: function(result) {
+                        console.log(result.response);
+                        let alm_status_list = result.response;
+
+                        var data = {
+                            operators: {},
+                            links: {}
+                        };
+
+                        console.log(alm_status_list);
+                        console.log(arms_state_list);
+                        let inputData = arms_state_list;
+                        let outputData = alm_status_list;
+
+                        let width = $flowchart.width();
+
+                        var topPosition = 20;
+                        var leftPositionInput = 20;
+                        var leftPositionOutput = width-200;
+
+                        console.log(width);
+                        inputData.forEach(function(input, index) {
+                            var operatorId = 'operator' + (index + 1);
+                            data.operators[operatorId] = {
+                                top: topPosition + index * 80,
+                                left: leftPositionInput,
+                                properties: {
+                                    title: "A-RMS - " +input.c_title,
+                                    class: 'input-operator',
+                                    inputs: {},
+                                    outputs: {
+                                        output_1: {
+                                            label: input.c_title,
+                                        }
+                                    }
+                                }
+                            };
+                        });
+                        outputData.forEach(function(output, index) {
+                            var operatorId = 'operator' + (inputData.length + index + 1);
+                            data.operators[operatorId] = {
+                                top: topPosition + index * 80,
+                                left: leftPositionOutput,
+                                properties: {
+                                    title: "ALM - " + output.c_issue_status_name,
+                                    class: 'output-operator',
+                                    inputs: {
+                                        input_1: {
+                                            label: output.c_issue_status_name,
+                                        }
+                                    },
+                                    outputs: {}
+                                }
+                            };
+                        });
+
+                        console.log(data);
+                        updateFlowchartData(data);
+                        // mapping_flow_chart(alm_status_list, arms_state_list);
                         //////////////////////////////////////////////////////////
                         //////////////////////////////////////////////////////////
                         jSuccess("ALM 서버 상태 조회가 완료 되었습니다.");
@@ -1119,224 +1188,105 @@ function flow_chart() {
     //--- draggable operators
     //-----------------------------------------
 
-
-    //-----------------------------------------
-    //--- save and load
-    //--- start
-    function Flow2Text() {
-        var data = $flowchart.flowchart('getData');
-        $('#flowchart_data').val(JSON.stringify(data, null, 2));
-    }
-    $('#get_data').click(Flow2Text);
-
-    function Text2Flow() {
-        var data = JSON.parse($('#flowchart_data').val());
-        $flowchart.flowchart('setData', data);
-    }
-    $('#set_data').click(Text2Flow);
-
-    /*global localStorage*/
-    function SaveToLocalStorage() {
-        if (typeof localStorage !== 'object') {
-            alert('local storage not available');
-            return;
-        }
-        Flow2Text();
-        localStorage.setItem("stgLocalFlowChart", $('#flowchart_data').val());
-    }
-    $('#save_local').click(SaveToLocalStorage);
-
-    function LoadFromLocalStorage() {
-        if (typeof localStorage !== 'object') {
-            alert('local storage not available');
-            return;
-        }
-        var s = localStorage.getItem("stgLocalFlowChart");
-        if (s != null) {
-            $('#flowchart_data').val(s);
-            Text2Flow();
-        }
-        else {
-            alert('local storage empty');
-        }
-    }
-    $('#load_local').click(LoadFromLocalStorage);
-    //--- end
-    //--- save and load
-    //-----------------------------------------
-
-    var defaultFlowchartData = {
-        operators: {
-            operator1: {
-                top: 20,
-                left: 20,
-                properties: {
-                    title: 'Operator 1',
-                    inputs: {},
-                    outputs: {
-                        output_1: {
-                            label: 'Output 1',
-                        }
-                    }
-                }
-            },
-            operator2: {
-                top: 80,
-                left: 300,
-                properties: {
-                    title: 'Operator 2',
-                    inputs: {
-                        input_1: {
-                            label: 'Input 1',
-                        },
-                        input_2: {
-                            label: 'Input 2',
-                        },
-                    },
-                    outputs: {}
-                }
-            },
-        },
-        links: {
-            link_1: {
-                fromOperator: 'operator1',
-                fromConnector: 'output_1',
-                toOperator: 'operator2',
-                toConnector: 'input_2',
-            },
-        }
-    };
-    if (false) console.log('remove lint unused warning', defaultFlowchartData);
 }
 
-function example() {
-        var data = {
-            operators: {
-                operator1: {
-                    top: 20,
-                    left: 20,
-                    properties: {
-                        title: 'Operator 1',
-                        inputs: {},
-                        outputs: {
-                            output_1: {
-                                label: 'Output 1',
-                            }
-                        }
-                    }
-                },
-                operator2: {
-                    top: 80,
-                    left: 300,
-                    properties: {
-                        title: 'Operator 2',
-                        inputs: {
-                            input_1: {
-                                label: 'Input 1',
-                            }
-                        },
-                        outputs: {}
-                    }
-                },
-            },
-            links: {
-                link_1: {
-                    fromOperator: 'operator1',
-                    fromConnector: 'output_1',
-                    toOperator: 'operator2',
-                    toConnector: 'input_1',
-                },
-            }
-        };
+function mapping_flow_chart() {
 
-        var $lastEvent = $('#last_event_example_6');
-        var $lastEventContainer = $('#last_event_example_container_6');
+    $("#state_flow_chart").flowchart();
 
-        var $flowchart = $('#example_6');
+    // 스타일 적용
+    $(".input-operator").css("background-color", "#f0ad4e");
+    $(".output-operator").css("background-color", "#5bc0de");
 
-        function showEvent(txt) {
-            $lastEvent.text(txt + "\n" + $lastEvent.text());
-            $lastEventContainer.effect( "highlight", {color: '#3366ff'}, 500);
+    var $lastEvent = $('#last_event_state_flow_chart');
+    var $lastEventContainer = $('#last_event_state_flow_chart_container');
+
+    var $flowchart = $('#state_flow_chart');
+    var $container = $("#flow_chart_container");
+
+    var cx = $flowchart.width() / 2;
+    var cy = $flowchart.height() / 2;
+
+    // Panzoom initialization...
+    $flowchart.panzoom();
+
+    // Centering panzoom
+    $flowchart.panzoom('pan', -cx + $container.width() / 2, -cy + $container.height() / 2);
+
+    // Panzoom zoom handling...
+    var possibleZooms = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+    var currentZoom = 2.5;
+    $flowchart.panzoom('zoom', possibleZooms[currentZoom], {
+        animate: false
+    });
+
+    $container.on('mousewheel.focal', function( e ) {
+        e.preventDefault();
+        var delta = (e.delta || e.originalEvent.wheelDelta) || e.originalEvent.detail;
+        var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+        currentZoom = Math.max(0, Math.min(possibleZooms.length - 1, (currentZoom + (zoomOut * 2 - 1))));
+        $flowchart.flowchart('setPositionRatio', possibleZooms[currentZoom]);
+        $flowchart.panzoom('zoom', possibleZooms[currentZoom], {
+            animate: false,
+            focal: e
+        });
+    });
+
+    function showEvent(txt) {
+        $lastEvent.text(txt + "\n" + $lastEvent.text());
+        $lastEventContainer.effect( "highlight", {color: '#3366ff'}, 500);
+    }
+
+    // Apply the plugin on a standard, empty div...
+    $flowchart.flowchart({
+        defaultOperatorClass: 'flowchart-operator',
+        onOperatorSelect: function(operatorId) {
+            showEvent('Operator "' + operatorId + '" selected. Title: ' + $flowchart.flowchart('getOperatorTitle', operatorId) + '.');
+            return true;
+        },
+        onOperatorUnselect: function() {
+            showEvent('Operator unselected.');
+            return true;
+        },
+        onLinkSelect: function(linkId) {
+            showEvent('Link "' + linkId + '" selected. Main color: ' + $flowchart.flowchart('getLinkMainColor', linkId) + '.');
+            return true;
+        },
+        onLinkUnselect: function() {
+            showEvent('Link unselected.');
+            return true;
+        },
+        onOperatorCreate: function(operatorId, operatorData, fullElement) {
+            showEvent('New operator created. Operator ID: "' + operatorId + '", operator title: "' + operatorData.properties.title + '".');
+            return true;
+        },
+        onLinkCreate: function(linkId, linkData) {
+            showEvent('New link created. Link ID: "' + linkId + '", link color: "' + linkData.color + '".');
+            return true;
+        },
+        onOperatorDelete: function(operatorId) {
+            showEvent('Operator deleted. Operator ID: "' + operatorId + '", operator title: "' + $flowchart.flowchart('getOperatorTitle', operatorId) + '".');
+            return true;
+        },
+        onLinkDelete: function(linkId, forced) {
+            showEvent('Link deleted. Link ID: "' + linkId + '", link color: "' + $flowchart.flowchart('getLinkMainColor', linkId) + '".');
+            return true;
+        },
+        onOperatorMoved: function(operatorId, position) {
+            showEvent('Operator moved. Operator ID: "' + operatorId + ', position: ' + JSON.stringify(position) + '.');
         }
+    });
 
-        // Apply the plugin on a standard, empty div...
-        $flowchart.flowchart({
-            data: data,
-            onOperatorSelect: function(operatorId) {
-                showEvent('Operator "' + operatorId + '" selected. Title: ' + $flowchart.flowchart('getOperatorTitle', operatorId) + '.');
-                return true;
-            },
-            onOperatorUnselect: function() {
-                showEvent('Operator unselected.');
-                return true;
-            },
-            onLinkSelect: function(linkId) {
-                showEvent('Link "' + linkId + '" selected. Main color: ' + $flowchart.flowchart('getLinkMainColor', linkId) + '.');
-                return true;
-            },
-            onLinkUnselect: function() {
-                showEvent('Link unselected.');
-                return true;
-            },
-            onOperatorCreate: function(operatorId, operatorData, fullElement) {
-                showEvent('New operator created. Operator ID: "' + operatorId + '", operator title: "' + operatorData.properties.title + '".');
-                return true;
-            },
-            onLinkCreate: function(linkId, linkData) {
-                showEvent('New link created. Link ID: "' + linkId + '", link color: "' + linkData.color + '".');
-                return true;
-            },
-            onOperatorDelete: function(operatorId) {
-                showEvent('Operator deleted. Operator ID: "' + operatorId + '", operator title: "' + $flowchart.flowchart('getOperatorTitle', operatorId) + '".');
-                return true;
-            },
-            onLinkDelete: function(linkId, forced) {
-                showEvent('Link deleted. Link ID: "' + linkId + '", link color: "' + $flowchart.flowchart('getLinkMainColor', linkId) + '".');
-                return true;
-            },
-            onOperatorMoved: function(operatorId, position) {
-                showEvent('Operator moved. Operator ID: "' + operatorId + ', position: ' + JSON.stringify(position) + '.');
-            }
-        });
+    $flowchart.siblings('.delete_selected_button').click(function() {
+        $flowchart.flowchart('deleteSelected');
+    });
 
-        $flowchart.siblings('.get_data').click(function() {
-            var data = $flowchart.flowchart('getData');
-            $('#flowchart_data').val(JSON.stringify(data, null, 2));
-        });
+    $(".flowchart-operator").resizable({handles:"se"});
+}
 
-        $flowchart.siblings('.set_data').click(function() {
-            var data = JSON.parse($('#flowchart_data').val());
-            $flowchart.flowchart('setData', data);
-        });
-
-        var operatorI = 0;
-        $flowchart.siblings('.create_operator').click(function() {
-            var operatorId = 'created_operator_' + operatorI;
-            var operatorData = {
-                top: 60,
-                left: 500,
-                properties: {
-                    title: 'Operator ' + (operatorI + 3),
-                    inputs: {
-                        input_1: {
-                            label: '.',
-                        }
-                    },
-                    outputs: {
-                        output_1: {
-                            label: '.',
-                        }
-                    }
-                }
-            };
-
-            operatorI++;
-
-            $flowchart.flowchart('createOperator', operatorId, operatorData);
-        });
-
-        $flowchart.siblings('.delete_selected_button').click(function() {
-            $flowchart.flowchart('deleteSelected');
-        });
-        $(".flowchart-operator").resizable({handles:"se"});
+function updateFlowchartData(newData) {
+    // 새로운 데이터 설정
+    let $flowchart = $("#state_flow_chart");
+    let $container = $("#flow_chart_container");
+    $flowchart.flowchart('setData', newData);
 }
