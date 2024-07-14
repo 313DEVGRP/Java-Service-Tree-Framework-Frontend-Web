@@ -1008,7 +1008,8 @@ function dataTable_build(
 	isServerSide,
 	scrollY,
 	data,
-	isAjax = true
+	isAjax = true,
+	errorMode = true
 ){
 	var isServerSide = false;
 
@@ -1026,7 +1027,8 @@ function dataTable_build(
 		isServerSide,
 		scrollY,
 		data,
-		isAjax = true
+		isAjax = true,
+		errorMode = true
 	);
 }
 
@@ -1043,7 +1045,8 @@ function dataTable_extendBuild(
 	isServerSide,
 	scrollY,
 	data,
-	isAjax = true
+	isAjax = true,
+	errorMode = true
 ) {
 	var jQueryElementID = jquerySelector;
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
@@ -1102,7 +1105,7 @@ function dataTable_extendBuild(
 					var $td = $(td);
 					// 숫자일 경우 우측 정렬
 					if ($.isNumeric($td.text())) {
-						$(td).addClass("dt-body-right");
+						//$(td).addClass("dt-body-right");
 					}
 				}
 			}
@@ -1202,7 +1205,7 @@ function dataTable_extendBuild(
 
 	$.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
 		console.log(message);
-		jError("Notification : <strong>Ajax Error</strong>, retry plz !");
+		jError("Notification : <strong>Ajax Error</strong>, retry plz !!!!!!!");
 	};
 
 	return tempDataTable;
@@ -2055,4 +2058,36 @@ function parseDateString(dateString) {
 		return " - ";
 	}
 	return timestampToDatepicker(date);
+}
+
+////////////////////////////////////////////////////////////
+// spreadsheet 에서 stylesheet 와 js호출울 위해 추가
+////////////////////////////////////////////////////////////
+$.getStylesheet = function (href) {
+	$(".spinner").empty();
+	$(".spinner").html(
+		'<i class="fa fa-spinner fa-spin"></i> ' +
+		{
+			ko: " 스타일시트를 다운로드 중입니다...",
+			en: " Downloading stylesheet...",
+			jp: " スタイルシートをダウンロード中です..."
+		}[getCookie("locale") || "ko"]
+	);
+	$("<link/>",{
+		rel: "stylesheet",
+		type: "text/css",
+		href: href
+	}).appendTo("head");
+};
+
+$.getJavascript = function (href) {
+	$(".spinner").empty();
+	$(".spinner").html(
+		'<i class="fa fa-spinner fa-spin"></i> ' +
+		{
+			ko: " 자바스크립트 라이브러리를 다운로드 중입니다...",
+			en: " Downloading the JavaScript library...",
+			jp: " JavaScriptライブラリをダウンロード中です..."
+		}[getCookie("locale") || "ko"]
+	);
 }

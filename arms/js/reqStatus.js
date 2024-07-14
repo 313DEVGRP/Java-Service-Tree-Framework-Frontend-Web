@@ -12,6 +12,8 @@ var selectedIssueKey; //선택한 이슈 키
 var pdServiceListData;
 var versionListData;
 
+var jiraServerList;
+
 function execDocReady() {
 
 
@@ -177,7 +179,7 @@ function makePdServiceSelectBox() {
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
-
+		getServerInfo();
 	});
 } // end makePdServiceSelectBox()
 
@@ -953,6 +955,14 @@ function getReqIssueAndItsSubtakss(endPointUrl) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+					let serverType = getServerType(row.jira_server_id);
+					let alm_link = makeALMIssueLink(serverType, row.self, data);
+					return ("<div style='white-space: nowrap; color: #a4c6ff'>" + data +
+						$("<button class='btn btn-transparent btn-xs' />")
+							.append($('<i class="fa fa-link" style="transform: rotate(90deg)"></i>'))
+							.attr("onclick", alm_link ? `window.open('${alm_link}', '_blank')` : "#")
+							.prop("outerHTML") +
+						"</div>");
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
@@ -1127,4 +1137,62 @@ function getReqIssueAndItsSubtakss(endPointUrl) {
 		isServerSide,
 		errorMode
 	);
+}
+
+function getServerInfo() {
+	$.ajax({
+		url: "/auth-user/api/arms/jiraServerPure/getJiraServerTypeInfo.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		method: "GET",
+		dataType: "json", // 서버에서 보내줄 데이터의 타입
+		success: function(response) {
+			console.log(response);
+			jiraServerList = response;
+		}
+	});
+}
+
+var getServerType = function (server_id) {
+	if (jiraServerList.hasOwnProperty(server_id)) {
+		let value = jiraServerList[server_id];
+		return value;
+	} else {
+		return "NO-TYPE";
+	}
+};
+
+var makeALMIssueLink = function (server_type, self_link, issue_key) {
+	let alm_link ="";
+	switch (server_type) {
+		case "JIRA_CLOUD" :
+			// "https://ABCDEFG.ABCDEFG.net/rest/api/3/issue/10187" => "https://ABCDEFG.ABCDEFG.net"
+			let match_jc = self_link.match(/^(https?:\/\/[^\/]+)/);
+			if (match_jc) {
+				match_jc[1];
+				alm_link = match_jc[1]+"/browse/"+issue_key;
+			} else {
+				console.log("makeALMIssueLink[JIRA_CLOUD] :: 링크 형식이 올바르지 않습니다. " +
+					"link => " + self_link +", issue_key => " +issue_key);
+			}
+			break;
+		case "JIRA_ON_PREMISE":
+			// "http://www.313.co.kr/jira/rest/api/latest/issue/24708" => "www.313.co.kr/jira"
+			let match_jop = self_link.match(/^(https?:\/\/)?(www\.[^\/]+\/jira)/);
+			if (match_jop) {
+				match_jop[1];
+				alm_link = match_jop[1]+"/browse/"+issue_key;
+			} else {
+				console.log("makeALMIssueLink[JIRA_ON_PREMISE] :: 링크 형식이 올바르지 않습니다. " +
+					"link => " + self_link + ", issue_key => " +issue_key);
+			}
+			break;
+		case "REDMINE_ON_PREMISE":
+			alm_link = self_link.replace(/\.json$/, "");
+			break;
+		case "NO-TYPE" :
+			console.log("makeALMIssueLink[NO-TYPE] :: 서버 타입이 없습니다. link => " + self_link +", issue_key => " +issue_key);
+			alm_link = "";
+			break;
+	}
+	console.log(alm_link);
+	return alm_link;
 }
