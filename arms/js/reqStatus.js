@@ -100,6 +100,8 @@ function execDocReady() {
 			makeVersionMultiSelectBox();
 
 			reqIssueAndItsSubtasksEvent();
+
+			deletedIssueTableEvent()
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
@@ -451,10 +453,14 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+		            let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -575,6 +581,24 @@ function dataTableLoad(selectId, endPointUrl) {
 			name: "updated",
 			title: "ALM Updated",
 			data: "updated",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "false") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
+					}
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+        {
+			name: "deleted",
+			title: "ALM Deleted",
+			data: "deleted",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1128,3 +1152,232 @@ function getReqIssueAndItsSubtakss(endPointUrl) {
 		errorMode
 	);
 }
+function deletedIssueTableEvent() {
+    	let $modalBtn;
+    	$("#deleted_issue_report_modal").on("shown.bs.modal", function(event) {
+    		console.log("[ reqStatus :: deletedIssueTableEvent ] :: deleted_issue_report_modal btn is clicked");
+    		 $modalBtn = $(event.relatedTarget);
+    		 var selectedRow = $modalBtn.data("row");
+    		 console.log(selectedRow);
+
+    		var endPointUrl =  "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
+    		//getDeletedIssueData(endPointUrl); // 데이터테이블 그리기
+    	});
+}
+/*
+function getDeletedIssueData(endPointUrl) {
+
+	var columnList = [
+		{
+			name: "isReq",
+			title: "요구사항 구분",
+			data: "isReq",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data == false) {
+					return "<div style='color: #808080'> 연결 이슈</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'> 요구사항 이슈</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "issueID",
+			title: "이슈아이디",
+			data: "issueID",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: false
+		},
+		{
+			name: "key",
+			title: "ALM Issue Key",
+			data: "key",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "parentReqKey",
+			title: "부모이슈 키",
+			data: "parentReqKey",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: false
+		},
+		{
+			name: "summary",
+			title: "ALM Issue Title ",
+			data: "summary",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "issuetype.issuetype_name",
+			title: "Issue Type",
+			data: "issuetype.issuetype_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "false") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+					}
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "priority",
+			title: "Issue Priority",
+			data: "priority.priority_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "status.status_name",
+			title: "Issue Status",
+			data: "status.status_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "reporter.reporter_displayName",
+			title: "Issue Reporter",
+			data: "reporter.reporter_displayName",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "assignee.assignee_displayName",
+			title: "Issue Assignee",
+			data: function (row, type, set, meta) {
+				return row.assignee ? row.assignee.assignee_displayName : null;
+			},
+			render: function (data, type, row, meta) {
+				//if (isEmpty(data) || data === "unknown") {
+				if ([null, undefined, ""].includes(data)) {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "created",
+			title: "ALM Created",
+			data: "created",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "updated",
+			title: "ALM Updated",
+			data: "updated",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		}
+	];
+
+	var rowsGroupList = [];
+	var columnDefList = [];
+	var orderList = [[1, "asc"]];
+	var jquerySelector = "#deletedIssueTable";
+	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+	var jsonRoot = "response";
+	var buttonList = [];
+	var selectList = {};
+	var isServerSide = false;
+	var errorMode = false;
+
+	reqStatusDataTable = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide,
+		errorMode
+	);
+}*/
