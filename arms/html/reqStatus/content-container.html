@@ -473,6 +473,14 @@
 									</div>
 								</div>
 								<div
+										style="float: right">
+									<button
+											type="button"  data-target="#deleted_issue_report_modal" data-toggle="modal" class="btn btn-danger btn-sm">
+
+										삭제 리포트
+									</button>
+								</div>
+								<div
 									class="hidden"
 									style="float: right">
 									<button
@@ -823,6 +831,98 @@
 					type="button"
 					class="btn btn-default"
 					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- 삭제된 요구사항 리포트 -->
+<div
+		id="deleted_issue_report_modal"
+		class="modal fade"
+		role="dialog"
+		aria-labelledby="myModalLabel"
+		aria-hidden="true"
+		style="display: none; border-radius: 10px">
+	<div
+			class="modal-dialog"
+			style="width: 80%">
+		<div class="modal-content modalDarkBack">
+			<div
+					class="modal-header"
+					style="padding: 0px; border-bottom: 1px">
+				<h4
+						class="modal-title font14"
+						id="my_modal_label2"
+						style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+							class="font13"
+							id="my_modal2_title"
+							style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						삭제된 ALM 이슈 목록
+					</span>
+					<blockquote
+							class="search-result"
+							style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; margin: 10px 0px 10px 0px; padding-left: 10px">
+							삭제된 ALM 이슈 목록을 확인하실 수 있습니다.<br>해당 데이터는 2일 후 완전히 삭제되어 통계에 포함되지 않습니다.
+						</p>
+
+					</blockquote>
+				</h4>
+				<div
+						class="widget-controls"
+						style="padding-top: 10px">
+					<a
+							title="Options"
+							class="hidden"
+							href="#">
+						<i class="glyphicon glyphicon-cog"></i>
+					</a>
+					<a
+							data-widgster="expand"
+							title="Expand"
+							class="hidden"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+							data-widgster="collapse"
+							title="Collapse"
+							class="hidden"
+							href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+							data-widgster="close"
+							title="Close"
+							href="#"
+							data-dismiss="modal"
+							aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<div
+					class="modal-body"
+					style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<table
+						id="deletedIssueTable"
+						class="display"
+						style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3); color: #f8f8f8"></table>
+			</div>
+			<div
+					class="modal-footer"
+					style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+						type="button"
+						class="btn btn-default"
+						data-dismiss="modal">
 					Close
 				</button>
 			</div>
