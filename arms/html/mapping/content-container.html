@@ -46,7 +46,7 @@
 		</header>
 		<div class="body">
 			<div class="row">
-<!--				<div class="col-lg-3">
+				<div class="col-lg-3">
 					<section class="widget">
 						<header style="margin-bottom: 20px">
 							<h4>
@@ -66,7 +66,7 @@
 									1. ALM 서버 선택
 								</blockquote>
 								<div class="clearfix widget-content">
-									&lt;!&ndash; 컴포넌트 대상 &ndash;&gt;
+									<!-- 컴포넌트 대상 -->
 									<div id="selected_info">
 										<div
 												class="panel-group json-menu"
@@ -184,7 +184,7 @@
 							</div>
 						</div>
 					</section>
-					&lt;!&ndash;					<section class="widget">
+					<!--					<section class="widget">
                                 <div class="body">
                                   <div
                                       class="gradient_middle_border"
@@ -323,9 +323,9 @@
                                     </div>
                                   </div>
                                 </div>
-                              </section>&ndash;&gt;
-				</div>-->
-				<div class="col-lg-12">
+                              </section>-->
+				</div>
+				<div class="col-lg-9">
 					<section class="widget">
 						<div class="body">
 							<div class="w-full max-w-screen-xl mx-auto">
@@ -335,41 +335,39 @@
 									<div id="sample">
 										<div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 500px"></div>
 										<button id="SaveButton" onclick="gojs.save()">Save</button>
-										<button onclick="gojs.load()">Load</button>
-										<button onclick="gojs.layout()">Do Layout</button>
+<!--										<button onclick="mapping_data_load()">Load</button>
+											<button onclick="gojs.layout()">Do Layout</button>-->
 										<br />
-										<textarea id="mySavedModel" style="width: 100%; height: 300px; background: none!important;">
-											{ "class": "GraphLinksModel",
-											  "nodeDataArray": [
-											{"key":1,"text":"\uc0c1\ud0dc \uce74\ud14c\uace0\ub9ac","category":"Loading","loc":"0 46.49999999999999"},
-											{"key":2,"text":"A-RMS \uc0c1\ud0dc 1","loc":"183 1.5"},
-											{"key":3,"text":"A-RMS \uc0c1\ud0dc 2","loc":"183 31.5"},
-											{"key":4,"text":"A-RMS \uc0c1\ud0dc 3","loc":"183 61.5"},
-											{"key":5,"text":"A-RMS \uc0c1\ud0dc 4","loc":"183 91.5"},
-											{"key":6,"text":"ALM \uc0c1\ud0dc 1","category":"End","loc":"366 1.5"},
-											{"key":7,"text":"ALM \uc0c1\ud0dc 2","category":"End","loc":"366 31.5"},
-											{"key":8,"text":"ALM \uc0c1\ud0dc 3","category":"End","loc":"366 61.5"},
-											{"key":9,"text":"ALM \uc0c1\ud0dc 4","category":"End","loc":"366 91.5"},
-											{"key":-2,"category":"Recycle","loc":"426.5000000000001 139.49716796874984"}
-											],
-											  "linkDataArray": [
-											{"from":1,"to":2},
-											{"from":1,"to":-8},
-											{"from":2,"to":-9},
-											{"from":-9,"to":5},
-											{"from":1,"to":-10},
-											{"from":1,"to":-11},
-											{"from":1,"to":-12},
-											{"from":1,"to":-13},
-											{"from":1,"to":3},
-											{"from":1,"to":4},
-											{"from":1,"to":5},
-											{"from":2,"to":6},
-											{"from":3,"to":7},
-											{"from":4,"to":8},
-											{"from":5,"to":9}
-											]}
-									    </textarea>
+<!--										<textarea id="mySavedModel" style="width: 100%; height: 300px; background: none!important;">
+											{
+												"class": "GraphLinksModel",
+												"nodeDataArray": [
+													{"key":"카테고리 열림","text":"카테고리 열림","category":"Loading","loc":"0 40"},
+													{"key":"카테고리 진행중","text":"카테고리 진행중","category":"Loading","loc":"0 80"},
+													{"key":"카테고리 해결됨","text":"카테고리 해결됨","category":"Loading","loc":"0 120"},
+													{"key":"카테고리 닫힘","text":"카테고리 닫힘","category":"Loading","loc":"0 160"},
+													{"key":"A-RMS OPEN","text":"A-RMS OPEN","category":"NoAdd", "loc":"183 40"},
+													{"key":"A-RMS PROGRESS","text":"A-RMS PROGRESS","category":"NoAdd","loc":"183 80"},
+													{"key":"A-RMS RESOLVED","text":"A-RMS RESOLVED","category":"NoAdd","loc":"183 120"},
+													{"key":"A-RMS CLOSED","text":"A-RMS CLOSED","category":"NoAdd","loc":"183 160"},
+													{"key":"ALM 열림","text":"ALM 열림","category":"End","loc":"366 40"},
+													{"key":"ALM 진행중","text":"ALM 진행중","category":"End","loc":"366 80"},
+													{"key":"ALM 해결됨","text":"ALM 해결됨","category":"End","loc":"366 120"},
+													{"key":"ALM 닫힘","text":"ALM 닫힘","category":"End","loc":"366 160"},
+													{"key":-2,"category":"Recycle","loc":"600 300"}
+												],
+												"linkDataArray": [
+													{"from":"카테고리 열림","to":"A-RMS OPEN"},
+													{"from":"카테고리 진행중","to":"A-RMS PROGRESS"},
+													{"from":"카테고리 해결됨","to":"A-RMS RESOLVED"},
+													{"from":"카테고리 닫힘","to":"A-RMS CLOSED"},
+													{"from":"A-RMS OPEN","to":"ALM 열림"},
+													{"from":"A-RMS PROGRESS","to":"ALM 진행중"},
+													{"from":"A-RMS RESOLVED","to":"ALM 해결됨"},
+													{"from":"A-RMS CLOSED","to":"ALM 닫힘"}
+												]
+											}
+									    </textarea>-->
 									</div>
 								</div>
 								<!-- * * * * * * * * * * * * * -->
