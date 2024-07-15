@@ -12,8 +12,6 @@ var selectedIssueKey; //선택한 이슈 키
 var pdServiceListData;
 var versionListData;
 
-var jiraServerList;
-
 function execDocReady() {
 
 
@@ -102,6 +100,8 @@ function execDocReady() {
 			makeVersionMultiSelectBox();
 
 			reqIssueAndItsSubtasksEvent();
+
+			deletedIssueTableEvent()
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
@@ -179,7 +179,7 @@ function makePdServiceSelectBox() {
 		// 디폴트는 base version 을 선택하게 하고 ( select all )
 		//~> 이벤트 연계 함수 :: Version 표시 jsTree 빌드
 		bind_VersionData_By_PdService();
-		getServerInfo();
+
 	});
 } // end makePdServiceSelectBox()
 
@@ -453,10 +453,14 @@ function dataTableLoad(selectId, endPointUrl) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+		            let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #808080'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -577,6 +581,24 @@ function dataTableLoad(selectId, endPointUrl) {
 			name: "updated",
 			title: "ALM Updated",
 			data: "updated",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "false") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
+					}
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+        {
+			name: "deleted",
+			title: "ALM Deleted",
+			data: "deleted",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -955,14 +977,6 @@ function getReqIssueAndItsSubtakss(endPointUrl) {
 				if (isEmpty(data) || data === "unknown") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-					let serverType = getServerType(row.jira_server_id);
-					let alm_link = makeALMIssueLink(serverType, row.self, data);
-					return ("<div style='white-space: nowrap; color: #a4c6ff'>" + data +
-						$("<button class='btn btn-transparent btn-xs' />")
-							.append($('<i class="fa fa-link" style="transform: rotate(90deg)"></i>'))
-							.attr("onclick", alm_link ? `window.open('${alm_link}', '_blank')` : "#")
-							.prop("outerHTML") +
-						"</div>");
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
 				return data;
@@ -1138,61 +1152,232 @@ function getReqIssueAndItsSubtakss(endPointUrl) {
 		errorMode
 	);
 }
+function deletedIssueTableEvent() {
+    	let $modalBtn;
+    	$("#deleted_issue_report_modal").on("shown.bs.modal", function(event) {
+    		console.log("[ reqStatus :: deletedIssueTableEvent ] :: deleted_issue_report_modal btn is clicked");
+    		 $modalBtn = $(event.relatedTarget);
+    		 var selectedRow = $modalBtn.data("row");
+    		 console.log(selectedRow);
 
-function getServerInfo() {
-	$.ajax({
-		url: "/auth-user/api/arms/jiraServerPure/getJiraServerTypeInfo.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
-		method: "GET",
-		dataType: "json", // 서버에서 보내줄 데이터의 타입
-		success: function(response) {
-			console.log(response);
-			jiraServerList = response;
+    		var endPointUrl =  "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
+    		//getDeletedIssueData(endPointUrl); // 데이터테이블 그리기
+    	});
+}
+/*
+function getDeletedIssueData(endPointUrl) {
+
+	var columnList = [
+		{
+			name: "isReq",
+			title: "요구사항 구분",
+			data: "isReq",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data == false) {
+					return "<div style='color: #808080'> 연결 이슈</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'> 요구사항 이슈</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "issueID",
+			title: "이슈아이디",
+			data: "issueID",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: false
+		},
+		{
+			name: "key",
+			title: "ALM Issue Key",
+			data: "key",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "parentReqKey",
+			title: "부모이슈 키",
+			data: "parentReqKey",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: false
+		},
+		{
+			name: "summary",
+			title: "ALM Issue Title ",
+			data: "summary",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "issuetype.issuetype_name",
+			title: "Issue Type",
+			data: "issuetype.issuetype_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "false") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					if( isEmpty(row.isReq) || row.isReq == false){
+						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+					}
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "priority",
+			title: "Issue Priority",
+			data: "priority.priority_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "status.status_name",
+			title: "Issue Status",
+			data: "status.status_name",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "reporter.reporter_displayName",
+			title: "Issue Reporter",
+			data: "reporter.reporter_displayName",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "assignee.assignee_displayName",
+			title: "Issue Assignee",
+			data: function (row, type, set, meta) {
+				return row.assignee ? row.assignee.assignee_displayName : null;
+			},
+			render: function (data, type, row, meta) {
+				//if (isEmpty(data) || data === "unknown") {
+				if ([null, undefined, ""].includes(data)) {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "created",
+			title: "ALM Created",
+			data: "created",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
+		},
+		{
+			name: "updated",
+			title: "ALM Updated",
+			data: "updated",
+			render: function (data, type, row, meta) {
+				if (isEmpty(data) || data === "unknown") {
+					return "<div style='color: #808080'>N/A</div>";
+				} else {
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+				}
+				return data;
+			},
+			className: "dt-body-left",
+			visible: true
 		}
-	});
-}
+	];
 
-var getServerType = function (server_id) {
-	if (jiraServerList.hasOwnProperty(server_id)) {
-		let value = jiraServerList[server_id];
-		return value;
-	} else {
-		return "NO-TYPE";
-	}
-};
+	var rowsGroupList = [];
+	var columnDefList = [];
+	var orderList = [[1, "asc"]];
+	var jquerySelector = "#deletedIssueTable";
+	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
+	var jsonRoot = "response";
+	var buttonList = [];
+	var selectList = {};
+	var isServerSide = false;
+	var errorMode = false;
 
-var makeALMIssueLink = function (server_type, self_link, issue_key) {
-	let alm_link ="";
-	switch (server_type) {
-		case "JIRA_CLOUD" :
-			// "https://ABCDEFG.ABCDEFG.net/rest/api/3/issue/10187" => "https://ABCDEFG.ABCDEFG.net"
-			let match_jc = self_link.match(/^(https?:\/\/[^\/]+)/);
-			if (match_jc) {
-				match_jc[1];
-				alm_link = match_jc[1]+"/browse/"+issue_key;
-			} else {
-				console.log("makeALMIssueLink[JIRA_CLOUD] :: 링크 형식이 올바르지 않습니다. " +
-					"link => " + self_link +", issue_key => " +issue_key);
-			}
-			break;
-		case "JIRA_ON_PREMISE":
-			// "http://www.313.co.kr/jira/rest/api/latest/issue/24708" => "www.313.co.kr/jira"
-			let match_jop = self_link.match(/^(https?:\/\/)?(www\.[^\/]+\/jira)/);
-			if (match_jop) {
-				match_jop[1];
-				alm_link = match_jop[1]+"/browse/"+issue_key;
-			} else {
-				console.log("makeALMIssueLink[JIRA_ON_PREMISE] :: 링크 형식이 올바르지 않습니다. " +
-					"link => " + self_link + ", issue_key => " +issue_key);
-			}
-			break;
-		case "REDMINE_ON_PREMISE":
-			alm_link = self_link.replace(/\.json$/, "");
-			break;
-		case "NO-TYPE" :
-			console.log("makeALMIssueLink[NO-TYPE] :: 서버 타입이 없습니다. link => " + self_link +", issue_key => " +issue_key);
-			alm_link = "";
-			break;
-	}
-	console.log(alm_link);
-	return alm_link;
-}
+	reqStatusDataTable = dataTable_build(
+		jquerySelector,
+		ajaxUrl,
+		jsonRoot,
+		columnList,
+		rowsGroupList,
+		columnDefList,
+		selectList,
+		orderList,
+		buttonList,
+		isServerSide,
+		errorMode
+	);
+}*/
