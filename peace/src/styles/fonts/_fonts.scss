@@ -1,0 +1,42 @@
+$font-family: 'Nanum Gothic';
+$font-style: normal;
+$font-url: './NanumGothic/nanum-gothic-v11-latin_korean';
+
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: $font-style;
+  font-weight: $font-weight-normal;
+  src:
+    local('NanumGothic'),
+    url('#{$font-url}-regular.woff2') format('woff2') /* Super Modern Browsers */,
+    url('#{$font-url}-regular.woff') format('woff') /* Modern Browsers */,
+    url('#{$font-url}-regular.eot?#iefix') format('embedded-opentype') /* IE6-IE8 */,
+    url('#{$font-url}-regular.ttf') format('truetype') /* Safari, Android, iOS */,
+    url('#{$font-url}-regular.svg#NanumGothic') format('svg') /* Legacy iOS */;
+}
+
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: $font-style;
+  font-weight: $font-weight-bold;
+  src:
+    local('NanumGothic'),
+    url('#{$font-url}-700.woff2') format('woff2') /* Super Modern Browsers */,
+    url('#{$font-url}-700.woff') format('woff') /* Modern Browsers */,
+    url('#{$font-url}-700.eot?#iefix') format('embedded-opentype') /* IE6-IE8 */,
+    url('#{$font-url}-700.ttf') format('truetype') /* Safari, Android, iOS */,
+    url('#{$font-url}-700.svg#NanumGothic') format('svg') /* Legacy iOS */;
+}
+
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: $font-style;
+  font-weight: $font-weight-extra-bold;
+  src:
+    local('NanumGothic'),
+    url('#{$font-url}-800.woff2') format('woff2') /* Super Modern Browsers */,
+    url('#{$font-url}-800.woff') format('woff') /* Modern Browsers */,
+    url('#{$font-url}-800.eot?#iefix') format('embedded-opentype') /* IE6-IE8 */,
+    url('#{$font-url}-800.ttf') format('truetype') /* Safari, Android, iOS */,
+    url('#{$font-url}-800.svg#NanumGothic') format('svg') /* Legacy iOS */;
+}

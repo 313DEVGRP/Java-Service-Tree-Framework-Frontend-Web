@@ -1,0 +1,14 @@
+/**
+ * Customized version of bootstrap using variables from _variables.scss.
+ * This file is loaded via separate loader thus allowing to use original bootstrap classes (e.g. .btn-default) through out the app.
+ */
+@import 'bootstrap/scss/bootstrap';
+@import 'animate.css/animate';
+@import 'react-toastify/dist/ReactToastify.css';
+
+@import 'base';
+@import 'auth';
+@import 'fonts/fonts';
+@import 'overrides';
+@import 'general';
+@import 'utils';
