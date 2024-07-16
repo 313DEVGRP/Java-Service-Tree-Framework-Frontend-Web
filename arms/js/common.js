@@ -1200,12 +1200,12 @@ function dataTable_extendBuild(
 	$("body")
 		.find("[aria-controls='" + jQueryElementStr + "']")
 		.css("width", "50px");
-	$(".dataTables_filter input[type=search]").css("width", "100px");
+	$(".dataTables_filter input[type=search]").css("width", "150px");
 	$("select[name=" + jQueryElementStr + "]").css("width", "50px");
 
 	$.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
 		console.log(message);
-		jError("Notification : <strong>Ajax Error</strong>, retry plz !!!!!!!");
+		jError("Notification : <strong>Ajax Error</strong>, retry plz !");
 	};
 
 	return tempDataTable;

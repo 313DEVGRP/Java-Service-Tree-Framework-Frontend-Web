@@ -65,6 +65,16 @@ var gojs = (function () {
                     $(go.Shape, 'Circle', { width: 22, height: 22, fill: 'white', stroke: 'dodgerblue', strokeWidth: 3 }),
                     $(go.Shape, 'PlusLine', { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
                 ),
+/*                $(go.Panel,
+                    'Auto',
+                    { alignment: go.Spot.Right, portId: 'from', fromLinkable: true, cursor: 'pointer', click: (e, obj) => {
+                            if (obj.part.data.category !== 'NoAdd') {
+                                addNodeAndLink(e, obj);
+                            }
+                        }},
+                    $(go.Shape, 'Diamond', { width: 11, height: 11, fill: 'white', stroke: 'dodgerblue', strokeWidth: 3 }),
+                    $(go.Shape, 'PlusLine', new go.Binding('visible', '', (data) => data.category !== 'NoAdd').ofObject(), { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
+                ),*/
                 // input port
                 $(go.Panel,
                     'Auto',
@@ -191,6 +201,16 @@ var gojs = (function () {
             diagram.startTransaction('Add State');
             // get the node data for which the user clicked the button
             const fromData = fromNode.data;
+            const category = fromData.category;
+            const c_id = fromData.c_id;
+            alert(c_id);
+
+            if (category === 'NoAdd') {
+                // 중간 노드의 경우 ALM 상태의 Node는 생성 못하도록 처리
+                diagram.commitTransaction('Add Node');
+                return;
+            }
+
             // create a new "State" data object, positioned off to the right of the fromNode
             const p = fromNode.location.copy();
             p.x += diagram.toolManager.draggingTool.gridSnapCellSize.width;
@@ -238,13 +258,48 @@ var gojs = (function () {
         // Connecting a link with the Recycle node removes the link
         myDiagram.addDiagramListener('LinkDrawn', (e) => {
             const link = e.subject;
-            if (link.toNode.category === 'Recycle') myDiagram.remove(link);
+            const fromNode = link.fromNode;
+            const toNode = link.toNode;
+
+            if (fromNode.category === 'NoAdd' && fromNode.findLinksOutOf().count > 1) {
+                myDiagram.remove(link);
+            }
+
+            if (toNode.category === 'NoAdd' && toNode.findLinksInto().count > 1) {
+                myDiagram.remove(link);
+            }
+
+            if (toNode.category === 'End' && toNode.findLinksInto().count > 1) {
+                myDiagram.remove(link);
+            }
+
+            if (fromNode.category === 'Loading' && toNode.category === "End") {
+                myDiagram.remove(link);
+            }
+
             lowlight();
         });
         myDiagram.addDiagramListener('LinkRelinked', (e) => {
+            console.log(e);
             const link = e.subject;
-            if (link.toNode.category === 'Recycle') myDiagram.remove(link);
-            lowlight();
+            const fromNode = link.fromNode;
+            const toNode = link.toNode;
+
+            if (fromNode.category === 'NoAdd' && fromNode.findLinksOutOf().count > 1) {
+                myDiagram.remove(link);
+            }
+
+            if (toNode.category === 'NoAdd' && toNode.findLinksInto().count > 1) {
+                myDiagram.remove(link);
+            }
+
+            if (toNode.category === 'End' && toNode.findLinksInto().count > 1) {
+                myDiagram.remove(link);
+            }
+
+            if (fromNode.category === 'Loading' && toNode.category === "End") {
+                myDiagram.remove(link);
+            }
         });
 
         myDiagram.linkTemplate = $(go.Link,
@@ -334,16 +389,23 @@ var gojs = (function () {
             });
         });
 
-        load(); // load initial diagram from the mySavedModel textarea
+        // load(); // load initial diagram from the mySavedModel textarea
     }
 
     function save() {
+        let data = myDiagram.model.toJson();
+        console.log(data);
+
         document.getElementById('mySavedModel').value = myDiagram.model.toJson();
         myDiagram.isModified = false;
     }
 
-    function load() {
-        myDiagram.model = go.Model.fromJson(document.getElementById('mySavedModel').value);
+    function load(data) {
+
+        // let data = document.getElementById('mySavedModel').value;
+        console.log(data);
+
+        myDiagram.model = go.Model.fromJson(data);
         // if any nodes don't have a real location, explicitly do a layout
         if (myDiagram.nodes.any((n) => !n.location.isReal())) layout();
     }
