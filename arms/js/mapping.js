@@ -85,14 +85,13 @@ function execDocReady() {
         ],
         [
             // 칸반 보드
-            "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.css",
+            /*"../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.css",
             "../reference/jquery-plugins/jkanban-1.3.1/dist/jkanban.min.js",
             "../arms/js/reqKanban/kanban.js",
-            /*"../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.css",
+            "../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.css",
             "../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.js",
             "https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.min.js",
             "../reference/jquery-plugins/jquery-mousewheel-main/jquery.mousewheel.js",*/
-            "../reference/gojs/go-sample.js",
             "../reference/gojs/go-debug.js",
             "../reference/gojs/go.css",
             "../arms/js/mapping/gojs_setup.js"
@@ -106,7 +105,15 @@ function execDocReady() {
             $(".widget").widgster();
             setSideMenu("sidebar_menu_jira", "sidebar_menu_product_mapping");
 
+            //ALM 서버 셀렉트 박스 이니시에이터
+            make_alm_server_select_box();
+            gojs.init();
+
+            save_req_state_btn_click();
+            update_req_state_btn_click();
+            delete_req_state_btn_click();
             // --- 에디터 설정 --- //
+
             var waitCKEDITOR = setInterval(function () {
                 try {
                     if (window.CKEDITOR) {
@@ -123,50 +130,38 @@ function execDocReady() {
             // 칸반 보드 초기화
             // initKanban();
             // setKanban();
-
-            state_category_tab_group_click_event();
-            save_req_state_btn_click();
-            update_req_state_btn_click();
-            delete_req_state_btn_click();
-
-            $(window).resize(function() {
-                adjustHeight();
-            });
-
-            // 검색
-            $("#kanban_search").on("input", function () {
-                let searchText = $(this).val().toLowerCase();
-                // console.log("검색: " + searchText);
-
-                $('.kanban-item').each(function() {
-                    let itemText = $(this).find('.req_item').text().toLowerCase();
-                    if (itemText.indexOf(searchText) !== -1) {
-                        $(this).removeClass('hidden');
-                    } else {
-                        $(this).addClass('hidden');
-                    }
-                });
-
-                if ($(this).val().length > 0) {
-                    $('.kanban_search_clear').show();
-                } else {
-                    $('.kanban_search_clear').hide();
-                }
-            });
-
-            $('.kanban_search_clear').click(function() {
-                $('#kanban_search').val('').focus();
-                $('.kanban-item').removeClass('hidden');
-                $(this).hide();
-            });
-
-            //ALM 서버 셀렉트 박스 이니시에이터
-            make_alm_server_select_box();
+            // $("#kanban_search").on("input", function () {
+            //     let searchText = $(this).val().toLowerCase();
+            //     // console.log("검색: " + searchText);
+            //
+            //     $('.kanban-item').each(function() {
+            //         let itemText = $(this).find('.req_item').text().toLowerCase();
+            //         if (itemText.indexOf(searchText) !== -1) {
+            //             $(this).removeClass('hidden');
+            //         } else {
+            //             $(this).addClass('hidden');
+            //         }
+            //     });
+            //
+            //     if ($(this).val().length > 0) {
+            //         $('.kanban_search_clear').show();
+            //     } else {
+            //         $('.kanban_search_clear').hide();
+            //     }
+            // });
+            //
+            // $('.kanban_search_clear').click(function() {
+            //     $('#kanban_search').val('').focus();
+            //     $('.kanban-item').removeClass('hidden');
+            //     $(this).hide();
+            // });
+            // $(window).resize(function() {
+            //     adjustHeight();
+            // });
+            // state_category_tab_group_click_event();
             // mapping_flow_chart();
             // flow_chart();
             // mapping_flow_chart();
-
-            gojs.init();
         })
         .catch(function (e) {
             console.error("플러그인 로드 중 오류 발생");
@@ -174,6 +169,759 @@ function execDocReady() {
         });
 }
 
+///////////////////////
+// ALM 서버 셀렉트 박스
+//////////////////////
+function make_alm_server_select_box() {
+    //제품 서비스 셀렉트 박스 이니시에이터
+    $(".chzn-select").each(function() {
+        $(this).select2($(this).data());
+    });
+
+    //ALM 서버 셀렉트 박스 데이터 바인딩
+    $.ajax({
+        url: "/auth-user/api/arms/jiraServerPure/getNodesWithoutRoot.do",
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        progress: true,
+        statusCode: {
+            200: function(data) {
+                console.log(data.result);
+                //////////////////////////////////////////////////////////
+                for (var k in data.result) {
+                    var obj = data.result[k];
+                    alm_server_list[obj.c_id] = obj;
+                    var newOption = new Option(obj.c_title, obj.c_id, false, false);
+                    $("#selected_alm_server").append(newOption).trigger("change");
+                }
+                //////////////////////////////////////////////////////////
+                jSuccess("ALM 서버 조회가 완료 되었습니다.");
+            }
+        },
+        error: function (e) {
+            jError("ALM 서버 조회 중 에러가 발생했습니다. :: " + e);
+        }
+    });
+
+    $("#selected_alm_server").on("select2:open", function() {
+        //슬림스크롤
+        makeSlimScroll(".select2-results__options");
+    });
+
+    // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
+    $("#selected_alm_server").on("select2:select", function(e) {
+        $("#cloud_project_tree").hide();
+        $("#select-project-div").hide();
+        $("#select-issuetype-div").hide();
+        $("#select-project").text("선택되지 않음");
+        $("#select-issuetype").text("선택되지 않음");
+        selected_alm_server_id = $("#selected_alm_server").val();
+        selected_alm_server_name = $("#selected_alm_server").select2("data")[0].text;
+        $("#select-alm-server").text(selected_alm_server_name);
+
+        let alm_server_data = alm_server_list[selected_alm_server_id];
+        let alm_server_type = alm_server_data.c_jira_server_type;
+        /*var $flowchart = $('#state_flow_chart');
+        $flowchart.flowchart('setData', {});*/
+
+        if (alm_server_type === "클라우드") {
+            $("#cloud_project_tree").show();
+            $("#select-project-div").show();
+            $("#select-issuetype-div").show();
+            build_alm_server_jstree(selected_alm_server_id);
+            let data = {};
+            gojs.load(data);
+        }
+        else {
+            mapping_data_load(selected_alm_server_id, alm_server_type);
+
+            //ALM 서버 이슈상태 조회
+            /*$.ajax({
+                url: "/auth-user/api/arms/jiraServer/getJiraIssueStatus.do?c_id=" + selected_alm_server_id ,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                progress: true,
+                statusCode: {
+                    200: function(result) {
+                        console.log(result.response);
+                        let alm_status_list = result.response;
+
+                        var data = {
+                            operators: {},
+                            links: {}
+                        };
+
+                        console.log(alm_status_list);
+                        console.log(arms_state_list);
+                        let inputData = arms_state_list;
+                        let outputData = alm_status_list;
+
+                        let width = $flowchart.width();
+
+                        var topPosition = 20;
+                        var leftPositionInput = 20;
+                        var leftPositionOutput = width-200;
+
+                        console.log(width);
+                        inputData.forEach(function(input, index) {
+                            var operatorId = 'operator' + (index + 1);
+                            data.operators[operatorId] = {
+                                top: topPosition + index * 80,
+                                left: leftPositionInput,
+                                properties: {
+                                    title: "A-RMS - " +input.c_title,
+                                    class: 'input-operator',
+                                    inputs: {},
+                                    outputs: {
+                                        output_1: {
+                                            label: input.c_title,
+                                        }
+                                    }
+                                }
+                            };
+                        });
+                        outputData.forEach(function(output, index) {
+                            var operatorId = 'operator' + (inputData.length + index + 1);
+                            data.operators[operatorId] = {
+                                top: topPosition + index * 80,
+                                left: leftPositionOutput,
+                                properties: {
+                                    title: "ALM - " + output.c_issue_status_name,
+                                    class: 'output-operator',
+                                    inputs: {
+                                        input_1: {
+                                            label: output.c_issue_status_name,
+                                        }
+                                    },
+                                    outputs: {}
+                                }
+                            };
+                        });
+
+                        console.log(data);
+                        updateFlowchartData(data);
+                        // mapping_flow_chart(alm_status_list, arms_state_list);
+                        //////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////
+                        jSuccess("ALM 서버 상태 조회가 완료 되었습니다.");
+                    }
+                },
+                error: function (e) {
+                    jError("ALM 서버 상태 조회 중 에러가 발생했습니다. :: " + e);
+                }
+            });*/
+        }
+    });
+} // end make_alm_server_select_box()
+
+function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType_c_id) {
+    if (!alm_server_type) {
+        alm_server_id = alm_server_id || selected_alm_server_id;
+
+        if (!alm_server_id) {
+            alert("선택된 서버가 없습니다.");
+            return;
+        }
+
+        let alm_server_data = alm_server_list[alm_server_id];
+        alm_server_type = alm_server_data.c_jira_server_type;
+    }
+
+    if (alm_server_type === "클라우드") {
+        if (!project_id|| !issueType_c_id) {
+            alert("선택된 프로젝트 이슈유형이 없습니다.");
+            return;
+        }
+
+        alert("선택된 클라우드 유형의 경우 설계가 필요합니다.");
+
+        /*Promise.all([get_arms_state_list(), get_project_status_list(project_id, issueType_c_id)])
+            .then(([arms_state_list, alm_status_list]) => {
+                // 두 API 호출 결과를 함께 사용합니다.
+                console.log('ARMS State List:', arms_state_list);
+                console.log('ALM Status List:', alm_status_list);
+
+                if (alm_status_list.length === 0) {
+                    alert("선택된 이슈유형이 없습니다. 서버 관리에서 프로젝트의 이슈유형을 선택해주세요.");
+                    let data = {};
+                    gojs.load(data);
+                    return;
+                }
+
+                let data = create_gojs_data(req_state_category_list, arms_state_list, alm_status_list);
+                // 여기에 두 결과를 함께 사용하는 로직을 추가합니다.
+                gojs.load(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });*/
+    }
+    else {
+        Promise.all([get_arms_state_list(), get_alm_status_list(alm_server_id)])
+            .then(([arms_state_list, alm_status_list]) => {
+                // 두 API 호출 결과를 함께 사용합니다.
+                console.log('ARMS State List:', arms_state_list);
+                console.log('ALM Status List:', alm_status_list);
+
+                let data = create_gojs_data(req_state_category_list, arms_state_list, alm_status_list);
+                // 여기에 두 결과를 함께 사용하는 로직을 추가합니다.
+                gojs.load(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }
+}
+
+function create_gojs_data(req_state_category_list, arms_state_list, alm_status_list) {
+/*    const node_data_array = generate_node_data(req_state_category_list, arms_state_list, alm_status_list); // 노드 데이터 생성
+    console.log(node_data_array);
+    const link_data_array = generate_link_data(node_data_array); // 링크 데이터 생성
+    console.log(link_data_array);*/
+
+    const diagram_data = generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list); // 노드 데이터 생성
+
+/*    const diagram_data = {
+        class: 'GraphLinksModel',
+        nodeDataArray: node_data_array,
+        linkDataArray: link_data_array
+    };*/
+
+
+    return diagram_data;
+}
+
+function generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list) {
+    const node_data_array = [];
+    const link_data_array = [];
+
+    const categoryX = 0;
+    const armsX = 300;
+    const almX = 600;
+
+    const ySpacing = 40;
+    const categoryySpacing = 100;
+
+    // Keep track of Y positions for each depth
+    let categoryY = 0;
+    let armsY = 0;
+    let almY = 0;
+
+    const categoryNodes = {};
+    const armsNodes = {};
+
+    Object.entries(req_state_category_list).forEach(([key, value]) => {
+        const categoryNodeKey = `카테고리 ${value}`;
+        const node = {
+            key: categoryNodeKey,
+            text: `카테고리 ${value}`,
+            type: 'arms-category',
+            c_id: key,
+            category: 'Loading',
+            loc: `${categoryX} ${categoryY}`
+        };
+        node_data_array.push(node);
+        categoryNodes[key] = node;
+        categoryY += categoryySpacing;
+    });
+
+    arms_state_list.forEach((state) => {
+        const armsNodeKey = `A-RMS ${state.c_title}`;
+        const node = {
+            key: armsNodeKey,
+            text: `A-RMS ${state.c_title}`,
+            type: 'arms-state',
+            c_id: state.c_id,
+            mapping_id: state.c_etc,
+            category: 'NoAdd',
+            loc: `${armsX} ${armsY}`
+        };
+        node_data_array.push(node);
+        armsNodes[state.c_id] = node;
+        armsY += ySpacing;
+    });
+
+    alm_status_list.forEach((status) => {
+        const almNodeKey = `ALM ${status.c_issue_status_name}`;
+        const node = {
+            key: almNodeKey,
+            text: `ALM ${status.c_issue_status_name}`,
+            type: 'alm-status',
+            c_id: status.c_id,
+            mapping_id: status.c_req_state_mapping_link,
+            category: 'End',
+            loc: `${almX} ${almY}`
+        };
+        node_data_array.push(node);
+        almY += ySpacing;
+    });
+
+    // 링크 데이터 생성
+    node_data_array.forEach((node) => {
+        if (node.type === 'arms-state' && node.mapping_id) {
+            const fromNode = categoryNodes[node.mapping_id];
+            if (fromNode) {
+                link_data_array.push({ from: fromNode.key, to: node.key });
+            }
+        } else if (node.type === 'alm-status' && node.mapping_id) {
+            const fromNode = armsNodes[node.mapping_id];
+            if (fromNode) {
+                link_data_array.push({ from: fromNode.key, to: node.key });
+            }
+        }
+    });
+
+    // Depth 2번 노드들이 연결된 데이터 순서대로 나열되도록 정렬
+    // Depth 2번 노드들이 mapping_id 오름차순으로 나열되도록 정렬
+    const sortedArmsNodes = Object.values(armsNodes).sort((a, b) => {
+        // mapping_id를 기준으로 오름차순 정렬
+        return a.mapping_id.localeCompare(b.mapping_id);
+    });
+    // const sortedArmsNodes = Object.values(armsNodes).sort((a, b) => {
+    //
+    //     const fromNodeA = categoryNodes[a.mapping_id];
+    //     const fromNodeB = categoryNodes[b.mapping_id];
+    //     if (fromNodeA && fromNodeB) {
+    //         return fromNodeA.loc.localeCompare(fromNodeB.loc);
+    //     }
+    //     return 0;
+    // });
+
+    console.log(sortedArmsNodes);
+
+    armsY = 0;
+    sortedArmsNodes.forEach(node => {
+        node.loc = `${armsX} ${armsY}`;
+        armsY += ySpacing;
+    });
+
+    return {
+        class: 'GraphLinksModel',
+        nodeDataArray: node_data_array,
+        linkDataArray: link_data_array
+    };
+}
+
+function get_arms_state_list() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/getNodesWithoutRoot.do",
+            type: "GET",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function (data) {
+                    resolve(data.result);
+                }
+            },
+            error: function (e) {
+                jError("요구사항 조회 중 에러가 발생했습니다.");
+                reject(e);
+            }
+        });
+    });
+}
+
+function get_alm_status_list(selected_alm_server_id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/auth-user/api/arms/jiraServer/getJiraIssueStatus.do?c_id=" + selected_alm_server_id,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function(result) {
+                    console.log(result);
+                    resolve(result.response);
+                    jSuccess("ALM 서버 상태 조회가 완료 되었습니다.");
+                }
+            },
+            error: function (e) {
+                jError("ALM 서버 상태 조회 중 에러가 발생했습니다. :: " + e);
+                reject(e);
+            }
+        });
+    });
+}
+
+function get_project_status_list(project_id, issueType_c_id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/auth-user/api/arms/jiraProject/getIssueStatusListByIssueType.do?c_id=" + project_id
+                                                                                + "&issueTypeId=" + issueType_c_id,
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            progress: true,
+            statusCode: {
+                200: function(result) {
+                    console.log(result);
+                    resolve(result.response);
+                    jSuccess("ALM 프로젝트 상태 조회가 완료 되었습니다.");
+                }
+            },
+            error: function (e) {
+                jError("ALM 프로젝트 상태 조회 중 에러가 발생했습니다. :: " + e);
+                reject(e);
+            }
+        });
+    });
+}
+
+function build_alm_server_jstree(selected_alm_server_id) {
+    var jQueryElementID = "#alm_server_tree";
+    var serviceNameForURL = "/auth-user/api/arms/jiraServerProjectPure/getJiraProjectPure.do?c_id=" + selected_alm_server_id;
+
+    jstree_build(jQueryElementID, serviceNameForURL);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// -- jstree build 설정 -- //
+////////////////////////////////////////////////////////////////////////////////////////
+function jstree_build(jQueryElementID, serviceNameForURL) {
+    console.log("mapping :: jstree_build : ( jQueryElementID ) → " + jQueryElementID);
+    console.log("mapping :: jstree_build : ( serviceNameForURL ) → " + serviceNameForURL);
+
+    console.log("mapping :: jstree_build : ( href ) → " + $(location).attr("href"));
+    console.log("mapping :: jstree_build : ( protocol ) → " + $(location).attr("protocol"));
+    console.log("mapping :: jstree_build : ( host ) → " + $(location).attr("host"));
+    console.log("mapping :: jstree_build : ( pathname ) → " + $(location).attr("pathname"));
+    console.log("mapping :: jstree_build : ( search ) → " + $(location).attr("search"));
+    console.log("mapping :: jstree_build : ( hostname ) → " + $(location).attr("hostname"));
+    console.log("mapping :: jstree_build : ( port ) → " + $(location).attr("port"));
+
+    $(jQueryElementID)
+        .jstree({
+            plugins: ["themes", "json_data", "ui", "crrm", "dnd", "search", "types"],
+            themes: { theme: ["lightblue4"] },
+            json_data: {
+                ajax: {
+                    url: serviceNameForURL,
+                    cache: false,
+                    data: function (n) {
+                        // the result is fed to the AJAX request `data` option
+                        console.log("[ common :: jsTreeBuild ] :: json data load = " + JSON.stringify(n));
+                        return {
+                            c_id: n.attr ? n.attr("id").replace("node_", "").replace("copy_", "") : 1
+                        };
+                    },
+                    success: function (n) {
+                        jSuccess("프로젝트 조회 완료");
+                        n.forEach(project => {
+                            project.attr.rel = "project";
+                            project.attr.title = project.c_title;
+                            project.children = [];
+                            project.jiraIssueTypeEntities.forEach(issueType => {
+                                // 하위 작업 이슈유형 제거 처리
+                                if (issueType.c_contents !== "-1" || issueType.c_desc !== "true") {
+                                    project.children.push({
+                                        attr: { rel: "issueType", id: "issueType_" + issueType.c_id, title: issueType.c_issue_type_name },
+                                        data: [issueType.c_issue_type_name],
+                                        text: issueType.c_issue_type_name,
+                                    });
+                                }
+                            });
+                        });
+
+                        $(jQueryElementID).jstree("search", $("#text").val());
+                    }
+                }
+            },
+            search: {
+                show_only_matches: true,
+                search_callback: function (str, node) {
+                    return node.data().search(str);
+                }
+            },
+            types: {
+                max_depth: -2,
+                max_children: -2,
+                valid_children: ["project"],
+                types: {
+                    default: {
+                        // I want this type to have no children (so only leaf nodes)
+                        // In my case - those are files
+                        valid_children: "none",
+                        // If we specify an icon for the default type it WILL OVERRIDE the theme icons
+                        icon: {
+                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/attibutes.png"
+                        }
+                    },
+                    project: {
+                        valid_children: ["issueType"],
+                        icon: {
+                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/ic_app.png"
+                        }
+                    },
+                    issueType: {
+                        valid_children: "none",
+                        icon: {
+                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/toolbar_new.png"
+                        }
+                    }
+                }
+            },
+        })
+        .bind("select_node.jstree", function (event, data) {
+            if ($.isFunction(jstree_click)) {
+                console.log("[ jstree_build :: select_node ] :: data.rslt.obj.data('id')" + data.rslt.obj.attr("id"));
+                console.log("[ jstree_build :: select_node ] :: data.rslt.obj.data('rel')" + data.rslt.obj.attr("rel"));
+                console.log("[ jstree_build :: select_node ] :: data.rslt.obj.data('class')" + data.rslt.obj.attr("class"));
+                console.log("[ jstree_build :: select_node ] :: data.rslt.obj.children('a')" + data.rslt.obj.children("a"));
+                console.log("[ jstree_build :: select_node ] :: data.rslt.obj.children('ul')" + data.rslt.obj.children("ul"));
+                jstree_click(data.rslt.obj);
+            }
+        })
+        .bind("loaded.jstree", function (event, data) {
+            $(jQueryElementID).slimscroll({
+                height: "200px"
+            });
+        });
+
+    $("#mmenu input, #mmenu button").click(function () {
+        switch (this.id) {
+            case "add_default":
+            case "add_folder":
+                $(jQueryElementID).jstree("create", null, "last", {
+                    attr: {
+                        rel: this.id.toString().replace("add_", "")
+                    }
+                });
+                break;
+            case "search":
+                $(jQueryElementID).jstree("search", document.getElementById("text").value);
+                break;
+            case "text":
+                break;
+            default:
+                $(jQueryElementID).jstree(this.id);
+                break;
+        }
+    });
+
+    $("#mmenu .form-search").submit(function (event) {
+        event.preventDefault();
+
+        $(jQueryElementID).jstree("search", document.getElementById("text").value);
+    });
+}
+
+function jstree_click(data) {
+
+    let rel = data.attr('rel');
+    let project_c_id;
+    let issueType_c_id;
+    if (rel === "project") {
+        $(".jstree-clicked").removeClass("jstree-clicked");
+        console.log(rel);
+        return;
+    }
+    else {
+        let project_title = data.parent().parent().attr("title");
+        $("#select-project").text(project_title);
+        let issueType_title = data.attr("title");
+        $("#select-issuetype").text(issueType_title);
+
+        let project_c_id = data.parent().parent().attr("id").replace("node_", "").replace("copy_", "");
+        let issueType_c_id = data.attr("id").replace("issueType_", "").replace("copy_", "");
+        mapping_data_load(null, null, project_c_id, issueType_c_id);
+    }
+
+}
+
+$("#text").on("input", function () {
+    var searchString = $(this).val();
+    $("#alm_server_tree").jstree("search", searchString);
+});
+
+///////////////////////////////////
+// 팝업 띄울 때, UI 일부 수정되도록
+///////////////////////////////////
+function popup_modal(popup_type, state_id) {
+    $('#my_modal1').modal('show');
+
+    $("#popup_view_state_category_div label").removeClass("active");
+    $("input[name='popup_view_state_category_options']:checked").prop("checked", false);
+    $("#popup_view_state_name").val("");
+    CKEDITOR.instances.popup_view_state_description_editor.setData("상태 관련 설명 등을 기록합니다.");
+
+    $("#delete_req_state").addClass("hidden");
+    $("#update_req_state").addClass("hidden");
+    $("#save_req_state").addClass("hidden");
+
+    if (popup_type === "save_popup") {
+        $("#my_modal1_title").text("ARMS 상태 등록 팝업");
+        $("#my_modal1_description").text("A-RMS 요구사항의 상태를 등록합니다.");
+
+        // 모달 등록, 수정별 버튼 초기화
+        $("#save_req_state").removeClass("hidden");
+    }
+    else if (popup_type === "update_popup") {
+        $("#my_modal1_title").text("ARMS 상태 수정 팝업");
+        $("#my_modal1_description").text("A-RMS 요구사항의 상태를 수정합니다.");
+
+        $("#update_req_state").removeClass("hidden");
+        $("#delete_req_state").removeClass("hidden");
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/getNode.do?c_id=" + state_id,
+            type: "get",
+            statusCode: {
+                200: function (data) {
+                    console.log(data);
+
+                    $("#popup_view_state_c_id").val(data.c_id);
+                    $("#popup_view_state_name").val(data.c_title);
+                    CKEDITOR.instances.popup_view_state_description_editor.setData(data.c_contents);
+                    let state_category_value = data.c_etc;
+                    update_radio_buttons("#popup_view_state_category_div", state_category_value);
+                    // jSuccess('"' + reqTitle + '"' + " 상태 카테고리가 변경되었습니다.");
+                }
+            }
+        });
+    }
+}
+
+function update_radio_buttons(container_selector, value) {
+    $(container_selector + " label").removeClass("active");
+    $(container_selector + " input[type='radio']:checked").prop("checked", false);
+
+    let radio_buttons = $(container_selector + " input[type='radio']");
+    radio_buttons.each(function () {
+        if (value && $(this).val() === value) {
+            $(this).parent().addClass("active");
+            $(this).prop("checked", true);
+        }
+    });
+}
+
+function save_req_state_btn_click() {
+    $("#save_req_state").off().click(function() {
+        let state_name = $("#popup_view_state_name").val().trim();
+        if (!state_name) {
+            alert("상태의 이름이 입력되지 않았습니다.");
+            return;
+        }
+        let state_category_value = $("#popup_view_state_category_div input[name='popup_view_state_category_options']:checked").val();
+        if (!state_category_value) {
+            alert("상태 카테고리가 선택되지 않았습니다.");
+            return;
+        }
+        let state_description = CKEDITOR.instances["popup_view_state_description_editor"].getData();
+
+        let data = {
+            ref : 2,
+            c_type : "default",
+            c_etc : state_category_value,
+            c_title : state_name,
+            c_contents : state_description
+        };
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/addNode.do",
+            type: "POST",
+            data: data,
+            statusCode: {
+                200: function () {
+                    jSuccess('"' + state_name + '"' + " 상태가 생성되었습니다.");
+                    let active_tab_name = getActiveTab();
+                    if (active_tab_name === "#board") {
+                        setKanban();
+                    }
+                    else if (active_tab_name === "#table") {
+                        dataTableLoad();
+                    }
+
+                    $("#close_modal_popup").trigger("click");
+                }
+            }
+        });
+    });
+}
+
+function update_req_state_btn_click() {
+    $("#update_req_state").off().click(function() {
+        let state_name = $("#popup_view_state_name").val().trim();
+        if (!state_name) {
+            alert("상태의 이름이 입력되지 않았습니다.");
+            return;
+        }
+        let state_category_value = $("#popup_view_state_category_div input[name='popup_view_state_category_options']:checked").val();
+        if (!state_category_value) {
+            alert("상태 카테고리가 선택되지 않았습니다.");
+            return;
+        }
+        let state_description = CKEDITOR.instances["popup_view_state_description_editor"].getData();
+
+        let data = {
+            c_id : $("#popup_view_state_c_id").val(),
+            c_etc : state_category_value,
+            c_title : state_name,
+            c_contents : state_description
+        };
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/updateNode.do",
+            type: "PUT",
+            data: data,
+            statusCode: {
+                200: function () {
+                    jSuccess('"' + state_name + '"' + " 상태가 수정되었습니다.");
+                    let active_tab_name = getActiveTab();
+                    if (active_tab_name === "#board") {
+                        setKanban();
+                    }
+                    else if (active_tab_name === "#table") {
+                        dataTableLoad();
+                    }
+
+                    $("#close_modal_popup").trigger("click");
+                }
+            }
+        });
+    });
+}
+
+function delete_req_state_btn_click() {
+    $("#delete_req_state").off().click(function() {
+        let state_name = $("#popup_view_state_name").val().trim();
+
+        let isDelete = confirm(state_name + " 상태를 삭제하시겠습니까?");
+        if (!isDelete) {
+            return;
+        }
+
+
+        let data = {
+            c_id : $("#popup_view_state_c_id").val(),
+        };
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/removeNode.do",
+            type: "DELETE",
+            data: data,
+            statusCode: {
+                200: function () {
+                    jSuccess('"' + state_name + '"' + " 상태가 삭제되었습니다.");
+                    let active_tab_name = getActiveTab();
+                    if (active_tab_name === "#board") {
+                        setKanban();
+                    }
+                    else if (active_tab_name === "#table") {
+                        dataTableLoad();
+                    }
+
+                    $("#close_modal_popup").trigger("click");
+                }
+            }
+        });
+    });
+}
+
+/*
 function state_category_tab_group_click_event() {
     $('ul[data-group="state_category_tab_group"] a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
         var target = $(e.target).attr("href"); // activated tab
@@ -328,8 +1076,8 @@ function loadKanban(reqListByState, reqBoardByState) {
         });
     }).mousemove(function(e) {
         // 마우스 위치에 따라 툴팁 위치 조정
-        /*$('.req_item_tooltip')
-            .css({top: e.pageY + 20 + 'px', left: e.pageX - 20 + 'px'});*/
+        // $('.req_item_tooltip')
+        //     .css({top: e.pageY + 20 + 'px', left: e.pageX - 20 + 'px'});
     });
 }
 
@@ -543,190 +1291,6 @@ function dataTableCallBack(settings, json) {
     console.log(json);
 }
 
-///////////////////////////////////
-// 팝업 띄울 때, UI 일부 수정되도록
-///////////////////////////////////
-function popup_modal(popup_type, state_id) {
-    $('#my_modal1').modal('show');
-
-    $("#popup_view_state_category_div label").removeClass("active");
-    $("input[name='popup_view_state_category_options']:checked").prop("checked", false);
-    $("#popup_view_state_name").val("");
-    CKEDITOR.instances.popup_view_state_description_editor.setData("상태 관련 설명 등을 기록합니다.");
-
-    $("#delete_req_state").addClass("hidden");
-    $("#update_req_state").addClass("hidden");
-    $("#save_req_state").addClass("hidden");
-
-    if (popup_type === "save_popup") {
-        $("#my_modal1_title").text("ARMS 상태 등록 팝업");
-        $("#my_modal1_description").text("A-RMS 요구사항의 상태를 등록합니다.");
-
-        // 모달 등록, 수정별 버튼 초기화
-        $("#save_req_state").removeClass("hidden");
-    }
-    else if (popup_type === "update_popup") {
-        $("#my_modal1_title").text("ARMS 상태 수정 팝업");
-        $("#my_modal1_description").text("A-RMS 요구사항의 상태를 수정합니다.");
-
-        $("#update_req_state").removeClass("hidden");
-        $("#delete_req_state").removeClass("hidden");
-
-        $.ajax({
-            url: "/auth-user/api/arms/reqState/getNode.do?c_id=" + state_id,
-            type: "get",
-            statusCode: {
-                200: function (data) {
-                    console.log(data);
-
-                    $("#popup_view_state_c_id").val(data.c_id);
-                    $("#popup_view_state_name").val(data.c_title);
-                    CKEDITOR.instances.popup_view_state_description_editor.setData(data.c_contents);
-                    let state_category_value = data.c_etc;
-                    update_radio_buttons("#popup_view_state_category_div", state_category_value);
-                    // jSuccess('"' + reqTitle + '"' + " 상태 카테고리가 변경되었습니다.");
-                }
-            }
-        });
-    }
-}
-
-function update_radio_buttons(container_selector, value) {
-    $(container_selector + " label").removeClass("active");
-    $(container_selector + " input[type='radio']:checked").prop("checked", false);
-
-    let radio_buttons = $(container_selector + " input[type='radio']");
-    radio_buttons.each(function () {
-        if (value && $(this).val() === value) {
-            $(this).parent().addClass("active");
-            $(this).prop("checked", true);
-        }
-    });
-}
-
-function save_req_state_btn_click() {
-    $("#save_req_state").off().click(function() {
-        let state_name = $("#popup_view_state_name").val().trim();
-        if (!state_name) {
-            alert("상태의 이름이 입력되지 않았습니다.");
-            return;
-        }
-        let state_category_value = $("#popup_view_state_category_div input[name='popup_view_state_category_options']:checked").val();
-        if (!state_category_value) {
-            alert("상태 카테고리가 선택되지 않았습니다.");
-            return;
-        }
-        let state_description = CKEDITOR.instances["popup_view_state_description_editor"].getData();
-
-        let data = {
-            ref : 2,
-            c_type : "default",
-            c_etc : state_category_value,
-            c_title : state_name,
-            c_contents : state_description
-        };
-
-        $.ajax({
-            url: "/auth-user/api/arms/reqState/addNode.do",
-            type: "POST",
-            data: data,
-            statusCode: {
-                200: function () {
-                    jSuccess('"' + state_name + '"' + " 상태가 생성되었습니다.");
-                    let active_tab_name = getActiveTab();
-                    if (active_tab_name === "#board") {
-                        setKanban();
-                    }
-                    else if (active_tab_name === "#table") {
-                        dataTableLoad();
-                    }
-
-                    $("#close_modal_popup").trigger("click");
-                }
-            }
-        });
-    });
-}
-
-function update_req_state_btn_click() {
-    $("#update_req_state").off().click(function() {
-        let state_name = $("#popup_view_state_name").val().trim();
-        if (!state_name) {
-            alert("상태의 이름이 입력되지 않았습니다.");
-            return;
-        }
-        let state_category_value = $("#popup_view_state_category_div input[name='popup_view_state_category_options']:checked").val();
-        if (!state_category_value) {
-            alert("상태 카테고리가 선택되지 않았습니다.");
-            return;
-        }
-        let state_description = CKEDITOR.instances["popup_view_state_description_editor"].getData();
-
-        let data = {
-            c_id : $("#popup_view_state_c_id").val(),
-            c_etc : state_category_value,
-            c_title : state_name,
-            c_contents : state_description
-        };
-
-        $.ajax({
-            url: "/auth-user/api/arms/reqState/updateNode.do",
-            type: "PUT",
-            data: data,
-            statusCode: {
-                200: function () {
-                    jSuccess('"' + state_name + '"' + " 상태가 수정되었습니다.");
-                    let active_tab_name = getActiveTab();
-                    if (active_tab_name === "#board") {
-                        setKanban();
-                    }
-                    else if (active_tab_name === "#table") {
-                        dataTableLoad();
-                    }
-
-                    $("#close_modal_popup").trigger("click");
-                }
-            }
-        });
-    });
-}
-
-function delete_req_state_btn_click() {
-    $("#delete_req_state").off().click(function() {
-        let state_name = $("#popup_view_state_name").val().trim();
-
-        let isDelete = confirm(state_name + " 상태를 삭제하시겠습니까?");
-        if (!isDelete) {
-            return;
-        }
-
-
-        let data = {
-            c_id : $("#popup_view_state_c_id").val(),
-        };
-
-        $.ajax({
-            url: "/auth-user/api/arms/reqState/removeNode.do",
-            type: "DELETE",
-            data: data,
-            statusCode: {
-                200: function () {
-                    jSuccess('"' + state_name + '"' + " 상태가 삭제되었습니다.");
-                    let active_tab_name = getActiveTab();
-                    if (active_tab_name === "#board") {
-                        setKanban();
-                    }
-                    else if (active_tab_name === "#table") {
-                        dataTableLoad();
-                    }
-
-                    $("#close_modal_popup").trigger("click");
-                }
-            }
-        });
-    });
-}
-
 function getActiveTab() {
     var activeTab = $('ul[data-group="state_category_tab_group"] li.active a[data-toggle="tab"]')[0].hash;
     return activeTab;
@@ -911,9 +1475,6 @@ function flow_chart() {
             }
         }
     });
-    //--- end
-    //--- draggable operators
-    //-----------------------------------------
 
 }
 
@@ -934,13 +1495,10 @@ function mapping_flow_chart() {
     var cx = $flowchart.width() / 2;
     var cy = $flowchart.height() / 2;
 
-    // Panzoom initialization...
     $flowchart.panzoom();
 
-    // Centering panzoom
     $flowchart.panzoom('pan', -cx + $container.width() / 2, -cy + $container.height() / 2);
 
-    // Panzoom zoom handling...
     var possibleZooms = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
     var currentZoom = 2.5;
     $flowchart.panzoom('zoom', possibleZooms[currentZoom], {
@@ -964,7 +1522,6 @@ function mapping_flow_chart() {
         $lastEventContainer.effect( "highlight", {color: '#3366ff'}, 500);
     }
 
-    // Apply the plugin on a standard, empty div...
     $flowchart.flowchart({
         defaultOperatorClass: 'flowchart-operator',
         onOperatorSelect: function(operatorId) {
@@ -1019,513 +1576,189 @@ function updateFlowchartData(newData) {
 }
 
 
-///////////////////////
-// ALM 서버 셀렉트 박스
-//////////////////////
-function make_alm_server_select_box() {
-    //제품 서비스 셀렉트 박스 이니시에이터
-    $(".chzn-select").each(function() {
-        $(this).select2($(this).data());
-    });
-
-    //ALM 서버 셀렉트 박스 데이터 바인딩
-    $.ajax({
-        url: "/auth-user/api/arms/jiraServerPure/getNodesWithoutRoot.do",
-        type: "GET",
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        progress: true,
-        statusCode: {
-            200: function(data) {
-                console.log(data.result);
-                //////////////////////////////////////////////////////////
-                for (var k in data.result) {
-                    var obj = data.result[k];
-                    alm_server_list[obj.c_id] = obj;
-                    var newOption = new Option(obj.c_title, obj.c_id, false, false);
-                    $("#selected_alm_server").append(newOption).trigger("change");
-                }
-                //////////////////////////////////////////////////////////
-                jSuccess("ALM 서버 조회가 완료 되었습니다.");
-            }
-        },
-        error: function (e) {
-            jError("ALM 서버 조회 중 에러가 발생했습니다. :: " + e);
-        }
-    });
-
-    $("#selected_alm_server").on("select2:open", function() {
-        //슬림스크롤
-        makeSlimScroll(".select2-results__options");
-    });
-
-    // --- select2 ( 제품(서비스) 검색 및 선택 ) 이벤트 --- //
-    $("#selected_alm_server").on("select2:select", function(e) {
-        $("#cloud_project_tree").hide();
-        $("#select-project-div").hide();
-        $("#select-project").text("선택되지 않음");
-        selected_alm_server_id = $("#selected_alm_server").val();
-        selected_alm_server_name = $("#selected_alm_server").select2("data")[0].text;
-        $("#select-alm-server").text(selected_alm_server_name);
-
-        let alm_server_data = alm_server_list[selected_alm_server_id];
-        let alm_server_type = alm_server_data.c_jira_server_type;
-        /*var $flowchart = $('#state_flow_chart');
-        $flowchart.flowchart('setData', {});*/
-
-        if (alm_server_type === "클라우드") {
-            $("#cloud_project_tree").show();
-            $("#select-project-div").show();
-            build_alm_server_jstree(selected_alm_server_id);
-            let data = {};
-            gojs.load(data);
-        }
-        else {
-            mapping_data_load(selected_alm_server_id, alm_server_type);
-
-            //ALM 서버 이슈상태 조회
-            /*$.ajax({
-                url: "/auth-user/api/arms/jiraServer/getJiraIssueStatus.do?c_id=" + selected_alm_server_id ,
-                type: "GET",
-                contentType: "application/json;charset=UTF-8",
-                dataType: "json",
-                progress: true,
-                statusCode: {
-                    200: function(result) {
-                        console.log(result.response);
-                        let alm_status_list = result.response;
-
-                        var data = {
-                            operators: {},
-                            links: {}
-                        };
-
-                        console.log(alm_status_list);
-                        console.log(arms_state_list);
-                        let inputData = arms_state_list;
-                        let outputData = alm_status_list;
-
-                        let width = $flowchart.width();
-
-                        var topPosition = 20;
-                        var leftPositionInput = 20;
-                        var leftPositionOutput = width-200;
-
-                        console.log(width);
-                        inputData.forEach(function(input, index) {
-                            var operatorId = 'operator' + (index + 1);
-                            data.operators[operatorId] = {
-                                top: topPosition + index * 80,
-                                left: leftPositionInput,
-                                properties: {
-                                    title: "A-RMS - " +input.c_title,
-                                    class: 'input-operator',
-                                    inputs: {},
-                                    outputs: {
-                                        output_1: {
-                                            label: input.c_title,
-                                        }
-                                    }
-                                }
-                            };
-                        });
-                        outputData.forEach(function(output, index) {
-                            var operatorId = 'operator' + (inputData.length + index + 1);
-                            data.operators[operatorId] = {
-                                top: topPosition + index * 80,
-                                left: leftPositionOutput,
-                                properties: {
-                                    title: "ALM - " + output.c_issue_status_name,
-                                    class: 'output-operator',
-                                    inputs: {
-                                        input_1: {
-                                            label: output.c_issue_status_name,
-                                        }
-                                    },
-                                    outputs: {}
-                                }
-                            };
-                        });
-
-                        console.log(data);
-                        updateFlowchartData(data);
-                        // mapping_flow_chart(alm_status_list, arms_state_list);
-                        //////////////////////////////////////////////////////////
-                        //////////////////////////////////////////////////////////
-                        jSuccess("ALM 서버 상태 조회가 완료 되었습니다.");
-                    }
-                },
-                error: function (e) {
-                    jError("ALM 서버 상태 조회 중 에러가 발생했습니다. :: " + e);
-                }
-            });*/
-        }
-    });
-} // end make_alm_server_select_box()
-
-function mapping_data_load(alm_server_id, alm_server_type, project_id) {
-    if (!alm_server_type) {
-        alm_server_id = alm_server_id || selected_alm_server_id;
-
-        if (!alm_server_id) {
-            alert("선택된 서버가 없습니다.");
-            return;
-        }
-
-        let alm_server_data = alm_server_list[alm_server_id];
-        alm_server_type = alm_server_data.c_jira_server_type;
-    }
-
-    if (alm_server_type === "클라우드") {
-        if (!project_id) {
-            alert("선택된 프로젝트가 없습니다.");
-            return;
-        }
-        else {
-            alert("클라우드 지라의 경우 이슈유형 등 설계가 더 필요합니다.");
-        }
- /*       if (!project_id) {
-            alert("선택된 프로젝트가 없습니다.");
-            return;
-        }
-
-        Promise.all([get_arms_state_list(), get_project_status_list(project_id)])
-            .then(([arms_state_list, alm_status_list]) => {
-                // 두 API 호출 결과를 함께 사용합니다.
-                console.log('ARMS State List:', arms_state_list);
-                console.log('ALM Status List:', alm_status_list);
-
-                if (alm_status_list.length === 0) {
-                    alert("선택된 이슈유형이 없습니다. 서버 관리에서 프로젝트의 이슈유형을 선택해주세요.");
-                    let data = {};
-                    gojs.load(data);
-                    return;
-                }
-
-                let data = create_gojs_data(req_state_category_list, arms_state_list, alm_status_list);
-                // 여기에 두 결과를 함께 사용하는 로직을 추가합니다.
-                gojs.load(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });*/
-    }
-    else {
-
-        Promise.all([get_arms_state_list(), get_alm_status_list(alm_server_id)])
-            .then(([arms_state_list, alm_status_list]) => {
-                // 두 API 호출 결과를 함께 사용합니다.
-                console.log('ARMS State List:', arms_state_list);
-                console.log('ALM Status List:', alm_status_list);
-
-                let data = create_gojs_data(req_state_category_list, arms_state_list, alm_status_list);
-                // 여기에 두 결과를 함께 사용하는 로직을 추가합니다.
-                gojs.load(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    }
+// mapping_id를 기준으로 노드의 키를 찾는 함수
+function find_category_mapping_id(node_data_array, mappingId) {
+    const node = node_data_array.find(node => node.type === "arms-category" && node.c_id === mappingId);
+    return node ? node.key : null;
 }
 
-function create_gojs_data(req_state_category_list, arms_state_list, alm_status_list) {
-    const node_data_array = generate_node_data(req_state_category_list, arms_state_list, alm_status_list); // 노드 데이터 생성
-    console.log(node_data_array);
-    const link_data_araay = generate_link_data(node_data_array); // 링크 데이터 생성
-    console.log(link_data_araay);
+function find_arms_state_mapping_id(node_data_array, mappingId) {
+    const node = node_data_array.find(node => node.type === "arms-state" && node.c_id === mappingId);
+    return node ? node.key : null;
+}
+function generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list) {
+    const node_data_array = [];
+    const link_data_array = [];
 
-    const diagram_data = {
+    const categoryX = 0;
+    const armsX = 300;
+    const almX = 600;
+
+    const ySpacing = 40;
+
+    // Keep track of Y positions for each depth
+    let categoryY = 0;
+    let armsY = 0;
+    let almY = 0;
+
+    // 카테고리 열림, 진행중, 해결됨, 닫힘 노드 생성
+    Object.entries(req_state_category_list).forEach(([key, value]) => {
+        const categoryNodeKey = `카테고리 ${value}`;
+        node_data_array.push({
+            key: categoryNodeKey,
+            text: `카테고리 ${value}`,
+            type: 'arms-category',
+            c_id: key,
+            category: 'Loading',
+            loc: `${categoryX} ${categoryY}`
+        });
+        categoryY += ySpacing;
+    });
+
+    // A-RMS OPEN, PROGRESS, RESOLVED, CLOSED 노드 생성
+    arms_state_list.forEach((state) => {
+        const armsNodeKey = `A-RMS ${state.c_title}`;
+        node_data_array.push({
+            key: armsNodeKey,
+            text: `A-RMS ${state.c_title}`,
+            type: 'arms-state',
+            c_id: state.c_id,
+            mapping_id: state.c_etc,
+            category: 'NoAdd',
+            loc: `${armsX} ${armsY}`
+        });
+        armsY += ySpacing;
+    });
+
+    // ALM 열림, 진행중, 해결됨, 닫힘 노드 생성
+    alm_status_list.forEach((status) => {
+        const almNodeKey = `ALM ${status.c_issue_status_name}`;
+        node_data_array.push({
+            key: almNodeKey,
+            text: `ALM ${status.c_issue_status_name}`,
+            type: 'alm-status',
+            c_id: status.c_id,
+            mapping_id: status.c_req_state_mapping_link,
+            category: 'End',
+            loc: `${almX} ${almY}`
+        });
+        almY += ySpacing;
+    });
+
+    // 링크 데이터 생성
+    node_data_array.forEach((node) => {
+        if (node.type === 'arms-state' && node.mapping_id) {
+            const fromNode = node_data_array.find(n => n.c_id === node.mapping_id);
+            if (fromNode) {
+                link_data_array.push({ from: fromNode.key, to: node.key });
+            }
+        } else if (node.type === 'alm-status' && node.mapping_id) {
+            const fromNode = node_data_array.find(n => n.c_id === node.mapping_id);
+            if (fromNode) {
+                link_data_array.push({ from: fromNode.key, to: node.key });
+            }
+        }
+    });
+
+    return {
         class: 'GraphLinksModel',
         nodeDataArray: node_data_array,
-        linkDataArray: link_data_araay
+        linkDataArray: link_data_array
     };
-
-    return diagram_data;
 }
 
-function generate_node_data(req_state_category_list, arms_state_list, alm_status_list) {
+function generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list) {
     const node_data_array = [];
+    const link_data_array = [];
+    const armsNodeMap = new Map();
 
     // 카테고리 열림, 진행중, 해결됨, 닫힘 노드 생성
     Object.entries(req_state_category_list).forEach(([key, value], index) => {
+        const categoryNodeKey = `카테고리 ${value}`;
         node_data_array.push({
-            key: `카테고리 ${value}`,
+            key: categoryNodeKey,
             text: `카테고리 ${value}`,
             type: 'arms-category',
             c_id: key,
             category: 'Loading',
             loc: `0 ${40 + index * 40}`
         });
-    });
 
-    // A-RMS OPEN, PROGRESS, RESOLVED, CLOSED 노드 생성 (NoAdd 카테고리)
-    arms_state_list.forEach((state, index) => {
-        node_data_array.push({
-            key: `A-RMS ${state.c_title}`,
-            text: `A-RMS ${state.c_title}`,
-            type: 'arms-state',
-            c_id: state.c_id,
-            mapping_id: status.c_req_state_category_mapping_link,
-            category: 'NoAdd',
-            loc: `183 ${40 + index * 40}`
-        });
-    });
-
-    // ALM 열림, 진행중, 해결됨, 닫힘 노드 생성 (End 카테고리)
-    alm_status_list.forEach((status, index) => {
-        node_data_array.push({
-            key: `ALM ${status.c_issue_status_name}`,
-            text: `ALM ${status.c_issue_status_name}`,
-            type: 'alm-status',
-            c_id: status.c_id,
-            mapping_id: status.c_req_state_mapping_link,
-            category: 'End',
-            loc: `366 ${40 + index * 40}`
-        });
-    });
-
-    // Recycle 노드 추가
-    // nodeDataArray.push({
-    //     key: -2,
-    //     category: 'Recycle',
-    //     loc: '600 300'
-    // });
-
-    return node_data_array;
-}
-
-function generate_link_data(node_data_array) {
-    const linkDataArray = [];
-
-    // 링크 데이터 생성
-    node_data_array.forEach((node) => {
-        switch (node.type) {
-            case 'arms-state':
-                switch (node.text) {
-                    case '카테고리 열림':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'A-RMS OPEN') });
-                        break;
-                    case '카테고리 진행중':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'A-RMS PROGRESS') });
-                        break;
-                    case '카테고리 해결됨':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'A-RMS RESOLVED') });
-                        break;
-                    case '카테고리 닫힘':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'A-RMS CLOSED') });
-                        break;
-                }
-                break;
-            case 'alm-status':
-                switch (node.text) {
-                    case 'A-RMS OPEN':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'ALM 열림') });
-                        break;
-                    case 'A-RMS PROGRESS':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'ALM 진행중') });
-                        break;
-                    case 'A-RMS RESOLVED':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'ALM 해결됨') });
-                        break;
-                    case 'A-RMS CLOSED':
-                        linkDataArray.push({ from: node.key, to: findNodeKeyByMappingId(node_data_array, 'ALM 닫힘') });
-                        break;
-                }
-                break;
-        }
-    });
-
-    return linkDataArray;
-}
-
-// mapping_id를 기준으로 노드의 키를 찾는 함수
-function findNodeKeyByMappingId(node_data_array, mappingId) {
-    const node = node_data_array.find(node => node.mapping_id === mappingId);
-    return node ? node.key : null;
-}
-
-function get_arms_state_list() {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/auth-user/api/arms/reqState/getNodesWithoutRoot.do",
-            type: "GET",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function (data) {
-                    resolve(data.result);
-                }
-            },
-            error: function (e) {
-                jError("요구사항 조회 중 에러가 발생했습니다.");
-                reject(e);
-            }
-        });
-    });
-}
-
-function get_alm_status_list(selected_alm_server_id) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/auth-user/api/arms/jiraServer/getJiraIssueStatus.do?c_id=" + selected_alm_server_id,
-            type: "GET",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function(result) {
-                    console.log(result);
-                    resolve(result.response);
-                    jSuccess("ALM 서버 상태 조회가 완료 되었습니다.");
-                }
-            },
-            error: function (e) {
-                jError("ALM 서버 상태 조회 중 에러가 발생했습니다. :: " + e);
-                reject(e);
-            }
-        });
-    });
-}
-
-function get_project_status_list(project_id) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/auth-user/api/arms/jiraProject/getProjectIssueStatus.do?c_id=" + project_id,
-            type: "GET",
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function(result) {
-                    console.log(result);
-                    resolve(result.response);
-                    jSuccess("ALM 프로젝트 상태 조회가 완료 되었습니다.");
-                }
-            },
-            error: function (e) {
-                jError("ALM 프로젝트 상태 조회 중 에러가 발생했습니다. :: " + e);
-                reject(e);
-            }
-        });
-    });
-}
-
-function build_alm_server_jstree(selected_alm_server_id) {
-    var jQueryElementID = "#alm_server_tree";
-    var serviceNameForURL = "/auth-user/api/arms/jiraServerProjectPure/getJiraProjectPure.do?c_id=" + selected_alm_server_id;
-
-    jstree_build(jQueryElementID, serviceNameForURL);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// -- jstree build 설정 -- //
-////////////////////////////////////////////////////////////////////////////////////////
-function jstree_build(jQueryElementID, serviceNameForURL) {
-    console.log("mapping :: jstree_build : ( jQueryElementID ) → " + jQueryElementID);
-    console.log("mapping :: jstree_build : ( serviceNameForURL ) → " + serviceNameForURL);
-
-    console.log("mapping :: jstree_build : ( href ) → " + $(location).attr("href"));
-    console.log("mapping :: jstree_build : ( protocol ) → " + $(location).attr("protocol"));
-    console.log("mapping :: jstree_build : ( host ) → " + $(location).attr("host"));
-    console.log("mapping :: jstree_build : ( pathname ) → " + $(location).attr("pathname"));
-    console.log("mapping :: jstree_build : ( search ) → " + $(location).attr("search"));
-    console.log("mapping :: jstree_build : ( hostname ) → " + $(location).attr("hostname"));
-    console.log("mapping :: jstree_build : ( port ) → " + $(location).attr("port"));
-
-    $(jQueryElementID)
-        .jstree({
-            plugins: ["themes", "json_data", "ui", "crrm", "dnd", "search", "types"],
-            themes: { theme: ["lightblue4"] },
-            json_data: {
-                ajax: {
-                    url: serviceNameForURL,
-                    cache: false,
-                    data: function (n) {
-                        // the result is fed to the AJAX request `data` option
-                        console.log("[ common :: jsTreeBuild ] :: json data load = " + JSON.stringify(n));
-                        return {
-                            c_id: n.attr ? n.attr("id").replace("node_", "").replace("copy_", "") : 1
-                        };
-                    },
-                    success: function (n) {
-                        jSuccess("프로젝트 조회 완료");
-                        $(jQueryElementID).jstree("search", $("#text").val());
-                    }
-                }
-            },
-            search: {
-                show_only_matches: true,
-                search_callback: function (str, node) {
-                    return node.data().search(str);
-                }
-            },
-            types: {
-                max_depth: -2,
-                max_children: -2,
-                valid_children: ["drive"],
-                types: {
-                    default: {
-                        valid_children: "none",
-                        icon: {
-                            image: "../reference/jquery-plugins/jstree-v.pre1.0/themes/attibutes.png"
-                        }
-                    }
-                }
-            },
-        })
-        .bind("select_node.jstree", function (event, data) {
-            if ($.isFunction(jstree_click)) {
-                console.log("[ jsTreeBuild :: select_node ] :: data.rslt.obj.data('id')" + data.rslt.obj.attr("id"));
-                console.log("[ jsTreeBuild :: select_node ] :: data.rslt.obj.data('rel')" + data.rslt.obj.attr("rel"));
-                console.log("[ jsTreeBuild :: select_node ] :: data.rslt.obj.data('class')" + data.rslt.obj.attr("class"));
-                console.log("[ jsTreeBuild :: select_node ] :: data.rslt.obj.children('a')" + data.rslt.obj.children("a"));
-                console.log("[ jsTreeBuild :: select_node ] :: data.rslt.obj.children('ul')" + data.rslt.obj.children("ul"));
-                jstree_click(data.rslt.obj);
-            }
-        })
-        .bind("loaded.jstree", function (event, data) {
-            $(jQueryElementID).slimscroll({
-                height: "200px"
-            });
-        });
-
-    $("#mmenu input, #mmenu button").click(function () {
-        switch (this.id) {
-            case "add_default":
-            case "add_folder":
-                $(jQueryElementID).jstree("create", null, "last", {
-                    attr: {
-                        rel: this.id.toString().replace("add_", "")
-                    }
+        // A-RMS 노드 생성 및 연결
+        arms_state_list.forEach((state, armsIndex) => {
+            if (state.c_etc === key) {
+                const armsNodeKey = `A-RMS ${state.c_title}`;
+                armsNodeMap.set(state.c_id, armsNodeKey);
+                node_data_array.push({
+                    key: armsNodeKey,
+                    text: `A-RMS ${state.c_title}`,
+                    type: 'arms-state',
+                    c_id: state.c_id,
+                    mapping_id: state.c_etc,
+                    category: 'NoAdd',
+                    loc: `300 ${40 + armsIndex * 40}`
                 });
-                break;
-            case "search":
-                $(jQueryElementID).jstree("search", document.getElementById("text").value);
-                break;
-            case "text":
-                break;
-            default:
-                $(jQueryElementID).jstree(this.id);
-                break;
+
+                // 링크 생성
+                link_data_array.push({ from: categoryNodeKey, to: armsNodeKey });
+            }
+        });
+    });
+
+    // A-RMS 노드 생성 및 연결
+    arms_state_list.forEach((state, armsIndex) => {
+        const armsNodeKey = `A-RMS ${state.c_title}`;
+        if (!armsNodeMap.has(state.c_id)) {
+            node_data_array.push({
+                key: armsNodeKey,
+                text: `A-RMS ${state.c_title}`,
+                type: 'arms-state',
+                c_id: state.c_id,
+                mapping_id: state.c_etc,
+                category: 'NoAdd',
+                loc: `300 ${40 + armsIndex * 40}`
+            });
+        }
+
+        // ALM 노드 생성 및 연결
+        alm_status_list.forEach((status, almIndex) => {
+            if (status.c_req_state_mapping_link === state.c_id) {
+                const almNodeKey = `ALM ${status.c_issue_status_name}`;
+                node_data_array.push({
+                    key: almNodeKey,
+                    text: `ALM ${status.c_issue_status_name}`,
+                    type: 'alm-status',
+                    c_id: status.c_id,
+                    mapping_id: status.c_req_state_mapping_link,
+                    category: 'End',
+                    loc: `600 ${40 + almIndex * 40}`
+                });
+
+                // 링크 생성
+                link_data_array.push({ from: armsNodeKey, to: almNodeKey });
+            }
+        });
+    });
+
+    // ALM 노드 생성
+    alm_status_list.forEach((status, almIndex) => {
+        const almNodeKey = `ALM ${status.c_issue_status_name}`;
+        if (!node_data_array.some(node => node.key === almNodeKey)) {
+            node_data_array.push({
+                key: almNodeKey,
+                text: `ALM ${status.c_issue_status_name}`,
+                type: 'alm-status',
+                c_id: status.c_id,
+                mapping_id: status.c_req_state_mapping_link,
+                category: 'End',
+                loc: `600 ${40 + almIndex * 40}`
+            });
         }
     });
 
-    $("#mmenu .form-search").submit(function (event) {
-        event.preventDefault();
-
-        $(jQueryElementID).jstree("search", document.getElementById("text").value);
-    });
-}
-
-function jstree_click(data) {
-    let c_id = data.attr("id").replace("node_", "").replace("copy_", "");
-    let c_title = $(".jstree-clicked").text().trim();
-    $("#select-project").text(c_title);
-
-    mapping_data_load(null, null, c_id);
-}
-
-$("#text").on("input", function () {
-    var searchString = $(this).val();
-    $("#alm_server_tree").jstree("search", searchString);
-});
+    return {
+                class: 'GraphLinksModel',
+                nodeDataArray: node_data_array,
+                linkDataArray: link_data_array
+            };
+}*/
