@@ -365,9 +365,8 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
                 console.log('ARMS State List:', arms_state_list);
                 console.log('ALM Status List:', alm_status_list);
 
-                let data = create_gojs_data(req_state_category_list, arms_state_list, alm_status_list);
-                // 여기에 두 결과를 함께 사용하는 로직을 추가합니다.
-                gojs.load(data);
+                let diagram_data = generate_diagram_data(req_state_category_list, arms_state_list, alm_status_list);
+                gojs.load(diagram_data);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -375,25 +374,7 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
     }
 }
 
-function create_gojs_data(req_state_category_list, arms_state_list, alm_status_list) {
-/*    const node_data_array = generate_node_data(req_state_category_list, arms_state_list, alm_status_list); // 노드 데이터 생성
-    console.log(node_data_array);
-    const link_data_array = generate_link_data(node_data_array); // 링크 데이터 생성
-    console.log(link_data_array);*/
-
-    const diagram_data = generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list); // 노드 데이터 생성
-
-/*    const diagram_data = {
-        class: 'GraphLinksModel',
-        nodeDataArray: node_data_array,
-        linkDataArray: link_data_array
-    };*/
-
-
-    return diagram_data;
-}
-
-function generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list) {
+function generate_diagram_data(req_state_category_list, arms_state_list, alm_status_list) {
     const node_data_array = [];
     const link_data_array = [];
 
@@ -473,23 +454,12 @@ function generate_node_and_link_data(req_state_category_list, arms_state_list, a
         }
     });
 
-    // Depth 2번 노드들이 연결된 데이터 순서대로 나열되도록 정렬
-    // Depth 2번 노드들이 mapping_id 오름차순으로 나열되도록 정렬
     const sortedArmsNodes = Object.values(armsNodes).sort((a, b) => {
+        const mappingA = a.mapping_id || "9999";
+        const mappingB = b.mapping_id || "9999";
         // mapping_id를 기준으로 오름차순 정렬
-        return a.mapping_id.localeCompare(b.mapping_id);
+        return mappingA.localeCompare(mappingB);
     });
-    // const sortedArmsNodes = Object.values(armsNodes).sort((a, b) => {
-    //
-    //     const fromNodeA = categoryNodes[a.mapping_id];
-    //     const fromNodeB = categoryNodes[b.mapping_id];
-    //     if (fromNodeA && fromNodeB) {
-    //         return fromNodeA.loc.localeCompare(fromNodeB.loc);
-    //     }
-    //     return 0;
-    // });
-
-    console.log(sortedArmsNodes);
 
     armsY = 0;
     sortedArmsNodes.forEach(node => {
@@ -712,8 +682,6 @@ function jstree_build(jQueryElementID, serviceNameForURL) {
 function jstree_click(data) {
 
     let rel = data.attr('rel');
-    let project_c_id;
-    let issueType_c_id;
     if (rel === "project") {
         $(".jstree-clicked").removeClass("jstree-clicked");
         console.log(rel);
@@ -729,7 +697,6 @@ function jstree_click(data) {
         let issueType_c_id = data.attr("id").replace("issueType_", "").replace("copy_", "");
         mapping_data_load(null, null, project_c_id, issueType_c_id);
     }
-
 }
 
 $("#text").on("input", function () {
