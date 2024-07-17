@@ -839,7 +839,101 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
-
+<!-- 함께 생성된 요구사항 모달 -->
+<div
+	id="reqIssue_alongWith_modal"
+	class="modal fade"
+	role="dialog"
+	aria-labelledby="myModalLabel"
+	aria-hidden="true"
+	style="display: none; border-radius: 10px">
+	<div
+		class="modal-dialog"
+		style="width: 80%">
+		<div class="modal-content modalDarkBack">
+			<div
+				class="modal-header"
+				style="padding: 0px; border-bottom: 1px">
+				<h4
+					class="modal-title font14"
+					id="my_modal_label2"
+					style="color: #f8f8f8; text-align: left; padding: 5px">
+					<span
+						class="font13"
+						id="my_modal2_title"
+						style="font-weight: bold">
+						<i class="fa fa-edit"></i>
+						함께 생성된 요구사항 이슈 확인
+					</span>
+					<div
+						class="gradient_middle_border"
+						style="width: 100%; height: 2px"></div>
+					<blockquote
+						class="search-result"
+						style="border-left: 5px solid #e5603b">
+						<p style="font-size: 13px; padding-left: 10px">
+							선택한 요구사항 이슈와 연결이슈 및 서브테스크(하위작업)의 상세정보를 확인하실 수 있습니다.
+							</br>
+							ALM 이슈로 직접 이동하시려면 이슈 키 컬럼의 링크 <i class="fa fa-link" style="transform: rotate(90deg)"></i> 아이콘을 클릭하세요.
+						</p>
+					</blockquote>
+				</h4>
+				<div
+					class="widget-controls"
+					style="padding-top: 10px">
+					<a
+						title="Options"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-cog"></i>
+					</a>
+					<a
+						data-widgster="expand"
+						title="Expand"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-up"></i>
+					</a>
+					<a
+						data-widgster="collapse"
+						title="Collapse"
+						class="hidden"
+						href="#">
+						<i class="glyphicon glyphicon-chevron-down"></i>
+					</a>
+					<a
+						data-widgster="close"
+						title="Close"
+						href="#"
+						data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</div>
+			</div>
+			<div
+				class="modal-body"
+				style="padding: 5px; border-top: 1px solid rgba(51, 51, 51, 0.3); padding-top: 5px">
+				<table
+					id="reqIssue_alongWith_table"
+					class="display"
+					style="width: 100%; border-top: 1px dashed rgba(51, 51, 51, 0.3); color: #f8f8f8"></table>
+			</div>
+			<div
+				class="modal-footer"
+				style="background-color: transparent; padding: 5px; text-align: right; border-top: 0px">
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
 <!-- 삭제된 요구사항 리포트 -->
 <div
 		id="deleted_issue_report_modal"
