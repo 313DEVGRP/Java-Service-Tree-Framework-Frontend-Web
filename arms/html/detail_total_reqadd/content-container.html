@@ -499,7 +499,7 @@
 													placeholder="Requirements Last Created Date" />
 											</div>
 										</div>
-										<div class="control-group">
+										<div class="control-group" style="margin-bottom: 10px;">
 											<label class="control-label font13">제품(서비스) 리뷰어 :</label>
 											<div
 												class="controls input-group"
@@ -597,6 +597,35 @@
 												<span class="input-group-addon font11">INFO : 공동 책임자</span>
 											</div>
 										</div>
+
+										<div class="control-group" id="pdservice_detail_drawio_div" for="pdservice_detail_drawio_contents" style="display: none;">
+											<label class="control-label font13">drawio :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+												<input type="hidden" id="pdservice_detail_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+												<button type="button" id="btn_product_detail_edit_drawio" class="btn btn-primary btn-sm" onclick="viewDrawIO();">drawio 확인하러 가기</button>
+												<span id="product_detail_edit_drawio_time" class="drawio-time"></span>
+											</div>
+										</div>
+
+										<div id="pdservice_detail_drawio_swiper" class="control-group" for="pdservice_detail_drawio_swiper_container" style="display: none">
+											<label class="control-label font13">drawio 썸네일 :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px;">
+													<span class="input-group-addon">
+															<i class="glyphicon glyphicon-camera"></i>
+													</span>
+												<div class="swiper main-swiper" id="pdservice_detail_drawio_swiper_container">
+													<div class="swiper-wrapper"></div>
+													<div class="swiper-button-next"></div>
+													<div class="swiper-button-prev"></div>
+													<div class="swiper-pagination"></div>
+												</div>
+												<div thumbsSlider="" class="swiper thumbnail-swiper" id="pdservice_detail_drawio_swiper_container_thumbs">
+													<div class="swiper-wrapper"></div>
+												</div>
+											</div>
+										</div>
+
+
 										<div class="control-group">
 											<label
 												class="control-label"

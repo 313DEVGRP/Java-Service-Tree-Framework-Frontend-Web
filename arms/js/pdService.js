@@ -51,6 +51,8 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js",
 			"../reference/jquery-plugins/swiper-11.1.4/swiper-bundle.min.js",
 			"../reference/jquery-plugins/swiper-11.1.4/swiper-bundle.min.css",
+			"./js/common/swiperHelper.js",
+			"./css/customSwiper.css"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -163,10 +165,6 @@ function execDocReady() {
 		});
 }
 
-function removeDrawIOConfig() {
-	localStorage.removeItem('.drawio-config');
-}
-
 function drawio() {
 
     // 로컬 스토리지 초기화
@@ -178,19 +176,19 @@ function drawio() {
 				jError("제품(서비스)을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id='+selectId+ '&type=create&splash=0', '_blank');
+			window.open('/reference/drawio?id='+selectId+ '&type=create&splash=0&armsType=product', '_blank');
 		} else if (this.id === 'btn_product_detail_edit_drawio') {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update&splash=0', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update&splash=0&armsType=product', '_blank');
 		} else if(this.id === "btn_modal_product_detail_edit_drawio") {
 			if(selectedDetailId == "" || selectedDetailId == undefined){
 				jError("제품(서비스) 산출물을 선택해 주세요.");
 				return false;
 			}
-			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update&splash=0', '_blank');
+			window.open('/reference/drawio?id=' + selectedDetailId + '&type=update&splash=0&armsType=product', '_blank');
 		} else {
 			jError("drawio was clicked but id is not matched");
 			return false;
@@ -218,10 +216,6 @@ function setDrawioImage(localStorageKey, localStorageValue, mode) {
 		$("#product_detail_view_pdservice_detail_drawio_swiper").show();
 	}
 
-}
-
-function changeBtnText(btn, msg) {
-    $(btn).text(msg);
 }
 
 function setDefaultBtnText() {
@@ -761,72 +755,7 @@ function detailClick(element, c_id) {
 	});
 }
 
-function addImageToSwiper(imageSrcArray, swiperContainerId) {
-	var mainSwiperContainer = document.querySelector('#' + swiperContainerId + ' .swiper-wrapper');
-	var thumbsSwiperContainer = document.querySelector('#' + swiperContainerId + '_thumbs' + ' .swiper-wrapper');
 
-	var swiperInstance = document.querySelector('#' + swiperContainerId).swiper;
-	var thumbsSwiperInstance = document.querySelector('#' + swiperContainerId + '_thumbs').swiper;
-
-	if (swiperInstance) {
-		swiperInstance.removeAllSlides();
-	}
-
-	if (thumbsSwiperInstance) {
-		thumbsSwiperInstance.removeAllSlides();
-	}
-
-	for (var i = 0; i < imageSrcArray.length; i++) {
-		var mainSlide = document.createElement('div');
-		mainSlide.className = 'swiper-slide';
-		var mainImage = document.createElement('img');
-		mainImage.src = imageSrcArray[i];
-		mainSlide.appendChild(mainImage);
-		mainSwiperContainer.appendChild(mainSlide);
-
-		var thumbsSlide = document.createElement('div');
-		thumbsSlide.className = 'swiper-slide';
-		var thumbsImage = document.createElement('img');
-		thumbsImage.src = imageSrcArray[i];
-		thumbsSlide.appendChild(thumbsImage);
-		thumbsSwiperContainer.appendChild(thumbsSlide);
-	}
-
-	thumbsSwiperInstance = new Swiper('#' + swiperContainerId + '_thumbs', {
-		spaceBetween: 0,
-		// slidesPerView: imageSrcArray.length,
-		slidesPerView: 4,
-		freeMode: true,
-		watchSlidesVisibility: true,
-		watchSlidesProgress: true,
-	});
-
-	swiperInstance = new Swiper('#' + swiperContainerId, {
-		spaceBetween: 10,
-		pagination: {
-			el: '.swiper-pagination',
-			// clickable: true,
-			type: "fraction",
-		},
-		slidesPerView: 1,
-		navigation: {
-			nextEl: '.swiper-button-next',
-			prevEl: '.swiper-button-prev',
-		},
-		thumbs: {
-			swiper: thumbsSwiperInstance,
-		},
-	});
-
-	var slides = document.querySelectorAll("#" + swiperContainerId + " .swiper-slide");
-	if (slides.length === 1) {
-		document.querySelector("#" + swiperContainerId + " .swiper-pagination").style.display = "block";
-		document.querySelector("#" + swiperContainerId + " .swiper-button-next").style.display = "block";
-		document.querySelector("#" + swiperContainerId + " .swiper-button-prev").style.display = "block";
-		swiperInstance.navigation.nextEl.classList.add("swiper-button-disabled");
-		swiperInstance.navigation.prevEl.classList.add("swiper-button-disabled");
-	}
-}
 
 function init_versionList() {
 	var menu;
@@ -1082,6 +1011,7 @@ function product_detail_save_btn_click() {
 					productServiceDetailDataLoad(selectId);
 					localStorage.removeItem("create-drawio-" + selectId);
 					localStorage.removeItem("create-drawio-image-raw-" + selectId);
+					localStorage.removeItem("create-drawio-time-" + selectId);
 					removeDrawIOConfig();
 				}
 			},
@@ -1295,6 +1225,7 @@ function product_detail_update_btn_click() {
 					}, 300);
 					localStorage.removeItem("update-drawio-" + tempSelectDetailId);
 					localStorage.removeItem("update-drawio-image-raw-" + tempSelectDetailId);
+					localStorage.removeItem("update-drawio-time-" + tempSelectDetailId);
 					removeDrawIOConfig();
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}
@@ -1354,6 +1285,7 @@ function product_detail_update_btn_click() {
 					}, 300);
 					localStorage.removeItem("update-drawio-" + tempSelectDetailId);
 					localStorage.removeItem("update-drawio-image-raw-" + tempSelectDetailId);
+					localStorage.removeItem("update-drawio-time-" + tempSelectDetailId);
 					removeDrawIOConfig();
 					jSuccess(detailName + "의 데이터가 변경되었습니다.");
 				}

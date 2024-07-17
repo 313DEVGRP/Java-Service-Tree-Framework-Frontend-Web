@@ -142,19 +142,34 @@
 										class="form-horizontal"
 										method="post">
 									<fieldset>
-										<div id="pdservice_detail_drawio_div" class="control-group" for="pdservice_detail_drawio_image_raw">
-											<label class="font13" style="float: left; padding-top: 6px;">drawio 썸네일 :</label>
-											<div class="controls form-group input-group" style="margin-left: 105px;">
-                                                <span class="input-group-addon">
-                                                    <i class="glyphicon glyphicon-camera"></i>
-                                                </span>
-												<div class="drawio-gallery">
-													<div class="drawio-image darkBack">
-														<img id="pdservice_detail_drawio_image_raw" class="parsley-validated font13 hidden" src="" />
-													</div>
+										<div class="control-group" id="pdservice_detail_drawio_div" for="pdservice_detail_drawio_contents" style="display: none;">
+											<label class="control-label font13">drawio :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+												<input type="hidden" id="pdservice_detail_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+												<button type="button" id="btn_product_detail_edit_drawio" class="btn btn-primary btn-sm" onclick="viewDrawIO();">drawio 확인하러 가기</button>
+												<span id="product_detail_edit_drawio_time" class="drawio-time"></span>
+											</div>
+										</div>
+
+										<div id="pdservice_detail_drawio_swiper" class="control-group" for="pdservice_detail_drawio_swiper_container" style="display: none">
+											<label class="control-label font13">drawio 썸네일 :</label>
+											<div class="controls form-group input-group" style="margin-left: 180px;">
+													<span class="input-group-addon">
+															<i class="glyphicon glyphicon-camera"></i>
+													</span>
+												<div class="swiper main-swiper" id="pdservice_detail_drawio_swiper_container">
+													<div class="swiper-wrapper"></div>
+													<div class="swiper-button-next"></div>
+													<div class="swiper-button-prev"></div>
+													<div class="swiper-pagination"></div>
+												</div>
+												<div thumbsSlider="" class="swiper thumbnail-swiper" id="pdservice_detail_drawio_swiper_container_thumbs">
+													<div class="swiper-wrapper"></div>
 												</div>
 											</div>
 										</div>
+
+
 
 										<div class="control-group">
 											<label class="control-label" style="margin-top: 10px">제품(서비스) 산출물 컨텐츠 :</label>

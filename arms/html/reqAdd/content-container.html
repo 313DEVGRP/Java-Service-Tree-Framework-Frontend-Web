@@ -929,6 +929,27 @@
 																<span class="input-group-addon font11">INFO : 공동 책임자</span>
 															</div>
 														</div>
+														<br>
+														<div class="control-group"  id="req_add_view_drawio_swiper" for="req_add_view_drawio_swiper_container" style="display: none;">
+															<label class="control-label font13">drawio 썸네일 :</label>
+															<div class="controls form-group input-group" style="margin-left: 180px;">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-camera"></i>
+																</span>
+																<div class="swiper main-swiper" id="req_add_view_drawio_swiper_container">
+																	<div class="swiper-wrapper"></div>
+																	<div class="swiper-button-next"></div>
+																	<div class="swiper-button-prev"></div>
+																	<div class="swiper-pagination"></div>
+																</div>
+																<div thumbsSlider="" class="swiper thumbnail-swiper"
+																		 id="req_add_view_drawio_swiper_container_thumbs">
+																	<div class="swiper-wrapper">
+																	</div>
+																</div>
+															</div>
+														</div>
+
 														<div class="control-group">
 															<label
 																class="control-label"
@@ -1349,47 +1370,44 @@
 																	</div>
 																</div>
 															</div>
-															<div class="control-group"
-                                                                 id="req_edit_layer_reviewers">
-																<label
-																	class="control-label"
-																	for="editview_req_reviewers">
-																	요구사항 리뷰어 :
-																</label>
-																<div
-																	class="controls form-group"
-																	style="margin-bottom: 10px; margin-left: 180px">
+															<div class="control-group" id="req_edit_layer_reviewers">
+																<label class="control-label" for="editview_req_reviewers">요구사항 리뷰어 :</label>
+																<div class="controls form-group" style="margin-bottom: 10px; margin-left: 180px">
 																	<div class="input-group">
-																		<span class="input-group-addon">
-																			<i class="glyphicon glyphicon-inbox"></i>
-																		</span>
-																		<select
-																			id="editview_req_reviewers"
-																			class="js-data-example-ajax form-control font13 darkBack"
-																			name="selectedReviewers[]"
-																			multiple="multiple"
-																			style="width: 100%; color: #a4c6ff"></select>
+																		<span class="input-group-addon"><i class="glyphicon glyphicon-inbox"></i></span>
+																		<select id="editview_req_reviewers" class="js-data-example-ajax form-control font13 darkBack" name="selectedReviewers[]" multiple="multiple" style="width: 100%; color: #a4c6ff"></select>
 																	</div>
 																</div>
 															</div>
-															<div class="control-group"
-                                                                 id="req_edit_layer_req_contents">
-																<label
-																	class="control-label"
-																	for="edit_tabmodal_editor">
-																	요구사항 내용 :
-																</label>
-																<div
-																	class="controls form-group"
-																	style="margin-bottom: 10px; margin-left: 180px">
-																	<div
-																		class="input-group"
-																		style="padding-top: 5px">
-																		<code>
-																			입력 창이 좁다면 하단의
-																			<span class="glyphicon glyphicon-fullscreen"></span>
-																			( 풀스크린 편집 ) 아이콘을 클릭하세요
-																		</code>
+															<div class="control-group" for="req_add_edit_drawio_contents"><label class="control-label font13">drawio :</label>
+																<div class="controls form-group input-group" style="margin-left: 180px"><span class="input-group-addon"><i class="glyphicon glyphicon-gift"></i></span>
+																	<input type="hidden" id="req_add_edit_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important" />
+																	<button type="button" id="btn_req_add_edit_drawio" class="btn btn-primary btn-sm">drawio 편집하러 가기</button>
+																	<span id="req_add_edit_drawio_time" class="drawio-time"></span>
+																</div>
+															</div>
+															<div id="req_add_edit_drawio_swiper" class="control-group" for="req_add_edit_drawio_swiper_container" style="display: none">
+																<label class="control-label font13">drawio 썸네일 :</label>
+																<div class="controls form-group input-group" style="margin-left: 180px;">
+																<span class="input-group-addon">
+																		<i class="glyphicon glyphicon-camera"></i>
+																</span>
+																	<div class="swiper main-swiper" id="req_add_edit_drawio_swiper_container">
+																		<div class="swiper-wrapper"></div>
+																		<div class="swiper-button-next"></div>
+																		<div class="swiper-button-prev"></div>
+																		<div class="swiper-pagination"></div>
+																	</div>
+																	<div thumbsSlider="" class="swiper thumbnail-swiper" id="req_add_edit_drawio_swiper_container_thumbs">
+																		<div class="swiper-wrapper"></div>
+																	</div>
+															</div>
+
+															<div class="control-group" id="req_edit_layer_req_contents">
+																<label class="control-label" for="edit_tabmodal_editor">요구사항 내용 :</label>
+																<div class="controls form-group" style="margin-bottom: 10px; margin-left: 180px">
+																	<div class="input-group" style="padding-top: 5px">
+																		<code>입력 창이 좁다면 하단의<span class="glyphicon glyphicon-fullscreen"></span>( 풀스크린 편집 ) 아이콘을 <클릭하세요></클릭하세요></code>
 																	</div>
 																</div>
 																<div
@@ -2288,6 +2306,40 @@
 										placeholder="요구사항 시작날짜를 입력해 주세요" />
 							</div>
 						</div>
+
+						<div class="control-group col-sm-12" id="modal_req_add_drawio_div">
+							<div class="controls form-group col-sm-1">&nbsp;</div>
+							<label for="req_title" class="control-label" style="color: #f8f8f8">
+								drawio
+								<span class="required">*</span>
+								<span class="input-group-addon" style="display: inline !important"><i class="glyphicon glyphicon-calendar"></i></span>
+							</label>
+							<div class="controls form-group col-sm-8">
+								<input type="hidden" id="modal_req_add_drawio_contents" name="" class="form-control parsley-validated font13 darkBack" data-placement="top" data-original-title="" required="required" placeholder="drawio" style="border: 0px !important; color: #a4c6ff !important">
+								<button type="button" id="btn_modal_req_add_drawio" class="btn btn-primary btn-sm">drawio 등록하러 가기</button>
+								<span id="modal_req_add_drawio_time" class="drawio-time"></span>
+							</div>
+						</div>
+
+						<div id="modal_req_add_drawio_swiper" class="control-group col-sm-12" for="modal_req_add_drawio_swiper_container" style="display: none">
+							<label class="control-label font13">drawio 썸네일 : </label>
+							<div class="controls form-group input-group" style="margin-left: 180px;">
+								<span class="input-group-addon">
+										<i class="glyphicon glyphicon-camera"></i>
+								</span>
+								<div class="swiper main-swiper" id="modal_req_add_drawio_swiper_container">
+									<div class="swiper-wrapper"></div>
+									<div class="swiper-button-next"></div>
+									<div class="swiper-button-prev"></div>
+									<div class="swiper-pagination"></div>
+								</div>
+								<div thumbsSlider="" class="swiper thumbnail-swiper" id="modal_req_add_drawio_swiper_container_thumbs">
+									<div class="swiper-wrapper"></div>
+								</div>
+							</div>
+						</div>
+
+
 						<div class="control-group col-sm-12">
 							<div class="controls form-group col-sm-1">&nbsp;</div>
 							<label

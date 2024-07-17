@@ -4,6 +4,7 @@
 var urlParams;
 var selectedPdService;
 var selectedPdServiceVersion;
+var selectedPdServiceDetail;
 var selectedJiraServer;
 var selectedJiraProject;
 var selectedJsTreeId; // 요구사항 아이디
@@ -58,7 +59,11 @@ function execDocReady() {
             "../reference/light-blue/lib/jquery.iframe-transport.js",
             "../reference/light-blue/lib/jquery.fileupload.js",
             "../reference/light-blue/lib/jquery.fileupload-fp.js",
-            "../reference/light-blue/lib/jquery.fileupload-ui.js"
+            "../reference/light-blue/lib/jquery.fileupload-ui.js",
+						"../reference/jquery-plugins/swiper-11.1.4/swiper-bundle.min.js",
+						"../reference/jquery-plugins/swiper-11.1.4/swiper-bundle.min.css",
+						"./js/common/swiperHelper.js",
+						"./css/customSwiper.css"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -79,7 +84,6 @@ function execDocReady() {
 			file_upload_setting();
 			init_pdDetailList();
 			dataLoad();
-
 			// --- 에디터 설정 --- //
 			var waitCKEDITOR = setInterval(function () {
 				try {
@@ -227,8 +231,14 @@ function detailClick(element, c_id) {
 			CKEDITOR.instances.pdservice_detail_contents.setData(json.c_contents); // 상세 보기
 
 			if (json.c_drawio_image_raw != null && json.c_drawio_image_raw != "") {
-				$("#pdservice_detail_drawio_image_raw").attr("src", json.c_drawio_image_raw);
-				$("#pdservice_detail_drawio_image_raw").removeClass('hidden');
+				var imageSrcArray = Array(1).fill(json.c_drawio_image_raw);
+				addImageToSwiper(imageSrcArray, "pdservice_detail_drawio_swiper_container");
+				$("#pdservice_detail_drawio_swiper").show();
+				$("#pdservice_detail_drawio_div").show();
+				selectedPdServiceDetail = json.c_id;
+			} else {
+				$("#pdservice_detail_drawio_swiper").hide();
+				$("#pdservice_detail_drawio_div").hide();
 			}
 
 			var $fileupload = $("#fileupload");
@@ -251,4 +261,11 @@ function detailClick(element, c_id) {
 		$("#text").html("요청이 완료되었습니다!");
 		console.log(xhr + status);
 	});
+}
+
+function viewDrawIO() {
+	if(selectedPdServiceDetail) {
+		window.open('/reference/drawio?id='+selectedPdServiceDetail+ '&type=view&splash=0&armsType=product', '_blank');
+	}
+	return false;
 }
