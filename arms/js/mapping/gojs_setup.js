@@ -61,12 +61,6 @@ var gojs = (function () {
                 // output port
                 $(go.Panel,
                     'Auto',
-                    { alignment: go.Spot.Right, portId: 'from', fromLinkable: true, cursor: 'pointer', click: addNodeAndLink },
-                    $(go.Shape, 'Circle', { width: 22, height: 22, fill: 'white', stroke: 'dodgerblue', strokeWidth: 3 }),
-                    $(go.Shape, 'PlusLine', { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
-                ),
-/*                $(go.Panel,
-                    'Auto',
                     { alignment: go.Spot.Right, portId: 'from', fromLinkable: true, cursor: 'pointer', click: (e, obj) => {
                             if (obj.part.data.category !== 'NoAdd') {
                                 addNodeAndLink(e, obj);
@@ -74,7 +68,7 @@ var gojs = (function () {
                         }},
                     $(go.Shape, 'Diamond', { width: 11, height: 11, fill: 'white', stroke: 'dodgerblue', strokeWidth: 3 }),
                     $(go.Shape, 'PlusLine', new go.Binding('visible', '', (data) => data.category !== 'NoAdd').ofObject(), { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
-                ),*/
+                ),
                 // input port
                 $(go.Panel,
                     'Auto',
@@ -447,8 +441,6 @@ var gojs = (function () {
         }
     }
     // end DragLinkingTool
-
-
 
     return {
         init, save, load, layout
