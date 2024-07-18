@@ -355,7 +355,7 @@ function bind_VersionData_By_PdService() {
 
 				var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
 				// 이슈리스트 데이터테이블
-				dataTableLoad($("#selected_pdService").val(), endPointUrl);
+				setReqStatusTable(endPointUrl);
 
                 $("#deleted_issue_report_modal").on("shown.bs.modal", function(event) {
                     endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/deletedIssueList.do?version="+selectedVersionId;
@@ -370,20 +370,311 @@ function bind_VersionData_By_PdService() {
 	});
 }
 
+function setReqStatusTable(endPointUrl) {
+   $.ajax({
+      url: "/auth-user/api/arms/reqStatus" + endPointUrl,
+      type: "GET",
+      contentType: "application/json;charset=UTF-8",
+      dataType: "json",
+      progress: true,
+      statusCode: {
+         200: function (apiResponse) {
+
+            let data = apiResponse.body;
+            let tableData = processData(data);
+            dataTableLoad("#reqstatustable", tableData);
+         }
+      }
+   });
+}
+
+function processData(data) {
+
+  const nodes = {};
+  data.forEach(item => {
+    nodes[item.key] = { ...item, children: [] };
+  });
+
+  // 트리 구성
+  data.forEach(item => {
+    if (!item.isReq && item.parentReqKey !== item.upperKey) {
+      // 상위 항목의 children에 추가
+      let parent = nodes[item.upperKey];
+      while (parent && parent.upperKey !== parent.parentReqKey) {
+        parent = nodes[parent.upperKey];
+      }
+      if (parent) {
+        parent.children.push(nodes[item.key]);
+      }
+    }
+  });
+
+  // 상위 항목만 필터링
+  return data.filter(item => item.isReq || (item.isReq === false && item.parentReqKey === item.upperKey)).map(item => nodes[item.key]);
+}
+
+function format(d) {
+    return '<div class="child-table-container"><table class="display child-table" style="width:100%"><thead><tr><th>요구사항 구분</th><th>ALM Issue Key</th><th>Version</th><th>ALM Issue Title</th><th>ALM project</th><th>ALM Issue Type</th><th>ALM Assignee</th><th>ALM Priority</th><th>ALM Status</th><th>ALM Created</th><th>ALM Updated</th><th>ALM Resolution</th></tr></thead><tbody></tbody></table></div>';
+}
+
+function initializeChildTable(childrenData, container) {
+    var columnList = [
+        {
+            name: "isReq",
+            title: "요구사항 구분",
+            data: "isReq",
+            render: function (data, type, row, meta) {
+                if (row.connectType === "subtask") {
+                    return "<div style='color: #f8f8f8'>" + row.upperKey + "의 하위 이슈</div>";
+                } else {
+                    return "<div style='color: #f8f8f8'>" + row.upperKey + "의 연결 이슈</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "key",
+            title: "ALM Issue Key",
+            data: "key",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "pdServiceVersions",
+            title: "Version",
+            data: "pdServiceVersions",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    let verNameList = [];
+                    let verHtml =``;
+                        data.forEach(version_id => {
+                        let versionInfo = versionListData.find(version => version["c_id"] === version_id);
+                        if(versionInfo) {
+                            verNameList.push(versionInfo["c_title"]);
+                            verHtml+= versionInfo["c_title"]+`<br/>`;
+                        }
+                    });
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + verHtml + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "summary",
+            title: "ALM Issue Title",
+            data: "summary",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s>" + data + "</s>";
+                    }
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "project.project_key",
+            title: "ALM project",
+            data: "project.project_name",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "issuetype.issuetype_name",
+            title: "ALM Issue Type",
+            data: "issuetype.issuetype_name",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "assignee.assignee_displayName",
+            title: "ALM Assignee",
+            data: "assignee.assignee_displayName",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                }
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "priority.priority_name",
+            title: "ALM Priority",
+            data: "priority.priority_name",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "status.status_name",
+            title: "ALM Status",
+            data: "status.status_name",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "created",
+            title: "ALM Created",
+            data: "created",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "updated",
+            title: "ALM Updated",
+            data: "updated",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        },
+        {
+            name: "resolutiondate",
+            title: "ALM Resolution",
+            data: "resolutiondate",
+            render: function (data, type, row, meta) {
+                if (isEmpty(data) || data === "false") {
+                    return "<div style='color: #808080'>N/A</div>";
+                } else {
+                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+                }
+                return data;
+            },
+            className: "dt-body-left",
+            visible: true
+        }
+    ];
+
+    var columnDefList = [{
+        "defaultContent": "<div style='color: #808080'>N/A</div>",
+        "targets": "_all"
+    }];
+    var orderList = [[2, "asc"]];
+    var rowsGroupList = [];
+    var buttonList = [];
+
+    var childTable = container.find('table.child-table').DataTable({
+        data: childrenData,
+        columns: columnList,
+        columnDefs: columnDefList,
+        order: orderList,
+        rowsGroup: rowsGroupList,
+        buttons: buttonList,
+        paging: false,
+        searching: false,
+        info: false,
+        responsive: true,
+        autoWidth: false
+    });
+
+    container.find('tbody').on('click', 'td.details-control', function() {
+        var tr = $(this).closest('tr');
+        var row = childTable.row(tr);
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+            initializeChildTable(row.data().children, tr.next('tr').find('div.child-table-container'));
+        }
+    });
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function dataTableLoad(selectId, endPointUrl) {
+function dataTableLoad(table, tableData) {
 	var columnList = [
 		{ name: "parentReqKey", title: "부모 요구사항 키", data: "parentReqKey", visible: false },
+		{
+		    className: "details-control",
+            orderable: false,
+            data: null,
+            title: '',
+            defaultContent: '',
+            render: function(data, type, row) {
+                return row.children && row.children.length > 0 ? '<i class="fa fa-angle-down"></i>' : '';
+            },
+            visible: true
+        },
 		{
 			name: "isReq",
 			title: "요구사항 구분",
 			data: "isReq",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data == false) {
-					return "<div style='color: #808080'>" + row.parentReqKey + "의 연결 이슈</div>";
+					return "<div style='color: #f8f8f8'>" + row.parentReqKey + "의 연결 이슈</div>";
 				} else {
 
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + row.key + "</div>";
@@ -419,7 +710,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					// data-row 에 API에 맞는 param 설정 예정.
 
@@ -459,7 +750,7 @@ function dataTableLoad(selectId, endPointUrl) {
 						}
 					});
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + verHtml + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + verHtml + "</div>";
 					} else {
 						return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
 					}
@@ -483,7 +774,7 @@ function dataTableLoad(selectId, endPointUrl) {
                         displayText = "<s>" + data + "</s>";
                     }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + displayText + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
@@ -501,7 +792,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -519,7 +810,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -537,7 +828,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					} else {
 						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 					}
@@ -556,7 +847,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -574,7 +865,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -593,7 +884,7 @@ function dataTableLoad(selectId, endPointUrl) {
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
 
-						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
 				}
@@ -611,7 +902,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
 				}
@@ -629,7 +920,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -647,7 +938,7 @@ function dataTableLoad(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + dateFormat(data) + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
 				}
@@ -663,10 +954,10 @@ function dataTableLoad(selectId, endPointUrl) {
 		"defaultContent": "<div style='color: #808080'>N/A</div>",
 		"targets": "_all"
 	}];
-	var orderList = [[1, "asc"]];
-	var jquerySelector = "#reqstatustable";
-	var ajaxUrl = "/auth-user/api/arms/reqStatus" + endPointUrl;
-	var jsonRoot = "body";
+	var orderList = [[2, "asc"]];
+	var jquerySelector = table;
+	var ajaxUrl = "";
+	var jsonRoot = "";
 	var buttonList = [
 		"copy",
 		"excel",
@@ -688,6 +979,7 @@ function dataTableLoad(selectId, endPointUrl) {
 	];
 	var selectList = {};
 	var isServerSide = false;
+	var isAjax = false;
 
 	reqStatusDataTable = dataTable_build(
 		jquerySelector,
@@ -700,7 +992,9 @@ function dataTableLoad(selectId, endPointUrl) {
 		orderList,
 		buttonList,
 		isServerSide,
-		700
+		700,
+		tableData,
+		isAjax
 	);
 
 	$("#reqstatustable").on('page.dt', function() {
@@ -719,6 +1013,27 @@ function dataTableClick(tempDataTable, selectedData) {
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(settings, json) {
 	console.log("check");
+
+    // 테이블 행 클릭 이벤트 (하위 이슈 조회)
+	$('#reqstatustable tbody').on('click', 'td.details-control', function() {
+          const tr = $(this).closest('tr');
+          const row = reqStatusDataTable.row(tr);
+          const icon = $(this).find('i');
+          if (icon.length === 0) {
+            return;
+          }
+
+          if (row.child.isShown()) {
+             row.child.hide();
+             tr.removeClass('shown');
+             icon.removeClass('fa-angle-up').addClass('fa-angle-down');
+          } else {
+             row.child(format(row.data())).show();
+             tr.addClass('shown');
+             icon.removeClass('fa-angle-down').addClass('fa-angle-up');
+             initializeChildTable(row.data().children, tr.next('tr').find('div.child-table-container'));
+          }
+       });
 }
 
 function dataTableDrawCallback(tableInfo) {
