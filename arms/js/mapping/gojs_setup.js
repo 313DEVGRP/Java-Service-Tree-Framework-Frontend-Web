@@ -21,7 +21,7 @@ var gojs = (function () {
 
         // when the document is modified, add a "*" to the title and enable the "Save" button
         myDiagram.addDiagramListener('Modified', (e) => {
-            const button = document.getElementById('SaveButton');
+            const button = document.getElementById('mapping_save_button');
             if (button) button.disabled = !myDiagram.isModified;
             const idx = document.title.indexOf('*');
             if (myDiagram.isModified) {
@@ -197,7 +197,7 @@ var gojs = (function () {
             const fromData = fromNode.data;
             const category = fromData.category;
             const c_id = fromData.c_id;
-            alert(c_id);
+            const type = fromData.type;
 
             if (category === 'NoAdd') {
                 // 중간 노드의 경우 ALM 상태의 Node는 생성 못하도록 처리
@@ -208,10 +208,29 @@ var gojs = (function () {
             // create a new "State" data object, positioned off to the right of the fromNode
             const p = fromNode.location.copy();
             p.x += diagram.toolManager.draggingTool.gridSnapCellSize.width;
-            const toData = {
+/*            const toData = {
                 text: 'new',
                 loc: go.Point.stringify(p),
-            };
+            };*/
+
+            let toData;
+
+            if (type === 'arms-category') {
+                toData = {
+                    key: 'arms-state-' + (diagram.model.nodeDataArray.length + 1),
+                    text: 'new',
+                    type: 'arms-state',
+                    mapping_id: fromData.c_id,
+                    category: 'NoAdd',
+                    loc: go.Point.stringify(p),
+                };
+            } else {
+                toData = {
+                    text: 'new',
+                    loc: go.Point.stringify(p),
+                };
+            }
+
             // add the new node data to the model
             const model = diagram.model;
             model.addNodeData(toData);
@@ -389,9 +408,31 @@ var gojs = (function () {
     function save() {
         let data = myDiagram.model.toJson();
         console.log(data);
+        let jsonData = JSON.parse(data);
+        decodeObject(jsonData);
+        console.log(jsonData);
 
-        document.getElementById('mySavedModel').value = myDiagram.model.toJson();
+        document.getElementById('mySavedModel').value = JSON.stringify(jsonData, null, 2);
         myDiagram.isModified = false;
+    }
+
+    function isEncoded(str) {
+        try {
+            return str !== decodeURIComponent(str);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // 객체의 모든 문자열을 디코딩하는 재귀 함수
+    function decodeObject(obj) {
+        for (let key in obj) {
+            if (typeof obj[key] === 'string' && isEncoded(obj[key])) {
+                obj[key] = decodeURIComponent(obj[key]);
+            } else if (typeof obj[key] === 'object') {
+                decodeObject(obj[key]);
+            }
+        }
     }
 
     function load(data) {
