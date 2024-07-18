@@ -365,7 +365,7 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
                 console.log('ARMS State List:', arms_state_list);
                 console.log('ALM Status List:', alm_status_list);
 
-                let gojs_mapping_data = generate_gojs_mapping_data(req_state_category_list, arms_state_list, alm_status_list);
+                let gojs_mapping_data = generate_gojs_mapping_data(req_state_category_list, arms_state_list, alm_status_list, alm_server_type);
                 gojs.load(gojs_mapping_data);
             })
             .catch((error) => {
@@ -374,7 +374,7 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
     }
 }
 
-function generate_gojs_mapping_data(req_state_category_list, arms_state_list, alm_status_list) {
+function generate_gojs_mapping_data(req_state_category_list, arms_state_list, alm_status_list, alm_server_type) {
     const node_data_array = [];
     const link_data_array = [];
 
@@ -397,7 +397,7 @@ function generate_gojs_mapping_data(req_state_category_list, arms_state_list, al
         const category_node_key = category_type+ "-"+key;
         const node = {
             key: category_node_key,
-            text: `카테고리 ${value}`,
+            text: `${value}`,
             type: category_type,
             c_id: key,
             category: 'Loading',
@@ -414,7 +414,7 @@ function generate_gojs_mapping_data(req_state_category_list, arms_state_list, al
         const arms_node_key = arms_state_type+"-"+state.c_id;
         const node = {
             key: arms_node_key,
-            text: `A-RMS ${state.c_title}`,
+            text: `${state.c_title}`,
             type: arms_state_type,
             c_id: state.c_id,
             mapping_id: state.c_etc,
@@ -431,7 +431,8 @@ function generate_gojs_mapping_data(req_state_category_list, arms_state_list, al
         const alm_node_key = alm_status_type + "-" + status.c_id;
         const node = {
             key: alm_node_key,
-            text: `ALM ${status.c_issue_status_name}`,
+            text: `${status.c_issue_status_name}`,
+            server_type: alm_server_type,
             type: alm_status_type,
             c_id: status.c_id,
             mapping_id: status.c_req_state_mapping_link,
