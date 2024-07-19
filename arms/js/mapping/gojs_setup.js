@@ -2,6 +2,8 @@ var gojs = (function () {
     "use strict";
 
     var myDiagram;
+    let isLinkDeletion = false;
+    let isContextMenuOpen = false;
 
     function init() {
         // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
@@ -17,6 +19,7 @@ var gojs = (function () {
             }),
             validCycle: go.CycleMode.NotDirected,
             'undoManager.isEnabled': true,
+            "maxSelectionCount": 1,  // 다중 선택 비활성
         });
 
         // when the document is modified, add a "*" to the title and enable the "Save" button
@@ -98,7 +101,8 @@ var gojs = (function () {
                 )
             );
 
-        myDiagram.nodeTemplate.contextMenu = $('ContextMenu',
+        // 우측 마우스 버튼 제거
+        /*myDiagram.nodeTemplate.contextMenu = $('ContextMenu',
             $('ContextMenuButton',
                 $(go.TextBlock, 'Rename'),
                 { click: (e, obj) => e.diagram.commandHandler.editTextBlock() },
@@ -110,7 +114,7 @@ var gojs = (function () {
                 { click: (e, obj) => e.diagram.commandHandler.deleteSelection() },
                 new go.Binding('visible', '', (o) => o.diagram && o.diagram.commandHandler.canDeleteSelection()).ofObject()
             )
-        );
+        );*/
 
         myDiagram.nodeTemplateMap.add(
             'Loading',
@@ -252,6 +256,11 @@ var gojs = (function () {
                 diagram.commitTransaction('Add Node');
                 return;
             }
+            else {
+                if (!confirm(fromData.text + " 카테고리 상태를 추가하시겠습니까?")) {
+                    return;
+                }
+            }
 
             // create a new "State" data object, positioned off to the right of the fromNode
             const p = fromNode.location.copy();
@@ -266,15 +275,18 @@ var gojs = (function () {
             if (type === 'arms-category') {
                 toData = {
                     key: 'arms-state-' + (diagram.model.nodeDataArray.length + 1),
-                    text: 'new',
+                    text: '신규 상태',
+                    isNew: true,
                     type: 'arms-state',
                     mapping_id: fromData.c_id,
                     category: 'NoAdd',
                     loc: go.Point.stringify(p),
                 };
-            } else {
+            }
+            else {
                 toData = {
-                    text: 'new',
+                    text: '신규 상태',
+                    isNew: true,
                     loc: go.Point.stringify(p),
                 };
             }
@@ -286,7 +298,9 @@ var gojs = (function () {
             const linkdata = {
                 from: model.getKeyForNodeData(fromData),
                 to: model.getKeyForNodeData(toData),
+                isNew: true,
             };
+
             // and add the link data to the model
             model.addLinkData(linkdata);
             // select the new Node
@@ -322,19 +336,26 @@ var gojs = (function () {
             const fromNode = link.fromNode;
             const toNode = link.toNode;
 
+            link.data.fromNode = fromNode.Qt;
+            link.data.toNode = toNode.Qt;
+
             if (fromNode.category === 'NoAdd' && fromNode.findLinksOutOf().count > 1) {
+                isLinkDeletion = false;
                 myDiagram.remove(link);
             }
 
             if (toNode.category === 'NoAdd' && toNode.findLinksInto().count > 1) {
+                isLinkDeletion = false;
                 myDiagram.remove(link);
             }
 
             if (toNode.category === 'End' && toNode.findLinksInto().count > 1) {
+                isLinkDeletion = false;
                 myDiagram.remove(link);
             }
 
             if (fromNode.category === 'Loading' && toNode.category === "End") {
+                isLinkDeletion = false;
                 myDiagram.remove(link);
             }
 
@@ -363,17 +384,89 @@ var gojs = (function () {
             }
         });
 
+        myDiagram.commandHandler.canDeleteSelection = function() {
+
+            if (isContextMenuOpen) {
+                return false;
+            }
+
+            // 선택된 노드 (다중 선택이 비활성화되어 있어 항상 하나의 노드만 선택됨)
+            const selectedNode = myDiagram.selection.first();
+
+            // 노드가 선택되어 있고, 조건에 맞는 경우 경고 메시지와 함께 false 반환
+            if (selectedNode instanceof go.Node) {
+                isLinkDeletion = false;
+                // 노드가 선택되어 있고, 조건에 맞는 경우 경고 메시지와 함께 false 반환
+                if (selectedNode && (selectedNode.data.type === "arms-category" || selectedNode.data.type === 'alm-status')) {
+                    let node_type = selectedNode.data.type === "arms-category" ? "카테고리" : "ALM 상태";
+                    alert(`${node_type} 유형의 노드는 삭제할 수 없습니다.`);
+                    return false;
+                }
+                else if (selectedNode && (selectedNode.data.type === "arms-state")) {
+                    const state_name = selectedNode.data.text;
+                    if (!confirm( state_name + " 상태를 삭제하시겠습니까?")) {
+                        return false;
+                    }
+                }
+            }
+
+            // 기본 삭제 동작 수행
+            return go.CommandHandler.prototype.canDeleteSelection.call(this);
+        };
+
+        myDiagram.addDiagramListener("SelectionDeleting", function(e) {
+            const selectedNode = e.diagram.selection.first();
+
+            // 연결 선택 시 삭제 확인 알림 창 뜨도록 처리를 위한 플래그
+            if (selectedNode instanceof go.Node) {
+                isLinkDeletion = false;
+            }
+            else if (selectedNode instanceof  go.Link) {
+                isLinkDeletion = true;
+            }
+        });
+
+        // 연결 삭제 제어
+        myDiagram.addModelChangedListener(function(e) {
+
+            if (e.change === go.ChangedEvent.Remove) {
+                if (e.propertyName === 'linkDataArray' && isLinkDeletion) {
+                    // 노드 삭제 과정에서 링크 삭제 시 확인 메시지를 건너뜁니다.
+                    const removedLinkData = e.oldValue;
+                    if (!confirm("해당 연결을 삭제하시겠습니까?")) {
+                        // 삭제를 취소 시 링크 재연결
+                        myDiagram.model.addLinkData(removedLinkData);
+                        return;
+                    }
+
+                    // 연결 삭제(업데이트) API 호출 (필요시)
+                    // $.ajax({
+                    //     url: '/your/ajax/endpoint',  // Your server endpoint
+                    //     type: 'POST',
+                    //     data: JSON.stringify(removedLinkData),
+                    //     contentType: 'application/json',
+                    //     success: function(response) {
+                    //         console.log('Link deletion acknowledged by server:', response);
+                    //     },
+                    //     error: function(error) {
+                    //         console.error('Error while acknowledging link deletion:', error);
+                    //     }
+                    // });
+                }
+            }
+        });
+
         myDiagram.linkTemplate = $(go.Link,
             { selectionAdorned: false, fromPortId: 'from', toPortId: 'to', relinkableTo: true },
             $(go.Shape,
-                { stroke: 'lightgray', strokeWidth: 4 },
+                { stroke: 'lightgray', strokeWidth: 3 },
                 {
                     mouseEnter: (e, obj) => {
-                        obj.strokeWidth = 6;
+                        obj.strokeWidth = 5;
                         obj.stroke = 'dodgerblue';
                     },
                     mouseLeave: (e, obj) => {
-                        obj.strokeWidth = 4;
+                        obj.strokeWidth = 3;
                         obj.stroke = 'lightgray';
                     },
                 }
