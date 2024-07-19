@@ -1027,7 +1027,7 @@ function dataTable_build(
 		isServerSide,
 		scrollY,
 		data,
-		isAjax = true,
+		isAjax,
 		errorMode = true
 	);
 }

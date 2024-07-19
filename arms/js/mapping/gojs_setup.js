@@ -21,7 +21,7 @@ var gojs = (function () {
 
         // when the document is modified, add a "*" to the title and enable the "Save" button
         myDiagram.addDiagramListener('Modified', (e) => {
-            const button = document.getElementById('SaveButton');
+            const button = document.getElementById('mapping_save_button');
             if (button) button.disabled = !myDiagram.isModified;
             const idx = document.title.indexOf('*');
             if (myDiagram.isModified) {
@@ -31,7 +31,17 @@ var gojs = (function () {
             }
         });
 
-        const graygrad = $(go.Brush, 'Linear', { 0: 'white', 0.1: 'whitesmoke', 0.9: 'whitesmoke', 1: 'lightgray' });
+        // const graygrad = $(go.Brush, 'Linear', { 0: 'white', 0.1: 'whitesmoke', 0.9: 'whitesmoke', 1: 'lightgray' });
+
+        // 노드 박스 배경색
+        const graygrad = $(go.Brush, 'Linear', {
+            0: 'rgba(51, 51, 51, 0)',
+            0.1: 'rgba(51, 51, 51, 0.1)',
+            0.9: 'rgba(51, 51, 51, 0.9)',
+            1: 'rgba(51, 51, 51, 1)'
+        });
+        // 노드 박스 테두리
+        const lightGray = 'rgba(128, 128, 128, 0.5)'; // 흐린 회색 (투명도 50%)
 
         myDiagram.nodeTemplate = // the default node template
             $(go.Node,
@@ -43,19 +53,29 @@ var gojs = (function () {
                     'Auto',
                     { name: 'BODY' },
                     $(go.Shape,
-                        'Rectangle',
-                        { fill: graygrad, stroke: 'gray', minSize: new go.Size(120, 21) },
+                        'RoundedRectangle',
+                        { fill: graygrad, stroke: lightGray, minSize: new go.Size(100, 30) },
                         new go.Binding('fill', 'isSelected', (s) => (s ? 'dodgerblue' : graygrad)).ofObject()
                     ),
-                    $(go.TextBlock,
-                        {
-                            stroke: 'black',
-                            font: '12px sans-serif',
-                            editable: true,
-                            margin: new go.Margin(3, 3 + 11, 3, 3 + 4),
-                            alignment: go.Spot.Left,
-                        },
-                        new go.Binding('text').makeTwoWay()
+                    $(go.Panel,
+                        'Horizontal',
+                        { alignment: go.Spot.Left, margin: 3 },
+                        $(go.Picture, {
+                            source: "/arms/img/arms.png",  // 아이콘 이미지 경로
+                            width: 20,
+                            height: 20,
+                            margin: new go.Margin(0, 0, 0, 0)
+                        }),
+                        $(go.TextBlock,
+                            {
+                                stroke: 'white',
+                                font: '12px sans-serif',
+                                editable: true,
+                                margin: new go.Margin(3, 4, 3, 4), // 적절한 마진 설정
+                                alignment: go.Spot.Left,
+                            },
+                            new go.Binding('text').makeTwoWay()
+                        )
                     )
                 ),
                 // output port
@@ -66,15 +86,15 @@ var gojs = (function () {
                                 addNodeAndLink(e, obj);
                             }
                         }},
-                    $(go.Shape, 'Diamond', { width: 11, height: 11, fill: 'white', stroke: 'dodgerblue', strokeWidth: 3 }),
+                    $(go.Shape, 'Diamond', { width: 11, height: 11, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
                     $(go.Shape, 'PlusLine', new go.Binding('visible', '', (data) => data.category !== 'NoAdd').ofObject(), { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
                 ),
                 // input port
                 $(go.Panel,
                     'Auto',
                     { alignment: go.Spot.Left, portId: 'to', toLinkable: true },
-                    $(go.Shape, 'Circle', { width: 8, height: 8, fill: 'white', stroke: 'gray' }),
-                    $(go.Shape, 'Circle', { width: 4, height: 4, fill: 'dodgerblue', stroke: null })
+                    $(go.Shape, 'Ellipse', { width: 9, height: 9, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
+                    $(go.Shape, 'Ellipse', { width: 6, height: 6, fill: 'white', stroke: null })
                 )
             );
 
@@ -103,27 +123,35 @@ var gojs = (function () {
                     'Auto',
                     { name: 'BODY' },
                     $(go.Shape,
-                        'Rectangle',
-                        { fill: graygrad, stroke: 'gray', minSize: new go.Size(120, 21) },
+                        'RoundedRectangle',
+                        { fill: graygrad, stroke: lightGray, minSize: new go.Size(100, 30) },
                         new go.Binding('fill', 'isSelected', (s) => (s ? 'dodgerblue' : graygrad)).ofObject()
                     ),
-                    $(go.TextBlock,
-                        {
-                            stroke: 'black',
-                            font: '12px sans-serif',
-                            editable: true,
-                            margin: new go.Margin(3, 3 + 11, 3, 3 + 4),
-                            alignment: go.Spot.Left,
-                        },
-                        new go.Binding('text', 'text')
+                    $(go.Panel,
+                        'Horizontal',
+                        { alignment: go.Spot.Left, margin: 3 },
+                        $(go.TextBlock,
+                            {
+                                stroke: 'white',
+                                font: '12px FontAwesome, sans-serif',
+                                editable: false,
+                                margin: new go.Margin(3, 3 + 11, 3, 3 + 4),
+                                alignment: go.Spot.Left,
+                            },
+                            new go.Binding("text", "", function(data) {
+                                // 아이콘과 텍스트를 함께 표시
+                                return "\uf009 " + data.text; // "\uf007"는 Font Awesome의 유니코드 문자입니다 (예: 사용자 아이콘)
+                            })
+                        )
                     )
+
                 ),
                 // output port
                 $(go.Panel,
                     'Auto',
                     { alignment: go.Spot.Right, portId: 'from', fromLinkable: true, click: addNodeAndLink },
-                    $(go.Shape, 'Circle', { width: 22, height: 22, fill: 'white', stroke: 'dodgerblue', strokeWidth: 3 }),
-                    $(go.Shape, 'PlusLine', { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
+                    $(go.Shape, 'Circle', { width: 22, height: 22, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
+                    $(go.Shape, 'PlusLine', { width: 11, height: 11, fill: null, stroke: graygrad, strokeWidth: 3 })
                 )
             )
         );
@@ -139,27 +167,47 @@ var gojs = (function () {
                     'Auto',
                     { name: 'BODY' },
                     $(go.Shape,
-                        'Rectangle',
-                        { fill: graygrad, stroke: 'gray', minSize: new go.Size(120, 21) },
+                        'RoundedRectangle',
+                        { fill: graygrad, stroke: lightGray, minSize: new go.Size(100, 30) },
                         new go.Binding('fill', 'isSelected', (s) => (s ? 'dodgerblue' : graygrad)).ofObject()
                     ),
-                    $(go.TextBlock,
-                        {
-                            stroke: 'black',
-                            font: '12px sans-serif',
-                            editable: true,
-                            margin: new go.Margin(3, 3 + 11, 3, 3 + 4),
-                            alignment: go.Spot.Left,
-                        },
-                        new go.Binding('text', 'text')
+                    $(go.Panel,
+                        'Horizontal',
+                        { alignment: go.Spot.Left, margin: 3 },
+                        $(go.Picture,
+                            {
+                                width: 20,
+                                height: 20,
+                                margin: new go.Margin(0, 0, 0, 2)
+                            },
+                            new go.Binding('source', 'server_type', function(type) {
+                                console.log(type);
+                                switch(type) {
+                                    case '클라우드': return '/arms/img/jira/mark-gradient-white-jira.svg';
+                                    case '온프레미스': return '/arms/img/jira/mark-gradient-blue-jira.svg';
+                                    case '레드마인_온프레미스': return '/arms/img/redmine/logo.png';
+                                    default: return '';
+                                }
+                            })
+                        ),
+                        $(go.TextBlock,
+                            {
+                                stroke: 'white',
+                                font: '12px sans-serif',
+                                editable: false,
+                                margin: new go.Margin(3, 3 + 11, 3, 3 + 4),
+                                alignment: go.Spot.Left,
+                            },
+                            new go.Binding('text', 'text')
+                        )
                     )
                 ),
                 // input port
                 $(go.Panel,
                     'Auto',
                     { alignment: go.Spot.Left, portId: 'to', toLinkable: true },
-                    $(go.Shape, 'Circle', { width: 8, height: 8, fill: 'white', stroke: 'gray' }),
-                    $(go.Shape, 'Circle', { width: 4, height: 4, fill: 'dodgerblue', stroke: null })
+                    $(go.Shape, 'Ellipse', { width: 9, height: 9, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
+                    $(go.Shape, 'Ellipse', { width: 6, height: 6, fill: 'white', stroke: null })
                 )
             )
         );
@@ -197,7 +245,7 @@ var gojs = (function () {
             const fromData = fromNode.data;
             const category = fromData.category;
             const c_id = fromData.c_id;
-            alert(c_id);
+            const type = fromData.type;
 
             if (category === 'NoAdd') {
                 // 중간 노드의 경우 ALM 상태의 Node는 생성 못하도록 처리
@@ -208,10 +256,29 @@ var gojs = (function () {
             // create a new "State" data object, positioned off to the right of the fromNode
             const p = fromNode.location.copy();
             p.x += diagram.toolManager.draggingTool.gridSnapCellSize.width;
-            const toData = {
+/*            const toData = {
                 text: 'new',
                 loc: go.Point.stringify(p),
-            };
+            };*/
+
+            let toData;
+
+            if (type === 'arms-category') {
+                toData = {
+                    key: 'arms-state-' + (diagram.model.nodeDataArray.length + 1),
+                    text: 'new',
+                    type: 'arms-state',
+                    mapping_id: fromData.c_id,
+                    category: 'NoAdd',
+                    loc: go.Point.stringify(p),
+                };
+            } else {
+                toData = {
+                    text: 'new',
+                    loc: go.Point.stringify(p),
+                };
+            }
+
             // add the new node data to the model
             const model = diagram.model;
             model.addNodeData(toData);
@@ -299,15 +366,15 @@ var gojs = (function () {
         myDiagram.linkTemplate = $(go.Link,
             { selectionAdorned: false, fromPortId: 'from', toPortId: 'to', relinkableTo: true },
             $(go.Shape,
-                { stroke: 'gray', strokeWidth: 2 },
+                { stroke: 'lightgray', strokeWidth: 4 },
                 {
                     mouseEnter: (e, obj) => {
-                        obj.strokeWidth = 5;
+                        obj.strokeWidth = 6;
                         obj.stroke = 'dodgerblue';
                     },
                     mouseLeave: (e, obj) => {
-                        obj.strokeWidth = 2;
-                        obj.stroke = 'gray';
+                        obj.strokeWidth = 4;
+                        obj.stroke = 'lightgray';
                     },
                 }
             )
@@ -389,9 +456,31 @@ var gojs = (function () {
     function save() {
         let data = myDiagram.model.toJson();
         console.log(data);
+        let jsonData = JSON.parse(data);
+        decodeObject(jsonData);
+        console.log(jsonData);
 
-        document.getElementById('mySavedModel').value = myDiagram.model.toJson();
+        document.getElementById('mySavedModel').value = JSON.stringify(jsonData, null, 2);
         myDiagram.isModified = false;
+    }
+
+    function isEncoded(str) {
+        try {
+            return str !== decodeURIComponent(str);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // 객체의 모든 문자열을 디코딩하는 재귀 함수
+    function decodeObject(obj) {
+        for (let key in obj) {
+            if (typeof obj[key] === 'string' && isEncoded(obj[key])) {
+                obj[key] = decodeURIComponent(obj[key]);
+            } else if (typeof obj[key] === 'object') {
+                decodeObject(obj[key]);
+            }
+        }
     }
 
     function load(data) {

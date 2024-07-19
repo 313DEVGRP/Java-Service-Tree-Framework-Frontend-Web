@@ -92,8 +92,8 @@ function execDocReady() {
             "../reference/jquery-plugins/jquery.flowchart-master/jquery.flowchart.js",
             "https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.min.js",
             "../reference/jquery-plugins/jquery-mousewheel-main/jquery.mousewheel.js",*/
+            // "../reference/gojs/go.css",
             "../reference/gojs/go-debug.js",
-            "../reference/gojs/go.css",
             "../arms/js/mapping/gojs_setup.js"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
@@ -365,8 +365,8 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
                 console.log('ARMS State List:', arms_state_list);
                 console.log('ALM Status List:', alm_status_list);
 
-                let diagram_data = generate_diagram_data(req_state_category_list, arms_state_list, alm_status_list);
-                gojs.load(diagram_data);
+                let gojs_mapping_data = generate_gojs_mapping_data(req_state_category_list, arms_state_list, alm_status_list, alm_server_type);
+                gojs.load(gojs_mapping_data);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -374,97 +374,102 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
     }
 }
 
-function generate_diagram_data(req_state_category_list, arms_state_list, alm_status_list) {
+function generate_gojs_mapping_data(req_state_category_list, arms_state_list, alm_status_list, alm_server_type) {
     const node_data_array = [];
     const link_data_array = [];
 
-    const categoryX = 0;
-    const armsX = 300;
-    const almX = 600;
+    const category_x_position = 0;
+    const arms_state_x_position = 300;
+    const alm_status_x_position = 600;
 
-    const ySpacing = 40;
-    const categoryySpacing = 100;
+    const y_spacing = 40;
+    const category_y_spacing = 100;
 
-    // Keep track of Y positions for each depth
-    let categoryY = 0;
-    let armsY = 0;
-    let almY = 0;
+    let category_y_position = 0;
+    let arms_state_y_position = 0;
+    let alm_status_y_position = 0;
 
-    const categoryNodes = {};
-    const armsNodes = {};
+    const category_nodes = {};
+    const arms_state_nodes = {};
 
     Object.entries(req_state_category_list).forEach(([key, value]) => {
-        const categoryNodeKey = `카테고리 ${value}`;
+        const category_type = "arms-category";
+        const category_node_key = category_type+ "-"+key;
         const node = {
-            key: categoryNodeKey,
-            text: `카테고리 ${value}`,
-            type: 'arms-category',
+            key: category_node_key,
+            text: `${value}`,
+            type: category_type,
             c_id: key,
             category: 'Loading',
-            loc: `${categoryX} ${categoryY}`
+            loc: `${category_x_position} ${category_y_position}`
         };
+
         node_data_array.push(node);
-        categoryNodes[key] = node;
-        categoryY += categoryySpacing;
+        category_nodes[key] = node;
+        category_y_position += category_y_spacing;
     });
 
     arms_state_list.forEach((state) => {
-        const armsNodeKey = `A-RMS ${state.c_title}`;
+        const arms_state_type = "arms-state";
+        const arms_node_key = arms_state_type+"-"+state.c_id;
         const node = {
-            key: armsNodeKey,
-            text: `A-RMS ${state.c_title}`,
-            type: 'arms-state',
+            key: arms_node_key,
+            text: `${state.c_title}`,
+            type: arms_state_type,
             c_id: state.c_id,
             mapping_id: state.c_etc,
             category: 'NoAdd',
-            loc: `${armsX} ${armsY}`
+            loc: `${arms_state_x_position} ${arms_state_y_position}`
         };
         node_data_array.push(node);
-        armsNodes[state.c_id] = node;
-        armsY += ySpacing;
+        arms_state_nodes[state.c_id] = node;
+        arms_state_y_position += y_spacing;
     });
 
     alm_status_list.forEach((status) => {
-        const almNodeKey = `ALM ${status.c_issue_status_name}`;
+        const alm_status_type = "alm-status";
+        const alm_node_key = alm_status_type + "-" + status.c_id;
         const node = {
-            key: almNodeKey,
-            text: `ALM ${status.c_issue_status_name}`,
-            type: 'alm-status',
+            key: alm_node_key,
+            text: `${status.c_issue_status_name}`,
+            server_type: alm_server_type,
+            type: alm_status_type,
             c_id: status.c_id,
             mapping_id: status.c_req_state_mapping_link,
             category: 'End',
-            loc: `${almX} ${almY}`
+            loc: `${alm_status_x_position} ${alm_status_y_position}`
         };
+
         node_data_array.push(node);
-        almY += ySpacing;
+        alm_status_y_position += y_spacing;
     });
 
     // 링크 데이터 생성
     node_data_array.forEach((node) => {
         if (node.type === 'arms-state' && node.mapping_id) {
-            const fromNode = categoryNodes[node.mapping_id];
+            const fromNode = category_nodes[node.mapping_id];
             if (fromNode) {
-                link_data_array.push({ from: fromNode.key, to: node.key });
+                link_data_array.push({ from: fromNode.key, to: node.key, fromNode: fromNode, toNode: node });
             }
         } else if (node.type === 'alm-status' && node.mapping_id) {
-            const fromNode = armsNodes[node.mapping_id];
+            const fromNode = arms_state_nodes[node.mapping_id];
             if (fromNode) {
-                link_data_array.push({ from: fromNode.key, to: node.key });
+                link_data_array.push({ from: fromNode.key, to: node.key, fromNode: fromNode, toNode: node });
             }
         }
     });
 
-    const sortedArmsNodes = Object.values(armsNodes).sort((a, b) => {
+    const sorted_arms_state_nodes = Object.values(arms_state_nodes).sort((a, b) => {
         const mappingA = a.mapping_id || "9999";
         const mappingB = b.mapping_id || "9999";
         // mapping_id를 기준으로 오름차순 정렬
         return mappingA.localeCompare(mappingB);
     });
 
-    armsY = 0;
-    sortedArmsNodes.forEach(node => {
-        node.loc = `${armsX} ${armsY}`;
-        armsY += ySpacing;
+    arms_state_y_position = 0;
+    sorted_arms_state_nodes.forEach(node => {
+        node.loc = `${arms_state_x_position} ${arms_state_y_position}`;
+        arms_state_y_position += y_spacing;
     });
 
     return {
@@ -794,13 +799,13 @@ function save_req_state_btn_click() {
             statusCode: {
                 200: function () {
                     jSuccess('"' + state_name + '"' + " 상태가 생성되었습니다.");
-                    let active_tab_name = getActiveTab();
+/*                    let active_tab_name = getActiveTab();
                     if (active_tab_name === "#board") {
                         setKanban();
                     }
                     else if (active_tab_name === "#table") {
                         dataTableLoad();
-                    }
+                    }*/
 
                     $("#close_modal_popup").trigger("click");
                 }
@@ -837,13 +842,13 @@ function update_req_state_btn_click() {
             statusCode: {
                 200: function () {
                     jSuccess('"' + state_name + '"' + " 상태가 수정되었습니다.");
-                    let active_tab_name = getActiveTab();
+/*                    let active_tab_name = getActiveTab();
                     if (active_tab_name === "#board") {
                         setKanban();
                     }
                     else if (active_tab_name === "#table") {
                         dataTableLoad();
-                    }
+                    }*/
 
                     $("#close_modal_popup").trigger("click");
                 }
@@ -873,13 +878,13 @@ function delete_req_state_btn_click() {
             statusCode: {
                 200: function () {
                     jSuccess('"' + state_name + '"' + " 상태가 삭제되었습니다.");
-                    let active_tab_name = getActiveTab();
+/*                    let active_tab_name = getActiveTab();
                     if (active_tab_name === "#board") {
                         setKanban();
                     }
                     else if (active_tab_name === "#table") {
                         dataTableLoad();
-                    }
+                    }*/
 
                     $("#close_modal_popup").trigger("click");
                 }
@@ -1541,191 +1546,4 @@ function updateFlowchartData(newData) {
     let $container = $("#flow_chart_container");
     $flowchart.flowchart('setData', newData);
 }
-
-
-// mapping_id를 기준으로 노드의 키를 찾는 함수
-function find_category_mapping_id(node_data_array, mappingId) {
-    const node = node_data_array.find(node => node.type === "arms-category" && node.c_id === mappingId);
-    return node ? node.key : null;
-}
-
-function find_arms_state_mapping_id(node_data_array, mappingId) {
-    const node = node_data_array.find(node => node.type === "arms-state" && node.c_id === mappingId);
-    return node ? node.key : null;
-}
-function generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list) {
-    const node_data_array = [];
-    const link_data_array = [];
-
-    const categoryX = 0;
-    const armsX = 300;
-    const almX = 600;
-
-    const ySpacing = 40;
-
-    // Keep track of Y positions for each depth
-    let categoryY = 0;
-    let armsY = 0;
-    let almY = 0;
-
-    // 카테고리 열림, 진행중, 해결됨, 닫힘 노드 생성
-    Object.entries(req_state_category_list).forEach(([key, value]) => {
-        const categoryNodeKey = `카테고리 ${value}`;
-        node_data_array.push({
-            key: categoryNodeKey,
-            text: `카테고리 ${value}`,
-            type: 'arms-category',
-            c_id: key,
-            category: 'Loading',
-            loc: `${categoryX} ${categoryY}`
-        });
-        categoryY += ySpacing;
-    });
-
-    // A-RMS OPEN, PROGRESS, RESOLVED, CLOSED 노드 생성
-    arms_state_list.forEach((state) => {
-        const armsNodeKey = `A-RMS ${state.c_title}`;
-        node_data_array.push({
-            key: armsNodeKey,
-            text: `A-RMS ${state.c_title}`,
-            type: 'arms-state',
-            c_id: state.c_id,
-            mapping_id: state.c_etc,
-            category: 'NoAdd',
-            loc: `${armsX} ${armsY}`
-        });
-        armsY += ySpacing;
-    });
-
-    // ALM 열림, 진행중, 해결됨, 닫힘 노드 생성
-    alm_status_list.forEach((status) => {
-        const almNodeKey = `ALM ${status.c_issue_status_name}`;
-        node_data_array.push({
-            key: almNodeKey,
-            text: `ALM ${status.c_issue_status_name}`,
-            type: 'alm-status',
-            c_id: status.c_id,
-            mapping_id: status.c_req_state_mapping_link,
-            category: 'End',
-            loc: `${almX} ${almY}`
-        });
-        almY += ySpacing;
-    });
-
-    // 링크 데이터 생성
-    node_data_array.forEach((node) => {
-        if (node.type === 'arms-state' && node.mapping_id) {
-            const fromNode = node_data_array.find(n => n.c_id === node.mapping_id);
-            if (fromNode) {
-                link_data_array.push({ from: fromNode.key, to: node.key });
-            }
-        } else if (node.type === 'alm-status' && node.mapping_id) {
-            const fromNode = node_data_array.find(n => n.c_id === node.mapping_id);
-            if (fromNode) {
-                link_data_array.push({ from: fromNode.key, to: node.key });
-            }
-        }
-    });
-
-    return {
-        class: 'GraphLinksModel',
-        nodeDataArray: node_data_array,
-        linkDataArray: link_data_array
-    };
-}
-
-function generate_node_and_link_data(req_state_category_list, arms_state_list, alm_status_list) {
-    const node_data_array = [];
-    const link_data_array = [];
-    const armsNodeMap = new Map();
-
-    // 카테고리 열림, 진행중, 해결됨, 닫힘 노드 생성
-    Object.entries(req_state_category_list).forEach(([key, value], index) => {
-        const categoryNodeKey = `카테고리 ${value}`;
-        node_data_array.push({
-            key: categoryNodeKey,
-            text: `카테고리 ${value}`,
-            type: 'arms-category',
-            c_id: key,
-            category: 'Loading',
-            loc: `0 ${40 + index * 40}`
-        });
-
-        // A-RMS 노드 생성 및 연결
-        arms_state_list.forEach((state, armsIndex) => {
-            if (state.c_etc === key) {
-                const armsNodeKey = `A-RMS ${state.c_title}`;
-                armsNodeMap.set(state.c_id, armsNodeKey);
-                node_data_array.push({
-                    key: armsNodeKey,
-                    text: `A-RMS ${state.c_title}`,
-                    type: 'arms-state',
-                    c_id: state.c_id,
-                    mapping_id: state.c_etc,
-                    category: 'NoAdd',
-                    loc: `300 ${40 + armsIndex * 40}`
-                });
-
-                // 링크 생성
-                link_data_array.push({ from: categoryNodeKey, to: armsNodeKey });
-            }
-        });
-    });
-
-    // A-RMS 노드 생성 및 연결
-    arms_state_list.forEach((state, armsIndex) => {
-        const armsNodeKey = `A-RMS ${state.c_title}`;
-        if (!armsNodeMap.has(state.c_id)) {
-            node_data_array.push({
-                key: armsNodeKey,
-                text: `A-RMS ${state.c_title}`,
-                type: 'arms-state',
-                c_id: state.c_id,
-                mapping_id: state.c_etc,
-                category: 'NoAdd',
-                loc: `300 ${40 + armsIndex * 40}`
-            });
-        }
-
-        // ALM 노드 생성 및 연결
-        alm_status_list.forEach((status, almIndex) => {
-            if (status.c_req_state_mapping_link === state.c_id) {
-                const almNodeKey = `ALM ${status.c_issue_status_name}`;
-                node_data_array.push({
-                    key: almNodeKey,
-                    text: `ALM ${status.c_issue_status_name}`,
-                    type: 'alm-status',
-                    c_id: status.c_id,
-                    mapping_id: status.c_req_state_mapping_link,
-                    category: 'End',
-                    loc: `600 ${40 + almIndex * 40}`
-                });
-
-                // 링크 생성
-                link_data_array.push({ from: armsNodeKey, to: almNodeKey });
-            }
-        });
-    });
-
-    // ALM 노드 생성
-    alm_status_list.forEach((status, almIndex) => {
-        const almNodeKey = `ALM ${status.c_issue_status_name}`;
-        if (!node_data_array.some(node => node.key === almNodeKey)) {
-            node_data_array.push({
-                key: almNodeKey,
-                text: `ALM ${status.c_issue_status_name}`,
-                type: 'alm-status',
-                c_id: status.c_id,
-                mapping_id: status.c_req_state_mapping_link,
-                category: 'End',
-                loc: `600 ${40 + almIndex * 40}`
-            });
-        }
-    });
-
-    return {
-                class: 'GraphLinksModel',
-                nodeDataArray: node_data_array,
-                linkDataArray: link_data_array
-            };
-}*/
+*/
