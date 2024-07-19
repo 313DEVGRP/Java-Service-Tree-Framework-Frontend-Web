@@ -673,11 +673,16 @@ function dataTableLoad(table, tableData) {
 			title: "요구사항 구분",
 			data: "isReq",
 			render: function (data, type, row, meta) {
+                let parentReqKey = row.parentReqKey+"의 연결 이슈";
+                let key = row.key;
+                if (row.deleted) {
+                    parentReqKey = "<s style='color: #808080'>" + parentReqKey + "</s>";
+                    key = "<s style='color: #808080'>" + key + "</s>";
+                }
 				if (isEmpty(data) || data == false) {
-					return "<div style='color: #f8f8f8'>" + row.parentReqKey + "의 연결 이슈</div>";
+					return "<div style='color: #f8f8f8'>" + parentReqKey + "</div>";
 				} else {
-
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + row.key + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + key + "</div>";
 /*
 
 					let btn_data_row = {
@@ -709,8 +714,12 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+		            let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
 					// data-row 에 API에 맞는 param 설정 예정.
 
@@ -718,7 +727,7 @@ function dataTableLoad(table, tableData) {
 						pdServiceVersions : row.pdServiceVersions.join(","),
 						cReqLink : row.creqLink
 					};
-					return ("<div style='white-space: nowrap; color: #a4c6ff'>" + data +
+					return ("<div style='white-space: nowrap; color: #a4c6ff'>" + displayText +
 						$("<button class='btn btn-transparent btn-xs' style='margin-left:5px'/>")
 							.append($('<i class="fa fa-list-alt"></i>'))
 							.attr("data-toggle", "modal")
@@ -749,6 +758,9 @@ function dataTableLoad(table, tableData) {
 							verHtml+= versionInfo["c_title"]+`<br/>`;
 						}
 					});
+                    if (row.deleted) {
+                        verHtml = "<s style='color: #808080'>" + verHtml + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
 						return "<div style='white-space: nowrap; color: #f8f8f8'>" + verHtml + "</div>";
 					} else {
@@ -771,7 +783,7 @@ function dataTableLoad(table, tableData) {
 				} else {
 		            let displayText = data;
                     if (row.deleted) {
-                        displayText = "<s>" + data + "</s>";
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
                     }
 					if( isEmpty(row.isReq) || row.isReq == false){
 						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
@@ -791,10 +803,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+				    let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -809,10 +825,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+				    let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -827,10 +847,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+				    let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					} else {
-						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 					}
 
 				}
@@ -846,10 +870,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+				    let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -864,10 +892,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+                    let displayText = data;
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -882,11 +914,15 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+                    let displayText = dateFormat(data);
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + dateFormat(data) + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
 
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -901,10 +937,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+                    let displayText = dateFormat(data);
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" + dateFormat(data) + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -919,10 +959,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+                    let displayText = dateFormat(data);
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" +data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -937,10 +981,14 @@ function dataTableLoad(table, tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
+                    let displayText = dateFormat(data);
+                    if (row.deleted) {
+                        displayText = "<s style='color: #808080'>" +data + "</s>";
+                    }
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
 					}
-					return "<div style='white-space: nowrap; color: #a4c6ff'>" + dateFormat(data) + "</div>";
+					return "<div style='white-space: nowrap; color: #a4c6ff'>" + displayText + "</div>";
 				}
 				return data;
 			},
@@ -1764,7 +1812,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "isReq",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data == false) {
-					return "<div style='color: #808080'>" + row.parentReqKey + "의 연결 이슈</div>";
+					return "<div style='color: #f8f8f8'>" + row.parentReqKey + "의 연결 이슈</div>";
 				} else {
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + row.key + "</div>";
 				}
@@ -1782,7 +1830,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 
 					return ("<div style='white-space: nowrap; color: #a4c6ff'>" + data +"</div>");
@@ -1799,7 +1847,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "pdServiceVersions",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
-					return "<div style='color: #808080'>N/A</div>";
+					return "<div style='color: #f8f8f8'>N/A</div>";
 				} else {
 					let verNameList = [];
 					let verHtml =``;
@@ -1811,7 +1859,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 						}
 					});
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + verHtml + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + verHtml + "</div>";
 					} else {
 						return "<div style='white-space: nowrap; color: #a4c6ff'>" + verHtml + "</div>";
 					}
@@ -1828,10 +1876,10 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "summary",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
-					return "<div style='color: #808080'>N/A</div>";
+					return "<div style='color: #f8f8f8'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -1846,10 +1894,10 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "project.project_name",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
-					return "<div style='color: #808080'>N/A</div>";
+					return "<div style='color: #f8f8f8'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -1864,10 +1912,10 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "assignee.assignee_displayName",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
-					return "<div style='color: #808080'>N/A</div>";
+					return "<div style='color: #f8f8f8'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" + data + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
 					} else {
 						return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 					}
@@ -1883,11 +1931,11 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "deleted",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
-					return "<div style='color: #808080'>N/A</div>";
+					return "<div style='color: #f8f8f8'>N/A</div>";
 				} else {
 					if( isEmpty(row.isReq) || row.isReq == false){
 
-						return "<div style='white-space: nowrap; color: #808080'>" + data+ "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" + data+ "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + data + "</div>";
 				}
@@ -1902,7 +1950,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 			data: "deleted",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
-					return "<div style='color: #808080'>N/A</div>";
+					return "<div style='color: #f8f8f8'>N/A</div>";
 				} else {
                     var date = new Date(data);
                     date.setDate(date.getDate()+2);
@@ -1912,7 +1960,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 
                     let newDateString = `${year}-${month}-${day}`;
 					if( isEmpty(row.isReq) || row.isReq == false){
-						return "<div style='white-space: nowrap; color: #808080'>" +newDateString + "</div>";
+						return "<div style='white-space: nowrap; color: #f8f8f8'>" +newDateString + "</div>";
 					}
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + newDateString + "</div>";
 				}
@@ -1925,7 +1973,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 
 	var rowsGroupList = [];
 	var columnDefList = [{
-		"defaultContent": "<div style='color: #808080'>N/A</div>",
+		"defaultContent": "<div style='color: #f8f8f8'>N/A</div>",
 		"targets": "_all"
 	}];
 	var orderList = [[1, "asc"]];
