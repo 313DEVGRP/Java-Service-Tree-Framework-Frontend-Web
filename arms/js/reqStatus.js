@@ -105,6 +105,8 @@ function execDocReady() {
 
 			reqIssueAndItsSubtasksEvent();
 
+			deleteWithdrawalButton();
+
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 
 			$("#progress_status").slimScroll({
@@ -954,7 +956,7 @@ function dataTableLoad(table, tableData) {
         {
 			name: "deleted",
 			title: "ALM Deleted",
-			data: "deleted",
+			data: "deleted.deleted_date",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
@@ -1802,9 +1804,18 @@ function getReqIssuesCreatedTogether(endPointUrl) {
 	);
 }
 function getDeletedIssueData(selectId, endPointUrl) {
-    console.log(endPointUrl);
-    console.log(selectId);
     var columnList = [
+        {
+            name: "select",
+            title: "<input type='checkbox' id='selectAll' onclick='toggleAll(this)'>", // 전체 선택 체크박스
+            data: null,
+            render: function (data, type, row, meta) {
+                 return "<input type='checkbox' class='rowCheckbox' value='" + data + "'/>";
+            },
+            orderable: false, // 정렬 비활성화
+            className: "dt-body-center",
+            visible: true
+        },
 		{ name: "parentReqKey", title: "부모 요구사항 키", data: "parentReqKey", visible: false },
 		{
 			name: "isReq",
@@ -1928,7 +1939,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
         {
 			name: "deleted",
 			title: "ALM Deleted",
-			data: "deleted",
+			data: "deleted.deleted_date",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #f8f8f8'>N/A</div>";
@@ -1947,7 +1958,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
         {
 			name: "deleted",
 			title: "삭제 예정일",
-			data: "deleted",
+			data: "deleted.deleted_date",
 			render: function (data, type, row, meta) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #f8f8f8'>N/A</div>";
@@ -1997,7 +2008,62 @@ function getDeletedIssueData(selectId, endPointUrl) {
 		isServerSide
 	);
 }
+function toggleAll(source) {
+    const checkboxes = document.querySelectorAll('.rowCheckbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = source.checked;
+    });
+}
+// 체크된 데이터 가져오기 함수
+function getCheckedData() {
+    const checkedData = [];
+    const checkboxes = document.querySelectorAll('.rowCheckbox:checked'); // 체크된 체크박스 선택
 
+    checkboxes.forEach(checkbox => {
+        const rowData = reqStatusDataTable.row(checkbox.closest('tr')).data(); // 데이터 테이블에서 해당 행의 데이터 가져오기
+        checkedData.push(rowData); // 배열에 추가
+    });
+
+    if (checkedData.length === 0) {
+        alert("체크된 데이터가 없습니다."); // 체크된 데이터가 없을 때 알림
+    } else {
+        const confirmation = confirm("삭제를 철회하시겠습니까?");
+
+        if (confirmation) {
+            // 사용자가 "예"를 클릭한 경우
+            deleteWithdrawal(checkedData);
+
+        }
+    }
+
+    return checkedData; // 필요에 따라 반환
+}
+
+function deleteWithdrawal(checkedData) {
+    var data = removeKeysFromArray(checkedData, ['selectedIndex', 'selectedPage'])
+	$.ajax({
+		url: "/auth-user/api/arms/reqStatus/deleteWithdrawal.do",
+		type: "PUT",
+		contentType: "application/json",
+        data: JSON.stringify(checkedData),
+		statusCode: {
+		    200: function () {
+		        jSuccess("삭제가 철회되었습니다.");
+		    }
+		}
+	});
+}
+function removeKeysFromArray(array, keys) {
+    array.forEach(item => {
+        keys.forEach(key => {
+            delete item[key];
+        });
+    });
+}
+// 버튼 클릭 이벤트 연결
+function deleteWithdrawalButton() {
+    document.getElementById('deleteWithdrawalButton').addEventListener('click', getCheckedData);
+}
 function getServerTypeMap() {
 	$.ajax({
 		url: "/auth-user/api/arms/jiraServerPure/serverTypeMap.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
