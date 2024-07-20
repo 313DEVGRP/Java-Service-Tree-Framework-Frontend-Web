@@ -49,3 +49,6 @@
 .jexcel_pagination {
     max-height: 40px;
 }
+.jexcel_toolbar {
+    margin: 0 !important;
+}

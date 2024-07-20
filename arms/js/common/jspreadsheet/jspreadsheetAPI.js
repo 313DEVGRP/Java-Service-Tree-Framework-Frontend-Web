@@ -292,7 +292,7 @@ var JspreadsheetApi = ( function() {
 
 					return items;
 				},
-				search:true,
+				search:false,
 				pagination:30,
 				// data: getSheetData(),
 				data: sheetData,
@@ -464,7 +464,7 @@ var JspreadsheetApi = ( function() {
 
 				return items;
 			},
-			search:true,
+			search:false,
 			pagination:10,
 			// data: getSheetData(),
 			data: sheetData,
@@ -596,7 +596,7 @@ var JspreadsheetApi = ( function() {
 
 						return items;
 					},
-					search:true,
+					search: false,
 					pagination:10,
 					data: sheetData,
 					columns: columnListExample,
