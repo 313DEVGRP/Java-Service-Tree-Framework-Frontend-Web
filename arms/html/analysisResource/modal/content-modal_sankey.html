@@ -87,7 +87,7 @@
 							<div
 								class="gradient_middle_border"
 								style="width: 100%; height: 1px"></div>
-							<div id="modal_excel" style="flex:0 0 97%; max-height: 30px;"></div>
+							<div id="modal_excel" style="flex:0 0 97%; min-height: 30px;"></div>
 						</div>
 					</div>
 			</section>
@@ -111,43 +111,283 @@
 </div>
 
 <style>
-	.wh100 {
-			height: 100%;
-			width: 100%;
-	}
-	.w100 { width: 100%;  }
-	.h100 {	height: 100%;	}
+    .wh100 {
+        height: 100%;
+        width: 100%;
+    }
+    .w100 { width: 100%;  }
+    .h100 {	height: 100%;	}
 
-	.flexAndColumn {
-		display: flex;
-		flex-direction: column;
-	}
-	.flexAndRow {
-    display: flex;
-    flex-direction: row;
-	}
+    .flexAndColumn {
+        display: flex;
+        flex-direction: column;
+    }
+    .flexAndRow {
+        display: flex;
+        flex-direction: row;
+    }
 
-	.no-padding { padding: 0; }
+    .no-padding { padding: 0; }
 
-	.flex1 { flex: 1;}
-	.flex5p  { flex:0 0 5%; }
-	.flex10p {	flex:0 0 10%;	}
+    .flex1 { flex: 1;}
+    .flex5p  { flex:0 0 5%; }
+    .flex10p {	flex:0 0 10%;	}
 
-	.fullscreen-footer {
-      background-color: transparent;padding: 5px;text-align: right;border-top: 0px;flex: 0 0 5%;
-			display: flex;flex-direction: row-reverse;align-content: center;align-items: flex-end;
-	}
+    .fullscreen-footer {
+        background-color: transparent;padding: 5px;text-align: right;border-top: 0px;flex: 0 0 5%;
+        display: flex;flex-direction: row-reverse;align-content: center;align-items: flex-end;
+    }
 </style>
 <script>
 	function widgsterDocReady() {
 		var pluginGroups = [
-			[
-				"./js/common/jspreadsheet/modal/fs_analysisResource.js"
+			[	"./js/common/jspreadsheet/spreadsheet.js",
+				"./js/common/jspreadsheet/modalTabFunction.js"
 			]
 		];
 
 		loadPluginGroupsParallelAndSequential(pluginGroups).then(function() {
 			console.log("해당 html 및 js 로드 완료.");
+
+			// excelColumn 세팅 (width ratio))
+			var columnList = [
+				{ type: "text", title: "제품(서비스) 키", wRatio: 0.1},
+				{ type: "text", title: "제품(서비스) 명", wRatio: 0.25},
+				{ type: "text", title: "버전 키", 				wRatio: 0.1},
+				{ type: "text", title: "버전 명", 				wRatio: 0.15},
+				{ type: "text", title: "작업자 키", 			wRatio: 0.3},
+				{ type: "text", title: "작업자", 					wRatio: 0.1}
+			];
+
+			var mock_data = [
+				{
+					"id": "22-product",
+					"name": "313 SOFT - 요구사항 관리 시스템 - ALM RMS",
+					"type": "제품",
+					"parent": ""
+				},
+				{
+					"id": "33-version",
+					"name": "BaseVersion",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "35-version",
+					"name": "1.0.0",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "36-version",
+					"name": "1.0.1",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "37-version",
+					"name": "24.01",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "46-version",
+					"name": "24.02",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "55-version",
+					"name": "24.03",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "59-version",
+					"name": "24.04",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "61-version",
+					"name": "24.05",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "74-version",
+					"name": "24.06",
+					"type": "버전",
+					"parent": ""
+				},
+				{
+					"id": "5f18ccb5ce15e800268d224d",
+					"name": "양형석",
+					"type": "작업자",
+					"parent": "37"
+				},
+				{
+					"id": "626551d434b9b70068796c1e",
+					"name": "moon",
+					"type": "작업자",
+					"parent": "37,35,74"
+				},
+				{
+					"id": "712020:4fc33a35-859f-4ac8-8956-b22581115623",
+					"name": "gkfn185",
+					"type": "작업자",
+					"parent": "37,36,55"
+				},
+				{
+					"id": "619ae743b43d5b006adef72c",
+					"name": "김찬호",
+					"type": "작업자",
+					"parent": "37,36,55"
+				},
+				{
+					"id": "hsyang",
+					"name": "hsyang",
+					"type": "작업자",
+					"parent": "37,33,55,59"
+				},
+				{
+					"id": "5ffe4999f7ea2a0107f8c6f6",
+					"name": "최수현",
+					"type": "작업자",
+					"parent": "37,36,55"
+				},
+				{
+					"id": "dumbbelloper",
+					"name": "dumbbelloper",
+					"type": "작업자",
+					"parent": "33,35"
+				},
+				{
+					"id": "gkfn185",
+					"name": "gkfn185",
+					"type": "작업자",
+					"parent": "33"
+				},
+				{
+					"id": "1",
+					"name": "Redmine Admin",
+					"type": "작업자",
+					"parent": "55"
+				},
+				{
+					"id": "admin",
+					"name": "admin",
+					"type": "작업자",
+					"parent": "55"
+				},
+				{
+					"id": "63b2a039159df2c252e826e9",
+					"name": "이동민",
+					"type": "작업자",
+					"parent": "61"
+				},
+				{
+					"id": "admin",
+					"name": "admin",
+					"type": "작업자",
+					"parent": "55"
+				},
+				{
+					"id": "63b2a039159df2c252e826e9",
+					"name": "이동민",
+					"type": "작업자",
+					"parent": "61"
+				},
+				{
+					"id": "admin",
+					"name": "admin",
+					"type": "작업자",
+					"parent": "37"
+				},
+				{
+					"id": "63b2a039159df2c252e826ee",
+					"name": "이동민",
+					"type": "작업자",
+					"parent": "61"
+				},
+				{
+					"id": "admin",
+					"name": "admin",
+					"type": "작업자",
+					"parent": "74"
+				},
+				{
+					"id": "63b2a039159df2c252e826e9",
+					"name": "이동민",
+					"type": "작업자",
+					"parent": "37"
+				},
+				{
+					"id": "admin",
+					"name": "admin",
+					"type": "작업자",
+					"parent": "36"
+				},
+				{
+					"id": "63b2a039159df2c252e826e9",
+					"name": "이동민",
+					"type": "작업자",
+					"parent": "55"
+				},
+				{
+					"id": "No-Worker",
+					"name": "No-Worker",
+					"type": "No-Worker",
+					"parent": ""
+				}
+			];
+			var modifyData = function(mock_data) {
+				let products = {};
+				let versions = {};
+				let workers = [];
+				let result = [];
+
+				mock_data.forEach(item => {
+					if (item.type === "제품") {
+						let itemId = item.id.split("-")[0];
+						products[itemId] = { id: itemId, name: item.name };
+						//products[item.id] = { id: item.id, name: item.name };
+					} else if (item.type === "버전") {
+						let itemId = item.id.split("-")[0];
+						versions[itemId] = { id: itemId, name: item.name, product: products["22"] };
+					} else if(item.type ==="작업자") {
+						item.parent.split(',').forEach(parentId => {
+							if (versions[parentId]) {
+								workers.push({
+									product: versions[parentId].product,
+									version: versions[parentId],
+									worker: { id: item.id, name: item.name }
+								});
+							}
+						});
+					}
+				});
+
+				workers.forEach(worker => {
+					result.push({
+						"제품(서비스) 키": worker.product.id,
+						"제품(서비스) 명": worker.product.name,
+						"버전 키": worker.version.id,
+						"버전 명": worker.version.name,
+						"작업자 키": worker.worker.id,
+						"작업자 명": worker.worker.name
+					});
+				});
+
+				return result;
+			};
+			let excelData = modifyData(mock_data);
+			console.log(excelData);
+
+			ModalTabFunction.setColumns(columnList);
+			ModalTabFunction.setExcelData(excelData);
+			ModalTabFunction.drawExcel("modal_excel");
+
 		});
 	}
 </script>

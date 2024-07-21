@@ -1,9 +1,36 @@
-(function(){
+var ModalTabFunction = (function(){
+	"use strict";
+
+	// Modal Chart / Modal Exce의 Tab 메뉴별 동작 설정
+
+	let $tabFunction_data;
+	let $tabFunction_columns;
 	// 엑셀 데이터 높이 고정을 위한, 계산
 	let chart_height = $("#chart_data").height();
 	let chart_width = $("#chart_data").width();
 	let jexcel_content_height;
+	console.log("tabFunction :: chart_height");
 	console.log(chart_height);
+
+	var setExcelData = function(data) {
+		$tabFunction_data = data;
+	}
+	var getExcelData = function () {
+		return $tabFunction_data
+	}
+	var setColumns = function(columns) {
+		$tabFunction_columns = columns;
+	}
+	var getColumns = function () {
+		return $tabFunction_columns;
+	}
+
+	var setColumnWidth = function (width) {
+		console.log("setColumnWidth");
+		$tabFunction_columns = $tabFunction_columns.map(column => ({
+			...column, width: width * column.wRatio
+		}));
+	}
 
 	// chart_height 고정
 	if(chart_height) {
@@ -21,7 +48,7 @@
 
 			if (selectedVersionId) {
 				$("#modal_chart").html("");
-				drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId, tarId, 10000);
+				//drawProductToManSankeyChart(selectedPdServiceId, selectedVersionId, tarId, 10000);
 			} else {
 				console.log("서비스 및 버전 선택이 안되어있습니다.");
 				$("#modal_chart").html(`<span style="margin: auto">
@@ -38,12 +65,14 @@
 					</span>`);
 				//jError("서비스 및 버전을 설정 후 선택해주세요.");
 			}
-		} else if (target === "#excel_data") {
+		}
+		else if (target === "#excel_data") {
 			console.log("excel_data");
+			console.log(chart_width);
 			let tarId = "modal_excel";
 			drawExcel(tarId);
-
-		} else if (target === "#option_toggle") {
+		}
+		else if (target === "#option_toggle") {
 			$(".option_tab").removeClass("active");
 			e.preventDefault();
 			if ($(".fullscreen-body-main").hasClass("col-lg-12")) {
@@ -64,7 +93,7 @@
 			handleResize(entry.target.id, width, height);
 		}
 	});
-	
+
 	// 모달요소 크리 변화 관찰
 	resizeObserver.observe(document.getElementById('chart_data'));
 	resizeObserver.observe(document.getElementById('excel_data'));
@@ -86,15 +115,28 @@
 	}
 
 	function drawExcel(targetId) {
-		$.when(JspreadsheetApi.getSheetData()).done(function() {
-			JspreadsheetApi.sheetRender(targetId);
-		}).done( function() {
-			// 40(pagination) 30(header)
-			jexcel_content_height = chart_height - 40 -30;
-			$("#modal_excel .jexcel_content").css("max-height",jexcel_content_height);
-			$("#modal_excel .jexcel_content").css("width","100%");
-		}).fail( function() {
-			console.log("excel_data 그리기 실패");
+		let $targetId = "#"+targetId;
+		
+		if($($targetId)[0].jexcel) {
+			$($targetId)[0].jexcel.destroy();
+		}
+
+		setColumnWidth(chart_width);
+
+		$($targetId).spreadsheet({
+			columns: getColumns(),
+			data: getExcelData(),
+			// 커스텀 옵션 정의
+			search:false
 		});
+
+		jexcel_content_height = chart_height - 40 -30 -35 - 34;
+		console.log("chart_height=> " + chart_height);
+		console.log("jexcel_content_height=> "+ jexcel_content_height);
+		$("#modal_excel .jexcel_content").css("max-height",jexcel_content_height);
+		$("#modal_excel .jexcel_content").css("width","100%");
 	}
-})(); // 이벤트 리스너 등록 및 즉시실행.
+	return {
+		setExcelData, getExcelData, setColumns, getColumns, drawExcel
+	}
+})(jQuery);
