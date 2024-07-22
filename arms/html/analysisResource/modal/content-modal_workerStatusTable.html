@@ -1,0 +1,244 @@
+<div class="fullscreen-wrapper flexAndColumn h100">
+	<div class="fullscreen-header flex5p">
+		<h4
+			class="font14"
+			style="color: #f8f8f8; text-align: left; padding: 5px">
+
+			<span
+				class="font13"
+				id="fullscreen_title"
+				style="font-weight: bold">
+				<i class="fa fa-edit"></i>
+				작업자별 업무 처리 현황
+			</span>
+		</h4>
+		<div
+			class="gradient_middle_border"
+			style="width: 100%; height: 2px"></div>
+		<div class="widget-controls" style="margin:10px">
+			<a data-widgster="restore" title="Restore" href="#">
+				<span class="glyphicon glyphicon-remove"></span>
+			</a>
+		</div>
+	</div>
+	<div  class="fullscreen-body flex1"
+				style="padding: 5px;;">
+		<div class="col-lg-12 h100 no-padding fullscreen-body-main">
+			<section class="widget-tabs h100 flexAndColumn">
+				<header style="flex: 0 0 3%;">
+					<ul class="nav nav-tabs">
+						<li class="chart_tab active">
+							<a href="#chart_data" data-toggle="tab">차트 보기</a>
+						</li>
+						<li class="list_tab">
+							<a href="#excel_data" data-toggle="tab">목록 보기</a>
+						</li>
+<!--						<li class="option_tab" style="float: right !important;">
+							<a href="#option_toggle" data-toggle="tab" style="margin-right: 0px">설정</a>
+						</li>-->
+					</ul>
+				</header>
+				<div class="body tab-content fs-tab-content" style="flex:1; display: flex; flex-direction: column;">
+					<div id="chart_data" class="tab-pane h100 active">
+						<div class="flexAndColumn h100">
+							<h5 class="tab-header font13" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px; margin-bottom: 3px;">
+								<i class="fa fa-bar-chart-o"></i> Chart View
+								<div
+									class="gradient_middle_border"
+									style="width: 100%; height: 1px"></div>
+							</h5>
+							<div id="modal_chart" style="flex:0 0 97%; overflow: hidden; display: flex">
+								<span style="margin: auto">
+									※ Notification ※
+									<br/>
+									전체 데이터 렌더링 영역 입니다.
+									<br/>
+									이 영역의 화면(차트 등)을 개발 진행 중입니다.
+									<br/>
+									<br/>
+									첫번째 탭은 전체 데이터를 활용한 차트 렌더링 영역입니다.
+									<br/>
+									두번째 탭은 전체 데이터를 엑셀 형태로 제공하고 있습니다.
+								</span>
+							</div>
+						</div>
+					</div>
+					<div id="excel_data" class="tab-pane h100">
+						<div class="flexAndColumn h100">
+							<h5 class="tab-header font13 flexAndRow" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px; align-items: center; margin-bottom: 0px">
+								<div class="tab-image-container" style="margin: 5px 3px 5px 0">
+									<img src="./img/spreadsheet/spreadsheet-2127832_1920.png" id="side_jira_white_icon" width="40px">
+								</div>
+								<div class="tab-title-container w100 flexAndColumn">
+									<div id="tab-doc-title-bar" style="line-height: 20px; font-size: 15px; margin: 8px 0 8px 8px">List View (Excel)</div>
+									<div id="tab-doc-bar" class="flexAndRow btn-group">
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">파일</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">수정</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">보기</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">삽입</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">서식</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">데이터</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도구</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">확장프로그램</button>
+										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도움말</button>
+									</div>
+								</div>
+							</h5>
+							<div
+								class="gradient_middle_border"
+								style="width: 100%; height: 1px"></div>
+							<div id="modal_excel" style="flex:0 0 97%; min-height: 30px;"></div>
+						</div>
+					</div>
+			</section>
+		</div>
+<!--		<div class="col-lg-3 fullscreen-body-option hidden">
+			<section class="widget widget-tabs">
+				<header>
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#version_filter" data-toggle="tab">조건 <i class="fa fa-cog"></i></a>
+						</li>
+					</ul>
+				</header>
+				<div class="body tab-content">
+					<div id="modal_options" class="tab-pane clearfix active">
+					</div>
+				</div>
+			</section>
+		</div>-->
+	</div>
+</div>
+
+<style>
+    .wh100 {
+        height: 100%;
+        width: 100%;
+    }
+    .w100 { width: 100%;  }
+    .h100 {	height: 100%;	}
+
+    .flexAndColumn {
+        display: flex;
+        flex-direction: column;
+    }
+    .flexAndRow {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .no-padding { padding: 0; }
+
+    .flex1 { flex: 1;}
+    .flex5p  { flex:0 0 5%; }
+    .flex10p {	flex:0 0 10%;	}
+
+    .fullscreen-footer {
+        background-color: transparent;padding: 5px;text-align: right;border-top: 0px;flex: 0 0 5%;
+        display: flex;flex-direction: row-reverse;align-content: center;align-items: flex-end;
+    }
+</style>
+<script>
+	function widgsterDocReady() {
+		var pluginGroups = [
+			[	"./js/common/jspreadsheet/spreadsheet.js",
+				"./js/common/jspreadsheet/modalTabFunction.js"
+			]
+		];
+
+		loadPluginGroupsParallelAndSequential(pluginGroups).then(function() {
+			console.log("해당 html 및 js 로드 완료.");
+
+			// excelColumn 세팅 (width ratio)
+			var columnList = [
+				{ type: "text", title: "작업자 명", wRatio: 0.1},
+				{ type: "text", title: "작업자 메일", wRatio: 0.2},
+				{ type: "text", title: "요구사항 및 연결이슈 합계", wRatio: 0.2},
+				{ type: "text", title: "요구사항 수", wRatio: 0.1},
+				{ type: "text", title: "연결이슈 수", wRatio: 0.1},
+				{ type: "text", title: "요구사항 상태",	wRatio: 0.15},
+				{ type: "text", title: "연결이슈 상태",	wRatio: 0.15}
+			];
+
+			var getData = function(pdservice_id, pdServiceVersionLinks) {
+				var deferred = $.Deferred();
+				var pdId = pdservice_id;
+				var verLinks = pdServiceVersionLinks;
+
+				return $.when(
+					ResourceApi.fetchResourceData(pdId, verLinks),
+					ResourceApi.fetchAssigneeInfoMap(pdId, verLinks)
+				).then(function(fetchResourceDataResponse, fetchAssigneeInfoMapResponse) {
+
+					var fetchedResourceData = ResourceApi.getFetchedResourceData();
+					var fetchedAssigneeInfoMap = ResourceApi.getFetchedAssigneeInfoMap();
+
+					return {
+						fetchedResourceData: fetchedResourceData,
+						fetchedAssigneeInfoMap: fetchedAssigneeInfoMap
+					};
+				});
+			};
+
+
+			if(!selectedPdServiceId || !selectedVersionId) {
+				alert("제품과 버전을 선택해주세요.");
+				return false;
+			} else {
+				getData(selectedPdServiceId, selectedVersionId)
+					.then(function(data) {
+						var fetchedAssigneeInfoMap = data.fetchedAssigneeInfoMap;
+						var fetchedResourceData = data.fetchedResourceData;
+						// 작업자명
+						console.log(fetchedResourceData);
+						console.log(fetchedAssigneeInfoMap);
+						var modifyData = function(fetchedResourceData) {
+							let result = fetchedResourceData.map(entry => {
+								let email = entry["필드명"];
+								let name = fetchedAssigneeInfoMap[email] || "";
+								let total = entry["개수"];
+								let reqCount = 0;
+								let subCount = 0;
+								let reqStatus = [];
+								let subStatus = [];
+
+								entry["하위검색결과"]["group_by_isReq"].forEach(isReqEntry => {
+									if (isReqEntry["필드명"] === "true") {
+										reqCount = isReqEntry["개수"];
+										reqStatus = isReqEntry["하위검색결과"]["group_by_status.status_name.keyword"].map(status => `${status["필드명"]} - ${status["개수"]}`);
+									} else if (isReqEntry["필드명"] === "false") {
+										subCount = isReqEntry["개수"];
+										subStatus = isReqEntry["하위검색결과"]["group_by_status.status_name.keyword"].map(status => `${status["필드명"]} - ${status["개수"]}`);
+									}
+								});
+
+								return {
+									"작업자 명" : name,
+									"작업자 메일": email,
+									"요구사항 및 연결이슈 합계": total,
+									"요구사항 수": reqCount,
+									"연결이슈 수": subCount,
+									"요구사항 상태": reqStatus.join(", "),
+									"연결이슈 상태": subStatus.join(", ")
+								};
+							});
+
+							return result;
+						}
+
+						let excelData = modifyData(fetchedResourceData);
+						console.log(excelData);
+
+						// 커스텀 옵션 정의
+						let customOptions = { search:true };
+						console.log(columnList);
+						ModalTabFunction.setColumns(columnList);
+						ModalTabFunction.setExcelData(excelData);
+						ModalTabFunction.setOptions(customOptions);
+						ModalTabFunction.drawExcel("modal_excel");
+				});
+			}
+
+		});
+	}
+</script>

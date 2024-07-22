@@ -17,7 +17,7 @@ var ModalTabFunction = (function(){
 		$tabFunction_data = data;
 	}
 	var getExcelData = function () {
-		return $tabFunction_data
+		return $tabFunction_data;
 	}
 	var setColumns = function(columns) {
 		$tabFunction_columns = columns;
@@ -135,7 +135,7 @@ var ModalTabFunction = (function(){
 			data: getExcelData()
 		}, getOptions()));
 
-		jexcel_content_height = chart_height - 40 -30 -35 - 34;
+		jexcel_content_height = chart_height -40-30-35-34; // 도구모음(34), row번호(50)
 		console.log("chart_height=> " + chart_height);
 		console.log("jexcel_content_height=> "+ jexcel_content_height);
 		$("#modal_excel .jexcel_content").css("max-height",jexcel_content_height);
