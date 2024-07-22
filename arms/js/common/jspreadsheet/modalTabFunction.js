@@ -3,8 +3,9 @@ var ModalTabFunction = (function(){
 
 	// Modal Chart / Modal Exce의 Tab 메뉴별 동작 설정
 
-	let $tabFunction_data;
-	let $tabFunction_columns;
+	let $tabFunction_data;   // 엑셀 데이터
+	let $tabFunction_columns;// 엑셀 컬럼
+	let $tabFunction_options;// 엑셀 (커스텀)옵션 :: 정의 안할 경우 default
 	// 엑셀 데이터 높이 고정을 위한, 계산
 	let chart_height = $("#chart_data").height();
 	let chart_width = $("#chart_data").width();
@@ -23,6 +24,12 @@ var ModalTabFunction = (function(){
 	}
 	var getColumns = function () {
 		return $tabFunction_columns;
+	}
+	var setOptions = function(options) {
+		$tabFunction_options = options;
+	}
+	var getOptions = function() {
+		return $tabFunction_options ? $tabFunction_options : null;
 	}
 
 	var setColumnWidth = function (width) {
@@ -123,12 +130,10 @@ var ModalTabFunction = (function(){
 
 		setColumnWidth(chart_width);
 
-		$($targetId).spreadsheet({
+		$($targetId).spreadsheet($.extend({}, {
 			columns: getColumns(),
-			data: getExcelData(),
-			// 커스텀 옵션 정의
-			search:false
-		});
+			data: getExcelData()
+		}, getOptions()));
 
 		jexcel_content_height = chart_height - 40 -30 -35 - 34;
 		console.log("chart_height=> " + chart_height);
@@ -137,6 +142,9 @@ var ModalTabFunction = (function(){
 		$("#modal_excel .jexcel_content").css("width","100%");
 	}
 	return {
-		setExcelData, getExcelData, setColumns, getColumns, drawExcel
+		setExcelData, getExcelData,
+		setColumns, getColumns,
+		setOptions, getOptions,
+		drawExcel
 	}
 })(jQuery);

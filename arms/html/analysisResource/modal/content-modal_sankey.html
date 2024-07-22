@@ -149,7 +149,7 @@
 		loadPluginGroupsParallelAndSequential(pluginGroups).then(function() {
 			console.log("해당 html 및 js 로드 완료.");
 
-			// excelColumn 세팅 (width ratio))
+			// excelColumn 세팅 (width ratio)
 			var columnList = [
 				{ type: "text", title: "제품(서비스) 키", wRatio: 0.1},
 				{ type: "text", title: "제품(서비스) 명", wRatio: 0.25},
@@ -384,8 +384,12 @@
 			let excelData = modifyData(mock_data);
 			console.log(excelData);
 
+			// 커스텀 옵션 정의
+			let customOptions = { search:false };
+
 			ModalTabFunction.setColumns(columnList);
 			ModalTabFunction.setExcelData(excelData);
+			ModalTabFunction.setOptions(customOptions);
 			ModalTabFunction.drawExcel("modal_excel");
 
 		});
