@@ -308,8 +308,8 @@ function makeVersionMultiSelectBox() {
 			resourceLoad($("#selected_pdService").val(), selectedVersionId);
 
 			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
-			// 이슈리스트 데이터테이블
-			dataTableLoad($("#selected_pdService").val(), endPointUrl);
+            // 이슈리스트 데이터테이블
+            setReqStatusTable(endPointUrl);
 			$(".ms-parent").css("z-index", 1000);
 		},
 		onOpen: function() {
@@ -384,35 +384,37 @@ function setReqStatusTable(endPointUrl) {
 
             let data = apiResponse.body;
             let tableData = processData(data);
-            dataTableLoad("#reqstatustable", tableData);
+            dataTableLoad(tableData);
          }
       }
    });
 }
 
 function processData(data) {
+    const nodes = {};
 
-  const nodes = {};
-  data.forEach(item => {
-    nodes[item.key] = { ...item, children: [] };
-  });
+    data.forEach(item => {
+        nodes[item.key] = { ...item, children: [] };
+    });
 
-  // 트리 구성
-  data.forEach(item => {
-    if (!item.isReq && item.parentReqKey !== item.upperKey) {
-      // 상위 항목의 children에 추가
-      let parent = nodes[item.upperKey];
-      while (parent && parent.upperKey !== parent.parentReqKey) {
-        parent = nodes[parent.upperKey];
-      }
-      if (parent) {
-        parent.children.push(nodes[item.key]);
-      }
-    }
-  });
+    // 트리 구성
+    data.forEach(item => {
+        if (!item.isReq && (item.parentReqKey !== item.upperKey)) {
+            // 상위 항목의 children에 추가
+            let upperNode = nodes[item.upperKey];
+            while (upperNode && (upperNode.parentReqKey !== upperNode.upperKey)) {
+                upperNode = nodes[upperNode.upperKey];
+            }
+            if (upperNode && !upperNode.children.some(child => child.key === item.key)) {
+                upperNode.children.push(nodes[item.key]);
+            }
+        }
+    });
 
-  // 상위 항목만 필터링
-  return data.filter(item => item.isReq || (item.isReq === false && item.parentReqKey === item.upperKey)).map(item => nodes[item.key]);
+    // 노드 필터링
+    return Object.values(nodes).filter(item =>
+                item.isReq || (!item.isReq && (item.parentReqKey === item.upperKey))
+            ).map(item => nodes[item.key]);
 }
 
 function format(d) {
@@ -656,7 +658,7 @@ function initializeChildTable(childrenData, container) {
 //데이터 테이블
 ////////////////////////////////////////////////////////////////////////////////////////
 // -------------------- 데이터 테이블을 만드는 템플릿으로 쓰기에 적당하게 리팩토링 함. ------------------ //
-function dataTableLoad(table, tableData) {
+function dataTableLoad(tableData) {
 	var columnList = [
 		{ name: "parentReqKey", title: "부모 요구사항 키", data: "parentReqKey", visible: false },
 		{
@@ -675,7 +677,12 @@ function dataTableLoad(table, tableData) {
 			title: "요구사항 구분",
 			data: "isReq",
 			render: function (data, type, row, meta) {
-                let parentReqKey = row.parentReqKey+"의 연결 이슈";
+			    let parentReqKey = row.parentReqKey;
+			    if (row.connectType === "subtask") {
+			        parentReqKey += "의 하위 이슈";
+			    } else {
+			        parentReqKey += "의 연결 이슈";
+			    }
                 let key = row.key;
                 if (row.deleted) {
                     if(row.deleted.deleted_isDeleted === true){
@@ -1024,7 +1031,7 @@ function dataTableLoad(table, tableData) {
 		"targets": "_all"
 	}];
 	var orderList = [[2, "asc"]];
-	var jquerySelector = table;
+	var jquerySelector = "#reqstatustable";
 	var ajaxUrl = "";
 	var jsonRoot = "";
 	var buttonList = [
