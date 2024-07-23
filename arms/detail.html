@@ -381,12 +381,7 @@
                 console.log("The URL of this page is: " + window.location.href);
 
                 var str = window.location.href;
-                console.table(str);
-                if (str.indexOf("313.co.kr:9999") > 0 || str.indexOf("a-rms.net:9999") || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0 || str.indexOf("localhost:9999") > 0 || str.indexOf("127.0.0.1:9999") > 0) {
-                    console.log("개발용으로 접속한 경우");
-                    console.log("마토모 : OFF");
-
-                } else if (str.indexOf("313.co.kr") > 0 || str.indexOf("a-rms.net") > 0) {
+                if (str.indexOf("313.co.kr") > 0 || str.indexOf("a-rms.net") > 0 || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0) {
                     console.log("313 사이트에 접속했거나 arms 사이트에 접속한 경우");
                     console.log("마토모 : ON");
                     <!-- Matomo -->
@@ -407,6 +402,7 @@
                     })();
                     <!-- End Matomo Code -->
                 } else {
+                    console.log("고객사 또는 개발용으로 접속한 경우");
                     console.log("고객사 사이트에 접속한 경우");
                     console.log("마토모 : OFF");
                 }

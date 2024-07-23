@@ -15,7 +15,13 @@ function execDocReady() {
 			"../reference/light-blue/lib/vendor/jquery.ui.widget.js"
 		],
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
-		[ "css/jiraServerCustom.css"]
+		[
+			"css/jiraServerCustom.css",
+			"../reference/jquery-plugins/swiper-11.1.4/swiper-bundle.min.js",
+			"../reference/jquery-plugins/swiper-11.1.4/swiper-bundle.min.css",
+			"./js/common/swiperHelper.js",
+			"./css/customSwiper.css"
+		]
 	];
 
 	loadPluginGroupsParallelAndSequential(pluginGroups)
@@ -200,10 +206,29 @@ function bindDataDetailTab(ajaxData) {
 	CKEDITOR.instances.detailview_req_contents.setData(contents);
 	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
 
+	if (ajaxData.c_drawio_image_raw != null && ajaxData.c_drawio_image_raw != "") {
+		var imageSrcArray = Array(1).fill(ajaxData.c_drawio_image_raw);
+		console.log(imageSrcArray);
+		addImageToSwiper(imageSrcArray, "pdservice_detail_drawio_swiper_container");
+		$("#pdservice_detail_drawio_swiper").show();
+		$("#pdservice_detail_drawio_div").show();
+	} else {
+		$("#pdservice_detail_drawio_swiper").hide();
+		$("#pdservice_detail_drawio_div").hide();
+	}
+
+
 }
 function formatDate(date) {
 	var year = date.getFullYear().toString(); // 연도의 마지막 두 자리를 얻습니다.
 	var month = (date.getMonth() + 1).toString().padStart(2, "0");
 	var day = date.getDate().toString().padStart(2, "0");
 	return year + "-" + month + "-" + day;
+}
+
+function viewDrawIO() {
+	if(selectedJsTreeId) {
+		window.open("/reference/drawio?id=" + selectedJsTreeId + "&type=view&splash=0&armsType=reqadd&pdServiceId="+selectedPdService, "_blank");
+	}
+	return false;
 }

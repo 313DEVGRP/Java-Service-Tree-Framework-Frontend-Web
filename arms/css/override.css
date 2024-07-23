@@ -2164,3 +2164,16 @@ svg .ghostCircle.show {
 div.slimScrollDiv > ul {
 	overflow: auto !important;
 }
+
+/* 현황 관리 테이블 */
+td.details-control {
+    cursor: pointer;
+}
+
+.child-table-container {
+    margin-left: 26px;
+}
+
+.goTXarea {
+	color : #0a0a0a!important;
+}

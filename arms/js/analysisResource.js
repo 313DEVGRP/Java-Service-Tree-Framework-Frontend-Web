@@ -68,14 +68,13 @@ function execDocReady() {
             "./js/common/chart/eCharts/simplePie.js"
         ],
         [
+            // jspreadsheet
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.js",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.css",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/index.js",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css",
             // "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.datatables.css",
-            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css",
-            "./js/common/jspreadsheet/jspreadsheetAPI.js",
-            "./css/jspreadsheet/custom_sheet.css"
+            "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css"
         ],
         [
             "../reference/jquery-plugins/dataTables-1.10.16/media/css/jquery.dataTables_lightblue4.css",
