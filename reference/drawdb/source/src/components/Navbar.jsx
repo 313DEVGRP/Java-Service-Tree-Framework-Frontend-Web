@@ -11,7 +11,7 @@ export default function Navbar() {
     <>
       <div className="py-5 px-8 sm:px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <Link to="/">
+          <Link to="/reference/drawdb">
             <img src={logo} alt="logo" className="me-2 h-[48px] sm:h-[32px]" />
           </Link>
           <div className="md:hidden flex space-x-6 ml-6">

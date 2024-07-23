@@ -16,6 +16,15 @@ module.exports = function (grunt) {
 							res.setHeader("Access-Control-Allow-Credentials", true);
 							res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 							res.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+							if (req.url.startsWith("/reference/drawdb/editor")) {
+								req.url = "/reference/drawdb/index.html";
+							} else if (req.url.startsWith("/reference/drawdb/templates")) {
+								req.url = "/reference/drawdb/index.html";
+							} else if (req.url.startsWith("/reference/drawdb/survey")) {
+								req.url = "/reference/drawdb/index.html";
+							} else if (req.url.startsWith("/reference/drawdb/shortcuts")) {
+								req.url = "/reference/drawdb/index.html";
+							}
 							if (req.method.toUpperCase() == "POST") req.method = "GET";
 							return next();
 						});

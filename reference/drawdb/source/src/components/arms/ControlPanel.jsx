@@ -1514,7 +1514,7 @@ export default function ControlPanel({
     return (
       <nav className="flex justify-between pt-1 items-center whitespace-nowrap">
         <div className="flex justify-start items-center">
-          <Link to="/">
+          <Link to="/reference/drawdb">
             <img
               width={54}
               src={icon}

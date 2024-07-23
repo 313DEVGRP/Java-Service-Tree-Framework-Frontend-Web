@@ -40,7 +40,7 @@ export default function Templates() {
       <div className="min-h-screen">
         <div className="sm:py-3 py-5 px-12 xl:px-20 sm:px-6 flex justify-between items-center select-none">
           <div className="flex items-center justify-start">
-            <Link to="/">
+            <Link to="/reference/drawdb">
               <img
                 src={logo_light}
                 alt="logo"

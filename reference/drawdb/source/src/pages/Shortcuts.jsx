@@ -53,7 +53,7 @@ export default function Shortcuts() {
     <>
       <div className="sm:py-3 py-5 px-20 sm:px-6 flex justify-between items-center">
         <div className="flex items-center justify-start">
-          <Link to="/">
+          <Link to="/reference/drawdb">
             <img
               src={theme === "dark" ? logo_dark : logo_light}
               alt="logo"

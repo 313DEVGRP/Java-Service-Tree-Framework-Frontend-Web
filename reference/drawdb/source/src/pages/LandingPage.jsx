@@ -29,7 +29,7 @@ export default function LandingPage() {
       <div className="flex flex-col h-screen">
         {showSurvey && (
           <div className="text-white font-semibold py-1.5 px-4 text-sm text-center bg-gradient-to-r from-slate-700 from-10% via-slate-500 to-slate-700">
-            <Link to="/survey" className="hover:underline">
+            <Link to="/reference/drawdb/survey" className="hover:underline">
               Help us improve! Share your feedback.
             </Link>
             <div className="float-right">
@@ -311,7 +311,7 @@ const features = [
     content: (
       <div>
         Speed up development with keyboard shortuts. See all available shortcuts
-        <Link to="/shortcuts" className="ms-1.5 text-blue-500 hover:underline">
+        <Link to="/reference/drawdb/shortcuts" className="ms-1.5 text-blue-500 hover:underline">
           here
         </Link>
         .
