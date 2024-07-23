@@ -1,0 +1,2724 @@
+<!DOCTYPE html>
+<html
+	lang="en"
+	xmlns="http://www.w3.org/1999/html">
+	<head>
+		<title>A-RMS By 313DEVGRP</title>
+
+		<meta charset="utf-8" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="IE=edge" />
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<meta
+			http-equiv="Expire"
+			content="-1" />
+		<meta
+			http-equiv="Keywords"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			http-equiv="Reply-to"
+			content="313cokr@gmail.com" />
+		<meta
+			http-equiv="Content-Language"
+			content="Korean" />
+		<meta
+			http-equiv="Last-Modified"
+			content="Wed 01 Nov 2023 23:59:59" />
+		<meta
+			http-equiv="Organization"
+			content="www.a-rms.net" />
+		<meta
+			http-equiv="Content-Type"
+			content="text/html;charset=utf-8" />
+		<meta
+			http-equiv="Cache-Control"
+			content="no-cache" />
+		<meta
+			http-equiv="Pragma"
+			content="no-cache" />
+		<meta
+			http-equiv="imagetoolbar"
+			content="no" />
+		<meta
+			http-equiv="content-Script-type"
+			content="text/javascript" />
+		<meta
+			http-equiv="content-Style-type"
+			content="text/css" />
+
+		<meta
+			name="robots"
+			content="ALL, INDEX, FOLLOW" />
+		<meta
+			name="Subject"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			name="Filename"
+			content="template.html" />
+		<meta
+			name="Author-Date"
+			content="Wed 01 Nov 2023" />
+		<meta
+			name="Date"
+			content="Wed 01 Nov 2023" />
+		<meta
+			name="Author"
+			content="313DEVGRP" />
+		<meta
+			name="Other Agent"
+			content="313DEVGRP" />
+		<meta
+			name="Email"
+			content="313cokr@gmail.com" />
+		<meta
+			name="Reply-To"
+			content="313cokr@gmail.com" />
+		<meta
+			name="Project"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			name="Status"
+			content="Draft" />
+		<meta
+			name="Location"
+			content="South Korea" />
+		<meta
+			name="distribution"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			name="Description"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			name="verify-v1"
+			content="Eal6+fiCjgKAZb5A6pRvSLmsh9NLF2AsqxqJrLuFoAs=" />
+		<meta
+			name="Revision"
+			content="1.0" />
+		<meta
+			name="Generator"
+			content="eclipse 3.6.1" />
+		<meta
+			name="Classification"
+			content="Development,Deployment" />
+		<meta
+			name="Copyright"
+			content="CopyRight@313DEVGRP. All Rights Reserved" />
+		<meta
+			name="title"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			name="revisit-after"
+			content="1 days" />
+		<meta
+			name="siteinfo"
+			content="http://www.a-rms.net/robots.txt" />
+		<meta
+			name="HandheldFriendly"
+			content="True" />
+		<meta
+			name="MobileOptimized"
+			content="320" />
+		<meta
+			property="og:type"
+			content="website" />
+		<meta
+			property="og:title"
+			content="A-RMS By 313DEVGRP" />
+		<meta
+			property="og:url"
+			content="http://www.a-rms.net/" />
+		<meta
+			property="og:site_name"
+			content="A-RMS By 313DEVGRP" />
+
+		<!-- favicon -->
+		<link
+			rel="icon"
+			href="./img/313_logo.ico"
+			type="image/x-icon" />
+		<link
+			rel="shortcut icon"
+			href="./img/313_logo.ico"
+			type="image/x-icon" />
+
+		<link
+			href="../reference/jquery-plugins/normalize.css-8.0.1/normalize.css"
+			rel="stylesheet"
+			type="text/css"
+			media="screen" />
+		<link
+			href="../reference/lightblue4/docs/css/application.min.css"
+			rel="stylesheet"
+			type="text/css"
+			media="screen" />
+		<link
+			rel="stylesheet"
+			href="css/index.css" />
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="../reference/jquery-plugins/html5shiv.js"></script>
+			<script src="../reference/jquery-plugins/respond.js"></script>
+		<![endif]-->
+
+		<!-- common libraries. required for every page-->
+		<script
+			type="text/javascript"
+			src="../reference/lightblue4/docs/lib/jquery/dist/jquery.min.js"
+			charset="utf-8"></script>
+		<script
+			type="text/javascript"
+			src="../reference/lightblue4/docs/lib/jquery-ui/jquery-ui.min.js"
+			charset="utf-8"></script>
+		<script
+			type="text/javascript"
+			src="../reference/jquery-plugins/jquery-cookie-1.4.1/jquery.cookie.js"
+			charset="utf-8"></script>
+		<script
+			type="text/javascript"
+			src="../reference/lightblue4/docs/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js"
+			charset="utf-8"></script>
+
+		<script
+			type="text/javascript"
+			src="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.min.js"
+			charset="utf-8"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../reference/jquery-plugins/jnotify_v2.1/jquery/jNotify.jquery.css"
+			media="screen" />
+
+		<!-- Ladda -->
+		<script
+			type="text/javascript"
+			src="../reference/jquery-plugins/Ladda-jQuery-0.6.0/dist/spin.min.js"
+			charset="utf-8"></script>
+		<script
+			type="text/javascript"
+			src="../reference/jquery-plugins/Ladda-jQuery-0.6.0/js/ladda.js"
+			charset="utf-8"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../reference/jquery-plugins/Ladda-jQuery-0.6.0/dist/ladda.min.css"
+			media="screen" />
+
+		<!-- Tour-Guide -->
+		<script
+			type="text/javascript"
+			src="../reference/jquery-plugins/tourguide-js-0.0.1-alpha/dist/tour.js"
+			charset="utf-8"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../reference/jquery-plugins/tourguide-js-0.0.1-alpha/dist/css/tour.min.css"
+			media="screen" />
+		<script
+			type="text/javascript"
+			src="../arms/js/common/tourGuide/tgApi.js"
+			charset="utf-8"></script>
+		<script
+			type="text/javascript"
+			src="../arms/js/common/tourGuide/tgGroup.js"
+			charset="utf-8"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../arms/css/tourGuide/tourGuideCustom.css"
+			media="screen" />
+
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../arms/css/style.css"
+            media="screen" />
+
+		<!-- notification popup -->
+		<script
+			src="../reference/lightblue4/docs/lib/messenger/build/js/messenger.min.js"
+			charset="utf-8"></script>
+		<script
+			src="../reference/lightblue4/docs/lib/messenger/build/js/messenger-theme-flat.js"
+			charset="utf-8"></script>
+
+		<script
+			type="text/javascript"
+			src="../reference/lightblue4/docs/lib/widgster/widgster.js"
+			charset="utf-8"></script>
+
+		<!-- page interaction -->
+		<script
+			type="text/javascript"
+			src="../reference/jquery-plugins/topbar.js"
+			charset="utf-8"></script>
+	</head>
+
+	<body class="landing">
+		<header class="darkBack">
+			<div>
+				<a href="index.html">
+					<img
+						src="./img/313_logo.png"
+						width="170px" />
+				</a>
+			</div>
+
+			<div>
+				<a
+					href="/php/gnuboard5/"
+					class="more animated-button1"
+					style="padding: 14px 36px; text-decoration: none">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					Live
+					<strong>Service Go</strong>
+				</a>
+			</div>
+		</header>
+
+        <section class="first">
+            <div class="outer">
+                <div class="inner">
+                    <div class="bg one">
+                        <div class="wrap">
+                            <div class="content container">
+                                <div class="row">
+
+                                    <!-- main one start -->
+                                    <div    class="widgetheader text-align-center indextitle"
+                                            style="visibility: visible !important">
+                                        <img    class="heading-img"
+                                                src="./img/top-left.png" />
+                                        <span
+                                                class="font17"
+                                                style="font-weight: bold;vertical-align: text-top;">
+										<i      class="fa fa-sort-amount-asc"
+                                                style="vertical-align: middle; font-size: 14px"></i>
+                                            ARMS
+                                            <small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">keyword</small>
+                                        </span>
+                                        <img
+                                                class="heading-img"
+                                                src="./img/top-right.png" />
+                                    </div>
+
+                                    <div class="tv-main">
+                                        <div
+                                                class="tv-content"
+                                                id="tv-content"
+                                                aria-label="Main content"
+                                                tabindex="-1"
+                                        >
+                                            <div class="tv-markets-page" data-props-id="nw3LnR">
+                                                <div class="mainBlock">
+                                                    <div class="headerBlock">
+                                                        <h1 class="title">
+                                                            <p class="gradientPart">A-RMS</p>
+
+                                                            <p style="font-size: 3vw;">ALM 통합 . 요구사항 관리 시스템</p>
+                                                        </h1>
+
+                                                        <p class="subtitle" style="margin-top: -20px;">
+                                                            요구사항 → 이슈 전환, 전파, 수집, 통계 시스템
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- main one end -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+		<section class="second">
+			<div class="outer">
+				<div class="inner">
+					<div class="bg one">
+						<div class="wrap">
+							<div class="content container">
+								<div
+									class="widgetheader text-align-center indextitle"
+									style="visibility: visible !important">
+									<img
+										class="heading-img"
+										src="./img/top-left.png" />
+									<span
+										class="font17"
+                                        style="font-weight: bold;vertical-align: text-top;">
+										<i
+											class="fa fa-sort-amount-asc"
+											style="vertical-align: middle; font-size: 14px"></i>
+										배경
+										<small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">위기</small>
+									</span>
+									<img
+										class="heading-img"
+										src="./img/top-right.png" />
+								</div>
+
+								<div
+									class="widgetheader"
+									style="visibility: visible !important">
+									<h3 class="page-title font14">
+										<strong>진짜 위기는, 뭔지 아십니까?</strong>
+										<small>위기인데도 불구하고 위기인 것을 모르는 것이 진짜 위기입니다.</small>
+										<ol class="breadcrumb pull-right hidden-xs font12">
+											<li>
+												<a href="#">
+													<i class="fa fa-sitemap"></i>
+													Home
+												</a>
+											</li>
+											<li class="active">A-RMS 소개</li>
+											<li class="active">개발 배경</li>
+										</ol>
+									</h3>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-4 col-layer">
+										<div
+											class="widget"
+											style="visibility: visible; width: auto; height: auto; top: auto">
+											<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+												<h4>
+													<span
+														class="font13"
+														style="font-weight: bold">
+														<i
+															class="fa fa-sort-amount-asc"
+															style="vertical-align: middle; font-size: 14px"></i>
+														Time 실패 위기
+													</span>
+												</h4>
+												<div class="widget-controls">
+													<a
+														data-widgster="toleft"
+														title="change width to left"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-left"></i>
+													</a>
+													<a
+														data-widgster="expand"
+														title="Expand"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-up"></i>
+													</a>
+													<a
+														data-widgster="collapse"
+														title="Collapse"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-down"></i>
+													</a>
+													<a
+														data-widgster="toright"
+														title="change width to right"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-right"></i>
+													</a>
+													<a
+														data-widgster="restore"
+														title="Restore"
+														href="#">
+														<span class="glyphicon glyphicon-repeat"></span>
+													</a>
+													<a
+														data-widgster="fullscreen"
+														title="Fullscreen"
+														href="#">
+														<i
+															class="glyphicon glyphicon-fullscreen"
+															style="font-size: 11px"></i>
+													</a>
+												</div>
+											</header>
+											<div class="body">
+												<div
+													class="gradient_middle_border"
+													style="width: 100%; height: 2px"></div>
+												<blockquote
+													class="font13"
+													style="margin-top: 5px; color: #a4c6ff">
+													제품(서비스)
+													<strong style="color: #e5603b">출시가 지연</strong>
+													되고 있습니까?
+													<div style="float: right">
+														<button
+															class="btn btn-transparent btn-xs"
+															style="
+																margin-top: -3px;
+																color: #acacac;
+																background: rgba(51, 51, 51, 0.2);
+																padding: 1px 9px;
+																border-radius: 3px;
+															"
+															onclick="window.open('docs/guide.html#product_inquiry_selection')">
+															Help
+															<i
+																class="fa fa-question"
+																style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+														</button>
+													</div>
+												</blockquote>
+
+												<div
+													class="box box-primary"
+													style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+													<div class="box-body">
+														<div class="board-item p-sm-2">
+															<div class="board-thumb back-wemade"></div>
+															<div class="board-desc">
+																<div class="board-title">
+																	<span style="font-weight: bold; color: #a4c6ff">비지니스 적시성</span>
+																	<span style="font-weight: bold; color: #e5603b">실패 ( Time )</span>
+																</div>
+																<hr class="board-bar" />
+																<div class="board-text font13">
+																	비지니스는 적절한 시기와 함께 성장하고 발전하는 경향이 있습니다. 우리는 이 비지니스
+																	적시성이 성공과 실패를 가름함을 잘 알고 있습니다. 실제 비지니스의 최전선에 있는
+																	제품(서비스)가 적시에 배포되고 계획할 수 있는지는 매우 중요한 지표입니다.
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-4 col-layer">
+										<div
+											class="widget"
+											style="visibility: visible; width: auto; height: auto; top: auto">
+											<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+												<h4>
+													<span
+														class="font13"
+														style="font-weight: bold">
+														<i
+															class="fa fa-sort-amount-asc"
+															style="vertical-align: middle; font-size: 14px"></i>
+														Resource 실패 위기
+													</span>
+												</h4>
+												<div class="widget-controls">
+													<a
+														data-widgster="toleft"
+														title="change width to left"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-left"></i>
+													</a>
+													<a
+														data-widgster="expand"
+														title="Expand"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-up"></i>
+													</a>
+													<a
+														data-widgster="collapse"
+														title="Collapse"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-down"></i>
+													</a>
+													<a
+														data-widgster="toright"
+														title="change width to right"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-right"></i>
+													</a>
+													<a
+														data-widgster="restore"
+														title="Restore"
+														href="#">
+														<span class="glyphicon glyphicon-repeat"></span>
+													</a>
+													<a
+														data-widgster="fullscreen"
+														title="Fullscreen"
+														href="#">
+														<i
+															class="glyphicon glyphicon-fullscreen"
+															style="font-size: 11px"></i>
+													</a>
+												</div>
+											</header>
+											<div class="body">
+												<div
+													class="gradient_middle_border"
+													style="width: 100%; height: 2px"></div>
+												<blockquote
+													class="font13"
+													style="margin-top: 5px; color: #a4c6ff">
+													투입
+													<strong style="color: #e5603b">인력의 효율, 비용</strong>
+													은 적절합니까?
+													<div style="float: right">
+														<button
+															class="btn btn-transparent btn-xs"
+															style="
+																margin-top: -3px;
+																color: #acacac;
+																background: rgba(51, 51, 51, 0.2);
+																padding: 1px 9px;
+																border-radius: 3px;
+															"
+															onclick="window.open('docs/guide.html#product_inquiry_selection')">
+															Help
+															<i
+																class="fa fa-question"
+																style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+														</button>
+													</div>
+												</blockquote>
+
+												<div
+													class="box box-primary"
+													style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+													<div class="box-body">
+														<div class="board-item p-sm-2">
+															<div class="board-thumb back-nc"></div>
+															<div class="board-desc">
+																<div class="board-title">
+																	<span style="font-weight: bold; color: #a4c6ff">비지니스 효율성 관리</span>
+																	<span style="font-weight: bold; color: #e5603b">실패 ( Resource )</span>
+																</div>
+																<hr class="board-bar" />
+																<div class="board-text font13">
+																	비지니스의 효율성은 그 중요성이 지나침이 없습니다. 비효율적인 자원 배분과, 그 관리의
+																	효율성은 곧바로 비지니스의 경쟁력에 연계됩니다. 일관된 비지니스 효율성 관리는 인적
+																	자원에서부터 시작되고 마무리됨을 기억해야 합니다.
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-4 col-layer">
+										<div
+											class="widget"
+											style="visibility: visible; width: auto; height: auto; top: auto">
+											<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+												<h4>
+													<span
+														class="font13"
+														style="font-weight: bold">
+														<i
+															class="fa fa-sort-amount-asc"
+															style="vertical-align: middle; font-size: 14px"></i>
+														Scope 실패 위기
+													</span>
+												</h4>
+												<div class="widget-controls">
+													<a
+														data-widgster="toleft"
+														title="change width to left"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-left"></i>
+													</a>
+													<a
+														data-widgster="expand"
+														title="Expand"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-up"></i>
+													</a>
+													<a
+														data-widgster="collapse"
+														title="Collapse"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-down"></i>
+													</a>
+													<a
+														data-widgster="toright"
+														title="change width to right"
+														href="#">
+														<i class="glyphicon glyphicon-chevron-right"></i>
+													</a>
+													<a
+														data-widgster="restore"
+														title="Restore"
+														href="#">
+														<span class="glyphicon glyphicon-repeat"></span>
+													</a>
+													<a
+														data-widgster="fullscreen"
+														title="Fullscreen"
+														href="#">
+														<i
+															class="glyphicon glyphicon-fullscreen"
+															style="font-size: 11px"></i>
+													</a>
+												</div>
+											</header>
+											<div class="body">
+												<div
+													class="gradient_middle_border"
+													style="width: 100%; height: 2px"></div>
+												<blockquote
+													class="font13"
+													style="margin-top: 5px; color: #a4c6ff">
+													<strong style="color: #e5603b">요구사항의 전파</strong>
+													가 제대로 전달되고 있습니까?
+													<div style="float: right">
+														<button
+															class="btn btn-transparent btn-xs"
+															style="
+																margin-top: -3px;
+																color: #acacac;
+																background: rgba(51, 51, 51, 0.2);
+																padding: 1px 9px;
+																border-radius: 3px;
+															"
+															onclick="window.open('docs/guide.html#product_inquiry_selection')">
+															Help
+															<i
+																class="fa fa-question"
+																style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+														</button>
+													</div>
+												</blockquote>
+
+												<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+												<div
+													class="box box-primary"
+													style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+													<div class="box-body">
+														<div class="board-item p-sm-2">
+															<div class="board-thumb back-kakao"></div>
+															<div class="board-desc">
+																<div class="board-title">
+																	<span style="font-weight: bold; color: #a4c6ff">비지니스 범위 관리</span>
+																	<span style="font-weight: bold; color: #e5603b">실패 ( Scope )</span>
+																</div>
+																<hr class="board-bar" />
+																<div class="board-text font13">
+																	비지니스를 확대하기 위한 전략으로 계열사 및 분사를 하게됩니다. 비지니스 범주의 실패는
+																	자회사 및 계열사의 위기가 공동체에 영향을 주게되는 현상에 직면합니다. 일관된 비지니스
+																	범주 관리는 공동체에서 시작되어 지속적인 Align을 맞추는데에 그 해법이 있습니다.
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="third">
+			<div class="outer">
+				<div class="inner bg">
+					<div class="wrap">
+						<div class="content container">
+							<div
+								class="widgetheader text-align-center indextitle"
+								style="visibility: visible !important">
+								<img
+									class="heading-img"
+									src="./img/top-left.png" />
+								<span
+									class="font17"
+                                    style="font-weight: bold;vertical-align: text-top;">
+									<i
+										class="fa fa-sort-amount-asc"
+										style="vertical-align: middle; font-size: 14px"></i>
+									문제
+									<small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">정의</small>
+								</span>
+								<img
+									class="heading-img"
+									src="./img/top-right.png" />
+							</div>
+
+							<div
+								class="widgetheader"
+								style="visibility: visible !important">
+								<h3 class="page-title font14">
+									<strong>그보다 더 큰 위기는 뭔지 아십니까?</strong>
+									<small>문제를 정의할려고 하지 않는것은 위기를 제대로 인지하지 못하는 것입니다.</small>
+									<ol class="breadcrumb pull-right hidden-xs font12">
+										<li>
+											<a href="#">
+												<i class="fa fa-sitemap"></i>
+												Home
+											</a>
+										</li>
+										<li class="active">A-RMS 소개</li>
+										<li class="active">문제 정의</li>
+									</ol>
+								</h3>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-9 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													Scope(범위) ⇄ Time(일정) ⇄ Resource(자원) 의 실패
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												요구사항 ( 기획의도 및 지시사항 ) 이
+												<strong style="color: #e5603b">정확하게 전달</strong>
+												되고 있습니까?
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb back-buy-1"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #a4c6ff">정보 전달의 단절로 인한 소통의</span>
+																<span style="font-weight: bold; color: #e5603b">실패 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																<div class="row">
+																	<div class="col-sm-12">
+																		<div class="row features">
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-danger" style="text-align: center;">
+																									<i class="fa fa-trophy"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">관리</h5>
+																							<p style="text-align: left">
+																								제품(*서비스)의 요구사항을, 지시사항을 CEO+기획자+관리자는 문서로 관리
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-warning" style="text-align: center;">
+																									<i class="fa fa-star-half-empty"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">분리</h5>
+																							<p style="text-align: left">
+																								PM은...요구사항과 일정을. 그리고 ALM-ISSUE로 연결하고 관리
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-success" style="text-align: center;">
+																									<i class="fa fa-unlink"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">단절</h5>
+																							<p style="text-align: left">
+																								개발자 및 일하는 사람은 ALM으로 일해요. ISSUE를 기반으로 업무를 진행
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													우리는 사실 잘 알지 못합니다.
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												알 수가 없어요. 정보의 연결이 끊겨있어요.
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb disconnection"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #a4c6ff">한정적인 정보의</span>
+																<span style="font-weight: bold; color: #e5603b">실패 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																비지니스의 목표 및 요구사항, 그리고 지시사항에 대한 임직원의 이해도는 매우 중요한 관리
+																포인트입니다.
+																<br />
+																비지니스의 목표에 대하여 임직원간 이해도 차이는 사실 비지니스의 성공과 실패를 나누는
+																척도입니다.
+																<br />
+																잘못 전달된 목표 및 요구사항은
+																<br />
+																임직원의 혼란과 더불어 제품(*서비스)의 모호함을 유발하게 됩니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="fourth">
+			<div class="outer">
+				<div class="inner bg">
+					<div class="wrap">
+						<div class="content container">
+							<div
+								class="widgetheader text-align-center indextitle"
+								style="visibility: visible !important">
+								<img
+									class="heading-img"
+									src="./img/top-left.png" />
+								<span
+									class="font17"
+                                    style="font-weight: bold;vertical-align: text-top;">
+									<i
+										class="fa fa-sort-amount-asc"
+										style="vertical-align: middle; font-size: 14px"></i>
+									문제
+									<small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">원인</small>
+								</span>
+								<img
+									class="heading-img"
+									src="./img/top-right.png" />
+							</div>
+
+							<div
+								class="widgetheader"
+								style="visibility: visible !important">
+								<h3 class="page-title font14">
+									<strong>마지막. 가장 큰 위기는 뭔지 아십니까?</strong>
+									<small>위기인 걸 알면서도 아무 것도 하지 않는 것이 바로 가장 큰 위기입니다.</small>
+									<ol class="breadcrumb pull-right hidden-xs font12">
+										<li>
+											<a href="#">
+												<i class="fa fa-sitemap"></i>
+												Home
+											</a>
+										</li>
+										<li class="active">A-RMS 소개</li>
+										<li class="active">개발 배경</li>
+									</ol>
+								</h3>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-9 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													Scope(범위) ⇄ Time(일정) ⇄ Resource(자원) 의 실패
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												말은
+												<strong style="color: #e5603b">단계를 거칠수록 와전(訛傳)</strong>
+												되기 마련입니다
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb back-buy-2"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #a4c6ff">이해의</span>
+																<span style="font-weight: bold; color: #e5603b">실패 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																<div class="row">
+																	<div class="col-sm-12">
+																		<div class="row features">
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-danger" style="text-align: center;">
+																									<i class="fa fa-bullhorn"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">미봉</h5>
+																							<p style="text-align: left">
+																								일시적으로 기획의도와 지시사항을 전달하는 효과보다 근원적 대책이 필요
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-warning" style="text-align: center;">
+																									<i class="fa fa-retweet"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">연계</h5>
+																							<p style="text-align: left">
+																								중간 관리자는 근본적인 의도를 자의적으로 해석하여 전달하고, 관리방안을
+																								고려
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-success" style="text-align: center;">
+																									<i class="fa fa-graduation-cap"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">이해</h5>
+																							<p style="text-align: left">
+																								개발자 및 일하는 사람은 와전된 의도를 기반으로 이해하고, 업무를 추진
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													누군가는 연결하는 업무를 합니다
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												문제의 핵심은. 끊겨있음을 아는것.
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb disconnect-detail"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #a4c6ff">연결의</span>
+																<span style="font-weight: bold; color: #e5603b">실패 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																문제의 핵심은 이거에요.
+																<br />
+																개발자 및 일하는 사람은. 요구사항을. 기획의도를. 지시사항을. 제대로 이해하지 못하고,
+																그저 하라는대로 하게됩니다.
+																<br />
+																개발자 및 일하는 사람은. 요구사항을. 기획의도를. 지시사항을. 정확하게 이해할 수 있는
+																채널이 필요합니다.
+																<br />
+																의도를 안다면, 더 좋은 아이디어와 업무를 개선할 수 있습니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="fifth">
+			<div class="outer">
+				<div class="inner bg">
+					<div class="wrap">
+						<div class="content container">
+							<div
+								class="widgetheader text-align-center indextitle"
+								style="visibility: visible !important">
+								<img
+									class="heading-img"
+									src="./img/top-left.png" />
+								<span
+									class="font17"
+                                    style="font-weight: bold;vertical-align: text-top;">
+									<i
+										class="fa fa-sort-amount-asc"
+										style="vertical-align: middle; font-size: 14px"></i>
+									문제
+									<small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">해결</small>
+								</span>
+								<img
+									class="heading-img"
+									src="./img/top-right.png" />
+							</div>
+
+							<div
+								class="widgetheader"
+								style="visibility: visible !important">
+								<h3 class="page-title font14">
+									<strong>성공은 변화로부터 시작됩니다.</strong>
+									<small>카네기 성공론</small>
+									<ol class="breadcrumb pull-right hidden-xs font12">
+										<li>
+											<a href="#">
+												<i class="fa fa-sitemap"></i>
+												Home
+											</a>
+										</li>
+										<li class="active">A-RMS 소개</li>
+										<li class="active">개발 배경</li>
+									</ol>
+								</h3>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-9 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													Scope(범위) ⇄ Time(일정) ⇄ Resource(자원) 의 성공
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												기획의도와 요구사항을 업무 시스템에
+												<strong style="color: #e5603b">연결하는 것</strong>
+												입니다.
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb back-buy-3"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #e5603b">비지니스 연결</span>
+																<span style="font-weight: bold; color: #a4c6ff">성공 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																<div class="row">
+																	<div class="col-sm-12">
+																		<div class="row features">
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-danger" style="text-align: center;">
+																									<i class="fa fa-send"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">시작</h5>
+																							<p style="text-align: left">
+																								기획의도와 요구사항. 그리고 지시사항을 업무 담당자까지 전달하는 시스템
+																								개설
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-warning" style="text-align: center;">
+																									<i class="fa fa-chain"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">연결</h5>
+																							<p style="text-align: left">
+																								중간 관리자는 관리의 묘를 시스템에서 발휘할 수 있는 계기를 제공
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-success" style="text-align: center;">
+																									<i class="fa fa-check"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">개선</h5>
+																							<p style="text-align: left">
+																								개발자 및 업무 담당자는 정확한 이해를 기반으로 업무 추진
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													연결의 시작. 성공의 첫 단추.
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												요구사항을 ALM 에 ISSUE 로 자동 전파
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb arms-about"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #e5603b">비지니스 범위 관리</span>
+																<span style="font-weight: bold; color: #a4c6ff">성공 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																ARMS 에 제품(서비스)의 기획의도를 갱신하고, 제품(서비스)의 Version 정보 및 업데이트
+																정보를 전달하며, 제품(서비스)의 요구사항을 ALM 에 자동으로 전파하여, 소통과 연결을
+																기반한 관리 자동화 시스템
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="sixth">
+			<div class="outer">
+				<div class="inner bg">
+					<div class="wrap">
+						<div class="content container">
+							<div
+								class="widgetheader text-align-center indextitle"
+								style="visibility: visible !important">
+								<img
+									class="heading-img"
+									src="./img/top-left.png" />
+								<span
+									class="font17"
+                                    style="font-weight: bold;vertical-align: text-top;">
+									<i
+										class="fa fa-sort-amount-asc"
+										style="vertical-align: middle; font-size: 14px"></i>
+									해결
+									<small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">효과</small>
+								</span>
+								<img
+									class="heading-img"
+									src="./img/top-right.png" />
+							</div>
+
+							<div
+								class="widgetheader"
+								style="visibility: visible !important">
+								<h3 class="page-title font14">
+									<strong>위기 극복의 저력, 회복탄력성</strong>
+									<small>변화하는 환경에서, 중요한 기능을 회복해 성과로 연결</small>
+									<ol class="breadcrumb pull-right hidden-xs font12">
+										<li>
+											<a href="#">
+												<i class="fa fa-sitemap"></i>
+												Home
+											</a>
+										</li>
+										<li class="active">A-RMS 소개</li>
+										<li class="active">개발 배경</li>
+									</ol>
+								</h3>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-9 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													Scope(범위) ⇄ Time(일정) ⇄ Resource(자원) 의 성공
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												제품(서비스)의 기획 및
+												<strong style="color: #e5603b">요구사항이 업무 담당자에게 연결</strong>
+												되면.!
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb back-buy-4"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #e5603b">측정 및 분석</span>
+																<span style="font-weight: bold; color: #a4c6ff">성공 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																<div class="row">
+																	<div class="col-sm-12">
+																		<div class="row features">
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-danger" style="text-align: center;">
+																									<i class="fa fa-bar-chart-o"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">측정</h5>
+																							<p style="text-align: left">
+																								Breitbach에 따르면 “많은 프로젝트가 실패하는 지점은 측정할 수 있는
+																								부분입니다.”
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-warning" style="text-align: center;">
+																									<i class="fa fa-camera-retro"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">분석</h5>
+																							<p style="text-align: left">
+																								측정된 데이터를 기반한, 예측 가능성을 높여 비즈니스 리스크 관리를 강화
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-success" style="text-align: center;">
+																									<i class="fa fa-key"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">효율</h5>
+																							<p style="text-align: left">
+																								개발자 및 업무 담당자의 퍼포먼스를 정성적 평가가 아닌 정량적 평가에 기반
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													연결의 힘. 데이터 측정/분석
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												연결된 정보를 기반한 업무 성과
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb solution"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #e5603b">비지니스 효율성 관리</span>
+																<span style="font-weight: bold; color: #a4c6ff">성공 ( Resource )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																ARMS는 요구사항 ISSUE를 기반하여,
+																<br />
+																검색엔진에 데이터를 탑재. 분석 및 통계를 통한.
+																<br />
+																프로젝트 자원의 효율성을 검증 할 수 있도록 지원합니다.
+																<br />
+																<br />
+
+																요구사항 및 지시사항을 기반한 이슈 추적시스템은
+																<br />
+																관련 이슈만을 수집합니다.
+																<br />
+																( 이외 이슈는 수집 대상 제외 )
+																<br />
+
+																Scope, Time, Resource 복합 분석.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="seventh">
+			<div class="outer">
+				<div class="inner bg">
+					<div class="wrap">
+						<div class="content container">
+							<div
+								class="widgetheader text-align-center indextitle"
+								style="visibility: visible !important">
+								<img
+									class="heading-img"
+									src="./img/top-left.png" />
+								<span
+									class="font17"
+                                    style="font-weight: bold;vertical-align: text-top;">
+									<i
+										class="fa fa-sort-amount-asc"
+										style="vertical-align: middle; font-size: 14px"></i>
+									효과
+									<small style="font-size: 12px; font-weight: normal; color: rgba(255, 255, 255, 0.7)">전략</small>
+								</span>
+								<img
+									class="heading-img"
+									src="./img/top-right.png" />
+							</div>
+
+							<div
+								class="widgetheader"
+								style="visibility: visible !important">
+								<h3 class="page-title font14">
+									<strong>성공적인 '변화' . ARMS</strong>
+									<small>오늘날 기업은 어느 때보다 스스로를 변화시키거나 재창조할 필요성을 실감하고 있다.</small>
+									<ol class="breadcrumb pull-right hidden-xs font12">
+										<li>
+											<a href="#">
+												<i class="fa fa-sitemap"></i>
+												Home
+											</a>
+										</li>
+										<li class="active">A-RMS 소개</li>
+										<li class="active">개발 배경</li>
+									</ol>
+								</h3>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-9 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													cope(범위) ⇄ Time(일정) ⇄ Resource(자원) 의 성공
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												<strong>변화를 기회로 볼 때 미래가 열린다.</strong>
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb back-buy-5"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #e5603b">기업문화 변화와 내재화</span>
+																<span style="font-weight: bold; color: #a4c6ff">성공 ( Connect )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																<div class="row">
+																	<div class="col-sm-12">
+																		<div class="row features">
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-danger" style="text-align: center;">
+																									<i class="fa fa-star-o"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">명확한 목표 설정</h5>
+																							<p style="text-align: left">
+																								Breitbach에 따르면 “많은 프로젝트가 실패하는 지점은 측정할 수 있는
+																								부분입니다.”
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-warning" style="text-align: center;">
+																									<i class="fa fa-share-alt"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">투명한 소통 방식</h5>
+																							<p style="text-align: left">
+																								측정된 데이터를 기반한, 예측 가능성을 높여 비즈니스 리스크 관리를 강화
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="feature">
+																					<div class="row">
+																						<div class="col-xs-4">
+																							<p>
+																								<span class="icon background-success" style="text-align: center;">
+																									<i class="fa fa-wrench"></i>
+																								</span>
+																							</p>
+																						</div>
+																						<div class="col-xs-8">
+																							<h5 style="text-align: left; font-weight: bold">책임 있는 실행</h5>
+																							<p style="text-align: left">
+																								개발자 및 업무 담당자의 퍼포먼스를 정성적 평가가 아닌 정량적 평가에 기반
+																							</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 col-layer">
+									<div
+										class="widget"
+										style="visibility: visible; width: auto; height: auto; top: auto">
+										<header style="height: unset; letter-spacing: unset; font-size: 13px; padding: 0">
+											<h4>
+												<span
+													class="font13"
+													style="font-weight: bold">
+													<i
+														class="fa fa-sort-amount-asc"
+														style="vertical-align: middle; font-size: 14px"></i>
+													지속 가능성 유지
+												</span>
+											</h4>
+											<div class="widget-controls">
+												<a
+													data-widgster="toleft"
+													title="change width to left"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-left"></i>
+												</a>
+												<a
+													data-widgster="expand"
+													title="Expand"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-up"></i>
+												</a>
+												<a
+													data-widgster="collapse"
+													title="Collapse"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-down"></i>
+												</a>
+												<a
+													data-widgster="toright"
+													title="change width to right"
+													href="#">
+													<i class="glyphicon glyphicon-chevron-right"></i>
+												</a>
+												<a
+													data-widgster="restore"
+													title="Restore"
+													href="#">
+													<span class="glyphicon glyphicon-repeat"></span>
+												</a>
+												<a
+													data-widgster="fullscreen"
+													title="Fullscreen"
+													href="#">
+													<i
+														class="glyphicon glyphicon-fullscreen"
+														style="font-size: 11px"></i>
+												</a>
+											</div>
+										</header>
+										<div class="body">
+											<div
+												class="gradient_middle_border"
+												style="width: 100%; height: 2px"></div>
+											<blockquote
+												class="font13"
+												style="margin-top: 5px; color: #a4c6ff">
+												'혁신에 완성은 없다'. '디테일과 연결' 뿐.
+												<div style="float: right">
+													<button
+														class="btn btn-transparent btn-xs"
+														style="
+															margin-top: -3px;
+															color: #acacac;
+															background: rgba(51, 51, 51, 0.2);
+															padding: 1px 9px;
+															border-radius: 3px;
+														"
+														onclick="window.open('docs/guide.html#product_inquiry_selection')">
+														Help
+														<i
+															class="fa fa-question"
+															style="font-size: 14px; vertical-align: middle; color: #acacac"></i>
+													</button>
+												</div>
+											</blockquote>
+
+											<!--
+                                        <div class="clearfix"
+                                             style="margin-bottom: 10px; margin-top: 10px;">
+                                            <div style="float: left">
+                                            </div>
+
+                                            <div style="float: right">
+                                            </div>
+                                        </div>
+                                        -->
+
+											<div
+												class="box box-primary"
+												style="background: rgba(51, 51, 51, 0.225); margin-bottom: 5px !important">
+												<div class="box-body">
+													<div class="board-item p-sm-2">
+														<div class="board-thumb connect"></div>
+														<div class="board-desc">
+															<div class="board-title">
+																<span style="font-weight: bold; color: #e5603b">비지니스 적시성</span>
+																<span style="font-weight: bold; color: #a4c6ff">성공 ( Time )</span>
+															</div>
+															<hr class="board-bar" />
+															<div class="board-text font13">
+																ARMS를 통해 분석 시각은, 제품 출시일을 예측가능하게 하며, 업무 범위에 대한 확인을 작업자
+																관점과 관리자 관점으로 분리 제공하고, 작업자의 업무를 추적하여 효율성을 제고할 수 있는
+																통계 지표를 확인 할 수 있습니다.
+																<br />
+
+																이로써 ARMS는 효율적인 자원의 배분을 지원할 수 있도록 하며, 그로인한 비용의 감소가
+																제품(서비스)의 기능의 확장에 영향을 주지 않도록 가이드 할 수 있습니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="section-scroll-dots-navigation">
+			<ul class="list list-unstyled">
+				<li
+					class="dot"
+					style="text-align: center">
+					<button
+						type="button"
+						class="dot-btn">
+						<img
+							src="img/redfire.gif"
+							class="circle"
+							style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+					</button>
+				</li>
+
+				<li
+					class="dot"
+					style="text-align: center">
+					<button
+						type="button"
+						class="dot-btn">
+						<img
+							src="img/redfire.gif"
+							class="circle"
+							style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+					</button>
+				</li>
+
+				<li
+					class="dot"
+					style="text-align: center">
+					<button
+						type="button"
+						class="dot-btn">
+						<img
+							src="img/redfire.gif"
+							class="circle"
+							style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+					</button>
+				</li>
+
+				<li
+					class="dot"
+					style="text-align: center">
+					<button
+						type="button"
+						class="dot-btn">
+						<img
+							src="img/redfire.gif"
+							class="circle"
+							style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+					</button>
+				</li>
+
+				<li
+					class="dot"
+					style="text-align: center">
+					<button
+						type="button"
+						class="dot-btn">
+						<img
+							src="img/redfire.gif"
+							class="circle"
+							style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+					</button>
+				</li>
+
+				<li
+					class="dot"
+					style="text-align: center">
+					<button
+						type="button"
+						class="dot-btn">
+						<img
+							src="img/redfire.gif"
+							class="circle"
+							style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+					</button>
+				</li>
+
+                <li
+                        class="dot"
+                        style="text-align: center">
+                    <button
+                            type="button"
+                            class="dot-btn">
+                        <img
+                                src="img/redfire.gif"
+                                class="circle"
+                                style="
+								width: 16px;
+								background-color: unset;
+								height: unset;
+								border-radius: unset;
+								margin-top: unset;
+								margin-right: unset;
+								border: unset;
+							" />
+                    </button>
+                </li>
+			</ul>
+		</div>
+
+		<div
+			class="loader animated fadeIn darkBack hide"
+			style="z-index: 999999">
+			<span
+				class="spinner"
+				style="font-size: 13px !important">
+				<i class="fa fa-empire fa-spin"></i>
+				어플리케이션 API Data를 가져오는 중입니다...
+			</span>
+		</div>
+
+		<script src="../reference/jquery-plugins/GSAP-3.12.2/dist/gsap.min.js"></script>
+		<script src="../reference/jquery-plugins/GSAP-3.12.2/dist/Observer.min.js"></script>
+
+		<script src="./js/index.js"></script>
+
+		<!-- onload -->
+        <!-- Matomo -->
+		<script type="text/javascript">
+			//<![CDATA[
+            window.onload = function () {
+                console.log("The URL of this page is: " + window.location.href);
+
+                var str = window.location.href;
+                if (str.indexOf("313.co.kr") > 0 || str.indexOf("a-rms.net") > 0 || str.indexOf("localhost") > 0 || str.indexOf("127.0.0.1") > 0) {
+                    console.log("313 사이트에 접속했거나 arms 사이트에 접속한 경우");
+                    console.log("개발용으로 접속한 경우");
+                    console.log("마토모 : ON");
+                    $(".animated-button1").prop("href", "/arms/template.html?page=pdService");
+                    <!-- Matomo -->
+                    var _paq = (window._paq = window._paq || []);
+                    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+                    _paq.push(["trackPageView"]);
+                    _paq.push(["enableLinkTracking"]);
+                    (function () {
+                        var u = "//313.co.kr/php/matomo/";
+                        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+                        _paq.push(["setSiteId", "1"]);
+                        var d = document,
+                            g = d.createElement("script"),
+                            s = d.getElementsByTagName("script")[0];
+                        g.async = true;
+                        g.src = u + "matomo.js";
+                        s.parentNode.insertBefore(g, s);
+                    })();
+                    <!-- End Matomo Code -->
+                } else {
+                    console.log("고객사 또는 개발용으로 접속한 경우");
+                    console.log("고객사 사이트에 접속한 경우");
+                    console.log("마토모 : OFF");
+                    $(".animated-button1").prop("href", "/php/gnuboard5/index.php");
+                }
+            };
+			//]]>
+		</script>
+        <!-- End Matomo Code -->
+	</body>
+</html>
