@@ -19,7 +19,7 @@ export default function SettingsContextProvider({ children }) {
     showFieldSummary: true,
     showGrid: true,
     mode: "light",
-    autosave: true,
+    autosave: false,
     panning: true,
     showCardinality: true,
     tableWidth: tableWidth,

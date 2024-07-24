@@ -6,6 +6,7 @@ import SidePanel from "../EditorSidePanel/SidePanel.jsx";
 import { DB, State } from "../../data/constants.js";
 import { db } from "../../data/db.js";
 import axios from "axios";
+import { toPng } from "html-to-image";
 import {
   useLayout,
   useSettings,
@@ -57,6 +58,57 @@ export default function WorkSpace() {
   const { undoStack, redoStack, setUndoStack, setRedoStack } = useUndoRedo();
   const { t } = useTranslation();
 
+
+
+  // Blob 데이터를 Base64 문자열로 변환하는 함수
+  const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  };
+
+  const generatePngData = async () => {
+    const canvas = document.getElementById("canvas");
+    if (!canvas) {
+      console.error("Canvas element not found");
+      return;
+    }
+
+    try {
+      const dataUrl = await toPng(canvas);
+
+      const blob = dataURItoBlob(dataUrl);
+
+      const base64Data = await blobToBase64(blob);
+
+      // Base64 데이터에서 MIME 타입 제거
+      // const base64RawData = base64Data.split(",")[1];
+
+      console.log("Base64 raw data :: ", base64Data);
+
+      return base64Data;
+    } catch (error) {
+      console.error("Error generating PNG data:", error);
+      throw error;
+    }
+  };
+
   // 1. query string setup
   useEffect(() => {
     const queryString = window.location.search;
@@ -78,7 +130,6 @@ export default function WorkSpace() {
       Toast.success('URL parameters are valid');
     } else {
       Toast.error('One or more required parameters are missing');
-      // console.warn('One or more required parameters are missing');
       return;
     }
   }, []);
@@ -86,7 +137,7 @@ export default function WorkSpace() {
   // 3. API 호출 및 상태 설정 함수
   const fetchData = async () => {
     try {
-      const ARMS_REQADD_ENDPOINT = '/auth-user/api/arms/reqAdd/T_ARMS_REQADD_' + pdServiceId;
+      const ARMS_REQADD_ENDPOINT = '/auth-user/api/arms/reqAddPure/T_ARMS_REQADD_' + pdServiceId + '/getNode.do?c_id=' + armsId;
       const ARMS_PRODUCT_ENDPOINT = '/auth-user/api/arms/pdServicePure/getNode.do?c_id=' + pdServiceId;
       let response;
       if (armsType === 'reqadd') {
@@ -137,18 +188,20 @@ export default function WorkSpace() {
     const saveAsDiagram = window.name === "" || op === "d" || op === "lt";
 
     if (saveAsDiagram) {
-      if (
-        (id === 0 && window.name === "") ||
-        window.name.split(" ")[0] === "lt"
-      ) {
-        if (armsValidate) {
+      if (armsMode === "create" && armsValidate) {
+        const base64RawData = await generatePngData();
+        if (id === "") {
+          const tempId = "create-" + armsType + "-" + armsId;
+          setId(tempId);
           await db.armsDiagrams
             .add({
-              id: armsId,
+              id: tempId,
               armsId: armsId,
               armsType: armsType,
+              armsMode: armsMode,
               pdServiceId: pdServiceId,
               armsValidate: armsValidate,
+              armsThumbnail: base64RawData,
               database: database,
               name: title,
               lastModified: new Date(),
@@ -160,25 +213,29 @@ export default function WorkSpace() {
               pan: transform.pan,
               zoom: transform.zoom,
               ...(databases[database].hasEnums && { enums: enums }),
-              ...(databases[database].hasTypes && { types: types }),
+              ...(databases[database].hasTypes && { types: types })
             })
-            .then((id) => {
+            .then(async (id) => {
+              Toast.success("[A-RMS] :: [Workspace.jsx] :: 저장 완료");
               setId(id);
               window.name = `d ${id}`;
               setSaveState(State.SAVED);
               setLastSaved(new Date().toLocaleString());
+              if (window.opener && !window.opener.closed) {
+                window.opener.changeBtnText("#btn_modal_req_add_drawdb", "drawdb 등록 완료");
+                window.opener.changeBtnText("#modal_req_add_drawdb_time", new Date().toLocaleTimeString("ko-KR"));
+                window.opener.setDrawdbImage(id, base64RawData, "create");
+              }
             });
         } else {
-          alert("[A-RMS] :: [Workspace.jsx] :: A-RMS를 통해 접근한 케이스에 한해서 저장이 가능합니다. 125");
-        }
-      } else {
-        if (armsValidate) {
           await db.armsDiagrams
             .update(id, {
               armsId: armsId,
               armsType: armsType,
+              armsMode: armsMode,
               pdServiceId: pdServiceId,
               armsValidate: armsValidate,
+              armsThumbnail: base64RawData,
               database: database,
               name: title,
               lastModified: new Date(),
@@ -190,15 +247,21 @@ export default function WorkSpace() {
               pan: transform.pan,
               zoom: transform.zoom,
               ...(databases[database].hasEnums && { enums: enums }),
-              ...(databases[database].hasTypes && { types: types }),
+              ...(databases[database].hasTypes && { types: types })
             })
-            .then(() => {
+            .then(async () => {
+              Toast.success("[A-RMS] :: [Workspace.jsx] :: 수정 완료");
               setSaveState(State.SAVED);
               setLastSaved(new Date().toLocaleString());
+              if (window.opener && !window.opener.closed) {
+                const base64RawData = await generatePngData();
+                window.opener.changeBtnText("#modal_req_add_drawdb_time", new Date().toLocaleTimeString("ko-KR"));
+                window.opener.setDrawdbImage(id, base64RawData, "create");
+              }
             });
-        } else {
-          alert("[A-RMS] :: [Workspace.jsx] :: A-RMS를 통해 접근한 케이스에 한해서 저장이 가능합니다. 125");
         }
+      } else {
+        Toast.error("[A-RMS] :: [Workspace.jsx] :: A-RMS를 통해 접근한 케이스에 한해서 저장이 가능합니다. 125");
       }
     } else {
       await db.templates
@@ -213,7 +276,7 @@ export default function WorkSpace() {
           pan: transform.pan,
           zoom: transform.zoom,
           ...(databases[database].hasEnums && { enums: enums }),
-          ...(databases[database].hasTypes && { types: types }),
+          ...(databases[database].hasTypes && { types: types })
         })
         .then(() => {
           setSaveState(State.SAVED);
@@ -235,7 +298,7 @@ export default function WorkSpace() {
     transform,
     setSaveState,
     database,
-    enums,
+    enums
   ]);
 
   const load = useCallback(async () => {
