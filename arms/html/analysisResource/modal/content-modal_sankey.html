@@ -418,7 +418,12 @@
 			console.log(excelData);
 
 			// 커스텀 옵션 정의
-			let customOptions = { search:false };
+			let customOptions = {
+				search:false,
+				updateTable: function(instance, cell, col, row, val, id) {
+					cell.style.whiteSpace = "normal";
+				}
+			};
 
 			ModalTabFunction.setColumns(columnList);
 			ModalTabFunction.setExcelData(excelData);

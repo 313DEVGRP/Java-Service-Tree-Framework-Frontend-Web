@@ -184,11 +184,11 @@
 
 			// excelColumn 세팅 (width ratio)
 			var columnList = [
-				{ type: "text", title: "작업자 명", wRatio: 0.1},
+				{ type: "text", title: "작업자 이름", wRatio: 0.1},
 				{ type: "text", title: "작업자 메일", wRatio: 0.2},
-				{ type: "text", title: "요구사항 및 연결이슈 합계", wRatio: 0.2},
-				{ type: "text", title: "요구사항 수", wRatio: 0.1},
-				{ type: "text", title: "연결이슈 수", wRatio: 0.1},
+				{ type: "numeric", title: "요구사항 및 연결이슈 합계", wRatio: 0.2},
+				{ type: "numeric", title: "요구사항 수", wRatio: 0.1},
+				{ type: "numeric", title: "연결이슈 수", wRatio: 0.1},
 				{ type: "text", title: "요구사항 상태",	wRatio: 0.15},
 				{ type: "text", title: "연결이슈 상태",	wRatio: 0.15}
 			];
@@ -263,7 +263,11 @@
 						let customOptions =
 							{ search:true,
 								updateTable: function(instance, cell, col, row, val, id) {
-									cell.style.textAlign = "left";
+									if(col === 2 || col === 3 || col === 4) {
+										cell.style.textAlign = "right";
+									} else {
+										cell.style.textAlign = "left";
+									}
 									cell.style.whiteSpace = "normal";
 								}
 							};
