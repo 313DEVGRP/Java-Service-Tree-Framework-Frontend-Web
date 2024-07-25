@@ -7,7 +7,6 @@
 		$.getStylesheet("../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.css"),
 		$.getStylesheet("../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css"),
 		$.getStylesheet("../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css"),
-		$.getStylesheet("../reference/jquery-plugins/Font-Awesome-6.6.0/css/all.min.css"),
 		$.getStylesheet("./css/jspreadsheet/custom_sheet.css")
 	).done(function() {
 			var Spreadsheet = function (element, options) {

@@ -62,3 +62,7 @@
     font-size: 12px !important;
     line-height: 15px !important; /* 행간 설정 */
 }
+
+.jexcel_toolbar i.jexcel_toolbar_item {
+    line-height: 16px !important;
+}
