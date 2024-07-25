@@ -356,9 +356,9 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
             return;
         }
 
-        // alert("선택된 클라우드 유형의 경우 설계가 필요합니다.");
+        alert("선택된 클라우드 유형의 경우 설계가 필요합니다.");
 
-        /*Promise.all([get_arms_state_list(), get_project_status_list(project_id, issueType_c_id)])
+       /* Promise.all([get_arms_state_list(), get_project_status_list(project_id, issueType_c_id)])
             .then(([arms_state_list, alm_status_list]) => {
                 // 두 API 호출 결과를 함께 사용합니다.
                 console.log('ARMS State List:', arms_state_list);
@@ -945,38 +945,13 @@ function delete_req_state_btn_click() {
     });
 }
 
-function remove_arms_state(state_c_id, state_name) {
-    return new Promise((resolve, reject) => {
-
-        let data = {
-            c_id : state_c_id,
-        };
-
-        $.ajax({
-            url: "/auth-user/api/arms/reqState/removeNode.do",
-            type: "DELETE",
-            data: data,
-            statusCode: {
-                200: function (data) {
-                    jSuccess('"' + state_name + '"' + " 상태가 삭제되었습니다.");
-                    resolve(data);
-                }
-            },
-            error: function (e) {
-                jError("상태 삭제 중 오류가 발생하였습니다.");
-                reject(e);
-            }
-        });
-    });
-}
-
-function update_arms_state(state_c_id, state_category_value, state_name, state_contents) {
+function update_arms_state(state_c_id, state_category_mapping_id, state_name, state_contents) {
 
     return new Promise((resolve, reject) => {
 
         let data = {
             c_id : state_c_id,
-            c_state_category_mapping_id : state_category_value,
+            c_state_category_mapping_id : state_category_mapping_id,
         };
 
         if (state_contents) {
@@ -999,6 +974,31 @@ function update_arms_state(state_c_id, state_category_value, state_name, state_c
             },
             error: function (e) {
                 jError("상태 수정 중 오류가 발생하였습니다.");
+                reject(e);
+            }
+        });
+    });
+}
+
+function remove_arms_state(state_c_id, state_name) {
+    return new Promise((resolve, reject) => {
+
+        let data = {
+            c_id : state_c_id,
+        };
+
+        $.ajax({
+            url: "/auth-user/api/arms/reqState/removeNode.do",
+            type: "DELETE",
+            data: data,
+            statusCode: {
+                200: function (data) {
+                    jSuccess('"' + state_name + '"' + " 상태가 삭제되었습니다.");
+                    resolve(data);
+                }
+            },
+            error: function (e) {
+                jError("상태 삭제 중 오류가 발생하였습니다.");
                 reject(e);
             }
         });

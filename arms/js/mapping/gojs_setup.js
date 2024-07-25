@@ -48,6 +48,7 @@ var gojs = (function () {
 
         myDiagram.nodeTemplate = // the default node template
             $(go.Node,
+                { movable: false },
                 'Spot',
                 { selectionAdorned: false, textEditable: true, locationObjectName: 'BODY' },
                 new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -138,6 +139,7 @@ var gojs = (function () {
         myDiagram.nodeTemplateMap.add(
             'Loading',
             $(go.Node,
+                { movable: false },
                 'Spot',
                 { selectionAdorned: false, textEditable: true, locationObjectName: 'BODY' },
                 new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -203,6 +205,7 @@ var gojs = (function () {
         myDiagram.nodeTemplateMap.add(
             'End',
             $(go.Node,
+                { movable: false },
                 'Spot',
                 { selectionAdorned: false, textEditable: true, locationObjectName: 'BODY' },
                 new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -374,14 +377,15 @@ var gojs = (function () {
             if (node !== null) {
                 const edited_text = text_block.text;
                 const state_c_id = node.data.c_id;
-                const mapping_id = node.data.mapping_id;
+                const state_category_mapping_id = node.data.mapping_id;
                 console.log(node.data.c_id);
                 console.log('Edited text: ', edited_text);
 
                 // 상태명 변경 호출
-                update_arms_state(state_c_id, mapping_id, edited_text, null)
+                update_arms_state(state_c_id, state_category_mapping_id, edited_text, null)
                     .then((result) => {
                         // API 호출 결과를 처리합니다.
+                        jSuccess("상태명 변경이 완료되었습니다.");
                         console.log(result);
                     })
                     .catch((error) => {
@@ -440,28 +444,30 @@ var gojs = (function () {
             let update_c_id = to_node.data.c_id;
             let update_mapping_id = from_node.data.c_id;
 
-            // if (to_node.data.type === "arms-state") {
-            //     update_arms_state(update_c_id, update_mapping_id, null, null)
-            //         .then((result) => {
-            //             console.log(result);
-            //             jSuccess(to_node.data.text + " 상태가 " + from_node.data.text + "카테고리에 연결되었습니다.");
-            //         })
-            //         .catch((error) => {
-            //             console.error('Error fetching data:', error);
-            //             return;
-            //         });
-            // }
-            // else if (to_node.data.type === "alm-status") {
-            //     update_alm_status(update_c_id, update_mapping_id)
-            //         .then((result) => {
-            //             console.log(result);
-            //             jSuccess("ALM 상태(" + to_node.data.text + ")가 " + from_node.data.text + " 상태에 연결되었습니다.");
-            //         })
-            //         .catch((error) => {
-            //             console.error('Error fetching data:', error);
-            //             return;
-            //         });
-            // }
+            if (to_node.data.type === "arms-state") {
+                update_arms_state(update_c_id, update_mapping_id, null, null)
+                    .then((result) => {
+                        console.log(result);
+                        jSuccess(to_node.data.text + " 상태가 " + from_node.data.text + " 카테고리에 연결되었습니다.");
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error)
+                        myDiagram.remove(link);
+                        return;
+                    });
+            }
+            else if (to_node.data.type === "alm-status") {
+                update_alm_status(update_c_id, update_mapping_id)
+                    .then((result) => {
+                        console.log(result);
+                        jSuccess("ALM 상태(" + to_node.data.text + ")가 " + from_node.data.text + " 상태에 연결되었습니다.");
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        myDiagram.remove(link);
+                        return;
+                    });
+            }
 
             lowlight();
         });
@@ -524,61 +530,36 @@ var gojs = (function () {
                 remove_new_link_and_restore();
                 return;
             }
-/*            // ARMS 상태 노드는 카테고리를 1개만 연결 가능
-            if (from_node.category === "NoAdd" && from_node.findLinksOutOf().count > 1) {
-                // jNotify("1");
-                remove_new_link_and_restore();
-                return;
-            }
-
-            // ARMS 상태 노드의 연결은 1개만 연결 가능
-            if (to_node.category === "NoAdd" && to_node.findLinksInto().count > 1) {
-                jNotify(to_node.data.text + " 상태에 연결된 상태 카테고리가 있습니다.");
-                remove_new_link_and_restore();
-                return;
-            }
-
-            // ALM 상태 노드의 연결은 1개만 연결 가능
-            if (to_node.category === 'End' && to_node.findLinksInto().count > 1) {
-                jNotify("ALM 상태와 ARMS 상태는 1 : 1 매핑만 가능합니다.");
-                remove_new_link_and_restore();
-                return;
-            }
-
-            // 카테고리 - ALM 상태 연결 막기
-            if (from_node.category === 'Loading' && to_node.category === "End") {
-                jNotify("카테고리는 ARMS 상태에만 연결할 수 있습니다.");
-                remove_new_link_and_restore();
-                return;
-            }*/
 
             // 드래그 앤 드롭으로 연결을 변경 처리할 경우 기존 연결 삭제 update 처리
             console.log(old_to_node);
             console.log(old_from_node);
-/*            let old_c_id = old_to_node.c_id;
-            let old_mapping_id = old_from_node.c_id;
+            let old_c_id = old_to_node.c_id;
+            let old_mapping_id = null;
+            // let old_mapping_id = old_from_node.c_id;
 
             if (old_to_node.type === "arms-state") {
-                console.log("기존 ARMS 상태 초기화");
-                update_arms_state(old_c_id, null, null, null)
+                // 기존 ARMS 상태 초기화
+                update_arms_state(old_c_id, old_mapping_id, null, null)
                     .then((result) => {
                         // API 호출 결과를 처리합니다.
                         console.log(result);
                     })
                     .catch((error) => {
                         console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
                         return;
                     });
             }
             else if (old_to_node.type === "alm-status") {
-                console.log("기존 ALM 상태 초기화");
-
-                update_alm_status(old_c_id, null)
+                // 기존 ALM 상태 초기화
+                update_alm_status(old_c_id, old_mapping_id)
                     .then((result) => {
                         console.log(result);
                     })
                     .catch((error) => {
                         console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
                         return;
                     });
             }
@@ -596,6 +577,7 @@ var gojs = (function () {
                     })
                     .catch((error) => {
                         console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
                         return;
                     });
             }
@@ -608,9 +590,10 @@ var gojs = (function () {
                     })
                     .catch((error) => {
                         console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
                         return;
                     });
-            }*/
+            }
 
             // old data 최신화
             link.data.oldFromNode = from_node.data;
@@ -643,7 +626,7 @@ var gojs = (function () {
                         return false;
                     }
                     else {
-/*                        remove_arms_state(state_c_id, state_name)
+                        remove_arms_state(state_c_id, state_name)
                             .then((result) => {
                                 // API 호출 결과를 처리합니다.
                                 console.log(result);
@@ -652,7 +635,7 @@ var gojs = (function () {
                                 // 오류가 발생한 경우 처리합니다.
                                 console.error('Error fetching data:', error);
                                 return false;
-                            });*/
+                            });
                     }
                 }
             }
@@ -673,24 +656,25 @@ var gojs = (function () {
             }
         });
 
+        // 데이터 변경 이벤트 리스너
         myDiagram.addModelChangedListener(function(e) {
+            // 삭제 이벤트 처리(Remove)
             if (e.change === go.ChangedEvent.Remove) {
-                // 링크 삭제의 경우
+                // 연결(링크)만 삭제 - 노드의 삭제의 경우는 연결이 자동삭제
                 if (e.propertyName === 'linkDataArray' && isLinkDeletion) {
-                    // 연결 삭제 타입의 경우
-                    const removedLinkData = e.oldValue;
+                    const removedLinkData = e.oldValue;     // 기존 연결
                     if (!confirm("해당 연결을 삭제하시겠습니까?")) {
-                        // 삭제 취소 시 링크 재연결
+                        // 삭제 취소 시 기존 연결 재등록
                         myDiagram.model.addLinkData(removedLinkData);
                         return;
                     }
 
-                    console.log(removedLinkData);
                     let c_id = removedLinkData.toNode.c_id;
 
-                    /*if (removedLinkData.toNode.type === "arms-state") {
-
-                        update_arms_state(c_id, null, null, null)
+                    if (removedLinkData.toNode.type === "arms-state") {
+                        // amrs 상태 c_id에 대한 매핑 값 null 처리
+                        let state_category_mapping_id = null;
+                        update_arms_state(c_id, state_category_mapping_id, null, null)
                             .then((result) => {
                                 // API 호출 결과를 처리합니다.
                                 console.log(result);
@@ -715,7 +699,7 @@ var gojs = (function () {
                                 myDiagram.model.addLinkData(removedLinkData);
                                 return;
                             });
-                    }*/
+                    }
                 }
             }
         });
@@ -806,8 +790,6 @@ var gojs = (function () {
                 node.minLocation = new go.Point(node.location.x, -Infinity);
             });
         });
-
-        // load(); // load initial diagram from the mySavedModel textarea
     }
 
     function isEncoded(str) {
@@ -883,64 +865,10 @@ var gojs = (function () {
         let jsonData = JSON.parse(data);
         decodeObject(jsonData);
 
-        console.log(jsonData.linkDataArray);
-        jsonData.linkDataArray.forEach(link => {
-            console.log(link);
-            if (link.toNode && link.fromNode) {
-                let type = link.toNode.type;
-                let c_id = link.toNode.c_id;
-                let mapping_id = link.fromNode.c_id;
-                console.log(type);
-                console.log("바꿀 데이터의 아이디 = "+ c_id);
-                console.log("바꿀 데이터의 매핑 아이디 = "+ mapping_id);
-                if (type === "arms-state") {
-                    let name = link.toNode.c_title;
-                    // arms state의 c_id에 mapping_id 값 업데이트
-                    let data = {
-                        c_id : c_id,
-                        c_state_category_mapping_id : mapping_id
-                    };
-
-                    console.log(data);
-                    console.log(name);
-                }
-                else if (type === "alm-status") {
-                    // alm status의 c_id에 mapping_id 값 업데이트
-                }
-            }
-            else if (link.isNew === true) {
-                let node = find_arms_state_data(jsonData.nodeDataArray, link.to);
-                console.log(node);
-                let state_name = node.text.trim();
-                if (!state_name) {
-                    alert("상태의 이름이 입력되지 않았습니다.");
-                    return;
-                }
-
-                let state_category_value = node.mapping_id;
-                if (!state_category_value) {
-                    alert("상태 카테고리가 선택되지 않았습니다.");
-                    return;
-                }
-
-                let data = {
-                    ref : 2,
-                    c_type : "default",
-                    c_state_category_mapping_id : state_category_value,
-                    c_title : state_name
-                };
-            }
-        })
-
-        console.log(jsonData.nodeDataArray);
+        console.log(jsonData);
 
         document.getElementById('mySavedModel').value = JSON.stringify(jsonData, null, 2);
         myDiagram.isModified = false;
-    }
-
-    function find_arms_state_data(node_data_array, key) {
-        const node = node_data_array.find(node => node.key === key);
-        return node ? node : null;
     }
 
     return {
