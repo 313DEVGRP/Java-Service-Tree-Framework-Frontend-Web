@@ -7,6 +7,7 @@ import { DB, State } from "../../data/constants.js";
 import { db } from "../../data/db.js";
 import axios from "axios";
 import { toPng } from "html-to-image";
+import html2canvas from 'html2canvas';
 import {
   useLayout,
   useSettings,
@@ -84,23 +85,22 @@ export default function WorkSpace() {
   };
 
   const generatePngData = async () => {
-    const canvas = document.getElementById("canvas");
-    if (!canvas) {
+    const canvasElement = document.getElementById("canvas");
+    if (!canvasElement) {
       console.error("Canvas element not found");
       return;
     }
 
     try {
-      const dataUrl = await toPng(canvas);
+      // const canvas = await html2canvas(canvasElement);
+
+      // const dataUrl = canvas.toDataURL('image/webp', 100);
+
+      const dataUrl = await toPng(canvasElement);
 
       const blob = dataURItoBlob(dataUrl);
 
       const base64Data = await blobToBase64(blob);
-
-      // Base64 데이터에서 MIME 타입 제거
-      // const base64RawData = base64Data.split(",")[1];
-
-      console.log("Base64 raw data :: ", base64Data);
 
       return base64Data;
     } catch (error) {
@@ -134,6 +134,7 @@ export default function WorkSpace() {
     }
   }, []);
 
+  // TODO: fetchData <-> load 간 커스터마이징이 필요함...
   // 3. API 호출 및 상태 설정 함수
   const fetchData = async () => {
     try {
@@ -254,7 +255,6 @@ export default function WorkSpace() {
               setSaveState(State.SAVED);
               setLastSaved(new Date().toLocaleString());
               if (window.opener && !window.opener.closed) {
-                const base64RawData = await generatePngData();
                 window.opener.changeBtnText("#modal_req_add_drawdb_time", new Date().toLocaleTimeString("ko-KR"));
                 window.opener.setDrawdbImage(id, base64RawData, "create");
               }
@@ -415,13 +415,16 @@ export default function WorkSpace() {
           if (selectedDb === "") setShowSelectDbModal(true);
         });
     };
-
+    console.log("[A-RMS] :: [Workspace.jsx] :: load :: window.name :: " + window.name);
     if (window.name === "") {
       loadLatestDiagram();
     } else {
       const name = window.name.split(" ");
       const op = name[0];
-      const id = parseInt(name[1]);
+      const id = name[1];
+      console.log("[A-RMS] :: [Workspace.jsx] :: load :: name :: " + name);
+      console.log("[A-RMS] :: [Workspace.jsx] :: load :: op :: " + op);
+      console.log("[A-RMS] :: [Workspace.jsx] :: load :: id :: " + id);
       switch (op) {
         case "d": {
           loadDiagram(id);
