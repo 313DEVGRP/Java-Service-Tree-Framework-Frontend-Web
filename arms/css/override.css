@@ -2022,7 +2022,7 @@ svg .ghostCircle.show {
 }
 
 /* drawio */
-.drawio-time {
+.drawio-time, .drawdb-time {
     color: #f8f8f8;
     margin-left: 10px;
 }
