@@ -109,7 +109,6 @@ export default function WorkSpace() {
     }
   };
 
-  // 1. query string setup
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -127,55 +126,118 @@ export default function WorkSpace() {
       setArmsType(paramArmsType);
       setArmsMode(paramArmsMode);
       setArmsValidate(true);
-      Toast.success('URL parameters are valid');
+      Toast.success('Step 1 : Parameters Are Valid');
     } else {
-      Toast.error('One or more required parameters are missing');
+      Toast.error('Step 1 : One or more required parameters are missing');
       return;
     }
   }, []);
 
-  // TODO: fetchData <-> load 간 커스터마이징이 필요함...
-  // 3. API 호출 및 상태 설정 함수
   const fetchData = async () => {
-    try {
-      const ARMS_REQADD_ENDPOINT = '/auth-user/api/arms/reqAddPure/T_ARMS_REQADD_' + pdServiceId + '/getNode.do?c_id=' + armsId;
-      const ARMS_PRODUCT_ENDPOINT = '/auth-user/api/arms/pdServicePure/getNode.do?c_id=' + pdServiceId;
-      let response;
-      if (armsType === 'reqadd') {
-        if (armsMode === 'update' || armsMode === 'view' || armsMode === 'create') {
-          response = await axios.get(ARMS_REQADD_ENDPOINT);
-          Toast.success("Workspace reqadd loaded!");
-        }
-      } else if (armsType === 'product') {
-        response = await axios.get(ARMS_PRODUCT_ENDPOINT);
-        Toast.success("Workspace product loaded!");
+    Toast.success("Step 3 : fetchData function is called");
+    if (armsType === "reqadd") {
+      if (armsMode === "create") {
+        const tempId = "create-" + armsType + "-" + armsId;
+        Toast.success("Step 4 : armsMode is valid :: " + tempId);
+        await db.armsDiagrams
+          .get(tempId)
+          .then((diagram) => {
+            if (diagram) {
+              if (diagram.database) {
+                setDatabase(diagram.database);
+              } else {
+                setDatabase(DB.GENERIC);
+              }
+              setId(diagram.id);
+              setTitle(diagram.name);
+              setTables(diagram.tables);
+              setRelationships(diagram.references);
+              setAreas(diagram.areas);
+              setNotes(diagram.notes);
+              setTasks(diagram.todos ?? []);
+              setTransform({
+                pan: diagram.pan,
+                zoom: diagram.zoom
+              });
+              setUndoStack([]);
+              setRedoStack([]);
+              if (databases[database].hasTypes) {
+                setTypes(diagram.types ?? []);
+              }
+              if (databases[database].hasEnums) {
+                setEnums(diagram.enums ?? []);
+              }
+              window.name = `d ${diagram.id}`;
+            } else {
+              window.name = "";
+              if (selectedDb === "") setShowSelectDbModal(true);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else if (armsMode === "update" || armsMode === "view") {
+        Toast.success("Step 4 : armsMode is valid");
+        const ARMS_REQADD_ENDPOINT = "/auth-user/api/arms/reqAddPure/T_ARMS_REQADD_" + pdServiceId + "/getNode.do?c_id=" + armsId;
+        await axios.get(ARMS_REQADD_ENDPOINT)
+          .then((response) => {
+            Toast.success("Step 5 :: 요구사항 조회 완료!");
+            const c_drawdb_contents = response.data.c_drawdb_contents;
+
+            if (c_drawdb_contents) {
+              const armsDiagram = JSON.parse(c_drawdb_contents);
+
+              if (armsDiagram) {
+                if (armsDiagram.database) {
+                  setDatabase(armsDiagram.database);
+                } else {
+                  setDatabase(DB.GENERIC);
+                }
+                setId(armsDiagram.id);
+                setTitle(armsDiagram.name);
+                setTables(armsDiagram.tables);
+                setRelationships(armsDiagram.references);
+                setNotes(armsDiagram.notes);
+                setAreas(armsDiagram.areas);
+                setTasks(armsDiagram.todos ?? []);
+                setTransform({ pan: armsDiagram.pan, zoom: armsDiagram.zoom });
+                if (databases[database].hasTypes) {
+                  setTypes(armsDiagram.types ?? []);
+                }
+                if (databases[database].hasEnums) {
+                  setEnums(armsDiagram.enums ?? []);
+                }
+                window.name = `d ${armsDiagram.id}`;
+              } else {
+                window.name = "";
+                if (selectedDb === "") setShowSelectDbModal(true);
+              }
+            } else {
+              Toast.error("c_drawdb_contents 데이터가 없습니다.");
+            }
+          })
+          .catch((error) => {
+            Toast.error("Step 5 :: 요구사항 조회 실패!");
+            console.log(error);
+          });
+
       } else {
-        Toast.error('armsType is not valid');
+        Toast.error("Step 4 : armsMode is not valid");
         return;
       }
-
-      // API 응답 데이터를 상태에 설정
-      if (response) {
-        // setTables(response.data.tables);
-        // setRelationships(response.data.relationships);
-        console.log(response);
-        // 추가로 필요한 상태 업데이트 로직을 여기에 추가
-      }
-    } catch (err) {
-      Toast.error(err);
+    } else {
+      Toast.error("Step 3 : fetchData function is called");
+      return;
     }
   };
 
-  // 4. useEffect를 사용하여 fetchData 함수 호출
   useEffect(() => {
     if (armsValidate) {
-      Toast.success('armsValidate is true');
+      document.title = "Editor | drawDB";
+      Toast.success('Step 2 : armsValidate is true');
       fetchData();
     }
-  }, [armsValidate]); // armsValidate가 true로 설정된 경우에만 fetchData 호출
-  // deps 인자는 해당 값이 바뀌면 이 useEffect가 실행 되도록 설정. 계속 실행된단얘기임.
-
-
+  }, [armsValidate]);
 
   const handleResize = (e) => {
     if (!resize) return;
@@ -187,11 +249,10 @@ export default function WorkSpace() {
     const name = window.name.split(" ");
     const op = name[0];
     const saveAsDiagram = window.name === "" || op === "d" || op === "lt";
-
     if (saveAsDiagram) {
       if (armsMode === "create" && armsValidate) {
         const base64RawData = await generatePngData();
-        if (id === "") {
+        if ((id === "" && window.name === "") || window.name.split(" ")[0] === "lt") {
           const tempId = "create-" + armsType + "-" + armsId;
           setId(tempId);
           await db.armsDiagrams
@@ -217,7 +278,7 @@ export default function WorkSpace() {
               ...(databases[database].hasTypes && { types: types })
             })
             .then(async (id) => {
-              Toast.success("[A-RMS] :: [Workspace.jsx] :: 저장 완료");
+              Toast.success("[A-RMS] :: 저장 완료");
               setId(id);
               window.name = `d ${id}`;
               setSaveState(State.SAVED);
@@ -251,7 +312,7 @@ export default function WorkSpace() {
               ...(databases[database].hasTypes && { types: types })
             })
             .then(async () => {
-              Toast.success("[A-RMS] :: [Workspace.jsx] :: 수정 완료");
+              Toast.success("[A-RMS] :: 수정 완료");
               setSaveState(State.SAVED);
               setLastSaved(new Date().toLocaleString());
               if (window.opener && !window.opener.closed) {
@@ -260,8 +321,56 @@ export default function WorkSpace() {
               }
             });
         }
+      } else if (armsMode === "update" && armsValidate) {
+        const base64RawData = await generatePngData();
+        const ARMS_REQADD_ENDPOINT = "/auth-user/api/arms/reqAddPure/T_ARMS_REQADD_" + pdServiceId + "/updateDrawDBContents.do";
+        const body = {
+          c_id: armsId,
+          c_drawdb_contents: JSON.stringify({
+            id: id,
+            armsId: armsId,
+            armsType: armsType,
+            armsMode: armsMode,
+            pdServiceId: pdServiceId,
+            armsValidate: armsValidate,
+            armsThumbnail: base64RawData,
+            database: database,
+            name: title,
+            lastModified: new Date(),
+            tables: tables,
+            references: relationships,
+            notes: notes,
+            areas: areas,
+            todos: tasks,
+            pan: transform.pan,
+            zoom: transform.zoom,
+            ...(databases[database].hasEnums && { enums: enums }),
+            ...(databases[database].hasTypes && { types: types })
+          })
+        };
+
+        axios.put(ARMS_REQADD_ENDPOINT, body, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          }
+        }).then((response) => {
+          console.table(response);
+          Toast.success("[A-RMS] :: 수정 완료");
+          setSaveState(State.SAVED);
+          setLastSaved(new Date().toLocaleString());
+          if (window.opener && !window.opener.closed) {
+            window.opener.changeBtnText("#btn_req_add_edit_drawdb", "drawdb 편집 완료");
+            window.opener.changeBtnText("#req_add_edit_drawdb_time", new Date().toLocaleTimeString("ko-KR"));
+            window.opener.setDrawdbImage(id, base64RawData, "update");
+          }
+        }).catch((error) => {
+          Toast.error(error);
+          console.log(error);
+        });
+      } else if (armsMode === "view") {
+        Toast.error("[A-RMS] :: 읽기 모드에서는 저장이 불가능합니다.");
       } else {
-        Toast.error("[A-RMS] :: [Workspace.jsx] :: A-RMS를 통해 접근한 케이스에 한해서 저장이 가능합니다. 125");
+        Toast.error("[A-RMS] :: A-RMS를 통해 접근한 케이스에 한해서 저장이 가능합니다.");
       }
     } else {
       await db.templates
@@ -301,160 +410,6 @@ export default function WorkSpace() {
     enums
   ]);
 
-  const load = useCallback(async () => {
-    const loadLatestDiagram = async () => {
-      await db.armsDiagrams
-        .orderBy("lastModified")
-        .last()
-        .then((d) => {
-          if (d) {
-            if (d.database) {
-              setDatabase(d.database);
-            } else {
-              setDatabase(DB.GENERIC);
-            }
-            setId(d.id);
-            setTitle(d.name);
-            setTables(d.tables);
-            setRelationships(d.references);
-            setNotes(d.notes);
-            setAreas(d.areas);
-            setTasks(d.todos ?? []);
-            setTransform({ pan: d.pan, zoom: d.zoom });
-            if (databases[database].hasTypes) {
-              setTypes(d.types ?? []);
-            }
-            if (databases[database].hasEnums) {
-              setEnums(d.enums ?? []);
-            }
-            window.name = `d ${d.id}`;
-          } else {
-            window.name = "";
-            if (selectedDb === "") setShowSelectDbModal(true);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
-    const loadDiagram = async (id) => {
-      await db.armsDiagrams
-        .get(id)
-        .then((diagram) => {
-          if (diagram) {
-            if (diagram.database) {
-              setDatabase(diagram.database);
-            } else {
-              setDatabase(DB.GENERIC);
-            }
-            setId(diagram.id);
-            setTitle(diagram.name);
-            setTables(diagram.tables);
-            setRelationships(diagram.references);
-            setAreas(diagram.areas);
-            setNotes(diagram.notes);
-            setTasks(diagram.todos ?? []);
-            setTransform({
-              pan: diagram.pan,
-              zoom: diagram.zoom,
-            });
-            setUndoStack([]);
-            setRedoStack([]);
-            if (databases[database].hasTypes) {
-              setTypes(diagram.types ?? []);
-            }
-            if (databases[database].hasEnums) {
-              setEnums(diagram.enums ?? []);
-            }
-            window.name = `d ${diagram.id}`;
-          } else {
-            window.name = "";
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
-    const loadTemplate = async (id) => {
-      await db.templates
-        .get(id)
-        .then((diagram) => {
-          if (diagram) {
-            if (diagram.database) {
-              setDatabase(diagram.database);
-            } else {
-              setDatabase(DB.GENERIC);
-            }
-            setId(diagram.id);
-            setTitle(diagram.title);
-            setTables(diagram.tables);
-            setRelationships(diagram.relationships);
-            setAreas(diagram.subjectAreas);
-            setTasks(diagram.todos ?? []);
-            setNotes(diagram.notes);
-            setTransform({
-              zoom: 1,
-              pan: { x: 0, y: 0 },
-            });
-            setUndoStack([]);
-            setRedoStack([]);
-            if (databases[database].hasTypes) {
-              setTypes(diagram.types ?? []);
-            }
-            if (databases[database].hasEnums) {
-              setEnums(diagram.enums ?? []);
-            }
-          } else {
-            if (selectedDb === "") setShowSelectDbModal(true);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          if (selectedDb === "") setShowSelectDbModal(true);
-        });
-    };
-    console.log("[A-RMS] :: [Workspace.jsx] :: load :: window.name :: " + window.name);
-    if (window.name === "") {
-      loadLatestDiagram();
-    } else {
-      const name = window.name.split(" ");
-      const op = name[0];
-      const id = name[1];
-      console.log("[A-RMS] :: [Workspace.jsx] :: load :: name :: " + name);
-      console.log("[A-RMS] :: [Workspace.jsx] :: load :: op :: " + op);
-      console.log("[A-RMS] :: [Workspace.jsx] :: load :: id :: " + id);
-      switch (op) {
-        case "d": {
-          loadDiagram(id);
-          break;
-        }
-        case "t":
-        case "lt": {
-          loadTemplate(id);
-          break;
-        }
-        default:
-          break;
-      }
-    }
-  }, [
-    setTransform,
-    setRedoStack,
-    setUndoStack,
-    setRelationships,
-    setTables,
-    setAreas,
-    setNotes,
-    setTypes,
-    setTasks,
-    setDatabase,
-    database,
-    setEnums,
-    selectedDb,
-  ]);
-
   useEffect(() => {
     if (
       tables?.length === 0 &&
@@ -488,12 +443,6 @@ export default function WorkSpace() {
 
     save();
   }, [id, saveState, save]);
-
-  useEffect(() => {
-    document.title = "Editor | drawDB";
-
-    load();
-  }, [load]);
 
   return (
     <div className="h-full flex flex-col overflow-hidden theme">

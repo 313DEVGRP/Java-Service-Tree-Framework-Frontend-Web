@@ -8,6 +8,9 @@ var tempDataTable;
 var isChecked = []; // 지라 프로젝트 연결 목록 체크
 var jiraCheckId = []; // 여러 개의 c_id를 저장할 배열
 var dataTableRef;
+var dbName = "drawDB";
+var dbVersion = 50;
+var storeName = "armsDiagrams";
 var reqColumnList = [
 	{ data: "c_id",	   title: "<span class='toggle-column'>c_id</span>",   visible: false, defaultContent: "-"},
 	{ data: "c_left",  title: "<span class='toggle-column'>c_left</span>", visible: false, defaultContent: "-"},
@@ -141,6 +144,7 @@ function execDocReady() {
 			tab_click_event();
 
 			drawio();
+			drawdb();
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			var 라따적용_클래스이름_배열 = ['.ladda_save_req'];
 			laddaBtnSetting(라따적용_클래스이름_배열);
@@ -480,6 +484,7 @@ function dataTableLoad(selectId, selectRel) {
 	var c_type = $("#req_tree").jstree("get_selected").attr("rel");
 	console.log("dataTableLoad - c_type:::" + c_type);
 	drawioImageClear();
+	drawDBImageClear();
 	// var dataTableRef;
 	if (selectId == 2) {
 		// 데이터 테이블 컬럼 및 열그룹 구성
@@ -601,6 +606,7 @@ function dataTableDrawCallback(tableInfo) {
 function setDetailAndEditViewTab() {
 	console.log("Detail Tab ::::");
 	drawioImageClear();
+	drawDBImageClear();
 	setDefaultBtnText();
 
 	var tableName = "T_ARMS_REQADD_" + $("#selected_pdService").val();
@@ -628,6 +634,15 @@ function setDetailAndEditViewTab() {
 				changeBtnText('#req_add_edit_drawio_time', localStorage.getItem("req-update-drawio-time-" + data.c_id));
 			}
 
+			if (data.c_drawdb_contents) {
+				var armsDiagram = JSON.parse(data.c_drawdb_contents);
+				if (armsDiagram) {
+					var armsThumbnail = armsDiagram.armsThumbnail;
+					if (armsThumbnail) {
+						setDrawdbImage("", armsThumbnail, "update");
+					}
+				}
+			}
 		})
 		.fail(function (e) {})
 		.always(function () {});
@@ -1194,18 +1209,36 @@ function registNewPopup() {
 			}
 		}
 		$("#popup_pdservice_reviewers").val(selectedReviewerArr).trigger("change");
+		// ------------------------- reviewer end --------------------------------//
 
+		// ------------------------- drawio start  --------------------------------//
 		var selectedProductServiceId = $("#selected_pdService").val();
 		if(localStorage.getItem("req-create-drawio-"+selectedProductServiceId) && localStorage.getItem("req-create-drawio-time-"+selectedProductServiceId)) {
 			changeBtnText('#btn_modal_req_add_drawio', 'drawio 등록 완료');
 			changeBtnText('#modal_req_add_drawio_time', localStorage.getItem("req-create-drawio-time-"+selectedProductServiceId));
 		}
-
 		if(localStorage.getItem("req-create-drawio-image-raw-"+selectedProductServiceId)) {
 			setDrawioImage("req-create-drawio-image-raw-"+selectedProductServiceId, localStorage.getItem("req-create-drawio-image-raw-"+selectedProductServiceId), "create");
 		}
+		// ------------------------- drawio end  --------------------------------//
 
-		// ------------------------- reviewer end --------------------------------//
+		// ------------------------- drawdb start  --------------------------------//
+		selectByIndexedDB("create-reqadd-" + selectedProductServiceId).then(result => {
+			if (result) {
+				var armsThumbnail = result.armsThumbnail;
+				var lastModified = result.lastModified;
+				var seoulTime = convertToSeoulTimeWithMeridiem(lastModified);
+				setDrawdbImage("create-reqadd-" + selectedProductServiceId, armsThumbnail, "create");
+				changeBtnText('#btn_modal_req_add_drawdb', 'drawdb 등록 완료');
+				changeBtnText('#modal_req_add_drawdb_time', seoulTime);
+			} else {
+				console.log("No data found for the given key.");
+			}
+		}).catch(error => {
+			console.error("Error:", error);
+		});
+		// ------------------------- drawdb end  --------------------------------//
+
 	});
 }
 
@@ -1224,12 +1257,23 @@ function switch_action_for_mode() {
 			$("#popup_req_state_div").show();
 
 			$("#modal_req_add_drawio_div").show();
+			$("#modal_req_add_drawdb_div").show();
 			var selectedProductServiceId = $("#selected_pdService").val();
 			if(localStorage.getItem("req-create-drawio-image-raw-"+selectedProductServiceId)) {
 				setDrawioImage("req-create-drawio-image-raw-"+selectedProductServiceId, localStorage.getItem("req-create-drawio-image-raw-"+selectedProductServiceId), "create");
-				$("#modal_req_add_drawio_swiper").show();
 			}
 
+			selectByIndexedDB("create-reqadd-" + selectedProductServiceId).then(result => {
+				if (result) {
+					var armsThumbnail = result.armsThumbnail;
+					console.log("Arms Thumbnail:", armsThumbnail);
+					setDrawdbImage("create-reqadd-" + selectedProductServiceId, armsThumbnail, "create");
+				} else {
+					console.log("No data found for the given key.");
+				}
+			}).catch(error => {
+				console.error("Error:", error);
+			});
 		}
 		else {
 			$("#popup_reviewer_div").hide();
@@ -1240,6 +1284,8 @@ function switch_action_for_mode() {
 			$("#popup_req_state_div").hide();
 			$("#modal_req_add_drawio_swiper").hide();
 			$("#modal_req_add_drawio_div").hide();
+			$("#modal_req_add_drawdb_swiper").hide();
+			$("#modal_req_add_drawdb_div").hide();
 		}
 	});
 }
@@ -1347,22 +1393,53 @@ function click_btn_for_req_save() {
 			"신규 요구사항 ( " + req_title + " )이 추가되었습니다." :
 			" 요구사항 폴더 ( " + req_title + " )가 등록되었습니다.";
 
-		$.ajax({
-			url: "/auth-user/api/arms/reqAdd/" + table_name + "/addNode.do",
-			type: "POST",
-			data: data_object_param,
-			statusCode: {
-				200: function () {
-					$("#req_tree").jstree("refresh");
-					$("#close_req").trigger("click");
-					jSuccess(success_message);
-					localStorage.removeItem("req-create-drawio-" + selectedProductServiceId);
-					localStorage.removeItem("req-create-drawio-image-raw-" + selectedProductServiceId);
-					localStorage.removeItem("req-create-drawio-time-" + selectedProductServiceId);
-					removeDrawIOConfig();
+		var request = indexedDB.open(dbName, dbVersion);
+
+		request.onerror = function(event) {
+			console.error("IndexedDB 열기 실패:", event.target.error);
+		};
+		var searchKey = "create-reqadd-"+$("#selected_pdService").val();
+		console.log("searchKey:", searchKey);
+		request.onsuccess = function(event) {
+			var db = event.target.result;
+			var transaction = db.transaction([storeName], "readonly");
+			var objectStore = transaction.objectStore(storeName);
+			var getRequest = objectStore.get(searchKey);
+
+			getRequest.onerror = function(event) {
+				console.error("데이터 조회 실패:", event.target.error);
+			};
+
+			getRequest.onsuccess = function(event) {
+				var result = event.target.result;
+				if (result) {
+					console.log("조회된 데이터:", result);
+					data_object_param.c_drawdb_contents = JSON.stringify(result);
+					data_object_param.c_drawdb_image_raw = result.armsThumbnail;
+					console.log("data_object_param.c_drawdb_contents :: " + data_object_param.c_drawdb_contents);
+					console.log("data_object_param.c_drawdb_image_raw :: " + data_object_param.c_drawdb_image_raw);
+				} else {
+					console.log("해당 키에 대한 데이터가 없습니다.");
 				}
-			}
-		});
+				$.ajax({
+					url: "/auth-user/api/arms/reqAdd/" + table_name + "/addNode.do",
+					type: "POST",
+					data: data_object_param,
+					statusCode: {
+						200: function () {
+							$("#req_tree").jstree("refresh");
+							$("#close_req").trigger("click");
+							jSuccess(success_message);
+							localStorage.removeItem("req-create-drawio-" + selectedProductServiceId);
+							localStorage.removeItem("req-create-drawio-image-raw-" + selectedProductServiceId);
+							localStorage.removeItem("req-create-drawio-time-" + selectedProductServiceId);
+							deleteByIndexedDB(searchKey);
+							removeDrawIOConfig();
+						}
+					}
+				});
+			};
+		};
 	});
 }
 
@@ -1976,9 +2053,6 @@ function formatDate(date) {
 }
 
 function setDrawioImage(localStorageKey, localStorageValue, mode) {
-	console.log("ARMS DRAWIO Key :: " + localStorageKey);
-	console.log("ARMS DRAWIO VALUE :: " + localStorageValue);
-
 	var imageSrcArray = Array(1).fill(localStorageValue);
 
 	if (mode === "create") {
@@ -1990,9 +2064,21 @@ function setDrawioImage(localStorageKey, localStorageValue, mode) {
 		$("#req_add_view_drawio_swiper").show();
 		addImageToSwiper(imageSrcArray, 'req_add_view_drawio_swiper_container');
 	}
-
 }
 
+function setDrawdbImage(localStorageKey, localStorageValue, mode) {
+	var imageSrcArray = Array(1).fill(localStorageValue);
+
+	if (mode === "create") {
+		addImageToSwiper(imageSrcArray, 'modal_req_add_drawdb_swiper_container');
+		$("#modal_req_add_drawdb_swiper").show();
+	} else if (mode === "update") {
+		$("#req_add_edit_drawdb_swiper").show();
+		addImageToSwiper(imageSrcArray, 'req_add_edit_drawdb_swiper_container');
+		$("#req_add_view_drawdb_swiper").show();
+		addImageToSwiper(imageSrcArray, 'req_add_view_drawdb_swiper_container');
+	}
+}
 
 function setDefaultBtnText() {
 	changeBtnText('#btn_modal_req_add_drawio', 'drawio 등록하러 가기');
@@ -2000,6 +2086,12 @@ function setDefaultBtnText() {
 
 	changeBtnText('#req_add_edit_drawio_time', '');
 	changeBtnText('#modal_req_add_drawio_time', '');
+
+	changeBtnText('#btn_modal_req_add_drawdb', 'drawdb 등록하러 가기');
+	changeBtnText('#btn_req_add_edit_drawdb', 'drawdb 편집하러 가기');
+
+	changeBtnText('#req_add_edit_drawdb_time', '');
+	changeBtnText('#modal_req_add_drawdb_time', '');
 }
 
 function drawioImageClear() {
@@ -2008,6 +2100,14 @@ function drawioImageClear() {
 	$("#req_add_view_drawio_swiper").hide();
 	$("#req_add_edit_drawio_swiper").hide();
 }
+
+function drawDBImageClear() {
+	console.log("drawdbImageClear");
+	$("#modal_req_add_drawdb_swiper").hide();
+	$("#req_add_view_drawdb_swiper").hide();
+	$("#req_add_edit_drawdb_swiper").hide();
+}
+
 
 function drawio() {
 
@@ -2031,5 +2131,83 @@ function drawio() {
 			jError("drawio was clicked but id is not matched");
 			return false;
 		}
+	});
+}
+
+function drawdb() {
+	$("#btn_req_add_edit_drawdb, #btn_modal_req_add_drawdb").on("click", function() {
+		if (this.id === "btn_modal_req_add_drawdb") {
+			if ($("#selected_pdService").val() == "" || $("#selected_pdService").val() == undefined) {
+				jError("제품(서비스)을 선택해 주세요.");
+				return false;
+			}
+			window.open("/reference/drawdb/editor?armsId=" + $("#selected_pdService").val() + "&armsMode=create&armsType=reqadd&pdServiceId="+$("#selected_pdService").val(), "_blank");
+		} else if (this.id === "btn_req_add_edit_drawdb") {
+			if (selectedJsTreeId == "" || selectedJsTreeId == undefined) {
+				jError("요구사항을 선택해 주세요.");
+				return false;
+			}
+			window.open("/reference/drawdb/editor?armsId=" + selectedJsTreeId + "&armsMode=update&armsType=reqadd&pdServiceId="+$("#selected_pdService").val(), "_blank");
+		} else {
+			jError("drawdb was clicked but id is not matched");
+			return false;
+		}
+	});
+}
+
+function deleteByIndexedDB(searchKey) {
+	var request = indexedDB.open(dbName, dbVersion);
+
+	request.onerror = function(event) {
+		console.error("IndexedDB 열기 실패:", event.target.error);
+	};
+
+	request.onsuccess = function(event) {
+		var db = event.target.result;
+		var transaction = db.transaction([storeName], "readwrite");
+		var objectStore = transaction.objectStore(storeName);
+		var deleteRequest = objectStore.delete(searchKey);
+
+		deleteRequest.onerror = function(event) {
+			console.error("데이터 삭제 실패:", event.target.error);
+		};
+
+		deleteRequest.onsuccess = function(event) {
+			console.log("데이터가 성공적으로 삭제되었습니다.");
+		};
+	};
+}
+
+function selectByIndexedDB(searchKey) {
+	return new Promise((resolve, reject) => {
+		var request = indexedDB.open(dbName, dbVersion);
+
+		request.onerror = function(event) {
+			console.error("IndexedDB 열기 실패:", event.target.error);
+			reject(event.target.error);
+		};
+
+		request.onsuccess = function(event) {
+			var db = event.target.result;
+			var transaction = db.transaction([storeName], "readonly");
+			var objectStore = transaction.objectStore(storeName);
+			var getRequest = objectStore.get(searchKey);
+
+			getRequest.onerror = function(event) {
+				console.error("데이터 조회 실패:", event.target.error);
+				reject(event.target.error);
+			};
+
+			getRequest.onsuccess = function(event) {
+				var result = event.target.result;
+				if (result) {
+					console.log("조회된 데이터:", result);
+					resolve(result);
+				} else {
+					console.log("해당 키에 대한 데이터가 없습니다.");
+					resolve(null);
+				}
+			};
+		};
 	});
 }

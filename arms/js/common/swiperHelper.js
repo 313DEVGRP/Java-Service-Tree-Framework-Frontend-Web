@@ -73,3 +73,45 @@ function changeBtnText(btn, msg) {
 function removeDrawIOConfig() {
 	localStorage.removeItem('.drawio-config');
 }
+
+function convertToSeoulTime(utcDateTime) {
+	var date = new Date(utcDateTime);
+
+	var options = {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: false,
+		timeZone: "Asia/Seoul"
+	};
+
+	var formatter = new Intl.DateTimeFormat("ko-KR", options);
+	var formattedDate = formatter.format(date);
+
+	formattedDate = formattedDate.replace(/(\d{4})\.(\d{2})\.(\d{2})\.\s(\d{2}):(\d{2}):(\d{2})/, "$1-$2-$3 $4:$5:$6");
+
+	return formattedDate;
+}
+
+function convertToSeoulTimeWithMeridiem(utcDateTime) {
+	var date = new Date(utcDateTime);
+
+	var options = {
+		hour: '2-digit',
+		minute: '2-digit',
+		second: '2-digit',
+		hour12: true,
+		timeZone: 'Asia/Seoul'
+	};
+
+	var formatter = new Intl.DateTimeFormat('ko-KR', options);
+	var formattedTime = formatter.format(date);
+
+	// 포맷된 문자열을 원하는 형식으로 변환
+	formattedTime = formattedTime.replace(/(오전|오후)\s(\d{2}):(\d{2}):(\d{2})/, '$1 $2:$3:$4');
+
+	return formattedTime;
+}
