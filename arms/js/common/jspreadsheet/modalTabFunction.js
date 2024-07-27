@@ -128,7 +128,7 @@ var ModalTabFunction = (function(){
 			$($targetId)[0].jexcel.destroy();
 		}
 
-		setColumnWidth(chart_width);
+		setColumnWidth(chart_width-50); // ∵ 열 번호(jexcel_row) 때문에
 
 		$($targetId).spreadsheet($.extend({}, {
 			columns: getColumns(),

@@ -4,6 +4,9 @@
 var selectedPdServiceId; // 제품(서비스) 아이디
 var selectedVersionId; // 선택된 버전 아이디
 var reqStatusDataTable;
+var reqIssueAndItsSubtasksTable;
+var reqIssueAlongWithTable;
+var deletedIssueTable;
 var dataTableRef;
 
 var selectedIssue;    //선택한 이슈
@@ -621,7 +624,7 @@ function initializeChildTable(childrenData, container) {
         "defaultContent": "<div style='color: #808080'>N/A</div>",
         "targets": "_all"
     }];
-    var orderList = [[2, "asc"]];
+    var orderList = [[0, "asc"]];
     var rowsGroupList = [];
     var buttonList = [];
 
@@ -662,14 +665,14 @@ function dataTableLoad(tableData) {
 	var columnList = [
 		{ name: "parentReqKey", title: "부모 요구사항 키", data: "parentReqKey", visible: false },
 		{
-		    className: "details-control",
+		    name: "icon",
+		    title: "",
+		    data: null,
             orderable: false,
-            data: null,
-            title: '',
-            defaultContent: '',
             render: function(data, type, row) {
                 return row.children && row.children.length > 0 ? '<i class="fa fa-angle-down"></i>' : '';
             },
+            className: "details-control",
             visible: true
         },
 		{
@@ -1088,10 +1091,13 @@ function dataTableClick(tempDataTable, selectedData) {
 
 // 데이터 테이블 데이터 렌더링 이후 콜백 함수.
 function dataTableCallBack(settings, json) {
-	console.log("check");
+    console.log("check");
+	if (settings.nTable.id !== "reqstatustable") {
+	    return;
+	}
 
     // 테이블 행 클릭 이벤트 (하위 이슈 조회)
-	$('#reqstatustable tbody').on('click', 'td.details-control', function() {
+	$('#reqstatustable tbody').off('click', 'td.details-control').on('click', 'td.details-control', function() {
           const tr = $(this).closest('tr');
           const row = reqStatusDataTable.row(tr);
           const icon = $(this).find('i');
@@ -1571,7 +1577,7 @@ function getReqIssueAndItsSubtasks(endPointUrl) {
 	var isServerSide = false;
 	var errorMode = false;
 
-	reqStatusDataTable = dataTable_build(
+	reqIssueAndItsSubtasksTable = dataTable_build(
 		jquerySelector,
 		ajaxUrl,
 		jsonRoot,
@@ -1815,7 +1821,7 @@ function getReqIssuesCreatedTogether(endPointUrl) {
 	var isServerSide = false;
 	var errorMode = false;
 
-	reqStatusDataTable = dataTable_build(
+	reqIssueAlongWithTable = dataTable_build(
 		jquerySelector,
 		ajaxUrl,
 		jsonRoot,
@@ -2021,7 +2027,7 @@ function getDeletedIssueData(selectId, endPointUrl) {
 	var selectList = {};
 	var isServerSide = false;
 
-	reqStatusDataTable = dataTable_build(
+	deletedIssueTable = dataTable_build(
 		jquerySelector,
 		ajaxUrl,
 		jsonRoot,
@@ -2046,7 +2052,7 @@ function getCheckedData() {
     const checkboxes = document.querySelectorAll('.rowCheckbox:checked');
 
     checkboxes.forEach(checkbox => {
-        const rowData = reqStatusDataTable.row(checkbox.closest('tr')).data();
+        const rowData = deletedIssueTable.row(checkbox.closest('tr')).data();
         checkedData.push(rowData);
     });
 

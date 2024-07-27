@@ -67,20 +67,53 @@
 						<div class="flexAndColumn h100">
 							<h5 class="tab-header font13 flexAndRow" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px; align-items: center; margin-bottom: 0px">
 								<div class="tab-image-container" style="margin: 5px 3px 5px 0">
-									<img src="./img/spreadsheet/spreadsheet-2127832_1920.png" id="side_jira_white_icon" width="40px">
+									<img src="./img/spreadsheet/spreadsheet-2127832_1920.png" width="40px">
 								</div>
 								<div class="tab-title-container w100 flexAndColumn">
 									<div id="tab-doc-title-bar" style="line-height: 20px; font-size: 15px; margin: 8px 0 8px 8px">List View (Excel)</div>
 									<div id="tab-doc-bar" class="flexAndRow btn-group">
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">파일</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">수정</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">보기</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">삽입</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">서식</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">데이터</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도구</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">확장프로그램</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도움말</button>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">파일</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">수정</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">보기</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">수식</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">데이터</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">도움말</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
 									</div>
 								</div>
 							</h5>
@@ -151,11 +184,11 @@
 
 			// excelColumn 세팅 (width ratio)
 			var columnList = [
-				{ type: "text", title: "작업자 명", wRatio: 0.1},
+				{ type: "text", title: "작업자 이름", wRatio: 0.1},
 				{ type: "text", title: "작업자 메일", wRatio: 0.2},
-				{ type: "text", title: "요구사항 및 연결이슈 합계", wRatio: 0.2},
-				{ type: "text", title: "요구사항 수", wRatio: 0.1},
-				{ type: "text", title: "연결이슈 수", wRatio: 0.1},
+				{ type: "numeric", title: "요구사항 및 연결이슈 합계", wRatio: 0.2},
+				{ type: "numeric", title: "요구사항 수", wRatio: 0.1},
+				{ type: "numeric", title: "연결이슈 수", wRatio: 0.1},
 				{ type: "text", title: "요구사항 상태",	wRatio: 0.15},
 				{ type: "text", title: "연결이슈 상태",	wRatio: 0.15}
 			];
@@ -189,9 +222,7 @@
 					.then(function(data) {
 						var fetchedAssigneeInfoMap = data.fetchedAssigneeInfoMap;
 						var fetchedResourceData = data.fetchedResourceData;
-						// 작업자명
-						console.log(fetchedResourceData);
-						console.log(fetchedAssigneeInfoMap);
+
 						var modifyData = function(fetchedResourceData) {
 							let result = fetchedResourceData.map(entry => {
 								let email = entry["필드명"];
@@ -227,11 +258,20 @@
 						}
 
 						let excelData = modifyData(fetchedResourceData);
-						console.log(excelData);
 
 						// 커스텀 옵션 정의
-						let customOptions = { search:true };
-						console.log(columnList);
+						let customOptions =
+							{ search:true,
+								updateTable: function(instance, cell, col, row, val, id) {
+									if(col === 2 || col === 3 || col === 4) {
+										cell.style.textAlign = "right";
+									} else {
+										cell.style.textAlign = "left";
+									}
+									cell.style.whiteSpace = "normal";
+								}
+							};
+
 						ModalTabFunction.setColumns(columnList);
 						ModalTabFunction.setExcelData(excelData);
 						ModalTabFunction.setOptions(customOptions);

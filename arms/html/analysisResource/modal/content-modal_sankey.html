@@ -67,20 +67,53 @@
 						<div class="flexAndColumn h100">
 							<h5 class="tab-header font13 flexAndRow" style="color:#f8f8f8; flex:0 0 3%; padding-bottom: 3px; align-items: center; margin-bottom: 0px">
 								<div class="tab-image-container" style="margin: 5px 3px 5px 0">
-									<img src="./img/spreadsheet/spreadsheet-2127832_1920.png" id="side_jira_white_icon" width="40px">
+									<img src="./img/spreadsheet/spreadsheet-2127832_1920.png" width="40px">
 								</div>
 								<div class="tab-title-container w100 flexAndColumn">
 									<div id="tab-doc-title-bar" style="line-height: 20px; font-size: 15px; margin: 8px 0 8px 8px">List View (Excel)</div>
 									<div id="tab-doc-bar" class="flexAndRow btn-group">
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">파일</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">수정</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">보기</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">삽입</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">서식</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">데이터</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도구</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">확장프로그램</button>
-										<button type="button" class="btn btn-xs btn-default" style="background: transparent; border:none; margin:0 2px;">도움말</button>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">파일</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">수정</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">보기</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">수식</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">데이터</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
+										<li class="btn-group">
+											<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" style="background: transparent; border:none; margin:0 2px;">도움말</button>
+											<ul class="dropdown-menu"
+													style="background: rgba(51, 51, 51, 0.9) !important; top:105% !important;">
+												<li><a href="#" style="color: white;">개발 진행 중입니다.</a></li>
+											</ul>
+										</li>
 									</div>
 								</div>
 							</h5>
@@ -385,7 +418,12 @@
 			console.log(excelData);
 
 			// 커스텀 옵션 정의
-			let customOptions = { search:false };
+			let customOptions = {
+				search:false,
+				updateTable: function(instance, cell, col, row, val, id) {
+					cell.style.whiteSpace = "normal";
+				}
+			};
 
 			ModalTabFunction.setColumns(columnList);
 			ModalTabFunction.setExcelData(excelData);

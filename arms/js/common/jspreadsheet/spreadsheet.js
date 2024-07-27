@@ -15,7 +15,7 @@
 
 			Spreadsheet.prototype = Object.create(window.jspreadsheet);
 			Spreadsheet.prototype.constructor = Spreadsheet;
-
+			//$("#hsh").show(); 에서 $.fn.show(); 와 동일하다.
 			$.fn.spreadsheet = function (option) {
 				var $this = $(this);
 				var spreadsheet = $this.data("arms.spreadsheet"); // 검토
@@ -132,8 +132,8 @@
 					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='center']").addClass("fa fa-align-center");
 					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='right']").addClass("fa fa-align-right");
 					$jexcel.find(".jexcel_toolbar_item[data-k='font-weight'][data-v='bold']").addClass("fa fa-bold");
-					$jexcel.find(".jexcel_toolbar_item[data-k='color']").addClass("fa fa-palette");
-					$jexcel.find(".jexcel_toolbar_item[data-k='background-color']").addClass("fa-solid fa-palette");
+					$jexcel.find(".jexcel_toolbar_item[data-k='color']").addClass("fa-solid fa-palette");
+					$jexcel.find(".jexcel_toolbar_item[data-k='background-color']").addClass("fa-solid fa-fill-drip");
 				}
 			};
 

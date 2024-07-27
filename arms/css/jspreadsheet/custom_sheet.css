@@ -56,3 +56,13 @@
 .jexcel_container .jexcel_content {
     box-shadow: none !important;
 }
+
+.jexcel_content{
+    padding-right: 0 !important;
+    font-size: 12px !important;
+    line-height: 15px !important; /* 행간 설정 */
+}
+
+.jexcel_toolbar i.jexcel_toolbar_item {
+    line-height: 16px !important;
+}

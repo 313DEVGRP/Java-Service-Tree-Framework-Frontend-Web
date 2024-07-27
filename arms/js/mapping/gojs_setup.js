@@ -3,7 +3,6 @@ var gojs = (function () {
 
     var myDiagram;
     let isLinkDeletion = false;
-    let isContextMenuOpen = false;
 
     function init() {
         // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
@@ -43,11 +42,13 @@ var gojs = (function () {
             0.9: 'rgba(51, 51, 51, 0.9)',
             1: 'rgba(51, 51, 51, 1)'
         });
+
         // 노드 박스 테두리
         const lightGray = 'rgba(128, 128, 128, 0.5)'; // 흐린 회색 (투명도 50%)
 
         myDiagram.nodeTemplate = // the default node template
             $(go.Node,
+                { movable: false },
                 'Spot',
                 { selectionAdorned: false, textEditable: true, locationObjectName: 'BODY' },
                 new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -70,6 +71,24 @@ var gojs = (function () {
                             margin: new go.Margin(0, 0, 0, 0)
                         }),
                         $(go.TextBlock,
+                        {
+                                stroke: 'white',
+                                font: '12px sans-serif',
+                                margin: new go.Margin(3, 4, 3, 4), // 적절한 마진 설정
+                                alignment: go.Spot.Left,
+                                editable: true,
+                                textEdited: function(textBlock, oldText, newText) {
+                                    // 줄바꿈 문자를 제거
+                                    textBlock.text = newText.replace(/\r?\n|\r/g, '');
+                                    if (textBlock.text.trim() === "") {
+                                        jNotify("빈 값으로는 상태명을 변경할 수 없습니다.");
+                                        textBlock.text = oldText;
+                                    }
+                                },
+                            },
+                            new go.Binding('text').makeTwoWay()
+                        )
+/*                        $(go.TextBlock,
                             {
                                 stroke: 'white',
                                 font: '12px sans-serif',
@@ -78,7 +97,7 @@ var gojs = (function () {
                                 alignment: go.Spot.Left,
                             },
                             new go.Binding('text').makeTwoWay()
-                        )
+                        )*/
                     )
                 ),
                 // output port
@@ -90,7 +109,7 @@ var gojs = (function () {
                             }
                         }},
                     $(go.Shape, 'Diamond', { width: 11, height: 11, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
-                    $(go.Shape, 'PlusLine', new go.Binding('visible', '', (data) => data.category !== 'NoAdd').ofObject(), { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
+                    // $(go.Shape, 'PlusLine', new go.Binding('visible', '', (data) => data.category !== 'NoAdd').ofObject(), { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
                 ),
                 // input port
                 $(go.Panel,
@@ -116,9 +135,11 @@ var gojs = (function () {
             )
         );*/
 
+        // ARMS 카테고리 노드 설정
         myDiagram.nodeTemplateMap.add(
             'Loading',
             $(go.Node,
+                { movable: false },
                 'Spot',
                 { selectionAdorned: false, textEditable: true, locationObjectName: 'BODY' },
                 new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -134,7 +155,24 @@ var gojs = (function () {
                     $(go.Panel,
                         'Horizontal',
                         { alignment: go.Spot.Left, margin: 3 },
+                        $(go.Picture, {
+                            source: "/arms/img/arms.png",  // 아이콘 이미지 경로
+                            width: 20,
+                            height: 20,
+                            margin: new go.Margin(0, 0, 0, 0)
+                        }),
                         $(go.TextBlock,
+                            {
+                                stroke: 'white',
+                                font: '12px sans-serif',
+                                editable: false,
+                                margin: new go.Margin(3, 4, 3, 4), // 적절한 마진 설정
+                                alignment: go.Spot.Left,
+                            },
+                            new go.Binding('text').makeTwoWay()
+                        )
+                        // 아이콘 설정 샘플
+                        /*$(go.TextBlock,
                             {
                                 stroke: 'white',
                                 font: '12px FontAwesome, sans-serif',
@@ -146,23 +184,28 @@ var gojs = (function () {
                                 // 아이콘과 텍스트를 함께 표시
                                 return "\uf009 " + data.text; // "\uf007"는 Font Awesome의 유니코드 문자입니다 (예: 사용자 아이콘)
                             })
-                        )
+                        )*/
                     )
 
                 ),
                 // output port
                 $(go.Panel,
                     'Auto',
-                    { alignment: go.Spot.Right, portId: 'from', fromLinkable: true, click: addNodeAndLink },
-                    $(go.Shape, 'Circle', { width: 22, height: 22, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
-                    $(go.Shape, 'PlusLine', { width: 11, height: 11, fill: null, stroke: graygrad, strokeWidth: 3 })
-                )
+                    { alignment: go.Spot.Right, portId: 'from', fromLinkable: true, cursor: 'pointer', click: (e, obj) => {
+                            if (obj.part.data.category !== 'NoAdd') {
+                                addNodeAndLink(e, obj);
+                            }
+                        }},
+                    $(go.Shape, 'Diamond', { width: 11, height: 11, fill: 'white', stroke: graygrad, strokeWidth: 3 }),
+                    // $(go.Shape, 'PlusLine', new go.Binding('visible', '', (data) => data.category !== 'Loading').ofObject(), { width: 11, height: 11, fill: null, stroke: 'dodgerblue', strokeWidth: 3 })
+                ),
             )
         );
 
         myDiagram.nodeTemplateMap.add(
             'End',
             $(go.Node,
+                { movable: false },
                 'Spot',
                 { selectionAdorned: false, textEditable: true, locationObjectName: 'BODY' },
                 new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -216,9 +259,8 @@ var gojs = (function () {
             )
         );
 
-        // dropping a node on this special node will cause the selection to be deleted;
-        // linking or relinking to this special node will cause the link to be deleted
-        myDiagram.nodeTemplateMap.add(
+        // 노드 쓰레기통 영역 주석
+        /*myDiagram.nodeTemplateMap.add(
             'Recycle',
             $(go.Node,
                 'Auto',
@@ -237,10 +279,8 @@ var gojs = (function () {
                 $(go.Shape, { fill: 'lightgray', stroke: 'gray' }),
                 $(go.TextBlock, 'Drop Here\nTo Delete', { margin: 5, textAlign: 'center' })
             )
-        );
+        );*/
 
-        // this is a click event handler that adds a node and a link to the diagram,
-        // connecting with the node on which the click occurred
         function addNodeAndLink(e, obj) {
             const fromNode = obj.part;
             const diagram = fromNode.diagram;
@@ -251,16 +291,16 @@ var gojs = (function () {
             const c_id = fromData.c_id;
             const type = fromData.type;
 
-            if (category === 'NoAdd') {
-                // 중간 노드의 경우 ALM 상태의 Node는 생성 못하도록 처리
+            if (category === "NoAdd" || category === "Loading") {
+                // NoAdd, Loading 카테고리 노드의 경우 Node는 생성 못하도록 처리
                 diagram.commitTransaction('Add Node');
                 return;
             }
-            else {
-                if (!confirm(fromData.text + " 카테고리 상태를 추가하시겠습니까?")) {
-                    return;
-                }
-            }
+            // else {
+            //     if (!confirm(fromData.text + " 카테고리 상태를 추가하시겠습니까?")) {
+            //         return;
+            //     }
+            // }
 
             // create a new "State" data object, positioned off to the right of the fromNode
             const p = fromNode.location.copy();
@@ -330,82 +370,272 @@ var gojs = (function () {
             }
         }
 
-        // Connecting a link with the Recycle node removes the link
+        // ARMS 상태 노드 텍스트 편집 이벤트 리스너 추가
+        myDiagram.addDiagramListener('TextEdited', (e) => {
+            const text_block = e.subject;  // 편집된 텍스트 블록
+            const node = text_block.part;  // 텍스트 블록이 포함된 노드
+            if (node !== null) {
+                const edited_text = text_block.text;
+                const state_c_id = node.data.c_id;
+                const state_category_mapping_id = node.data.mapping_id;
+                console.log(node.data.c_id);
+                console.log('Edited text: ', edited_text);
+
+                // 상태명 변경 호출
+                update_arms_state(state_c_id, state_category_mapping_id, edited_text, null)
+                    .then((result) => {
+                        // API 호출 결과를 처리합니다.
+                        jSuccess("상태명 변경이 완료되었습니다.");
+                        console.log(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        return;
+                    });
+            }
+        });
+
+        // 연결을 Point to Point 연결 이벤트 처리
         myDiagram.addDiagramListener('LinkDrawn', (e) => {
             const link = e.subject;
-            const fromNode = link.fromNode;
-            const toNode = link.toNode;
+            const from_node = link.fromNode;
+            const to_node = link.toNode;
 
-            link.data.fromNode = fromNode.Qt;
-            link.data.toNode = toNode.Qt;
+            link.data.fromNode = from_node.data;
+            link.data.toNode = to_node.data;
+            link.data.oldFromNode = from_node.data;
+            link.data.oldToNode = to_node.data;
 
-            if (fromNode.category === 'NoAdd' && fromNode.findLinksOutOf().count > 1) {
+            // ARMS 상태 노드에서 ALM 상태로 이미 연결이 있는 경우
+            if (from_node.category === "NoAdd" && from_node.findLinksOutOf().count > 1) {
+                const existing_link = from_node.findLinksOutOf().first();   //
+                jNotify(from_node.data.text + "는 이미 연결된 ALM 상태가 있습니다. 연결 삭제 후 연결 해주세요.");
                 isLinkDeletion = false;
                 myDiagram.remove(link);
+                return;
             }
 
-            if (toNode.category === 'NoAdd' && toNode.findLinksInto().count > 1) {
+            // ALM 상태 노드가 이미 연결된 ARMS 상태가 있는 경우
+            if (to_node.category === 'End' && to_node.findLinksInto().count > 1) {
+                const existing_link = to_node.findLinksInto().first();
+                jNotify("ALM 상태(" + to_node.data.text + ")는 이미 "+ existing_link.data.fromNode.text +" 상태와 연결되어있습니다.");
                 isLinkDeletion = false;
                 myDiagram.remove(link);
+                return;
             }
 
-            if (toNode.category === 'End' && toNode.findLinksInto().count > 1) {
+            // ARMS 상태는 상태 카테고리 1개에만 연결 가능
+            if (to_node.category === "NoAdd" && to_node.findLinksInto().count > 1) {
+                const existing_link = to_node.findLinksInto().first();
+                jNotify(to_node.data.text + " 상태는 " + existing_link.data.fromNode.text +" 카테고리가 지정 되어있습니다.");
                 isLinkDeletion = false;
                 myDiagram.remove(link);
+                return;
             }
 
-            if (fromNode.category === 'Loading' && toNode.category === "End") {
+            // 카테고리 - ALM 상태 연결 막기
+            if (from_node.category === 'Loading' && to_node.category === "End") {
+                jNotify("카테고리는 ARMS 상태에만 연결할 수 있습니다.");
                 isLinkDeletion = false;
                 myDiagram.remove(link);
+                return;
+            }
+
+            let update_c_id = to_node.data.c_id;
+            let update_mapping_id = from_node.data.c_id;
+
+            if (to_node.data.type === "arms-state") {
+                update_arms_state(update_c_id, update_mapping_id, null, null)
+                    .then((result) => {
+                        console.log(result);
+                        jSuccess(to_node.data.text + " 상태가 " + from_node.data.text + " 카테고리에 연결되었습니다.");
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error)
+                        myDiagram.remove(link);
+                        return;
+                    });
+            }
+            else if (to_node.data.type === "alm-status") {
+                update_alm_status(update_c_id, update_mapping_id)
+                    .then((result) => {
+                        console.log(result);
+                        jSuccess("ALM 상태(" + to_node.data.text + ")가 " + from_node.data.text + " 상태에 연결되었습니다.");
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        myDiagram.remove(link);
+                        return;
+                    });
             }
 
             lowlight();
         });
+
+        // 연결 드래그로 연결을 그리는 이벤트 처리
         myDiagram.addDiagramListener('LinkRelinked', (e) => {
             console.log(e);
             const link = e.subject;
-            const fromNode = link.fromNode;
-            const toNode = link.toNode;
+            const from_node = link.fromNode;
+            const to_node = link.toNode;
 
-            if (fromNode.category === 'NoAdd' && fromNode.findLinksOutOf().count > 1) {
+            // 드래그 전 링크 데이터 추가
+            const old_from_node = link.data.oldFromNode;
+            const old_to_node = link.data.oldToNode;
+
+            // 유효성 검사에 실패한 경우 링크를 제거하고 기존 상태로 복원
+            const remove_new_link_and_restore = () => {
+                isLinkDeletion = false;
                 myDiagram.remove(link);
+                if (old_from_node && old_to_node) {
+                    const newLinkData = {
+                        from: old_from_node.key,
+                        to: old_to_node.key,
+                        fromNode: old_from_node,
+                        toNode: old_to_node,
+                        oldFromNode: old_from_node,
+                        oldToNode: old_to_node,
+                    };
+                    myDiagram.model.addLinkData(newLinkData);
+                }
+            };
+
+            // ARMS 상태 노드에서 ALM 상태로 이미 연결이 있는 경우
+            if (from_node.category === "NoAdd" && from_node.findLinksOutOf().count > 1) {
+                const existing_link = from_node.findLinksOutOf().first();   //
+                jNotify(from_node.data.text + "는 이미 연결된 ALM 상태가 있습니다. 연결 삭제 후 연결 해주세요.");
+                remove_new_link_and_restore();
+                return;
             }
 
-            if (toNode.category === 'NoAdd' && toNode.findLinksInto().count > 1) {
-                myDiagram.remove(link);
+            // ALM 상태 노드가 이미 연결된 ARMS 상태가 있는 경우
+            if (to_node.category === 'End' && to_node.findLinksInto().count > 1) {
+                const existing_link = to_node.findLinksInto().first();
+                jNotify("ALM 상태(" + to_node.data.text + ")는 이미 "+ existing_link.data.fromNode.text +" 상태와 연결되어있습니다.");
+                remove_new_link_and_restore();
+                return;
             }
 
-            if (toNode.category === 'End' && toNode.findLinksInto().count > 1) {
-                myDiagram.remove(link);
+            // ARMS 상태는 상태 카테고리 1개에만 연결 가능
+            if (to_node.category === "NoAdd" && to_node.findLinksInto().count > 1) {
+                const existing_link = to_node.findLinksInto().first();
+                jNotify(to_node.data.text + " 상태는 " + existing_link.data.fromNode.text +" 카테고리가 지정 되어있습니다.");
+                remove_new_link_and_restore();
+                return;
             }
 
-            if (fromNode.category === 'Loading' && toNode.category === "End") {
-                myDiagram.remove(link);
+            // 카테고리 - ALM 상태 연결 막기
+            if (from_node.category === 'Loading' && to_node.category === "End") {
+                jNotify("카테고리는 ARMS 상태에만 연결할 수 있습니다.");
+                remove_new_link_and_restore();
+                return;
             }
+
+            // 드래그 앤 드롭으로 연결을 변경 처리할 경우 기존 연결 삭제 update 처리
+            console.log(old_to_node);
+            console.log(old_from_node);
+            let old_c_id = old_to_node.c_id;
+            let old_mapping_id = null;
+            // let old_mapping_id = old_from_node.c_id;
+
+            if (old_to_node.type === "arms-state") {
+                // 기존 ARMS 상태 초기화
+                update_arms_state(old_c_id, old_mapping_id, null, null)
+                    .then((result) => {
+                        // API 호출 결과를 처리합니다.
+                        console.log(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
+                        return;
+                    });
+            }
+            else if (old_to_node.type === "alm-status") {
+                // 기존 ALM 상태 초기화
+                update_alm_status(old_c_id, old_mapping_id)
+                    .then((result) => {
+                        console.log(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
+                        return;
+                    });
+            }
+
+            // 드래그 앤 드롭으로 연결을 변경 처리할 경우 새로운 연결 link update 처리
+            let c_id = to_node.data.c_id;
+            let mapping_id = from_node.data.c_id;
+
+            if (to_node.data.type === "arms-state") {
+                update_arms_state(c_id, mapping_id, null, null)
+                    .then((result) => {
+                        // API 호출 결과를 처리합니다.
+                        jSuccess(to_node.data.text + " 상태가 " + from_node.data.text + "카테고리에 연결되었습니다.");
+                        console.log(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
+                        return;
+                    });
+            }
+            else if (to_node.data.type === "alm-status") {
+                console.log("ALM 상태 매핑 변경");
+                update_alm_status(c_id, mapping_id)
+                    .then((result) => {
+                        jSuccess("ALM 상태(" + to_node.data.text + ")가 " + from_node.data.text + " 상태에 연결되었습니다.");
+                        console.log(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching data:', error);
+                        remove_new_link_and_restore();
+                        return;
+                    });
+            }
+
+            // old data 최신화
+            link.data.oldFromNode = from_node.data;
+            link.data.oldToNode = to_node.data;
         });
 
         myDiagram.commandHandler.canDeleteSelection = function() {
 
-            if (isContextMenuOpen) {
-                return false;
-            }
-
-            // 선택된 노드 (다중 선택이 비활성화되어 있어 항상 하나의 노드만 선택됨)
+            // 선택된 데이터 (다중 선택이 비활성화되어 있어 항상 하나만 선택됨)
             const selectedNode = myDiagram.selection.first();
 
-            // 노드가 선택되어 있고, 조건에 맞는 경우 경고 메시지와 함께 false 반환
+            // 선택된 데이터가 Node 타입일 때
             if (selectedNode instanceof go.Node) {
-                isLinkDeletion = false;
-                // 노드가 선택되어 있고, 조건에 맞는 경우 경고 메시지와 함께 false 반환
+                isLinkDeletion = false; // Link 삭제가 아닌 Node 삭제로 처리
+
+                // 카테고리 이거나, ALM 상태일 경우
                 if (selectedNode && (selectedNode.data.type === "arms-category" || selectedNode.data.type === 'alm-status')) {
+                    // 삭제 못하도록 처리
                     let node_type = selectedNode.data.type === "arms-category" ? "카테고리" : "ALM 상태";
                     alert(`${node_type} 유형의 노드는 삭제할 수 없습니다.`);
                     return false;
                 }
+                // ARMS의 상태의 경우
                 else if (selectedNode && (selectedNode.data.type === "arms-state")) {
+                    // 삭제할지 여부에 대한 알림 창 추가
                     const state_name = selectedNode.data.text;
+                    const state_c_id = selectedNode.data.c_id;
+
                     if (!confirm( state_name + " 상태를 삭제하시겠습니까?")) {
                         return false;
+                    }
+                    else {
+                        remove_arms_state(state_c_id, state_name)
+                            .then((result) => {
+                                // API 호출 결과를 처리합니다.
+                                console.log(result);
+                            })
+                            .catch((error) => {
+                                // 오류가 발생한 경우 처리합니다.
+                                console.error('Error fetching data:', error);
+                                return false;
+                            });
                     }
                 }
             }
@@ -421,37 +651,55 @@ var gojs = (function () {
             if (selectedNode instanceof go.Node) {
                 isLinkDeletion = false;
             }
-            else if (selectedNode instanceof  go.Link) {
+            else if (selectedNode instanceof go.Link) {
                 isLinkDeletion = true;
             }
         });
 
-        // 연결 삭제 제어
+        // 데이터 변경 이벤트 리스너
         myDiagram.addModelChangedListener(function(e) {
-
+            // 삭제 이벤트 처리(Remove)
             if (e.change === go.ChangedEvent.Remove) {
+                // 연결(링크)만 삭제 - 노드의 삭제의 경우는 연결이 자동삭제
                 if (e.propertyName === 'linkDataArray' && isLinkDeletion) {
-                    // 노드 삭제 과정에서 링크 삭제 시 확인 메시지를 건너뜁니다.
-                    const removedLinkData = e.oldValue;
+                    const removedLinkData = e.oldValue;     // 기존 연결
                     if (!confirm("해당 연결을 삭제하시겠습니까?")) {
-                        // 삭제를 취소 시 링크 재연결
+                        // 삭제 취소 시 기존 연결 재등록
                         myDiagram.model.addLinkData(removedLinkData);
                         return;
                     }
 
-                    // 연결 삭제(업데이트) API 호출 (필요시)
-                    // $.ajax({
-                    //     url: '/your/ajax/endpoint',  // Your server endpoint
-                    //     type: 'POST',
-                    //     data: JSON.stringify(removedLinkData),
-                    //     contentType: 'application/json',
-                    //     success: function(response) {
-                    //         console.log('Link deletion acknowledged by server:', response);
-                    //     },
-                    //     error: function(error) {
-                    //         console.error('Error while acknowledging link deletion:', error);
-                    //     }
-                    // });
+                    let c_id = removedLinkData.toNode.c_id;
+
+                    if (removedLinkData.toNode.type === "arms-state") {
+                        // amrs 상태 c_id에 대한 매핑 값 null 처리
+                        let state_category_mapping_id = null;
+                        update_arms_state(c_id, state_category_mapping_id, null, null)
+                            .then((result) => {
+                                // API 호출 결과를 처리합니다.
+                                console.log(result);
+                            })
+                            .catch((error) => {
+                                // 오류가 발생한 경우 처리합니다.
+                                console.error('Error fetching data:', error);
+                                myDiagram.model.addLinkData(removedLinkData);
+                                return;
+                            });
+                    }
+                    else if (removedLinkData.toNode.type === "alm-status") {
+                        console.log("alm 상태 링크 삭제");
+                        update_alm_status(c_id, null)
+                            .then((result) => {
+                                // API 호출 결과를 처리합니다.
+                                console.log(result);
+                            })
+                            .catch((error) => {
+                                // 오류가 발생한 경우 처리합니다.
+                                console.error('Error fetching data:', error);
+                                myDiagram.model.addLinkData(removedLinkData);
+                                return;
+                            });
+                    }
                 }
             }
         });
@@ -542,19 +790,6 @@ var gojs = (function () {
                 node.minLocation = new go.Point(node.location.x, -Infinity);
             });
         });
-
-        // load(); // load initial diagram from the mySavedModel textarea
-    }
-
-    function save() {
-        let data = myDiagram.model.toJson();
-        console.log(data);
-        let jsonData = JSON.parse(data);
-        decodeObject(jsonData);
-        console.log(jsonData);
-
-        document.getElementById('mySavedModel').value = JSON.stringify(jsonData, null, 2);
-        myDiagram.isModified = false;
     }
 
     function isEncoded(str) {
@@ -623,6 +858,18 @@ var gojs = (function () {
         }
     }
     // end DragLinkingTool
+
+    function save() {
+        let data = myDiagram.model.toJson();
+        console.log(data);
+        let jsonData = JSON.parse(data);
+        decodeObject(jsonData);
+
+        console.log(jsonData);
+
+        document.getElementById('mySavedModel').value = JSON.stringify(jsonData, null, 2);
+        myDiagram.isModified = false;
+    }
 
     return {
         init, save, load, layout

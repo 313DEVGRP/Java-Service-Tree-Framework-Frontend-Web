@@ -1559,6 +1559,7 @@ svg .ghostCircle.show {
 	max-height: 745px;
 	background: 0 none;
 	overflow: auto;
+	min-height: 400px;
 }
 
 #reqDataTable .reqTable {
@@ -2021,7 +2022,7 @@ svg .ghostCircle.show {
 }
 
 /* drawio */
-.drawio-time {
+.drawio-time, .drawdb-time {
     color: #f8f8f8;
     margin-left: 10px;
 }
