@@ -304,11 +304,11 @@ function makeVersionMultiSelectBox() {
 			}
 
 			// 통계로드
-			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+			//statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 			// 진행상태 가져오기
-			progressLoad($("#selected_pdService").val(), selectedVersionId);
+			//progressLoad($("#selected_pdService").val(), selectedVersionId);
 			// 작업자 정보
-			resourceLoad($("#selected_pdService").val(), selectedVersionId);
+			//resourceLoad($("#selected_pdService").val(), selectedVersionId);
 
 			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
             // 이슈리스트 데이터테이블
@@ -352,11 +352,11 @@ function bind_VersionData_By_PdService() {
 				console.log(selectedVersionId);
 
 				// 통계로드
-				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+				//($("#selected_pdService").val(), selectedVersionId);
 				// 진행상태 가져오기
-				progressLoad($("#selected_pdService").val(), selectedVersionId);
+				//progressLoad($("#selected_pdService").val(), selectedVersionId);
 				// 작업자 정보
-				resourceLoad($("#selected_pdService").val(), selectedVersionId);
+				//resourceLoad($("#selected_pdService").val(), selectedVersionId);
 
 				var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
 				// 이슈리스트 데이터테이블
@@ -714,30 +714,32 @@ function dataTableLoad(tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-                    let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
-                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
-                        displayText = "<s style='color: #808080'>" + data  + "</s>";
-                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
-                        color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
-                    }
-					// data-row 에 API에 맞는 param 설정 예정.
-
+          let displayText = data;
+          let color = "#f8f8f8"; // 기본 텍스트 색상
 					let btn_data_row1 = {
 						pdServiceVersions : row.pdServiceVersions.join(","),
 						cReqLink : row.creqLink
 					};
-					return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText +
-						$("<button class='btn btn-transparent btn-xs' style='margin-left:5px'/>")
-							.append($('<i class="fa fa-list-alt"></i>'))
-							.attr("data-toggle", "modal")
-							.attr("data-target","#reqIssue_alongWith_modal")
-							.attr("data-row", JSON.stringify(btn_data_row1)).prop("outerHTML") +
-						"</div>");
-
+					// 삭제 여부
+          if (row.deleted && row.deleted.deleted_isDeleted === true) {
+            displayText = "<s style='color: #808080'>" + data  + "</s>";
+          }
+					else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+            color = "#808080";
+          }
+					// 요구사항 이슈 여부
+          if (!isEmpty(row.isReq) && row.isReq === true) {
+              color = "#a4c6ff";
+						return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText +
+							$("<button class='btn btn-transparent btn-xs' style='margin-left:5px'/>")
+								.append($('<i class="fa fa-list-alt"></i>'))
+								.attr("data-toggle", "modal")
+								.attr("data-target","#reqIssue_alongWith_modal")
+								.attr("data-row", JSON.stringify(btn_data_row1)).prop("outerHTML") +
+							"</div>");
+          } else {
+						return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText + "</div>");
+					}
 				}
 				return data;
 			},
