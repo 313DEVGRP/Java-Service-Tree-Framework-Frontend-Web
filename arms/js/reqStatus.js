@@ -304,11 +304,11 @@ function makeVersionMultiSelectBox() {
 			}
 
 			// 통계로드
-			//statisticsLoad($("#selected_pdService").val(), selectedVersionId);
+			statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 			// 진행상태 가져오기
-			//progressLoad($("#selected_pdService").val(), selectedVersionId);
+			progressLoad($("#selected_pdService").val(), selectedVersionId);
 			// 작업자 정보
-			//resourceLoad($("#selected_pdService").val(), selectedVersionId);
+			resourceLoad($("#selected_pdService").val(), selectedVersionId);
 
 			var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
             // 이슈리스트 데이터테이블
@@ -352,11 +352,11 @@ function bind_VersionData_By_PdService() {
 				console.log(selectedVersionId);
 
 				// 통계로드
-				//($("#selected_pdService").val(), selectedVersionId);
+				statisticsLoad($("#selected_pdService").val(), selectedVersionId);
 				// 진행상태 가져오기
-				//progressLoad($("#selected_pdService").val(), selectedVersionId);
+				progressLoad($("#selected_pdService").val(), selectedVersionId);
 				// 작업자 정보
-				//resourceLoad($("#selected_pdService").val(), selectedVersionId);
+				resourceLoad($("#selected_pdService").val(), selectedVersionId);
 
 				var endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/requirement-linkedissue.do?version="+selectedVersionId;
 				// 이슈리스트 데이터테이블
@@ -2103,7 +2103,6 @@ function getServerTypeMap() {
 		method: "GET",
 		dataType: "json", // 서버에서 보내줄 데이터의 타입
 		success: function(response) {
-			console.log(response);
 			jiraServerTypeMap = response;
 		}
 	});
