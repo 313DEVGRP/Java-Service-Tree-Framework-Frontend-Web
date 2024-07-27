@@ -53,5 +53,15 @@
       src="https://kit.fontawesome.com/e35edcd75e.js"
       crossorigin="anonymous"
     ></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				setTimeout(() => {
+					if (window.history && window.history.pushState) {
+						window.history.pushState(null, '', '/reference/drawdb/editor' + window.location.search);
+						window.dispatchEvent(new Event('popstate'));
+					}
+				}, 50);
+			});
+		</script>
   </body>
 </html>
