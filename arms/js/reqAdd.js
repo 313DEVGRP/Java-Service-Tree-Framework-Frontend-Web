@@ -2141,13 +2141,13 @@ function drawdb() {
 				jError("제품(서비스)을 선택해 주세요.");
 				return false;
 			}
-			window.open("/reference/drawdb/editor?armsId=" + $("#selected_pdService").val() + "&armsMode=create&armsType=reqadd&pdServiceId="+$("#selected_pdService").val(), "_blank");
+			window.open("/reference/drawdb?armsId=" + $("#selected_pdService").val() + "&armsMode=create&armsType=reqadd&pdServiceId="+$("#selected_pdService").val(), "_blank");
 		} else if (this.id === "btn_req_add_edit_drawdb") {
 			if (selectedJsTreeId == "" || selectedJsTreeId == undefined) {
 				jError("요구사항을 선택해 주세요.");
 				return false;
 			}
-			window.open("/reference/drawdb/editor?armsId=" + selectedJsTreeId + "&armsMode=update&armsType=reqadd&pdServiceId="+$("#selected_pdService").val(), "_blank");
+			window.open("/reference/drawdb?armsId=" + selectedJsTreeId + "&armsMode=update&armsType=reqadd&pdServiceId="+$("#selected_pdService").val(), "_blank");
 		} else {
 			jError("drawdb was clicked but id is not matched");
 			return false;
