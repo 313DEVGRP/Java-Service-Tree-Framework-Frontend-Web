@@ -574,7 +574,6 @@ function dataTableClick(tempDataTable, selectedData) {
 	selectId = selectedData.c_id;
 	selectName = selectedData.c_title;
 	pdServiceDataTableClick(selectedData.c_id);
-	productServiceDetailDataLoad(selectId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -787,7 +786,7 @@ function dataTableDrawCallback(tableInfo) {
 ////////////////////////////////////////////////////////////////////////////////////////
 function pdServiceDataTableClick(c_id) {
 	$.ajax({
-		url: "/auth-user/api/arms/pdServicePure/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		url: "/auth-user/api/arms/pdServicePure/getPdServiceWithDetail.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
 		method: "GET", // HTTP 요청 메소드(GET, POST 등)
 		dataType: "json", // 서버에서 보내줄 데이터의 타입
@@ -796,7 +795,10 @@ function pdServiceDataTableClick(c_id) {
 		}
 	})
 		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function (json) {
+		.done(function (apiResult) {
+			var pdServicePure = apiResult.response.pdServicePure;
+			var pdServiceDetails = apiResult.response.pdServiceDetails;
+			$("#version_accordion").jsonMenu("set", pdServiceDetails, { speed: 5000 });
 			selectedDetailId = "";
 			selectedDetailName = "";
 			var selectedHtml =
@@ -805,7 +807,7 @@ function pdServiceDataTableClick(c_id) {
 					<span class="arrow" style="top: 35% !important;"></span>
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
 				<span class="text" style="color: #a4c6ff;">
-				` + json.c_title +
+				` + pdServicePure.c_title +
 				`
 				</span>
 				</div>
@@ -816,80 +818,80 @@ function pdServiceDataTableClick(c_id) {
 
 			// -------------------------------------------------------------------------------
 
-			$("#modal_product_edit_pdservice_name").val(json.c_title);
+			$("#modal_product_edit_pdservice_name").val(pdServicePure.c_title);
 
 			//clear
 			$("#modal_product_edit_pdservice_owner").val(null).trigger("change");
 
-			if (json.c_pdservice_owner == null || json.c_pdservice_owner == "none") {
-				console.log("pdServiceDataTableClick :: json.c_pdservice_owner empty");
+			if (pdServicePure.c_pdservice_owner == null || pdServicePure.c_pdservice_owner == "none") {
+				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_owner empty");
 			} else {
-				var newOption = new Option(json.c_pdservice_owner, json.c_pdservice_owner, true, true);
+				var newOption = new Option(pdServicePure.c_pdservice_owner, pdServicePure.c_pdservice_owner, true, true);
 				$("#modal_product_edit_pdservice_owner").append(newOption).trigger("change");
 			}
 			// -------------------- reviewer setting -------------------- //
 			$("#modal_product_edit_pdservice_reviewers").val(null).trigger("change");
 
 			var selectedReviewerArr = [];
-			if (json.c_pdservice_reviewer01 == null || json.c_pdservice_reviewer01 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer01 empty");
+			if (pdServicePure.c_pdservice_reviewer01 == null || pdServicePure.c_pdservice_reviewer01 == "none") {
+				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer01 empty");
 			} else {
-				selectedReviewerArr.push(json.c_pdservice_reviewer01);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer01 + "']").length) {
-					console.log("option[value='\" + json.c_pdservice_reviewer01 + \"']\"" + "already exist");
+				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer01);
+				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer01 + "']").length) {
+					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer01 + \"']\"" + "already exist");
 				} else {
-					var newOption01 = new Option(json.c_pdservice_reviewer01, json.c_pdservice_reviewer01, true, true);
+					var newOption01 = new Option(pdServicePure.c_pdservice_reviewer01, pdServicePure.c_pdservice_reviewer01, true, true);
 					$("#modal_product_edit_pdservice_reviewers").append(newOption01).trigger("change");
 				}
 			}
-			if (json.c_pdservice_reviewer02 == null || json.c_pdservice_reviewer02 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer02 empty");
+			if (pdServicePure.c_pdservice_reviewer02 == null || pdServicePure.c_pdservice_reviewer02 == "none") {
+				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer02 empty");
 			} else {
-				selectedReviewerArr.push(json.c_pdservice_reviewer02);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer02 + "']").length) {
-					console.log("option[value='\" + json.c_pdservice_reviewer02 + \"']\"" + "already exist");
+				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer02);
+				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer02 + "']").length) {
+					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer02 + \"']\"" + "already exist");
 				} else {
-					var newOption02 = new Option(json.c_pdservice_reviewer02, json.c_pdservice_reviewer02, true, true);
+					var newOption02 = new Option(pdServicePure.c_pdservice_reviewer02, pdServicePure.c_pdservice_reviewer02, true, true);
 					$("#modal_product_edit_pdservice_reviewers").append(newOption02).trigger("change");
 				}
 			}
-			if (json.c_pdservice_reviewer03 == null || json.c_pdservice_reviewer03 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer03 empty");
+			if (pdServicePure.c_pdservice_reviewer03 == null || pdServicePure.c_pdservice_reviewer03 == "none") {
+				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer03 empty");
 			} else {
-				selectedReviewerArr.push(json.c_pdservice_reviewer03);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer03 + "']").length) {
-					console.log("option[value='\" + json.c_pdservice_reviewer03 + \"']\"" + "already exist");
+				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer03);
+				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer03 + "']").length) {
+					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer03 + \"']\"" + "already exist");
 				} else {
-					var newOption03 = new Option(json.c_pdservice_reviewer03, json.c_pdservice_reviewer03, true, true);
+					var newOption03 = new Option(pdServicePure.c_pdservice_reviewer03, pdServicePure.c_pdservice_reviewer03, true, true);
 					$("#modal_product_edit_pdservice_reviewers").append(newOption03).trigger("change");
 				}
 			}
-			if (json.c_pdservice_reviewer04 == null || json.c_pdservice_reviewer04 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer04 empty");
+			if (pdServicePure.c_pdservice_reviewer04 == null || pdServicePure.c_pdservice_reviewer04 == "none") {
+				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer04 empty");
 			} else {
-				selectedReviewerArr.push(json.c_pdservice_reviewer04);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer04 + "']").length) {
-					console.log("option[value='\" + json.c_pdservice_reviewer04 + \"']\"" + "already exist");
+				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer04);
+				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer04 + "']").length) {
+					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer04 + \"']\"" + "already exist");
 				} else {
-					var newOption04 = new Option(json.c_pdservice_reviewer04, json.c_pdservice_reviewer04, true, true);
+					var newOption04 = new Option(pdServicePure.c_pdservice_reviewer04, pdServicePure.c_pdservice_reviewer04, true, true);
 					$("#modal_product_edit_pdservice_reviewers").append(newOption04).trigger("change");
 				}
 			}
-			if (json.c_pdservice_reviewer05 == null || json.c_pdservice_reviewer05 == "none") {
-				console.log("pdServiceDataTableClick :: json.c_pdservice_reviewer05 empty");
+			if (pdServicePure.c_pdservice_reviewer05 == null || pdServicePure.c_pdservice_reviewer05 == "none") {
+				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer05 empty");
 			} else {
-				selectedReviewerArr.push(json.c_pdservice_reviewer05);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + json.c_pdservice_reviewer05 + "']").length) {
-					console.log("option[value='\" + json.c_pdservice_reviewer05 + \"']\"" + "already exist");
+				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer05);
+				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer05 + "']").length) {
+					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer05 + \"']\"" + "already exist");
 				} else {
-					var newOption05 = new Option(json.c_pdservice_reviewer05, json.c_pdservice_reviewer05, true, true);
+					var newOption05 = new Option(pdServicePure.c_pdservice_reviewer05, pdServicePure.c_pdservice_reviewer05, true, true);
 					$("#modal_product_edit_pdservice_reviewers").append(newOption05).trigger("change");
 				}
 			}
 			$("#modal_product_edit_pdservice_reviewers").val(selectedReviewerArr).trigger("change");
 
 			// ------------------------- reviewer end --------------------------------//
-			CKEDITOR.instances.modal_product_edit_editor.setData(json.c_pdservice_contents); // 편집하기
+			CKEDITOR.instances.modal_product_edit_editor.setData(pdServicePure.c_pdservice_contents); // 편집하기
 
 			// ------------------------- 제품 선택 시, 제품 디테일 모든 값 초기화  --------------------------------//
 			productDetailNameClear();
@@ -897,9 +899,10 @@ function pdServiceDataTableClick(c_id) {
 			showDefaultTab();
 			dropzoneDataClear();
 			productDetailArrowClear();
-			$("#modal_product_detail_add_pdservice_name").val(json.c_title); // 제품 디테일 등록에 제품명 추가해줌. readonly
+			$("#modal_product_detail_add_pdservice_name").val(pdServicePure.c_title); // 제품 디테일 등록에 제품명 추가해줌. readonly
 
 			setDefaultBtnText();
+			drawioImageClear();
 
 		})
 		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
@@ -913,7 +916,6 @@ function pdServiceDataTableClick(c_id) {
 		});
 
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 제품 디테일 UI 초기화
