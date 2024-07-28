@@ -2178,3 +2178,12 @@ td.details-control {
 .goTXarea {
 	color : #0a0a0a!important;
 }
+
+* {
+	caret-color: transparent;
+}
+
+input,
+textarea {
+	caret-color: auto;
+}
