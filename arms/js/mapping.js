@@ -356,9 +356,7 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
             return;
         }
 
-        alert("선택된 클라우드 유형의 경우 설계가 필요합니다.");
-
-       /* Promise.all([get_arms_state_list(), get_project_status_list(project_id, issueType_c_id)])
+        Promise.all([get_arms_state_list(), get_project_status_list(project_id, issueType_c_id)])
             .then(([arms_state_list, alm_status_list]) => {
                 // 두 API 호출 결과를 함께 사용합니다.
                 console.log('ARMS State List:', arms_state_list);
@@ -377,7 +375,7 @@ function mapping_data_load(alm_server_id, alm_server_type, project_id, issueType
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
-            });*/
+            });
     }
     else {
         Promise.all([get_arms_state_list(), get_alm_status_list(alm_server_id)])
@@ -1053,12 +1051,12 @@ function setKanban() {
         progress: true,
         statusCode: {
             200: function (data) {
-                arms_state_list = data.result;
+                let arms_state_list = data.result;
                 console.log(arms_state_list);
 
                 // 요구사항 상태 별 리스트
-                const reqListByState = data.result.reduce((reqList, item) => {
-                    const state = (item && item.c_state_category_mapping_id) || "상태 정보 없음";
+                const reqListByState = arms_state_list.reduce((reqList, item) => {
+                    const state = (item && item.reqStateCategoryEntity && item.reqStateCategoryEntity.c_id) || "상태 정보 없음";
 
                     // 해당 상태의 리스트가 없으면 초기화
                     if (!reqList[state]) {
@@ -1078,14 +1076,12 @@ function setKanban() {
 
                     return reqList;
                 }, {});
-                console.log(reqListByState);
 
                 const reqBoardByState = Object.keys(req_state_category_list).map(state => ({
                     id: state,                                                          // 상태 카테고리 ID
-                    title: `${reqStateToIconMapping[state]} ${req_state_category_list[state]}`,  // 상태 카테고리 이름
+                    title: `${req_state_category_list[state].c_category_icon} ${req_state_category_list[state].c_title}`,  // 상태 카테고리 이름
                     item: reqListByState[state]                                         // 상태 카테고리별 상태 목록
                 }));
-
 
                 // 칸반 보드 로드
                 loadKanban(reqListByState, reqBoardByState);
