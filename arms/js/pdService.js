@@ -145,8 +145,6 @@ function execDocReady() {
 
 			drawio();
 
-			// drawdb();
-
 			// 스크립트 실행 로직을 이곳에 추가합니다.
 			var 라따적용_클래스이름_배열 = [
 				'.ladda-new-pdservice',
@@ -197,9 +195,6 @@ function drawio() {
 }
 
 function setDrawioImage(localStorageKey, localStorageValue, mode) {
-	console.log("ARMS DRAWIO Key :: " + localStorageKey);
-	console.log("ARMS DRAWIO VALUE :: " + localStorageValue);
-
 	var imageSrcArray = Array(1).fill(localStorageValue);
 
 	if (mode === "create") {
@@ -227,10 +222,6 @@ function setDefaultBtnText() {
     changeBtnText('#modal_product_detail_edit_drawio_time', '');
     changeBtnText('#product_detail_edit_drawio_time', '');
 }
-
-/*window.onload = function() {
-	localStorage.clear();
-};*/
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // 탭 클릭 이벤트 처리
@@ -354,7 +345,7 @@ function popup_size_setting(){
 
 		$("#modal_product_add_pdservice_reviewer").css("height", "20px");
 		setTimeout(function () {
-			var heightValue = $("#modal_product_add_pdservice_reviewer").height();
+			var heightValue = 40;
 			var resultValue = heightValue + 20 * reviewerCount;
 			$("#modal_product_add_pdservice_reviewer").css("height", resultValue + "px");
 		}, 250);
@@ -382,7 +373,7 @@ function popup_size_setting(){
 
 		$("#modal_product_edit_pdservice_reviewer").css("height", "20px");
 		setTimeout(function () {
-			var heightValue = $("#modal_product_edit_pdservice_reviewer").height();
+			var heightValue = 40;
 			var resultValue = heightValue + 20 * multifyValue;
 			$("#modal_product_edit_pdservice_reviewer").css("height", resultValue + "px");
 		}, 250);
@@ -431,11 +422,11 @@ function formatUser(jsonData) {
 	console.log(jsonData)
 	var $container = $(
 		"<div class='select2-result-jsonData clearfix'>" +
-			"<div class='select2-result-jsonData__meta'>" +
-			"<div class='select2-result-jsonData__username'><i class='fa fa-flash'></i></div>" +
-			"<div class='select2-result-jsonData__id'><i class='fa fa-star'></i></div>" +
-			"</div>" +
-			"</div>"
+		"<div class='select2-result-jsonData__meta'>" +
+		"<div class='select2-result-jsonData__username'><i class='fa fa-flash'></i></div>" +
+		"<div class='select2-result-jsonData__id'><i class='fa fa-star'></i></div>" +
+		"</div>" +
+		"</div>"
 	);
 
 	$container.find(".select2-result-jsonData__username").text(jsonData.username);
@@ -450,6 +441,22 @@ function formatUser(jsonData) {
 function formatUserSelection(jsonData) {
 	console.log("formatUserSelection");
 	console.log(jsonData);
+
+	if (jsonData._resultId) {
+		let defaultHeight = 40;
+		if (jsonData._resultId.includes("modal_product_add_pdservice_reviewers")) {
+			let modalElement = $("#modal_product_add_pdservice_reviewers");
+			let reviewerCount = modalElement.children("option").length;
+			let height = defaultHeight + (20 * reviewerCount);
+			$("#modal_product_add_pdservice_reviewer").css("height", height + "px");
+		} else if (jsonData._resultId.includes("modal_product_edit_pdservice_reviewer")) {
+			let modalElement = $("#modal_product_add_pdservice_reviewers");
+			let reviewerCount = modalElement.children("option").length;
+			let height = defaultHeight + (20 * reviewerCount);
+			$("#modal_product_edit_pdservice_reviewer").css("height", height + "px");
+		}
+	}
+
 	if (jsonData.id == "") {
 		jsonData.text = "placeholder";
 	} else {
@@ -580,15 +587,15 @@ function dataTableClick(tempDataTable, selectedData) {
 //제품의 게시글 리스트를 로드하는 함수 ( 게시글 추가, 갱신, 삭제 시 호출 )
 ////////////////////////////////////////////////////////////////////////////////////////
 function productServiceDetailDataLoad(selectId) {
-	console.log("productServiceDetailDataLoad :: getSelectedID → " + selectId);
-	$.ajax("/auth-user/api/arms/pdServiceDetail/getNodes.do/" + selectId).done(function (json) {
-		console.log("/auth-user/api/arms/pdServiceDetail/getNodesWithoutRoot.do :: success → ", json);
-		$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
-
-		showDefaultTab();
-		dropzoneDataClear();
-		setDefaultBtnText();
-		drawioImageClear();
+	return new Promise((resolve, reject) => {
+		$.ajax("/auth-user/api/arms/pdServiceDetail/getNodes.do/" + selectId).done(function (json) {
+			$("#version_accordion").jsonMenu("set", json.response, { speed: 5000 });
+			showDefaultTab();
+			dropzoneDataClear();
+			setDefaultBtnText();
+			drawioImageClear();
+			resolve();
+		});
 	});
 }
 
@@ -668,29 +675,29 @@ function drawioImageClear() {
 // 제품 디테일 목록에서 선택 시 상세보기 및 편집하기 데이터 바인딩
 ////////////////////////////////////////////////////////////////////////////////////////
 function detailClick(element, c_id) {
-	showDefaultTab();
-	dropzoneDataClear();
-	hideDropzoneArea();
-	setDefaultBtnText();
-	drawioImageClear();
+	return new Promise((resolve, reject) => {
+		showDefaultTab();
+		dropzoneDataClear();
+		hideDropzoneArea();
+		setDefaultBtnText();
+		drawioImageClear();
 
-	$("a[id^='pdservice_detail_link_']").each(function() {
-		this.style.background = "";
-		if (c_id == this.id.split("_")[3]) {
-			this.style.background = "rgba(229, 96, 59, 0.3)";
-			this.style.color = "rgb(164, 198, 255)";
-			this.style.textDecoration = "none";
-			this.style.cursor = "pointer";
-		}
-	});
+		$("a[id^='pdservice_detail_link_']").each(function() {
+			this.style.background = "";
+			if (c_id == this.id.split("_")[3]) {
+				this.style.background = "rgba(229, 96, 59, 0.3)";
+				this.style.color = "rgb(164, 198, 255)";
+				this.style.textDecoration = "none";
+				this.style.cursor = "pointer";
+			}
+		});
 
-	$.ajax({
-		url: "/auth-user/api/arms/pdServiceDetail/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
-		data: { c_id: c_id },
-		method: "GET",
-		dataType: "json"
-	}).done(function (json) {
-			console.log(json);
+		$.ajax({
+			url: "/auth-user/api/arms/pdServiceDetail/getNode.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+			data: { c_id: c_id },
+			method: "GET",
+			dataType: "json"
+		}).done(function(json) {
 
 			selectedDetailId = json.c_id;
 			selectedDetailName = json.c_title;
@@ -721,40 +728,32 @@ function detailClick(element, c_id) {
 			$("#selected_pdservice_detail").text(json.c_title);
 			$("#modal_product_detail_edit_pdservice_detail_name").val(json.c_title);
 
-			$(".list-group-item-detail-edit .chat-message-body").css({"border-left":""});
-			$(".list-group-item-detail-edit .arrow").css({"border-right":""});
+			$(".list-group-item-detail-edit .chat-message-body").css({ "border-left": "" });
+			$(".list-group-item-detail-edit .arrow").css({ "border-right": "" });
 
 			if (localStorage.getItem("update-drawio-" + c_id) && localStorage.getItem("update-drawio-time-" + c_id)) {
 				changeBtnText("#btn_modal_product_detail_edit_drawio", "drawio 편집 완료");
 				changeBtnText("#btn_product_detail_edit_drawio", "drawio 편집 완료");
-				changeBtnText('#modal_product_detail_edit_drawio_time', localStorage.getItem("update-drawio-time-" + c_id));
-				changeBtnText('#product_detail_edit_drawio_time', localStorage.getItem("update-drawio-time-" + c_id));
+				changeBtnText("#modal_product_detail_edit_drawio_time", localStorage.getItem("update-drawio-time-" + c_id));
+				changeBtnText("#product_detail_edit_drawio_time", localStorage.getItem("update-drawio-time-" + c_id));
 			}
 
 			if (localStorage.getItem("update-drawio-image-raw-" + c_id)) {
 				setDrawioImage("update-drawio-image-raw-" + c_id, localStorage.getItem("update-drawio-image-raw-" + c_id), "update");
 			}
 
-			var $fileupload = $("#fileupload");
-
-			$.ajax({
-				url: "/auth-user/api/arms/pdServiceDetail/getFilesByNode.do",
-				data: { fileIdLink: json.c_id },
-				dataType: "json",
-				context: $fileupload[0]
-			}).done(function(result) {
-				$(this).fileupload("option", "done").call(this, null, { result: result.response });
-				$(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리 -> 편집하기 tab 에서만 보여준다.
-			});
+			reloadDetailFileData(json.c_id)
+				.then(() => {
+					resolve();
+				});
 		}).fail(function(xhr, status, errorThrown) {
-		console.log(xhr + status + errorThrown);
-	}).always(function(xhr, status) {
-		$("#text").html("요청이 완료되었습니다!");
-		console.log(xhr + status);
+			console.log(xhr + status + errorThrown);
+		}).always(function(xhr, status) {
+			$("#text").html("요청이 완료되었습니다!");
+			console.log(xhr + status);
+		});
 	});
 }
-
-
 
 function init_versionList() {
 	var menu;
@@ -785,136 +784,83 @@ function dataTableDrawCallback(tableInfo) {
 //제품(서비스) 클릭할 때 동작하는 함수
 ////////////////////////////////////////////////////////////////////////////////////////
 function pdServiceDataTableClick(c_id) {
-	$.ajax({
-		url: "/auth-user/api/arms/pdServicePure/getPdServiceWithDetail.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
-		data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
-		method: "GET", // HTTP 요청 메소드(GET, POST 등)
-		dataType: "json", // 서버에서 보내줄 데이터의 타입
-		beforeSend: function () {
-			$(".loader").removeClass("hide");
-		}
-	})
-		// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function (apiResult) {
-			var pdServicePure = apiResult.response.pdServicePure;
-			var pdServiceDetails = apiResult.response.pdServiceDetails;
-			$("#version_accordion").jsonMenu("set", pdServiceDetails, { speed: 5000 });
-			selectedDetailId = "";
-			selectedDetailName = "";
-			var selectedHtml =
-				`<div class="chat-message">
-				<div class="chat-message-body" style="margin-left: 0px !important;">
-					<span class="arrow" style="top: 35% !important;"></span>
-					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
-				<span class="text" style="color: #a4c6ff;">
-				` + pdServicePure.c_title +
-				`
-				</span>
-				</div>
-				</div>
-				 `;
-
-			$(".list-group-item-detail").html(selectedHtml);
-
-			// -------------------------------------------------------------------------------
-
-			$("#modal_product_edit_pdservice_name").val(pdServicePure.c_title);
-
-			//clear
-			$("#modal_product_edit_pdservice_owner").val(null).trigger("change");
-
-			if (pdServicePure.c_pdservice_owner == null || pdServicePure.c_pdservice_owner == "none") {
-				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_owner empty");
-			} else {
-				var newOption = new Option(pdServicePure.c_pdservice_owner, pdServicePure.c_pdservice_owner, true, true);
-				$("#modal_product_edit_pdservice_owner").append(newOption).trigger("change");
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: "/auth-user/api/arms/pdServicePure/getPdServiceWithDetail.do", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+			data: { c_id: c_id }, // HTTP 요청과 함께 서버로 보낼 데이터
+			method: "GET", // HTTP 요청 메소드(GET, POST 등)
+			dataType: "json", // 서버에서 보내줄 데이터의 타입
+			beforeSend: function() {
+				$(".loader").removeClass("hide");
 			}
-			// -------------------- reviewer setting -------------------- //
-			$("#modal_product_edit_pdservice_reviewers").val(null).trigger("change");
-
-			var selectedReviewerArr = [];
-			if (pdServicePure.c_pdservice_reviewer01 == null || pdServicePure.c_pdservice_reviewer01 == "none") {
-				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer01 empty");
-			} else {
-				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer01);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer01 + "']").length) {
-					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer01 + \"']\"" + "already exist");
-				} else {
-					var newOption01 = new Option(pdServicePure.c_pdservice_reviewer01, pdServicePure.c_pdservice_reviewer01, true, true);
-					$("#modal_product_edit_pdservice_reviewers").append(newOption01).trigger("change");
-				}
-			}
-			if (pdServicePure.c_pdservice_reviewer02 == null || pdServicePure.c_pdservice_reviewer02 == "none") {
-				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer02 empty");
-			} else {
-				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer02);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer02 + "']").length) {
-					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer02 + \"']\"" + "already exist");
-				} else {
-					var newOption02 = new Option(pdServicePure.c_pdservice_reviewer02, pdServicePure.c_pdservice_reviewer02, true, true);
-					$("#modal_product_edit_pdservice_reviewers").append(newOption02).trigger("change");
-				}
-			}
-			if (pdServicePure.c_pdservice_reviewer03 == null || pdServicePure.c_pdservice_reviewer03 == "none") {
-				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer03 empty");
-			} else {
-				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer03);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer03 + "']").length) {
-					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer03 + \"']\"" + "already exist");
-				} else {
-					var newOption03 = new Option(pdServicePure.c_pdservice_reviewer03, pdServicePure.c_pdservice_reviewer03, true, true);
-					$("#modal_product_edit_pdservice_reviewers").append(newOption03).trigger("change");
-				}
-			}
-			if (pdServicePure.c_pdservice_reviewer04 == null || pdServicePure.c_pdservice_reviewer04 == "none") {
-				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer04 empty");
-			} else {
-				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer04);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer04 + "']").length) {
-					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer04 + \"']\"" + "already exist");
-				} else {
-					var newOption04 = new Option(pdServicePure.c_pdservice_reviewer04, pdServicePure.c_pdservice_reviewer04, true, true);
-					$("#modal_product_edit_pdservice_reviewers").append(newOption04).trigger("change");
-				}
-			}
-			if (pdServicePure.c_pdservice_reviewer05 == null || pdServicePure.c_pdservice_reviewer05 == "none") {
-				console.log("pdServiceDataTableClick :: pdServicePure.c_pdservice_reviewer05 empty");
-			} else {
-				selectedReviewerArr.push(pdServicePure.c_pdservice_reviewer05);
-				if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + pdServicePure.c_pdservice_reviewer05 + "']").length) {
-					console.log("option[value='\" + pdServicePure.c_pdservice_reviewer05 + \"']\"" + "already exist");
-				} else {
-					var newOption05 = new Option(pdServicePure.c_pdservice_reviewer05, pdServicePure.c_pdservice_reviewer05, true, true);
-					$("#modal_product_edit_pdservice_reviewers").append(newOption05).trigger("change");
-				}
-			}
-			$("#modal_product_edit_pdservice_reviewers").val(selectedReviewerArr).trigger("change");
-
-			// ------------------------- reviewer end --------------------------------//
-			CKEDITOR.instances.modal_product_edit_editor.setData(pdServicePure.c_pdservice_contents); // 편집하기
-
-			// ------------------------- 제품 선택 시, 제품 디테일 모든 값 초기화  --------------------------------//
-			productDetailNameClear();
-			productDetailEditorClear();
-			showDefaultTab();
-			dropzoneDataClear();
-			productDetailArrowClear();
-			$("#modal_product_detail_add_pdservice_name").val(pdServicePure.c_title); // 제품 디테일 등록에 제품명 추가해줌. readonly
-
-			setDefaultBtnText();
-			drawioImageClear();
-
 		})
-		// HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-		.fail(function(xhr, status, errorThrown) {
-			console.log(xhr + status + errorThrown);
-		})
-		//
-		.always(function(xhr, status) {
-			console.log(xhr + status);
-			$(".loader").addClass("hide");
-		});
+			// HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+			.done(function(apiResult) {
+				let pdServicePure = apiResult.response.pdServicePure;
+				let pdServiceDetails = apiResult.response.pdServiceDetails;
+				let pdServiceTitle = pdServicePure.c_title;
+				let pdServiceOwner = pdServicePure.c_pdservice_owner;
+				let pdServiceReviewers = [
+					pdServicePure.c_pdservice_reviewer01,
+					pdServicePure.c_pdservice_reviewer02,
+					pdServicePure.c_pdservice_reviewer03,
+					pdServicePure.c_pdservice_reviewer04,
+					pdServicePure.c_pdservice_reviewer05
+				];
 
+				$("#version_accordion").jsonMenu("set", pdServiceDetails, { speed: 5000 });
+				selectedDetailId = "";
+				selectedDetailName = "";
+
+				$(".list-group-item-detail").html(generateSelectedPdServiceUI(pdServiceTitle));
+
+				$("#modal_product_edit_pdservice_name").val(pdServiceTitle);
+
+				$("#modal_product_detail_add_pdservice_name").val(pdServiceTitle);
+
+				$("#modal_product_edit_pdservice_owner").val(null).trigger("change");
+
+				if (pdServiceOwner && pdServiceOwner !== "none") {
+					var newOption = new Option(pdServiceOwner, pdServiceOwner, true, true);
+					$("#modal_product_edit_pdservice_owner").append(newOption).trigger("change");
+				}
+
+				$("#modal_product_edit_pdservice_reviewers").val(null).trigger("change");
+
+				var selectedReviewerArr = [];
+				pdServiceReviewers.forEach(function(reviewer) {
+					if (reviewer && reviewer !== "none") {
+						selectedReviewerArr.push(reviewer);
+						if ($("#modal_product_edit_pdservice_reviewers").find("option[value='" + reviewer + "']").length === 0) {
+							var newOption = new Option(reviewer, reviewer, true, true);
+							$("#modal_product_edit_pdservice_reviewers").append(newOption).trigger("change");
+						}
+					}
+				});
+
+				$("#modal_product_edit_pdservice_reviewers").val(selectedReviewerArr).trigger("change");
+
+				CKEDITOR.instances.modal_product_edit_editor.setData(pdServicePure.c_pdservice_contents); // 편집하기
+
+				// ------------------------- 제품 선택 시, 제품 디테일 모든 값 초기화  --------------------------------//
+				productDetailNameClear();
+				productDetailEditorClear();
+				showDefaultTab();
+				dropzoneDataClear();
+				productDetailArrowClear();
+				setDefaultBtnText();
+				drawioImageClear();
+				resolve();
+			})
+			.fail(function(xhr, status, errorThrown) {
+				console.log(xhr + status + errorThrown);
+				reject();
+			})
+			.always(function(xhr, status) {
+				console.log(xhr + status);
+				$(".loader").addClass("hide");
+			});
+	});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -948,13 +894,9 @@ function productDetailNameClear() {
 	$("#modal_product_detail_edit_pdservice_detail_name").val("");
 
 	$("#stats_pdservice_name").val("");
-	$("#stats_pdservice_name").val("");
-	$("#report_pdservice_name").val("");
 	$("#report_pdservice_name").val("");
 
 	$("#stats_pdservice_detail_name").val("");
-	$("#stats_pdservice_detail_name").val("");
-	$("#report_pdservice_detail_name").val("");
 	$("#report_pdservice_detail_name").val("");
 }
 
@@ -988,13 +930,11 @@ function product_detail_save_btn_click() {
 		};
 
 		var drawioXML = localStorage.getItem("create-drawio-" + selectId);
-		console.log("product_detail_save_btn_click :: drawioXML → ", drawioXML);
 		if(drawioXML !== null) {
 			requestParams.c_drawio_contents = drawioXML;
 		}
 
 		var drawioThumbnail = localStorage.getItem("create-drawio-image-raw-" + selectId);
-		console.log("product_detail_save_btn_click :: drawioThumbnail → ", drawioThumbnail);
 		if(drawioThumbnail !== null) {
 			requestParams.c_drawio_image_raw = drawioThumbnail;
 		}
@@ -1006,15 +946,15 @@ function product_detail_save_btn_click() {
 			progress: true,
 			statusCode: {
 				200: function (data) {
-					console.log("/auth-user/api/arms/pdServiceDetail/addNodeByPdService.do :: success → ", data);
 					$("#btn_modal_product_detail_add_close").trigger("click");
-					jSuccess("신규 제품 디테일 등록이 완료 되었습니다.");
-					pdServiceDataTableClick(selectId);
-					productServiceDetailDataLoad(selectId);
-					localStorage.removeItem("create-drawio-" + selectId);
-					localStorage.removeItem("create-drawio-image-raw-" + selectId);
-					localStorage.removeItem("create-drawio-time-" + selectId);
-					removeDrawIOConfig();
+					reloadDetailData(selectId, data.response.c_id, data.response.c_id)
+						.then(() => {
+							localStorage.removeItem("create-drawio-" + selectId);
+							localStorage.removeItem("create-drawio-image-raw-" + selectId);
+							localStorage.removeItem("create-drawio-time-" + selectId);
+							removeDrawIOConfig();
+							jSuccess("신규 제품 디테일 등록이 완료 되었습니다.");
+						});
 				}
 			},
 			beforeSend: function () {
@@ -1115,17 +1055,7 @@ function product_delete_btn_click(){
 			statusCode: {
 				200: function () {
 					reloadDataWithSameOrdering("");
-					var selectedHtml =
-						`<div class="chat-message">
-								<div class="chat-message-body" style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important;border-left: 2px solid #a4c6ff;">
-									<span id="" class="arrow" style="top: 10px !important; border-right: 5px solid #a4c6ff"></span>
-									<div class="sender" style="padding-bottom: 5px; padding-top: 5px">선택된 제품(서비스) :
-										<span id="" style="color: #a4c6ff">선택되지 않음</span>
-									</div>
-								</div>
-							</div>
-				 `;
-					$(".list-group-item-detail").html(selectedHtml);
+					$(".list-group-item-detail").html(generateUnselectedPdServiceUI());
 					$("#version_accordion").html("");
 					productDetailNameClear();
 					productDetailEditorClear();
@@ -1158,15 +1088,16 @@ function product_detail_delete_btn_click(){
 			url: "/auth-user/api/arms/pdServiceDetail/deleteNode.do/" + selectedDetailId,
 			type: "post",
 			statusCode: {
-				200: function () {
-					jSuccess($("#report_pdservice_detail_name").val() + " 데이터가 삭제되었습니다.");
-					// pdServiceDataTableClick(tempSelectId);
+				200: function() {
 					productDetailNameClear();
 					productDetailEditorClear();
 					productDetailArrowClear();
-					productServiceDetailDataLoad(tempSelectId);
-					selectedDetailId = ""; // 선택한 디테일 아이디
-					selectedDetailName = ""; // 선택한 디테일 이름
+					productServiceDetailDataLoad(tempSelectId)
+						.then(() => {
+							selectedDetailId = "";
+							selectedDetailName = "";
+							jSuccess($("#report_pdservice_detail_name").val() + " 데이터가 삭제되었습니다.");
+						});
 				}
 			}
 		});
@@ -1200,13 +1131,11 @@ function product_detail_update_btn_click() {
 		};
 
 		var drawioXML = localStorage.getItem("update-drawio-" + selectedDetailId);
-		console.log("product_detail_update_btn_click :: drawioXML → ", drawioXML);
 		if(drawioXML !== null) {
 			requestParams.c_drawio_contents = drawioXML;
 		}
 
 		var drawioThumbnail = localStorage.getItem("update-drawio-image-raw-" + selectedDetailId);
-		console.log("product_detail_update_btn_click :: drawioThumbnail → ", drawioThumbnail);
 		if(drawioThumbnail !== null) {
 			requestParams.c_drawio_image_raw = drawioThumbnail;
 		}
@@ -1216,20 +1145,16 @@ function product_detail_update_btn_click() {
 			type: "put",
 			data: requestParams,
 			statusCode: {
-				200: function () {
+				200: function() {
 					$("#btn_modal_product_detail_edit_close").trigger("click");
-					pdServiceDataTableClick(tempSelectId);
-					setTimeout(function() {
-						productServiceDetailDataLoad(tempSelectId);
-						setTimeout(function() {
-							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
-						}, 500);
-					}, 300);
-					localStorage.removeItem("update-drawio-" + tempSelectDetailId);
-					localStorage.removeItem("update-drawio-image-raw-" + tempSelectDetailId);
-					localStorage.removeItem("update-drawio-time-" + tempSelectDetailId);
-					removeDrawIOConfig();
-					jSuccess(detailName + "의 데이터가 변경되었습니다.");
+					reloadDetailData(tempSelectId, selectedDetailId, tempSelectDetailId)
+						.then(() => {
+							localStorage.removeItem("update-drawio-" + tempSelectDetailId);
+							localStorage.removeItem("update-drawio-image-raw-" + tempSelectDetailId);
+							localStorage.removeItem("update-drawio-time-" + tempSelectDetailId);
+							removeDrawIOConfig();
+							jSuccess(detailName + "의 데이터가 변경되었습니다.");
+						});
 				}
 			}
 		});
@@ -1261,13 +1186,11 @@ function product_detail_update_btn_click() {
 		};
 
 		var drawioXML = localStorage.getItem("update-drawio-" + selectedDetailId);
-		console.log("btn_product_detail_edit_submit :: drawioXML → ", drawioXML);
 		if(drawioXML !== null) {
 			requestParams.c_drawio_contents = drawioXML;
 		}
 
 		var drawioThumbnail = localStorage.getItem("update-drawio-image-raw-" + selectedDetailId);
-		console.log("btn_product_detail_edit_submit :: drawioThumbnail → ", drawioThumbnail);
 		if(drawioThumbnail !== null) {
 			requestParams.c_drawio_image_raw = drawioThumbnail;
 		}
@@ -1277,26 +1200,22 @@ function product_detail_update_btn_click() {
 			type: "put",
 			data: requestParams,
 			statusCode: {
-				200: function () {
-					pdServiceDataTableClick(tempSelectId);
-					setTimeout(function() {
-						productServiceDetailDataLoad(tempSelectId);
-						setTimeout(function() {
-							detailClick(document.getElementById("pdservice_detail_link_" + selectedDetailId), tempSelectDetailId);
-						}, 500);
-					}, 300);
-					localStorage.removeItem("update-drawio-" + tempSelectDetailId);
-					localStorage.removeItem("update-drawio-image-raw-" + tempSelectDetailId);
-					localStorage.removeItem("update-drawio-time-" + tempSelectDetailId);
-					removeDrawIOConfig();
-					jSuccess(detailName + "의 데이터가 변경되었습니다.");
+				200: function() {
+					reloadDetailData(tempSelectId, selectedDetailId, tempSelectDetailId)
+						.then(() => {
+							localStorage.removeItem("update-drawio-" + tempSelectDetailId);
+							localStorage.removeItem("update-drawio-image-raw-" + tempSelectDetailId);
+							localStorage.removeItem("update-drawio-time-" + tempSelectDetailId);
+							removeDrawIOConfig();
+							jSuccess(detailName + "의 데이터가 변경되었습니다.");
+						});
 				}
 			}
 		});
 
-        // 버튼 원상복구
-		changeBtnText('#btn_product_detail_edit_drawio', 'drawio 편집하러 가기');
-		changeBtnText('#product_detail_edit_drawio_time', '');
+		// 버튼 원상복구
+		changeBtnText("#btn_product_detail_edit_drawio", "drawio 편집하러 가기");
+		changeBtnText("#product_detail_edit_drawio_time", "");
 	});
 
 }
@@ -1353,7 +1272,6 @@ function product_update_btn_click() {
 					$("#btn_modal_product_edit_close").trigger("click");
 					reloadDataWithSameOrdering(cTitle);
 					jSuccess($("#modal_product_edit_pdservice_name").val() + "의 데이터가 변경되었습니다.");
-
 					pdServiceDataTableClick(selectId);
 				}
 			}
@@ -1377,6 +1295,69 @@ function reloadDataWithSameOrdering(cTitle) {
 				$(this).click();
 				return false;
 			}
+		});
+	});
+}
+
+function generateSelectedPdServiceUI(title) {
+	var html = `<div class="chat-message">
+				<div class="chat-message-body" style="margin-left: 0px !important;">
+					<span class="arrow" style="top: 35% !important;"></span>
+					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 제품(서비스) :  </span>
+				<span class="text" style="color: #a4c6ff;">
+				` + title +
+		`
+				</span>
+				</div>
+				</div>
+				 `;
+	return html;
+}
+
+function generateUnselectedPdServiceUI() {
+	var html = `<div class="chat-message">
+								<div class="chat-message-body" style="margin-left: 0px !important; padding: 0px 10px 0px 10px !important;border-left: 2px solid #a4c6ff;">
+									<span id="" class="arrow" style="top: 10px !important; border-right: 5px solid #a4c6ff"></span>
+									<div class="sender" style="padding-bottom: 5px; padding-top: 5px">선택된 제품(서비스) :
+										<span id="" style="color: #a4c6ff">선택되지 않음</span>
+									</div>
+								</div>
+							</div>
+				 `;
+	return html;
+}
+
+
+async function reloadDetailData(pdServiceId, pdServiceDetailId, tempSelectDetailId) {
+	try {
+		await pdServiceDataTableClick(pdServiceId);
+		await productServiceDetailDataLoad(pdServiceId);
+		await detailClick(document.getElementById("pdservice_detail_link_" + pdServiceDetailId), tempSelectDetailId);
+	} catch (e) {
+		console.error("Error:", e);
+	}
+}
+
+async function reloadDetailFileData(pdServiceDetailId) {
+	try {
+		await getFileList(pdServiceDetailId);
+	} catch (e) {
+		console.error("Error:", e);
+	}
+}
+
+function getFileList(pdServiceDetailId) {
+	new Promise((resolve, reject) => {
+		var $fileupload = $("#fileupload");
+		$.ajax({
+			url: "/auth-user/api/arms/pdServiceDetail/getFilesByNode.do",
+			data: { fileIdLink: pdServiceDetailId },
+			dataType: "json",
+			context: $fileupload[0]
+		}).done(function(result) {
+			$(this).fileupload("option", "done").call(this, null, { result: result.response });
+			$(".file-delete-btn").hide(); // 파일 리스트에서 delete 버튼 display none 처리 -> 편집하기 tab 에서만 보여준다.
+			resolve();
 		});
 	});
 }
