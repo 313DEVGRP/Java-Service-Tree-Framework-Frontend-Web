@@ -7,7 +7,8 @@
 		$.getStylesheet("../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jsuites.css"),
 		$.getStylesheet("../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css"),
 		$.getStylesheet("../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css"),
-		$.getStylesheet("./css/jspreadsheet/custom_sheet.css")
+		$.getStylesheet("./css/jspreadsheet/custom_sheet.css"),
+		$.getStylesheet("./css/jspreadsheet/custom_icon.css")
 	).done(function() {
 			var Spreadsheet = function (element, options) {
 				$.fn.jspreadsheet.call(element, options);
@@ -35,6 +36,7 @@
 									type: "i",
 									k: "undo",
 									onclick: function () {
+										console.log("undo");
 										getSpreadsheet().undo();
 									}
 								},
@@ -42,6 +44,7 @@
 									type: "i",
 									k: "redo",
 									onclick: function () {
+										console.log("redo");
 										getSpreadsheet().redo();
 									}
 								},
@@ -81,6 +84,21 @@
 									type: "i",
 									k: "font-weight",
 									v: "bold"
+								},
+								{
+									type: "i",
+									k: "font-style",
+									v: "italic"
+								},
+								{
+									type: "i",
+									k: "text-decoration",
+									v: "underline"
+								},
+								{
+									type: "i",
+									k: "text-decoration",
+									v: "line-through"
 								},
 								{
 									type: "color",
@@ -128,12 +146,15 @@
 					$jexcel.find(".jexcel_toolbar_item[data-k='undo']").addClass("fa fa-mail-reply ");
 					$jexcel.find(".jexcel_toolbar_item[data-k='redo']").addClass("fa fa-mail-forward ");
 					$jexcel.find(".jexcel_toolbar_item[data-k='save']").addClass("fa fa-save");
-					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='left']").addClass("fa fa-align-left");
-					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='center']").addClass("fa fa-align-center");
-					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='right']").addClass("fa fa-align-right");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='left']").addClass("fa fa-align-left fa-flip-vertical");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='center']").addClass("fa fa-align-center fa-flip-vertical");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-align'][data-v='right']").addClass("fa fa-align-right fa-flip-vertical");
 					$jexcel.find(".jexcel_toolbar_item[data-k='font-weight'][data-v='bold']").addClass("fa fa-bold");
-					$jexcel.find(".jexcel_toolbar_item[data-k='color']").addClass("fa-solid fa-palette");
-					$jexcel.find(".jexcel_toolbar_item[data-k='background-color']").addClass("fa-solid fa-fill-drip");
+					$jexcel.find(".jexcel_toolbar_item[data-k='font-style'][data-v='italic']").addClass("fa fa-italic");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-decoration'][data-v='underline']").addClass("fa fa-underline");
+					$jexcel.find(".jexcel_toolbar_item[data-k='text-decoration'][data-v='line-through']").addClass("fa fa-strikethrough");
+					$jexcel.find(".jexcel_toolbar_item[data-k='color']").addClass("fa fa-font");
+					$jexcel.find(".jexcel_toolbar_item[data-k='background-color']").addClass("fa fa-font fa-background");
 				}
 			};
 

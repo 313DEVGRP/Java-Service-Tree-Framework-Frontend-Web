@@ -299,7 +299,7 @@ function makeVersionMultiSelectBox() {
 			selectedVersionId = versionTag.join(",");
 
 			if (versionTag === null || versionTag == "") {
-				alert("버전이 선택되지 않았습니다.");ㅔㅇ
+				alert("버전이 선택되지 않았습니다.");
 				return;
 			}
 
@@ -362,10 +362,10 @@ function bind_VersionData_By_PdService() {
 				// 이슈리스트 데이터테이블
 				setReqStatusTable(endPointUrl);
 
-                $("#deleted_issue_report_modal").on("shown.bs.modal", function(event) {
-                    endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/deletedIssueList.do?version="+selectedVersionId;
-                    getDeletedIssueData($("#selected_pdService").val(), endPointUrl)
-                });
+        $("#deleted_issue_report_modal").on("shown.bs.modal", function(event) {
+            endPointUrl = "/T_ARMS_REQSTATUS_" + $("#selected_pdService").val() + "/deletedIssueList.do?version="+selectedVersionId;
+            getDeletedIssueData($("#selected_pdService").val(), endPointUrl);
+        });
 
 
 				$(".multiple-select").multipleSelect("refresh");
@@ -1100,24 +1100,24 @@ function dataTableCallBack(settings, json) {
 
     // 테이블 행 클릭 이벤트 (하위 이슈 조회)
 	$('#reqstatustable tbody').off('click', 'td.details-control').on('click', 'td.details-control', function() {
-          const tr = $(this).closest('tr');
-          const row = reqStatusDataTable.row(tr);
-          const icon = $(this).find('i');
-          if (icon.length === 0) {
-            return;
-          }
+      const tr = $(this).closest('tr');
+      const row = reqStatusDataTable.row(tr);
+      const icon = $(this).find('i');
+      if (icon.length === 0) {
+        return;
+      }
 
-          if (row.child.isShown()) {
-             row.child.hide();
-             tr.removeClass('shown');
-             icon.removeClass('fa-angle-up').addClass('fa-angle-down');
-          } else {
-             row.child(format(row.data())).show();
-             tr.addClass('shown');
-             icon.removeClass('fa-angle-down').addClass('fa-angle-up');
-             initializeChildTable(row.data().children, tr.next('tr').find('div.child-table-container'));
-          }
-       });
+      if (row.child.isShown()) {
+         row.child.hide();
+         tr.removeClass('shown');
+         icon.removeClass('fa-angle-up').addClass('fa-angle-down');
+      } else {
+         row.child(format(row.data())).show();
+         tr.addClass('shown');
+         icon.removeClass('fa-angle-down').addClass('fa-angle-up');
+         initializeChildTable(row.data().children, tr.next('tr').find('div.child-table-container'));
+      }
+  });
 }
 
 function dataTableDrawCallback(tableInfo) {

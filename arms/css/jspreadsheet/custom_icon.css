@@ -1,0 +1,30 @@
+.fa:before {
+    width: 16px;
+    display: inline-block;
+    height: 16px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ci-fa-paint-brush {
+    /* custom icon font awesome */
+    background-image: url('../../img/spreadsheet/svg/paintbrush.svg');
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+
+.ci-fa-fill-drip {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    /* custom icon font awesome */
+    background: url("../../img/spreadsheet/svg/fill-drip.svg") no-repeat center center;
+    background-size: contain;
+}
+
+.fa.fa-font.fa-background {
+    color: #FFF;
+    background-color: #000000;
+}
