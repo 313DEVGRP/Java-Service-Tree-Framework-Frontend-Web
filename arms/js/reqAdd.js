@@ -388,16 +388,18 @@ function jsTreeClick(selectedNode) {
 	console.log(selectedNode);
 
 	selectedJsTreeId = selectedNode.attr("id").replace("node_", "").replace("copy_", "");
-	selectedJsTreeName = $("#req_tree").jstree("get_selected").text().trim();
+	selectedJsTreeName = $(".jstree-clicked").text().trim();
 
 	var selectRel = selectedNode.attr("rel");
 
-	if (selectedJsTreeId == 2) {
+	if (selectedJsTreeId === 2) {
 		$("#select_Req").text("루트 요구사항이 선택되었습니다.");
-	} else if (selectRel == "folder") {
+	}
+	else if (selectRel == "folder") {
 		$("#select_Req").text("(folder)" + $(".jstree-clicked").text());
-	} else {
-		$("#select_Req").text($("#req_tree").jstree("get_selected").text());
+	}
+	else {
+		$("#select_Req").text(selectedJsTreeName);
 		$("#delete_text").text(selectedJsTreeName);
 	}
 
@@ -684,7 +686,7 @@ function bindDataEditTab(ajaxData) {
 	//편집하기 - 우선순위 버튼
 	let priorityRadioButtons = $("#editview_req_priority input[type='radio']");
 	priorityRadioButtons.each(function () {
-		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
+		if (ajaxData.c_req_priority_link && $(this).val() == ajaxData.c_req_priority_link) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 
@@ -695,7 +697,7 @@ function bindDataEditTab(ajaxData) {
 	//편집하기 - 난이도 버튼
 	let difficultRadioButtons = $("#editview_req_difficulty input[type='radio']");
 	difficultRadioButtons.each(function () {
-		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
+		if (ajaxData.c_req_difficulty_link && $(this).val() == ajaxData.c_req_difficulty_link) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 
@@ -706,7 +708,7 @@ function bindDataEditTab(ajaxData) {
 	//편집하기 - 상태 버튼
 	let stateRadioButtons = $("#editview_req_state input[type='radio']");
 	stateRadioButtons.each(function () {
-		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
+		if (ajaxData.c_req_state_link && $(this).val() == ajaxData.c_req_state_link) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 		} else {
@@ -860,7 +862,7 @@ function bindDataDetailTab(ajaxData) {
 	//상세보기 - 우선순위 버튼
 	let priorityRadioButtons = $("#detailview_req_priority input[type='radio']");
 	priorityRadioButtons.each(function () {
-		if (ajaxData.reqPriorityEntity && $(this).val() == ajaxData.reqPriorityEntity["c_id"]) {
+		if (ajaxData.c_req_priority_link && $(this).val() == ajaxData.c_req_priority_link) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 		} else {
@@ -870,7 +872,7 @@ function bindDataDetailTab(ajaxData) {
 	//상세보기 - 난이도 버튼
 	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
 	difficultRadioButtons.each(function () {
-		if (ajaxData.reqDifficultyEntity && $(this).val() == ajaxData.reqDifficultyEntity["c_id"]) {
+		if (ajaxData.c_req_difficulty_link && $(this).val() == ajaxData.c_req_difficulty_link) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 		} else {
@@ -880,7 +882,7 @@ function bindDataDetailTab(ajaxData) {
 	//상세보기 - 상태 버튼
 	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
 	stateRadioButtons.each(function () {
-		if (ajaxData.reqStateEntity && $(this).val() == ajaxData.reqStateEntity["c_id"]) {
+		if (ajaxData.c_req_state_link && $(this).val() == ajaxData.c_req_state_link) {
 			$(this).parent().addClass("active");
 			$(this).prop("checked", true);
 		} else {
