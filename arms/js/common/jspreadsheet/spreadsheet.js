@@ -10,22 +10,13 @@
 		$.getStylesheet("./css/jspreadsheet/custom_sheet.css"),
 		$.getStylesheet("./css/jspreadsheet/custom_icon.css")
 	).done(function() {
-			var Spreadsheet = function (element, options) {
-				$.fn.jspreadsheet.call(element, options);
-			};
 
-			Spreadsheet.prototype = Object.create(window.jspreadsheet);
-			Spreadsheet.prototype.constructor = Spreadsheet;
-			//$("#hsh").show(); 에서 $.fn.show(); 와 동일하다.
 			$.fn.spreadsheet = function (option) {
 				var $this = $(this);
-				var spreadsheet = $this.data("arms.spreadsheet"); // 검토
-				var getSpreadsheet = function() {
-					return spreadsheet;
-				};
+				var spreadsheet = $this.data("arms.spreadsheet");
 
 				if (typeof option === "string") {
-					if (!spreadsheet) return false;
+					if (!spreadsheet) { return false; }
 					return spreadsheet[option]();
 				}
 				if (!spreadsheet || (typeof option === "object" && option !== null)) {
@@ -36,23 +27,21 @@
 									type: "i",
 									k: "undo",
 									onclick: function () {
-										console.log("undo");
-										getSpreadsheet().undo();
+										spreadsheet.undo();
 									}
 								},
 								{
 									type: "i",
 									k: "redo",
 									onclick: function () {
-										console.log("redo");
-										getSpreadsheet().redo();
+										spreadsheet.redo();
 									}
 								},
 								{
 									type: "i",
 									k: "save",
 									onclick: function () {
-										getSpreadsheet().download();
+										spreadsheet.download();
 									}
 								},
 								{
@@ -113,7 +102,7 @@
 						option
 					);
 
-					$this.data("arms.spreadsheet", (spreadsheet = new Spreadsheet(this, options)));
+					$this.data("arms.spreadsheet", (spreadsheet = $this.jspreadsheet(options)));
 				}
 
 				return spreadsheet;
@@ -140,6 +129,9 @@
 				tableOverflow: true,
 				textOverflow: true,
 				tableWidth: "100%",
+				onchange: function (instance, cell, x, y, value) {
+					console.log(cell);
+				},
 				onload: function(element) {
 					var $jexcel = $(element);
 
@@ -158,6 +150,5 @@
 				}
 			};
 
-			$.fn.spreadsheet.Constructor = Spreadsheet;
 	});
 })(jQuery);
