@@ -2091,3 +2091,87 @@ $.getJavascript = function (href) {
 		}[getCookie("locale") || "ko"]
 	);
 }
+
+function get_arms_state_category_list() {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: "/auth-user/api/arms/reqStateCategory/getNodesWithoutRoot.do",
+			type: "GET",
+			dataType: "json",
+			progress: true,
+			statusCode: {
+				200: function (data) {
+					resolve(data.result);
+				}
+			},
+			error: function (e) {
+				jError("상태 카테고리 조회 중 에러가 발생했습니다.");
+				reject(e);
+			}
+		});
+	});
+}
+
+function get_arms_req_state_list() {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: "/auth-user/api/arms/reqState/getReqStateListFilter.do",
+			type: "GET",
+			dataType: "json",
+			progress: true,
+			statusCode: {
+				200: function (data) {
+					resolve(data);
+				}
+			},
+			error: function (e) {
+				jError("ARMS 상태 조회 중 에러가 발생했습니다.");
+				reject(e);
+			}
+		});
+	});
+}
+
+function req_state_setting(container_id, req_state_list, is_disabled) {
+	const container = $('#' + container_id);
+	container.empty();
+
+	for (const key in req_state_list) {
+		const item = req_state_list[key].reqStateCategoryEntity;
+		if (item === null) {
+			continue;
+		}
+
+		const labelClass = is_disabled ? 'btn btn-disabled' : 'btn';
+		const label = $('<label>', {
+			class: labelClass,
+			style: 'margin-right: 5px;'
+		});
+
+		switch (item.c_title) {
+			case '열림':
+				label.addClass('edit-red');
+				break;
+			case '진행중':
+				label.addClass('edit-orange');
+				break;
+			case '해결됨':
+				label.addClass('edit-green');
+				break;
+			case '닫힘':
+				label.addClass('edit-blue');
+				break;
+		}
+
+		const input = $('<input>', {
+			type: 'radio',
+			name: container_id+'_options',
+			value: req_state_list[key].c_id
+		});
+
+		label.append(input);
+		label.append(item.c_category_icon + " " +req_state_list[key].c_title + " ");
+
+		container.append(label);
+	}
+}

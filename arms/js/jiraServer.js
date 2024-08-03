@@ -993,13 +993,13 @@ function tab_click_event() { // 탭 클릭시 이벤트
 					$("#jira_renew_button_div_3rd_grid").removeClass("hidden");
 					set_renew_btn_3rd_grid(selectedTab, selectServerId, selectProjectId);
 					// projectIssueStatusDataTable();
-					draw_req_state_mapping_datatable("project_issuestatus", selectProjectId);
+					// draw_req_state_mapping_datatable("project_issuestatus", selectProjectId);
 				}
 				if (selectServerType === "온프레미스") {
 					$("#server_issue_status").removeClass("hidden");
 					set_renew_btn(selectedTab, selectServerId);
 					// jiraServerDataTable(selectedTab);
-					draw_req_state_mapping_datatable(selectedTab);
+					// draw_req_state_mapping_datatable(selectedTab);
 				}
 
 				if (selectServerType === "레드마인_온프레미스")  {
@@ -1009,7 +1009,7 @@ function tab_click_event() { // 탭 클릭시 이벤트
 					set_renew_btn(selectedTab, selectServerId);
 					display_set_wide_projectTable();
 					// jiraServerDataTable(selectedTab);
-					draw_req_state_mapping_datatable(selectedTab);
+					// draw_req_state_mapping_datatable(selectedTab);
 				}
 			}
 		}
@@ -1046,7 +1046,7 @@ function alm_renew(renewJiraType, serverId, projectId) { // 서버 c_id
 							if (projectId) {
 								renewJiraType = "project_issuestatus";
 							}
-							draw_req_state_mapping_datatable(renewJiraType, projectId);
+							// draw_req_state_mapping_datatable(renewJiraType, projectId);
 						}
 						else {
 							jiraServerDataTable(renewJiraType);
