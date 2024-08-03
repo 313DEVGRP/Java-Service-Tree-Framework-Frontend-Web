@@ -177,26 +177,6 @@ function execDocReady() {
         });
 }
 
-function get_arms_state_category_list() {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/auth-user/api/arms/reqStateCategory/getNodesWithoutRoot.do",
-            type: "GET",
-            dataType: "json",
-            progress: true,
-            statusCode: {
-                200: function (data) {
-                    resolve(data.result);
-                }
-            },
-            error: function (e) {
-                jError("상태 카테고리 조회 중 에러가 발생했습니다.");
-                reject(e);
-            }
-        });
-    });
-}
-
 ///////////////////////
 // ALM 서버 셀렉트 박스
 //////////////////////
@@ -401,8 +381,8 @@ function generate_gojs_mapping_data(req_state_category_list, arms_state_list, al
     const arms_state_x_position = 300;
     const alm_status_x_position = 600;
 
-    const y_spacing = 40;
-    const category_y_spacing = 100;
+    const y_spacing = 50;
+    const category_y_spacing = 50;
 
     let category_y_position = 0;
     let arms_state_y_position = 0;
