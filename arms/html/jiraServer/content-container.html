@@ -321,7 +321,7 @@
                                 </li>
                                 <li id="status_tab" class="hidden">
                                     <a href="#server_issue_status" data-toggle="tab">
-                                        <strong>이슈 상태 매핑</strong>
+                                        <strong>이슈 상태</strong>
                                     </a>
                                 </li>
                                 <li>
@@ -777,10 +777,16 @@
                                     </thead>
                                 </table>
                             </div>
-                            <div id="server_issue_status"
-                                 class="tab-pane active clearfix hidden"
-                                 style="padding-top: 30px !important">
-                                <table id="server_issue_status_table"
+                            <div
+                                id="server_issue_status"
+                                class="tab-pane active clearfix hidden"
+                                style="padding-top: 10px !important">
+                                <button
+                                        class="btn btn-info"
+                                        onclick="goToTemplatePage('mapping')">
+                                    상태 관리로 이동
+                                </button>
+<!--                                <table id="server_issue_status_table"
                                        class="display"
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
@@ -789,7 +795,7 @@
                                         <th>c_id</th>
                                     </tr>
                                     </thead>
-                                </table>
+                                </table>-->
                             </div>
                             <div    id="dropdown1"
                                     class="tab-pane">
@@ -955,7 +961,7 @@
                                 <li>
                                     <a  href="#issue_status"
                                         data-toggle="tab">
-                                        <strong>이슈 상태 매핑</strong>
+                                        <strong>이슈 상태</strong>
                                     </a>
                                 </li>
                             </ul>
@@ -977,10 +983,16 @@
                                     </thead>
                                 </table>
                             </div>
-                            <div id="issue_status"
-                                 class="tab-pane active clearfix"
-                                 style="padding-top: 30px !important">
-                                <table id="issue_status_table"
+                            <div
+                                id="issue_status"
+                                class="tab-pane active clearfix"
+                                style="padding-top: 10px !important">
+                                <button
+                                        class="btn btn-info"
+                                        onclick="goToTemplatePage('mapping')">
+                                        상태 관리로 이동
+                                </button>
+<!--                                <table id="issue_status_table"
                                        class="display hidden"
                                        style="width: 100%; overflow: hidden; border-top: 1px dashed rgba(51, 51, 51, 0.3)">
                                     <thead>
@@ -989,7 +1001,7 @@
                                         <th>c_id</th>
                                     </tr>
                                     </thead>
-                                </table>
+                                </table>-->
                             </div>
                         </div>
                     </section>
