@@ -1,22 +1,9 @@
-let selectedPdServiceId;           // 선택한 제품(서비스) 아이디
-let selectedPdService;             // 선택한 제품(서비스) 이름
-let selectedVersionId;             // 선택한 버전 아이디
-const reqStateToIdMapping = {      // 요구사항 상태에 id 매핑
-    '열림': '10',
-    '진행중': '11',
-    '해결됨': '12',
-    '닫힘': '13'
-};
-const reqStateToIconMapping = {     // 요구사항 상태에 아이콘 매핑
-    '열림': '<i class="fa fa-folder-o text-danger"></i>',
-    '진행중': '<i class="fa fa-fire" style="color: #E49400;"></i>',
-    '해결됨': '<i class="fa fa-fire-extinguisher text-success"></i>',
-    '닫힘': '<i class="fa fa-folder text-primary"></i>'
-};
-let boardData = Object.keys(reqStateToIdMapping).map(state => ({ // 기본 보드 데이터
-                     id: reqStateToIdMapping[state],
-                     title: `${reqStateToIconMapping[state]} ${state}`
-                 }));
+var selectedPdServiceId;           // 선택한 제품(서비스) 아이디
+var selectedPdService;             // 선택한 제품(서비스) 이름
+var selectedVersionId;             // 선택한 버전 아이디
+var req_state_to_id_mapping = {};
+var req_state_to_icon_mapping = {};
+var board_data = [];
 
 const reqKanbanTg = new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
                         exitOnClickOutside: true,
@@ -84,8 +71,27 @@ function execDocReady() {
             //버전 멀티 셀렉트 박스 이니시에이터
             makeVersionMultiSelectBox();
 
-            // 칸반 보드 초기화
-            initKanban();
+            get_arms_req_state_list()
+                .then((state_list) => {
+                    board_data = [];
+                    for (let k in state_list) {
+                        let obj = state_list[k];
+                        let state = { // 기본 보드 데이터
+                            id: obj.c_id.toString(),
+                            title: `${obj.reqStateCategoryEntity.c_category_icon} ${obj.c_title}`
+                        }
+
+                        board_data.push(state);
+                        req_state_to_id_mapping[obj.c_title] = obj.c_id.toString();
+                        req_state_to_icon_mapping[obj.c_title] = obj.reqStateCategoryEntity.c_category_icon;
+                    }
+
+                    // 칸반 보드 초기화
+                    initKanban();
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
 
             $(window).resize(function() {
                 adjustHeight();
@@ -176,12 +182,11 @@ function makePdServiceSelectBox() {
 					<span class="sender" style="padding-bottom: 5px; padding-top: 3px;"> 선택된 서버 :  </span>
 					<span class="text" style="color: #a4c6ff;">
 					` +
-            selectedPdService +
-            `
+                        selectedPdService
+                    + `
 					</span>
 				</div>
-			</div>
-			`;
+			</div>`;
         $("#reqSender").html(selectedHtml); // 선택된 제품(서비스)
 
         //refreshDetailChart(); 변수값_초기화();
@@ -304,19 +309,20 @@ function setKanban() {
                             reqPriority: (item.reqPriorityEntity && item.reqPriorityEntity.c_title) || "우선순위 정보 없음",
                             reqDifficulty: (item.reqDifficultyEntity && item.reqDifficultyEntity.c_title) || "난이도 정보 없음",
                             reqPlan: item.c_req_plan_time || "예상 일정 정보 없음",
-                            reqSummary: item.c_title
-                        }
-                    });
+                            reqSummary: item.c_title,
+                        },
+                        category: (item.reqStateEntity && item.reqStateEntity.reqStateCategoryEntity && item.reqStateEntity.reqStateCategoryEntity.c_title)
+                });
 
                     return reqList;
                 }, {});
                 //console.log("[ reqKanban :: changeMultipleSelected ] :: 요구사항 상태 별 리스트 => ", JSON.stringify(reqListByState));
-                
+
                 // 칸반 보드 구성
-                const reqBoardByState = Object.keys(reqStateToIdMapping).map(state => ({
-                                            id: reqStateToIdMapping[state],                    // 요구사항 상태 별 id
-                                            title: `${reqStateToIconMapping[state]} ${state}`, // 요구사항 제목
-                                            item: reqListByState[state]                        // 요구사항 상태 별 리스트
+                const reqBoardByState = Object.keys(req_state_to_id_mapping).map(state => ({
+                                            id: req_state_to_id_mapping[state],                    // 요구사항 상태 별 id
+                                            title: `${req_state_to_icon_mapping[state]} ${state}`, // 요구사항 제목
+                                            item: reqListByState[state] || []                 // 요구사항 상태 별 리스트, null 또는 undefined 시 빈 배열로 대체
                                         }));
 
                 // 칸반 보드 로드
@@ -327,7 +333,6 @@ function setKanban() {
 
                 // 요구사항 개수 표시
                 setReqCount(reqListByState);
-                
             }
         },
         error: function (e) {
@@ -463,33 +468,43 @@ function adjustHeight() {
 
 function setReqCount() {
 
-    // 개수
-    let counts = {
-        "열림": 0,
-        "진행중": 0,
-        "해결됨": 0,
-        "닫힘": 0
-    };
+    get_arms_state_category_list()
+        .then((category_list) => {
+            let category_counts = {};
+            for (var k in category_list) {
+                var obj = category_list[k];
+                category_counts[obj.c_title] = 0;
+            }
 
-    // 각 상태 별 개수 카운트
-    let className = '.kanban-item';
-    Object.keys(reqStateToIdMapping).forEach(state => {
-        counts[state] = $('div[data-id="' + reqStateToIdMapping[state] + '"]').find(className).length;
-    });
-    let 총합 = Object.values(counts).reduce((acc, currentValue) => acc + currentValue, 0);
+            // 각 상태 카테고리 별 개수 카운트
+            let className = '.kanban-item';
+            let req_data_list = $('div').find(className).toArray();
 
-    // 개수 표시
-    $("#req-count").text(총합);
-    $("#req-open-count").text(counts["열림"]);
-    $("#req-progress-count").text(counts["진행중"]);
-    $("#req-resolve-count").text(counts["해결됨"]);
-    $("#req-close-count").text(counts["닫힘"]);
+            req_data_list.forEach(item => {
+                let $item = $(item);
+                let req_info = $item.data('category');
+                category_counts[req_info] += 1;
+            });
 
-    // 통계 표시
-    $("#req-open-stats").text(setStatsFormat(counts["열림"], 총합));
-    $("#req-progress-stats").text(setStatsFormat(counts["진행중"], 총합));
-    $("#req-resolve-stats").text(setStatsFormat(counts["해결됨"], 총합));
-    $("#req-close-stats").text(setStatsFormat(counts["닫힘"], 총합));
+            let 총합 = Object.values(category_counts).reduce((acc, currentValue) => acc + currentValue, 0);
+
+            // 개수 표시
+            $("#req-count").text(총합);
+            $("#req-open-count").text(category_counts["열림"]);
+            $("#req-progress-count").text(category_counts["진행중"]);
+            $("#req-resolve-count").text(category_counts["해결됨"]);
+            $("#req-close-count").text(category_counts["닫힘"]);
+
+            // 통계 표시
+            $("#req-open-stats").text(setStatsFormat(category_counts["열림"], 총합));
+            $("#req-progress-stats").text(setStatsFormat(category_counts["진행중"], 총합));
+            $("#req-resolve-stats").text(setStatsFormat(category_counts["해결됨"], 총합));
+            $("#req-close-stats").text(setStatsFormat(category_counts["닫힘"], 총합));
+        })
+        .catch((error) => {
+            // 오류가 발생한 경우 처리합니다.
+            console.error('Error fetching data:', error);
+        });
 }
 
 function setStatsFormat(값, 총합) {
@@ -500,7 +515,7 @@ function setStatsFormat(값, 총합) {
 }
 
 function initKanban() {
-    KanbanBoard.init('myKanban', boardData);
+    KanbanBoard.init('myKanban', board_data);
     adjustHeight();
     setReqCount();
 }
