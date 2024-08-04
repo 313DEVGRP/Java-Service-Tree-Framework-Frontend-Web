@@ -213,7 +213,7 @@ export default function WorkSpace() {
                 if (selectedDb === "") setShowSelectDbModal(true);
               }
             } else {
-              Toast.error("c_drawdb_contents 데이터가 없습니다.");
+              Toast.success("c_drawdb_contents 데이터가 없습니다.");
             }
           })
           .catch((error) => {

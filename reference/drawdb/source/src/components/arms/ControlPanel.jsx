@@ -715,10 +715,10 @@ export default function ControlPanel({
       //     newWindow.name = window.name;
       //   },
       // },
-      open: {
-        function: open,
-        shortcut: "Ctrl+O",
-      },
+      // open: {
+      //   function: open,
+      //   shortcut: "Ctrl+O",
+      // },
       save: {
         function: save,
         shortcut: "Ctrl+S",
@@ -1071,7 +1071,9 @@ export default function ControlPanel({
       exit: {
         function: () => {
           save();
-          if (saveState === State.SAVED) navigate("/");
+          if (saveState === State.SAVED) {
+            window.close();
+          }
         },
       },
     },
