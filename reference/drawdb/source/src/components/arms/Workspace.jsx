@@ -182,7 +182,7 @@ export default function WorkSpace() {
         const ARMS_REQADD_ENDPOINT = "/auth-user/api/arms/reqAddPure/T_ARMS_REQADD_" + pdServiceId + "/getNode.do?c_id=" + armsId;
         await axios.get(ARMS_REQADD_ENDPOINT)
           .then((response) => {
-            Toast.success("Step 5 :: 요구사항 조회 완료!");
+            Toast.success("Step 5 :: drawDB 조회 완료");
             const c_drawdb_contents = response.data.c_drawdb_contents;
 
             if (c_drawdb_contents) {
@@ -214,11 +214,11 @@ export default function WorkSpace() {
                 if (selectedDb === "") setShowSelectDbModal(true);
               }
             } else {
-              Toast.success("c_drawdb_contents 데이터가 없습니다.");
+              Toast.success("[A-RMS] :: drawDB 데이터가 없습니다.");
             }
           })
           .catch((error) => {
-            Toast.error("Step 5 :: 요구사항 조회 실패!");
+            Toast.error("Step 5 :: drawDB 조회 실패");
             console.log(error);
           });
 
@@ -235,7 +235,7 @@ export default function WorkSpace() {
   useEffect(() => {
     if (armsValidate) {
       document.title = "Editor | drawDB";
-      Toast.success('Step 2 : armsValidate is true');
+      Toast.success('Step 2 : Validation successful! Please proceed.');
       fetchData();
     }
   }, [armsValidate]);
