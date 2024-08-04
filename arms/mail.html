@@ -3,6 +3,31 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
 
+    @font-face {
+        font-family: "Nanum Gothic";
+        font-style: normal;
+        font-weight: 400;
+        src: url("https://www.a-rms.net/reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot"); /* IE9 Compat Modes */
+        src: local("NanumGothic"),
+        url("https://www.a-rms.net/reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.eot?#iefix")
+        format("embedded-opentype"),
+            /* IE6-IE8 */ url("https://www.a-rms.net/reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff2")
+        format("woff2"),
+            /* Super Modern Browsers */
+        url("https://www.a-rms.net/reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.woff") format("woff"),
+            /* Modern Browsers */
+        url("https://www.a-rms.net/reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.ttf")
+        format("truetype"),
+            /* Safari, Android, iOS */
+        url("https://www.a-rms.net/reference/light-blue/css/font/NanumGothic/nanum-gothic-v11-latin_korean-regular.svg#NanumGothic")
+        format("svg"); /* Legacy iOS */
+    }
+
+    html,
+    body {
+        font-family: "Nanum Gothic" !important;
+    }
+    
     .gradient_middle_border {
         border-bottom: 1px solid transparent;
         border-image: linear-gradient(0.25turn, rgb(0 0 0 / 0%), #c3c3c3, rgb(0 0 0 / 0%));
@@ -205,7 +230,7 @@
                                                             <tr>
                                                                 <td align="center"
                                                                     style="border-collapse:collapse;font-size:0;padding:0px 0px 20px 0px;word-break:break-word">
-                                                                    <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
+                                                                    <div style="font-family:Nanum Gothic;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
 
                                                                         <p style="margin-top: 0.75rem; line-height: 1.714; letter-spacing: -0.005em;">
                                                                             <span role="img" aria-label=":checkered_flag:" title=":checkered_flag:"
@@ -226,11 +251,11 @@
                                                                                 저는 16년동안 . Daum - Ahnlab - NC 등에서 제품(서비스) 개발 및 운영, 관리를 해왔던 Full Stack Developer 입니다.<br>
                                                                                 다양한 프로젝트, 제품, 솔루션, 서비스를 개발 및 관리해오며, ALM ( Jira, Redmine, Gitlab )을 사용해 왔습니다.<br>
                                                                                 <br>
-                                                                                현장에서 사용했던 ALM 의 <span style="color: #e5603b">아주 크리티컬한 문제를 인지했고, 이를 해결한 솔루션을 만들었습니다.</span><br>
+                                                                                현장에서 사용했던 ALM 의 <span style="color: #e5603b; font-weight: bold">아주 크리티컬한 문제를 인지했고, 이를 해결한 솔루션을 만들었습니다.</span><br>
                                                                                 다음의 문제를 해결했으며, 보다 깊은 기능을 가진 저희 솔루션은 귀사 및 고객사에 뿌리깊게 박혀있는 암적인 문제를 해결 할 수 있습니다.<br>
                                                                                 <br>
                                                                                 <span style="margin-top: 7px;">1. Issue Tracking 에 <span style="color: #a4c6ff">ISSUE를 개발자 멋대로</span> 만들고 있을겁니다. → <span style="color: #E49400">요구사항, 지시사항에 의한 ISSUE 관리</span>가 되어야 하지 않을까요?</span><br>
-                                                                                <span style="margin-top: 7px;">2. Issue Tracking 을 통해서 <span style="color: #a4c6ff">일정관리</span>가 가능합니까? → 제품*(서비스)는 ALM 의 Project에 <span style="color: #E49400">1:N 의 관계에 의해 일정 관리는 될 수 없습니다.</span></span><br>
+                                                                                <span style="margin-top: 7px;">2. Issue Tracking 을 통해서 <span style="color: #a4c6ff">일정관리</span>가 가능합니까? → 제품*(서비스)는 ALM Project 와 <span style="color: #E49400">1:N 의 관계에 의해 일정 관리는 될 수 없습니다.</span></span><br>
                                                                                 <span style="margin-top: 7px;">3. Issue Tracking 을 통해서 <span style="color: #a4c6ff">범위관리</span>가 가능합니까? → ALM 은 <span style="color: #E49400">요구사항의 구조를 관리하거나 통계를 낼 수 없습니다.</span></span><br>
                                                                                 <span style="margin-top: 7px;">4. Issue Tracking 을 통해서 <span style="color: #a4c6ff">자원관리</span>가 가능합니까? → ALM 은 <span style="color: #E49400">각 작업자의 Performance 를 측정 할 수 없습니다.</span></span><br>
                                                                                 <span style="margin-top: 7px;">5. Issue Tracking 을 통해서 <span style="color: #a4c6ff">비용관리</span>가 가능합니까? → ALM 은 비용 관리 <span style="color: #E49400">기능 자체가 없습니다.</span></span><br>
@@ -288,7 +313,7 @@
                                                                                     <tbody>
                                                                                     <tr>
                                                                                         <td align="center" style="border-collapse:collapse;font-size:0;padding-bottom:20px;word-break:break-word">
-                                                                                            <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:normal;text-align:center;">
+                                                                                            <div style="font-family:Nanum Gothic;font-size:15px;font-weight:400;letter-spacing:0;line-height:normal;text-align:center;">
                                                                                                 <img src="https://www.a-rms.net/arms/img/more_info.png"
                                                                                                      height="60px" width="66px"
                                                                                                      data-image-whitelisted="" class="CToWUd"
@@ -451,7 +476,7 @@
                                                                                             <tr>
                                                                                                 <td align="center"
                                                                                                     style="border-collapse:collapse;font-size:0;padding:0 10px;padding-top:20px;word-break:break-word">
-                                                                                                    <div style="font-family:arial,sans-serif;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
+                                                                                                    <div style="font-family:Nanum Gothic;font-size:15px;font-weight:400;letter-spacing:0;line-height:1.4;text-align:left;color:#f8f8f8">
 
                                                                                                         <p style="margin-top: 0.75rem; line-height: 1.714; letter-spacing: -0.005em;">
                                                                                                             <span role="img" aria-label=":checkered_flag:" title=":checkered_flag:"
@@ -710,7 +735,7 @@
                                                                                                         <tr>
                                                                                                             <td align="center"
                                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                                <div style="font-family:arial,sans-serif;font-size:32px;font-weight:400;letter-spacing:0;line-height:1.5;text-align:center;color:#202124">
+                                                                                                                <div style="font-family:Nanum Gothic;font-size:32px;font-weight:400;letter-spacing:0;line-height:1.5;text-align:center;color:#202124">
                                                                                                                     <img src="https://www.a-rms.net/arms/img/available_now.png"
                                                                                                                          height="60px" width="60px" data-image-whitelisted=""
                                                                                                                          class="CToWUd" data-bit="iit">
@@ -775,7 +800,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:15px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                                 <span style="font-size:16px;color:#f8f8f8;line-height:1.6;font-weight: bold;">
                                                                                                                     Lorem ipsum
                                                                                                                 </span>
@@ -797,7 +822,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="#" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                                 <span style="display:block;min-width:10px">
@@ -867,7 +892,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         Dashboard
                                                                                                     </span>
@@ -887,7 +912,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -958,7 +983,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         제품(서비스)
                                                                                                     </span>
@@ -976,7 +1001,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1047,7 +1072,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         버전 관리
                                                                                                     </span>
@@ -1065,7 +1090,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1136,7 +1161,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         ALM Server 관리
                                                                                                     </span>
@@ -1154,7 +1179,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1225,7 +1250,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         ARMS - ALM 연결
                                                                                                     </span>
@@ -1243,7 +1268,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1314,7 +1339,7 @@
                                                                                             <tr role="presentation">
                                                                                                 <td align="left"
                                                                                                     style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                    <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                    <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                         <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                             ARMS - ALM 상태 맵핑 기능
                                                                                                         </span>
@@ -1334,7 +1359,7 @@
                                                                                                         <tr>
                                                                                                             <td align="center" bgcolor="transparent" role="presentation"
                                                                                                                 style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                                <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                     font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                     target="_blank">
                                                                                                                     <span style="display:block;min-width:10px">
@@ -1405,7 +1430,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         요구사항
                                                                                                     </span>
@@ -1425,7 +1450,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1496,7 +1521,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         현황관리
                                                                                                     </span>
@@ -1515,7 +1540,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1586,7 +1611,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         간트 차트
                                                                                                     </span>
@@ -1606,7 +1631,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1677,7 +1702,7 @@
                                                                                             <tr role="presentation">
                                                                                                 <td align="left"
                                                                                                     style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                    <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                    <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                         <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                             칸반 보드 지원 ( Kanban )
                                                                                                         </span>
@@ -1695,7 +1720,7 @@
                                                                                                         <tr>
                                                                                                             <td align="center" bgcolor="transparent" role="presentation"
                                                                                                                 style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                                <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                     font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                     target="_blank">
                                                                                                                     <span style="display:block;min-width:10px">
@@ -1766,7 +1791,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         Time 분석
                                                                                                     </span>
@@ -1784,7 +1809,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1855,7 +1880,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         Scope 분석
                                                                                                     </span>
@@ -1873,7 +1898,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -1944,7 +1969,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         Resource 분석
                                                                                                     </span>
@@ -1962,7 +1987,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=dashboard" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -2033,7 +2058,7 @@
                                                                                         <tr role="presentation">
                                                                                             <td align="left"
                                                                                                 style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                     <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                         Cost 분석
                                                                                                     </span>
@@ -2051,7 +2076,7 @@
                                                                                                     <tr>
                                                                                                         <td align="center" bgcolor="transparent" role="presentation"
                                                                                                             style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                            <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                 font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                 target="_blank">
                                                                                                                 <span style="display:block;min-width:10px">
@@ -2122,7 +2147,7 @@
                                                                                             <tr role="presentation">
                                                                                                 <td align="left"
                                                                                                     style="border-collapse:collapse;font-size:0;padding:0;word-break:break-word">
-                                                                                                    <div style="font-family:arial,sans-serif;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
+                                                                                                    <div style="font-family:Nanum Gothic;font-size:13px;line-height:1.4;letter-spacing:0;text-align:left;color:#f8f8f8;">
                                                                                                         <span style="font-size:16px;color:#E49400;line-height:2;font-weight: bold;">
                                                                                                             DEVOPS Tool Chain & Consulting
                                                                                                         </span>
@@ -2143,7 +2168,7 @@
                                                                                                         <tr>
                                                                                                             <td align="center" bgcolor="transparent" role="presentation"
                                                                                                                 style="border-collapse:collapse;background:transparent" valign="middle">
-                                                                                                                <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:arial,sans-serif;font-size:13px;
+                                                                                                                <a  href="https://www.a-rms.net/arms/template.html?page=analysisGantt" style="display:inline-block;background:transparent;color:#a4c6ff;font-family:Nanum Gothic;font-size:13px;
                                                                                                                                     font-weight:400;line-height:1;letter-spacing:0;margin:0;text-decoration:none;text-transform:none"
                                                                                                                     target="_blank">
                                                                                                                     <span style="display:block;min-width:10px">
@@ -2215,25 +2240,25 @@
                                                                                 <p style="margin-bottom:22px;">
                                                                                     <span style="vertical-align:baseline;white-space:pre-wrap;">A-RMS / 313 DEVGRP</span>
                                                                                 </p>
-                                                                                <p style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;">
+                                                                                <p style="font-family:Nanum Gothic;font-weight:800;vertical-align:baseline;">
                                                                                     <span style="vertical-align:baseline;">Solution Development & Consulting</span>
                                                                                 </p>
                                                                                 <p>PaaS+SaaS Web Services / Mobile / Search Engine / DevOps<br> Platform  / Cloud / BigData / Machine learning / AI / Education</p>
                                                                                 <p>
                                                                                     <span style="padding-right: 12px;">
-                                                                                        <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Email</strong>
+                                                                                        <strong style="font-family:Nanum Gothic;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Email</strong>
                                                                                         <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
                                                                                         313cokr@gmail.com
                                                                                     </span>
                                                                                     <br>
                                                                                     <span>
-                                                                                        <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Mobile</strong>
+                                                                                        <strong style="font-family:Nanum Gothic;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Mobile</strong>
                                                                                         <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
                                                                                         +82-10-5093-7313
                                                                                     </span>
                                                                                     <br>
                                                                                     <span>
-                                                                                        <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Website</strong>
+                                                                                        <strong style="font-family:Nanum Gothic;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Website</strong>
                                                                                         <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
                                                                                         <a href="https://www.313.co.kr" target="_blank" style="color:#f8f8f8;">313.co.kr</a>
                                                                                         <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> / </span>
@@ -2241,7 +2266,7 @@
                                                                                     </span>
                                                                                 </p>
                                                                                 <p style="margin-bottom:4px">
-                                                                                    <strong style="font-family:arial,sans-serif;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Adr</strong>
+                                                                                    <strong style="font-family:Nanum Gothic;font-weight:800;vertical-align:baseline;white-space:pre-wrap;">Adr</strong>
                                                                                     <span style="color:#b5b5b5;vertical-align:baseline;white-space:pre-wrap;"> | </span>
                                                                                     <span style="vertical-align:baseline;white-space:pre-wrap;">313 B/D Dosan-daero, Gangnam-gu, Seoul, Republic of Korea 06021</span>
                                                                                 </p>
