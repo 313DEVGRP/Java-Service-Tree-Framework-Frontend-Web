@@ -1225,19 +1225,18 @@ function registNewPopup() {
 		// ------------------------- drawio end  --------------------------------//
 
 		// ------------------------- drawdb start  --------------------------------//
-		selectByIndexedDB("create-reqadd-" + selectedProductServiceId).then(result => {
-			if (result) {
-				var armsThumbnail = result.armsThumbnail;
-				var lastModified = result.lastModified;
-				var seoulTime = convertToSeoulTimeWithMeridiem(lastModified);
-				setDrawdbImage("create-reqadd-" + selectedProductServiceId, armsThumbnail, "create");
-				changeBtnText('#btn_modal_req_add_drawdb', 'drawdb 등록 완료');
-				changeBtnText('#modal_req_add_drawdb_time', seoulTime);
-			} else {
-				console.log("No data found for the given key.");
-			}
-		}).catch(error => {
-			console.error("Error:", error);
+		selectByIndexedDB("create-reqadd-" + selectedProductServiceId)
+			.then(result => {
+				if (result) {
+					var armsThumbnail = result.armsThumbnail;
+					var lastModified = result.lastModified;
+					var seoulTime = convertToSeoulTimeWithMeridiem(lastModified);
+					setDrawdbImage("create-reqadd-" + selectedProductServiceId, armsThumbnail, "create");
+					changeBtnText("#btn_modal_req_add_drawdb", "drawdb 등록 완료");
+					changeBtnText("#modal_req_add_drawdb_time", seoulTime);
+				}
+			}).catch(e => {
+			console.log("REQADD :: create :: selectByIndexedDB :: 조회 실패", e);
 		});
 		// ------------------------- drawdb end  --------------------------------//
 
@@ -1402,33 +1401,24 @@ function click_btn_for_req_save() {
 		};
 		var searchKey = "create-reqadd-"+$("#selected_pdService").val();
 		console.log("searchKey:", searchKey);
-		request.onsuccess = function(event) {
-			var db = event.target.result;
-			var transaction = db.transaction([storeName], "readonly");
-			var objectStore = transaction.objectStore(storeName);
-			var getRequest = objectStore.get(searchKey);
 
-			getRequest.onerror = function(event) {
-				console.error("데이터 조회 실패:", event.target.error);
-			};
-
-			getRequest.onsuccess = function(event) {
-				var result = event.target.result;
+		selectByIndexedDB(searchKey)
+			.then(result => {
 				if (result) {
-					console.log("조회된 데이터:", result);
 					data_object_param.c_drawdb_contents = JSON.stringify(result);
 					data_object_param.c_drawdb_image_raw = result.armsThumbnail;
-					console.log("data_object_param.c_drawdb_contents :: " + data_object_param.c_drawdb_contents);
-					console.log("data_object_param.c_drawdb_image_raw :: " + data_object_param.c_drawdb_image_raw);
-				} else {
-					console.log("해당 키에 대한 데이터가 없습니다.");
 				}
+			})
+			.catch(error => {
+				console.log("IndexedDB 조회 실패:", error);
+			})
+			.finally(() => {
 				$.ajax({
 					url: "/auth-user/api/arms/reqAdd/" + table_name + "/addNode.do",
 					type: "POST",
 					data: data_object_param,
 					statusCode: {
-						200: function () {
+						200: function() {
 							$("#req_tree").jstree("refresh");
 							$("#close_req").trigger("click");
 							jSuccess(success_message);
@@ -1436,12 +1426,12 @@ function click_btn_for_req_save() {
 							localStorage.removeItem("req-create-drawio-image-raw-" + selectedProductServiceId);
 							localStorage.removeItem("req-create-drawio-time-" + selectedProductServiceId);
 							deleteByIndexedDB(searchKey);
+							setDefaultBtnText();
 							removeDrawIOConfig();
 						}
 					}
 				});
-			};
-		};
+			});
 	});
 }
 
@@ -1536,6 +1526,7 @@ function click_btn_for_req_update() {
 					localStorage.removeItem("req-update-drawio-" + previousId);
 					localStorage.removeItem("req-update-drawio-image-raw-" + previousId);
 					localStorage.removeItem("req-update-drawio-time-" + previousId);
+					setDefaultBtnText();
 					removeDrawIOConfig();
 				}
 			}
@@ -2166,6 +2157,10 @@ function deleteByIndexedDB(searchKey) {
 
 	request.onsuccess = function(event) {
 		var db = event.target.result;
+		if (!db.objectStoreNames.contains(storeName)) {
+			reject("armsDiagrams 오브젝트 스토어가 존재하지 않습니다.");
+			return;
+		}
 		var transaction = db.transaction([storeName], "readwrite");
 		var objectStore = transaction.objectStore(storeName);
 		var deleteRequest = objectStore.delete(searchKey);
@@ -2191,12 +2186,16 @@ function selectByIndexedDB(searchKey) {
 
 		request.onsuccess = function(event) {
 			var db = event.target.result;
+			if (!db.objectStoreNames.contains(storeName)) {
+				reject("armsDiagrams 오브젝트 스토어가 존재하지 않습니다.");
+				return;
+			}
 			var transaction = db.transaction([storeName], "readonly");
 			var objectStore = transaction.objectStore(storeName);
 			var getRequest = objectStore.get(searchKey);
 
 			getRequest.onerror = function(event) {
-				console.error("데이터 조회 실패:", event.target.error);
+				console.log("데이터 조회 실패:", event.target.error);
 				reject(event.target.error);
 			};
 
