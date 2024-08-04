@@ -1309,9 +1309,23 @@ export default function ControlPanel({
     },
     help: {
       shortcuts: {
-        function: () => window.open("/reference/drawdb/shortcuts", "_blank"),
+        function: () => {
+          const queryString = new URLSearchParams(window.location.search);
+          queryString.set("destination", "shortcuts");
+          const url = `/reference/drawdb?${queryString.toString()}`;
+          window.open(url, "_blank");
+        },
         shortcut: "Ctrl+H",
       },
+      // TODO: templates 부분 수정 필요함
+      // templates: {
+      //   function: () => {
+      //     const queryString = new URLSearchParams(window.location.search);
+      //     queryString.set("destination", "templates");
+      //     const url = `/reference/drawdb?${queryString.toString()}`;
+      //     window.open(url, "_blank");
+      //   },
+      // },
       // ask_on_discord: {
       //   function: () => window.open("https://discord.gg/BrjZgNrmR6", "_blank"),
       // },

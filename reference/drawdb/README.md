@@ -15,13 +15,26 @@ http://localhost:5173/reference/drawdb/ 확인
 ## 3-2-1. 빌드 후 index.html 파일에 아래 코드 추가
 ```javascript
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(() => {
-            if (window.history && window.history.pushState) {
-                window.history.pushState(null, '', '/reference/drawdb/editor' + window.location.search);
-                window.dispatchEvent(new Event('popstate'));
-            }
-        }, 1000);
-    });
+	document.addEventListener('DOMContentLoaded', function() {
+	setTimeout(() => {
+		if (window.history && window.history.pushState) {
+			const params = new URLSearchParams(window.location.search);
+			const destination = params.get('destination');
+
+			let newPath = '';
+			if (destination === 'editor') {
+				newPath = '/reference/drawdb/editor';
+			} else if (destination === 'templates') {
+				newPath = '/reference/drawdb/templates';
+			} else if (destination === 'shortcuts') {
+				newPath = '/reference/drawdb/shortcuts';
+			} else {
+				newPath = '/reference/drawdb/editor';
+			}
+			window.history.pushState(null, '', newPath + window.location.search);
+			window.dispatchEvent(new Event('popstate'));
+		}
+	}, 1000);
+});
 </script>
 ```

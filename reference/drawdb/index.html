@@ -43,7 +43,7 @@
     />
 
     <title>drawDB | Online database diagram editor and SQL generator</title>
-    <script type="module" crossorigin src="./assets/index-jc5-B8m5.js"></script>
+    <script type="module" crossorigin src="./assets/index-lzPX5esU.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-oYEa5UIC.css">
   </head>
   <body theme-mode="light">
@@ -57,7 +57,20 @@
 			document.addEventListener('DOMContentLoaded', function() {
 				setTimeout(() => {
 					if (window.history && window.history.pushState) {
-						window.history.pushState(null, '', '/reference/drawdb/editor' + window.location.search);
+						const params = new URLSearchParams(window.location.search);
+						const destination = params.get('destination');
+
+						let newPath = '';
+						if (destination === 'editor') {
+							newPath = '/reference/drawdb/editor';
+						} else if (destination === 'templates') {
+							newPath = '/reference/drawdb/templates';
+						} else if (destination === 'shortcuts') {
+							newPath = '/reference/drawdb/shortcuts';
+						} else {
+							newPath = '/reference/drawdb/editor';
+						}
+						window.history.pushState(null, '', newPath + window.location.search);
 						window.dispatchEvent(new Event('popstate'));
 					}
 				}, 1000);

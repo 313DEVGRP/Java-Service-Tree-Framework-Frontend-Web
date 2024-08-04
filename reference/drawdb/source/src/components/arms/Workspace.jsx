@@ -174,6 +174,7 @@ export default function WorkSpace() {
             }
           })
           .catch((error) => {
+            setShowSelectDbModal(true);
             console.log(error);
           });
       } else if (armsMode === "update" || armsMode === "view") {
