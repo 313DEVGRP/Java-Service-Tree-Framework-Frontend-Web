@@ -1394,11 +1394,6 @@ function click_btn_for_req_save() {
 			"신규 요구사항 ( " + req_title + " )이 추가되었습니다." :
 			" 요구사항 폴더 ( " + req_title + " )가 등록되었습니다.";
 
-		var request = indexedDB.open(dbName, dbVersion);
-
-		request.onerror = function(event) {
-			console.error("IndexedDB 열기 실패:", event.target.error);
-		};
 		var searchKey = "create-reqadd-"+$("#selected_pdService").val();
 		console.log("searchKey:", searchKey);
 

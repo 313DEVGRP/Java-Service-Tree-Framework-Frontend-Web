@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IconCaretdown,
   IconChevronRight,
@@ -66,6 +66,7 @@ import Modal from "./Modal.jsx";
 import { useTranslation } from "react-i18next";
 import { exportSQL } from "../../utils/exportSQL/index.js";
 import { databases } from "../../data/databases.js";
+import axios from "axios";
 
 export default function ControlPanel({
   diagramId,
@@ -74,6 +75,9 @@ export default function ControlPanel({
   setTitle,
   lastSaved,
 }) {
+  const [armsId, setArmsId] = useState(0);
+  const [armsMode, setArmsMode] = useState("");
+  const [pdServiceId, setPdServiceId] = useState(0);
   const [modal, setModal] = useState(MODAL.NONE);
   const [sidesheet, setSidesheet] = useState(SIDESHEET.NONE);
   const [prevTitle, setPrevTitle] = useState(title);
@@ -110,7 +114,24 @@ export default function ControlPanel({
   const { transform, setTransform } = useTransform();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let paramArmsId = urlParams.get("armsId");
+    let paramPdServiceId = urlParams.get("pdServiceId");
+    let paramArmsMode = urlParams.get("armsMode");
+    console.log("[A-RMS] :: URL param :: armsId :: " + paramArmsId);
+    console.log("[A-RMS] :: URL param :: pdServiceId :: " + paramPdServiceId);
+    console.log("[A-RMS] :: URL param :: armsMode :: " + paramArmsMode);
+    if (paramArmsId && paramPdServiceId && paramArmsMode) {
+      setArmsId(Number(paramArmsId));
+      setPdServiceId(Number(paramPdServiceId));
+      setArmsMode(paramArmsMode);
+    } else {
+      Toast.error('Step 1 : One or more required parameters are missing');
+      return;
+    }
+  }, []);
   const invertLayout = (component) =>
     setLayout((prev) => ({ ...prev, [component]: !prev[component] }));
 
@@ -685,9 +706,9 @@ export default function ControlPanel({
 
   const menu = {
     file: {
-      new: {
-        function: () => setModal(MODAL.NEW),
-      },
+      // new: {
+      //   function: () => setModal(MODAL.NEW),
+      // },
       // new_window: {
       //   function: () => {
       //     const newWindow = window.open("/reference/drawdb/editor", "_blank");
@@ -734,25 +755,57 @@ export default function ControlPanel({
       delete_diagram: {
         warning: {
           title: t("delete_diagram"),
-          message: t("are_you_sure_delete_diagram"),
+          message: t("are_you_sure_delete_diagram")
         },
         function: async () => {
-          await db.armsDiagrams
-            .delete(diagramId)
-            .then(() => {
-              setDiagramId(0);
-              setTitle("Untitled diagram");
-              setTables([]);
-              setRelationships([]);
-              setAreas([]);
-              setNotes([]);
-              setTypes([]);
-              setEnums([]);
-              setUndoStack([]);
-              setRedoStack([]);
-            })
-            .catch(() => Toast.error(t("oops_smth_went_wrong")));
-        },
+          if (diagramId !== 0) {
+            if (armsMode === "create") {
+              await db.armsDiagrams
+                .delete(diagramId)
+                .then(() => {
+                  setDiagramId(0);
+                  setTitle("Untitled diagram");
+                  setTables([]);
+                  setRelationships([]);
+                  setAreas([]);
+                  setNotes([]);
+                  setTypes([]);
+                  setEnums([]);
+                  setUndoStack([]);
+                  setRedoStack([]);
+                  if (window.opener && !window.opener.closed) {
+                    window.opener.changeBtnText("#btn_modal_req_add_drawdb", "drawdb 등록하러 가기");
+                    window.opener.changeBtnText("#modal_req_add_drawdb_time", "");
+                    window.opener.drawDBImageClear();
+                    window.close();
+                  }
+                })
+                .catch(() => Toast.error(t("oops_smth_went_wrong")));
+            }
+            if (armsMode === "update") {
+              const ARMS_REQADD_ENDPOINT = "/auth-user/api/arms/reqAddPure/T_ARMS_REQADD_" + pdServiceId + "/updateDrawDBContents.do";
+              const body = {
+                c_id: armsId,
+                c_drawdb_contents: null
+              };
+              axios.put(ARMS_REQADD_ENDPOINT, body, {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+              }).then(() => {
+                if (window.opener && !window.opener.closed) {
+                  window.opener.changeBtnText("#btn_req_add_edit_drawdb", "drawdb 편집하러 가기");
+                  window.opener.changeBtnText("#req_add_edit_drawdb_time", "");
+                  window.opener.drawDBImageClear();
+                  window.close();
+                }
+              }).catch((error) => {
+                Toast.error(error);
+                console.log(error);
+              });
+            }
+          }
+        }
       },
       import_diagram: {
         function: fileImport,
@@ -1254,18 +1307,18 @@ export default function ControlPanel({
     },
     help: {
       shortcuts: {
-        function: () => window.open("/shortcuts", "_blank"),
+        function: () => window.open("/reference/drawdb/shortcuts", "_blank"),
         shortcut: "Ctrl+H",
       },
-      ask_on_discord: {
-        function: () => window.open("https://discord.gg/BrjZgNrmR6", "_blank"),
-      },
-      report_bug: {
-        function: () => window.open("/bug-report", "_blank"),
-      },
-      feedback: {
-        function: () => window.open("/survey", "_blank"),
-      },
+      // ask_on_discord: {
+      //   function: () => window.open("https://discord.gg/BrjZgNrmR6", "_blank"),
+      // },
+      // report_bug: {
+      //   function: () => window.open("/bug-report", "_blank"),
+      // },
+      // feedback: {
+      //   function: () => window.open("/survey", "_blank"),
+      // },
     },
   };
 
@@ -1294,7 +1347,7 @@ export default function ControlPanel({
   });
   useHotkeys("ctrl+alt+c, meta+alt+c", copyAsImage, { preventDefault: true });
   useHotkeys("ctrl+r, meta+r", resetView, { preventDefault: true });
-  useHotkeys("ctrl+h, meta+h", () => window.open("/shortcuts", "_blank"), {
+  useHotkeys("ctrl+h, meta+h", () => window.open("/reference/drawdb/shortcuts", "_blank"), {
     preventDefault: true,
   });
   useHotkeys("ctrl+alt+w, meta+alt+w", fitWindow, { preventDefault: true });
