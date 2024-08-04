@@ -431,10 +431,25 @@ function initializeChildTable(childrenData, container) {
             title: "요구사항 구분",
             data: "isReq",
             render: function (data, type, row, meta) {
+                let upperKey = row.upperKey;
+			    if (row.connectType === "subtask") {
+			        upperKey += "의 하위 이슈";
+			    } else {
+			        upperKey += "의 연결 이슈";
+			    }
+
+                if (row.deleted) {
+                    if(row.deleted.deleted_isDeleted === true){
+                        upperKey = "<s style='color: #808080'>" + upperKey + "</s>";
+                    }else if(row.deleted.deleted_isDeleted === false){
+                        upperKey = "<p style='color: #808080'>" + upperKey + "</p>";
+                    }
+                }
+
                 if (row.connectType === "subtask") {
-                    return "<div style='color: #f8f8f8'>" + row.upperKey + "의 하위 이슈</div>";
+                    return "<div style='color: #f8f8f8'>" + upperKey + "</div>";
                 } else {
-                    return "<div style='color: #f8f8f8'>" + row.upperKey + "의 연결 이슈</div>";
+                    return "<div style='color: #f8f8f8'>" + upperKey + "</div>";
                 }
                 return data;
             },
@@ -449,7 +464,16 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                    let displayText = data;
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    }
+					else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+					return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText + "</div>");
                 }
                 return data;
             },
@@ -464,16 +488,22 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    let verNameList = [];
-                    let verHtml =``;
-                        data.forEach(version_id => {
-                        let versionInfo = versionListData.find(version => version["c_id"] === version_id);
-                        if(versionInfo) {
-                            verNameList.push(versionInfo["c_title"]);
-                            verHtml+= versionInfo["c_title"]+`<br/>`;
-                        }
-                    });
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + verHtml + "</div>";
+					let verNameList = [];
+					let verHtml =``;
+						data.forEach(version_id => {
+						let versionInfo = versionListData.find(version => version["c_id"] === version_id);
+						if(versionInfo) {
+							verNameList.push(versionInfo["c_title"]);
+							verHtml+= versionInfo["c_title"]+`<br/>`;
+						}
+					});
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        verHtml = "<s style='color: #808080'>" + verHtml  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + verHtml + "</div>";
                 }
                 return data;
             },
@@ -489,10 +519,14 @@ function initializeChildTable(childrenData, container) {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
                     let displayText = data;
-                    if (row.deleted) {
-                        displayText = "<s>" + data + "</s>";
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
                     }
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + displayText + "</div>";
+
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -507,7 +541,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                    let displayText = data;
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -522,7 +563,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                    let displayText = data;
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -537,7 +585,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                    let displayText = data;
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
             },
             className: "dt-body-left",
@@ -551,7 +606,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                    let displayText = data;
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -566,7 +628,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + data + "</div>";
+                    let displayText = data;
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -581,7 +650,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+                    let displayText = dateFormat(data);
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + dateFormat(data)  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -596,7 +672,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+                    let displayText = dateFormat(data);
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + dateFormat(data)  + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        color = "#808080";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -611,7 +694,14 @@ function initializeChildTable(childrenData, container) {
                 if (isEmpty(data) || data === "false") {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
-                    return "<div style='white-space: nowrap; color: #f8f8f8'>" + dateFormat(data) + "</div>";
+                    let displayText = dateFormat(data);
+                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + displayText + "</s>";
+                    } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
+                        displayText = "<div style='color: #808080'>" + displayText + "</div>";
+                    }
+                    return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
                 return data;
             },
@@ -714,22 +804,26 @@ function dataTableLoad(tableData) {
 				if (isEmpty(data) || data === "false") {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
-          let displayText = data;
-          let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let displayText = data;
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
 					let btn_data_row1 = {
 						pdServiceVersions : row.pdServiceVersions.join(","),
 						cReqLink : row.creqLink
 					};
 					// 삭제 여부
-          if (row.deleted && row.deleted.deleted_isDeleted === true) {
-            displayText = "<s style='color: #808080'>" + data  + "</s>";
-          }
+                    if (row.deleted && row.deleted.deleted_isDeleted === true) {
+                        displayText = "<s style='color: #808080'>" + data  + "</s>";
+                    }
 					else if (row.deleted && row.deleted.deleted_isDeleted === false) {
-            color = "#808080";
-          }
+                        color = "#808080";
+                    }
 					// 요구사항 이슈 여부
-          if (!isEmpty(row.isReq) && row.isReq === true) {
-              color = "#a4c6ff";
+                    if (!isEmpty(row.isReq) && row.isReq === true) {
 						return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText +
 							$("<button class='btn btn-transparent btn-xs' style='margin-left:5px'/>")
 								.append($('<i class="fa fa-list-alt"></i>'))
@@ -737,7 +831,7 @@ function dataTableLoad(tableData) {
 								.attr("data-target","#reqIssue_alongWith_modal")
 								.attr("data-row", JSON.stringify(btn_data_row1)).prop("outerHTML") +
 							"</div>");
-          } else {
+                    } else {
 						return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText + "</div>");
 					}
 				}
@@ -763,15 +857,19 @@ function dataTableLoad(tableData) {
 							verHtml+= versionInfo["c_title"]+`<br/>`;
 						}
 					});
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
+
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         verHtml = "<s style='color: #808080'>" + verHtml  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
                     }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
-                    }
+
                     return "<div style='white-space: nowrap; color: " + color + "'>" + verHtml + "</div>";
 				}
 				return data;
@@ -788,14 +886,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -813,14 +913,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -838,14 +940,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -863,14 +967,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -887,14 +993,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -912,14 +1020,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = data;
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -937,14 +1047,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = dateFormat(data);
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + dateFormat(data)  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -962,14 +1074,16 @@ function dataTableLoad(tableData) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
                     let displayText = dateFormat(data);
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + dateFormat(data)  + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
 				}
@@ -987,14 +1101,16 @@ function dataTableLoad(tableData) {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
                     let displayText = dateFormat(data);
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + displayText + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         color = "#808080";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                        color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
@@ -1012,14 +1128,16 @@ function dataTableLoad(tableData) {
                     return "<div style='color: #808080'>N/A</div>";
                 } else {
                     let displayText = dateFormat(data);
-                    let color = "#f8f8f8"; // 기본 텍스트 색상
+                    let color;
+                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                        color = "#a4c6ff";
+                    }else{
+                        color = "#f8f8f8"; // 기본 텍스트 색상
+                    }
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + displayText + "</s>";
                     } else if (row.deleted && row.deleted.deleted_isDeleted === false) {
                         displayText = "<div style='color: #808080'>" + displayText + "</div>";
-                    }
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
-                       color = "#a4c6ff";
                     }
                     return "<div style='white-space: nowrap; color: " + color + "'>" + displayText + "</div>";
                 }
