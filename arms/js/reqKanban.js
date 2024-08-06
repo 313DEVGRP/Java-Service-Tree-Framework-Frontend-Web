@@ -3,6 +3,7 @@ var selectedPdService;             // 선택한 제품(서비스) 이름
 var selectedVersionId;             // 선택한 버전 아이디
 var req_state_to_id_mapping = {};
 var req_state_to_icon_mapping = {};
+var req_state_map = {};
 var board_data = [];
 
 const reqKanbanTg = new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
@@ -84,6 +85,7 @@ function execDocReady() {
                         board_data.push(state);
                         req_state_to_id_mapping[obj.c_title] = obj.c_id.toString();
                         req_state_to_icon_mapping[obj.c_title] = obj.reqStateCategoryEntity.c_category_icon;
+                        req_state_map[obj.c_id] = obj;
                     }
 
                     // 칸반 보드 초기화
@@ -352,7 +354,8 @@ function loadKanban(reqListByState, reqBoardByState) {
         dragBoards: false,
         boards  : reqBoardByState,
         dropEl: function (el, target, source) {
-            // 보드 변경
+            // 보드 변경 시 상태 category에 맞게 변경
+            el.dataset.category = req_state_map[target.parentNode.dataset.id].reqStateCategoryEntity.c_title;
             let reqId = el.dataset.eid;
             reqId = reqId.replace("req_", "");
             let reqTitle = el.innerText;
@@ -477,13 +480,17 @@ function setReqCount() {
             }
 
             // 각 상태 카테고리 별 개수 카운트
-            let className = '.kanban-item';
-            let req_data_list = $('div').find(className).toArray();
-
-            req_data_list.forEach(item => {
-                let $item = $(item);
-                let req_info = $item.data('category');
-                category_counts[req_info] += 1;
+            let board_class_name = '.kanban-board';
+            let board_list = $('div').find(board_class_name).toArray();
+            board_list.forEach(item => {
+                let id = item.dataset.id;
+                let $item = $(item.childNodes[1]).toArray();
+                let node_list = $item[0].childNodes;
+                node_list.forEach(node => {
+                    let $node = $(node);
+                    let node_info = $node[0].dataset.category;
+                    category_counts[node_info] += 1;
+                });
             });
 
             let 총합 = Object.values(category_counts).reduce((acc, currentValue) => acc + currentValue, 0);
