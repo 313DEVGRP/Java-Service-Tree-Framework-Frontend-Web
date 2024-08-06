@@ -426,8 +426,20 @@ function bindDataDetailTab(ajaxData) {
 	} else {
 		$("#detailview_req_reviewer05").val(ajaxData.c_req_reviewer05);
 	}
-	CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
-	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
+
+	// ckedtior 로드가 완료되기 전에 데이터를 set해서 오류 발생
+	let editor_instance_wait = setInterval(function () {
+		try {
+			var editor_instance = CKEDITOR.instances['detailview_req_contents'];
+			if (editor_instance) {
+				CKEDITOR.instances.detailview_req_contents.setData(ajaxData.c_req_contents);
+				CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
+				clearInterval(editor_instance_wait);
+			}
+		} catch (err) {
+			console.log("CKEDITOR 로드가 완료되지 않아서 재시도 중...");
+		}
+	}, 313 /*milli*/);
 
 	if (ajaxData.c_drawio_image_raw != null && ajaxData.c_drawio_image_raw != "") {
 		var imageSrcArray = Array(1).fill(ajaxData.c_drawio_image_raw);
