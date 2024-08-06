@@ -110,7 +110,7 @@ function bindDataDetailTab(ajaxData) {
 	console.log(ajaxData);
 
 	//제품(서비스) 데이터 바인딩
-	var selectedPdServiceText = ajaxData.pdService_c_title;
+	let selectedPdServiceText = ajaxData.pdService_c_title;
 	let contents = ajaxData.reqAdd_c_req_contents;
 
 	if (isEmpty(selectedPdServiceText)) {
@@ -141,6 +141,7 @@ function bindDataDetailTab(ajaxData) {
 			$(this).prop("checked", false);
 		}
 	});
+
 	//상세보기 - 난이도 버튼
 	let difficultRadioButtons = $("#detailview_req_difficulty input[type='radio']");
 	difficultRadioButtons.each(function () {
@@ -151,6 +152,7 @@ function bindDataDetailTab(ajaxData) {
 			$(this).prop("checked", false);
 		}
 	});
+
 	//상세보기 - 상태 버튼
 	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
 	stateRadioButtons.each(function () {
@@ -205,8 +207,19 @@ function bindDataDetailTab(ajaxData) {
 		$("#detailview_req_reviewer05").val(ajaxData.reqAdd_c_req_reviewer05);
 	}
 
-	CKEDITOR.instances.detailview_req_contents.setData(contents);
-	CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
+	// ckedtior 로드가 완료되기 전에 데이터를 set해서 오류 발생
+	let editor_instance_wait = setInterval(function () {
+		try {
+			var editor_instance = CKEDITOR.instances['detailview_req_contents'];
+			if (editor_instance) {
+				CKEDITOR.instances.detailview_req_contents.setData(contents);
+				CKEDITOR.instances.detailview_req_contents.setReadOnly(true);
+				clearInterval(editor_instance_wait);
+			}
+		} catch (err) {
+			console.log("CKEDITOR 로드가 완료되지 않아서 재시도 중...");
+		}
+	}, 313 /*milli*/);
 
 	if (ajaxData.c_drawio_image_raw != null && ajaxData.c_drawio_image_raw != "") {
 		var imageSrcArray = Array(1).fill(ajaxData.c_drawio_image_raw);
