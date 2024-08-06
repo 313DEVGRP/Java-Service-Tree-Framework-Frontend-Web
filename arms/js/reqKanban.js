@@ -3,12 +3,6 @@ var selectedPdService;             // 선택한 제품(서비스) 이름
 var selectedVersionId;             // 선택한 버전 아이디
 var req_state_to_id_mapping = {};
 var req_state_to_icon_mapping = {};
-var board_data = [];
-var selectedPdServiceId;           // 선택한 제품(서비스) 아이디
-var selectedPdService;             // 선택한 제품(서비스) 이름
-var selectedVersionId;             // 선택한 버전 아이디
-var req_state_to_id_mapping = {};
-var req_state_to_icon_mapping = {};
 var req_state_map = {};
 var board_data = [];
 
