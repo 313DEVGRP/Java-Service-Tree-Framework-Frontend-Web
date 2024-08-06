@@ -16,6 +16,8 @@ var reqColumnList = [
 	{ data: "c_left",  title: "<span class='toggle-column'>c_left</span>", visible: false, defaultContent: "-"},
 	{ data: "c_title", title: "<span class=''>요구사항</span>", defaultContent: "-"}
 ];
+var req_state_map  = {};
+
 function execDocReady() {
 	var pluginGroups = [
 		[
@@ -706,15 +708,21 @@ function bindDataEditTab(ajaxData) {
 		}
 	});
 	//편집하기 - 상태 버튼
-	let stateRadioButtons = $("#editview_req_state input[type='radio']");
-	stateRadioButtons.each(function () {
-		if (ajaxData.c_req_state_link && $(this).val() == ajaxData.c_req_state_link) {
-			$(this).parent().addClass("active");
-			$(this).prop("checked", true);
-		} else {
-			$(this).prop("checked", false);
-		}
-	});
+	req_state_setting("editview_req_state", true)
+		.then(() => {
+			let stateRadioButtons = $("#editview_req_state input[type='radio']");
+			stateRadioButtons.each(function () {
+				if (ajaxData.c_req_state_link && $(this).val() == ajaxData.c_req_state_link) {
+					$(this).parent().addClass("active");
+					$(this).prop("checked", true);
+				} else {
+					$(this).prop("checked", false);
+				}
+			});
+		})
+		.catch((error) => {
+			console.error('Error fetching data:', error);
+		});
 
 	var datepickerOption = {
 		timepicker: false,
@@ -830,6 +838,7 @@ function bindDataEditTab(ajaxData) {
 
 // ------------------ 상세보기 ------------------ //
 function bindDataDetailTab(ajaxData) {
+
 	console.log(ajaxData);
 
 	//제품(서비스) 데이터 바인딩
@@ -879,16 +888,22 @@ function bindDataDetailTab(ajaxData) {
 			$(this).prop("checked", false);
 		}
 	});
-	//상세보기 - 상태 버튼
-	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
-	stateRadioButtons.each(function () {
-		if (ajaxData.c_req_state_link && $(this).val() == ajaxData.c_req_state_link) {
-			$(this).parent().addClass("active");
-			$(this).prop("checked", true);
-		} else {
-			$(this).prop("checked", false);
-		}
-	});
+	// 상세보기 - 상태 버튼
+	req_state_setting("detailview_req_state", true)
+		.then(() => {
+			let stateRadioButtons = $("#detailview_req_state input[type='radio']");
+			stateRadioButtons.each(function () {
+				if (ajaxData.c_req_state_link && $(this).val() == ajaxData.c_req_state_link) {
+					$(this).parent().addClass("active");
+					$(this).prop("checked", true);
+				} else {
+					$(this).prop("checked", false);
+				}
+			});
+		})
+		.catch((error) => {
+			console.error('Error fetching data:', error);
+		});
 
 	if (ajaxData.c_req_start_date) {
 		$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.c_req_start_date)));
@@ -1112,7 +1127,14 @@ function registNewPopup() {
 	//radio 버튼 - 상태 초기화
 	$("input[name='popup_req_priority_options']:checked").prop("checked", false);
 	$("input[name='popup_req_difficulty_options']:checked").prop("checked", false);
-	$("input[name='popup_req_state_options']:checked").prop("checked", false);
+	//등록하기 - 상태 버튼
+	req_state_setting("popup_req_state", false)
+		.then(() => {
+			$("input[name='popup_req_state_options']:checked").prop("checked", false);
+		})
+		.catch((error) => {
+			console.error('Error fetching data:', error);
+		});
 
 	var datepickerOption = {
 		timepicker: false,
@@ -1330,7 +1352,10 @@ function click_btn_for_req_save() {
 		let	select_req_difficulty_link = difficulty_value === undefined ? "5" : difficulty_value;
 
 		let state_value = $("#popup_req_state input[name='popup_req_state_options']:checked").val();
-		let	select_req_state_link = state_value === undefined ? "10" : state_value;
+		if (state_value === undefined) {
+			alert("요구사항 상태 설정이 필요합니다.");
+			return false;
+		}
 
 		let start_date_value = $("#popup_req_start_date").val();
 		let c_req_start_date;
@@ -1373,7 +1398,7 @@ function click_btn_for_req_save() {
 			Object.assign(data_object_param, {
 				c_req_priority_link: select_req_priority_link,
 				c_req_difficulty_link: select_req_difficulty_link,
-				c_req_state_link: select_req_state_link,
+				c_req_state_link: state_value,
 				c_req_reviewer01: reviewers01,
 				c_req_reviewer02: reviewers02,
 				c_req_reviewer03: reviewers03,
