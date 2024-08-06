@@ -106,7 +106,9 @@ function getDetailViewTab() {
 }
 
 function bindDataDetailTab(ajaxData) {
+
 	console.log(ajaxData);
+
 	//제품(서비스) 데이터 바인딩
 	var selectedPdServiceText = ajaxData.pdService_c_title;
 	let contents = ajaxData.reqAdd_c_req_contents;
@@ -120,7 +122,7 @@ function bindDataDetailTab(ajaxData) {
 	$("#detailview_req_id").val(selectedJsTreeId);
 	$("#detailview_req_name").val(ajaxData.reqAdd_c_title);
 
-//radio 버튼 - 선택 초기화
+	//radio 버튼 - 선택 초기화
 	$("#detailview_req_priority label").removeClass("active");
 	$("#detailview_req_difficulty label").removeClass("active");
 	$("#detailview_req_state label").removeClass("active");
