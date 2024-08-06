@@ -396,13 +396,20 @@ function setReqStatusTable(endPointUrl) {
 function processData(data) {
     const nodes = {};
 
-    data.forEach(item => {
-        nodes[item.key] = { ...item, children: [] };
+    let reqIssue = data.filter(item => item.isReq && !item.etc);
+    let linkedIssue = data.filter(item => item.etc).map(item => {
+        return { ...item, connectType: "linked" };
+    });
+    let subtaskIssue = data.filter(item => !item.isReq && !item.etc);
+
+    // 노드 생성
+    subtaskIssue.forEach(item => {
+        nodes[item.key] = { ...item, children: [], connectType: "subtask" };
     });
 
     // 트리 구성
-    data.forEach(item => {
-        if (!item.isReq && (item.parentReqKey !== item.upperKey)) {
+    subtaskIssue.forEach(item => {
+        if (item.parentReqKey !== item.upperKey) {
             // 상위 항목의 children에 추가
             let upperNode = nodes[item.upperKey];
             while (upperNode && (upperNode.parentReqKey !== upperNode.upperKey)) {
@@ -415,9 +422,15 @@ function processData(data) {
     });
 
     // 노드 필터링
-    return Object.values(nodes).filter(item =>
-                item.isReq || (!item.isReq && (item.parentReqKey === item.upperKey))
-            ).map(item => nodes[item.key]);
+    let parentNodes = Object.values(nodes)
+                            .filter(item => item.parentReqKey === item.upperKey)
+                            .map(item => nodes[item.key]);
+
+    return [
+        ...reqIssue,
+        ...linkedIssue,
+        ...parentNodes
+    ];
 }
 
 function format(d) {
@@ -431,24 +444,17 @@ function initializeChildTable(childrenData, container) {
             title: "요구사항 구분",
             data: "isReq",
             render: function (data, type, row, meta) {
-                let upperKey = row.upperKey;
-			    if (row.connectType === "subtask") {
-			        upperKey += "의 하위 이슈";
-			    } else {
-			        upperKey += "의 연결 이슈";
-			    }
+                let upperKey = row.upperKey + "의 하위 이슈";
 
                 if (row.deleted) {
-                    if(row.deleted.deleted_isDeleted === true){
+                    if (row.deleted.deleted_isDeleted) {
                         upperKey = "<s style='color: #808080'>" + upperKey + "</s>";
-                    }else if(row.deleted.deleted_isDeleted === false){
+                    } else {
                         upperKey = "<p style='color: #808080'>" + upperKey + "</p>";
                     }
                 }
 
                 if (row.connectType === "subtask") {
-                    return "<div style='color: #f8f8f8'>" + upperKey + "</div>";
-                } else {
                     return "<div style='color: #f8f8f8'>" + upperKey + "</div>";
                 }
                 return data;
@@ -773,9 +779,9 @@ function dataTableLoad(tableData) {
 			    let parentReqKey = row.parentReqKey;
 			    if (row.connectType === "subtask") {
 			        parentReqKey += "의 하위 이슈";
-			    } else {
-			        parentReqKey += "의 연결 이슈";
-			    }
+			    } else if (row.connectType === "linked") {
+                    parentReqKey = row.etc + "의 연결 이슈";
+                }
                 let key = row.key;
                 if (row.deleted) {
                     if(row.deleted.deleted_isDeleted === true){
@@ -786,7 +792,7 @@ function dataTableLoad(tableData) {
                         key = "<p style='color: #808080'>" + key + "</p>";
                     }
                 }
-				if (isEmpty(data) || data == false) {
+				if (isEmpty(data) || data == false || row.etc) {
 					return "<div style='color: #f8f8f8'>" + parentReqKey + "</div>";
 				} else {
 					return "<div style='white-space: nowrap; color: #a4c6ff'>" + key + "</div>";
@@ -806,15 +812,12 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
                     }
-					let btn_data_row1 = {
-						pdServiceVersions : row.pdServiceVersions.join(","),
-						cReqLink : row.creqLink
-					};
+
 					// 삭제 여부
                     if (row.deleted && row.deleted.deleted_isDeleted === true) {
                         displayText = "<s style='color: #808080'>" + data  + "</s>";
@@ -823,7 +826,11 @@ function dataTableLoad(tableData) {
                         color = "#808080";
                     }
 					// 요구사항 이슈 여부
-                    if (!isEmpty(row.isReq) && row.isReq === true) {
+                    if (!isEmpty(row.isReq) && row.isReq && !row.etc) {
+                        let btn_data_row1 = {
+                            pdServiceVersions : row.pdServiceVersions.join(","),
+                            cReqLink : row.creqLink
+                        };
 						return ("<div style='white-space: nowrap; color:" + color + "'>" + displayText +
 							$("<button class='btn btn-transparent btn-xs' style='margin-left:5px'/>")
 								.append($('<i class="fa fa-list-alt"></i>'))
@@ -858,7 +865,7 @@ function dataTableLoad(tableData) {
 						}
 					});
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -887,7 +894,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -914,7 +921,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -941,7 +948,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -968,7 +975,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -994,7 +1001,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -1021,7 +1028,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = data;
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -1048,7 +1055,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = dateFormat(data);
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -1075,7 +1082,7 @@ function dataTableLoad(tableData) {
 				} else {
                     let displayText = dateFormat(data);
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -1102,7 +1109,7 @@ function dataTableLoad(tableData) {
                 } else {
                     let displayText = dateFormat(data);
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
@@ -1129,7 +1136,7 @@ function dataTableLoad(tableData) {
                 } else {
                     let displayText = dateFormat(data);
                     let color;
-                    if (!isEmpty(row.isReq) && row.isReq == true) {
+                    if (!isEmpty(row.isReq) && row.isReq == true && !row.etc) {
                         color = "#a4c6ff";
                     }else{
                         color = "#f8f8f8"; // 기본 텍스트 색상
