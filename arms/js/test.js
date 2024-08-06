@@ -20,9 +20,6 @@ function execDocReady() {
 			//setSideMenu("sidebar_menu_product", "sidebar_menu_version_manage");
 
 			// 스크립트 실행 로직을 이곳에 추가합니다.
-			click_btn_for_delete_version();
-			click_btn_for_update_version();
-			init_versionList();
 
 
 		})
