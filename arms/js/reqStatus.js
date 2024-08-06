@@ -1737,6 +1737,7 @@ function getReqIssuesCreatedTogether(endPointUrl) {
 					return "<div style='color: #808080'>N/A</div>";
 				} else {
 					let serverType = getServerType(row.jira_server_id);
+					console.log("serverType => " + serverType);
 					let alm_link = makeALMIssueLink(serverType, row.self, data);
 
 					return ("<div style='white-space: nowrap; color: #a4c6ff'>" + data +
@@ -2244,6 +2245,7 @@ var makeALMIssueLink = function (server_type, self_link, issue_key) {
 		case "클라우드" : // JIRA
 			// "https://ABCDEFG.ABCDEFG.net/rest/api/3/issue/10187" => "https://ABCDEFG.ABCDEFG.net"
 			let match_jc = self_link.match(/^(https?:\/\/[^\/]+)/);
+			console.log(match_jc);
 			if (match_jc) {
 				match_jc[1];
 				alm_link = match_jc[1]+"/browse/"+issue_key;
@@ -2256,8 +2258,8 @@ var makeALMIssueLink = function (server_type, self_link, issue_key) {
 			// "http://www.ABCDEFG.co.kr/jira/rest/api/latest/issue/24708" => "www.ABCDEFG.co.kr/jira"
 			let match_jop = self_link.match(/^(https?:\/\/)?(www\.[^\/]+\/jira)/);
 			if (match_jop) {
-				match_jop[1];
-				alm_link = match_jop[1]+"/browse/"+issue_key;
+				const firstJiraElement = match_jop.find(element => element.includes("jira"));
+				alm_link = firstJiraElement+"/browse/"+issue_key;
 			} else {
 				console.log("makeALMIssueLink[JIRA_ON_PREMISE] :: 링크 형식이 올바르지 않습니다. " +
 					"link => " + self_link + ", issue_key => " +issue_key);
