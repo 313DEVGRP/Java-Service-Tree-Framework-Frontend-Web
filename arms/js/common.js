@@ -122,11 +122,6 @@ function menu_setting() {
 
 		indexPHPTG.start();
 
-		indexPHPTG.onAfterExit(() => {
-			$(`[data-id="${reqId}"]`).removeAttr('data-tg-tour');
-			$(`[data-id="${reqId}"]`).removeAttr('data-tg-title');
-		});
-
 	}
 
 }
