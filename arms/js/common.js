@@ -110,17 +110,30 @@ function menu_setting() {
 
 		console.log("class가 존재함. 로그인이 안됬다는 의미.");
 
-		const indexPHPTG = 	new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
-			exitOnClickOutside: true,
-			autoScroll: false,
-			hidePrev: true,
-			hideNext: true,
-			showStepDots: false,
-			showStepProgress: false,
-			steps: TgGroup.indexPHPStep()
-		});
+		// 현재 페이지의 URL 가져오기
+		var href = window.location.href;
 
-		indexPHPTG.start();
+		// 현재 페이지의 origin 가져오기
+		var origin = window.location.origin;
+
+		// origin을 제외한 URL 경로 얻기
+		var path = href.replace(origin, '');
+
+		console.log(path);
+
+		if (path == "/php/gnuboard5/" || path == "/php/gnuboard5/index.php") {
+			const indexPHPTG = 	new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
+				exitOnClickOutside: true,
+				autoScroll: false,
+				hidePrev: true,
+				hideNext: true,
+				showStepDots: false,
+				showStepProgress: false,
+				steps: TgGroup.indexPHPStep()
+			});
+
+			indexPHPTG.start();
+		}
 
 	}
 
