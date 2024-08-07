@@ -15,6 +15,7 @@ let userRealmRoles;
 let permissions;
 let userEmail;
 let scrollPos = 0;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //Document Ready
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -104,8 +105,29 @@ function menu_setting() {
 		$("#menu_requirement").removeClass("hide");
 		$("#menu_analysis").removeClass("hide");
 	}
-	
-	
+
+	if($("#menu_login").hasClass("hide") === false) {
+
+		console.log("class가 존재함. 로그인이 안됬다는 의미.");
+
+		const indexPHPTG = 	new tourguide.TourGuideClient({           // 상세 정보 투어 가이드
+			exitOnClickOutside: true,
+			autoScroll: false,
+			hidePrev: true,
+			hideNext: true,
+			showStepDots: false,
+			showStepProgress: false,
+			steps: TgGroup.indexPHPStep()
+		});
+
+		indexPHPTG.start();
+
+		indexPHPTG.onAfterExit(() => {
+			$(`[data-id="${reqId}"]`).removeAttr('data-tg-tour');
+			$(`[data-id="${reqId}"]`).removeAttr('data-tg-title');
+		});
+
+	}
 
 }
 
