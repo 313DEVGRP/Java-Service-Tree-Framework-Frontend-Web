@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 							"/v2",
 							"/php",
 						],
-						host: "a-rms.net",
+						host: "www.313.co.kr",
 						port: 80,
 						https: false,
 						changeOrigin: true

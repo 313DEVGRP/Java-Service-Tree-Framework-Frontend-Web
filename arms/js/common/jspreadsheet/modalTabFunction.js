@@ -141,6 +141,17 @@ var ModalTabFunction = (function(){
 		$("#modal_excel .jexcel_content").css("max-height",jexcel_content_height);
 		$("#modal_excel .jexcel_content").css("width","100%");
 	}
+
+	function excelEventListener() {
+		// Theme 변경
+		$("#toggle-excel-theme").on("click", function() {
+			if($(".jexcel_container").hasClass("dark-theme")) {
+				$(".jexcel_container").removeClass("dark-theme");
+			} else {
+				$(".jexcel_container").addClass("dark-theme");
+			}
+		});
+	}
 	return {
 		setExcelData, getExcelData,
 		setColumns, getColumns,

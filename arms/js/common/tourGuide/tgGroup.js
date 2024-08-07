@@ -1,4 +1,17 @@
 var TgGroup = ( function () {
+
+        var indexPHPStep = function () {
+            const steps = [
+                {
+                    title: '<div class="step-title"> A-RMS By 313DEVGRP</div>',
+                    content: '<div class="step-content"> 클릭하시면 DEMO를 확인 할 수 있습니다. </div>',
+                    target: "#menu_login"
+                }
+            ];
+            return steps;
+        };
+
+
         var sampleStep = function (pageName) {
             const steps = [
                 {
@@ -15,19 +28,20 @@ var TgGroup = ( function () {
             ];
             return steps;
         };
+
         var tg_dashboard = function () {
-            const steps = [{
-                content: "This is a short guide to get you set up and show you where things are",
-                title: "Welcome aboard",
-                target: "#firstStep"
-            },
+            const steps = [
+                {
+                    content: "This is a short guide to get you set up and show you where things are",
+                    title: "Welcome aboard",
+                    target: "#firstStep"
+                },
                 {
                     content: "Register New Product(or Service) that you want to manage",
                     title: "Register Product(or Service) Button",
                     target: "#modal_popup_id"
                 }
             ];
-
             return steps;
         };
 
@@ -131,7 +145,9 @@ var TgGroup = ( function () {
 
         };
 
-        return { tg_dashboard : tg_dashboard,
+        return {
+
+            tg_dashboard : tg_dashboard,
 
             tg_pdService : tg_pdService,
             tg_pdServiceVersion : tg_pdServiceVersion,
@@ -149,6 +165,8 @@ var TgGroup = ( function () {
             tg_analysisCost : tg_analysisCost,
 
             sampleStep : sampleStep,
+
+            indexPHPStep : indexPHPStep,
 
             modalReqKanban : modalReqKanban
         }; // 내부함수 key : value

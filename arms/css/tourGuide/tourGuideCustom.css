@@ -22,11 +22,11 @@
 
 .tg-dialog {
     color: #f8f8f8;
-    background: rgb(51, 51, 51);
+    background: rgba(51, 51, 51, .825);
 }
 
 .tg-dialog .tg-arrow {
-    background: rgb(51, 51, 51);
+    background: rgba(51, 51, 51, .825);
 }
 
 .tg-dialog-close-btn {

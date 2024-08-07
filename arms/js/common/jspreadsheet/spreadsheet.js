@@ -140,7 +140,11 @@
 				},
 				onload: function(element) {
 					var $jexcel = $(element);
-					var $searchInput = $('<span style="margin-left: 5px;display: flex;flex-direction: row;align-items: center; font-style: normal">Search: <input class="jexcel_search" placeholder="시트에서 검색" style="margin-left: 5px"></span>');
+					var $searchInput =
+						$('<span style="margin-left: 5px;display: flex;flex-direction: ' +
+						'row;align-items: center; font-style: normal">Search:' +
+							' <input class="jexcel_search" placeholder="시트에서 검색" style="margin-left: 5px">' +
+							'</span>');
 					$jexcel.find(".jexcel_toolbar_item[data-k='undo']").addClass("fa fa-mail-reply ");
 					$jexcel.find(".jexcel_toolbar_item[data-k='redo']").addClass("fa fa-mail-forward ");
 					$jexcel.find(".jexcel_toolbar_item[data-k='save']").addClass("fa fa-save");
@@ -155,6 +159,16 @@
 					$jexcel.find(".jexcel_toolbar_item[data-k='background-color']").addClass("fa fa-font fa-background");
 					$jexcel.find(".jexcel_filter").addClass("hidden");
 					$jexcel.find(".jexcel_toolbar_item[data-k='search-box']").append($searchInput);
+
+					// 검색 input 에 focus 일때, 선택 초기화
+					var $inputField = $searchInput.find('input.jexcel_search');
+					if ($inputField.length) {
+						$inputField.on('focus', function() {
+							if (element.jexcel) {
+								element.jexcel.resetSelection();
+							}
+						});
+					}
 				}
 			};
 
