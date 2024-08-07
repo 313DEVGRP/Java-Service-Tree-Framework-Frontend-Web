@@ -21,13 +21,13 @@
         dark theme 설정
         313131 의 alpha 값 활용
     */
-    --dark_toolbar_background: #313131;
+    --dark_toolbar_background: rgba(51,51,51,0.9);
     --dark_toolbar_color: #FFF;
-    --dark_jexcel_header_background: #313131;
+    --dark_jexcel_header_background: rgba(51,51,51,0.95);
     /*--dark_jexcel_row_col_header_color: #646463;*/
     --dark_jexcel_row_col_header_color: #EEE;
-
-    --dark_border_color: #313131;
+    --dark_jexcel_border_color_5: rgba(51,51,51,0.5);
+    --dark_border_color: rgba(51,51,51,1);
 }
 
 .jexcel tbody tr:nth-child(even) td{
@@ -93,7 +93,9 @@
     color: var(--dark_jexcel_row_col_header_color) !important;
     border-bottom: 1px solid #787878 !important;
 }
-
+.jexcel_container.dark-theme .jexcel > thead {
+    background-color: transparent !important;
+}
 /* cell */
 .jexcel_container.dark-theme .jexcel tbody tr td {
     border-top: none !important;
@@ -107,4 +109,101 @@
 .jexcel_container.dark-theme .jexcel_pagination div div {
     background-color: var(--dark_jexcel_header_background) !important;
     color: var(--dark_jexcel_row_col_header_color) !important;
+}
+
+/* icon 설정 */
+.fa:before {
+    width: 16px;
+    display: inline-block;
+    height: 16px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/**/
+
+.jexcel_toolbar i.jexcel_toolbar_item {
+    line-height: 16px !important;
+}
+
+/* DarkTheme 을 위한 설정 */
+.jexcel_toolbar {
+    background: rgba(51,51,51,0.9) !important; /* rgba(51,51,51,0.9) */
+    border: none !important;
+    border-bottom: 1px solid rgba(51,51,51,0.9) !important; /* rgba(51,51,51,0.9) */
+}
+.tb-default-color,
+.jexcel_toolbar_item {
+    color: var(--dark_toolbar_color) !important;
+}
+.jexcel thead {
+    background-color: transparent !important;
+}
+
+/* 행 헤더 스타일 */
+.jexcel thead tr td{
+    height: 30px !important;
+
+    color: var(--dark_jexcel_row_col_header_color) !important;
+    font-weight: 300 !important;
+    font-size: 12px !important;
+
+    background: var(--dark_jexcel_header_background) !important;
+
+    border:none !important;
+    border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
+}
+.jexcel_row {
+    color: var(--dark_jexcel_row_col_header_color) !important;
+    font-weight: 300 !important;
+    font-size: 12px !important;
+
+    background: var(--dark_jexcel_header_background) !important;
+
+    border:none !important;
+    border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
+}
+.jexcel thead tr td.selected {
+    background-color: #333333 !important;
+}
+.jexcel tbody tr.selected .jexcel_row {
+    background-color: #333333 !important;
+}
+
+
+.jexcel {
+    border: none !important;
+}
+.jexcel tbody tr td {
+    border-top: none !important;
+    border-right: 1px solid var(--dark_jexcel_border_color_5) !important;
+    border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
+    border-left: none !important;;
+    padding: 5px !important;
+}
+
+.jexcel_pagination div div {
+    background: rgba(51,51,51,0.5) !important;
+    color: var(--dark_jexcel_row_col_header_color) !important;
+    border: 1px solid rgba(51,51,51,0.7) !important;
+}
+.jexcel_pagination .jexcel_page {
+    font-size: 11px !important;
+}
+.jexcel_pagination .jexcel_page_selected {
+    background-color: rgba(51,51,51,0.9) !important;
+}
+
+/* custom_icon setting*/
+#modal_excel .fa:before {
+    width: 16px;
+    display: inline-block;
+    height: 16px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fa.fa-font.fa-background {
+    color: #FFF;
+    background-color: #000000;
 }
