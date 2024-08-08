@@ -68,7 +68,7 @@ var gojs = (function () {
                             source: "/arms/img/arms.png",  // 아이콘 이미지 경로
                             width: 20,
                             height: 20,
-                            margin: new go.Margin(0, 0, 0, 0)
+                            margin: new go.Margin(0, 0, 0, 4)
                         }),
                         $(go.TextBlock,
                         {
@@ -155,7 +155,7 @@ var gojs = (function () {
                     $(go.Panel,
                         'Horizontal',
                         { alignment: go.Spot.Left, margin: 3 },
-                        $(go.Picture, {
+                        /*$(go.Picture, {
                             source: "/arms/img/arms.png",  // 아이콘 이미지 경로
                             width: 20,
                             height: 20,
@@ -170,23 +170,58 @@ var gojs = (function () {
                                 alignment: go.Spot.Left,
                             },
                             new go.Binding('text').makeTwoWay()
-                        )
-                        // 아이콘 설정 샘플
-                        /*$(go.TextBlock,
+                        )*/
+                        $(go.TextBlock,
+                            // 카테고리 별 아이콘 설정
                             {
-                                stroke: 'white',
-                                font: '12px FontAwesome, sans-serif',
-                                editable: false,
-                                margin: new go.Margin(3, 3 + 11, 3, 3 + 4),
-                                alignment: go.Spot.Left,
+                                font: "12px FontAwesome, sans-serif",  // 아이콘에 FontAwesome 사용
+                                margin: new go.Margin(0, 8, 0, 8),  // 아이콘과 텍스트 사이의 간격 설정
                             },
                             new go.Binding("text", "", function(data) {
-                                // 아이콘과 텍스트를 함께 표시
-                                return "\uf009 " + data.text; // "\uf007"는 Font Awesome의 유니코드 문자입니다 (예: 사용자 아이콘)
+                                let icon = "";
+                                if (data.c_id === "3") {
+                                    icon = "";  // 특정 아이콘
+                                }
+                                else if (data.c_id === "4") {
+                                    icon = "";  // 다른 아이콘
+                                }
+                                else if (data.c_id === "5") {
+                                    icon = "";  // 다른 아이콘
+                                }
+                                else if (data.c_id === "6") {
+                                    icon = "";  // 다른 아이콘
+                                }
+                                return "   " + icon;
+                            }),
+                            // 카테고리 별 색상 설정
+                            new go.Binding("stroke", "", function(data) {
+                                let color = "black";  // 기본 색상
+                                if (data.c_id === "3") {
+                                    color = "#DB2A34";  // 특정 아이콘
+                                }
+                                else if (data.c_id === "4") {
+                                    color = "#E49400";  // 다른 아이콘
+                                }
+                                else if (data.c_id === "5") {
+                                    color = "#2D8515";  // 다른 아이콘
+                                }
+                                else if (data.c_id === "6") {
+                                    color = "#2477FF";  // 다른 아이콘
+                                }
+                                return color;
                             })
-                        )*/
+                        ),
+                        // 카테고리명
+                        $(go.TextBlock,
+                            {
+                                stroke: "white",  // 텍스트 색상
+                                font: "12px sans-serif"
+                            },
+                            new go.Binding("text", "", function(data) {
+                                return " " + data.text;
+                            })
+                        )
                     )
-
                 ),
                 // output port
                 $(go.Panel,
@@ -225,7 +260,7 @@ var gojs = (function () {
                             {
                                 width: 20,
                                 height: 20,
-                                margin: new go.Margin(0, 0, 0, 2)
+                                margin: new go.Margin(0, 0, 0, 4)
                             },
                             new go.Binding('source', 'server_type', function(type) {
                                 console.log(type);

@@ -16,7 +16,6 @@ var reqColumnList = [
 	{ data: "c_left",  title: "<span class='toggle-column'>c_left</span>", visible: false, defaultContent: "-"},
 	{ data: "c_title", title: "<span class=''>요구사항</span>", defaultContent: "-"}
 ];
-var req_state_map  = {};
 
 function execDocReady() {
 	var pluginGroups = [
@@ -144,6 +143,25 @@ function execDocReady() {
 
 			switch_action_for_mode();
 			tab_click_event();
+
+			get_arms_req_state_list()
+				.then((state_list) => {
+					let req_state_list = [];
+					for (let k in state_list) {
+						let state = state_list[k];
+						//--- 테이블 보기에서 사용하는 전역변수
+						req_state_map[state.c_id] = state;
+						ReqStatus[state.c_title] = state.c_id;
+						req_state_list.push(state);
+					}
+					console.log(req_state_list);
+					binding_state_list("detailview_req_state", req_state_list, true);
+					binding_state_list("editview_req_state", req_state_list, false);
+				})
+				.catch((error) => {
+					console.error('Error fetching data:', error);
+					reject(error);  // 에러 발생 시 프라미스를 거부
+				});
 
 			drawio();
 			drawdb();
@@ -708,7 +726,7 @@ function bindDataEditTab(ajaxData) {
 		}
 	});
 	//편집하기 - 상태 버튼
-	req_state_setting("editview_req_state", true)
+	req_state_setting("editview_req_state", false)
 		.then(() => {
 			let stateRadioButtons = $("#editview_req_state input[type='radio']");
 			stateRadioButtons.each(function () {
