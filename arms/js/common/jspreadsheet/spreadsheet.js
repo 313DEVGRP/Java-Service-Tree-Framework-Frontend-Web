@@ -119,16 +119,16 @@
 					var items = [];
 
 					// Save
-					// items.push({
-					// 	title: jSuites.translate("Save as"),
-					// 	shortcut: "Ctrl + S",
-					// 	icon: "save",
-					// 	onclick: function () {
-					// 		o.download();
-					// 	}
-					// });
+					items.push({
+						title: jSuites.translate("Save as"),
+						shortcut: "Ctrl + S",
+						icon: "save",
+						onclick: function () {
+							o.download();
+						}
+					});
 
-					return items;
+					return [];
 				},
 				search: true,
 				pagination: 30,

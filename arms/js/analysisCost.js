@@ -1518,10 +1518,12 @@ function drawExcel(targetId, data) {
         toolbar:[],
         pagination:10,
         allowInsertColumn: false,
+        contextMenu: [],
         updateTable: function(instace, cell, col, row, val, id) {
             cell.style.whiteSpace = "normal";
             if(col === 2) {
                 cell.style.textAlign = "right";
+                cell.style.color = "#a4c6ff";
             } else {
                 cell.style.textAlign = "left";
             }
@@ -1584,6 +1586,27 @@ var SpreadSheetFunctions = ( function () {
             ...column, width: width * column.wRatio
         }));
     };
+
+    var resizeObserver = new ResizeObserver(function(entries) {
+        for (let entry of entries) {
+            var width = entry.contentRect.width;
+            var height = entry.contentRect.height;
+            handleResize(entry.target.id, width, height);
+        }
+    });
+
+    // 모달요소 크기 변화 관찰
+    resizeObserver.observe(document.getElementById('spreadsheet'));
+
+    function handleResize(id,width, height) {
+        if (id ==="spreadsheet" && height !== 0) {
+            if (인력별_연봉정보) {
+                drawExcel("spreadsheet", 인력별_연봉정보);
+            } else {
+                console.log("엑셀 데이터를 그릴 영역의 넓이가 너무 작습니다.");
+            }
+        }
+    }
 
     return {
       setExcelData, getExcelData,

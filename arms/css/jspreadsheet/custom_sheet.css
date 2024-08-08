@@ -156,9 +156,9 @@ table.jexcel tbody tr.selected td.jexcel_row {
     background-color: rgba(51,51,51,0.7) !important;
 }
 
-.jexcel tbody tr,
-table.jexcel tbody tr{
-
+.jexcel .editor input,
+table.jexcel .editor input {
+    color: #FFF !important;
 }
 
 .jexcel,
