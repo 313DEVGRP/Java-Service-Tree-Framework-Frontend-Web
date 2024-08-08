@@ -1603,7 +1603,7 @@ var SpreadSheetFunctions = ( function () {
             if (인력별_연봉정보) {
                 drawExcel("spreadsheet", 인력별_연봉정보);
             } else {
-                console.log("엑셀 데이터를 그릴 영역의 넓이가 너무 작습니다.");
+                console.log("인력별_연봉정보 데이터가 없습니다.");
             }
         }
     }
