@@ -37,7 +37,7 @@
 .jexcel_content{
     padding-right: 0 !important;
     font-size: 12px;
-    line-height: 15px !important; /* 행간 설정 */
+    line-height: 20px !important; /* 행간 설정 */
 }
 
 .jexcel_toolbar i.jexcel_toolbar_item {
@@ -156,6 +156,10 @@ table.jexcel tbody tr.selected td.jexcel_row {
     background-color: rgba(51,51,51,0.7) !important;
 }
 
+.jexcel tbody tr,
+table.jexcel tbody tr{
+
+}
 
 .jexcel,
 table.jexcel {
@@ -174,6 +178,7 @@ table.jexcel tbody tr td {
     border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
     border-left: none !important;;
     padding: 5px !important;
+    line-height: 1.5;
 }
 .jexcel .highlight,
 table.jexcel .highlight {

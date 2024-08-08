@@ -119,14 +119,14 @@
 					var items = [];
 
 					// Save
-					items.push({
-						title: jSuites.translate("Save as"),
-						shortcut: "Ctrl + S",
-						icon: "save",
-						onclick: function () {
-							o.download();
-						}
-					});
+					// items.push({
+					// 	title: jSuites.translate("Save as"),
+					// 	shortcut: "Ctrl + S",
+					// 	icon: "save",
+					// 	onclick: function () {
+					// 		o.download();
+					// 	}
+					// });
 
 					return items;
 				},
@@ -143,7 +143,7 @@
 					var $searchInput =
 						$('<span style="margin-left: 2px;display: flex;flex-direction: ' +
 						'row;align-items: center; font-style: normal; height: 100%; width:100% !important;"><i class="fa fa-search"></i>' +
-							' <input class="jexcel_search" placeholder="시트에서 검색" style="margin-left: 5px;background-color: transparent;border: none; width: 100%">' +
+							' <input class="jexcel_search" placeholder="시트에서 검색" style="margin-left: 5px;background-color: transparent;border: none; width: 100%; color: #FFF">' +
 							'</span>');
 					$jexcel.find(".jexcel_toolbar_item[data-k='undo']").addClass("fa fa-mail-reply ");
 					$jexcel.find(".jexcel_toolbar_item[data-k='redo']").addClass("fa fa-mail-forward ");
