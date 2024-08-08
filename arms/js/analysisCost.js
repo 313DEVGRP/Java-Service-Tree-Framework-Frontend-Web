@@ -82,9 +82,9 @@ function execDocReady() {
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.css",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.datatables.css",
             "../reference/jquery-plugins/jspreadsheet-ce-4.13.1/dist/jspreadsheet.theme.css",
-            "./css/jspreadsheet/custom_sheet.css",
+            "./js/common/jspreadsheet/spreadsheet.js",
             "./css/jspreadsheet/custom_icon.css",
-            "./js/common/jspreadsheet/spreadsheet.js"
+            "./css/jspreadsheet/custom_sheet.css"
         ]
         // 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
     ];
@@ -1508,19 +1508,17 @@ function drawExcel(targetId, data) {
     var columnList = [
         { type: "text", title: "이름", wRatio: 0.25, readOnly: true },
         { type: "text", title: "키",   wRatio: 0.25, readOnly: true },
-        { type: "text", title: "연봉", wRatio: 0.5 }
+        { type: "text", title: "연봉", wRatio: 0.49 }
     ];
 
     SpreadSheetFunctions.setColumns(columnList);
     SpreadSheetFunctions.setColumnWidth(excelWidth);
 
     var customOptions = {
-        toolbar:false,
+        toolbar:[],
         pagination:10,
         allowInsertColumn: false,
         updateTable: function(instace, cell, col, row, val, id) {
-            cell.classList.add("cell-content");
-
             cell.style.whiteSpace = "normal";
             if(col === 2) {
                 cell.style.textAlign = "right";
@@ -1582,15 +1580,10 @@ var SpreadSheetFunctions = ( function () {
     };
 
     var setColumnWidth = function (width) {
-        console.log("setColumnWidth");
-        console.log($tabFunction_columns);
         $tabFunction_columns = $tabFunction_columns.map(column => ({
             ...column, width: width * column.wRatio
         }));
-        console.log($tabFunction_columns);
     };
-
-
 
     return {
       setExcelData, getExcelData,
