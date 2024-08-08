@@ -37,7 +37,7 @@
 .jexcel_content{
     padding-right: 0 !important;
     font-size: 12px;
-    line-height: 15px !important; /* 행간 설정 */
+    line-height: 20px !important; /* 행간 설정 */
 }
 
 .jexcel_toolbar i.jexcel_toolbar_item {
@@ -130,8 +130,8 @@ table.jexcel thead tr td{
     background: rgba(51,51,51,0.95); !important;
 
     border:none !important;
-    border-right: 1px solid var(--dark_jexcel_border_color_5) !important;
-    border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
+    border-right: 1px solid #d9d9d94d !important;
+    border-bottom: 1px solid #d9d9d94d !important;
 }
 .jexcel tbody tr td.jexcel_row,
 table.jexcel tbody tr td.jexcel_row {
@@ -142,8 +142,8 @@ table.jexcel tbody tr td.jexcel_row {
     background: rgba(51,51,51,0.95) !important;
 
     border:none !important;
-    border-right: 1px solid var(--dark_jexcel_border_color_5) !important;
-    border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
+    border-right: 1px solid #d9d9d94d !important;
+    border-bottom: 1px solid #d9d9d94d !important;
 }
 .jexcel thead tr td.selected,
 table.jexcel thead tr td.selected {
@@ -156,6 +156,10 @@ table.jexcel tbody tr.selected td.jexcel_row {
     background-color: rgba(51,51,51,0.7) !important;
 }
 
+.jexcel tbody tr,
+table.jexcel tbody tr{
+
+}
 
 .jexcel,
 table.jexcel {
@@ -174,6 +178,7 @@ table.jexcel tbody tr td {
     border-bottom: 1px solid var(--dark_jexcel_border_color_5) !important;
     border-left: none !important;;
     padding: 5px !important;
+    line-height: 1.5;
 }
 .jexcel .highlight,
 table.jexcel .highlight {
@@ -199,9 +204,28 @@ table.jexcel .highlight {
     height: 16px;
     text-align: center;
     vertical-align: middle;
+    line-height: 16px;
 }
 
 .fa.fa-font.fa-background {
     color: #FFF;
     background-color: #000000;
+}
+
+.search-box {
+    margin-left: auto;
+    min-width: 220px;
+    background-color: #4d4d4d4d !important;
+    border: 1px dashed #d9d9d94d;
+    border-radius: 3px;
+}
+.jexcel_search::placeholder {
+    color:#D9D9D9A0;
+}
+.jexcel_search:focus,
+.jexcel_search:active {
+    outline: none;
+    transition: border linear 0.2s, box-shadow linear 0.2s;
+    border-color: #a4c6ff;
+    box-shadow: 0 0 10px rgba(164, 198, 255, 0.8);
 }
