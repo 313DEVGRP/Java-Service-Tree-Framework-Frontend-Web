@@ -502,7 +502,7 @@ $(function () {
             $(this).sparkline('html', $(this).data());
         });
 
-        createCharts();
+        //createCharts();
     }
 
     function createCharts() {
