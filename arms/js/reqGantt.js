@@ -1486,40 +1486,46 @@ function handle_change_date(start, end) {
 	const dayDiff = Math.max(0, diff_day(start, end));
 	const todayDiff = Math.max(0, diff_day(start, today));
 
-	// 시작일이 오늘보다 미래인 경우
-	if (startDate > today) {
-		return {
-			dayDiff: dayDiff,
-			todayDiff: 0,
-			plan_progress: 0
-		};
-	}
-
-	// 시작일이 종료일보다 같거나 큰 경우
-	if (startDate >= endDate) {
-		return {
-			dayDiff: 0,
-			todayDiff: 0,
-			plan_progress: 0
-		};
-	}
-
-	if (endDate <= today) {
-		return {
-			dayDiff: dayDiff,
-			todayDiff: dayDiff,
-			plan_progress: 100
-		};
-	}
-
-	// 진행률 계산
-	const progress = dayDiff > 0 ? (todayDiff / dayDiff) * 100 : 0;
-
 	return {
 		dayDiff: dayDiff,
 		todayDiff: todayDiff,
-		plan_progress: Math.min(progress.toFixed(0), 100)
+		plan_progress: 0
 	};
+
+	// // 시작일이 오늘보다 미래인 경우
+	// if (startDate > today) {
+	// 	return {
+	// 		dayDiff: dayDiff,
+	// 		todayDiff: 0,
+	// 		plan_progress: 0
+	// 	};
+	// }
+	//
+	// // 시작일이 종료일보다 같거나 큰 경우
+	// if (startDate >= endDate) {
+	// 	return {
+	// 		dayDiff: 0,
+	// 		todayDiff: 0,
+	// 		plan_progress: 0
+	// 	};
+	// }
+	//
+	// if (endDate <= today) {
+	// 	return {
+	// 		dayDiff: dayDiff,
+	// 		todayDiff: dayDiff,
+	// 		plan_progress: 100
+	// 	};
+	// }
+	//
+	// // 진행률 계산
+	// const progress = dayDiff > 0 ? (todayDiff / dayDiff) * 100 : 0;
+	//
+	// return {
+	// 	dayDiff: dayDiff,
+	// 	todayDiff: todayDiff,
+	// 	plan_progress: Math.min(progress.toFixed(0), 100)
+	// };
 }
 
 function change_input_for_req_date(prefix) {
