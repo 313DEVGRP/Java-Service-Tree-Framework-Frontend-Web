@@ -386,11 +386,11 @@ var TopMenuApi = (function () {
                   if(objectiveDateDiff>= currentDateDiff) {
                       $("#remaining_days").text("D-"+dateDiff);
                       $("#remaining_days").css("color","rgb(164,198,255)");
-                      $("#remaining_days").css("font-size","20px");
+                      $("#remaining_days").css("font-size","18px");
                   } else {
                       $("#remaining_days").text("D+"+dateDiff);
                       $("#remaining_days").css("color", "rgb(219,42,52)");
-                      $("#remaining_days").css("font-size","20px");
+                      $("#remaining_days").css("font-size","18px");
                   }
                   현재진행데이터_배열 = [resource_info["resource"], req_state["not-open"], currentDateDiff];
                   total_days_progress = currentDateDiff;
