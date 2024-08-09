@@ -1515,9 +1515,7 @@ function drawExcel(targetId, data) {
     SpreadSheetFunctions.setColumnWidth(excelWidth);
 
     var customOptions = {
-        toolbar:[],
         pagination:10,
-        allowInsertColumn: false,
         contextMenu: [],
         updateTable: function(instace, cell, col, row, val, id) {
             cell.style.whiteSpace = "normal";
@@ -1600,7 +1598,7 @@ var SpreadSheetFunctions = ( function () {
 
     function handleResize(id,width, height) {
         if (id ==="spreadsheet" && height !== 0) {
-            if (인력별_연봉정보) {
+            if (Object.keys(인력별_연봉정보).length > 0) {
                 drawExcel("spreadsheet", 인력별_연봉정보);
             } else {
                 console.log("인력별_연봉정보 데이터가 없습니다.");
