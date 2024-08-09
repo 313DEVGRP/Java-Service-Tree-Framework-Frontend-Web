@@ -34,6 +34,16 @@ function execDocReady() {
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.html5.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/buttons.print.js",
 			"../reference/jquery-plugins/dataTables-1.10.16/extensions/Buttons/js/jszip.min.js"
+		],
+
+		[
+			//chart Colors
+			"./js/common/colorPalette.js",
+			// c3 차트(도넛)
+			"../reference/jquery-plugins/d3-5.16.0/d3.min.js",
+			"../reference/jquery-plugins/c3-0.7.20/c3.min.css",
+			"../reference/jquery-plugins/c3-0.7.20/c3.js",
+			"./js/common/chart/d3/donutChart.js"
 		]
 		// 추가적인 플러그인 그룹들을 이곳에 추가하면 됩니다.
 	];
@@ -47,7 +57,24 @@ function execDocReady() {
 			$('.widget').widgster();
 			setSideMenu("sidebar_menu_report", "sidebar_menu_full_data_sheet");
 
+
+			let mock = {
+				"total": 5,
+				"folder": 4,
+				"in-progress": 1,
+				"open": 2,
+				"resolved" : 1,
+				"closed": 1
+			};
+
 			// 스크립트 실행 로직을 이곳에 추가합니다.
+			for (let i = 0; i<1; i++) {
+				let targetId = "donut" + i;
+				console.log($(".card").width());
+				let cardWidth = $(".card").width();
+				drawDonutChart_report(targetId, mock, cardWidth);
+			}
+
 
 
 		})
