@@ -204,16 +204,24 @@ function makeMessageList(wrap, comment, time) {
 	}</textarea></div>
         <div class="text action-group">
         	<span class="handle-group default">
-						<button onclick="handleEditClick($(this), ${comment.c_id}, '${
-		comment.c_req_comment_contents
-	}')"><i style="color:gray;" class="fa fa-edit"></i></button>
-						<button onclick="handleDeleteClick(${comment.c_id})"><i style=" color:gray" class="fa fa-trash-o"></i></button>
+						${isSender ? `
+						<button onclick="handleEditClick($(this), ${comment.c_id}, '${comment.c_req_comment_contents}')">
+							<i style="color:gray;" class="fa fa-edit"></i>
+						</button>
+						<button onclick="handleDeleteClick(${comment.c_id})">
+							<i style="color:gray;" class="fa fa-trash-o"></i>
+						</button>
+						` : ""}
 					</span>
 					<span class="edit-group edit">
-						<button onclick="handleModify(${comment.c_id})"><i style="color:gray;" class="fa fa-check"></i></button>
-						<button onclick="handleCancel($(this))"><i style=" color:gray" class="fa fa-times"></i></button>
+						<button onclick="handleModify(${comment.c_id})">
+							<i style="color:gray;" class="fa fa-check"></i>
+						</button>
+						<button onclick="handleCancel($(this))">
+							<i style="color:gray;" class="fa fa-times"></i>
+						</button>
 					</span>
-					<span style=" color:gray">${time}</span>
+					<span style="color:gray">${time}</span>
 				</div>
       </div>
     `;

@@ -153,16 +153,21 @@ function bindDataDetailTab(ajaxData) {
 		}
 	});
 
-	//상세보기 - 상태 버튼
-	let stateRadioButtons = $("#detailview_req_state input[type='radio']");
-	stateRadioButtons.each(function () {
-		if ($(this).val() == ajaxData.reqAdd_c_req_state_link) {
-			$(this).parent().addClass("active");
-			$(this).prop("checked", true);
-		} else {
-			$(this).prop("checked", false);
-		}
-	});
+	req_state_setting("detailview_req_state", true)
+		.then(() => {
+			let stateRadioButtons = $("#detailview_req_state input[type='radio']");
+			stateRadioButtons.each(function () {
+				if ($(this).val() == ajaxData.reqAdd_c_req_state_link) {
+					$(this).parent().addClass("active");
+					$(this).prop("checked", true);
+				} else {
+					$(this).prop("checked", false);
+				}
+			});
+		})
+		.catch((error) => {
+			console.error('Error fetching data:', error);
+		});
 
 	if (ajaxData.reqAdd_c_req_start_date) {
 		$("#detailview_req_start_date").val(formatDate(new Date(ajaxData.reqAdd_c_req_start_date)));
