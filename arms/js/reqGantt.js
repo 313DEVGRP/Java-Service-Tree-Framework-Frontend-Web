@@ -1508,17 +1508,19 @@ function handle_change_date(start, end) {
 		return {
 			dayDiff: dayDiff,
 			todayDiff: dayDiff,
-			plan_progress: 100
+			// plan_progress: 100,
+			plan_progress: 0
 		};
 	}
 
 	// 진행률 계산
-	const progress = dayDiff > 0 ? (todayDiff / dayDiff) * 100 : 0;
+	// const progress = dayDiff > 0 ? (todayDiff / dayDiff) * 100 : 0;
 
 	return {
 		dayDiff: dayDiff,
 		todayDiff: todayDiff,
-		plan_progress: Math.min(progress.toFixed(0), 100)
+		// plan_progress: Math.min(progress.toFixed(0), 100)
+		plan_progress: 0
 	};
 }
 
